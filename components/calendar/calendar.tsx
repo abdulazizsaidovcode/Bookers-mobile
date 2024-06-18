@@ -1,12 +1,12 @@
-import type {DatePickerProps} from 'antd';
-import {DatePicker} from 'antd';
-import type {Dayjs} from 'dayjs';
+import { View, Text } from 'react-native'
+import React from 'react'
 
 const Calendar = () => {
-    const onChange: DatePickerProps<Dayjs[]>['onChange'] = (date, dateString) => {
-        console.log(date, dateString);
-    };
-    return <DatePicker onChange={onChange}/>
-};
+  return (
+    <View>
+      <Text>Calendar</Text>
+    </View>
+  )
+}
 
-export default Calendar;
+export default Calendar
