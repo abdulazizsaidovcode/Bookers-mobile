@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Image, FlatList, TextInput, Pressable, Button } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { View, Text, FlatList, TextInput, Button } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import ChatCard from '../userCard/card';
 import { MaterialIcons } from '@expo/vector-icons';
-
-
-
-
+import { router, useNavigation } from 'expo-router';
 
 interface Message {
     id: string;
@@ -17,7 +13,8 @@ interface Message {
     unread: number;
     avatar: string;
 }
-const initialMessages: Message[] = [
+
+export const initialMessages: Message[] = [
     {
         id: '1',
         name: 'Служба поддержки',
@@ -57,6 +54,7 @@ const ChatList: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>(initialMessages);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [showDeleteButton, setShowDeleteButton] = useState(false);
+    const navigation = useNavigation();
 
     const handleLongPress = (id: string) => {
         if (!showDeleteButton) {
@@ -78,6 +76,8 @@ const ChatList: React.FC = () => {
             if (updatedSelectedIds.length === 0) {
                 setShowDeleteButton(false);
             }
+        } else {
+            router.push('(chat)/(communicatie)/7')
         }
 
     };
