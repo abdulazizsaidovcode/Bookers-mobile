@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Modal from 'react-native-modal';
 import Buttons from "@/components/(buttons)/button";
-import {ICenteredModalProps} from "@/type/modal";
+import {ICenteredModalProps} from "@/type/modal/modal";
 
 const { width, height } = Dimensions.get('window')
 

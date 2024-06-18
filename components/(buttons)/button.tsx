@@ -1,14 +1,8 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {IButton} from "@/type/button/button";
 
-type Props = {
-    title: string;
-    backgroundColor: string;
-    textColor: string;
-    onPress?: () => void;
-};
-
-const ModalButton: React.FC<Props> = ({ title, backgroundColor, textColor, onPress }) => {
+const Buttons: React.FC<IButton> = ({ title, backgroundColor, textColor, onPress }) => {
     return (
         <TouchableOpacity
             style={[
@@ -37,4 +31,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ModalButton;
+export default Buttons;
