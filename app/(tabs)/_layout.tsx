@@ -6,14 +6,11 @@ import { Pressable } from 'react-native';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import tw from 'tailwind-react-native-classnames';
+import { TabBarIcon } from '../../components/navigation/TabBarIcon';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -52,6 +49,22 @@ export default function TabLayout() {
         options={{
           title: 'Tab Two',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
+      {/* <Tabs.Screen
+        name="chat"
+        options={{
+          title: 'Chat',
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      /> */}
+      <Tabs.Screen
+        name="chat"
+        options={{
+          title: 'chat',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon style={tw`mb-3`} name={focused ? 'chatbubble' : 'chatbubble-outline'} color={color} />
+          ),
         }}
       />
     </Tabs>
