@@ -10,6 +10,7 @@ const Buttons: React.FC<IButton> = ({ title, backgroundColor, textColor, onPress
                 { backgroundColor: backgroundColor }
             ]}
             onPress={onPress}
+            activeOpacity={.7}
         >
             <Text style={[styles.buttonText, { color: textColor }]}>
                 {title}
