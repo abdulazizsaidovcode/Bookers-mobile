@@ -4,4 +4,5 @@ export interface IButton {
     backgroundColor?: string;
     textColor?: string;
     onPress?: () => void;
+    isDisebled?: boolean
 }
