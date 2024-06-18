@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import {IButton} from "@/type/button/button";
 
-const Buttons: React.FC<IButton> = ({ title, backgroundColor, textColor, onPress }) => {
+const Buttons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', textColor = 'white', onPress }) => {
     return (
         <TouchableOpacity
             style={[
@@ -10,7 +10,7 @@ const Buttons: React.FC<IButton> = ({ title, backgroundColor, textColor, onPress
                 { backgroundColor: backgroundColor }
             ]}
             onPress={onPress}
-            activeOpacity={.7}
+            activeOpacity={.8}
         >
             <Text style={[styles.buttonText, { color: textColor }]}>
                 {title}
