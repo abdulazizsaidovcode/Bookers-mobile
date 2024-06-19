@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { Event as DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
-const CalendarComponent = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date(2024, 2, 20));
-  const [showCalendar, setShowCalendar] = useState(false);
+const CalendarComponent: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [showCalendar, setShowCalendar] = useState<boolean>(false);
 
-  const onChange = (selectedDate: any) => {
-    const currentDate = selectedDate;
+  const onChange = (event: DateTimePickerEvent, selectedDate?: Date | undefined) => {
+    const currentDate = selectedDate || new Date();
     setShowCalendar(false);
     setSelectedDate(currentDate);
   };
 
   const formatDate = (date: Date) => {
+    if (!date) return '';
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    console.log(date.toLocaleDateString('ru-RU', options));
-    
     return date.toLocaleDateString('ru-RU', options);
   };
-  
+
   return (
     <>
       <TouchableOpacity style={styles.datePicker} onPress={() => setShowCalendar(true)}>
