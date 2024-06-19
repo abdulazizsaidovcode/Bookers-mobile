@@ -11,6 +11,8 @@ import { TabBarIcon } from '../../components/navigation/TabBarIcon';
 import TabOneScreen from '.';
 import TabTwoScreen from './two';
 import ChatScreen from './chat';
+import Finance from './finance';
+import tw from 'tailwind-react-native-classnames';
 
 const Tab = createBottomTabNavigator();
 
