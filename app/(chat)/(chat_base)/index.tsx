@@ -10,7 +10,7 @@ const ChatList: React.FC<{ userData: any }> = ({ userData }) => {
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const navigation = useNavigation();
-    
+
     // use effect bolmasa birinchi render bolayotganda ishlaydi
     useEffect(() => {
         setMessages(userData);
