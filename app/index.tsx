@@ -4,7 +4,7 @@ import { View, Text } from "react-native"
 function Index() {
   return (
     <View>
-      <ServicesCatgegory/>
+      <Text>Hello</Text>
     </View>
   )
 }
