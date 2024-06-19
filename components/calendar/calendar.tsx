@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker, { Event as DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const CalendarComponent: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -20,9 +21,13 @@ const CalendarComponent: React.FC = () => {
 
   return (
     <>
-      <TouchableOpacity style={styles.datePicker} onPress={() => setShowCalendar(true)}>
+      <TouchableOpacity
+        style={styles.datePicker}
+        onPress={() => setShowCalendar(true)}
+        activeOpacity={.8}
+      >
         <Text style={styles.dateText}>{formatDate(selectedDate)}</Text>
-        <View style={styles.calendarIcon} />
+        <MaterialIcons name="date-range" size={24} color="white" />
       </TouchableOpacity>
       {showCalendar && (
         <DateTimePicker
@@ -50,12 +55,6 @@ const styles = StyleSheet.create({
   dateText: {
     color: '#FFFFFF',
     fontSize: 18,
-  },
-  calendarIcon: {
-    width: 24,
-    height: 24,
-    backgroundColor: '#403D4B',
-    borderRadius: 12,
   },
 });
 
