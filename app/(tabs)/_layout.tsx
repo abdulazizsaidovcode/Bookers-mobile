@@ -61,7 +61,7 @@ export default function TabLayout() {
           title: 'Finance',
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="finance" size={24} color={color} />,
         }}
-      />
+      />          
       <Tab.Screen
         name="chat"
         component={ChatScreen}
