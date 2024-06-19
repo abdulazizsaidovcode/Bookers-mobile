@@ -37,19 +37,16 @@ const ChatSupport = () => {
     useEffect(() => {
         connect();
         GetChatList({
-            status: "master",
             setData: setChatData
         });
-        console.log("aa");
-        
-    }, []);
+     }, []);
 
     useEffect(() => {
         if (recipientId) {
             // fetchMessages(adminId, recipientId);
         }
     }, [recipientId]);
-    console.log("salom");
+
     console.log(chatData);
 
 
@@ -239,7 +236,7 @@ const ChatSupport = () => {
                         />
                     </View>
                 }
-                <ChatList />
+                <ChatList userData={chatData} />
             </View>
         </View>
     );
