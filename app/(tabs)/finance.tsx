@@ -1,10 +1,11 @@
-import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import tw from 'tailwind-react-native-classnames'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FiltersButton from '@/components/(buttons)/filters-button'
 import FinanceCard from '@/components/(cards)/finance-card'
-import FinanceRevenuesMonth from '@/components/(cards)/finance-revenues-month'
+import FinanceRevenuesDay from '@/components/(cards)/finance-revenues-day'
+import ClientCard from '@/components/(cards)/top-client-card'
 
 const Finance = () => {
     return (
@@ -23,7 +24,8 @@ const Finance = () => {
                 <FiltersButton title='ТОП клинеты' />
             </View>
             <FinanceCard />
-            <FinanceRevenuesMonth />
+            <FinanceRevenuesDay />
+            <ClientCard />
         </ScrollView>
     )
 }
