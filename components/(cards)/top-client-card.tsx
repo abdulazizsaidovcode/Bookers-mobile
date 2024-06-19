@@ -4,7 +4,7 @@ import tw from 'tailwind-react-native-classnames';
 
 const ClientCard = () => {
     return (
-        <View style={[tw`rounded-xl p-5 mt-5`, { backgroundColor: '#B9B9C9' }]}>
+        <View style={[tw`rounded-xl p-5`, { backgroundColor: '#B9B9C9' }]}>
             <View style={[tw`flex-row justify-start`, { gap: 16 }]}>
                 <Image
                     source={require('../../assets/images/auth/logo.png')}

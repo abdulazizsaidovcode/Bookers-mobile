@@ -1,4 +1,4 @@
-import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StatusBar, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import tw from 'tailwind-react-native-classnames'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -6,11 +6,13 @@ import FiltersButton from '@/components/(buttons)/filters-button'
 import FinanceCard from '@/components/(cards)/finance-card'
 import FinanceRevenuesDay from '@/components/(cards)/finance-revenues-day'
 import ClientCard from '@/components/(cards)/top-client-card'
+import FinanceCardMonth from '@/components/(cards)/finance-card-month'
+import { MaterialIcons } from '@expo/vector-icons';
 
 const Finance = () => {
     const [isFilters, setIsFilters] = useState('day')
     console.log(isFilters);
-    
+
     return (
         <ScrollView
             showsHorizontalScrollIndicator={false}
@@ -21,7 +23,7 @@ const Finance = () => {
             </SafeAreaView>
             <Text style={[tw`text-white text-3xl my-7 font-bold`, { letterSpacing: 2 }]}>Финансы</Text>
 
-            <View style={styles.tabs}>
+            <View style={[ tw`flex-row justify-between items-center mb-5`, {gap: 5}]}>
                 <FiltersButton
                     title='По дням'
                     isDisebled={isFilters !== 'day' ? true : false}
@@ -38,24 +40,46 @@ const Finance = () => {
                     onPress={() => setIsFilters('top_clients')}
                 />
             </View>
-            <FinanceCard />
-            <FinanceRevenuesDay />
-            <ClientCard />
+
+            {isFilters === 'day' && <FinanceCard />}
+            {isFilters === 'month' && (
+                <>
+                    <FinanceCardMonth />
+                    <View style={tw`mb-5 mt-7 flex-row justify-between items-center`}>
+                        <Text style={tw`text-base text-white font-bold`}>По месяцам</Text>
+                        <MaterialIcons
+                            name="navigate-next"
+                            size={30}
+                            color="white"
+                            style={{ transform: 'rotate(90deg)' }}
+                        />
+                    </View>
+                </>
+            )}
+
+            {/* day cards */}
+            {isFilters === 'day' && <FinanceRevenuesDay />}
+
+            {/* month cards */}
+            {isFilters === 'month' && (
+                <View style={{ gap: 18 }}>
+                    <FinanceRevenuesDay />
+                    <FinanceRevenuesDay />
+                    <FinanceRevenuesDay />
+                </View>
+            )}
+
+            {/* clients cards */}
+            {isFilters === 'top_clients' && (
+                <View style={{ gap: 18 }}>
+                    <ClientCard />
+                    <ClientCard />
+                    <ClientCard />
+                    <ClientCard />
+                </View>
+            )}
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    tabs: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 20,
-        gap: 5
-    },
-    boldText: {
-        fontWeight: 'bold',
-    }
-});
 
 export default Finance;
