@@ -1,7 +1,7 @@
-import GraficWork from "./(work-grafic)/workGrafic"
+import TabLayout from "./(tabs)/_layout"
 
 function Index() {
-  return <GraficWork />
+  return <TabLayout />
 }
 
 export default Index

@@ -10,6 +10,7 @@ import Index from './index';
 import Auth from './(auth)/auth';
 import TabLayout from './(tabs)/_layout';
 import ChatDetails from './(chat)/(communicatie)/chatDetails';
+import MyServices from './(standart)/services/myServices/myServices';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -56,6 +57,8 @@ function RootLayoutNav() {
         <Stack.Screen name="(auth)/auth" component={Auth} options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" component={TabLayout} options={{ headerShown: false }} />
         <Stack.Screen name="(chat)/(communicatie)/chatDetails" component={ChatDetails} options={{ title: 'Chat Detail' }} />
+        <Stack.Screen name="(standart)/(services)/MyServices" component={MyServices} options={{ title: 'Services' }} />
+        <Stack.Screen name="(profile)/(notification)/index" component={Notification} options={{ title: 'Services' }} />
       </Stack.Navigator>
     </ThemeProvider>
   );
