@@ -77,7 +77,8 @@ const ChatList: React.FC = () => {
                 setShowDeleteButton(false);
             }
         } else {
-            router.push('(chat)/(communicatie)/7')
+            navigation.navigate('(chat)/(communicatie)/chatDetails', { id });
+            // router.push('(chat)/(communicatie)/index/7')
         }
 
     };
