@@ -11,6 +11,7 @@ import Auth from './(auth)/auth';
 import TabLayout from './(tabs)/_layout';
 import ChatDetails from './(chat)/(communicatie)/chatDetails';
 import MyServices from './(standart)/services/myServices/myServices';
+import Notification from './(profile)/(notification)';
 const Stack = createNativeStackNavigator();
 
 export {
