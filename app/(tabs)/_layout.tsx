@@ -8,11 +8,9 @@ import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import { TabBarIcon } from '../../components/navigation/TabBarIcon';
-import tw from 'tailwind-react-native-classnames';
 import TabOneScreen from '.';
 import TabTwoScreen from './two';
 import ChatScreen from './chat';
-import Finance from './finance';
 
 const Tab = createBottomTabNavigator();
 
