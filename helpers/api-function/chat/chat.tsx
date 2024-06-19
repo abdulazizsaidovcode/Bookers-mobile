@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getChatList_url } from '../../api';
+import { getUsers_url } from '../../api';
 import { config } from '../../token';
 import { Data } from '../../state_managment/chat/chatStore';
 
@@ -12,7 +12,7 @@ interface IChat {
   
 
 export const GetChatList = ({ status, fullName, messageStatus, setData }: IChat) => {
-    axios.get(`${getChatList_url}${status ? `?status=${status}` : ''}${fullName ? `&fullName=${fullName}` : ''}${messageStatus ? `&messageStatus=${messageStatus}` : ''}`, config)
+    axios.get(`${getUsers_url}${status ? `?status=${status}` : ''}${fullName ? `&fullName=${fullName}` : ''}${messageStatus ? `&messageStatus=${messageStatus}` : ''}`,     config)
         .then(res => {
             if (res.data.success === true) {
                 setData(res.data.body)
