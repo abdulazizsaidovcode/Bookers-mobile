@@ -10,14 +10,18 @@ import FinanceCardMonth from '@/components/(cards)/finance-card-month'
 import { MaterialIcons } from '@expo/vector-icons';
 import { getTopClients } from '@/helpers/api-function/finance/finance'
 import { setConfig } from '@/helpers/token'
+import financeStore from '@/helpers/state_managment/finance/financeStore'
 
 const Finance = () => {
+    const {dayData, setDayData, monthData, setMonthData, topClients, setTopClients} = financeStore()
     const [isFilters, setIsFilters] = useState('day')
 
     useEffect(() => {
         setConfig()
-        getTopClients()
+        getTopClients(setTopClients)
     }, [])
+    console.log(topClients);
+    
     return (
         <ScrollView
             showsHorizontalScrollIndicator={false}

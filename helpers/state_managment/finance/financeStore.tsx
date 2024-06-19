@@ -3,11 +3,11 @@ import { create } from 'zustand';
 
 const financeStore = create<Finance>((set) => ({
     dayData: null,
-    setDayData: (val: FinanceDay) => set({ dayData: val }),
+    setDayData: (val: FinanceDay | null) => set({ dayData: val }),
     monthData: null,
-    setMonthData: (val: FinanceMonth[]) => set({ monthData: val }),
+    setMonthData: (val: FinanceMonth[] | null) => set({ monthData: val }),
     topClients: null,
-    setTopClients: (val: FinanceTopClients[]) => set({ topClients: val }),
+    setTopClients: (val: FinanceTopClients[] | null) => set({ topClients: val }),
 }));
 
 export default financeStore;

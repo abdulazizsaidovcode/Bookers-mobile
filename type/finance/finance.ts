@@ -1,10 +1,10 @@
 export interface Finance {
     dayData: null | FinanceDay;
-    setDayData: (val: FinanceDay) => void;
+    setDayData: (val: FinanceDay | null) => void;
     monthData: null | FinanceMonth[];
-    setMonthData: (val: FinanceMonth[]) => void;
+    setMonthData: (val: FinanceMonth[] | null) => void;
     topClients: null | FinanceTopClients[];
-    setTopClients: (val: FinanceTopClients[]) => void;
+    setTopClients: (val: FinanceTopClients[] | null) => void;
 }
 
 export interface FinanceDay {
