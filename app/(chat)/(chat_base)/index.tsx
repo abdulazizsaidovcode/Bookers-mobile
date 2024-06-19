@@ -1,60 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, Button } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import ChatCard from '../userCard/card';
 import { MaterialIcons } from '@expo/vector-icons';
-import { router, useNavigation } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 
-interface Message {
-    id: string;
-    name: string;
-    message: string;
-    time: string;
-    unread: number;
-    avatar: string;
-}
-
-export const initialMessages: Message[] = [
-    {
-        id: '1',
-        name: 'Служба поддержки',
-        message: 'Уважаемый клиент, мы при ...',
-        time: '2:14 PM',
-        unread: 1,
-        avatar: 'https://picsum.photos/200/300',
-    },
-    {
-        id: '2',
-        name: 'Натали',
-        message: 'Не могли бы вы принять ме ...',
-        time: '2:10 PM',
-        unread: 1,
-        avatar: 'https://picsum.photos/200/300',
-    },
-    {
-        id: '3',
-        name: 'Мелисара',
-        message: 'Не могли бы вы принять ме ...',
-        time: '10:16 PM',
-        unread: 10,
-        avatar: 'https://picsum.photos/200/300',
-    },
-    {
-        id: '4',
-        name: 'Мадина',
-        message: 'Вы: Не могли бы вы принять ...',
-        time: 'Среда',
-        unread: 0,
-        avatar: 'https://picsum.photos/200/300',
-    },
-];
-
-
-const ChatList: React.FC = () => {
-    const [messages, setMessages] = useState<Message[]>(initialMessages);
+const ChatList: React.FC<{ userData: any }> = ({ userData }) => {
+    const [messages, setMessages] = useState<any[]>(userData);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const navigation = useNavigation();
+    
+    // use effect bolmasa birinchi render bolayotganda ishlaydi
+    useEffect(() => {
+        setMessages(userData);
+    }, [userData])
+
 
     const handleLongPress = (id: string) => {
         if (!showDeleteButton) {
@@ -78,13 +39,11 @@ const ChatList: React.FC = () => {
             }
         } else {
             navigation.navigate('(chat)/(communicatie)/chatDetails', { id });
-            // router.push('(chat)/(communicatie)/index/7')
         }
-
     };
 
     const handleDelete = () => {
-        setMessages(messages.filter((message) => !selectedIds.includes(message.id)));
+        setMessages(messages.filter((message) => !selectedIds.includes(message.userId)));
         setSelectedIds([]);
         setShowDeleteButton(false);
     };
@@ -112,10 +71,10 @@ const ChatList: React.FC = () => {
                         item={item}
                         onPress={handlePress}
                         onLongPress={handleLongPress}
-                        isSelected={selectedIds.includes(item.id)}
+                        isSelected={selectedIds.includes(item.userId)}
                     />
                 )}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.userId}
             />
         </View>
     );
