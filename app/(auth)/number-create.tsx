@@ -13,13 +13,13 @@ const PhoneNumberInput: React.FC = () => {
 
     const handlePhoneNumberChange = (text: string) => {
         setPhoneNumber(text);
-        // Simple validation: Check if the number length is exactly 9
         setIsValid(text.length === 9);
     };
 
     const handleLoginPress = () => {
         if (isValid) {
             console.log('Login Pressed');
+            console.log(phoneNumber);
         } else {
             console.log('Invalid phone number');
         }
@@ -105,13 +105,13 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     phoneInputContainer: {
-        backgroundColor: '#1E1E1E',
+        backgroundColor: '#4B4B64',
         borderColor: '#9C0A35',
         borderBottomWidth: 1,
         width: '100%',
     },
     phoneInputTextContainer: {
-        backgroundColor: '#1E1E1E',
+        backgroundColor: '#4B4B64',
         paddingVertical: 10,
     },
     errorText: {
