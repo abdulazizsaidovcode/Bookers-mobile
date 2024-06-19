@@ -56,6 +56,7 @@ function RootLayoutNav() {
         <Stack.Screen name="(auth)/auth" component={Auth} options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" component={TabLayout} options={{ headerShown: false }} />
         <Stack.Screen name="(chat)/(communicatie)/chatDetails" component={ChatDetails} options={{ title: 'Chat Detail' }} />
+        <Stack.Screen name="(standart)/(services)/MyServices" component={ChatDetails} options={{ title: 'Services' }} />
       </Stack.Navigator>
     </ThemeProvider>
   );
