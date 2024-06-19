@@ -13,6 +13,7 @@ import TabTwoScreen from './two';
 import ChatScreen from './chat';
 import Finance from './finance';
 import tw from 'tailwind-react-native-classnames';
+import ProfileScreen from './profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -69,6 +70,20 @@ export default function TabLayout() {
         component={ChatScreen}
         options={{
           title: 'Chat',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              style={tw`mb-3`}
+              name={focused ? 'chatbubble' : 'chatbubble-outline'}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="profile"
+        component={ProfileScreen}
+        options={{
+          title: 'profile',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               style={tw`mb-3`}
