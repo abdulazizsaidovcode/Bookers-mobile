@@ -6,7 +6,7 @@ const Auth = () => {
     const onPress = (language: string, link: string) => {
         router.push(link)
         console.log(language);
-        
+
     }
     return (
         <SafeAreaView style={styles.container}>

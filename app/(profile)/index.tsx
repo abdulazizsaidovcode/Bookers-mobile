@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal, StyleSheet, Button } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import tw from 'tailwind-react-native-classnames';
+import { useNavigation } from 'expo-router';
 
-const ProfilePage: React.FC = ({ navigation }: any) => {
+const ProfilePage: React.FC = () => {
     const [isInviteModalVisible, setInviteModalVisible] = useState(false);
     const [isShareModalVisible, setShareModalVisible] = useState(false);
+    const navigation = useNavigation();
 
     const openInviteModal = () => {
         setInviteModalVisible(true);
@@ -24,8 +26,12 @@ const ProfilePage: React.FC = ({ navigation }: any) => {
     };
 
     const navigateTo = (screen: string) => {
-        navigation.navigate(screen);
-    };
+        if (screen) {
+            navigation.navigate(screen);
+        } else {
+            console.log(screen);
+        }
+    }
     // eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTk4OTE5NTk1NTk5In0.baWTz1u6dafE8Yy9VzDI2Uq_40X7oEcdg4LTxEVqOCO9lno2Rr-fPwPpZ5m6iQUAIohuJVqnx53g1TH0i_jVlA
     return (
         <View style={tw`flex-1 bg-gray-900 p-4`}>
@@ -42,6 +48,8 @@ const ProfilePage: React.FC = ({ navigation }: any) => {
                 { icon: 'history', label: 'История сеансов', screen: 'SessionHistory' },
                 { icon: 'info-circle', label: 'Справка', screen: 'Help' },
                 { icon: 'bell', label: 'Уведомления', screen: '(profile)/(notification)/index' },
+                { icon: 'wallet', label: 'Расходы', screen: '(profile)/(Expenses)/index' },
+                { icon: 'wallet', label: 'ooo', screen: '(profile)/(sessionhistory)/sessionHistory' },
                 { icon: 'globe', label: 'Веб страница', screen: 'WebPage' },
                 { icon: 'cogs', label: 'Настройки', screen: 'Settings' },
                 { icon: 'users', label: 'Клиенты', screen: 'Clients' },
@@ -53,7 +61,7 @@ const ProfilePage: React.FC = ({ navigation }: any) => {
                     onPress={() => navigateTo(item.screen)}
                 >
                     <View style={tw`flex-row items-center`}>
-                        <FontAwesome name={item.icon} size={20} color="#E74C3C" />
+                        <FontAwesome5 name={item.icon} size={20} color="#E74C3C" />
                         <Text style={tw`text-white ml-4`}>{item.label}</Text>
                     </View>
                     <FontAwesome name="chevron-right" size={20} color="#E74C3C" />
