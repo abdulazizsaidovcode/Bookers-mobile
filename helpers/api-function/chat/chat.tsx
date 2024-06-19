@@ -22,6 +22,5 @@ export const GetChatList = ({ status, fullName, messageStatus, setData }: IChat)
         .catch((err) => {
             setData([])
             console.log(err);
-            
         });
 };

@@ -41,15 +41,6 @@ const ChatSupport = () => {
         });
      }, []);
 
-    useEffect(() => {
-        if (recipientId) {
-            // fetchMessages(adminId, recipientId);
-        }
-    }, [recipientId]);
-
-    console.log(chatData);
-
-
     const connect = () => {
         // if (adminId) {
         const socket = new SockJS(sockjs_url);

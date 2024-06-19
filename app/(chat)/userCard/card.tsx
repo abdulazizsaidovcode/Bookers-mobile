@@ -14,9 +14,6 @@ const ChatCard: React.FC<ChatCardProps> = ({ item, onPress, onLongPress, isSelec
   const { name, chatDto, newMessageCount, avatar, status } = item;
   const message = chatDto?.content || 'No message';
 
-  console.log(item);
-  console.log("salom");
-  
   return (
     <Pressable
       onPress={() => onPress(item.userId)}
