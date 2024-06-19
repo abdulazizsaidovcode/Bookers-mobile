@@ -20,8 +20,8 @@ const Finance = () => {
 
             <View style={styles.tabs}>
                 <FiltersButton title='По дням' />
-                <FiltersButton title='По периоду' />
-                <FiltersButton title='ТОП клинеты' />
+                <FiltersButton title='По периоду' isDisebled />
+                <FiltersButton title='ТОП клинеты' isDisebled />
             </View>
             <FinanceCard />
             <FinanceRevenuesDay />
