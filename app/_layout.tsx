@@ -7,6 +7,8 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/components/useColorScheme';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Index from './index';
+import Auth from './(auth)/auth';
+import TabLayout from './(tabs)/_layout';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -48,9 +50,10 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator initialRouteName='index'>
+      <Stack.Navigator initialRouteName='Index'>
         <Stack.Screen name="index" component={Index} options={{ headerShown: false }} />
-        {/* <Stack.Screen name="index" component={Index} options={{ headerShown: false }} /> */}
+        <Stack.Screen name="(auth)/auth" component={Auth} options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" component={TabLayout} options={{ headerShown: false }} />
       </Stack.Navigator>
     </ThemeProvider>
   );

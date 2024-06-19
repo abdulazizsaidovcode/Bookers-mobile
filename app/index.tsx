@@ -1,9 +1,10 @@
+import ServicesCatgegory from "@/components/services/servicesCatgegory"
 import { View, Text } from "react-native"
 
 function Index() {
   return (
     <View>
-      <Text>Index</Text>
+      <Text>Hello</Text>
     </View>
   )
 }

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, SafeAreaView, Image } from 'react-native'
 import { router } from 'expo-router';
 import Buttons from "@/components/(buttons)/button";
 
-const Index = () => {
+const Auth = () => {
     const onPress = (language: string, link: string) => {
         router.push(link)
         console.log(language);
@@ -37,7 +37,7 @@ const Index = () => {
     )
 }
 
-export default Index;
+export default Auth;
 
 const styles = StyleSheet.create({
     container: {
