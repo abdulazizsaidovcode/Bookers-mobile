@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Index from './index';
 import Auth from './(auth)/auth';
 import TabLayout from './(tabs)/_layout';
+import ChatDetails from './(chat)/(communicatie)/chatDetails';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -54,6 +55,7 @@ function RootLayoutNav() {
         <Stack.Screen name="index" component={Index} options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/auth" component={Auth} options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" component={TabLayout} options={{ headerShown: false }} />
+        <Stack.Screen name="(chat)/(communicatie)/chatDetails" component={ChatDetails} options={{ title: 'Chat Detail' }} />
       </Stack.Navigator>
     </ThemeProvider>
   );

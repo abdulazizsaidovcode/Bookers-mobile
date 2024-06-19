@@ -1,11 +1,7 @@
-import { View, Text } from "react-native"
+import Finance from "./(tabs)/finance"
 
 function Index() {
-  return (
-    <View>
-      <Text>Index</Text>
-    </View>
-  )
+  return <Finance />
 }
 
 export default Index

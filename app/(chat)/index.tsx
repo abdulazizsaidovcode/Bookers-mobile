@@ -28,7 +28,6 @@ const ChatSupport = () => {
                         />
                     </View>
                 }
-
                 <ChatList />
             </View>
         </View>
