@@ -1,12 +1,7 @@
-import ServicesCatgegory from "@/components/services/servicesCatgegory"
-import { View, Text } from "react-native"
+import Finance from "./(tabs)/finance"
 
 function Index() {
-  return (
-    <View>
-      <Text>Hello</Text>
-    </View>
-  )
+  return <Finance />
 }
 
 export default Index
