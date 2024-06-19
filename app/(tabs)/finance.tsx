@@ -1,4 +1,4 @@
-import { ScrollView, StatusBar, Text, View } from 'react-native'
+import { FlatList, ScrollView, StatusBar, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import tw from 'tailwind-react-native-classnames'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -13,15 +13,14 @@ import { setConfig } from '@/helpers/token'
 import financeStore from '@/helpers/state_managment/finance/financeStore'
 
 const Finance = () => {
-    const {dayData, setDayData, monthData, setMonthData, topClients, setTopClients} = financeStore()
+    const { dayData, setDayData, monthData, setMonthData, topClients, setTopClients } = financeStore()
     const [isFilters, setIsFilters] = useState('day')
 
     useEffect(() => {
         setConfig()
         getTopClients(setTopClients)
     }, [])
-    console.log(topClients);
-    
+
     return (
         <ScrollView
             showsHorizontalScrollIndicator={false}
@@ -32,7 +31,7 @@ const Finance = () => {
             </SafeAreaView>
             <Text style={[tw`text-white text-3xl my-7 font-bold`, { letterSpacing: 2 }]}>Финансы</Text>
 
-            <View style={[ tw`flex-row justify-between items-center mb-5`, {gap: 5}]}>
+            <View style={[tw`flex-row justify-between items-center mb-5`, { gap: 5 }]}>
                 <FiltersButton
                     title='По дням'
                     isDisebled={isFilters !== 'day' ? true : false}
@@ -81,10 +80,11 @@ const Finance = () => {
             {/* clients cards */}
             {isFilters === 'top_clients' && (
                 <View style={{ gap: 18 }}>
-                    <ClientCard />
-                    <ClientCard />
-                    <ClientCard />
-                    <ClientCard />
+                    <FlatList
+                        data={topClients}
+                        renderItem={({item}) => <ClientCard items={item} />}
+                        keyExtractor={(item: any) => item.id}
+                    />
                 </View>
             )}
         </ScrollView>
