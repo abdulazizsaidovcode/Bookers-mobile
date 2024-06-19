@@ -2,17 +2,21 @@ import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { IButton } from '@/type/button/button'
 
-const FiltersButton: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', textColor = 'white', onPress, isDisebled = true }) => {
+const FiltersButton: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', textColor = 'white', onPress, isDisebled = false }) => {
     return (
         <TouchableOpacity
             style={[
                 styles.button,
-                { backgroundColor: !isDisebled ? 'gray' : backgroundColor }
+                {
+                    backgroundColor: isDisebled ? '#21212E' : backgroundColor,
+                    borderColor: isDisebled ? '#828282' : 'transparent',
+                    borderWidth: isDisebled ? 1 : 0,
+                }
             ]}
             onPress={onPress}
             activeOpacity={.8}
         >
-            <Text style={[styles.buttonText, { color: textColor }]}>
+            <Text style={[styles.buttonText, { color: isDisebled ? '#828282' : textColor }]}>
                 {title}
             </Text>
         </TouchableOpacity>
