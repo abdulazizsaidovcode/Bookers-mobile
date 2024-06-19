@@ -14,6 +14,6 @@ export const getChatList_url = `${base_url}chat/web`;
 export const messages_url = `${base_url}chat/messages`; 
 
 // finance urls
-export const finance_top_client: string = `${base_url}/finance/top-client`
-export const finance_month: string = `${base_url}/finance/month`
-export const finance_day: string = `${base_url}/finance/day`
+export const finance_top_client: string = `${base_url}finance/top-client`
+export const finance_month: string = `${base_url}finance/month`
+export const finance_day: string = `${base_url}finance/day`

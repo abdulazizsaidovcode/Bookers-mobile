@@ -1,5 +1,5 @@
 import { ScrollView, StatusBar, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import tw from 'tailwind-react-native-classnames'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FiltersButton from '@/components/(buttons)/filters-button'
@@ -8,11 +8,16 @@ import FinanceRevenuesDay from '@/components/(cards)/finance-revenues-day'
 import ClientCard from '@/components/(cards)/top-client-card'
 import FinanceCardMonth from '@/components/(cards)/finance-card-month'
 import { MaterialIcons } from '@expo/vector-icons';
+import { getTopClients } from '@/helpers/api-function/finance/finance'
+import { setConfig } from '@/helpers/token'
 
 const Finance = () => {
     const [isFilters, setIsFilters] = useState('day')
-    console.log(isFilters);
 
+    useEffect(() => {
+        setConfig()
+        getTopClients()
+    }, [])
     return (
         <ScrollView
             showsHorizontalScrollIndicator={false}
