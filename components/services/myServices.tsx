@@ -6,11 +6,11 @@ import { MyServicesProps } from '@/type/services/myServices';
 // Define the interface for the props
 
 
-const MyServices: React.FC<MyServicesProps> = ({ title, subTitle, onPress }) => {
+const MyServicess: React.FC<MyServicesProps> = ({ title, subTitle, onPress }) => {
     return (
-        <View style={tw`p-2 bg-gray-100 flex-1`}>
+        <View style={tw`mt-3  `}>
             <TouchableOpacity 
-                style={tw`bg-white rounded-2xl shadow-6 p-4 flex-row justify-between items-center`}
+                style={tw`bg-white rounded-2xl  p-4 flex-row justify-between items-center`}
                 onPress={onPress}
             >
                 <View>
@@ -23,4 +23,4 @@ const MyServices: React.FC<MyServicesProps> = ({ title, subTitle, onPress }) => 
     );
 }
 
-export default MyServices;
+export default MyServicess;
