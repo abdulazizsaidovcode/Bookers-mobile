@@ -41,7 +41,7 @@ const ProfilePage: React.FC = ({ navigation }: any) => {
                 { icon: 'user', label: 'Подписка', screen: 'Subscription' },
                 { icon: 'history', label: 'История сеансов', screen: 'SessionHistory' },
                 { icon: 'info-circle', label: 'Справка', screen: 'Help' },
-                { icon: 'bell', label: 'Уведомления', screen: 'Notifications' },
+                { icon: 'bell', label: 'Уведомления', screen: '(profile)/(notification)/index' },
                 { icon: 'globe', label: 'Веб страница', screen: 'WebPage' },
                 { icon: 'cogs', label: 'Настройки', screen: 'Settings' },
                 { icon: 'users', label: 'Клиенты', screen: 'Clients' },
@@ -99,7 +99,7 @@ const ProfilePage: React.FC = ({ navigation }: any) => {
                                 { name: 'linkedin', color: '#0e76a8', label: 'LinkedIn' },
                                 { name: 'skype', color: '#00aff0', label: 'Skype' },
                                 { name: 'copy', color: '#E74C3C', label: 'Копировать ссылку' }
-                            ].map((item, index) => (
+                            ].map((item, index): any => (
                                 <TouchableOpacity key={index} style={styles.iconButton}>
                                     <FontAwesome name={item.name} size={40} color={item.color} />
                                     <Text style={tw`text-white mt-2`}>{item.label}</Text>
