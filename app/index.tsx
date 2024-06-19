@@ -1,7 +1,7 @@
-import Finance from "./(tabs)/finance"
+import GraficWork from "./(work-grafic)/workGrafic"
 
 function Index() {
-  return <Finance />
+  return <GraficWork />
 }
 
 export default Index

@@ -11,10 +11,10 @@ interface TimesCardProps {
 
 const TimesCard: React.FC<TimesCardProps> = ({ title, onSelect, isSelected, isInRange, disabled }) => {
   return (
-    <TouchableOpacity 
-      onPress={!disabled ? onSelect : undefined} 
+    <TouchableOpacity
+      onPress={!disabled ? onSelect : undefined}
       style={[
-        styles.container, 
+        styles.container,
         isSelected && styles.selected,
         isInRange && !isSelected && styles.inRange,
         disabled && styles.disabled
