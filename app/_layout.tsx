@@ -19,6 +19,12 @@ import Expenses from './(profile)/(Expenses)';
 import ExpensesDetail from './(profile)/(Expenses)/(component)/(detail)/expenseDetail';
 import SessionHistory from './(profile)/(sessionhistory)/sessionHistory';
 import ServesGender from './(standart)/(services)/(gender)/servesGender';
+import Expertise from './(standart)/(expertise)/expertise';
+import Category from './(standart)/(services)/(category)/category';
+import Upcomingentries from './(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries';
+import PastEntries from './(profile)/(sessionhistory)/components/Pastentries/Pastentries';
+import Canceledentries from './(profile)/(sessionhistory)/components/Canceledentries/Canceledentries';
+import Settings from './(profile)/(settings)';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -81,7 +87,7 @@ function RootLayoutNav() {
         {/*  */}
         <Stack.Screen name="(profile)/(sessionhistory)/sessionHistory" component={SessionHistory} options={{ title: 'Отменённые записи' }} />
         <Stack.Screen name="(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries" component={Upcomingentries} options={{ title: 'Отменённые записи' }} />
-        <Stack.Screen name="(profile)/(sessionhistory)/components/Pastentries/Pastentries" component={Pastentries} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Pastentries/Pastentries" component={PastEntries} options={{ title: 'Отменённые записи' }} />
         <Stack.Screen name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries" component={Canceledentries} options={{ title: 'Отменённые записи' }} />
         {/* settings update */}
         <Stack.Screen name="(settings)/settings" component={Settings} options={{ headerShown: false }} />
