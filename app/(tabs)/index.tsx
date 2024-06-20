@@ -39,7 +39,7 @@ export default function TabOneScreen() {
 				</View>
 			</View>
 
-			<View style={styles.statsContainer}>
+			<View style={styles.statsContainer}>														
 				<View style={styles.statsCard}>
 					<Text style={styles.statsText}>Выполнено сеансов</Text>
 					<ProgressChart
