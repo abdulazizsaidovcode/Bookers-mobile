@@ -50,7 +50,7 @@ const CalendarComponent = ({setMonthDate}: { setMonthDate?: (val: string) => voi
                     mode="date"
                     is24Hour={true}
                     display="default"
-                    onChange={() => onChange}
+                    onChange={onChange}
                 />
             )}
         </>
