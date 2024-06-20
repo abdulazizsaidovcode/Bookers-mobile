@@ -39,6 +39,7 @@ const ChatList: React.FC<{ userData: any }> = ({ userData }) => {
             }
         } else {
             navigation.navigate('(chat)/(communicatie)/chatDetails', { id });
+            // cde806d1-1da5-4264-85b6-47d066cadca1
         }
     };
 

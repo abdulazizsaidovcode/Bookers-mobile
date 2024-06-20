@@ -22,14 +22,14 @@ export interface Data {
   userId: string;
 }
 
-interface ChatData {
+export interface ChatData {
   messageData: Data[];
   setmessageData: (val: Data[]) => void;
 }
 
-const chatStore = create<ChatData>((set) => ({
+const fetchChatDataStore = create<ChatData>((set) => ({
   messageData: [],
   setmessageData: (val: Data[]) => set({ messageData: val }),
 }));
 
-export default chatStore;
+export default fetchChatDataStore;
