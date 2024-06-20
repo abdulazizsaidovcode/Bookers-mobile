@@ -13,7 +13,7 @@ const ServicesCategory: React.FC<ServicesProps> = ({ title, onPress, isRadioButt
         if (isRadioButton) {
             setChecked(true); // RadioButton uchun faqat bitta tanlangan bo'lsin
             if (onPress) {
-                onPress(id); // id ni onPress orqali o'tkazish
+                onPress(); // id ni onPress orqali o'tkazish
             }
         } else {
             setSelection(!isSelected); // Checkbox uchun holat o'zgartirish
