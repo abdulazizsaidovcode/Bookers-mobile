@@ -12,7 +12,6 @@ const ClientCard = ({ items }: any) => {
         <View style={[tw`rounded-xl p-5`, { backgroundColor: '#B9B9C9' }]}>
             <View style={[tw`flex-row justify-start`, { gap: 16 }]}>
                 <Image
-                
                     source={items.attachmentId !== null ?
                         { uri: `${getFile}${items.attachmentId}` }
                         : require('../../assets/images/auth/logo.png')}
@@ -36,11 +35,6 @@ const ClientCard = ({ items }: any) => {
                     ))}
                     <Text style={[tw`text-2xl font-bold`, { color: '#9C0A35' }]}>{items.price} сум</Text>
                 </View>
-            </View>
-            <View style={[tw`grid grid-col-2`]}>
-
-            <HomeCards/>
-            <HomeCards/>
             </View>
         </View>
     );
