@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { IButton } from "@/type/button/button";
 
-const Buttons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', textColor = 'white', onPress, isDisebled = false }) => {
+const Buttons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', textColor = 'white', onPress, isDisebled = true }) => {
     return (
         <TouchableOpacity
             style={[

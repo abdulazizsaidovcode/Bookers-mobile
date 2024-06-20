@@ -10,8 +10,11 @@ import Index from './index';
 import Auth from './(auth)/auth';
 import TabLayout from './(tabs)/_layout';
 import ChatDetails from './(chat)/(communicatie)/chatDetails';
-import MyServices from './(standart)/(services)/(myServices)/myServices';
 import Notification from './(profile)/(notification)';
+import GraficWork from './(work-grafic)/workGrafic';
+import WorkMain from './(work-grafic)/workMain';
+import WorkDays from './(work-grafic)/workDays';
+import MyServices from './(standart)/(services)/(myServices)/myServices';
 import Expenses from './(profile)/(Expenses)';
 import ExpensesDetail from './(profile)/(Expenses)/(component)/(detail)/expenseDetail';
 import SessionDetail from './(profile)/(sessionhistory)/components/SessionDetail/SessionDetail';
@@ -64,6 +67,9 @@ function RootLayoutNav() {
         <Stack.Screen name="(tabs)" component={TabLayout} options={{ headerShown: false }} />
         <Stack.Screen name="(chat)/(communicatie)/chatDetails" component={ChatDetails} options={{ title: 'Chat Detail' }} />
         <Stack.Screen name="(profile)/(notification)/index" component={Notification} options={{ title: 'Services' }} />
+        <Stack.Screen name="(work-grafic)/workGrafic" component={GraficWork} options={{ title: 'Services' }} />
+        <Stack.Screen name="(work-grafic)/workMain" component={WorkMain} options={{ headerShown: false }} />
+        <Stack.Screen name="(work-grafic)/workDays" component={WorkDays} options={{ headerShown: false }} />
 
           {/* expenses  rasxod */}
         <Stack.Screen name="(profile)/(Expenses)/index" component={Expenses} options={{ title: 'Services' }} />

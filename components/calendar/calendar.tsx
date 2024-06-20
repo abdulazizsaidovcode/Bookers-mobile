@@ -49,7 +49,7 @@ const CalendarComponent: React.FC = () => {
                     mode="date"
                     is24Hour={true}
                     display="default"
-                    onChange={onChange}
+                    onChange={() => onChange}
                 />
             )}
         </>
