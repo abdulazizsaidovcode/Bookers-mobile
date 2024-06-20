@@ -6,11 +6,9 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
 import CenteredModal from '@/components/(modals)/modal-centered';
+import { router } from 'expo-router';
 
-const Expertise = () => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [textAreaValue, setTextAreaValue] = useState('');
-
+const Category = () => {
     const services = [
         { title: "Здоровье и красота волос", },
         { title: "Ногтевой сервис" },
@@ -18,6 +16,10 @@ const Expertise = () => {
         { title: "Уход за телом" },
         { title: "Уход за лицом" }
     ];
+    const data = ['Парикмахер', 'Парикмахер', 'Парикмахер', 'Парикмахер', 'Парикмахер'];
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [textAreaValue, setTextAreaValue] = useState('');
 
     const openModal = () => setModalVisible(true);
     const closeModal = () => {
@@ -26,23 +28,22 @@ const Expertise = () => {
     };
 
     const handleSave = () => {
-        closeModal(); 
+        closeModal();
     };
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 }}>
                 <View style={tw`w-full p-3`}>
-                    <NavigationMenu name="Специализация" />
+                    <NavigationMenu name="Категория услуг" />
                     {services.map((service, index) => (
                         <ServicesCategory key={index} title={service.title} />
                     ))}
                 </View>
             </ScrollView>
             <View style={tw`content-end p-4`}>
-                <Buttons title="Другое" backgroundColor="white" textColor="red" onPress={openModal} />
                 <View style={tw`mt-2 content-end`}>
-                    <Buttons title="Сохранить" isDisebled={false} onPress={handleSave} />
+                    <Buttons title="Сохранить" onPress={openModal} />
                 </View>
                 <CenteredModal
                     isModal={modalVisible}
@@ -50,19 +51,17 @@ const Expertise = () => {
                     btnRedText='Закрыть'
                     isFullBtn={true}
                     toggleModal={closeModal}
-                   
+                    onConfirm={() => router.push('/expertise')}
+
                 >
                     <View style={tw`p-4 text-center`}>
-                        <Text style={tw`text-white text-xl mb-2 w-full`}>Добавьте свою специализацию</Text>
-                        <TextInput
-                            style={tw`bg-white p-3 rounded-xl text-lg text-black`}
-                            multiline
-                            numberOfLines={4}
-                            placeholder="Введите текст"
-                            value={textAreaValue}
-                            onChangeText={setTextAreaValue}
-                            scrollEnabled = {true}
-                        />
+                        <Text style={tw`text-white text-xl w-full text-2xl`}>Здоровье и красота волос</Text>
+                        <Text style={tw`text-center text-white  text-xl`}>В эту категорию входят услуги таких специализаций как:</Text>
+                        {data.map((item, index) => (
+                            <Text key={index} style={{ color: 'white', fontSize: 20 }}>
+                                {index + 1}. {item}
+                            </Text>
+                        ))}
                     </View>
                 </CenteredModal>
             </View>
@@ -70,4 +69,4 @@ const Expertise = () => {
     );
 };
 
-export default Expertise;
+export default Category;

@@ -20,6 +20,8 @@ import ExpensesDetail from './(profile)/(Expenses)/(component)/(detail)/expenseD
 import SessionDetail from './(profile)/(sessionhistory)/components/SessionDetail/SessionDetail';
 import SessionHistory from './(profile)/(sessionhistory)/sessionHistory';
 import ServesGender from './(standart)/(services)/(gender)/servesGender';
+import Expertise from './(standart)/(expertise)/expertise';
+import Category from './(standart)/(services)/(category)/category';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -76,6 +78,8 @@ function RootLayoutNav() {
         <Stack.Screen name="(profile)/(Expenses)/(component)/(detail)/expenseDetail" component={ExpensesDetail} options={{ title: 'Services' }} />
         <Stack.Screen name="(standart)/(services)/(myServices)/myServices" component={MyServices} options={{ headerShown: false }} />
         <Stack.Screen name="(standart)/(services)/(gender)/servesGender" component={ServesGender} options={{ headerShown: false }} />
+        <Stack.Screen name="(standart)/(services)/(category)/category" component={Category} options={{ headerShown: false }} />
+        <Stack.Screen name="(standart)/(expertise)/expertise" component={Expertise} options={{ headerShown: false }} />
 
         {/*  */}
         <Stack.Screen name="(profile)/(sessionhistory)/sessionHistory" component={SessionHistory} options={{ title: 'Отменённые записи' }} />
