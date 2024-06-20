@@ -17,9 +17,11 @@ import WorkDays from './(work-grafic)/workDays';
 import MyServices from './(standart)/(services)/(myServices)/myServices';
 import Expenses from './(profile)/(Expenses)';
 import ExpensesDetail from './(profile)/(Expenses)/(component)/(detail)/expenseDetail';
-import SessionDetail from './(profile)/(sessionhistory)/components/SessionDetail/SessionDetail';
 import SessionHistory from './(profile)/(sessionhistory)/sessionHistory';
 import ServesGender from './(standart)/(services)/(gender)/servesGender';
+import Upcomingentries from './(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries';
+import Pastentries from './(profile)/(sessionhistory)/components/Pastentries/Pastentries';
+import Canceledentries from './(profile)/(sessionhistory)/components/Canceledentries/Canceledentries';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -71,7 +73,7 @@ function RootLayoutNav() {
         <Stack.Screen name="(work-grafic)/workMain" component={WorkMain} options={{ headerShown: false }} />
         <Stack.Screen name="(work-grafic)/workDays" component={WorkDays} options={{ headerShown: false }} />
 
-          {/* expenses  rasxod */}
+        {/* expenses  rasxod */}
         <Stack.Screen name="(profile)/(Expenses)/index" component={Expenses} options={{ title: 'Services' }} />
         <Stack.Screen name="(profile)/(Expenses)/(component)/(detail)/expenseDetail" component={ExpensesDetail} options={{ title: 'Services' }} />
         <Stack.Screen name="(standart)/(services)/(myServices)/myServices" component={MyServices} options={{ headerShown: false }} />
@@ -79,6 +81,9 @@ function RootLayoutNav() {
 
         {/*  */}
         <Stack.Screen name="(profile)/(sessionhistory)/sessionHistory" component={SessionHistory} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries" component={Upcomingentries} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Pastentries/Pastentries" component={Pastentries} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries" component={Canceledentries} options={{ title: 'Отменённые записи' }} />
 
       </Stack.Navigator>
     </ThemeProvider>
