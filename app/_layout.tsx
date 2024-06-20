@@ -19,13 +19,14 @@ import Expenses from './(profile)/(Expenses)';
 import ExpensesDetail from './(profile)/(Expenses)/(component)/(detail)/expenseDetail';
 import SessionHistory from './(profile)/(sessionhistory)/sessionHistory';
 import ServesGender from './(standart)/(services)/(gender)/servesGender';
-import Expertise from './(standart)/(expertise)/expertise';
+
 import Category from './(standart)/(services)/(category)/category';
 import Upcomingentries from './(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries';
 import PastEntries from './(profile)/(sessionhistory)/components/Pastentries/Pastentries';
 import Canceledentries from './(profile)/(sessionhistory)/components/Canceledentries/Canceledentries';
 import Settings from './(profile)/(settings)';
 import { StompProvider, } from '@/context/StompContext';
+import Expertise from './(standart)/(services)/(expertise)/expertise';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -86,7 +87,7 @@ function RootLayoutNav() {
           <Stack.Screen name="(standart)/(services)/(myServices)/myServices" component={MyServices} options={{ headerShown: false }} />
           <Stack.Screen name="(standart)/(services)/(gender)/servesGender" component={ServesGender} options={{ headerShown: false }} />
           <Stack.Screen name="(standart)/(services)/(category)/category" component={Category} options={{ headerShown: false }} />
-          <Stack.Screen name="(standart)/(expertise)/expertise" component={Expertise} options={{ headerShown: false }} />
+          <Stack.Screen name="(standart)/(services)/(expertise)/expertise" component={Expertise} options={{ headerShown: false }} />
 
           {/*  */}
           <Stack.Screen name="(profile)/(sessionhistory)/sessionHistory" component={SessionHistory} options={{ title: 'Отменённые записи' }} />
