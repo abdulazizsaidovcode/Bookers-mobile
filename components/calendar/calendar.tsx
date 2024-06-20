@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Text, StyleSheet, TouchableOpacity} from 'react-native';
 import DateTimePicker, {Event as DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import {MaterialIcons} from '@expo/vector-icons';
 import moment from "moment";
 import financeStore from "@/helpers/state_managment/finance/financeStore";
 
-const CalendarComponent: React.FC = () => {
+const CalendarComponent = ({setMonthDate}: { setMonthDate?: (val: string) => void }) => {
     const {setDate} = financeStore()
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [showCalendar, setShowCalendar] = useState<boolean>(false);
@@ -18,6 +18,7 @@ const CalendarComponent: React.FC = () => {
     useEffect(() => {
         const date: string = moment(selectedDate).format('YYYY-MM-DD')
         setDate(date)
+        setMonthDate && setMonthDate(date)
     }, [selectedDate]);
 
     const onChange = (event: DateTimePickerEvent, selectedDate?: Date | undefined) => {
