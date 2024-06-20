@@ -8,22 +8,23 @@ import FinanceRevenuesDay from '@/components/(cards)/finance-revenues-day'
 import ClientCard from '@/components/(cards)/top-client-card'
 import FinanceCardMonth from '@/components/(cards)/finance-card-month'
 import {MaterialIcons} from '@expo/vector-icons';
-import {getFinanceDay, getTopClients} from '@/helpers/api-function/finance/finance'
+import {getFinanceDay, getFinanceMonth, getTopClients} from '@/helpers/api-function/finance/finance'
 import {setConfig} from '@/helpers/token'
 import financeStore from '@/helpers/state_managment/finance/financeStore'
+import FinanceRevenuesMonth from "@/components/(cards)/finance-revenues-month";
 
 const Finance = () => {
     const {
-        dayData,
         setDayData,
         monthData,
-        setMonthData,
         topClients,
         setTopClients,
-        date
+        date,
+        startDate,
+        endDate,
+        setMonthData
     } = financeStore()
     const [isFilters, setIsFilters] = useState('day')
-
     useEffect(() => {
         setConfig()
         getTopClients(setTopClients)
@@ -32,8 +33,10 @@ const Finance = () => {
 
     useEffect(() => {
         getFinanceDay(setDayData, date)
-
+        if (startDate === endDate) setMonthData(null)
     }, [date]);
+
+    console.log("tabs: ", monthData)
 
     return (
         <ScrollView
@@ -74,7 +77,7 @@ const Finance = () => {
                             name="navigate-next"
                             size={30}
                             color="white"
-                            style={{transform: 'rotate(90deg)'}}
+                            // style={{transform: 'rotate(90deg)'}}
                         />
                     </View>
                 </>
@@ -86,9 +89,10 @@ const Finance = () => {
             {/* month cards */}
             {isFilters === 'month' && (
                 <View style={{gap: 18}}>
-                    <FinanceRevenuesDay/>
-                    <FinanceRevenuesDay/>
-                    <FinanceRevenuesDay/>
+                    <FlatList
+                        data={monthData}
+                        renderItem={({item}) => <FinanceRevenuesMonth items={item}/>}
+                    />
                 </View>
             )}
 
@@ -98,7 +102,6 @@ const Finance = () => {
                     <FlatList
                         data={topClients}
                         renderItem={({item}) => <ClientCard items={item}/>}
-                        keyExtractor={(item: any) => item.id}
                     />
                 </View>
             )}

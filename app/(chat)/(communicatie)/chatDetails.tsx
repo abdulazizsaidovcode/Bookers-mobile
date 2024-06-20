@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { IoSend } from 'react-icons/io5';
-import { IoMdAttach } from "react-icons/io";
+import { IoMdAttach } from 'react-icons/io';
 import { BiReply, BiReplyAll } from 'react-icons/bi';
 import { ImCancelCircle } from 'react-icons/im';
 import { GiCancel } from 'react-icons/gi';
 import { ArrowDownOutlined, EditFilled } from '@ant-design/icons';
 import tw from 'tailwind-react-native-classnames';
 import { useRoute } from '@react-navigation/native';
+import axios from 'axios';
+import { fetchMessages } from '@/helpers/api-function/chat/getmessages';
+import fetchChatDataStore, { ChatData } from '@/helpers/state_managment/chat/chatfetchStore';
+import { useStomp } from '@/context/StompContext';
 
 // Mock data and functions
 const getFileId = (file: string) => `https://example.com/files/${file}`;
@@ -40,12 +44,15 @@ interface ChatSentSmstList {
 
 const ChatEmptyState = () => (
   <View style={tw`flex-1 items-center justify-center`}>
-    <Text style={tw`text-xl`}>No Messages</Text>
+    <Text style={tw`text-xl text-white`}>No Messages</Text>
   </View>
 );
 
 const ChatDetails = () => {
-  const [chats, setChats] = useState<ChatSentSmstList[]>(chat);
+  const { setmessageData, messageData } = fetchChatDataStore()
+  const { stompClient, adminId } = useStomp();
+
+  const [chats, setChats] = useState<any>(messageData);
   const scrolRef = useRef<any>();
   const [selreplyId, setSelreplyId] = useState<string>('');
   const [seleditId, setseleditId] = useState<string>('');
@@ -69,6 +76,14 @@ const ChatDetails = () => {
   useEffect(() => {
     console.log('Chat ID:', id);
     // Fetch the chat data based on the received id
+  }, [id]);
+
+  useEffect(() => {
+    fetchMessages({
+      adminId: "cde806d1-1da5-4264-85b6-47d066cadca1",
+      recipientId: id,
+      setmessageData
+    })
   }, [id]);
 
   const handleClick = () => {
@@ -164,30 +179,67 @@ const ChatDetails = () => {
     scrolRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chats]);
 
+
+  const sendMessage = async () => {
+    let fileUrl = null;
+    // if (photo) {
+    //   console.log(photo);
+    //   await uploadFile({
+    //     file: photo,
+    //     setUploadResponse: (response) => (fileUrl = response.body),
+    //   })
+    // }
+
+    if (stompClient) {
+      const chatMessage = {
+        senderId: adminId,
+        recipientId: id,
+        content: content,
+        isRead: false,
+        attachmentIds: fileUrl ? [fileUrl] : [],
+      };
+      console.log(JSON.stringify(chatMessage));
+
+      stompClient.send('/app/chat', {}, JSON.stringify(chatMessage));
+      setTimeout(() => {
+        fetchMessages({
+          adminId: "cde806d1-1da5-4264-85b6-47d066cadca1",
+          recipientId: id,
+          setmessageData
+        })
+      }, 500)
+      setContent('');
+    }
+  };
+
   return (
     <View style={tw`h-full relative`}>
       <View style={tw`w-full h-full flex flex-col`}>
         <ScrollView
-          style={tw`bg-gray-200 flex-1 h-full`}
+          style={[tw` flex-1 h-full`, { backgroundColor: "#21212e" }]}
           ref={chatContainerRef}
           onContentSizeChange={() => chatContainerRef.current?.scrollToEnd({ animated: true })}
         >
-          {chats.length > 0 ? (
-            chats.map((item, index) => (
+          {messageData.length > 0 ? (
+            messageData.map((item, index) => (
               <View
                 ref={scrolRef}
                 key={index}
-                style={tw`py-2 ${item.senderId === senderId ? 'flex items-end justify-end flex-col' : 'justify-start'}`}
+                style={[tw`py-2 text-white`, item.senderId === senderId ? tw`flex items-end justify-end flex-col` : tw`justify-start`]}
               >
                 <View style={tw`flex items-center mb-2`}>
                   <Image
                     style={tw`w-8 h-8 rounded-full mr-2`}
                     source={{ uri: item.senderId !== senderId ? getFileId(item.receiverImg) : getFileId(item.senderImg) }}
                   />
-                  <Text style={tw`font-medium`}>{item.senderId === senderId ? item.senderName : item.receiverName}</Text>
+                  <Text style={tw`font-medium text-white`}>{item.senderId === senderId ? item.senderName : item.receiverName}</Text>
                 </View>
                 <View
-                  style={tw`p-2 rounded-md flex flex-col ${item.replayDto ? 'dark:bg-[#9c093543] bg-[#85828343]' : ''} ${item.senderId === senderId ? 'items-end ml-20' : 'items-start mr-20'}`}
+                  style={[
+                    tw`p-2 rounded-md flex flex-col`,
+                    item.replayDto ? { backgroundColor: '#85828343' } : {},
+                    item.senderId === senderId ? tw`items-end ml-20` : tw`items-start mr-20`
+                  ]}
                 >
                   {item.replayDto && (
                     <View
@@ -197,7 +249,10 @@ const ChatDetails = () => {
                         <BiReply style={{ fontSize: 25 }} />
                       </View>
                       <View
-                        style={tw`bg-gray text-black py-1 px-3 mb-1 rounded-md dark:border-[#9c0935] ${item.senderId === senderId ? 'border-r-2' : 'border-l-2'}`}
+                        style={[
+                          tw`bg-gray text-black py-1 px-3 mb-1 rounded-md`,
+                          item.senderId === senderId ? tw`border-r-2` : tw`border-l-2`
+                        ]}
                       >
                         {item.replayDto.content ? item.replayDto.content : <Image source={{ uri: getFileId(item.attachmentIds[0]) }} style={tw`w-10 h-10`} />}
                       </View>
@@ -215,14 +270,17 @@ const ChatDetails = () => {
                   )}
                   {item.content && (
                     <Text
-                      style={tw`flex items-start gap-5 ${item.senderId === senderId ? 'bg-white rounded-lg py-2 px-3 shadow max-w-sm w-max' : 'bg-lime-500 text-white rounded-lg py-2 px-3 shadow mb-2 max-w-max flex-col-reverse'}`}
+                      style={[
+                        tw`flex items-start gap-5`,
+                        item.senderId === senderId ? tw`bg-white rounded-lg py-2 px-3 shadow max-w-sm w-max` : tw`bg-lime-500 text-white rounded-lg py-2 px-3 shadow mb-2 max-w-max flex-col-reverse`
+                      ]}
                     >
                       <Text style={tw`w-[95%]`}>{item.content ? item.content : '(null)'}</Text>
                       {/* Qo'shimcha element */}
                     </Text>
                   )}
                 </View>
-                <Text style={tw`text-xs`}>{item.createdAt}</Text>
+                <Text style={tw`text-xs text-white`}>{item.createdAt}</Text>
               </View>
             ))
           ) : (
@@ -235,7 +293,7 @@ const ChatDetails = () => {
             <View key={index} style={tw`border flex gap-3 justify-between rounded-t-md p-3`}>
               <View style={tw`flex gap-3`}>
                 <BiReply style={{ fontSize: 25 }} />
-                <Text>{item.content}</Text>
+                <Text style={tw`text-white`}>{item.content}</Text>
               </View>
               <TouchableOpacity
                 onPress={() => {
@@ -282,9 +340,10 @@ const ChatDetails = () => {
             </TouchableOpacity>
             <TextInput
               value={content}
-              style={tw`w-full border-2 rounded-md py-2 px-4 mr-2 bg-transparent focus:outline-none focus:ring-0 custom-textarea`}
+              style={tw`w-full border-2 rounded-md py-2 px-4 mr-2 bg-transparent focus:outline-none focus:ring-0 custom-textarea text-white`}
               onChangeText={setContent}
               placeholder={'Type your message'}
+              placeholderTextColor="#aaa"
             />
             <View style={tw`flex flex-row justify-end items-center text-2xl w-max gap-5`}>
               {(content.trim() || photoPreview) && !selreplyId && !seleditId && (

@@ -8,7 +8,7 @@ import Buttons from '@/components/(buttons)/button';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import { router } from 'expo-router';
 
-const ServesGender = () => {
+const ServiceStyle = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView style={{ flex: 1 }}>
@@ -25,4 +25,5 @@ const ServesGender = () => {
     );
 };
 
-export default ServesGender;
+export default ServiceStyle;
+

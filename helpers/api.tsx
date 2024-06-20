@@ -20,3 +20,7 @@ export const messages_url = `${base_url}chat/messages`;
 export const finance_top_client: string = `${base_url}finance/top-client`
 export const finance_month: string = `${base_url}finance/month`
 export const finance_day: string = `${base_url}finance/day`
+
+// attachment
+export const postFileId = `${base_url}attachment/upload`; // get chat list
+export const postFilelist = `${base_url}attachment/upload/list`; // get chat list
