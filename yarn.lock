@@ -7117,6 +7117,11 @@ modern-normalize@^1.1.0:
   resolved "https://registry.npmjs.org/modern-normalize/-/modern-normalize-1.1.0.tgz"
   integrity sha512-2lMlY1Yc1+CUy0gw4H95uNN7vjbpoED7NNRSBHE25nWfLBdmMzFCsPshlzbxHz+gYMcBEUN8V4pU16prcdPSgA==
 
+moment@^2.30.1, "moment@>= 2.x":
+  version "2.30.1"
+  resolved "https://registry.npmjs.org/moment/-/moment-2.30.1.tgz"
+  integrity sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==
+
 mrmime@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/mrmime/-/mrmime-1.0.1.tgz"
