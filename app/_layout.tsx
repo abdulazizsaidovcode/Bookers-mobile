@@ -24,6 +24,8 @@ import Category from './(standart)/(services)/(category)/category';
 import Upcomingentries from './(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries';
 import PastEntries from './(profile)/(sessionhistory)/components/Pastentries/Pastentries';
 import Canceledentries from './(profile)/(sessionhistory)/components/Canceledentries/Canceledentries';
+import SettingsLocation from './(settings)/(settings-location)/settings-locations';
+import SettingsLocationMain from './(settings)/(settings-location)/settings-locations-main';
 import Settings from './(profile)/(settings)';
 import { StompProvider, } from '@/context/StompContext';
 import Expertise from './(standart)/(services)/(expertise)/expertise';
@@ -82,6 +84,16 @@ function RootLayoutNav() {
           <Stack.Screen name="(work-grafic)/workMain" component={WorkMain} options={{ headerShown: false }} />
           <Stack.Screen name="(work-grafic)/workDays" component={WorkDays} options={{ headerShown: false }} />
 
+        {/*  */}
+        <Stack.Screen name="(profile)/(sessionhistory)/sessionHistory" component={SessionHistory} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries" component={Upcomingentries} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Pastentries/Pastentries" component={PastEntries} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries" component={Canceledentries} options={{ title: 'Отменённые записи' }} />
+        {/* settings update */}
+        <Stack.Screen name="(settings)/settings" component={Settings} options={{ headerShown: false }} />
+        <Stack.Screen name="(settings)/(settings-location)/settings-locations-main" component={SettingsLocationMain} options={{ headerShown: false }} />
+        <Stack.Screen name="(settings)/(settings-location)/settings-locations" component={SettingsLocation} options={{ headerShown: false }} />
+        
           {/* expenses  rasxod */}
           <Stack.Screen name="(profile)/(Expenses)/index" component={Expenses} options={{ title: 'Services' }} />
           <Stack.Screen name="(profile)/(Expenses)/(component)/(detail)/expenseDetail" component={ExpensesDetail} options={{ title: 'Services' }} />
