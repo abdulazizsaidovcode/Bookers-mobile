@@ -11,6 +11,10 @@ import Auth from './(auth)/auth';
 import TabLayout from './(tabs)/_layout';
 import ChatDetails from './(chat)/(communicatie)/chatDetails';
 import MyServices from './(standart)/services/myServices/myServices';
+import Notification from './(profile)/(notification)';
+import GraficWork from './(work-grafic)/workGrafic';
+import WorkMain from './(work-grafic)/workMain';
+import WorkDays from './(work-grafic)/workDays';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -59,6 +63,9 @@ function RootLayoutNav() {
         <Stack.Screen name="(chat)/(communicatie)/chatDetails" component={ChatDetails} options={{ title: 'Chat Detail' }} />
         <Stack.Screen name="(standart)/(services)/MyServices" component={MyServices} options={{ title: 'Services' }} />
         <Stack.Screen name="(profile)/(notification)/index" component={Notification} options={{ title: 'Services' }} />
+        <Stack.Screen name="(work-grafic)/workGrafic" component={GraficWork} options={{ title: 'Services' }} />
+        <Stack.Screen name="(work-grafic)/workMain" component={WorkMain} options={{ headerShown: false }} />
+        <Stack.Screen name="(work-grafic)/workDays" component={WorkDays} options={{ headerShown: false }} />
       </Stack.Navigator>
     </ThemeProvider>
   );

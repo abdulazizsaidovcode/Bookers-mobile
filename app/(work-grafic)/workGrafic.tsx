@@ -57,17 +57,17 @@ const GraficWork: React.FC = () => {
       return prevSelectedTimeSlots;
     });
   };
-  
+
 
   const getRangeIndices = () => {
     if (selectedTimeSlots.length < 2) return [];
-  
+
     const indices = selectedTimeSlots.map((slot) => timeList.indexOf(slot)).sort((a, b) => a - b);
     const [start, end] = [indices[0], indices[indices.length - 1]];
-  
+
     return timeList.slice(start, end + 1);
   };
-  
+
   const rangeIndices = getRangeIndices();
 
   const weekendDays = weekList.filter(day => !selectedWeekDays.includes(day.id)).map(day => day.value);
@@ -117,8 +117,8 @@ const GraficWork: React.FC = () => {
                       selectedTimeSlots.length > 0 &&
                       timeList.indexOf(time) < timeList.indexOf(selectedTimeSlots[0]) ||
                       (selectedTimeSlots.length >= 2 &&
-                      !selectedTimeSlots.includes(time) &&
-                      !rangeIndices.includes(time))
+                        !selectedTimeSlots.includes(time) &&
+                        !rangeIndices.includes(time))
                     }
                   />
                 ))}
@@ -138,7 +138,7 @@ const GraficWork: React.FC = () => {
         </View>
       </View>
       <View style={{ paddingHorizontal: 15, marginVertical: 20, height: '15%', alignItems: 'center', justifyContent: 'center' }}>
-        <Buttons title='Продолжить' onPress={handleContinue} isDisebled={!isDisabled} />
+        <Buttons title='Продолжить' onPress={() => !isFiltered ? handleContinue() : router.push('/workMain')} isDisebled={!isDisabled} />
       </View>
     </SafeAreaView>
   );
