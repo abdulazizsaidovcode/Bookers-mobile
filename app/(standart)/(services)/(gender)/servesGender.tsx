@@ -12,8 +12,8 @@ const ServesGender = () => {
             <ScrollView style={{ flex: 1 }}>
                 <View style={tw`flex w-full p-3`}>
                     <NavigationMenu name="Направление по полу" />
-                    <ServicesCategory title="Мужское напрвление" />
-                    <ServicesCategory title="Женское напрвление" />
+                    <ServicesCategory title="Мужское напрвление" id="salon" />
+                    <ServicesCategory title="Женское напрвление" id="salon" />
                 </View>
             </ScrollView>
             <View style={tw`grid content-end p-4`}>

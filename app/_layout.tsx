@@ -10,8 +10,19 @@ import Index from './index';
 import Auth from './(auth)/auth';
 import TabLayout from './(tabs)/_layout';
 import ChatDetails from './(chat)/(communicatie)/chatDetails';
-import MyServices from './(standart)/services/myServices/myServices';
 import Notification from './(profile)/(notification)';
+import GraficWork from './(work-grafic)/workGrafic';
+import WorkMain from './(work-grafic)/workMain';
+import WorkDays from './(work-grafic)/workDays';
+import MyServices from './(standart)/(services)/(myServices)/myServices';
+import Expenses from './(profile)/(Expenses)';
+import ExpensesDetail from './(profile)/(Expenses)/(component)/(detail)/expenseDetail';
+import SessionHistory from './(profile)/(sessionhistory)/sessionHistory';
+import ServesGender from './(standart)/(services)/(gender)/servesGender';
+import Upcomingentries from './(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries';
+import Pastentries from './(profile)/(sessionhistory)/components/Pastentries/Pastentries';
+import Canceledentries from './(profile)/(sessionhistory)/components/Canceledentries/Canceledentries';
+import Settings from './(profile)/(settings)';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -53,13 +64,30 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator initialRouteName='Index'>
+      <Stack.Navigator initialRouteName='index'>
         <Stack.Screen name="index" component={Index} options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/auth" component={Auth} options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" component={TabLayout} options={{ headerShown: false }} />
         <Stack.Screen name="(chat)/(communicatie)/chatDetails" component={ChatDetails} options={{ title: 'Chat Detail' }} />
-        <Stack.Screen name="(standart)/(services)/MyServices" component={MyServices} options={{ title: 'Services' }} />
         <Stack.Screen name="(profile)/(notification)/index" component={Notification} options={{ title: 'Services' }} />
+        <Stack.Screen name="(work-grafic)/workGrafic" component={GraficWork} options={{ title: 'Services' }} />
+        <Stack.Screen name="(work-grafic)/workMain" component={WorkMain} options={{ headerShown: false }} />
+        <Stack.Screen name="(work-grafic)/workDays" component={WorkDays} options={{ headerShown: false }} />
+
+        {/* expenses  rasxod */}
+        <Stack.Screen name="(profile)/(Expenses)/index" component={Expenses} options={{ title: 'Services' }} />
+        <Stack.Screen name="(profile)/(Expenses)/(component)/(detail)/expenseDetail" component={ExpensesDetail} options={{ title: 'Services' }} />
+        <Stack.Screen name="(standart)/(services)/(myServices)/myServices" component={MyServices} options={{ headerShown: false }} />
+        <Stack.Screen name="(standart)/(services)/(gender)/servesGender" component={ServesGender} options={{ headerShown: false }} />
+
+        {/*  */}
+        <Stack.Screen name="(profile)/(sessionhistory)/sessionHistory" component={SessionHistory} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries" component={Upcomingentries} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Pastentries/Pastentries" component={Pastentries} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries" component={Canceledentries} options={{ title: 'Отменённые записи' }} />
+        {/* settings update */}
+        <Stack.Screen name="(settings)/settings" component={Settings} options={{ headerShown: false }} />
+        
       </Stack.Navigator>
     </ThemeProvider>
   );
