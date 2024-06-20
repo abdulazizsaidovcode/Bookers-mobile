@@ -61,7 +61,7 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator initialRouteName='Index'>
+      <Stack.Navigator initialRouteName='index'>
         <Stack.Screen name="index" component={Index} options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/auth" component={Auth} options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" component={TabLayout} options={{ headerShown: false }} />
