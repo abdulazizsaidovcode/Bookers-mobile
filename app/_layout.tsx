@@ -22,6 +22,7 @@ import ServesGender from './(standart)/(services)/(gender)/servesGender';
 import Upcomingentries from './(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries';
 import Pastentries from './(profile)/(sessionhistory)/components/Pastentries/Pastentries';
 import Canceledentries from './(profile)/(sessionhistory)/components/Canceledentries/Canceledentries';
+import Settings from './(profile)/(settings)';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -84,7 +85,9 @@ function RootLayoutNav() {
         <Stack.Screen name="(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries" component={Upcomingentries} options={{ title: 'Отменённые записи' }} />
         <Stack.Screen name="(profile)/(sessionhistory)/components/Pastentries/Pastentries" component={Pastentries} options={{ title: 'Отменённые записи' }} />
         <Stack.Screen name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries" component={Canceledentries} options={{ title: 'Отменённые записи' }} />
-
+        {/* settings update */}
+        <Stack.Screen name="(settings)/settings" component={Settings} options={{ headerShown: false }} />
+        
       </Stack.Navigator>
     </ThemeProvider>
   );
