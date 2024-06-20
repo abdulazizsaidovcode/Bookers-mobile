@@ -11,6 +11,8 @@ const Expertise = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [textAreaValue, setTextAreaValue] = useState('');
 
+    console.log(textAreaValue);
+
     const services = [
         { title: "Здоровье и красота волос", },
         { title: "Ногтевой сервис" },
@@ -22,10 +24,11 @@ const Expertise = () => {
     const openModal = () => setModalVisible(true);
     const closeModal = () => {
         setModalVisible(false);
-        setTextAreaValue('');
+        textAreaValue
     };
 
     const handleSave = () => {
+        textAreaValue
         closeModal(); 
     };
 
@@ -50,7 +53,7 @@ const Expertise = () => {
                     btnRedText='Закрыть'
                     isFullBtn={true}
                     toggleModal={closeModal}
-                   
+                    
                 >
                     <View style={tw`p-4 text-center`}>
                         <Text style={tw`text-white text-xl mb-2 w-full`}>Добавьте свою специализацию</Text>
@@ -61,7 +64,7 @@ const Expertise = () => {
                             placeholder="Введите текст"
                             value={textAreaValue}
                             onChangeText={setTextAreaValue}
-                            scrollEnabled = {true}
+                            scrollEnabled={true}
                         />
                     </View>
                 </CenteredModal>
