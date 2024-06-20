@@ -9,7 +9,7 @@ import tw from "tailwind-react-native-classnames";
 import { useNavigation } from 'expo-router';
 
 const MyServices = () => {
-    const navigation = useNavigation()
+    
     return (
         <SafeAreaView>
             <ScrollView>
@@ -19,7 +19,7 @@ const MyServices = () => {
                         <MyServicess
                             title="Направление услуг по полу"
                             subTitle="Не выбрано"
-                            
+                            onPress={() => router.push('/servesGender')}
                         />
                         <MyServicess
                             title="Hellor"
