@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#21212e',
   },
   title: {
-    fontSize: 23,
+    fontSize: 20,
     color: 'white',
     marginBottom: 10,
     paddingHorizontal: 15

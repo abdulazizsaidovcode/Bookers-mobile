@@ -17,11 +17,8 @@ import WorkDays from './(work-grafic)/workDays';
 import MyServices from './(standart)/(services)/(myServices)/myServices';
 import Expenses from './(profile)/(Expenses)';
 import ExpensesDetail from './(profile)/(Expenses)/(component)/(detail)/expenseDetail';
-import SessionDetail from './(profile)/(sessionhistory)/components/SessionDetail/SessionDetail';
 import SessionHistory from './(profile)/(sessionhistory)/sessionHistory';
 import ServesGender from './(standart)/(services)/(gender)/servesGender';
-import Expertise from './(standart)/(expertise)/expertise';
-import Category from './(standart)/(services)/(category)/category';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -63,7 +60,7 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator initialRouteName='Index'>
+      <Stack.Navigator initialRouteName='index'>
         <Stack.Screen name="index" component={Index} options={{ headerShown: false }} />
         <Stack.Screen name="(auth)/auth" component={Auth} options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" component={TabLayout} options={{ headerShown: false }} />
@@ -73,7 +70,7 @@ function RootLayoutNav() {
         <Stack.Screen name="(work-grafic)/workMain" component={WorkMain} options={{ headerShown: false }} />
         <Stack.Screen name="(work-grafic)/workDays" component={WorkDays} options={{ headerShown: false }} />
 
-          {/* expenses  rasxod */}
+        {/* expenses  rasxod */}
         <Stack.Screen name="(profile)/(Expenses)/index" component={Expenses} options={{ title: 'Services' }} />
         <Stack.Screen name="(profile)/(Expenses)/(component)/(detail)/expenseDetail" component={ExpensesDetail} options={{ title: 'Services' }} />
         <Stack.Screen name="(standart)/(services)/(myServices)/myServices" component={MyServices} options={{ headerShown: false }} />
@@ -83,7 +80,12 @@ function RootLayoutNav() {
 
         {/*  */}
         <Stack.Screen name="(profile)/(sessionhistory)/sessionHistory" component={SessionHistory} options={{ title: 'Отменённые записи' }} />
-
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries" component={Upcomingentries} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Pastentries/Pastentries" component={Pastentries} options={{ title: 'Отменённые записи' }} />
+        <Stack.Screen name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries" component={Canceledentries} options={{ title: 'Отменённые записи' }} />
+        {/* settings update */}
+        <Stack.Screen name="(settings)/settings" component={Settings} options={{ headerShown: false }} />
+        
       </Stack.Navigator>
     </ThemeProvider>
   );

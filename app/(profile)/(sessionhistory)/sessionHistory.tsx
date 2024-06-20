@@ -3,11 +3,12 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native
 import tw from 'tailwind-react-native-classnames';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 
 const sessionData = [
-    { id: '1', title: 'Предстоящие записи', icon: 'calendar', count: 2, screen: 'UpcomingSessions' },
-    { id: '2', title: 'Прошедшие записи', icon: 'history', count: 2, screen: 'PastSessions' },
-    { id: '3', title: 'Отменённые записи', icon: 'times-circle', count: 1, screen: 'CancelledSessions' },
+    { id: '1', title: 'Предстоящие записи', icon: 'calendar', count: 2, screen: '(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries' },
+    { id: '2', title: 'Прошедшие записи', icon: 'history', count: 2, screen: '(profile)/(sessionhistory)/components/Pastentries/Pastentries' },
+    { id: '3', title: 'Отменённые записи', icon: 'times-circle', count: 1, screen: '(profile)/(sessionhistory)/components/Canceledentries/Canceledentries' },
 ];
 
 const SessionHistory = () => {
