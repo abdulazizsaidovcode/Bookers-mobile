@@ -27,6 +27,7 @@ import Canceledentries from './(profile)/(sessionhistory)/components/Canceledent
 import Settings from './(profile)/(settings)';
 import { StompProvider, } from '@/context/StompContext';
 import Expertise from './(standart)/(services)/(expertise)/expertise';
+import ServiceStyle from './(standart)/(services)/serviceStyle/serviceStyle';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -88,6 +89,7 @@ function RootLayoutNav() {
           <Stack.Screen name="(standart)/(services)/(gender)/servesGender" component={ServesGender} options={{ headerShown: false }} />
           <Stack.Screen name="(standart)/(services)/(category)/category" component={Category} options={{ headerShown: false }} />
           <Stack.Screen name="(standart)/(services)/(expertise)/expertise" component={Expertise} options={{ headerShown: false }} />
+          <Stack.Screen name="(standart)/(services)/serviceStyle/serviceStyle" component={ServiceStyle} options={{ headerShown: false }} />
 
           {/*  */}
           <Stack.Screen name="(profile)/(sessionhistory)/sessionHistory" component={SessionHistory} options={{ title: 'Отменённые записи' }} />
