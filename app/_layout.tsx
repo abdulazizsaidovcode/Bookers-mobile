@@ -10,11 +10,16 @@ import Index from './index';
 import Auth from './(auth)/auth';
 import TabLayout from './(tabs)/_layout';
 import ChatDetails from './(chat)/(communicatie)/chatDetails';
-import MyServices from './(standart)/services/myServices/myServices';
 import Notification from './(profile)/(notification)';
 import GraficWork from './(work-grafic)/workGrafic';
 import WorkMain from './(work-grafic)/workMain';
 import WorkDays from './(work-grafic)/workDays';
+import MyServices from './(standart)/(services)/(myServices)/myServices';
+import Expenses from './(profile)/(Expenses)';
+import ExpensesDetail from './(profile)/(Expenses)/(component)/(detail)/expenseDetail';
+import SessionDetail from './(profile)/(sessionhistory)/components/SessionDetail/SessionDetail';
+import SessionHistory from './(profile)/(sessionhistory)/sessionHistory';
+import ServesGender from './(standart)/(services)/(gender)/servesGender';
 const Stack = createNativeStackNavigator();
 
 export {
@@ -61,11 +66,20 @@ function RootLayoutNav() {
         <Stack.Screen name="(auth)/auth" component={Auth} options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" component={TabLayout} options={{ headerShown: false }} />
         <Stack.Screen name="(chat)/(communicatie)/chatDetails" component={ChatDetails} options={{ title: 'Chat Detail' }} />
-        <Stack.Screen name="(standart)/(services)/MyServices" component={MyServices} options={{ title: 'Services' }} />
         <Stack.Screen name="(profile)/(notification)/index" component={Notification} options={{ title: 'Services' }} />
         <Stack.Screen name="(work-grafic)/workGrafic" component={GraficWork} options={{ title: 'Services' }} />
         <Stack.Screen name="(work-grafic)/workMain" component={WorkMain} options={{ headerShown: false }} />
         <Stack.Screen name="(work-grafic)/workDays" component={WorkDays} options={{ headerShown: false }} />
+
+          {/* expenses  rasxod */}
+        <Stack.Screen name="(profile)/(Expenses)/index" component={Expenses} options={{ title: 'Services' }} />
+        <Stack.Screen name="(profile)/(Expenses)/(component)/(detail)/expenseDetail" component={ExpensesDetail} options={{ title: 'Services' }} />
+        <Stack.Screen name="(standart)/(services)/(myServices)/myServices" component={MyServices} options={{ headerShown: false }} />
+        <Stack.Screen name="(standart)/(services)/(gender)/servesGender" component={ServesGender} options={{ headerShown: false }} />
+
+        {/*  */}
+        <Stack.Screen name="(profile)/(sessionhistory)/sessionHistory" component={SessionHistory} options={{ title: 'Отменённые записи' }} />
+
       </Stack.Navigator>
     </ThemeProvider>
   );
