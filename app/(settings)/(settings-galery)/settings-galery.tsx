@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Alert, Image } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Alert, Image, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import LocationInput from '@/components/(location)/locationInput';
@@ -10,6 +10,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 const SettingsGalery: React.FC = () => {
     const [image, setImage] = useState<string | null>(null);
+    const [isPhotoMain, setIsPhotoMain] = useState(false);
 
     const pickImage = async () => {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -42,8 +43,17 @@ const SettingsGalery: React.FC = () => {
                         <LocationInput placeholder='Название альбома' labalVisible={true} />
                     </View>
                     {image && (
-                        <View style={{ marginVertical: 20 }}>
+                        <View style={styles.imageContainer}>
                             <Image source={{ uri: image }} style={styles.image} />
+                            <View style={styles.switchContainer}>
+                                <Text style={styles.switchLabel}>Сделать фото основным</Text>
+                                <Switch
+                                    value={isPhotoMain}
+                                    onValueChange={setIsPhotoMain}
+                                    trackColor={{ false: '#767577', true: '#fff' }}
+                                    thumbColor={isPhotoMain ? '#9C0A35' : '#f4f3f4'}
+                                />
+                            </View>
                         </View>
                     )}
                     <View style={{ marginTop: 10 }}>
@@ -69,11 +79,25 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'white',
-        fontSize: 27
+        fontSize: 27,
+    },
+    imageContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginVertical: 20,
     },
     image: {
         width: 80,
         height: 80,
         borderRadius: 15,
+    },
+    switchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    switchLabel: {
+        color: 'white',
+        marginRight: 10,
     },
 });
