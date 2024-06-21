@@ -6,6 +6,8 @@ import React from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
 import NavigationMenu from "@/components/navigation/navigation-menu";
+import LocationInput from "@/components/(location)/locationInput";
+import CalendarComponent from "@/components/calendar/calendar";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
 
@@ -21,12 +23,18 @@ const CreatingClient = () => {
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
-
+                        <LocationInput label={`Имя`}/>
+                        <LocationInput label={`Фамилия`}/>
+                        <LocationInput label={`Профессия`}/>
+                        <LocationInput label={`Предпочтения клинета`}/>
+                        <Text style={[tw`text-gray-500 mb-2 text-base`]}>День рождения</Text>
+                        <CalendarComponent />
                     </View>
                     <View style={tw`pb-5`}>
                         <Buttons
                             title={`Сохранить`}
-                            onPress={() => {}}
+                            onPress={() => {
+                            }}
                         />
                     </View>
                 </ScrollView>
