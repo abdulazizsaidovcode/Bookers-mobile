@@ -12,6 +12,7 @@ import axios from 'axios';
 import { fetchMessages } from '@/helpers/api-function/chat/getmessages';
 import fetchChatDataStore, { ChatData } from '@/helpers/state_managment/chat/chatfetchStore';
 import { useStomp } from '@/context/StompContext';
+import { Menu, MenuOptions, MenuOption, MenuTrigger, renderers } from 'react-native-popup-menu';
 
 // Mock data and functions
 const getFileId = (file: string) => `https://example.com/files/${file}`;
@@ -24,6 +25,8 @@ const deleteId = (id: any) => { };
 const markMessageAsRead = (id: any) => { };
 const editMessage = (id: any) => { };
 const reply = (id: any) => { };
+
+const { Popover } = renderers;
 
 interface ChatSentSmstList {
   id: string;
@@ -53,8 +56,6 @@ const ChatDetails = () => {
   const { stompClient, adminId } = useStomp();
 
   const [chats, setChats] = useState<any>(messageData);
-  const scrolRef = useRef<any>();
-  const messageRefs = useRef<Record<string, HTMLDivElement>>({});
   const [selreplyId, setSelreplyId] = useState<string>('');
   const [seleditId, setseleditId] = useState<string>('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -64,11 +65,14 @@ const ChatDetails = () => {
   const [photo, setPhoto] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const chatContainerRef = useRef<ScrollView>(null);
-  const checkReadElement = useRef<View>(null);
   const [unReadMessages, setUnReadMessages] = useState<any[]>([]);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [content, setContent] = useState<string>('');
+
+  const messageRefs = useRef<Record<string, HTMLDivElement>>({});
+  const scrolRef = useRef<any>();
+  const chatContainerRef = useRef<ScrollView>(null);
+  const checkReadElement = useRef<View>(null);
 
   const route = useRoute();
   const { id } = route.params as { id: string };
@@ -79,6 +83,10 @@ const ChatDetails = () => {
     console.log('Chat ID:', id);
     // Fetch the chat data based on the received id
   }, [id]);
+
+  useEffect(() => {
+    console.log(selectedMessageId);
+  }, [selectedMessageId])
 
   useEffect(() => {
     fetchMessages({
@@ -201,6 +209,7 @@ const ChatDetails = () => {
     }
   };
 
+  // reply qilingan messageninoziga olib boruvchi funcsiya
   const scrollToMessage = (messageId: string) => {
     const messageElement = messageRefs.current[messageId];
     if (messageElement) {
@@ -213,6 +222,10 @@ const ChatDetails = () => {
       }, 1000);
     }
   };
+
+  function popUp() {
+
+  }
 
   return (
     <View style={tw`h-full relative`}>
@@ -286,6 +299,17 @@ const ChatDetails = () => {
                   )}
                 </View>
                 <Text style={tw`text-xs text-white`}>{item.createdAt}</Text>
+                {selectedMessageId === item.id &&
+                  <Menu renderer={Popover} rendererProps={{ placement: 'bottom' }}>
+                    <MenuTrigger />
+                    <MenuOptions>
+                      <MenuOption onSelect={() => handleReply(item.id)} text='Ответить' />
+                      <MenuOption onSelect={() => console.log(`Copy message with id: ${item.id}`)} text='Копировать' />
+                      <MenuOption onSelect={() => handleEdit(item.id)} text='Редактировать' />
+                      <MenuOption onSelect={() => deleteMessage(item.id)} text='Удалить' />
+                    </MenuOptions>
+                  </Menu>
+                }
               </Pressable>
             ))
           ) : (
