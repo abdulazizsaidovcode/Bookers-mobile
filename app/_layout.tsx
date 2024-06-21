@@ -36,6 +36,7 @@ import Settings from "./(profile)/(settings)";
 import { StompProvider } from "@/context/StompContext";
 import Expertise from "./(standart)/(services)/(expertise)/expertise";
 import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
+import SettingsGaleryMain from "./(settings)/(settings-galery)/settings-galery-main";
 
 const Stack = createNativeStackNavigator();
 
@@ -131,6 +132,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(settings)/(settings-location)/settings-locations"
               component={SettingsLocation}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(settings)/(settings-galery)/settings-galery-main"
+              component={SettingsGaleryMain}
               options={{ headerShown: false }}
             />
             <Stack.Screen

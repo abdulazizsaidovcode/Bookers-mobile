@@ -14,7 +14,7 @@ const Buttons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', icon, 
             disabled={!isDisebled}
         >
             <Text style={[styles.buttonText, { color: textColor }]}>
-                {icon} {title}
+                {icon ? icon : ''} {title}
             </Text>
         </TouchableOpacity>
     );
