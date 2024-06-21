@@ -37,6 +37,8 @@ import { StompProvider } from "@/context/StompContext";
 import Expertise from "./(standart)/(services)/(expertise)/expertise";
 import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
 import SettingsGaleryMain from "./(settings)/(settings-galery)/settings-galery-main";
+import PhoneNumberInput from "./(auth)/number-create";
+import MainClient from "@/app/(free)/(client)/main";
 
 const Stack = createNativeStackNavigator();
 
@@ -87,6 +89,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/auth"
               component={Auth}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/number-create"
+              component={PhoneNumberInput}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -198,6 +205,11 @@ function RootLayoutNav() {
               name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries"
               component={Canceledentries}
               options={{ title: "Отменённые записи" }}
+            />
+            <Stack.Screen
+              name="FreeMain"
+              component={MainClient}
+              options={{ title: "Client", headerShown: false }}
             />
           </Stack.Navigator>
         </MenuProvider>
