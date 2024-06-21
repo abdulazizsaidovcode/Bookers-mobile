@@ -39,6 +39,7 @@ import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
 import SettingsGaleryMain from "./(settings)/(settings-galery)/settings-galery-main";
 import PhoneNumberInput from "./(auth)/number-create";
 import MainClient from "@/app/(free)/(client)/main";
+import Process from "./(standart)/(services)/(process)/process";
 
 const Stack = createNativeStackNavigator();
 
@@ -160,6 +161,11 @@ function RootLayoutNav() {
               name="(profile)/(Expenses)/(component)/(detail)/expenseDetail"
               component={ExpensesDetail}
               options={{ title: "Services" }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(process)/process"
+              component={Process}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="(standart)/(services)/(myServices)/myServices"
