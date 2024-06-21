@@ -1,7 +1,8 @@
-import TabLayout from "./(tabs)/_layout"
+import Auth from "./(auth)/auth"
+// import TabLayout from "./(tabs)/_layout"
 
 function Index() {
-  return <TabLayout />
+  return <Auth />
 }
 
 export default Index
