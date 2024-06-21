@@ -207,7 +207,7 @@ function RootLayoutNav() {
               options={{ title: "Отменённые записи" }}
             />
             <Stack.Screen
-              name="FreeMain"
+              name="(free)/(client)/main"
               component={MainClient}
               options={{ title: "Client", headerShown: false }}
             />
