@@ -5,7 +5,7 @@ import { HomeCard } from "@/type/card/homeCard";
 
 const HomeCards: React.FC<HomeCard> = ({ icon: Icon, title, description, onPress }) => {
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity onPress={onPress} activeOpacity={0.6}>
       <View style={[tw`flex rounded-3xl items-center p-5`, { backgroundColor: "#e8e8e8" }]}>
         <View style={[tw`w-full flex items-center`]}>
           <View
