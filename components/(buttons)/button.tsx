@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { IButton } from "@/type/button/button";
 
-const Buttons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', textColor = 'white', onPress, isDisebled = true }) => {
+const Buttons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', icon, textColor = 'white', onPress, isDisebled = true }) => {
     return (
         <TouchableOpacity
             style={[
@@ -14,7 +14,7 @@ const Buttons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', textCo
             disabled={!isDisebled}
         >
             <Text style={[styles.buttonText, { color: textColor }]}>
-                {title}
+                {icon} {title}
             </Text>
         </TouchableOpacity>
     );
@@ -25,9 +25,10 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingVertical: 12,
         borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     buttonText: {
-        textAlign: 'center',
         fontSize: 18,
         fontWeight: '500',
     },

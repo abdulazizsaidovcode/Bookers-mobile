@@ -33,6 +33,7 @@ import { StompProvider, } from '@/context/StompContext';
 import Expertise from './(standart)/(services)/(expertise)/expertise';
 import ServiceStyle from './(standart)/(services)/serviceStyle/serviceStyle';
 import SettingsLocationMain from "./(settings)/(settings-location)/settings-locations-main";
+import SettingsGalery from "./(settings)/(settings-galery)/settings-galery";
 const Stack = createNativeStackNavigator();
 
 export { ErrorBoundary } from "expo-router";
@@ -161,6 +162,11 @@ function RootLayoutNav() {
             name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries"
             component={Canceledentries}
             options={{ title: "Отменённые записи" }}
+          />
+          <Stack.Screen
+            name="(settings)/(settings-galery)/settings-galery"
+            component={SettingsGalery}
+            options={{ headerShown: false }}
           />
           {/* settings update */}
         </Stack.Navigator>
