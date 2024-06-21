@@ -2,16 +2,17 @@ import React from 'react';
 import { Text, View } from "@/components/Themed";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import MyServicess from "@/components/services/myServices";
-import { router } from "expo-router"; // router ni import qiling
+import { router } from "expo-router"; 
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";
-import { useNavigation } from 'expo-router';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/components/(location)/locationInput';
 import Buttons from '@/components/(buttons)/button';
 
 const Process = () => {
+     
+
 
     const Gender = [
         {

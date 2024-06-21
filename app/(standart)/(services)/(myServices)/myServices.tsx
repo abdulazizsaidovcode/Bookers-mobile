@@ -6,7 +6,7 @@ import { router } from "expo-router"; // router ni import qiling
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";
-import { useNavigation } from 'expo-router';
+
 
 const MyServices = () => {
 

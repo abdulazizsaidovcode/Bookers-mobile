@@ -33,6 +33,7 @@ import { StompProvider, } from '@/context/StompContext';
 import Expertise from './(standart)/(services)/(expertise)/expertise';
 import ServiceStyle from './(standart)/(services)/serviceStyle/serviceStyle';
 import SettingsLocationMain from "./(settings)/(settings-location)/settings-locations-main";
+import Process from "./(standart)/(services)/(process)/process";
 const Stack = createNativeStackNavigator();
 
 export { ErrorBoundary } from "expo-router";
@@ -140,6 +141,7 @@ function RootLayoutNav() {
           <Stack.Screen name="(standart)/(services)/(category)/category" component={Category} options={{ headerShown: false }} />
           <Stack.Screen name="(standart)/(services)/(expertise)/expertise" component={Expertise} options={{ headerShown: false }} />
           <Stack.Screen name="(standart)/(services)/serviceStyle/serviceStyle" component={ServiceStyle} options={{ headerShown: false }} />
+          <Stack.Screen name="(standart)/(services)/(process)/process" component={Process} options={{ headerShown: false }} />
 
           {/*  */}
           <Stack.Screen
