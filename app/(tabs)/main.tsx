@@ -5,6 +5,8 @@ import { LineChart, ProgressChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
+// shunaqa qilib ishlatsa xam buladi
+const {width, height, scale, fontScale} = Dimensions.get("window");
 
 export default function TabOneScreen() {
 	return (
@@ -39,7 +41,7 @@ export default function TabOneScreen() {
 				</View>
 			</View>
 
-			<View style={styles.statsContainer}>
+			<View style={styles.statsContainer}>														
 				<View style={styles.statsCard}>
 					<Text style={styles.statsText}>Выполнено сеансов</Text>
 					<ProgressChart

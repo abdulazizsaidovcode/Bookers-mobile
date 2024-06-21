@@ -29,7 +29,7 @@ const sessionDetails = [
     },
 ];
 
-const SessionDetail = () => {
+const Upcomingentries = () => {
     const navigation = useNavigation();
 
     const renderItem = ({ item }: any) => (
@@ -72,4 +72,4 @@ const SessionDetail = () => {
     );
 };
 
-export default SessionDetail;
+export default Upcomingentries;

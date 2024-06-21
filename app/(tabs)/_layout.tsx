@@ -8,7 +8,7 @@ import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import { TabBarIcon } from "../../components/navigation/TabBarIcon";
-import TabOneScreen from ".";
+import TabOneScreen from "./main";
 import TabTwoScreen from "./two";
 import ChatScreen from "./chat";
 import Finance from "./finance";
@@ -28,14 +28,11 @@ export default function TabLayout() {
 			}}
 		>
 			<Tab.Screen
-				name="index"
+				name="main"
 				component={TabOneScreen}
 				options={{
 					title: "Главная",
 					tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-					tabBarOptions: {
-						activeTintColor: "#21212e",
-					},
 					headerRight: () => (
 						<View style={{ flexDirection: "row", alignItems: "center", marginRight: 10 }}>
 							<Ionicons name="notifications" size={24} color="white" style={{ marginRight: 16 }} />

@@ -5,6 +5,12 @@ export interface Finance {
     setMonthData: (val: FinanceMonth[] | null) => void;
     topClients: null | FinanceTopClients[];
     setTopClients: (val: FinanceTopClients[] | null) => void;
+    date: string | null;
+    setDate: (val: string | null) => void;
+    startDate: string | null;
+    setStartDate: (val: string | null) => void;
+    endDate: string | null;
+    setEndDate: (val: string | null) => void;
 }
 
 export interface FinanceDay {

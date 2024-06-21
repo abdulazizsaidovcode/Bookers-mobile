@@ -8,6 +8,12 @@ const financeStore = create<Finance>((set) => ({
     setMonthData: (val: FinanceMonth[] | null) => set({ monthData: val }),
     topClients: null,
     setTopClients: (val: FinanceTopClients[] | null) => set({ topClients: val }),
+    date: null,
+    setDate: (val: string | null) => set({ date: val }),
+    startDate: null,
+    setStartDate: (val: string | null) => set({ startDate: val }),
+    endDate: null,
+    setEndDate: (val: string | null) => set({ endDate: val }),
 }));
 
 export default financeStore;
