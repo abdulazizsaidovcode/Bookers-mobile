@@ -1,5 +1,5 @@
 export interface HomeCard {
-    img?: string;
+    icon: React.ComponentType<{ style?: any }>;
     title?: string;
     description?: string;
     onPress?: () => void;
