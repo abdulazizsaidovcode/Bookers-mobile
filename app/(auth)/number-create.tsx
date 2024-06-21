@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Buttons from '@/components/(buttons)/button';
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 
 const PhoneNumberInput: React.FC = () => {
@@ -13,23 +13,16 @@ const PhoneNumberInput: React.FC = () => {
 
     const handlePhoneNumberChange = (text: string) => {
         setPhoneNumber(text);
-        setIsValid(text.length === 9);
+        setIsValid(phoneInput.current?.isValidNumber(text) ?? false);
     };
 
-    const handleLoginPress = () => {
-        if (isValid) {
-            console.log('Login Pressed');
-            console.log(phoneNumber);
-        } else {
-            console.log('Invalid phone number');
-        }
-    };
+
 
     return (
         <View style={styles.container}>
             <SafeAreaView style={{ marginBottom: 16 }}>
-                <StatusBar barStyle="dark-content" backgroundColor={`black`} />
-                <NavigationMenu name='' deleteIcon={false} key={1} />
+                <StatusBar barStyle="dark-content" backgroundColor="black" />
+                <NavigationMenu name="" deleteIcon={false} key={1} />
             </SafeAreaView>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center' }}>
                 <View style={styles.textContainer}>
@@ -38,37 +31,46 @@ const PhoneNumberInput: React.FC = () => {
                 </View>
                 <StatusBar barStyle="dark-content" />
                 <View style={styles.phoneNumber}>
-                    <PhoneInput
-                        ref={phoneInput}
-                        defaultValue={phoneNumber}
-                        defaultCode="UZ"
-                        onChangeText={handlePhoneNumberChange}
-                        placeholder="Номер телефона"
-                        containerStyle={styles.phoneInputContainer}
-                        textContainerStyle={styles.phoneInputTextContainer}
-                        autoFocus
-                    />
+                    <View style={styles.phoneInputWrapper}>
+                        <PhoneInput
+                            ref={phoneInput}
+                            defaultValue={phoneNumber}
+                            defaultCode="UZ"
+                            layout="first"
+                            onChangeFormattedText={handlePhoneNumberChange}
+                            placeholder="Номер телефона"
+                            containerStyle={styles.phoneInputContainer}
+                            textContainerStyle={styles.phoneInputTextContainer}
+                            textInputStyle={styles.phoneInputText}
+                            codeTextStyle={styles.phoneInputCodeText}
+                            flagButtonStyle={styles.flagButton}
+                            textInputProps={{
+                                placeholderTextColor: '#FFFFFF'
+                            }}
+                            withDarkTheme
+                            autoFocus
+                        />
+                    </View>
                     {!isValid && (
                         <Text style={styles.errorText}>Пожалуйста, введите корректный номер телефона</Text>
                     )}
                 </View>
                 <View style={{ marginVertical: 20, width: '100%' }}>
-                    <TouchableOpacity style={styles.socialButton} activeOpacity={.7} onPress={() => console.log('Login with Google')}>
-                        <FontAwesome5 name="google" size={24} color="white" />
+                    <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} onPress={() => console.log('Login with Google')}>
+                        <Image source={require('../../assets/images/auth/google.png')} />
                         <Text style={styles.socialButtonText}>Войти через Google</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.socialButton} activeOpacity={.7} onPress={() => console.log('Login with Facebook')}>
-                        <FontAwesome5 name="facebook" size={24} color="white" />
+                    <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} onPress={() => console.log('Login with Facebook')}>
+                        <Image source={require('../../assets/images/auth/facebook.png')} />
                         <Text style={styles.socialButtonText}>Войти через Facebook</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
             <View style={{ marginVertical: 20 }}>
                 <Buttons
-                    title='next'
-                    onPress={handleLoginPress}
-                    isDisebled={isValid}
-                    backgroundColor={!isValid ? 'gray' : '#9C0A35'}
+                    title="Войти"
+                    // onPress={}
+                    backgroundColor={'#9C0A35'}
                 />
             </View>
         </View>
@@ -78,41 +80,65 @@ const PhoneNumberInput: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1E1E1E',
+        backgroundColor: '#21212E',
         padding: 16,
-        paddingTop: 0
+        paddingTop: 0,
     },
     textContainer: {
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 30,
     },
     title: {
         color: 'white',
         fontSize: 26,
         letterSpacing: 1,
-        marginBottom: 10,
+        marginBottom: 20,
         fontWeight: 'bold',
     },
     subTitle: {
         color: '#828282',
         textAlign: 'center',
         fontSize: 16,
-        lineHeight: 18
+        lineHeight: 18,
     },
     phoneNumber: {
         width: '100%',
         alignItems: 'center',
         marginTop: 20,
     },
-    phoneInputContainer: {
-        backgroundColor: '#4B4B64',
-        borderColor: '#9C0A35',
-        borderBottomWidth: 1,
+    phoneInputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
         width: '100%',
+        // borderColor: '#9C0A35',
+        borderWidth: 1,
+        // borderRadius: 10,
+        backgroundColor: '#4B4B64',
+    },
+    phoneInputContainer: {
+        width: '100%',
+        height: 60,
+        borderRadius: 20,
     },
     phoneInputTextContainer: {
         backgroundColor: '#4B4B64',
-        paddingVertical: 10,
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+        flex: 1,
+    },
+    phoneInputText: {
+        color: '#fff',
+        fontSize: 18,
+    },
+    phoneInputCodeText: {
+        color: '#fff',
+        fontSize: 18,
+    },
+    flagButton: {
+        borderRightColor: '#9C0A35',
+        borderRightWidth: 1,
+        backgroundColor: '#4B4B64',
+        paddingHorizontal: 10,
     },
     errorText: {
         color: '#FF0000',
@@ -135,9 +161,9 @@ const styles = StyleSheet.create({
         marginTop: 20,
         paddingVertical: 15,
         paddingHorizontal: 40,
-        borderRadius: 5,
+        borderRadius: 10,
         borderWidth: 1,
-        borderColor: 'white',
+        borderColor: '#828282',
         width: '100%',
         justifyContent: 'center',
     },
@@ -146,7 +172,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginLeft: 10,
         fontWeight: '700',
-        letterSpacing: 1
+        letterSpacing: 1,
     },
 });
 
