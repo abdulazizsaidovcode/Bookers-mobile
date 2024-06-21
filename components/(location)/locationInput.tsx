@@ -8,7 +8,7 @@ const LocationInput: React.FC<LocationInputProps> = ({ label, labalVisible = tru
       <View style={{ width: '100%' }}>
         {labalVisible ? <Text style={tw`text-gray-500 mb-3 text-lg`}>{label}</Text> : ''}
         <TextInput
-          style={tw`bg-gray-500 rounded-xl p-3 mb-3 w-full h-18 text-white text-xl`}
+          style={tw`bg-gray-500 rounded-xl py-3 px-5 mb-3 w-full h-18 text-white text-lg`}
           onChangeText={onChangeText}
           placeholder={placeholder}
           value={value}
