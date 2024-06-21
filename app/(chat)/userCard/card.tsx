@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text, Image, Pressable } from 'react-native';
+import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
-import tw from 'tailwind-react-native-classnames';
 
 interface ChatCardProps {
   item: any;
@@ -18,30 +17,27 @@ const ChatCard: React.FC<ChatCardProps> = ({ item, onPress, onLongPress, isSelec
     <Pressable
       onPress={() => onPress(item.userId)}
       onLongPress={() => onLongPress(item.userId)}
-      style={[
-        tw`flex-row bg-gray-500 rounded-xl p-5 mb-3 items-center`,
-        isSelected && tw`bg-gray-700`,
-      ]}
+      style={[styles.card, isSelected && styles.selectedCard]}
     >
-      <View style={tw`relative`}>
-        <Image source={{ uri: avatar }} style={tw`w-12 h-12 rounded-full mr-3`} />
-        {isSelected &&
-          <AntDesign style={tw`text-xs text-white absolute right-2 bottom-0 bg-green-400 rounded-full flex justify-center w-4 h-4`} name="check" size={24} color="black" />
-        }
+      <View style={styles.imageContainer}>
+        <Image source={{ uri: avatar }} style={styles.image} />
+        {isSelected && (
+          <AntDesign style={styles.checkIcon} name="check" size={24} color="black" />
+        )}
       </View>
-      <View style={tw`flex-1`}>
-        <View style={tw`flex-row justify-between items-center`}>
-          <Text style={tw`text-black font-bold`}>{name}</Text>
+      <View style={styles.textContainer}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.name}>{name}</Text>
           {newMessageCount > 0 && (
-            <View style={tw`bg-red-600 rounded-full px-2 py-1`}>
-              <Text style={tw`text-white text-xs font-bold`}>{newMessageCount}</Text>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{newMessageCount}</Text>
             </View>
           )}
         </View>
-        <View style={tw`flex-row justify-between`}>
-          <Text style={tw`text-black mt-1`}>{message}</Text>
-          <View style={tw`flex-row justify-between items-center mt-1 `}>
-            <Text style={tw`text-black mr-2`}>{status}</Text>
+        <View style={styles.messageContainer}>
+          <Text style={styles.message}>{message}</Text>
+          <View style={styles.statusContainer}>
+            <Text style={styles.status}>{status}</Text>
             {newMessageCount === 0 && <FontAwesome name="check" size={14} color="#ccc" />}
           </View>
         </View>
@@ -49,5 +45,78 @@ const ChatCard: React.FC<ChatCardProps> = ({ item, onPress, onLongPress, isSelec
     </Pressable>
   );
 };
+
+const styles = StyleSheet.create({
+  card: {
+    flexDirection: 'row',
+    backgroundColor: '#4B5563',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 12,
+    alignItems: 'center',
+  },
+  selectedCard: {
+    backgroundColor: '#374151',
+  },
+  imageContainer: {
+    position: 'relative',
+    marginRight: 12,
+  },
+  image: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+  },
+  checkIcon: {
+    position: 'absolute',
+    right: -4,
+    bottom: -4,
+    backgroundColor: '#34D399',
+    borderRadius: 8,
+    padding: 2,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  name: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  badge: {
+    backgroundColor: '#DC2626',
+    borderRadius: 12,
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+  },
+  badgeText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  messageContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  message: {
+    color: '#FFFFFF',
+    fontSize: 14,
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  status: {
+    color: '#FFFFFF',
+    marginRight: 8,
+  },
+});
 
 export default ChatCard;

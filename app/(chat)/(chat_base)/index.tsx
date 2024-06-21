@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TextInput, Button } from 'react-native';
-import tw from 'tailwind-react-native-classnames';
+import { View, Text, FlatList, TextInput, Button, StyleSheet } from 'react-native';
 import ChatCard from '../userCard/card';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -11,11 +10,9 @@ const ChatList: React.FC<{ userData: any }> = ({ userData }) => {
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const navigation = useNavigation();
 
-    // use effect bolmasa birinchi render bolayotganda ishlaydi
     useEffect(() => {
         setMessages(userData);
-    }, [userData])
-
+    }, [userData]);
 
     const handleLongPress = (id: string) => {
         if (!showDeleteButton) {
@@ -39,7 +36,6 @@ const ChatList: React.FC<{ userData: any }> = ({ userData }) => {
             }
         } else {
             navigation.navigate('(chat)/(communicatie)/chatDetails', { id });
-            // cde806d1-1da5-4264-85b6-47d066cadca1
         }
     };
 
@@ -50,17 +46,18 @@ const ChatList: React.FC<{ userData: any }> = ({ userData }) => {
     };
 
     return (
-        <View style={tw`flex-1 bg-gray-900 w-full`}>
+        <View style={styles.container}>
             <TextInput
-                style={tw`bg-gray-700 rounded-lg p-3 mb-4 text-white py-4`}
+                style={styles.textInput}
                 placeholder="Поиск сообщений"
                 placeholderTextColor="#aaa"
             />
+            <Text>salomo</Text>
             {showDeleteButton && (
-                <View style={tw`flex-row justify-between mb-2`}>
-                    <View style={tw`flex-row justify-center items-center`}>
-                        <Text style={tw`text-gray-400 mr-3 text-xl`}>{selectedIds.length}</Text>
-                        <MaterialIcons style={tw`text-gray-400`} name="cancel" size={24} color="black" />
+                <View style={styles.deleteButtonContainer}>
+                    <View style={styles.selectedCountContainer}>
+                        <Text style={styles.selectedCountText}>{selectedIds.length}</Text>
+                        <MaterialIcons style={styles.cancelIcon} name="cancel" size={24} color="black" />
                     </View>
                     <Button title="Delete" onPress={handleDelete} color="#E74C3C" />
                 </View>
@@ -80,5 +77,37 @@ const ChatList: React.FC<{ userData: any }> = ({ userData }) => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 2,
+        width: '100%',
+    },
+    textInput: {
+        backgroundColor: '#4B5563',
+        borderRadius: 8,
+        padding: 12,
+        marginBottom: 16,
+        color: '#FFF',
+    },
+    deleteButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 8,
+    },
+    selectedCountContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    selectedCountText: {
+        color: '#9CA3AF',
+        marginRight: 12,
+        fontSize: 20,
+    },
+    cancelIcon: {
+        color: '#9CA3AF',
+    },
+});
 
 export default ChatList;
