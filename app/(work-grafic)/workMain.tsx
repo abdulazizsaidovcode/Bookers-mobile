@@ -8,13 +8,13 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MainCalendar from '@/components/calendar/MainCalendar';
 
 
-const WorkMainCard: React.FC<{ icon: boolean, title: string, subTitle: string, to: string }> = ({ icon, title, subTitle, to }) => {
+export const WorkMainCard: React.FC<{ icon: any, title: string, subTitle: string, to?: string }> = ({ icon, title, subTitle, to }) => {
     return (
-        <TouchableOpacity onPress={() => router.push(to)}>
+        <TouchableOpacity onPress={() => router.push(to || '')}>
             <View style={styles.card}>
                 <View >
                     <View style={{ flexDirection: 'row', gap: 5 }}>
-                        {icon ? <AntDesign name="calendar" size={24} color="#9C0A35" /> : <MaterialIcons name="timer" size={24} color="#9C0A35" />}
+                        {icon}
                         <Text style={styles.cardText}>{title}</Text>
                     </View>
                     <View>
@@ -33,8 +33,8 @@ const WorkMain = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={{ height: '80%', paddingHorizontal: 15, marginTop: 20 }}>
-                <WorkMainCard icon={true} title='График работы' subTitle='Пн Вт Чт Пт Сб Вс' to='/workDays'/>
-                <WorkMainCard icon={false} title='Время работы' subTitle='с 8:00 до 21:00' to='/workMain'/>
+                <WorkMainCard icon={<AntDesign name="calendar" size={24} color="#9C0A35" />} title='График работы' subTitle='Пн Вт Чт Пт Сб Вс' to='/workDays'/>
+                <WorkMainCard icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />} title='Время работы' subTitle='с 8:00 до 21:00' to='/workMain'/>
             </View>
             <View style={{ paddingHorizontal: 15, marginVertical: 20, height: '20%', alignItems: 'center', justifyContent: 'center' }}>
                 <Buttons title='На главную' onPress={() => router.push('/workMain')} />

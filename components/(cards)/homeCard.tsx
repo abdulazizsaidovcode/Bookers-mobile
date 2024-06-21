@@ -1,23 +1,32 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import tw from 'tailwind-react-native-classnames'
-import { HomeCard } from '@/type/card/homeCard'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import tw from "tailwind-react-native-classnames";
+import { HomeCard } from "@/type/card/homeCard";
 
-
-const Nomsizcard:React.FC<HomeCard> = ({img, title, description}) => {
+const HomeCards: React.FC<HomeCard> = ({ img, title, description, onPress }) => {
   return (
-    <View style={[tw`items-center`, {backgroundColor: "#B9B9C9"}]}>
-        <View>
-            <Image style={[tw`w-3/12 rounded-full`, {height: 80}]} source={require("../../assets/images/favicon.png")}/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-            {/* <Image style={[tw`w-full`]} source={{uri: ("https://images.uzmovi.com/2023-12-03/8720ad888885004d0faba6a256bcd525.jpg")}}/> */}
+    <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+      <View style={[tw`flex rounded-3xl items-center p-5`, { backgroundColor: "#e8e8e8" }]}>
+        <View style={[tw`w-full flex items-center `]}>
+          <View
+            style={[
+              tw`p-5 rounded-full flex items-center justify-center`,
+              { backgroundColor: "#9C0A35" },
+            ]}
+          >
+            <Image
+              style={[tw``, { height: 43, width: 43 }]}
+              source={require(`${img}`)}
+            />
+          </View>
         </View>
-      <Text>salom</Text>
-      <Text>salomlar</Text>
-    </View>
-  )
-}
+        <Text style={[tw`text-2xl mt-3 font-bold`]}>{title}</Text>
+        <Text style={[tw`text-lg text-gray-600 text-center`]}>{description}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
-export default Nomsizcard
+export default HomeCards;
 
-const styles = StyleSheet.create({
-})
+const styles = StyleSheet.create({});

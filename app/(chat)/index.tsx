@@ -5,28 +5,31 @@ import tw from 'tailwind-react-native-classnames';
 import { Ionicons } from '@expo/vector-icons';
 import CustomButton from '@/components/(buttons)/custom';
 import ChatList from './(chat_base)';
-import { GetChatList } from '@/helpers/api-function/chat/chat';
+import { getChatList } from '@/helpers/api-function/chat/chat';
 import chatStore from '@/helpers/state_managment/chat/chatStore';
 import { useStomp } from '@/context/StompContext';
+import fetchChatDataStore, { Data } from '@/helpers/state_managment/chat/chatfetchStore';
+
+
 
 const ChatSupport = () => {
     const { stompClient, adminId } = useStomp();
     const { chatData, setChatData } = chatStore();
+    const { setmessageData, messageData } = fetchChatDataStore()
 
     const [recipientId, setRecipientId] = useState<string | null>(null);
-    const [messages, setMessages] = useState<any[]>([]);
-    
+
     useEffect(() => {
         if (stompClient) {
-            stompClient.subscribe(`/user/${adminId}/queue/messages`, (response: any) => {
+            stompClient.subscribe(`/user/cde806d1-1da5-4264-85b6-47d066cadca1/queue/messages`, (response: any) => {
                 const receivedMessage = JSON.parse(response.body);
-                setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+                setmessageData([...messageData, receivedMessage]);
+                console.log(receivedMessage);
             });
         }
-        GetChatList({
-            setData: setChatData
-        });
+        getChatList({ setData: setChatData });
     }, []);
+
 
     const handlePress = () => {
         console.log('Support button pressed');
