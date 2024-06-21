@@ -48,7 +48,7 @@ const MyServicesScreen = () => {
                     <MaterialIcons name="mode-edit" size={24} color="white" />
                 </TouchableOpacity>
             </View>
-            {/* <ScrollView
+            <ScrollView
                 horizontal
                 contentContainerStyle={{ gap: 16, marginBottom: 10 }}
                 showsHorizontalScrollIndicator={false}
@@ -85,8 +85,8 @@ const MyServicesScreen = () => {
                 <TouchableOpacity activeOpacity={.6}>
                     <MaterialIcons name="mode-edit" size={24} color="white" />
                 </TouchableOpacity>
-            </View> */}
-            {/* <View style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
+            </View>
+            <View style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
                 <Text style={tw`font-bold text-xl`}>Мужская для взрослых</Text>
                 <ScrollView
                     horizontal
@@ -103,7 +103,7 @@ const MyServicesScreen = () => {
                 </ScrollView>
                 <Text style={[tw`font-bold text-xl mb-3`, { color: '#9C0A35' }]}>350 000 сум</Text>
                 <Text style={tw`text-black mb-2`}>В услугу входит мытьё головы, массаж головы и Разнообразный и богатый опыт постоянный</Text>
-            </View> */}
+            </View>
             <View style = {tw`mb-10`}>
                 <Buttons title='На главную'/>
             </View>
