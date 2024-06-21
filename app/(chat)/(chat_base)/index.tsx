@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TextInput, Button, StyleSheet } from 'react-native';
-import ChatCard from '../userCard/card';
+import ChatCard from '../userCard/card'; // Ensure this path is correct
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(chat)/(communicatie)/chatDetails'>;
 
 const ChatList: React.FC<{ userData: any }> = ({ userData }) => {
     const [messages, setMessages] = useState<any[]>(userData);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [showDeleteButton, setShowDeleteButton] = useState(false);
-    const navigation = useNavigation();
+    
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     useEffect(() => {
         setMessages(userData);
@@ -50,9 +54,8 @@ const ChatList: React.FC<{ userData: any }> = ({ userData }) => {
             <TextInput
                 style={styles.textInput}
                 placeholder="Поиск сообщений"
-                placeholderTextColor="#aaa"
+                placeholderTextColor="#fff"
             />
-            <Text>salomo</Text>
             {showDeleteButton && (
                 <View style={styles.deleteButtonContainer}>
                     <View style={styles.selectedCountContainer}>
@@ -67,8 +70,8 @@ const ChatList: React.FC<{ userData: any }> = ({ userData }) => {
                 renderItem={({ item }) => (
                     <ChatCard
                         item={item}
-                        onPress={handlePress}
-                        onLongPress={handleLongPress}
+                        onPress={() => handlePress(item.userId)}
+                        onLongPress={() => handleLongPress(item.userId)}
                         isSelected={selectedIds.includes(item.userId)}
                     />
                 )}
@@ -80,7 +83,7 @@ const ChatList: React.FC<{ userData: any }> = ({ userData }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 2,
+        flex: 1,
         width: '100%',
     },
     textInput: {
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 12,
         marginBottom: 16,
-        color: '#FFF',
+        color: '#fff',
     },
     deleteButtonContainer: {
         flexDirection: 'row',
