@@ -6,11 +6,11 @@ import LocationInput from '@/components/(location)/locationInput';
 const SettingsLocations = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{paddingHorizontal: 10}}>
-        <LocationInput label='Город' placeholder='Город'/>
-        <LocationInput label='Улица' placeholder='Улица'/>
-        <LocationInput label='Дом' placeholder='Дом'/>
-        <LocationInput label='Ориентир' placeholder='Ориентир'/>
+      <View style={{ paddingHorizontal: 10 }}>
+        <LocationInput label='Город' placeholder='Город' />
+        <LocationInput label='Улица' placeholder='Улица' />
+        <LocationInput label='Дом' placeholder='Дом' />
+        <LocationInput label='Ориентир' placeholder='Ориентир' />
       </View>
     </SafeAreaView>
   )

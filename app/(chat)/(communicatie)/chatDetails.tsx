@@ -1,29 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Pressable } from 'react-native';
-import { IoSend } from 'react-icons/io5';
-import { IoMdAttach } from 'react-icons/io';
-import { BiReply, BiReplyAll } from 'react-icons/bi';
-import { ImCancelCircle } from 'react-icons/im';
-import { GiCancel } from 'react-icons/gi';
-import { ArrowDownOutlined, EditFilled } from '@ant-design/icons';
-import tw from 'tailwind-react-native-classnames';
+import { View, TouchableOpacity, Image, ScrollView, Pressable, TextInput, StyleSheet, Text } from 'react-native';
+import { Ionicons, MaterialIcons, AntDesign } from '@expo/vector-icons'; // Use Expo icons
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { fetchMessages } from '@/helpers/api-function/chat/getmessages';
-import fetchChatDataStore, { ChatData } from '@/helpers/state_managment/chat/chatfetchStore';
+import fetchChatDataStore from '@/helpers/state_managment/chat/chatfetchStore';
 import { useStomp } from '@/context/StompContext';
+import { Menu, MenuOptions, MenuOption, MenuTrigger, renderers } from 'react-native-popup-menu';
 
-// Mock data and functions
-const getFileId = (file: string) => `https://example.com/files/${file}`;
-const chat: ChatSentSmstList[] = []; // Replace with actual chat data
-const sendMessage = () => { };
-const deleteMessage = () => { };
-const replyId = (id: any) => { };
-const editId = (id: any) => { };
-const deleteId = (id: any) => { };
-const markMessageAsRead = (id: any) => { };
-const editMessage = (id: any) => { };
-const reply = (id: any) => { };
+const { Popover } = renderers;
 
 interface ChatSentSmstList {
   id: string;
@@ -43,8 +28,8 @@ interface ChatSentSmstList {
 }
 
 const ChatEmptyState = () => (
-  <View style={tw`flex-1 items-center justify-center`}>
-    <Text style={tw`text-xl text-white`}>No Messages</Text>
+  <View >
+    <Text >No Messages</Text>
   </View>
 );
 
@@ -52,9 +37,7 @@ const ChatDetails = () => {
   const { setmessageData, messageData } = fetchChatDataStore();
   const { stompClient, adminId } = useStomp();
 
-  const [chats, setChats] = useState<any>(messageData);
-  const scrolRef = useRef<any>();
-  const messageRefs = useRef<Record<string, HTMLDivElement>>({});
+  const [chats, setChats] = useState<ChatSentSmstList[]>(messageData);
   const [selreplyId, setSelreplyId] = useState<string>('');
   const [seleditId, setseleditId] = useState<string>('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -64,11 +47,14 @@ const ChatDetails = () => {
   const [photo, setPhoto] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const chatContainerRef = useRef<ScrollView>(null);
-  const checkReadElement = useRef<View>(null);
   const [unReadMessages, setUnReadMessages] = useState<any[]>([]);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [content, setContent] = useState<string>('');
+
+  const messageRefs = useRef<Record<string, HTMLDivElement>>({});
+  const scrolRef = useRef<any>();
+  const chatContainerRef = useRef<ScrollView>(null);
+  const checkReadElement = useRef<View>(null);
 
   const route = useRoute();
   const { id } = route.params as { id: string };
@@ -77,8 +63,11 @@ const ChatDetails = () => {
 
   useEffect(() => {
     console.log('Chat ID:', id);
-    // Fetch the chat data based on the received id
   }, [id]);
+
+  useEffect(() => {
+    console.log(selectedMessageId);
+  }, [selectedMessageId]);
 
   useEffect(() => {
     fetchMessages({
@@ -101,25 +90,19 @@ const ChatDetails = () => {
     getUnreadMessages();
   }, [chats]);
 
-  useEffect(() => {
-    setChats(chat);
-  }, [chat]);
-
   const handleDelete = () => {
-    deleteMessage();
+    // deleteMessage();
   };
 
   const handleReply = (id: any) => {
     setseleditId('');
     setSelreplyId(id);
-    replyId(id);
     setseleditId('');
     setContent('');
   };
 
   const handleEdit = (id: any) => {
     let cont = chats.find((item: any) => item.id === id)?.content;
-    editId(id);
     setseleditId(id);
     setContent("salom");
     setSelreplyId('');
@@ -130,7 +113,6 @@ const ChatDetails = () => {
       key: '1',
       onPress: () => {
         openModal();
-        deleteId(id);
       },
       label: 'Delete',
     },
@@ -177,8 +159,6 @@ const ChatDetails = () => {
 
   const sendMessage = async () => {
     let fileUrl = null;
-    console.log(stompClient);
-
     if (stompClient) {
       const chatMessage = {
         senderId: "cde806d1-1da5-4264-85b6-47d066cadca1",
@@ -187,6 +167,7 @@ const ChatDetails = () => {
         isRead: false,
         attachmentIds: fileUrl ? [fileUrl] : [],
       };
+
       console.log(JSON.stringify(chatMessage));
 
       stompClient.send('/app/chat', {}, JSON.stringify(chatMessage));
@@ -198,6 +179,9 @@ const ChatDetails = () => {
         });
       }, 500);
       setContent('');
+    }else {
+      console.log(stompClient);
+      
     }
   };
 
@@ -206,7 +190,7 @@ const ChatDetails = () => {
     if (messageElement) {
       messageElement.scrollIntoView({ behavior: 'smooth' });
       messageElement.style.backgroundColor = '#85828343';
-      messageElement.style.transition = "1s"
+      messageElement.style.transition = "1s";
       messageElement.style.animationTimingFunction = 'ease-out';
       setTimeout(() => {
         messageElement.style.backgroundColor = 'transparent';
@@ -215,10 +199,10 @@ const ChatDetails = () => {
   };
 
   return (
-    <View style={tw`h-full relative`}>
-      <View style={tw`w-full h-full flex flex-col`}>
+    <View style={styles.container}>
+      <View style={styles.innerContainer}>
         <ScrollView
-          style={[tw`flex-1 h-full`, { backgroundColor: "#21212e" }]}
+          style={styles.scrollView}
           ref={chatContainerRef}
           onContentSizeChange={() => chatContainerRef.current?.scrollToEnd({ animated: true })}
         >
@@ -228,64 +212,62 @@ const ChatDetails = () => {
                 onLongPress={() => setSelectedMessageId(item.id)}
                 ref={(el) => { messageRefs.current[item.id] = el; }}
                 key={index}
-                style={[tw`p-2 mb-3 text-white flex-col`, item.senderId === senderId ? tw`flex items-end justify-end flex-col` : tw`flex justify-start`]}
+                style={[styles.messageContainer, item.senderId === senderId ? styles.senderMessage : styles.receiverMessage]}
               >
-                <View style={tw`flex items-center flex-row mb-2`}>
-                  <Image
-                    style={tw`w-8 h-8 rounded-full mr-2 bg-black flex flex-row`}
+                <View style={styles.messageHeader}>
+                  {/* <Image
+                    style={styles.avatar}
                     source={{ uri: item.senderId !== senderId ? getFileId(item.receiverImg) : getFileId(item.senderImg) }}
-                  />
-                  <Text style={tw`font-medium text-white`}>{item.senderId === senderId ? item.senderName : item.receiverName}</Text>
+                  /> */}
+                  <Text style={styles.senderName}>{item.senderId === senderId ? item.senderName : item.receiverName}</Text>
                 </View>
-                <View
-
-                  style={[
-                    tw`p-2 rounded-md flex flex-col`,
-                    item.replayDto ? { backgroundColor: '#85828343' } : {},
-                    item.senderId === senderId ? tw`items-end ml-20` : tw`items-start mr-20`
-                  ]}
-                >
+                <View style={[
+                  styles.messageContent,
+                  item.replayDto ? styles.repliedMessage : {},
+                  item.senderId === senderId ? styles.senderContent : styles.receiverContent
+                ]}>
                   {item.replayDto && (
                     <TouchableOpacity
                       onPress={() => scrollToMessage(item.replayDto.id)}
-                      style={tw`flex items-center ${item.senderId === senderId ? 'justify-end flex-row' : 'justify-start flex-row-reverse'}`}
+                      style={styles.replyContainer}
                     >
-                      <View style={tw`w-10 h-10 flex justify-center items-center`}>
-                        <BiReply style={{ fontSize: 25 }} />
+                      <View style={styles.replyIcon}>
+                        <Ionicons name="md-arrow-undo" style={styles.replyIconStyle} />
                       </View>
-                      <View
-                        style={[
-                          tw`border-red-800 bg-gray-200 text-black py-1 px-3 mb-1 rounded-md`,
-                          item.senderId === senderId ? tw`border-r-2` : tw`border-l-2`
-                        ]}
-                      >
-                        {item.replayDto.content ? item.replayDto.content : <Image source={{ uri: getFileId(item.attachmentIds[0]) }} style={tw`w-10 h-10`} />}
+                      <View style={[
+                        styles.replyContent,
+                        item.senderId === senderId ? styles.replyBorderRight : styles.replyBorderLeft
+                      ]}>
+                        <Text>{item.replayDto.content ? item.replayDto.content : <Image source={{ uri: getFileId(item.attachmentIds[0]) }} style={styles.replyImage} />}</Text>
                       </View>
                     </TouchableOpacity>
                   )}
                   {item.attachmentIds.length > 0 && (
-                    <View style={tw`relative`}>
-                      <Image source={{ uri: getFileId(item.attachmentIds[0]) }} style={tw`rounded-md mb-2`} />
-                      {!item.content && (
-                        <View style={tw`absolute top-3 right-2`}>
-                          {/* Qo'shimcha element */}
-                        </View>
-                      )}
+                    <View style={styles.attachmentContainer}>
+                      <Image source={{ uri: getFileId(item.attachmentIds[0]) }} style={styles.attachmentImage} />
                     </View>
                   )}
                   {item.content && (
-                    <Text
-                      style={[
-                        tw`flex items-end`,
-                        item.senderId === senderId ? tw`bg-white rounded-lg py-2 px-3 shadow max-w-sm w-max` : tw` bg-red-800 text-white rounded-lg py-2 px-3 shadow mb-2 max-w-max flex-col-reverse`
-                      ]}
-                    >
-                      <Text style={tw`w-max`}>{item.content ? item.content : '(null)'}</Text>
-                      {/* Qo'shimcha element */}
-                    </Text>
+                    <View style={[
+                      styles.textContent,
+                      item.senderId === senderId ? styles.senderText : styles.receiverText
+                    ]}>
+                      <Text style={styles.textContentText}>{item.content ? item.content : '(null)'}</Text>
+                    </View>
                   )}
                 </View>
-                <Text style={tw`text-xs text-white`}>{item.createdAt}</Text>
+                <Text style={styles.timestamp}>{item.createdAt}</Text>
+                {selectedMessageId === item.id &&
+                  <Menu renderer={Popover} rendererProps={{ placement: 'bottom' }}>
+                    <MenuTrigger />
+                    <MenuOptions>
+                      <MenuOption onSelect={() => handleReply(item.id)} text='Ответить' />
+                      <MenuOption onSelect={() => console.log(`Copy message with id: ${item.id}`)} text='Копировать' />
+                      <MenuOption onSelect={() => handleEdit(item.id)} text='Редактировать' />
+                      <MenuOption onSelect={() => handleDelete()} text='Удалить' />
+                    </MenuOptions>
+                  </Menu>
+                }
               </Pressable>
             ))
           ) : (
@@ -295,10 +277,10 @@ const ChatDetails = () => {
         {selreplyId &&
           chats.length > 0 &&
           chats.filter((item) => item.id === selreplyId).map((item, index) => (
-            <View key={index} style={tw`border flex gap-3 justify-between rounded-t-md p-3`}>
-              <View style={tw`flex gap-3`}>
-                <BiReply style={{ fontSize: 25 }} />
-                <Text style={tw`text-white`}>{item.content}</Text>
+            <View key={index} style={styles.replyFooter}>
+              <View style={styles.replyFooterContent}>
+                <Ionicons name="md-arrow-undo" style={styles.replyFooterIcon} />
+                <Text style={styles.replyFooterText}>{item.content}</Text>
               </View>
               <TouchableOpacity
                 onPress={() => {
@@ -306,77 +288,77 @@ const ChatDetails = () => {
                   handleReply(null);
                 }}
               >
-                <ImCancelCircle />
+                <MaterialIcons name="cancel" style={styles.cancelIcon} />
               </TouchableOpacity>
             </View>
           ))}
-        <View style={tw`px-4 py-2 border relative`}>
+        <View style={styles.inputContainer}>
           {isAtBottom && unReadMessages.length > 0 && (
-            <TouchableOpacity style={tw`flex justify-center h-max flex-col items-center bottom-5 left-[90%] absolute -top-13`}>
-              <View style={tw`relative`}>
-                {unReadMessages.length !== 0 && (
-                  <Text style={tw`absolute -top-2 left-2 w-4 h-4 flex items-center justify-center bg-gray text-black rounded-full`}>
+            <TouchableOpacity style={styles.unreadMessageButton}>
+              {unReadMessages.length !== 0 && (
+                <View style={styles.unreadMessageContainer}>
+                  <Text style={styles.unreadMessageCount}>
                     {unReadMessages.length}
                   </Text>
-                )}
-              </View>
-              <Text style={tw`w-10 h-10 flex items-center justify-center bg-gray text-black rounded-full p-5`}>
-                <ArrowDownOutlined style={tw`text-white text-xl`} />
+                </View>
+              )}
+              <Text style={styles.scrollDownIcon}>
+                <AntDesign name="down" style={styles.scrollDownIconStyle} />
               </Text>
             </TouchableOpacity>
           )}
-          <View style={[tw`flex items-center w-full flex-row`, { backgroundColor: "#21212e" }]}>
-            <TouchableOpacity onPress={handleClick} style={tw`flex items-center flex-row`}>
-              <IoMdAttach style={tw`cursor-pointer text-3xl`} />
+          <View style={styles.inputWrapper}>
+            <TouchableOpacity onPress={handleClick} style={styles.attachButton}>
+              <Ionicons name="attach" style={styles.attachIcon} />
               {photoPreview ? (
-                <View style={tw`flex items-center gap-2`}>
-                  <Image source={{ uri: photoPreview }} style={tw`w-10 h-10 rounded-md p-1 bg-[#9c0935]`} />
+                <View style={styles.photoPreviewContainer}>
+                  <Image source={{ uri: photoPreview }} style={styles.photoPreview} />
                   <TouchableOpacity
                     onPress={() => {
                       setPhotoPreview(null);
                       setPhotos(null);
                     }}
                   >
-                    <GiCancel />
+                    <MaterialIcons name="cancel" style={styles.cancelIcon} />
                   </TouchableOpacity>
                 </View>
               ) : null}
             </TouchableOpacity>
             <TextInput
               value={content}
-              style={tw`w-full border-2 rounded-md py-2 px-4 mr-2 bg-transparent custom-textarea text-white`}
+              style={styles.textInput}
               onChangeText={setContent}
               placeholder={'Type your message'}
               placeholderTextColor="#aaa"
             />
-            <View style={tw`flex flex-row justify-end items-center text-2xl w-max`}>
+            <View style={styles.sendButtonContainer}>
               {(content.trim() || photoPreview) && !selreplyId && !seleditId && (
                 <TouchableOpacity onPress={handleSendMessage}>
-                  <IoSend />
+                  <Ionicons name="send" style={styles.sendIcon} />
                 </TouchableOpacity>
               )}
               {(content.trim() || photoPreview) && selreplyId && (
                 <TouchableOpacity
                   onPress={() => {
-                    reply(1);
+                    handleReply(1);
                     setSelreplyId('');
                     setPhotoPreview(null);
                     setPhotos(null);
                   }}
                 >
-                  <BiReplyAll />
+                  <Ionicons name="arrow-undo" style={styles.sendIcon} />
                 </TouchableOpacity>
               )}
               {(content.trim() || photoPreview) && seleditId && (
                 <TouchableOpacity
                   onPress={() => {
-                    editMessage(1);
+                    handleEdit(1);
                     setseleditId('');
                     setPhotoPreview(null);
                     setPhotos(null);
                   }}
                 >
-                  <EditFilled />
+                  <AntDesign name="edit" style={styles.sendIcon} />
                 </TouchableOpacity>
               )}
             </View>
@@ -386,5 +368,243 @@ const ChatDetails = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    position: 'relative',
+  },
+  innerContainer: {
+    width: '100%',
+    height: '100%',
+    flexDirection: 'column',
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: '#21212e',
+  },
+  messageContainer: {
+    padding: 8,
+    marginBottom: 12,
+    borderRadius: 8,
+    flexDirection: 'column',
+    // backgroundColor: '#1a1a1a51',
+    width: '100%',
+  },
+  senderMessage: {
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+  },
+  receiverMessage: {
+    justifyContent: 'flex-start',
+  },
+  messageHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  avatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginRight: 8,
+  },
+  senderName: {
+    fontWeight: '500',
+    color: 'white',
+  },
+  messageContent: {
+    padding: 8,
+    borderRadius: 8,
+    flexDirection: 'column',
+    // backgroundColor: '#333',
+  },
+  repliedMessage: {
+    backgroundColor: '#85828343',
+  },
+  senderContent: {
+    marginLeft: 80,
+  },
+  receiverContent: {
+    marginRight: 80,
+  },
+  replyContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  replyIcon: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  replyIconStyle: {
+    fontSize: 25,
+  },
+  replyContent: {
+    backgroundColor: '#d1d1d1',
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    marginBottom: 4,
+  },
+  replyBorderRight: {
+    borderRightWidth: 2,
+  },
+  replyBorderLeft: {
+    borderLeftWidth: 2,
+  },
+  replyImage: {
+    width: 40,
+    height: 40,
+  },
+  attachmentContainer: {
+    position: 'relative',
+  },
+  attachmentImage: {
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  textContent: {
+    flexDirection: 'column',
+  },
+  senderText: {
+    backgroundColor: 'white',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    maxWidth: '80%',
+  },
+  receiverText: {
+    backgroundColor: '#e74c3c',
+    color: 'white',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+    maxWidth: '80%',
+    flexDirection: 'column-reverse',
+  },
+  textContentText: {
+    width: '95%',
+  },
+  timestamp: {
+    fontSize: 10,
+    color: 'white',
+  },
+  replyFooter: {
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: '#3b3b3b',
+  },
+  replyFooterContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  replyFooterIcon: {
+    fontSize: 25,
+  },
+  replyFooterText: {
+    color: 'white',
+  },
+  cancelIcon: {
+    fontSize: 25,
+  },
+  inputContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderWidth: 1,
+    position: 'relative',
+    backgroundColor: '#21212e',
+  },
+  unreadMessageButton: {
+    flexDirection: 'column',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 80,
+    left: '90%',
+  },
+
+  unreadMessageContainer: {
+    position: 'relative',
+  },
+
+  unreadMessageCount: {
+    position: 'absolute',
+    padding: 1,
+    top: -8,
+    left: 8,
+    width: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'gray',
+    borderRadius: 10,
+    color: 'black',
+    zIndex: 1,
+  },
+  scrollDownIcon: {
+    padding: 10,
+    display: "flex",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'gray',
+    borderRadius: 50,
+  },
+  scrollDownIconStyle: {
+    fontSize: 24,
+    color: 'white',
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
+  attachButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  attachIcon: {
+    fontSize: 24,
+    color: 'white',
+  },
+  photoPreviewContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  photoPreview: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    padding: 4,
+    backgroundColor: '#9c0935',
+  },
+  textInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    marginRight: 8,
+    backgroundColor: 'transparent',
+    color: 'white',
+  },
+  sendButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+  sendIcon: {
+    fontSize: 24,
+    color: 'white',
+  },
+});
 
 export default ChatDetails;

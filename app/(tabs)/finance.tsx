@@ -36,15 +36,13 @@ const Finance = () => {
         if (startDate === endDate) setMonthData(null)
     }, [date]);
 
-    console.log("tabs: ", monthData)
-
     return (
         <ScrollView
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{flexGrow: 1, padding: 16, backgroundColor: '#21212E'}}
+            contentContainerStyle={{flexGrow: 1, padding: 16, backgroundColor: '#21212E', paddingTop: 0}}
         >
             <SafeAreaView>
-                <StatusBar backgroundColor={`black`} barStyle={`dark-content`}/>
+                <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
             </SafeAreaView>
             <Text style={[tw`text-white text-3xl my-7 font-bold`, {letterSpacing: 2}]}>Финансы</Text>
 
