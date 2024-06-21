@@ -34,16 +34,17 @@ const Process = () => {
         {
             label: "Длительность (без учёта перерыва после процедуры)"
         },
-        {
-            label: "Длительность (без учёта перерыва после процедуры)"
-        },
+        
     ];
 
     return (
         <SafeAreaView>
             <ScrollView>
                 <View style={tw`flex w-full`}>
-                    <NavigationMenu name="Процедура услуг" deleteIcon={true} />
+                    <View style = {tw`mb-2`}>
+                        <NavigationMenu name="Процедура услуг" deleteIcon={true} />
+                    </View>
+                    
                     <View style={tw`p-3`}>
                         <View style={[tw`w-full p-4 rounded-3xl mb-4`, { backgroundColor: '#B9B9C9' }]}>
                             <Text style={tw`text-gray-600`}>Ваша специализация</Text>
@@ -56,7 +57,7 @@ const Process = () => {
                                 title={gender.title}
                                 isRadioButton />
                         ))}
-                        <View style={tw`mt-5 p-2 mb-2`}>
+                        <View style={tw`mt-5 p-2 `}>
                             {uslugi.map((uslugi, index) => (
                                 <LocationInput
                                     key={index}
@@ -67,7 +68,7 @@ const Process = () => {
                         <View style = {tw`p-3`}>
                             <Text style = {tw`text-gray-500 mb-2`}>Описание</Text>
                             <TextInput
-                                style={tw`bg-gray-500 rounded-xl text-lg text-white text-center`}
+                                style={tw`bg-gray-500 p-2 rounded-xl text-lg text-white `}
                                 multiline
                                 numberOfLines={4}
                                 value={textAreaValue}
@@ -75,7 +76,7 @@ const Process = () => {
                                 scrollEnabled={true}
                             />
                         </View>
-                        <View style={tw`mb-3 p-2`}>
+                        <View style={tw`mb-3 p-3`}>
                             <Buttons title='Сохранить' />
                         </View>
                     </View>
