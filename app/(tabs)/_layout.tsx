@@ -47,6 +47,7 @@ export default function TabLayout() {
 				options={{
 					title: "Tab Two",
 					tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+					headerShown: false
 				}}
 			/>
 			<Tab.Screen
@@ -57,6 +58,7 @@ export default function TabLayout() {
 					tabBarIcon: ({ color }) => (
 						<MaterialCommunityIcons name="finance" size={24} color={color} />
 					),
+					headerShown: false
 				}}
 			/>
 			<Tab.Screen
