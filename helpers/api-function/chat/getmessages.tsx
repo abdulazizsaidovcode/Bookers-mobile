@@ -16,9 +16,11 @@ export const fetchMessages = async ({ adminId, recipientId, setmessageData }: Fe
             setmessageData(res.data.body);
             console.log(res.data.body);
         } catch (err: any) {
-            if (err.response.status === 404) {
+            if (err.response.status === 404) { 
                 setmessageData([]);
             }
         }
+    } else {
+
     }
 };
