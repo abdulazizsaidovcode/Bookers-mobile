@@ -2,9 +2,10 @@ import tw from "tailwind-react-native-classnames";
 import {Text, TouchableOpacity} from "react-native";
 import CountNumber from "@/components/clients/count-number";
 
-const ClientsBtn = ({countOrIcon, icon, name}: { countOrIcon: boolean, icon?: JSX.Element, name: string }) => {
+const ClientsBtn = ({countOrIcon, icon, name, clicks}: { countOrIcon: boolean, icon?: JSX.Element, name: string, clicks?: () => void }) => {
     return (
         <TouchableOpacity
+            onPress={clicks}
             activeOpacity={.8}
             style={[tw`flex-row items-center rounded-lg py-2 px-5`, {backgroundColor: '#9C0A35'}]}
         >
