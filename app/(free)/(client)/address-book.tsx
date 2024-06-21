@@ -8,12 +8,16 @@ import {FromAddressBookList} from "@/components/clients/client-items";
 import IconsButtons from "@/components/(buttons)/icon-btn";
 import {Ionicons} from "@expo/vector-icons";
 import LocationInput from "@/components/(location)/locationInput";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
 
 const AddressBook = () => {
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
-            <NavigationMenu name={`Из адресной книги`}/>
+            <NavigationMenu name={`Из адресной книги`} clicks={() => navigation.navigate('(free)/(client)/main')}/>
             <View style={tw`flex-1`}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}

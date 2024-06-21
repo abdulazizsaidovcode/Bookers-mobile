@@ -8,10 +8,14 @@ import IconsButtons from "@/components/(buttons)/icon-btn";
 import {clientsData} from "@/type/client/client";
 import {ClientItem} from "@/components/clients/client-items";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
 
 const MainClientList: React.FC = () => {
     const {setSelectedClientList} = clientStore()
     const [selectedClients, setSelectedClients] = useState<number[]>([]);
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     useEffect(() => {
         setSelectedClientList(selectedClients);
@@ -34,7 +38,7 @@ const MainClientList: React.FC = () => {
                 <View style={[tw`flex-row items-center justify-between mt-7`, {paddingHorizontal: 16}]}>
                     <View style={tw`flex-row items-center justify-center`}>
                         <View style={tw`flex-row items-center justify-center`}>
-                            <AntDesign name="close" size={20} color="#828282" />
+                            <AntDesign name="close" size={20} color="#828282"/>
                             <Text style={[tw`text-lg font-bold mr-4 ml-1`, {color: '#828282'}]}>{selectedClients.length}</Text>
                         </View>
                         <TouchableOpacity
@@ -68,10 +72,13 @@ const MainClientList: React.FC = () => {
                         ))}
                     </View>
                     <View style={tw`pb-5`}>
-                        <IconsButtons
-                            name={`Добавить`}
-                            icon={<Ionicons name="add-circle-outline" size={36} color="white"/>}
-                        />
+                        {selectedClients.length !== 0 && (
+                            <IconsButtons
+                                name={`Добавить`}
+                                icon={<Ionicons name="add-circle-outline" size={36} color="white"/>}
+                                clicks={() => navigation.navigate('(free)/(client)/address-book')}
+                            />
+                        )}
                     </View>
                 </ScrollView>
             </View>
