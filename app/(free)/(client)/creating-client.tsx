@@ -1,7 +1,7 @@
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import tw from "tailwind-react-native-classnames";
-import {ScrollView, StatusBar, View} from "react-native";
+import {ScrollView, StatusBar, Text, View} from "react-native";
 import React from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
@@ -21,14 +21,15 @@ const CreatingClient = () => {
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
+
+                    </View>
+                    <View style={tw`pb-5`}>
+                        <Buttons
+                            title={`Сохранить`}
+                            onPress={() => {}}
+                        />
                     </View>
                 </ScrollView>
-            </View>
-            <View style={tw`pb-5`}>
-                <Buttons
-                    title={`Сохранить`}
-                    onPress={() => {}}
-                />
             </View>
         </SafeAreaView>
     );

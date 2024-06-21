@@ -31,6 +31,7 @@ const AddressBook = () => {
                             <FromAddressBookList
                                 key={client.id}
                                 client={client}
+                                clicks={() => navigation.navigate('(free)/(client)/creating-client')}
                             />
                         ))}
                     </View>
@@ -38,6 +39,7 @@ const AddressBook = () => {
                         <IconsButtons
                             name={`Добавить`}
                             icon={<Ionicons name="add-circle-outline" size={36} color="white"/>}
+                            clicks={() => navigation.navigate('(free)/(client)/client-list')}
                         />
                     </View>
                 </ScrollView>

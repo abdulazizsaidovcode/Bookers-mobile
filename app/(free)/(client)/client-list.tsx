@@ -8,8 +8,9 @@ import IconsButtons from "@/components/(buttons)/icon-btn";
 import {clientsData} from "@/type/client/client";
 import {ClientItem} from "@/components/clients/client-items";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "@/type/root";
+import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {RootStackParamList} from "@/type/root";
+
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
 
 const MainClientList: React.FC = () => {
@@ -76,7 +77,10 @@ const MainClientList: React.FC = () => {
                             <IconsButtons
                                 name={`Добавить`}
                                 icon={<Ionicons name="add-circle-outline" size={36} color="white"/>}
-                                clicks={() => navigation.navigate('(free)/(client)/address-book')}
+                                clicks={async () => {
+                                    await navigation.navigate('(free)/(client)/address-book')
+                                    await setSelectedClients([])
+                                }}
                             />
                         )}
                     </View>
