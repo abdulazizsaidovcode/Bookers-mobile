@@ -10,7 +10,7 @@ const MyServicess: React.FC<MyServicesProps> = ({ title, subTitle, onPress }) =>
     return (
         <View style={tw`mt-3  `}>
             <TouchableOpacity
-            activeOpacity={.7}
+            activeOpacity={.8}
                 style={tw`bg-white rounded-2xl  p-4 flex-row justify-between items-center`}
                 onPress={onPress}
             >

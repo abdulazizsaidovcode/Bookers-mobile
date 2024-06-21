@@ -21,9 +21,9 @@ const ServicesCategory: React.FC<ServicesProps> = ({ title, onPress, isRadioButt
     };
 
     return (
-        <View style={tw`p-2 rounded-xl`}>
-            <View style={tw`flex p-3 flex-row rounded-xl items-center bg-white`}>
-                <View style={[tw`rounded-full`, { backgroundColor: isRadioButton ? (checked ? 'red' : 'white') : (isSelected ? 'red' : 'white') }]}>
+        <View style={tw`rounded-2xl`}>
+            <View style={[tw`flex p-3 mb-3 flex-row rounded-2xl items-center`, {backgroundColor: '#B9B9C9'}]}>
+                <View style={[tw`rounded-full`, { backgroundColor: isRadioButton ? (checked ? 'red' : '#B9B9C9') : (isSelected ? 'red' : '#B9B9C9') }]}>
                     {isRadioButton ? (
                         <RadioButton
                             value="radio"
