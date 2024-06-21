@@ -41,6 +41,7 @@ import PhoneNumberInput from "./(auth)/number-create";
 import MainClient from "@/app/(free)/(client)/main";
 import AddressBook from "@/app/(free)/(client)/address-book";
 import MainClientList from "@/app/(free)/(client)/client-list";
+import CreatingClient from "@/app/(free)/(client)/creating-client";
 
 const Stack = createNativeStackNavigator();
 
@@ -222,6 +223,11 @@ function RootLayoutNav() {
               name="(free)/(client)/client-list"
               component={MainClientList}
               options={{ title: "Client-list", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/creating-client"
+              component={CreatingClient}
+              options={{ title: "CreatingClient", headerShown: false }}
             />
           </Stack.Navigator>
         </MenuProvider>
