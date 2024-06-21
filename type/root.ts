@@ -11,5 +11,6 @@ export type RootStackParamList = {
     '(settings)/(settings-galery)/settings-galery': undefined;
     '(chat)/(communicatie)/chatDetails': any;
     'FreeMain': undefined | string;
+    '(tabs)': undefined | string;
   };
   
