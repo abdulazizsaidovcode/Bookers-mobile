@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 
+
 const Auth: React.FC = () => {
     return (
         <SafeAreaView style={styles.container} >
@@ -14,8 +15,8 @@ const Auth: React.FC = () => {
             <Text style={styles.selectLanguage}>Выберите язык</Text>
             <View style={styles.button}>
                 <Buttons title="Русский" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/number-create')} />
-                <Buttons title="Русский" backgroundColor="#9C0A35" />
-                <Buttons title="Русский" backgroundColor="#9C0A35" />
+                <Buttons title="O‘zbek" backgroundColor="#9C0A35" />
+                <Buttons title="English" backgroundColor="#9C0A35" />
             </View>
         </SafeAreaView>
     );
@@ -24,7 +25,7 @@ const Auth: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#2A2438',
+        backgroundColor: '#21212E',
         alignItems: 'center',
         justifyContent: 'center',
     },
