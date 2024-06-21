@@ -32,6 +32,7 @@ import Settings from './(profile)/(settings)';
 import { StompProvider, } from '@/context/StompContext';
 import Expertise from './(standart)/(services)/(expertise)/expertise';
 import ServiceStyle from './(standart)/(services)/serviceStyle/serviceStyle';
+import SettingsLocationMain from "./(settings)/(settings-location)/settings-locations-main";
 const Stack = createNativeStackNavigator();
 
 export { ErrorBoundary } from "expo-router";
@@ -127,7 +128,7 @@ function RootLayoutNav() {
           />
           <Stack.Screen
             name="(settings)/(settings-location)/settings-locations"
-            component={SettingsLocation}
+            component={SettingsLocationMain}
             options={{ headerShown: false }}
           />
 
