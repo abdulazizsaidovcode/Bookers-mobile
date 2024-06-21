@@ -39,6 +39,8 @@ import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
 import SettingsGaleryMain from "./(settings)/(settings-galery)/settings-galery-main";
 import PhoneNumberInput from "./(auth)/number-create";
 import MainClient from "@/app/(free)/(client)/main";
+import AddressBook from "@/app/(free)/(client)/address-book";
+import MainClientList from "@/app/(free)/(client)/client-list";
 
 const Stack = createNativeStackNavigator();
 
@@ -210,6 +212,16 @@ function RootLayoutNav() {
               name="(free)/(client)/main"
               component={MainClient}
               options={{ title: "Client", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/address-book"
+              component={AddressBook}
+              options={{ title: "Client-book", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/client-list"
+              component={MainClientList}
+              options={{ title: "Client-list", headerShown: false }}
             />
           </Stack.Navigator>
         </MenuProvider>
