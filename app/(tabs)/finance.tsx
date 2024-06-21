@@ -36,8 +36,6 @@ const Finance = () => {
         if (startDate === endDate) setMonthData(null)
     }, [date]);
 
-    console.log("tabs: ", monthData)
-
     return (
         <ScrollView
             showsHorizontalScrollIndicator={false}

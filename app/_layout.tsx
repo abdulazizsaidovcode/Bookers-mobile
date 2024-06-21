@@ -4,6 +4,7 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
+import { MenuProvider } from 'react-native-popup-menu';
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
@@ -75,124 +76,127 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <StompProvider>
         {/* <ChatProvider> */}
-        <Stack.Navigator initialRouteName="index">
-          <Stack.Screen
-            name="index"
-            component={Index}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(auth)/auth"
-            component={Auth}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(tabs)"
-            component={TabLayout}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(chat)/(communicatie)/chatDetails"
-            component={ChatDetails}
-            options={{ title: "Chat Detail" }}
-          />
-          <Stack.Screen
-            name="(profile)/(notification)/index"
-            component={Notification}
-            options={{ title: "Services" }}
-          />
-          <Stack.Screen
-            name="(work-grafic)/workGrafic"
-            component={GraficWork}
-            options={{ title: "Services" }}
-          />
-          <Stack.Screen
-            name="(work-grafic)/workMain"
-            component={WorkMain}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(work-grafic)/workDays"
-            component={WorkDays}
-            options={{ headerShown: false }}
-          />
+        <MenuProvider>
 
-          <Stack.Screen
-            name="(settings)/settings"
-            component={Settings}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(settings)/(settings-location)/settings-locations-main"
-            component={SettingsLocationMain}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(settings)/(settings-location)/settings-locations"
-            component={SettingsLocation}
-            options={{ headerShown: false }}
-          />
+          <Stack.Navigator initialRouteName="index">
+            <Stack.Screen
+              name="index"
+              component={Index}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/auth"
+              component={Auth}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(tabs)"
+              component={TabLayout}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(chat)/(communicatie)/chatDetails"
+              component={ChatDetails}
+              options={{ title: "Chat Detail" }}
+            />
+            <Stack.Screen
+              name="(profile)/(notification)/index"
+              component={Notification}
+              options={{ title: "Services" }}
+            />
+            <Stack.Screen
+              name="(work-grafic)/workGrafic"
+              component={GraficWork}
+              options={{ title: "Services" }}
+            />
+            <Stack.Screen
+              name="(work-grafic)/workMain"
+              component={WorkMain}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(work-grafic)/workDays"
+              component={WorkDays}
+              options={{ headerShown: false }}
+            />
 
-          {/* expenses  rasxod */}
-          <Stack.Screen
-            name="(profile)/(Expenses)/index"
-            component={Expenses}
-            options={{ title: "Services" }}
-          />
-          <Stack.Screen
-            name="(profile)/(Expenses)/(component)/(detail)/expenseDetail"
-            component={ExpensesDetail}
-            options={{ title: "Services" }}
-          />
-          <Stack.Screen
-            name="(standart)/(services)/(myServices)/myServices"
-            component={MyServices}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(standart)/(services)/(gender)/servesGender"
-            component={ServesGender}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(standart)/(services)/(category)/category"
-            component={Category}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(standart)/(services)/(expertise)/expertise"
-            component={Expertise}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(standart)/(services)/serviceStyle/serviceStyle"
-            component={ServiceStyle}
-            options={{ headerShown: false }}
-          />
+            <Stack.Screen
+              name="(settings)/settings"
+              component={Settings}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(settings)/(settings-location)/settings-locations-main"
+              component={SettingsLocationMain}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(settings)/(settings-location)/settings-locations"
+              component={SettingsLocation}
+              options={{ headerShown: false }}
+            />
 
-          {/*  */}
-          <Stack.Screen
-            name="(profile)/(sessionhistory)/sessionHistory"
-            component={SessionHistory}
-            options={{ title: "Отменённые записи" }}
-          />
-          <Stack.Screen
-            name="(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries"
-            component={Upcomingentries}
-            options={{ title: "Отменённые записи" }}
-          />
-          <Stack.Screen
-            name="(profile)/(sessionhistory)/components/Pastentries/Pastentries"
-            component={PastEntries}
-            options={{ title: "Отменённые записи" }}
-          />
-          <Stack.Screen
-            name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries"
-            component={Canceledentries}
-            options={{ title: "Отменённые записи" }}
-          />
-          {/* settings update */}
-        </Stack.Navigator>
+            {/* expenses  rasxod */}
+            <Stack.Screen
+              name="(profile)/(Expenses)/index"
+              component={Expenses}
+              options={{ title: "Services" }}
+            />
+            <Stack.Screen
+              name="(profile)/(Expenses)/(component)/(detail)/expenseDetail"
+              component={ExpensesDetail}
+              options={{ title: "Services" }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(myServices)/myServices"
+              component={MyServices}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(gender)/servesGender"
+              component={ServesGender}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(category)/category"
+              component={Category}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(expertise)/expertise"
+              component={Expertise}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/serviceStyle/serviceStyle"
+              component={ServiceStyle}
+              options={{ headerShown: false }}
+            />
+
+            {/*  */}
+            <Stack.Screen
+              name="(profile)/(sessionhistory)/sessionHistory"
+              component={SessionHistory}
+              options={{ title: "Отменённые записи" }}
+            />
+            <Stack.Screen
+              name="(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries"
+              component={Upcomingentries}
+              options={{ title: "Отменённые записи" }}
+            />
+            <Stack.Screen
+              name="(profile)/(sessionhistory)/components/Pastentries/Pastentries"
+              component={PastEntries}
+              options={{ title: "Отменённые записи" }}
+            />
+            <Stack.Screen
+              name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries"
+              component={Canceledentries}
+              options={{ title: "Отменённые записи" }}
+            />
+            {/* settings update */}
+          </Stack.Navigator>
+        </MenuProvider>
       </StompProvider>
     </ThemeProvider>
   );

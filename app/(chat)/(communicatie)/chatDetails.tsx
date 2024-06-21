@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Pressable } from 'react-native';
 import { IoSend } from 'react-icons/io5';
 import { IoMdAttach } from 'react-icons/io';
 import { BiReply, BiReplyAll } from 'react-icons/bi';
@@ -12,6 +12,7 @@ import axios from 'axios';
 import { fetchMessages } from '@/helpers/api-function/chat/getmessages';
 import fetchChatDataStore, { ChatData } from '@/helpers/state_managment/chat/chatfetchStore';
 import { useStomp } from '@/context/StompContext';
+import { Menu, MenuOptions, MenuOption, MenuTrigger, renderers } from 'react-native-popup-menu';
 
 // Mock data and functions
 const getFileId = (file: string) => `https://example.com/files/${file}`;
@@ -24,6 +25,8 @@ const deleteId = (id: any) => { };
 const markMessageAsRead = (id: any) => { };
 const editMessage = (id: any) => { };
 const reply = (id: any) => { };
+
+const { Popover } = renderers;
 
 interface ChatSentSmstList {
   id: string;
@@ -49,29 +52,32 @@ const ChatEmptyState = () => (
 );
 
 const ChatDetails = () => {
-  const { setmessageData, messageData } = fetchChatDataStore()
+  const { setmessageData, messageData } = fetchChatDataStore();
   const { stompClient, adminId } = useStomp();
 
   const [chats, setChats] = useState<any>(messageData);
-  const scrolRef = useRef<any>();
   const [selreplyId, setSelreplyId] = useState<string>('');
   const [seleditId, setseleditId] = useState<string>('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [attachmentIds, setAttachmentIds] = useState<any>(null);
+  const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
   const [photos, setPhotos] = useState<File | null>(null);
   const [photo, setPhoto] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const chatContainerRef = useRef<ScrollView>(null);
-  const checkReadElement = useRef<View>(null);
   const [unReadMessages, setUnReadMessages] = useState<any[]>([]);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [content, setContent] = useState<string>('');
 
+  const messageRefs = useRef<Record<string, HTMLDivElement>>({});
+  const scrolRef = useRef<any>();
+  const chatContainerRef = useRef<ScrollView>(null);
+  const checkReadElement = useRef<View>(null);
+
   const route = useRoute();
   const { id } = route.params as { id: string };
 
-  let senderId = '';
+  let senderId = 'cde806d1-1da5-4264-85b6-47d066cadca1';
 
   useEffect(() => {
     console.log('Chat ID:', id);
@@ -79,11 +85,15 @@ const ChatDetails = () => {
   }, [id]);
 
   useEffect(() => {
+    console.log(selectedMessageId);
+  }, [selectedMessageId])
+
+  useEffect(() => {
     fetchMessages({
       adminId: "cde806d1-1da5-4264-85b6-47d066cadca1",
       recipientId: id,
       setmessageData
-    })
+    });
   }, [id]);
 
   const handleClick = () => {
@@ -91,7 +101,7 @@ const ChatDetails = () => {
   };
 
   const getUnreadMessages = () => {
-    const unread = chats.filter((item) => !item.read);
+    const unread = chats.filter((item: any) => !item.read);
     setUnReadMessages(unread);
   };
 
@@ -102,12 +112,6 @@ const ChatDetails = () => {
   useEffect(() => {
     setChats(chat);
   }, [chat]);
-
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollToEnd({ animated: true });
-    }
-  }, [chats]);
 
   const handleDelete = () => {
     deleteMessage();
@@ -122,7 +126,7 @@ const ChatDetails = () => {
   };
 
   const handleEdit = (id: any) => {
-    let cont = chats.find((item) => item.id === id)?.content;
+    let cont = chats.find((item: any) => item.id === id)?.content;
     editId(id);
     setseleditId(id);
     setContent("salom");
@@ -179,20 +183,13 @@ const ChatDetails = () => {
     scrolRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chats]);
 
-
   const sendMessage = async () => {
     let fileUrl = null;
-    // if (photo) {
-    //   console.log(photo);
-    //   await uploadFile({
-    //     file: photo,
-    //     setUploadResponse: (response) => (fileUrl = response.body),
-    //   })
-    // }
+    console.log(stompClient);
 
     if (stompClient) {
       const chatMessage = {
-        senderId: adminId,
+        senderId: "cde806d1-1da5-4264-85b6-47d066cadca1",
         recipientId: id,
         content: content,
         isRead: false,
@@ -206,35 +203,55 @@ const ChatDetails = () => {
           adminId: "cde806d1-1da5-4264-85b6-47d066cadca1",
           recipientId: id,
           setmessageData
-        })
-      }, 500)
+        });
+      }, 500);
       setContent('');
     }
   };
+
+  // reply qilingan messageninoziga olib boruvchi funcsiya
+  const scrollToMessage = (messageId: string) => {
+    const messageElement = messageRefs.current[messageId];
+    if (messageElement) {
+      messageElement.scrollIntoView({ behavior: 'smooth' });
+      messageElement.style.backgroundColor = '#85828343';
+      messageElement.style.transition = "1s"
+      messageElement.style.animationTimingFunction = 'ease-out';
+      setTimeout(() => {
+        messageElement.style.backgroundColor = 'transparent';
+      }, 1000);
+    }
+  };
+
+  function popUp() {
+
+  }
 
   return (
     <View style={tw`h-full relative`}>
       <View style={tw`w-full h-full flex flex-col`}>
         <ScrollView
-          style={[tw` flex-1 h-full`, { backgroundColor: "#21212e" }]}
+          style={[tw`flex-1 h-full`, { backgroundColor: "#21212e" }]}
           ref={chatContainerRef}
           onContentSizeChange={() => chatContainerRef.current?.scrollToEnd({ animated: true })}
         >
           {messageData.length > 0 ? (
             messageData.map((item, index) => (
-              <View
-                ref={scrolRef}
+              <Pressable
+                onLongPress={() => setSelectedMessageId(item.id)}
+                ref={(el) => { messageRefs.current[item.id] = el; }}
                 key={index}
-                style={[tw`py-2 text-white`, item.senderId === senderId ? tw`flex items-end justify-end flex-col` : tw`justify-start`]}
+                style={[tw`p-2 mb-3 text-white flex-col`, item.senderId === senderId ? tw`flex items-end justify-end flex-col` : tw`flex justify-start`]}
               >
-                <View style={tw`flex items-center mb-2`}>
+                <View style={tw`flex items-center flex-row mb-2`}>
                   <Image
-                    style={tw`w-8 h-8 rounded-full mr-2`}
+                    style={tw`w-8 h-8 rounded-full mr-2 bg-black flex flex-row`}
                     source={{ uri: item.senderId !== senderId ? getFileId(item.receiverImg) : getFileId(item.senderImg) }}
                   />
                   <Text style={tw`font-medium text-white`}>{item.senderId === senderId ? item.senderName : item.receiverName}</Text>
                 </View>
                 <View
+
                   style={[
                     tw`p-2 rounded-md flex flex-col`,
                     item.replayDto ? { backgroundColor: '#85828343' } : {},
@@ -242,21 +259,22 @@ const ChatDetails = () => {
                   ]}
                 >
                   {item.replayDto && (
-                    <View
-                      style={tw`flex gap-2 items-center ${item.senderId === senderId ? 'justify-end' : 'justify-start'}`}
+                    <TouchableOpacity
+                      onPress={() => scrollToMessage(item.replayDto.id)}
+                      style={tw`flex items-center ${item.senderId === senderId ? 'justify-end flex-row' : 'justify-start flex-row-reverse'}`}
                     >
                       <View style={tw`w-10 h-10 flex justify-center items-center`}>
                         <BiReply style={{ fontSize: 25 }} />
                       </View>
                       <View
                         style={[
-                          tw`bg-gray text-black py-1 px-3 mb-1 rounded-md`,
+                          tw`border-red-800 bg-gray-200 text-black py-1 px-3 mb-1 rounded-md`,
                           item.senderId === senderId ? tw`border-r-2` : tw`border-l-2`
                         ]}
                       >
                         {item.replayDto.content ? item.replayDto.content : <Image source={{ uri: getFileId(item.attachmentIds[0]) }} style={tw`w-10 h-10`} />}
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   )}
                   {item.attachmentIds.length > 0 && (
                     <View style={tw`relative`}>
@@ -271,17 +289,28 @@ const ChatDetails = () => {
                   {item.content && (
                     <Text
                       style={[
-                        tw`flex items-start gap-5`,
-                        item.senderId === senderId ? tw`bg-white rounded-lg py-2 px-3 shadow max-w-sm w-max` : tw`bg-lime-500 text-white rounded-lg py-2 px-3 shadow mb-2 max-w-max flex-col-reverse`
+                        tw`flex items-end`,
+                        item.senderId === senderId ? tw`bg-white rounded-lg py-2 px-3 shadow max-w-sm w-max` : tw` bg-red-800 text-white rounded-lg py-2 px-3 shadow mb-2 max-w-max flex-col-reverse`
                       ]}
                     >
-                      <Text style={tw`w-[95%]`}>{item.content ? item.content : '(null)'}</Text>
+                      <Text style={tw`w-max`}>{item.content ? item.content : '(null)'}</Text>
                       {/* Qo'shimcha element */}
                     </Text>
                   )}
                 </View>
                 <Text style={tw`text-xs text-white`}>{item.createdAt}</Text>
-              </View>
+                {selectedMessageId === item.id &&
+                  <Menu renderer={Popover} rendererProps={{ placement: 'bottom' }}>
+                    <MenuTrigger />
+                    <MenuOptions>
+                      <MenuOption onSelect={() => handleReply(item.id)} text='Ответить' />
+                      <MenuOption onSelect={() => console.log(`Copy message with id: ${item.id}`)} text='Копировать' />
+                      <MenuOption onSelect={() => handleEdit(item.id)} text='Редактировать' />
+                      <MenuOption onSelect={() => deleteMessage(item.id)} text='Удалить' />
+                    </MenuOptions>
+                  </Menu>
+                }
+              </Pressable>
             ))
           ) : (
             <ChatEmptyState />
@@ -305,7 +334,6 @@ const ChatDetails = () => {
               </TouchableOpacity>
             </View>
           ))}
-        <View ref={checkReadElement} style={tw`bg-red-400 rounded-full absolute bottom-9 p-2`}></View>
         <View style={tw`px-4 py-2 border relative`}>
           {isAtBottom && unReadMessages.length > 0 && (
             <TouchableOpacity style={tw`flex justify-center h-max flex-col items-center bottom-5 left-[90%] absolute -top-13`}>
@@ -321,7 +349,7 @@ const ChatDetails = () => {
               </Text>
             </TouchableOpacity>
           )}
-          <View style={tw`flex items-center gap-5 w-full flex-row`}>
+          <View style={[tw`flex items-center w-full flex-row`, { backgroundColor: "#21212e" }]}>
             <TouchableOpacity onPress={handleClick} style={tw`flex items-center flex-row`}>
               <IoMdAttach style={tw`cursor-pointer text-3xl`} />
               {photoPreview ? (
@@ -340,12 +368,12 @@ const ChatDetails = () => {
             </TouchableOpacity>
             <TextInput
               value={content}
-              style={tw`w-full border-2 rounded-md py-2 px-4 mr-2 bg-transparent focus:outline-none focus:ring-0 custom-textarea text-white`}
+              style={tw`w-full border-2 rounded-md py-2 px-4 mr-2 bg-transparent custom-textarea text-white`}
               onChangeText={setContent}
               placeholder={'Type your message'}
               placeholderTextColor="#aaa"
             />
-            <View style={tw`flex flex-row justify-end items-center text-2xl w-max gap-5`}>
+            <View style={tw`flex flex-row justify-end items-center text-2xl w-max`}>
               {(content.trim() || photoPreview) && !selreplyId && !seleditId && (
                 <TouchableOpacity onPress={handleSendMessage}>
                   <IoSend />

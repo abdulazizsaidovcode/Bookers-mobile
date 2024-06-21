@@ -50,7 +50,7 @@ return (
         <View style={tw`content-end p-4`}>
             <Buttons title="Другое" backgroundColor="white" textColor="red" onPress={openModal} />
             <View style={tw`mt-2 content-end`}>
-            <Buttons title="Сохранить" onPress={() => router.push('/serviceStyle')} />
+            <Buttons title="Сохранить" onPress={() =>  router.push('/process')} /> 
             </View>
             <CenteredModal
                 isModal={modalVisible}

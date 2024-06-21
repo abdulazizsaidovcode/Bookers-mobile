@@ -1,6 +1,6 @@
 interface LocationInputProps {
     label:string;  
     value?: string;
-    placeholder: string;
+    placeholder?: string;
     onChangeText?: (text: string) => void;
   }
