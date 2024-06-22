@@ -4,7 +4,7 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { MenuProvider } from 'react-native-popup-menu';
+import { MenuProvider } from "react-native-popup-menu";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
@@ -43,6 +43,7 @@ import CreatingClient from "./(free)/(client)/creating-client";
 import MainClientList from "./(free)/(client)/client-list";
 import AddressBook from "./(free)/(client)/address-book";
 import Process from "./(standart)/(services)/(process)/process";
+import LocationData from "./(location)/(location-data)/LocationData";
 
 const Stack = createNativeStackNavigator();
 
@@ -234,6 +235,11 @@ function RootLayoutNav() {
               name="(free)/(client)/creating-client"
               component={CreatingClient}
               options={{ title: "CreatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(location)/(location-data)/LocationData"
+              component={LocationData}
+              options={{headerShown:false}}
             />
           </Stack.Navigator>
         </MenuProvider>
