@@ -46,6 +46,7 @@ import AddressBook from "./(free)/(client)/address-book";
 import Process from "./(standart)/(services)/(process)/process";
 import AuthPage1 from "./(auth)/authPage1";
 import AuthPage2 from "./(auth)/authPage2";
+import AuthPage3 from "./(auth)/authPage3";
 
 const Stack = createNativeStackNavigator();
 
@@ -116,6 +117,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/authPage2"
               component={AuthPage2}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/authPage3"
+              component={AuthPage3}
               options={{ headerShown: false }}
             />
             <Stack.Screen
