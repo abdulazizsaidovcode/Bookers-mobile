@@ -21,7 +21,7 @@ const WorkDays = () => {
     return (
         <SafeAreaView style={styles.container}>
              <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
-             <NavigationMenu name={`Время работы`} clicks={() => ('')}/>
+             <NavigationMenu name={`График работы`}/>
             <ScrollView>
                 <View style={styles.section}>
                     <Text style={styles.title}>График работы с</Text>

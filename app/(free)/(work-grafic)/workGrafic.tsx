@@ -86,7 +86,7 @@ const GraficWork: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
        <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
-       <NavigationMenu name={`Из адресной книги`} clicks={() => ('')}/>
+       <NavigationMenu name={`Время работы`}/>
       <ScrollView style={{marginTop: 15}}>
         <View>
           <Text style={styles.title}>Рабочие дни</Text>
