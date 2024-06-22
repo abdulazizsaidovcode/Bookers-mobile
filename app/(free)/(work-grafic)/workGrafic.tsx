@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import TimesCard from "@/components/grafic/timesCard";
 import WeeklCard from "@/components/grafic/weeklCard";
 import Buttons from '@/components/(buttons)/button';
 import { router } from 'expo-router';
+import NavigationMenu from '@/components/navigation/navigation-menu';
 
 const weekList = [
   { id: 1, title: 'Пн', value: 'Понедельник' },
@@ -84,6 +85,8 @@ const GraficWork: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
+       <NavigationMenu name={`Из адресной книги`} clicks={() => ('')}/>
       <View style={{ height: '85%' }}>
         <View>
           <Text style={styles.title}>Рабочие дни</Text>
