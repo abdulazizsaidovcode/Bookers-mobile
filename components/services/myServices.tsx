@@ -8,7 +8,8 @@ import { MyServicesProps } from '@/type/services/myServices';
 
 const MyServicess: React.FC<MyServicesProps> = ({ title, subTitle, onPress }) => {
     return (
-        <View style={tw`mt-3  `}>
+       <View style = {[tw`mt-3 rounded-xl`, {backgroundColor:'#ffff'}]}>
+        <View style = {[tw`mt-3 rounded-xl`, {backgroundColor:'#ffff'}]}>
             <TouchableOpacity
             activeOpacity={.8}
                 style={tw`bg-white rounded-2xl  p-4 flex-row justify-between items-center`}
@@ -21,6 +22,8 @@ const MyServicess: React.FC<MyServicesProps> = ({ title, subTitle, onPress }) =>
                 <Text style={tw`text-gray-500 text-lg`}>{'>'}</Text>
             </TouchableOpacity>
         </View>
+       </View> 
+        
     );
 }
 

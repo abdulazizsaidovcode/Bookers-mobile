@@ -18,7 +18,7 @@ import ProfileScreen from "./profile";
 const Tab = createBottomTabNavigator();
 
 export default function TabLayout() {
-	const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme();
 
 	return (
 		<Tab.Navigator

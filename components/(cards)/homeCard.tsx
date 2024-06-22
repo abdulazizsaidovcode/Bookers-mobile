@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import tw from "tailwind-react-native-classnames";
+
 import { HomeCard } from "@/type/card/homeCard";
 
 const HomeCards: React.FC<HomeCard> = ({ icon: Icon, title, description, onPress }) => {

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Text, View } from "@/components/Themed";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import MyServicess from "@/components/services/myServices";
-import { router } from "expo-router";
-import { ScrollView, TextInput } from "react-native";
+import { router, useNavigation } from "expo-router";
+import { ScrollView, StatusBar, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";
 import ServicesCategory from '@/components/services/servicesCatgegory';
@@ -47,29 +47,28 @@ const Process = () => {
         }
     };
     
-    
-
     return (
-        <SafeAreaView>
-            <ScrollView>
-                <View style={tw`flex w-full`}>
-                    <View style={tw`mb-2`}>
-                        <NavigationMenu name="Процедура услуг" deleteIcon={true} />
-                    </View>
-
-                    <View style={tw`p-3`}>
+        <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
+           <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
+           <NavigationMenu name={`Процедура услуг`} deleteIcon />
+                <View style={[tw`flex-1` , {backgroundColor:'#21212E'}]}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between',backgroundColor:'#21212E'}}
+                > 
+                    <View style = {[tw``, {backgroundColor:'#21212E'}]}>
                         <View style={[tw`w-full p-4 rounded-3xl mb-4`, { backgroundColor: '#B9B9C9' }]}>
                             <Text style={tw`text-gray-600`}>Ваша специализация</Text>
                             <Text style={tw`text-black font-bold text-lg`}>Ваша специализация
                                 Парикмахер, Стилист, Специалист по причёскам Специалист по причёскам</Text>
                         </View>
-                        {Gender.map((gender, index) => (
+                             {Gender.map((gender, index) => (
                             <ServicesCategory
                                 key={index}
                                 title={gender.title}
                                 isRadioButton />
                         ))}
-                        <View style={tw`mt-5 p-2 `}>
+                        <View style={[tw`mt-5 p-2 `, {backgroundColor:'#21212E'}]}>
                             {uslugi.map((uslugi, index) => (
                                 <LocationInput
                                     key={index}
@@ -77,7 +76,7 @@ const Process = () => {
                                 />
                             ))}
                         </View>
-                        <View style={tw`p-3`}>
+                        <View style={[tw`p-3`,{backgroundColor:'#21212E'}]}>
                             <Text style={tw`text-gray-500 mb-2`}>Описание</Text>
                             <TextInput
                                 style={tw`bg-gray-500 p-2 rounded-xl text-lg text-white `}
@@ -91,12 +90,12 @@ const Process = () => {
                                 scrollEnabled={true}
                             />
                         </View>
-                        <View style={tw`mb-3 p-3`}>
-                            <Buttons title='Сохранить' isDisebled={false} />
-                        </View>
                     </View>
+                    <View style={[tw`mb-3 p-3`, {backgroundColor:'#21212E'}]}>
+                            <Buttons title='Сохранить' isDisebled={false} />
+                     </View>
+                </ScrollView>
                 </View>
-            </ScrollView>
         </SafeAreaView>
     );
 };

@@ -1,14 +1,24 @@
-import React from 'react';
-import { Text, View, TextInput, SafeAreaView, StyleSheet } from 'react-native';
-import tw from 'tailwind-react-native-classnames';
+import React from "react";
+import { Text, View, TextInput, SafeAreaView, StyleSheet } from "react-native";
+import tw from "tailwind-react-native-classnames";
 
-const LocationInput: React.FC<LocationInputProps> = ({ label, labalVisible = true, value, onChangeText, placeholder }) => {
+const LocationInput: React.FC<LocationInputProps> = ({
+  label,
+  labalVisible = true,
+  value,
+  onChangeText,
+  placeholder,
+}) => {
   return (
     <SafeAreaView>
-      <View style={{ width: '100%' }}>
-        {labalVisible ? <Text style={tw`text-gray-500 mb-2 text-base`}>{label}</Text> : ''}
+      <View style={{ width: "100%" }}>
+        {labalVisible ? (
+          <Text style={tw`text-gray-500 mb-2 text-base`}>{label}</Text>
+        ) : (
+          ""
+        )}
         <TextInput
-          style={tw`bg-gray-500 rounded-xl py-3 px-5 mb-3 w-full h-12 text-white text-lg`}
+          style={tw`bg-gray-500 rounded-xl py-3 px-5 mb-3 w-full h-14 text-white text-lg`}
           onChangeText={onChangeText}
           placeholder={placeholder}
           value={value}

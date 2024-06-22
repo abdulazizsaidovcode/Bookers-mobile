@@ -44,7 +44,7 @@ const ProfilePage: React.FC = () => {
             </View>
 
             {[
-                { icon: 'user', label: 'Подписка', screen: 'Subscription' },
+                { icon: 'user', label: 'Подписка', screen: '(profile)/(tariff)/tariff.tsx' },
                 { icon: 'history', label: 'История сеансов', screen: '(profile)/(sessionhistory)/sessionHistory' },
                 { icon: 'info-circle', label: 'Справка', screen: 'Help' },
                 { icon: 'bell', label: 'Уведомления', screen: '(profile)/(notification)/index' },

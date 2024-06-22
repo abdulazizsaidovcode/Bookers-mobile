@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, TextInput } from 'react-native';
+import { ScrollView, View, Text, TextInput, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -13,8 +13,7 @@ const Category = () => {
         { title: "Здоровье и красота волос", },
         { title: "Ногтевой сервис" },
         { title: "Ресницы и брови" },
-        { title: "Уход за телом" },
-        { title: "Уход за лицом" }
+        
     ];
     const data = ['Парикмахер', 'Парикмахер', 'Парикмахер', 'Парикмахер', 'Парикмахер'];
 
@@ -32,16 +31,20 @@ const Category = () => {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView style={{ flex: 1 }}>
-                <View style={tw`w-full p-3`}>
-                    <NavigationMenu name="Категория услуг" />
+        <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
+            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
+            <NavigationMenu name={`Категория услуг`} />
+            <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
+            <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
+                >
+                <View style={tw`w-full`}>
                     {services.map((service, index) => (
                         <ServicesCategory key={index} title={service.title} />
                     ))}
                 </View>
-            </ScrollView>
-            <View style={tw`content-end p-4`}>
+                <View style={tw`content-end mb-5 `}>
                 <View style={tw`mt-2 content-end`}>
                     <Buttons title="Сохранить" onPress={openModal} />
                 </View>
@@ -64,7 +67,10 @@ const Category = () => {
                         ))}
                     </View>
                 </CenteredModal>
-            </View>
+               </View>
+            </ScrollView>
+            
+             </View>  
         </SafeAreaView>
     );
 };

@@ -7,10 +7,10 @@ const LocationInput: React.FC<LocationInputProps> = ({ label, value, onChangeTex
   const navigation = useNavigation();
   return (
     <SafeAreaView>
-      <View style={tw`w-full p-4`}>
+      <View style={tw`w-full mt-1`}>
         <Text style={tw`text-gray-500 mb-3 text-lg`}>{label}</Text>
         <TextInput
-          style={tw`bg-gray-500 rounded-xl p-3 w-full h-18 text-white text-xl`}
+          style={tw`bg-gray-500 rounded-xl p-3 w-full h-14 text-white text-xl`}
           onChangeText={onChangeText}
           value={value}
         />
