@@ -29,7 +29,7 @@ const TariffsPage: React.FC = () => {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const handleDetailsPress = (tariff: any) => {
-    // navigation.navigate('(profile)/(tariff)/tariff');
+    // navigation.navigate('(profile)/(tariff)/tariff ');
   };
 
   return (
