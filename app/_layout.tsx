@@ -47,6 +47,7 @@ import Process from "./(standart)/(services)/(process)/process";
 import AuthPage1 from "./(auth)/authPage1";
 import AuthPage2 from "./(auth)/authPage2";
 import AuthPage3 from "./(auth)/authPage3";
+import MasterorClient from "./(auth)/masterORclient";
 
 const Stack = createNativeStackNavigator();
 
@@ -122,6 +123,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/authPage3"
               component={AuthPage3}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/masterORclient"
+              component={MasterorClient}
               options={{ headerShown: false }}
             />
             <Stack.Screen
