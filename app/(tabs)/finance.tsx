@@ -25,6 +25,8 @@ const Finance = () => {
         setMonthData
     } = financeStore()
     const [isFilters, setIsFilters] = useState('day')
+    const [monthShowHide, setMonthShowHide] = useState<boolean>(false)
+
     useEffect(() => {
         setConfig()
         getTopClients(setTopClients)
@@ -36,6 +38,12 @@ const Finance = () => {
         if (startDate === endDate) setMonthData(null)
     }, [date]);
 
+    useEffect(() => {
+        if (isFilters !== 'month') setMonthData(null)
+    }, [isFilters]);
+
+    const toggleMonth = () => setMonthShowHide(!monthShowHide)
+    console.log(monthData)
     return (
         <ScrollView
             showsHorizontalScrollIndicator={false}
@@ -72,10 +80,13 @@ const Finance = () => {
                     <View style={tw`mb-5 mt-7 flex-row justify-between items-center`}>
                         <Text style={tw`text-base text-white font-bold`}>По месяцам</Text>
                         <MaterialIcons
+                            onPress={() => {
+                                (monthData && monthData.length > 0) && toggleMonth()
+                            }}
                             name="navigate-next"
                             size={30}
                             color="white"
-                            // style={{transform: 'rotate(90deg)'}}
+                            style={{transform: monthData ? ((monthData.length > 0 && !monthShowHide) ? 'rotate(90deg)' : '') : ''}}
                         />
                     </View>
                 </>
@@ -86,7 +97,7 @@ const Finance = () => {
 
             {/* month cards */}
             {isFilters === 'month' && (
-                <View style={{gap: 18}}>
+                <View style={[tw`${monthShowHide ? 'hidden' : ''}`]}>
                     <FlatList
                         data={monthData}
                         renderItem={({item}) => <FinanceRevenuesMonth items={item}/>}

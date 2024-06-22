@@ -7,6 +7,7 @@ import { getChatList } from '@/helpers/api-function/chat/chat';
 import chatStore from '@/helpers/state_managment/chat/chatStore';
 import { useStomp } from '@/context/StompContext';
 import fetchChatDataStore, { Data } from '@/helpers/state_managment/chat/chatfetchStore';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ChatSupport = () => {
     const { stompClient, adminId } = useStomp();
@@ -31,7 +32,7 @@ const ChatSupport = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             {!chatData && (
                 <View>
                     <Text style={styles.headerText}>Чат</Text>
@@ -47,14 +48,14 @@ const ChatSupport = () => {
                 </View>
             )}
             <ChatList userData={chatData} />
-        </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1F2937', // bg-gray-900
+        backgroundColor: '#21212E', // bg-gray-900
         padding: 10
     },
     headerText: {

@@ -1,9 +1,11 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import CalendarComponent from '@/components/calendar/MainCalendar';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
+import { router } from 'expo-router';
+import NavigationMenu from '@/components/navigation/navigation-menu';
+import CalendarGraffic from './calendar';
 
 const WorkDays = () => {
     const items = [
@@ -18,10 +20,12 @@ const WorkDays = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
+             <NavigationMenu name={`График работы`}/>
             <ScrollView>
                 <View style={styles.section}>
                     <Text style={styles.title}>График работы с</Text>
-                    <CalendarComponent />
+                    <CalendarGraffic/>
                 </View>
                 <View style={styles.fullHeightSection}>
                     <Text style={styles.title}>Выберите рабочие дни в неделю</Text>
@@ -31,7 +35,7 @@ const WorkDays = () => {
                         ))}
                     </View>
                     <View style={{ padding: 10 }}>
-                        <Buttons title='Продолжить' />
+                        <Buttons title='Продолжить' onPress={() => router.push('(free)/(work-grafic)/workGrafic')} />
                     </View>
                 </View>
             </ScrollView>
@@ -47,10 +51,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#21212e',
     },
     section: {
-        height: 400,
+        height: 430,
+        display: "flex",
+        gap: 20
     },
     fullHeightSection: {
         flex: 1,
+        marginTop: 10
     },
     title: {
         fontSize: 20,

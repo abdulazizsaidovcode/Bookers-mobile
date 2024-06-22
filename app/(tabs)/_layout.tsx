@@ -1,20 +1,17 @@
+// TabLayout.tsx
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Pressable, View } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import Colors from "@/constants/Colors";
+import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useColorScheme } from "@/components/useColorScheme";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import { TabBarIcon } from "../../components/navigation/TabBarIcon";
 import TabOneScreen from "./main";
 import TabTwoScreen from "./two";
 import ChatScreen from "./chat";
 import Finance from "./finance";
-import tw from "tailwind-react-native-classnames";
 import ProfileScreen from "./profile";
 import Welcome from "../(welcome)/Welcome";
+import ScheduleScreen from "./schedule";
+import Colors from "@/constants/Colors";
+import { TabBarIcon } from "../../components/navigation/TabBarIcon";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,12 +24,43 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: useClientOnlyValue(false, true),
       }}
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: '#9c0935',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+          backgroundColor: '#2b2b2b',
+        },
+        headerShown: false,
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'main') {
+            iconName = focused ? 'home' : 'home';
+          } else if (route.name === 'Schedule') {
+            iconName = focused ? 'calendar' : 'calendar';
+          } else if (route.name === 'finance') {
+            iconName = focused ? 'finance' : 'finance';
+          } else if (route.name === 'chat') {
+            iconName = focused ? 'chatbubble' : 'chatbubble-outline';
+          } else if (route.name === 'profile') {
+            iconName = focused ? 'body' : 'body-outline';
+          }
+
+          if (route.name === 'finance') {
+            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+          } else {
+            return <FontAwesome name={iconName} size={size} color={color} />;
+          }
+        },
+      })}
+>>>>>>> cf812d4047a1133c3edfbe8e8e7c91827428103f
     >
       <Tab.Screen
         name="main"
         component={TabOneScreen}
         options={{
           title: "Главная",
+
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
             <View
@@ -95,6 +123,15 @@ export default function TabLayout() {
           title: "Tab Two",
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+        }}
+      />
+      <Tab.Screen
+        name="Schedule"
+        component={ScheduleScreen}
+        options={{
+          title: "Расписание",
+          tabBarIcon: ({ color }) => <TabBarIcon name="calendar" color={color} />,
         }}
       />
       <Tab.Screen
@@ -106,6 +143,9 @@ export default function TabLayout() {
             <MaterialCommunityIcons name="finance" size={24} color={color} />
           ),
           headerShown: false,
+          title: "Финансы",
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="finance" size={24} color={color} />,
+
         }}
       />
       <Tab.Screen
@@ -120,6 +160,8 @@ export default function TabLayout() {
               color={color}
             />
           ),
+          title: "Чат",
+          tabBarIcon: ({ color }) => <Ionicons name="chatbubble-outline" size={24} color={color} />,
         }}
       />
       <Tab.Screen
@@ -134,6 +176,9 @@ export default function TabLayout() {
               color={color}
             />
           ),
+
+          title: "Профиль",
+          tabBarIcon: ({ color }) => <Ionicons name="body-outline" size={24} color={color} />,
         }}
       />
     </Tab.Navigator>

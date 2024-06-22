@@ -17,9 +17,9 @@ import Auth from "./(auth)/auth";
 import TabLayout from "./(tabs)/_layout";
 import ChatDetails from "./(chat)/(communicatie)/chatDetails";
 import Notification from "./(profile)/(notification)";
-import GraficWork from "./(work-grafic)/workGrafic";
-import WorkMain from "./(work-grafic)/workMain";
-import WorkDays from "./(work-grafic)/workDays";
+import GraficWork from "./(free)/(work-grafic)/workGrafic";
+import WorkMain from "./(free)/(work-grafic)/workMain";
+import WorkDays from "./(free)/(work-grafic)/workDays";
 import MyServices from "./(standart)/(services)/(myServices)/myServices";
 import Expenses from "./(profile)/(Expenses)";
 import ExpensesDetail from "./(profile)/(Expenses)/(component)/(detail)/expenseDetail";
@@ -44,8 +44,6 @@ import CreatingClient from "./(free)/(client)/creating-client";
 import MainClientList from "./(free)/(client)/client-list";
 import AddressBook from "./(free)/(client)/address-book";
 import Process from "./(standart)/(services)/(process)/process";
-import Location from "./(location)/Location";
-import LocationData from "./(location)/(location-data)/LocationData";
 
 const Stack = createNativeStackNavigator();
 
@@ -109,6 +107,21 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="(auth)/authPage1"
+              component={AuthPage1}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/authPage2"
+              component={AuthPage2}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/authPage3"
+              component={AuthPage3}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="(tabs)"
               component={TabLayout}
               options={{ headerShown: false }}
@@ -124,17 +137,18 @@ function RootLayoutNav() {
               options={{ title: "Services" }}
             />
             <Stack.Screen
-              name="(work-grafic)/workGrafic"
+              name="(free)/(work-grafic)/workGrafic"
               component={GraficWork}
-              options={{ title: "Services" }}
+              options={{ headerShown: false }}
+
             />
             <Stack.Screen
-              name="(work-grafic)/workMain"
+              name="(free)/(work-grafic)/workMain"
               component={WorkMain}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(work-grafic)/workDays"
+              name="(free)/(work-grafic)/workDays"
               component={WorkDays}
               options={{ headerShown: false }}
             />
@@ -242,16 +256,6 @@ function RootLayoutNav() {
               name="(free)/(client)/creating-client"
               component={CreatingClient}
               options={{ title: "CreatingClient", headerShown: false }}
-            />
-            <Stack.Screen
-              name="(location)/Location"
-              component={Location}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="(location)/(location-data)/LocationData"
-              component={LocationData}
-              options={{ headerShown: false }}
             />
           </Stack.Navigator>
         </MenuProvider>

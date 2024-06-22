@@ -1,40 +1,77 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, Alert, Button } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, Alert, View, StatusBar } from 'react-native';
 import OTPTextInput from 'react-native-otp-textinput';
+import Buttons from '@/components/(buttons)/button';
+import NavigationMenu from '@/components/navigation/navigation-menu';
+import { router } from 'expo-router';
+
 const OtpInputExample = () => {
     const [otp, setOtp] = useState('');
-    const handleSubmit = () => {
-        Alert.alert('OTP Submitted', `OTP: ${otp}`);
-    };
+
+    // const handleSubmit = () => {
+    //     Alert.alert('OTP Submitted', `OTP: ${otp}`);
+    // };
+
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Подтверждение номера</Text>
-            <Text style={styles.phoneNumber}>+998942939449</Text>
-            <Text style={styles.subTitle}>Мы отправили вам SMS с кодом подтверждения.</Text>
-            <OTPTextInput
-                inputCount={4} // <<== Bu yerda 4 ga o'zgartirildi
-                handleTextChange={(text) => setOtp(text)}
-                containerStyle={styles.otpContainer}
-                textInputStyle={styles.otpInput}
-                tintColor="#03DAC6"
-            />
-            <Button title="Submit" onPress={handleSubmit} />
+            <SafeAreaView style={{ marginTop: 32 }}>
+                <StatusBar barStyle="dark-content" backgroundColor="#21212E" />
+                <NavigationMenu name="" deleteIcon={false} key={1} />
+            </SafeAreaView>
+            <View style={styles.content}>
+                <Text style={styles.title}>Подтверждение номера</Text>
+                <Text style={styles.phoneNumber}>+99 888 517 11 98</Text>
+                <Text style={styles.subTitle}>Мы отправили вам SMS с кодом подтверждения.</Text>
+                <OTPTextInput
+                    inputCount={4}
+                    handleTextChange={(text) => setOtp(text)}
+                    containerStyle={styles.otpContainer}
+                    textInputStyle={styles.otpInput}
+                    tintColor="#03DAC6"
+                />
+            </View>
+            <View style={styles.buttonWrapper}>
+                <Buttons title='Подтвердить' onPress={() => router.push("(auth)/authPage1")} />
+            </View>
         </SafeAreaView>
     );
 };
+
 export default OtpInputExample;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#21212e',
+    },
+    header: {
+        width: '100%',
+        alignItems: 'flex-end',
+        padding: 16,
+    },
+    iconWrapper: {
+        backgroundColor: '#ff0078',
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    iconText: {
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+    content: {
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 16,
+        paddingHorizontal: 16,
     },
     title: {
         fontSize: 20,
         fontWeight: '400',
-        marginBottom: 20,
+        marginBottom: 10,
         color: '#ffffff',
     },
     phoneNumber: {
@@ -46,15 +83,15 @@ const styles = StyleSheet.create({
         color: '#828282',
         textAlign: 'center',
         fontSize: 16,
-        lineHeight: 18,
+        lineHeight: 24,
         marginBottom: 20,
     },
     otpContainer: {
         width: '80%',
         height: 100,
-        marginBottom: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginBottom: 20,
     },
     otpInput: {
         width: 50,
@@ -65,5 +102,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#ffffff',
         fontSize: 24,
+    },
+    buttonWrapper: {
+        padding: 16,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
     },
 });

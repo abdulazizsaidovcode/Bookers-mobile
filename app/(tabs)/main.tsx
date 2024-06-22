@@ -3,99 +3,102 @@ import { StyleSheet, Text, View, ScrollView, Button, Image } from "react-native"
 import { Ionicons } from "@expo/vector-icons";
 import { LineChart, ProgressChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const screenWidth = Dimensions.get("window").width;
 // shunaqa qilib ishlatsa xam buladi
-const {width, height, scale, fontScale} = Dimensions.get("window");
+const { width, height, scale, fontScale } = Dimensions.get("window");
 
 export default function TabOneScreen() {
 	return (
-		<ScrollView style={styles.container} contentContainerStyle={styles.scrollContainer}>
-			<View style={styles.header}>
-				<Text style={styles.title}>Главная</Text>
-				<View style={styles.headerIcons}>
-					<Ionicons name="notifications" size={24} color="white" style={{ marginRight: 16 }} />
-					<Ionicons name="share-social-outline" size={24} color="white" />
+		<SafeAreaView style={styles.container} >
+			<ScrollView contentContainerStyle={styles.scrollContainer}>
+				<View style={styles.header}>
+					<Text style={styles.title}>Главная</Text>
+					<View style={styles.headerIcons}>
+						<Ionicons name="notifications" size={24} color="white" style={{ marginRight: 16 }} />
+						<Ionicons name="share-social-outline" size={24} color="white" />
+					</View>
 				</View>
-			</View>
 
-			<View style={styles.scheduleContainer}>
-				<Text style={styles.scheduleTitle}>Расписание на сегодня</Text>
-				<Text style={styles.scheduleSubtitle}>Время работы: с 8:00 до 22:00</Text>
-				<ScrollView horizontal>
-					<View style={styles.schedule}>
-						{scheduleData.map((item, index) => (
-							<View key={index} style={[styles.timeBlock, { backgroundColor: item.color }]}>
-								<Text style={styles.timeText}>{item.time}</Text>
+				<View style={styles.scheduleContainer}>
+					<Text style={styles.scheduleTitle}>Расписание на сегодня</Text>
+					<Text style={styles.scheduleSubtitle}>Время работы: с 8:00 до 22:00</Text>
+					<ScrollView horizontal>
+						<View style={styles.schedule}>
+							{scheduleData.map((item, index) => (
+								<View key={index} style={[styles.timeBlock, { backgroundColor: item.color }]}>
+									<Text style={styles.timeText}>{item.time}</Text>
+								</View>
+							))}
+						</View>
+					</ScrollView>
+					<View style={styles.legend}>
+						{legendData.map((item, index) => (
+							<View key={index} style={styles.legendItem}>
+								<View style={[styles.legendColor, { backgroundColor: item.color }]} />
+								<Text style={styles.legendText}>{item.label}</Text>
 							</View>
 						))}
 					</View>
-				</ScrollView>
-				<View style={styles.legend}>
-					{legendData.map((item, index) => (
-						<View key={index} style={styles.legendItem}>
-							<View style={[styles.legendColor, { backgroundColor: item.color }]} />
-							<Text style={styles.legendText}>{item.label}</Text>
+				</View>
+
+				<View style={styles.statsContainer}>
+					<View style={styles.statsCard}>
+						<Text style={styles.statsText}>Выполнено сеансов</Text>
+						<ProgressChart
+							data={[0.625]}
+							width={screenWidth / 2.4}
+							height={100}
+							strokeWidth={16}
+							radius={32}
+							chartConfig={chartConfig}
+							hideLegend={true}
+						/>
+						<Text style={styles.statsValue}>5/8</Text>
+					</View>
+					<View style={styles.statsCard}>
+						<Text style={styles.statsText}>Доход сегодня</Text>
+						<LineChart
+							data={incomeData}
+							width={screenWidth / 2.4}
+							height={100}
+							chartConfig={chartConfig}
+							bezier
+							style={styles.chartStyle}
+						/>
+						<Text style={styles.statsValue}>600 000 из 1 200 000</Text>
+					</View>
+					<View style={styles.statsCard}>
+						<Text style={styles.statsText}>Отменённые сеансы</Text>
+						<Text style={styles.statsValue}>0</Text>
+					</View>
+					<View style={styles.statsCard}>
+						<Text style={styles.statsText}>Доход в этом месяце</Text>
+						<Text style={styles.statsValue}>0</Text>
+					</View>
+				</View>
+
+				<View style={styles.requestsContainer}>
+					<Text style={styles.requestsTitle}>Запросы на бронь</Text>
+					<Text style={styles.requestsSubtitle}>4 заявки</Text>
+					{requestData.map((item, index) => (
+						<View key={index} style={styles.requestCard}>
+							<Image source={{ uri: item.image }} style={styles.avatar} />
+							<View style={styles.requestDetails}>
+								<Text style={styles.requestName}>{item.name}</Text>
+								<Text style={styles.requestService}>{item.service}</Text>
+								<Text style={styles.requestTime}>{item.time}</Text>
+							</View>
+							<View style={styles.requestButtons}>
+								<Button title="Одобрить" onPress={() => { }} color="#E53935" />
+								<Button title="Отклонить" onPress={() => { }} color="#808080" />
+							</View>
 						</View>
 					))}
 				</View>
-			</View>
-
-			<View style={styles.statsContainer}>														
-				<View style={styles.statsCard}>
-					<Text style={styles.statsText}>Выполнено сеансов</Text>
-					<ProgressChart
-						data={[0.625]}
-						width={screenWidth / 2.4}
-						height={100}
-						strokeWidth={16}
-						radius={32}
-						chartConfig={chartConfig}
-						hideLegend={true}
-					/>
-					<Text style={styles.statsValue}>5/8</Text>
-				</View>
-				<View style={styles.statsCard}>
-					<Text style={styles.statsText}>Доход сегодня</Text>
-					<LineChart
-						data={incomeData}
-						width={screenWidth / 2.4}
-						height={100}
-						chartConfig={chartConfig}
-						bezier
-						style={styles.chartStyle}
-					/>
-					<Text style={styles.statsValue}>600 000 из 1 200 000</Text>
-				</View>
-				<View style={styles.statsCard}>
-					<Text style={styles.statsText}>Отменённые сеансы</Text>
-					<Text style={styles.statsValue}>0</Text>
-				</View>
-				<View style={styles.statsCard}>
-					<Text style={styles.statsText}>Доход в этом месяце</Text>
-					<Text style={styles.statsValue}>0</Text>
-				</View>
-			</View>
-
-			<View style={styles.requestsContainer}>
-				<Text style={styles.requestsTitle}>Запросы на бронь</Text>
-				<Text style={styles.requestsSubtitle}>4 заявки</Text>
-				{requestData.map((item, index) => (
-					<View key={index} style={styles.requestCard}>
-						<Image source={{ uri: item.image }} style={styles.avatar} />
-						<View style={styles.requestDetails}>
-							<Text style={styles.requestName}>{item.name}</Text>
-							<Text style={styles.requestService}>{item.service}</Text>
-							<Text style={styles.requestTime}>{item.time}</Text>
-						</View>
-						<View style={styles.requestButtons}>
-							<Button title="Одобрить" onPress={() => {}} color="#E53935" />
-							<Button title="Отклонить" onPress={() => {}} color="#808080" />
-						</View>
-					</View>
-				))}
-			</View>
-		</ScrollView>
+			</ScrollView>
+		</SafeAreaView>
 	);
 }
 
