@@ -39,10 +39,14 @@ import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
 import SettingsGaleryMain from "./(settings)/(settings-galery)/settings-galery-main";
 import PhoneNumberInput from "./(auth)/number-create";
 import MainClient from "@/app/(free)/(client)/main";
+import OtpInput from "./(auth)/otp_input";
 import CreatingClient from "./(free)/(client)/creating-client";
 import MainClientList from "./(free)/(client)/client-list";
 import AddressBook from "./(free)/(client)/address-book";
 import Process from "./(standart)/(services)/(process)/process";
+import TariffsPage from "./(profile)/(tariff)/tariff";
+import TariffDetailPage from "./(profile)/(tariff)/details/tariffDetails";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -98,6 +102,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/number-create"
               component={PhoneNumberInput}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/otp_input"
+              component={OtpInput}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -235,6 +244,21 @@ function RootLayoutNav() {
               component={CreatingClient}
               options={{ title: "CreatingClient", headerShown: false }}
             />
+            {/* settings update */}
+
+            {/* tariff */}
+
+            {/* <Stack.Screen
+              name="(tariff)/tariff"
+              component={TariffsPage}
+              options={{ title: 'Тарифы' }}
+            />
+            <Stack.Screen
+              name="(tariff)/details/tariffDetails"
+              component={TariffDetailPage}
+              options={{ title: 'Тариф детали' }}
+            /> */}
+
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>

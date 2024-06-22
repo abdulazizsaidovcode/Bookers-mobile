@@ -5,6 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import Buttons from '@/components/(buttons)/button';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { router } from 'expo-router';
 
 const PhoneNumberInput: React.FC = () => {
     const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -21,7 +22,7 @@ const PhoneNumberInput: React.FC = () => {
     return (
         <View style={styles.container}>
             <SafeAreaView style={{ marginBottom: 16 }}>
-                <StatusBar barStyle="dark-content" backgroundColor="black" />
+                <StatusBar barStyle="dark-content" backgroundColor="#21212E" />
                 <NavigationMenu name="" deleteIcon={false} key={1} />
             </SafeAreaView>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center' }}>
@@ -69,7 +70,7 @@ const PhoneNumberInput: React.FC = () => {
             <View style={{ marginVertical: 20 }}>
                 <Buttons
                     title="Войти"
-                    // onPress={}
+                    onPress={() => router.push('(auth)/otp_input')}
                     backgroundColor={'#9C0A35'}
                 />
             </View>
