@@ -44,6 +44,9 @@ import CreatingClient from "./(free)/(client)/creating-client";
 import MainClientList from "./(free)/(client)/client-list";
 import AddressBook from "./(free)/(client)/address-book";
 import Process from "./(standart)/(services)/(process)/process";
+import TariffsPage from "./(profile)/(tariff)/tariff";
+import TariffDetailPage from "./(profile)/(tariff)/details/tariffDetails";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -241,6 +244,21 @@ function RootLayoutNav() {
               component={CreatingClient}
               options={{ title: "CreatingClient", headerShown: false }}
             />
+            {/* settings update */}
+
+            {/* tariff */}
+
+            {/* <Stack.Screen
+              name="(tariff)/tariff"
+              component={TariffsPage}
+              options={{ title: 'Тарифы' }}
+            />
+            <Stack.Screen
+              name="(tariff)/details/tariffDetails"
+              component={TariffDetailPage}
+              options={{ title: 'Тариф детали' }}
+            /> */}
+
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>

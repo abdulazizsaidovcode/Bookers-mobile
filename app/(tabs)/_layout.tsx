@@ -14,6 +14,7 @@ import ChatScreen from "./chat";
 import Finance from "./finance";
 import tw from "tailwind-react-native-classnames";
 import ProfileScreen from "./profile";
+import ScheduleScreen from "./schedule";
 
 const Tab = createBottomTabNavigator();
 
@@ -84,6 +85,20 @@ export default function TabLayout() {
 						<TabBarIcon
 							style={tw`mb-3`}
 							name={focused ? "chatbubble" : "chatbubble-outline"}
+							color={color}
+						/>
+					),
+				}}
+			/>
+			<Tab.Screen
+				name="schedule"
+				component={ScheduleScreen}
+				options={{
+					title: "schedule",
+					tabBarIcon: ({ color, focused }) => (
+						<TabBarIcon
+							style={tw`mb-3`}
+							name={focused ? "calendar" : "calendar-outline"}
 							color={color}
 						/>
 					),
