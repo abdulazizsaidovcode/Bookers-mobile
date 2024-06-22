@@ -49,6 +49,7 @@ import AuthPage2 from "./(auth)/authPage2";
 import AuthPage3 from "./(auth)/authPage3";
 import MasterorClient from "./(auth)/masterORclient";
 import TariffsPage from "./(profile)/(tariff)/tariff";
+import Welcome from "./(welcome)/Welcome";
 
 const Stack = createNativeStackNavigator();
 
@@ -270,6 +271,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(tariff)/tariff"
               component={TariffsPage}
+              options={{ title: "CreatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(welcome)/Welcome"
+              component={Welcome}
               options={{ title: "CreatingClient", headerShown: false }}
             />
           </Stack.Navigator>
