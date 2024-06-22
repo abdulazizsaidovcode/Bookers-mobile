@@ -46,6 +46,7 @@
     "react-native-gifted-chat": "^2.4.0",
     "react-native-localize": "^3.2.0",
     "react-native-modal": "^13.0.1",
+    "react-native-otp-textinput": "^1.1.6",
     "react-native-paper": "^5.12.3",
     "react-native-phone-number-input": "^2.1.0",
     "react-native-picker-select": "^9.1.3",

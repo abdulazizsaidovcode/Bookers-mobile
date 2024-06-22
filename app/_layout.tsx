@@ -39,6 +39,7 @@ import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
 import SettingsGaleryMain from "./(settings)/(settings-galery)/settings-galery-main";
 import PhoneNumberInput from "./(auth)/number-create";
 import MainClient from "@/app/(free)/(client)/main";
+import OtpInput from "./(auth)/otp_input";
 
 const Stack = createNativeStackNavigator();
 
@@ -94,6 +95,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/number-create"
               component={PhoneNumberInput}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/otp_input"
+              component={OtpInput}
               options={{ headerShown: false }}
             />
             <Stack.Screen
