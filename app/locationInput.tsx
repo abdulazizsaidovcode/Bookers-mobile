@@ -9,14 +9,13 @@ const LocationInput: React.FC<LocationInputProps> = ({
   onChangeText,
   placeholder,
 }) => {
-  const navigation = useNavigation();
   return (
     <SafeAreaView>
       <View style={tw`w-full mt-1`}>
-        <Text style={tw`text-gray-500 mb-3 text-lg`}>{label}</Text>
+        <Text style={[tw`text-gray-500 mb-3 text-lg`]}>{label}</Text>
         <TextInput
+          style={tw`bg-gray-500 rounded-xl text-white p-3 w-full h-14 text-white text-xl`}
           placeholder={placeholder}
-          style={tw`bg-gray-500 rounded-xl p-3 w-full h-14 text-white text-xl`}
           onChangeText={onChangeText}
           value={value}
         />

@@ -20,6 +20,9 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";
 import Textarea from "react-native-textarea";
+import { router } from "expo-router";
+import Modal from "react-native-modal";
+import { Feather } from "@expo/vector-icons";
 
 interface ListData {
   key: string;
@@ -38,6 +41,7 @@ const LocationData = () => {
   const [isModal, setIsmodal] = useState(false);
   const [salonName, setSalonName] = useState("");
   const [message, setMessage] = useState("");
+  const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
     if (
@@ -64,19 +68,25 @@ const LocationData = () => {
   };
 
   const handleSubmit = async () => {
-    const { data } = await axios.post(
+    await axios.post(
       `${base_url}address`,
       { districtId, street, homeNumber, target, salonId },
       config
     );
+    router.push("../(response-location)/ResponseLocation");
   };
   const onConfirm = async () => {
-    const { data } = await axios.post(
-      `${base_url}message/send/admin`,
-      { salonName, message },
-      config
-    );
-    console.log(data);
+    try {
+      const { data } = await axios.post(
+        `${base_url}message/send/admin`,
+        { salonName, message },
+        config
+      );
+      setToggle(true);
+      setIsmodal(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -104,7 +114,7 @@ const LocationData = () => {
             <SelectList
               boxStyles={tw`w-60 z-50 w-full text-white`}
               inputStyles={tw`text-white text-lg`}
-              dropdownStyles={style.dropdawn}
+              dropdownStyles={styles.dropdawn}
               dropdownTextStyles={tw`text-white text-lg`}
               setSelected={(val: string) => setSalonId(val)}
               data={data}
@@ -160,6 +170,7 @@ const LocationData = () => {
             />
           </View>
         </ScrollView>
+        {/* Не нашли свой салон красоты? */}
         <CenteredModal
           btnWhiteText={"Закрыть"}
           btnRedText={"Отправить"}
@@ -189,12 +200,47 @@ const LocationData = () => {
             />
           </View>
         </CenteredModal>
+        {/* Sucsess */}
+        <View style={tw`flex-1 justify-center items-center`}>
+          <Modal
+            style={tw`px-3`}
+            isVisible={toggle}
+            animationIn="slideInUp"
+            animationOut="slideOutDown"
+            backdropColor="black"
+            coverScreen={true}
+            deviceHeight={20}
+            deviceWidth={100}
+            hasBackdrop={true}
+            hideModalContentWhileAnimating={true}
+            onBackdropPress={() => setToggle(false)}
+            onBackButtonPress={() => setToggle(false)}
+            useNativeDriver={true}
+          >
+            <View style={tw`bg-gray-800 p-3 items-center rounded-xl`}>
+              <Feather
+                style={tw`mt-4`}
+                name="check-circle"
+                size={60}
+                color="#9c0a35"
+              />
+              <Text style={tw`text-white text-center mt-5 text-base`}>
+                Сообщение отправлено! Скоро администратор добавит ваш салон
+                красоты
+              </Text>
+              <Text style={tw`text-xl my-5 font-medium text-white`}>
+                Ожидайте ответа администратора
+              </Text>
+              <Buttons onPress={() => setToggle(false)} title="Закрыть" />
+            </View>
+          </Modal>
+        </View>
       </View>
     </SafeAreaView>
   );
 };
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   dropdawn: {
     zIndex: 1000,
     width: "100%",

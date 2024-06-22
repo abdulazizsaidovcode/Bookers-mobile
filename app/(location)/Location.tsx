@@ -7,17 +7,19 @@ import tw from "tailwind-react-native-classnames";
 
 const Location = () => {
   return (
-    <View style={[tw`flex-1 px-4 mt-8`, { backgroundColor: "#21212E" }]}>
+    <View style={[tw`flex-1 px-4 mt-5`, { backgroundColor: "#21212E" }]}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-      <NavigationMenu name="Мой адрес работы" />
+      <View style={tw`mt-2`}>
+        <NavigationMenu name="Мой адрес работы" />
+      </View>
       <Pressable
         onPress={() => router.push("/(location-data)/LocationData")}
-        style={tw`flex-2 flex-row items-center justify-between p-3 bg-gray-400 rounded-xl mt-4`}
+        style={tw`flex-row items-center justify-between p-3 bg-gray-400 rounded-xl mt-4`}
       >
         <View>
           <View style={tw`flex-row items-center`}>
             <Image
-              style={tw`w-8 h-8 bg-center object-cover`}
+              style={tw`w-8 h-8`}
               source={require("../../assets/images/location.png")}
             />
             <Text style={tw`text-xl font-bold ml-2`}>Адрес работы</Text>

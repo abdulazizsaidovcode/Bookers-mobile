@@ -51,6 +51,8 @@ import MasterorClient from "./(auth)/masterORclient";
 import TariffsPage from "./(profile)/(tariff)/tariff";
 import Location from "./(location)/Location";
 import LocationData from "./(location)/(location-data)/LocationData";
+import Welcome from "./(welcome)/Welcome";
+import ResponseLocation from "./(location)/(response-location)/ResponseLocation";
 
 const Stack = createNativeStackNavigator();
 
@@ -282,6 +284,16 @@ function RootLayoutNav() {
               name="(profile)/(tariff)/tariff"
               component={TariffsPage}
               options={{ title: "CreatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(welcome)/Welcome"
+              component={Welcome}
+              options={{ title: "CreatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(location)/(response-location)/ResponseLocation"
+              component={ResponseLocation}
+              options={{ headerShown: false }}
             />
           </Stack.Navigator>
         </MenuProvider>

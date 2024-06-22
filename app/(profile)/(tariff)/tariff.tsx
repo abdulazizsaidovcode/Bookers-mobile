@@ -4,33 +4,30 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(profile)/(tariff)/tariff'>;
-
 
 const tariffs = [
   {
     name: 'Тариф бесплатный',
     description: 'Стандартный набор функций',
     price: 'Срок до: 31.12.2024',
-    details: ['Бронирование услуг', 'Галерея', 'Предоплата']
+    details: ['Бронирование услуг', 'Галерея', 'Предоплата'],
+    navigate: '(welcome)/Welcome'
   },
   {
     name: 'Тариф STANDART',
     description: 'Продвинутый набор функций',
     price: '49 000 в месяц',
     trial: 'Пробный период доступен на 3 месяца',
-    details: ['Бронирование услуг', 'Галерея', 'Предоплата', 'Еще функции']
+    details: ['Бронирование услуг', 'Галерея', 'Предоплата', 'Еще функции'],
+    navigate: ''
   },
 ];
 
 const TariffsPage: React.FC = () => {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
-
-  const handleDetailsPress = (tariff: any) => {
-    // navigation.navigate('(profile)/(tariff)/tariff ');
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -44,10 +41,13 @@ const TariffsPage: React.FC = () => {
               <Text style={styles.price}>{tariff.price}</Text>
               {tariff.trial && <Text style={styles.trial}>{tariff.trial}</Text>}
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.activateButton}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate(tariff.navigate)}
+                  style={styles.activateButton}
+                >
                   <Text style={styles.buttonText}>Активировать</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.detailsButton} onPress={() => handleDetailsPress(tariff)}>
+                <TouchableOpacity style={styles.detailsButton}>
                   <Text style={[styles.buttonText, styles.detailsButtonText]}>Подробнее</Text>
                 </TouchableOpacity>
               </View>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#21212E',
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
   },
   card: {
     backgroundColor: '#fff',
