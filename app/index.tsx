@@ -21,7 +21,6 @@ function Index() {
         </View>
         <Buttons title={`Go Login page`} onPress={() => navigation.navigate('(auth)/auth')} />
       </SafeAreaView>
-      
     </>
   )
 }

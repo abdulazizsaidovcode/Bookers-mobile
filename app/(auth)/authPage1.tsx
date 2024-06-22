@@ -4,7 +4,7 @@ import React from 'react'
 const AuthPage1: React.FC = () => {
     return (
         <View>
-            <Text>AuthPage</Text>
+            <Text>AuthPage1</Text>
         </View>
     )
 }
