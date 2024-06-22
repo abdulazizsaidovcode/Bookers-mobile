@@ -44,6 +44,7 @@ import CreatingClient from "./(free)/(client)/creating-client";
 import MainClientList from "./(free)/(client)/client-list";
 import AddressBook from "./(free)/(client)/address-book";
 import Process from "./(standart)/(services)/(process)/process";
+import AuthPage1 from "./(auth)/authPage1";
 
 const Stack = createNativeStackNavigator();
 
@@ -108,7 +109,12 @@ function RootLayoutNav() {
             />
             <Stack.Screen
               name="(auth)/authPage1"
-              component={OtpInput}
+              component={AuthPage1}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/authPage2"
+              component={AuthPage1}
               options={{ headerShown: false }}
             />
             <Stack.Screen
