@@ -11,6 +11,7 @@ import LocationInput from '@/components/(location)/locationInput';
 import Buttons from '@/components/(buttons)/button';
 
 const Process = () => {
+    const [isFormValid, setIsFormValid] = useState(false);
     const [textAreaValue, setTextAreaValue] = useState<string>('');
 
 
@@ -34,16 +35,28 @@ const Process = () => {
         {
             label: "Длительность (без учёта перерыва после процедуры)"
         },
-        {
-            label: "Длительность (без учёта перерыва после процедуры)"
-        },
+
     ];
+
+    const checkFormValidity = () => {
+
+        if (textAreaValue.trim() !== '') {
+            setIsFormValid(true);
+        } else {
+            setIsFormValid(false);
+        }
+    };
+    
+    
 
     return (
         <SafeAreaView>
             <ScrollView>
                 <View style={tw`flex w-full`}>
-                    <NavigationMenu name="Процедура услуг" deleteIcon={true} />
+                    <View style={tw`mb-2`}>
+                        <NavigationMenu name="Процедура услуг" deleteIcon={true} />
+                    </View>
+
                     <View style={tw`p-3`}>
                         <View style={[tw`w-full p-4 rounded-3xl mb-4`, { backgroundColor: '#B9B9C9' }]}>
                             <Text style={tw`text-gray-600`}>Ваша специализация</Text>
@@ -56,7 +69,7 @@ const Process = () => {
                                 title={gender.title}
                                 isRadioButton />
                         ))}
-                        <View style={tw`mt-5 p-2 mb-2`}>
+                        <View style={tw`mt-5 p-2 `}>
                             {uslugi.map((uslugi, index) => (
                                 <LocationInput
                                     key={index}
@@ -64,19 +77,22 @@ const Process = () => {
                                 />
                             ))}
                         </View>
-                        <View style = {tw`p-3`}>
-                            <Text style = {tw`text-gray-500 mb-2`}>Описание</Text>
+                        <View style={tw`p-3`}>
+                            <Text style={tw`text-gray-500 mb-2`}>Описание</Text>
                             <TextInput
-                                style={tw`bg-gray-500 rounded-xl text-lg text-white text-center`}
+                                style={tw`bg-gray-500 p-2 rounded-xl text-lg text-white `}
                                 multiline
                                 numberOfLines={4}
                                 value={textAreaValue}
-                                onChangeText={setTextAreaValue}
+                                onChangeText={(text) => {
+                                    setTextAreaValue(text);
+                                    checkFormValidity();
+                                }}
                                 scrollEnabled={true}
                             />
                         </View>
-                        <View style={tw`mb-3 p-2`}>
-                            <Buttons title='Сохранить' />
+                        <View style={tw`mb-3 p-3`}>
+                            <Buttons title='Сохранить' isDisebled={false} />
                         </View>
                     </View>
                 </View>

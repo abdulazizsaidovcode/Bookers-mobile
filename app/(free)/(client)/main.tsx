@@ -8,13 +8,18 @@ import {Ionicons} from '@expo/vector-icons';
 import ClientsBtn from "@/components/(buttons)/clients-btn";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {RootStackParamList} from "@/type/root";
+
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
 
 const MainClient = () => {
     const {isClientModal, setIsClientModal} = clientStore()
     const toggleClientModal = () => setIsClientModal(!isClientModal);
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
-            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
+            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
             <NavigationMenu name={`Мои клиенты`}/>
             <View style={tw`flex-1`}>
                 <ScrollView
@@ -33,10 +38,12 @@ const MainClient = () => {
                             <ClientCountCard
                                 title={`Все клиенты`}
                                 icon={<Ionicons name="person-circle-outline" size={36} color="#9C0A35"/>}
+                                clicks={() => console.log('')}
                             />
                             <ClientCountCard
                                 title={`Из адресной книги`}
                                 icon={<Ionicons name="person-circle-outline" size={36} color="#9C0A35"/>}
+                                clicks={() => navigation.navigate('(free)/(client)/address-book')}
                             />
 
                             <Text style={tw`text-white text-base mt-5`}>
@@ -64,6 +71,10 @@ const MainClient = () => {
                             isFullBtn
                             isModal={isClientModal}
                             toggleModal={toggleClientModal}
+                            onConfirm={() => {
+                                navigation.navigate('(free)/(client)/client-list')
+                                toggleClientModal()
+                            }}
                         >
                             <Text style={[tw`text-base text-white text-center mb-5`, {opacity: .8, lineHeight: 22}]}>
                                 Разрешить приложению “Bookers” доступ к фото, мультимедиа и файлам на устройстве
@@ -71,7 +82,7 @@ const MainClient = () => {
                         </CenteredModal>
                     </View>
                     <View style={tw`pb-5`}>
-                        <Buttons title={`Настроить позже и перейти на главную`}/>
+                        <Buttons title={`Настроить позже и перейти на главную`} onPress={() => navigation.navigate('(tabs)')}/>
                     </View>
                 </ScrollView>
             </View>

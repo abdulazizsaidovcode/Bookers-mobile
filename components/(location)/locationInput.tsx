@@ -6,9 +6,9 @@ const LocationInput: React.FC<LocationInputProps> = ({ label, labalVisible = tru
   return (
     <SafeAreaView>
       <View style={{ width: '100%' }}>
-        {labalVisible ? <Text style={tw`text-gray-500 mb-3 text-lg`}>{label}</Text> : ''}
+        {labalVisible ? <Text style={tw`text-gray-500 mb-2 text-base`}>{label}</Text> : ''}
         <TextInput
-          style={tw`bg-gray-500 rounded-xl p-3 mb-3 w-full h-18 text-white text-xl`}
+          style={tw`bg-gray-500 rounded-xl py-3 px-5 mb-3 w-full h-12 text-white text-lg`}
           onChangeText={onChangeText}
           placeholder={placeholder}
           value={value}

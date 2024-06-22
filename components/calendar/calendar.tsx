@@ -4,6 +4,7 @@ import DateTimePicker, {Event as DateTimePickerEvent} from '@react-native-commun
 import {MaterialIcons} from '@expo/vector-icons';
 import moment from "moment";
 import financeStore from "@/helpers/state_managment/finance/financeStore";
+import tw from "tailwind-react-native-classnames";
 
 const CalendarComponent = ({setMonthDate}: { setMonthDate?: (val: string) => void }) => {
     const {setDate} = financeStore()
@@ -36,7 +37,7 @@ const CalendarComponent = ({setMonthDate}: { setMonthDate?: (val: string) => voi
     return (
         <>
             <TouchableOpacity
-                style={styles.datePicker}
+                style={[styles.datePicker, tw`h-12 bg-gray-500`]}
                 onPress={() => setShowCalendar(true)}
                 activeOpacity={.8}
             >
@@ -62,9 +63,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#4B4B64',
         borderRadius: 10,
-        padding: 10,
+        paddingHorizontal: 10,
     },
     dateText: {
         color: '#FFFFFF',

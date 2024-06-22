@@ -6,17 +6,17 @@ import { ServicesProps } from '@/type/services/servicesCategory';
 import { StyleSheet } from 'react-native';
 
 const ServicesCategory: React.FC<ServicesProps> = ({ title, onPress, isRadioButton = false, id }) => {
-    const [checked, setChecked] = useState(false); // RadioButton uchun
-    const [isSelected, setSelection] = useState(false); // Checkbox uchun
+    const [checked, setChecked] = useState(false); 
+    const [isSelected, setSelection] = useState(false); 
 
     const handlePress = () => {
         if (isRadioButton) {
-            setChecked(true); // RadioButton uchun faqat bitta tanlangan bo'lsin
+            setChecked(true); 
             if (onPress) {
-                onPress(); // id ni onPress orqali o'tkazish
+                onPress(); 
             }
         } else {
-            setSelection(!isSelected); // Checkbox uchun holat o'zgartirish
+            setSelection(!isSelected); 
         }
     };
 

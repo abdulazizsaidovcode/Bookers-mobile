@@ -37,6 +37,12 @@ import { StompProvider } from "@/context/StompContext";
 import Expertise from "./(standart)/(services)/(expertise)/expertise";
 import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
 import SettingsGaleryMain from "./(settings)/(settings-galery)/settings-galery-main";
+import PhoneNumberInput from "./(auth)/number-create";
+import MainClient from "@/app/(free)/(client)/main";
+import CreatingClient from "./(free)/(client)/creating-client";
+import MainClientList from "./(free)/(client)/client-list";
+import AddressBook from "./(free)/(client)/address-book";
+import Process from "./(standart)/(services)/(process)/process";
 
 const Stack = createNativeStackNavigator();
 
@@ -87,6 +93,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/auth"
               component={Auth}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/number-create"
+              component={PhoneNumberInput}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -155,6 +166,11 @@ function RootLayoutNav() {
               options={{ title: "Services" }}
             />
             <Stack.Screen
+              name="(standart)/(services)/(process)/process"
+              component={Process}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="(standart)/(services)/(myServices)/myServices"
               component={MyServices}
               options={{ headerShown: false }}
@@ -198,6 +214,26 @@ function RootLayoutNav() {
               name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries"
               component={Canceledentries}
               options={{ title: "Отменённые записи" }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/main"
+              component={MainClient}
+              options={{ title: "Client", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/address-book"
+              component={AddressBook}
+              options={{ title: "Client-book", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/client-list"
+              component={MainClientList}
+              options={{ title: "Client-list", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/creating-client"
+              component={CreatingClient}
+              options={{ title: "CreatingClient", headerShown: false }}
             />
           </Stack.Navigator>
         </MenuProvider>
