@@ -129,7 +129,8 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(free)/(work-grafic)/workGrafic"
               component={GraficWork}
-              options={{ title: "Services" }}
+              options={{ headerShown: false }}
+
             />
             <Stack.Screen
               name="(free)/(work-grafic)/workMain"

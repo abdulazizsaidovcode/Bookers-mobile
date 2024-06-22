@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import TimesCard from "@/components/grafic/timesCard";
 import WeeklCard from "@/components/grafic/weeklCard";
 import Buttons from '@/components/(buttons)/button';
@@ -87,7 +87,7 @@ const GraficWork: React.FC = () => {
     <SafeAreaView style={styles.container}>
        <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
        <NavigationMenu name={`Из адресной книги`} clicks={() => ('')}/>
-      <View style={{ height: '85%' }}>
+      <ScrollView style={{marginTop: 15}}>
         <View>
           <Text style={styles.title}>Рабочие дни</Text>
         </View>
@@ -139,8 +139,8 @@ const GraficWork: React.FC = () => {
             {weekendDays.length === 0 ? 'Без выходных' : weekendDays.join(', ')}
           </Text>
         </View>
-      </View>
-      <View style={{ paddingHorizontal: 15, marginVertical: 20, height: '15%', alignItems: 'center', justifyContent: 'center' }}>
+      </ScrollView>
+      <View style={{ paddingHorizontal: 5, marginVertical: 20, height: '10%', alignItems: 'center', justifyContent: 'center' }}>
         <Buttons title='Продолжить' onPress={() => !isFiltered ? handleContinue() : router.push('/workMain')} isDisebled={!isDisabled} />
       </View>
     </SafeAreaView>
@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#21212e',
+    marginTop: 35
   },
   title: {
     fontSize: 20,
