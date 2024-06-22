@@ -1,10 +1,8 @@
-// screens/Notification.tsx
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import tw from 'tailwind-react-native-classnames';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import NotificationCard from './card/index';
 import { FontAwesome } from '@expo/vector-icons';
+import NotificationCard from './card/index';
 
 const notifications = [
   {
@@ -23,28 +21,52 @@ const notifications = [
   },
 ];
 
-const Notification = () => {
+const Notification: React.FC = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={tw`flex-1 bg-gray-900 p-4`}>
-      <View style={tw`flex-row justify-between items-center mb-6`}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <FontAwesome name="arrow-left" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text style={tw`text-white text-lg font-bold`}>Уведомления</Text>
-        <TouchableOpacity>
-          <FontAwesome name="trash" size={24} color="#fff" />
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.padding}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <FontAwesome name="arrow-left" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Уведомления</Text>
+          <TouchableOpacity>
+            <FontAwesome name="trash" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
 
-      <FlatList
-        data={notifications}
-        renderItem={({ item }) => <NotificationCard item={item} />}
-        keyExtractor={(item) => item.id}
-      />
-    </View>
+        <FlatList
+          data={notifications}
+          renderItem={({ item }) => <NotificationCard item={item} />}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#21212E',
+    padding: 16,
+  },
+  padding: {
+    padding: 16
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  headerText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
 export default Notification;

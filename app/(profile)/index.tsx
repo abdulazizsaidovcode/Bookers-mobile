@@ -35,6 +35,7 @@ const ProfilePage: React.FC = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Text style={styles.title}>Профиль</Text>
             <View style={styles.profileHeader}>
                 <Image source={{ uri: 'https://picsum.photos/200/300' }} style={styles.avatar} />
                 <View>
@@ -126,6 +127,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#21212E',
         padding: 16,
+    },
+    title: {
+        color: '#ffffff',
+        fontSize: 26,
+        letterSpacing: 1,
+        marginBottom: 20,
     },
     profileHeader: {
         flexDirection: 'row',

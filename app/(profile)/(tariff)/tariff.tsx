@@ -62,7 +62,8 @@ const TariffsPage: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#2b2b2b',
+    backgroundColor: '#21212E',
+    paddingHorizontal: 10,
   },
   card: {
     backgroundColor: '#fff',

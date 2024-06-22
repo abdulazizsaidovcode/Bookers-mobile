@@ -1,21 +1,57 @@
-// components/NotificationCard.tsx
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import tw from 'tailwind-react-native-classnames';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-const NotificationCard = ({ item }: any) => {
+const NotificationCard: React.FC<{ item: any }> = ({ item }) => {
     return (
-        <View style={tw`bg-gray-700 p-4 rounded-lg mb-4 flex-row items-center`}>
-            <Image source={{ uri: item.avatar }} style={tw`w-12 h-12 rounded-full mr-4`} />
-            <View style={tw`flex-1`}>
-                <Text style={tw`text-white font-bold`}>{item.title}</Text>
-                <Text style={tw`text-gray-400 mt-1`}>{item.message}</Text>
-                <Text style={tw`text-gray-500 mt-2 text-sm`}>{item.time}</Text>
+        <View style={styles.card}>
+            <Image source={{ uri: item.avatar }} style={styles.avatar} />
+            <View style={styles.cardContent}>
+                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.message}>{item.message}</Text>
+                <Text style={styles.time}>{item.time}</Text>
             </View>
-            <FontAwesome name="chevron-right" size={20} color="#E74C3C" />
+            <View style={styles.link}>
+                <FontAwesome name="chevron-right" size={20} color="#E74C3C" />
+            </View>
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    card: {
+        backgroundColor: '#B9B9C9',
+        padding: 16,
+        borderRadius: 8,
+        flexDirection: 'row',
+        marginBottom: 16,
+    },
+    avatar: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        marginRight: 16,
+    },
+    cardContent: {
+        flex: 1,
+    },
+    title: {
+        color: 'black',
+        fontWeight: 'bold',
+    },
+    message: {
+        color: '#4F4F4F',
+        marginTop: 4,
+    },
+    time: {
+        color: '#888',
+        marginTop: 8,
+        fontSize: 12,
+    },
+    link: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+    }
+});
 
 export default NotificationCard;
