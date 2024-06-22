@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import moment from 'moment';
+import tw from 'tailwind-react-native-classnames';
 
 interface DateObject {
   dateString: string;
@@ -22,7 +22,6 @@ interface MarkedDates {
 
 const App: React.FC = () => {
   const [selectedDates, setSelectedDates] = useState<MarkedDates>({});
-  const [currentDate, setCurrentDate] = useState(moment().format('YYYY-MM-DD'));
 
   const onDayPress = (day: DateObject) => {
     let newSelectedDates: MarkedDates = { ...selectedDates };
@@ -71,34 +70,13 @@ const App: React.FC = () => {
     console.log('Selected Dates:', dates);
   };
 
-  const changeYear = (amount: number) => {
-    const newDate = moment(currentDate).add(amount, 'year').format('YYYY-MM-DD');
-    setCurrentDate(newDate);
-  };
-
-  const renderHeader = (date: DateObject) => {
-    const currentYear = moment(date.dateString).format('YYYY');
-    return (
-      <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => changeYear(-1)}>
-          <Text style={styles.arrow}>{"<"}</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerText}>{currentYear}</Text>
-        <TouchableOpacity onPress={() => changeYear(1)}>
-          <Text style={styles.arrow}>{">"}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <Calendar
-        current={currentDate}
+        style={[tw`w-80`]}  // width va height ni tailwind orqali beramiz
         onDayPress={onDayPress}
         markedDates={selectedDates}
-        markingType={'period'}
-        renderHeader={renderHeader}
+        markingType={'multi-period'}
       />
     </SafeAreaView>
   );
@@ -110,21 +88,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    backgroundColor: '#f2f2f2',
-  },
-  arrow: {
-    fontSize: 20,
-  },
-  headerText: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    borderRadius: 30,
+    marginHorizontal: 12,
   },
 });
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal, StyleSheet, Button } from 'react-native';
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
-import tw from 'tailwind-react-native-classnames';
 import { useNavigation } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ProfilePage: React.FC = () => {
     const [isInviteModalVisible, setInviteModalVisible] = useState(false);
@@ -31,20 +31,20 @@ const ProfilePage: React.FC = () => {
         } else {
             console.log(screen);
         }
-    }
-    // eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTk4OTE5NTk1NTk5In0.baWTz1u6dafE8Yy9VzDI2Uq_40X7oEcdg4LTxEVqOCO9lno2Rr-fPwPpZ5m6iQUAIohuJVqnx53g1TH0i_jVlA
+    };
+
     return (
-        <View style={tw`flex-1 bg-gray-900 p-4`}>
-            <View style={tw`flex-row items-center mb-6`}>
-                <Image source={{ uri: 'https://picsum.photos/200/300' }} style={tw`w-16 h-16 rounded-full mr-4`} />
+        <SafeAreaView style={styles.container}>
+            <View style={styles.profileHeader}>
+                <Image source={{ uri: 'https://picsum.photos/200/300' }} style={styles.avatar} />
                 <View>
-                    <Text style={tw`text-white text-lg font-bold`}>Гузаль Шерматова</Text>
-                    <Text style={tw`text-gray-400`}>+998 93 123-45-67</Text>
+                    <Text style={styles.profileName}>Гузаль Шерматова</Text>
+                    <Text style={styles.profilePhone}>+998 93 123-45-67</Text>
                 </View>
             </View>
 
             {[
-                { icon: 'user', label: 'Подписка', screen: '(profile)/(tariff)/tariff.tsx' },
+                { icon: 'user', label: 'Подписка', screen: '(profile)/(tariff)/tariff' },
                 { icon: 'history', label: 'История сеансов', screen: '(profile)/(sessionhistory)/sessionHistory' },
                 { icon: 'info-circle', label: 'Справка', screen: 'Help' },
                 { icon: 'bell', label: 'Уведомления', screen: '(profile)/(notification)/index' },
@@ -56,21 +56,21 @@ const ProfilePage: React.FC = () => {
             ].map((item, index) => (
                 <TouchableOpacity
                     key={index}
-                    style={tw`flex-row justify-between items-center bg-gray-700 p-4 rounded-lg mb-2`}
+                    style={styles.menuItem}
                     onPress={() => navigateTo(item.screen)}
                 >
-                    <View style={tw`flex-row items-center`}>
-                        <FontAwesome5 name={item.icon} size={20} color="#E74C3C" />
-                        <Text style={tw`text-white ml-4`}>{item.label}</Text>
+                    <View style={styles.menuItemContent}>
+                        <FontAwesome5 name={item.icon} size={20} color="#9c0935" />
+                        <Text style={styles.menuItemText}>{item.label}</Text>
                     </View>
-                    <FontAwesome name="chevron-right" size={20} color="#E74C3C" />
+                    <FontAwesome name="chevron-right" size={20} color="#9c0935" />
                 </TouchableOpacity>
             ))}
 
             <Modal transparent={true} visible={isInviteModalVisible} onRequestClose={closeInviteModal}>
                 <View style={styles.modalBackground}>
                     <View style={styles.modalContainer}>
-                        <Text style={tw`text-white text-lg mb-4`}>Кому вы хотите отправить ссылку?</Text>
+                        <Text style={styles.modalTitle}>Кому вы хотите отправить ссылку?</Text>
                         <TouchableOpacity
                             style={styles.modalButton}
                             onPress={() => {
@@ -78,7 +78,7 @@ const ProfilePage: React.FC = () => {
                                 openShareModal();
                             }}
                         >
-                            <Text style={tw`text-white text-center`}>Пригласить мастеров</Text>
+                            <Text style={styles.modalButtonText}>Пригласить мастеров</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.modalButton}
@@ -87,7 +87,7 @@ const ProfilePage: React.FC = () => {
                                 openShareModal();
                             }}
                         >
-                            <Text style={tw`text-white text-center`}>Пригласить друзей</Text>
+                            <Text style={styles.modalButtonText}>Пригласить друзей</Text>
                         </TouchableOpacity>
                         <Button title="Закрыть" onPress={closeInviteModal} color="#E74C3C" />
                     </View>
@@ -97,7 +97,7 @@ const ProfilePage: React.FC = () => {
             <Modal transparent={true} visible={isShareModalVisible} onRequestClose={closeShareModal}>
                 <View style={styles.modalBackground}>
                     <View style={styles.modalContainer}>
-                        <Text style={tw`text-white text-lg mb-4`}>Поделиться</Text>
+                        <Text style={styles.modalTitle}>Поделиться</Text>
                         <View style={styles.iconContainer}>
                             {[
                                 { name: 'facebook', color: '#3b5998', label: 'Facebook' },
@@ -109,7 +109,7 @@ const ProfilePage: React.FC = () => {
                             ].map((item, index): any => (
                                 <TouchableOpacity key={index} style={styles.iconButton}>
                                     <FontAwesome name={item.name} size={40} color={item.color} />
-                                    <Text style={tw`text-white mt-2`}>{item.label}</Text>
+                                    <Text style={styles.iconLabel}>{item.label}</Text>
                                 </TouchableOpacity>
                             ))}
                         </View>
@@ -117,11 +117,52 @@ const ProfilePage: React.FC = () => {
                     </View>
                 </View>
             </Modal>
-        </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#21212E',
+        padding: 16,
+    },
+    profileHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 24,
+    },
+    avatar: {
+        width: 64,
+        height: 64,
+        borderRadius: 32,
+        marginRight: 16,
+    },
+    profileName: {
+        color: '#ffffff',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    profilePhone: {
+        color: '#cccccc',
+    },
+    menuItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#b9b9c9',
+        padding: 16,
+        borderRadius: 8,
+        marginBottom: 8,
+    },
+    menuItemContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    menuItemText: {
+        color: 'black',
+        marginLeft: 16,
+    },
     modalBackground: {
         flex: 1,
         justifyContent: 'center',
@@ -135,12 +176,21 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
     },
+    modalTitle: {
+        color: '#ffffff',
+        fontSize: 18,
+        marginBottom: 16,
+    },
     modalButton: {
         backgroundColor: '#E74C3C',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 5,
-        marginBottom: 10,
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        borderRadius: 8,
+        marginBottom: 12,
+    },
+    modalButtonText: {
+        color: '#ffffff',
+        textAlign: 'center',
     },
     iconContainer: {
         flexDirection: 'row',
@@ -149,7 +199,11 @@ const styles = StyleSheet.create({
     },
     iconButton: {
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 16,
+    },
+    iconLabel: {
+        color: '#ffffff',
+        marginTop: 8,
     },
 });
 

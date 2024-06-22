@@ -3,6 +3,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
+import NavigationMenu from '@/components/navigation/navigation-menu';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(profile)/(tariff)/tariff'>;
 
@@ -27,34 +29,39 @@ const TariffsPage: React.FC = () => {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const handleDetailsPress = (tariff: any) => {
-    navigation.navigate('(profile)/(tariff)/tariff');
+    // navigation.navigate('(profile)/(tariff)/tariff');
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {tariffs.map((tariff, index) => (
-        <View key={index} style={styles.card}>
-          <Text style={styles.name}>{tariff.name}</Text>
-          <Text style={styles.description}>{tariff.description}</Text>
-          <Text style={styles.price}>{tariff.price}</Text>
-          {tariff.trial && <Text style={styles.trial}>{tariff.trial}</Text>}
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.activateButton}>
-              <Text style={styles.buttonText}>Активировать</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.detailsButton} onPress={() => handleDetailsPress(tariff)}>
-              <Text style={[styles.buttonText, styles.detailsButtonText]}>Подробнее</Text>
-            </TouchableOpacity>
-          </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView >
+        <NavigationMenu name='Tarifi' />
+        <View >
+          {tariffs.map((tariff, index) => (
+            <View key={index} style={styles.card}>
+              <Text style={styles.name}>{tariff.name}</Text>
+              <Text style={styles.description}>{tariff.description}</Text>
+              <Text style={styles.price}>{tariff.price}</Text>
+              {tariff.trial && <Text style={styles.trial}>{tariff.trial}</Text>}
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.activateButton}>
+                  <Text style={styles.buttonText}>Активировать</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.detailsButton} onPress={() => handleDetailsPress(tariff)}>
+                  <Text style={[styles.buttonText, styles.detailsButtonText]}>Подробнее</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
         </View>
-      ))}
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex: 1,
     backgroundColor: '#2b2b2b',
   },
   card: {
