@@ -47,6 +47,7 @@ import Process from "./(standart)/(services)/(process)/process";
 import AuthPage1 from "./(auth)/authPage1";
 import AuthPage2 from "./(auth)/authPage2";
 import AuthPage3 from "./(auth)/authPage3";
+import TariffsPage from "./(profile)/(tariff)/tariff";
 
 const Stack = createNativeStackNavigator();
 
@@ -258,6 +259,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(free)/(client)/creating-client"
               component={CreatingClient}
+              options={{ title: "CreatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(tariff)/tariff"
+              component={TariffsPage}
               options={{ title: "CreatingClient", headerShown: false }}
             />
           </Stack.Navigator>
