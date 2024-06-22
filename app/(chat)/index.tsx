@@ -33,6 +33,7 @@ const ChatSupport = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Text style={styles.title}>Чат</Text>
             {!chatData && (
                 <View>
                     <Text style={styles.headerText}>Чат</Text>
@@ -56,7 +57,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#21212E', // bg-gray-900
-        padding: 10
+        padding: 16,
+    },
+    title: {
+        color: '#ffffff',
+        fontSize: 26,
+        letterSpacing: 1,
+        marginBottom: 20,
     },
     headerText: {
         color: '#FFFFFF', // text-white
