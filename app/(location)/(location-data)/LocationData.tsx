@@ -36,6 +36,8 @@ const LocationData = () => {
   const [target, setTarget] = useState("");
   const [validate, setValidate] = useState(true);
   const [isModal, setIsmodal] = useState(false);
+  const [salonName, setSalonName] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (
@@ -67,8 +69,14 @@ const LocationData = () => {
       { districtId, street, homeNumber, target, salonId },
       config
     );
-    // const { data } = await axios.get(`${base_url}address`, config);
-    // console.log(data);
+  };
+  const onConfirm = async () => {
+    const { data } = await axios.post(
+      `${base_url}message/send/admin`,
+      { salonName, message },
+      config
+    );
+    console.log(data);
   };
 
   useEffect(() => {
@@ -153,26 +161,30 @@ const LocationData = () => {
           </View>
         </ScrollView>
         <CenteredModal
-          btnWhiteText={"Отправить"}
-          btnRedText={"Закрыть"}
+          btnWhiteText={"Закрыть"}
+          btnRedText={"Отправить"}
           isFullBtn={true}
           isModal={isModal}
+          onConfirm={onConfirm}
           toggleModal={() => setIsmodal(false)}
         >
           <View style={tw`w-full`}>
             <Text style={tw`text-center text-white text-base p-0 m-0`}>
               Расскажите администратору о вашем салоне
             </Text>
-            <LocationInput placeholder="Укажите название" />
-
+            <LocationInput
+              placeholder="Укажите название"
+              value={salonName}
+              onChangeText={setSalonName}
+            />
             <Textarea
               containerStyle={tw`bg-gray-900 rounded-lg mt-3`}
               style={[tw`bg-gray-500 flex-1 rounded-lg`]}
-              // onChangeText={this.onChange}
-              // defaultValue={this.state.text}
+              onChangeText={(e) => setMessage(e)}
+              defaultValue={message}
               maxLength={100}
               placeholder={"Сообщение"}
-              placeholderTextColor={"#c7c7c7"}
+              placeholderTextColor={"#fff"}
               underlineColorAndroid={"transparent"}
             />
           </View>

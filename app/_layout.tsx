@@ -49,6 +49,8 @@ import AuthPage2 from "./(auth)/authPage2";
 import AuthPage3 from "./(auth)/authPage3";
 import MasterorClient from "./(auth)/masterORclient";
 import TariffsPage from "./(profile)/(tariff)/tariff";
+import Location from "./(location)/Location";
+import LocationData from "./(location)/(location-data)/LocationData";
 
 const Stack = createNativeStackNavigator();
 
@@ -144,13 +146,12 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(notification)/index"
               component={Notification}
-              options={{ title: "Services" , headerShown: false  }}
+              options={{ title: "Services", headerShown: false }}
             />
             <Stack.Screen
               name="(free)/(work-grafic)/workGrafic"
               component={GraficWork}
               options={{ headerShown: false }}
-
             />
             <Stack.Screen
               name="(free)/(work-grafic)/workMain"
@@ -190,12 +191,12 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(Expenses)/index"
               component={Expenses}
-              options={{ title: "Services" , headerShown: false  }}
+              options={{ title: "Services", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(Expenses)/(component)/(detail)/expenseDetail"
               component={ExpensesDetail}
-              options={{ title: "Services" , headerShown: false  }}
+              options={{ title: "Services", headerShown: false }}
             />
             <Stack.Screen
               name="(standart)/(services)/(process)/process"
@@ -230,22 +231,22 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(sessionhistory)/sessionHistory"
               component={SessionHistory}
-              options={{ title: "Отменённые записи" , headerShown: false  }}
+              options={{ title: "Отменённые записи", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries"
               component={Upcomingentries}
-              options={{ title: "Отменённые записи" , headerShown: false  }}
+              options={{ title: "Отменённые записи", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(sessionhistory)/components/Pastentries/Pastentries"
               component={PastEntries}
-              options={{ title: "Отменённые записи" , headerShown: false  }}
+              options={{ title: "Отменённые записи", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries"
               component={Canceledentries}
-              options={{ title: "Отменённые записи" , headerShown: false  }}
+              options={{ title: "Отменённые записи", headerShown: false }}
             />
             <Stack.Screen
               name="(free)/(client)/main"
@@ -266,6 +267,16 @@ function RootLayoutNav() {
               name="(free)/(client)/creating-client"
               component={CreatingClient}
               options={{ title: "CreatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(location)/Location"
+              component={Location}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(location)/(location-data)/LocationData"
+              component={LocationData}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(tariff)/tariff"
