@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Alert, Image, TouchableWithoutFeedback, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import NavigationMenu from '@/components/navigation/navigation-menu';
 import LocationInput from '@/components/(location)/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import Feather from '@expo/vector-icons/Feather';
@@ -10,6 +9,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as ImagePicker from 'expo-image-picker';
 import { addData, fetchData } from '@/helpers/api-function/gallery/settings-galery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-galery';
+import NavigationMenu from '@/components/navigation/navigation-menu';
 
 const SettingsGallery: React.FC = () => {
     const [images, setImages] = useState<string[]>([]);
