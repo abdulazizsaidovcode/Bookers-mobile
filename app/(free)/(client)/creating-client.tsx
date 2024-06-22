@@ -1,7 +1,7 @@
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import tw from "tailwind-react-native-classnames";
-import {ScrollView, StatusBar, StyleSheet, Text, TextInput, View} from "react-native";
+import {ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
 import React, {useRef, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";

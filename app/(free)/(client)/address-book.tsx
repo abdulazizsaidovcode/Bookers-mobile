@@ -14,6 +14,15 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings
 
 const AddressBook = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+
+    // user/master/client-addressBooks => get books
+    // user/master/client-count-by-status => count chiqarish un
+    // user/add-client-from-address-book => teldan olingan malumotlarni list qilib qushish un
+    // client/{clientId} => book dagi client info edit qilish
+    // user/create-client-by-master => create qilish client ni
+    // user/master/client-not-visit => tashrif buyurmagan client chiqadi get
+    // user/master/client-stoppedVisiting
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
