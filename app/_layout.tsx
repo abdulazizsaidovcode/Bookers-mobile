@@ -113,6 +113,11 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="(auth)/authPage2"
+              component={AuthPage1}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="(tabs)"
               component={TabLayout}
               options={{ headerShown: false }}
