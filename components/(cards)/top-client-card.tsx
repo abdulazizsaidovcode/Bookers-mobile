@@ -5,9 +5,6 @@ import tw from 'tailwind-react-native-classnames';
 import HomeCards from './homeCard';
 
 const ClientCard = ({ items }: any) => {
-    console.log(items);
-
-
     return (
         <View style={[tw`rounded-xl p-5`, { backgroundColor: '#B9B9C9' }]}>
             <View style={[tw`flex-row justify-start`, { gap: 16 }]}>
