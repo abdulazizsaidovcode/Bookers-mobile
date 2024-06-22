@@ -1,6 +1,7 @@
 import LocationInput from "@/app/locationInput";
 import Buttons from "@/components/(buttons)/button";
 import LocationSelect from "@/components/(location)/locationSelect";
+import CenteredModal from "@/components/(modals)/modal-centered";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { base_url } from "@/helpers/api";
 import { config } from "@/helpers/token";
@@ -18,6 +19,7 @@ import {
 import { SelectList } from "react-native-dropdown-select-list";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";
+import Textarea from "react-native-textarea";
 
 interface ListData {
   key: string;
@@ -33,6 +35,7 @@ const LocationData = () => {
   const [homeNumber, setHomeNumber] = useState("");
   const [target, setTarget] = useState("");
   const [validate, setValidate] = useState(true);
+  const [isModal, setIsmodal] = useState(false);
 
   useEffect(() => {
     if (
@@ -66,7 +69,6 @@ const LocationData = () => {
     );
     // const { data } = await axios.get(`${base_url}address`, config);
     // console.log(data);
-    
   };
 
   useEffect(() => {
@@ -78,10 +80,16 @@ const LocationData = () => {
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
       <NavigationMenu name="Мой адрес работы" />
       <View style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
-        <ScrollView 
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle = {{paddingHorizontal:16 , flexGrow:1 , justifyContent:'space-between' , backgroundColor:'#21212E'}}>
-          <View style = {tw``}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingHorizontal: 16,
+            flexGrow: 1,
+            justifyContent: "space-between",
+            backgroundColor: "#21212E",
+          }}
+        >
+          <View style={tw``}>
             <Text style={tw`text-base my-2 text-gray-400`}>
               Название салона
             </Text>
@@ -99,9 +107,11 @@ const LocationData = () => {
             <Text style={tw`text-base text-white my-2`}>
               Не нашли свой салон красоты?
             </Text>
-            <TouchableOpacity 
-            activeOpacity={.8}
-            style={tw` mx-auto bg-white w-full p-3 rounded-lg mb-2`}>
+            <TouchableOpacity
+              onPress={() => setIsmodal(!isModal)}
+              activeOpacity={0.8}
+              style={tw` mx-auto bg-white w-full p-2 rounded-lg mb-2`}
+            >
               <Text
                 style={tw`text-red-500 text-center text-base px-4 font-semibold`}
               >
@@ -134,14 +144,39 @@ const LocationData = () => {
             </View>
           </View>
           <View style={tw` mt-10 mb-5`}>
-              <Buttons
-                onPress={handleSubmit}
-                title="Сохранить"
-                // backgroundColor={"#9c0935"}
-                isDisebled={true}
-              />
+            <Buttons
+              onPress={handleSubmit}
+              title="Сохранить"
+              // backgroundColor={"#9c0935"}
+              isDisebled={true}
+            />
           </View>
         </ScrollView>
+        <CenteredModal
+          btnWhiteText={"Отправить"}
+          btnRedText={"Закрыть"}
+          isFullBtn={true}
+          isModal={isModal}
+          toggleModal={() => setIsmodal(false)}
+        >
+          <View style={tw`w-full`}>
+            <Text style={tw`text-center text-white text-base p-0 m-0`}>
+              Расскажите администратору о вашем салоне
+            </Text>
+            <LocationInput placeholder="Укажите название" />
+
+            <Textarea
+              containerStyle={tw`bg-gray-900 rounded-lg mt-3`}
+              style={[tw`bg-gray-500 flex-1 rounded-lg`]}
+              // onChangeText={this.onChange}
+              // defaultValue={this.state.text}
+              maxLength={100}
+              placeholder={"Сообщение"}
+              placeholderTextColor={"#c7c7c7"}
+              underlineColorAndroid={"transparent"}
+            />
+          </View>
+        </CenteredModal>
       </View>
     </SafeAreaView>
   );

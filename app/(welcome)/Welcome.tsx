@@ -19,22 +19,27 @@ const Welcome = () => {
       title: "Услуги",
       description: "Ваша специализация и услуги",
       icon: <Feather name="check-circle" size={24} color="white" />,
-      router: "()"
+      onPress: () =>
+        router.push("../(standart)/(services)/(myServices)/myServices"),
     },
     {
       title: "График работы",
       description: "Планируйте своё рабочее время",
       icon: <FontAwesome5 name="calendar" size={24} color="white" />,
+      onPress: () => router.push("../(work-grafic)/workMain"),
     },
     {
       title: "Локация",
       description: "Ваше мето работы",
       icon: <Entypo name="location" size={24} color="white" />,
+      onPress: () => router.push("../(location)/Location"),
     },
     {
       title: "Галерея",
       description: "Создавайте фото и видео галереи своих работ",
       icon: <MaterialIcons name="photo" size={24} color="white" />,
+      onPress: () =>
+        router.push("../(settings)/(settings-galery)/settings-galery-main"),
     },
     {
       title: "Онлайн бронирование",
@@ -45,11 +50,13 @@ const Welcome = () => {
       title: "Уведомления",
       description: "Настройте уведомления",
       icon: <Ionicons name="notifications-outline" size={24} color="white" />,
+      onPress: () => router.push("../(profile)/(notification)"),
     },
     {
       title: "Клиенты",
       description: "Добавьте своих клинетов",
       icon: <Fontisto name="persons" size={24} color="white" />,
+      onPress: () => router.push("../(free)/(client)/main"),
     },
     {
       title: "Помощь",
@@ -111,6 +118,7 @@ const Welcome = () => {
         >
           {data.map((item, index) => (
             <TouchableOpacity
+              onPress={item.onPress}
               key={index}
               style={tw`w-1/2 p-2`}
               activeOpacity={0.8}

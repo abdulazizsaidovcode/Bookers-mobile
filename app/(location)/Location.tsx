@@ -7,7 +7,7 @@ import tw from "tailwind-react-native-classnames";
 
 const Location = () => {
   return (
-    <View style={[tw`flex-1 px-4`, { backgroundColor: "#21212E" }]}>
+    <View style={[tw`flex-1 px-4 mt-8`, { backgroundColor: "#21212E" }]}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
       <NavigationMenu name="Мой адрес работы" />
       <Pressable

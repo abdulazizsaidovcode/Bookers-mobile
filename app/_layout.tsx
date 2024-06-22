@@ -44,6 +44,8 @@ import CreatingClient from "./(free)/(client)/creating-client";
 import MainClientList from "./(free)/(client)/client-list";
 import AddressBook from "./(free)/(client)/address-book";
 import Process from "./(standart)/(services)/(process)/process";
+import Location from "./(location)/Location";
+import LocationData from "./(location)/(location-data)/LocationData";
 
 const Stack = createNativeStackNavigator();
 
@@ -240,6 +242,16 @@ function RootLayoutNav() {
               name="(free)/(client)/creating-client"
               component={CreatingClient}
               options={{ title: "CreatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(location)/Location"
+              component={Location}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(location)/(location-data)/LocationData"
+              component={LocationData}
+              options={{ headerShown: false }}
             />
           </Stack.Navigator>
         </MenuProvider>
