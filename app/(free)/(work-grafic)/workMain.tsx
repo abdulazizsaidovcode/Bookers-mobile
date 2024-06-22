@@ -33,7 +33,7 @@ const WorkMain = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={{ height: '80%', paddingHorizontal: 15, marginTop: 20 }}>
-                <WorkMainCard icon={<AntDesign name="calendar" size={24} color="#9C0A35" />} title='График работы' subTitle='Пн Вт Чт Пт Сб Вс' to='/workDays'/>
+                <WorkMainCard icon={<AntDesign name="calendar" size={24} color="#9C0A35" />} title='График работы' subTitle='Пн Вт Чт Пт Сб Вс' to='(free)/(work-grafic)/workDays'/>
                 <WorkMainCard icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />} title='Время работы' subTitle='с 8:00 до 21:00' to='/workMain'/>
             </View>
             <View style={{ paddingHorizontal: 15, marginVertical: 20, height: '20%', alignItems: 'center', justifyContent: 'center' }}>
