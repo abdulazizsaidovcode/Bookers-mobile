@@ -24,3 +24,7 @@ export const finance_day: string = `${base_url}finance/day`
 // attachment
 export const postFileId = `${base_url}attachment/upload`; // get chat list
 export const postFilelist = `${base_url}attachment/upload/list`; // get chat list
+
+// gallery
+export const gallery_list = `${base_url}gallery/master`;
+export const gallery_add = `${base_url}gallery`;

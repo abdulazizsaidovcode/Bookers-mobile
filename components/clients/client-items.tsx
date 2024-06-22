@@ -41,30 +41,16 @@ export const ClientItem: React.FC<ClientItemProps> = ({client, isSelected, onSel
 }
 
 // client info un
-export const FromAddressBookList = ({client}: {client: ClientData}) => {
+export const FromAddressBookList = ({client, clicks}: {client: ClientData, clicks?: () => void}) => {
     return (
         <TouchableOpacity
-            // onPress={() => onSelect(client.id)}
+            onPress={clicks}
             style={[
                 tw`flex-row items-center p-4 mb-3 rounded-2xl`,
-                {backgroundColor: '#B9B9C9'},
-                // isSelected && {borderWidth: 2, borderColor: '#9C0A35'}
+                {backgroundColor: '#B9B9C9'}
             ]}
             activeOpacity={.8}
         >
-            {/*{isSelected*/}
-            {/*    ? <View style={[tw`w-7 h-7 items-center justify-center rounded-md mr-3`, {backgroundColor: '#9C0A35'}]}>*/}
-            {/*        <Ionicons name="checkmark" size={24} color="white" style={tw`font-bold`}/>*/}
-            {/*    </View>*/}
-            {/*    : selectedClientList.length !== 0 && <View*/}
-            {/*    style={[tw`w-7 h-7 items-center justify-center rounded-md mr-3`,*/}
-            {/*        {*/}
-            {/*            backgroundColor: '#B9B9C9',*/}
-            {/*            borderWidth: 2,*/}
-            {/*            borderColor: 'gray'*/}
-            {/*        }*/}
-            {/*    ]}></View>*/}
-            {/*}*/}
             <Image source={{uri: client.image}} style={tw`w-10 h-10 rounded-full`}/>
             <View style={tw`ml-4`}>
                 <Text style={[tw`text-black text-lg font-bold`, {lineHeight: 20}]}>{client.name}</Text>
