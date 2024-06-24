@@ -1,45 +1,33 @@
-import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
-import { Calendar } from 'react-native-calendars';
-import tw from 'tailwind-react-native-classnames';
-
-interface DateObject {
-  dateString: string;
-  day: number;
-  month: number;
-  year: number;
-  timestamp: number;
-}
-
-interface MarkedDates {
-  [date: string]: {
-    selected?: boolean;
-    marked?: boolean;
-    dotColor?: string;
-    color?: string;
-  };
-}
+import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
+import { DateObject } from "@/type/graficWork/graficWork";
+import React, { useState } from "react";
+import { SafeAreaView, StyleSheet } from "react-native";
+import { Calendar } from "react-native-calendars";
+import { MarkedDates } from "react-native-calendars/src/types";
+import tw from "tailwind-react-native-classnames";
 
 const CalendarGraffic: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<MarkedDates>({});
+  const { setCalendarDate } = graficWorkStore();
 
   const onDayPress = (day: DateObject) => {
     const newSelectedDate: MarkedDates = {
-      [day.dateString]: { selected: true, marked: true, dotColor: 'blue', color: 'blue' }
+      [day.dateString]: {
+        selected: true,
+        marked: true,
+        dotColor: "red",
+        color: "#9C0A35",
+      },
     };
 
     setSelectedDate(newSelectedDate);
-    logSelectedDateToConsole(day.dateString);
-  };
-
-  const logSelectedDateToConsole = (dateString: string) => {
-    console.log('Selected Date:', dateString);
+    setCalendarDate(day.dateString); // Update the store with the selected date
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Calendar
-        style={[tw`w-80`]}  // width va height ni tailwind orqali beramiz
+        style={[tw`w-80`]} // width va height ni tailwind orqali beramiz
         onDayPress={onDayPress}
         markedDates={selectedDate}
       />
@@ -50,9 +38,9 @@ const CalendarGraffic: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 30,
     marginHorizontal: 12,
   },
