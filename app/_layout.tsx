@@ -64,6 +64,7 @@ import ApplicationSettings from "./(profile)/(settings)/(childSettings)/(Applica
 import LanguageSelection from "./(profile)/(settings)/(childSettings)/(Application Settings)/components/language";
 import SwitchPage from "./(auth)/switchPage";
 import OfferScreen from "./(auth)/offerScreen";
+import EditProfile from "./(profile)/(settings)/(childSettings)/Personal data/PersonalData";
 
 const Stack = createNativeStackNavigator();
 
@@ -359,6 +360,11 @@ function RootLayoutNav() {
               name="(profile)/(settings)/(childSettings)/(Application Settings)/components/language"
               component={LanguageSelection}
               options={{ title: "Настройки ", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(settings)/(childSettings)/Personal data/PersonalData"
+              component={EditProfile}
+              options={{title: "Настройки ", headerShown: false }}
             />
             {/* profile settings end */}
 
