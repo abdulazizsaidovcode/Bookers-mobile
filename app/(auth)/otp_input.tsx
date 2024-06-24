@@ -3,14 +3,11 @@ import { SafeAreaView, StyleSheet, Text, Alert, View, StatusBar } from 'react-na
 import OTPTextInput from 'react-native-otp-textinput';
 import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { router } from 'expo-router';
+import registerStory from '@/helpers/state_managment/auth/register';
+import { checkCode } from '@/helpers/api-function/register/registrFC';
 
 const OtpInputExample = () => {
-    const [otp, setOtp] = useState('');
-
-    // const handleSubmit = () => {
-    //     Alert.alert('OTP Submitted', `OTP: ${otp}`);
-    // };
+    const { phoneNumber, code, otp, setOtp, otpErr, setOtpErr } = registerStory()
 
     return (
         <SafeAreaView style={styles.container}>
@@ -20,18 +17,22 @@ const OtpInputExample = () => {
             </SafeAreaView>
             <View style={styles.content}>
                 <Text style={styles.title}>Подтверждение номера</Text>
-                <Text style={styles.phoneNumber}>+99 888 517 11 98</Text>
+                <Text style={styles.phoneNumber}>{phoneNumber}</Text>
                 <Text style={styles.subTitle}>Мы отправили вам SMS с кодом подтверждения.</Text>
                 <OTPTextInput
                     inputCount={4}
                     handleTextChange={(text) => setOtp(text)}
                     containerStyle={styles.otpContainer}
                     textInputStyle={styles.otpInput}
-                    tintColor="#03DAC6"
+                    tintColor='#FF0078'
                 />
+                <Text style={styles.code}>{code}</Text>
             </View>
+
             <View style={styles.buttonWrapper}>
-                <Buttons title='Подтвердить' onPress={() => router.push("(auth)/authPage1")} />
+                <Buttons title='Подтвердить' onPress={() => {
+                    checkCode(phoneNumber, otp, setOtpErr)
+                }} />
             </View>
         </SafeAreaView>
     );
@@ -109,4 +110,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
+    code: {
+        color: '#ffffff',
+        fontSize: 18,
+        fontWeight: '600',
+        marginBottom: 10,
+        textAlign: 'center',
+    }
 });

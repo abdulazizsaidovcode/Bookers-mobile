@@ -62,6 +62,9 @@ import AddressBookClients from "./(profile)/(client)/components/AddressBookClien
 import SettingsPage from "./(profile)/(settings)/settings";
 import ApplicationSettings from "./(profile)/(settings)/(childSettings)/(Application Settings)";
 import LanguageSelection from "./(profile)/(settings)/(childSettings)/(Application Settings)/components/language";
+import SwitchPage from "./(auth)/switchPage";
+import OfferScreen from "./(auth)/offerScreen";
+import EditProfile from "./(profile)/(settings)/(childSettings)/Personal data/PersonalData";
 
 const Stack = createNativeStackNavigator();
 
@@ -142,6 +145,16 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/masterORclient"
               component={MasterorClient}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/switchPage"
+              component={SwitchPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/offerScreen"
+              component={OfferScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -313,22 +326,22 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(client)/ClientPage"
               component={ClientPage}
-              options={{title: "salom", headerShown: false }}
+              options={{ title: "salom", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(client)/components/AllClients"
               component={AllClients}
-              options={{title: "salom", headerShown: false }}
+              options={{ title: "salom", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(client)/components/AddressBookClients"
               component={AddressBookClients}
-              options={{title: "salom", headerShown: false }}
+              options={{ title: "salom", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(client)/(detail)/ClientDetails"
               component={ClientDetails}
-              options={{title: "Client", headerShown: false }}
+              options={{ title: "Client", headerShown: false }}
             />
             {/* profile client end */}
 
@@ -336,16 +349,21 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(settings)/settings"
               component={SettingsPage}
-              options={{title: "Настройки ", headerShown: false }}
+              options={{ title: "Настройки ", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(settings)/(childSettings)/(Application Settings)/index"
               component={ApplicationSettings}
-              options={{title: "Настройки ", headerShown: false }}
+              options={{ title: "Настройки ", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(settings)/(childSettings)/(Application Settings)/components/language"
               component={LanguageSelection}
+              options={{ title: "Настройки ", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(settings)/(childSettings)/Personal data/PersonalData"
+              component={EditProfile}
               options={{title: "Настройки ", headerShown: false }}
             />
             {/* profile settings end */}

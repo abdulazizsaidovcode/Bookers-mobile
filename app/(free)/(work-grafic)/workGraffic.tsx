@@ -1,38 +1,41 @@
-import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import ServicesCategory from '@/components/services/servicesCatgegory';
-import Buttons from '@/components/(buttons)/button';
-import { useRouter } from 'expo-router';
-import NavigationMenu from '@/components/navigation/navigation-menu';
-import CalendarGraffic from './calendar';
-
-interface Item {
-  id: number;
-  name: string;
-  active: boolean;
-}
+import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ServicesCategory from "@/components/services/servicesCatgegory";
+import Buttons from "@/components/(buttons)/button";
+import { useRouter } from "expo-router";
+import NavigationMenu from "@/components/navigation/navigation-menu";
+import CalendarGraffic from "./calendar";
+import { Item } from "@/type/graficWork/graficWork";
+import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 
 const GrafficWork: React.FC = () => {
+  const { calendarDate, setWeek, week } = graficWorkStore();
+
   const [items, setItems] = useState<Item[]>([
-    { id: 1, name: 'Понедельник', active: false },
-    { id: 2, name: 'Вторник', active: false },
-    { id: 3, name: 'Среда', active: false },
-    { id: 4, name: 'Четверг', active: false },
-    { id: 5, name: 'Пятница', active: false },
-    { id: 6, name: 'Суббота', active: false },
-    { id: 7, name: 'Воскресенье', active: false },
+    { id: 1, dayName: "Понедельник", active: false },
+    { id: 2, dayName: "Вторник", active: false },
+    { id: 3, dayName: "Среда", active: false },
+    { id: 4, dayName: "Четверг", active: false },
+    { id: 5, dayName: "Пятница", active: false },
+    { id: 6, dayName: "Суббота", active: false },
+    { id: 7, dayName: "Воскресенье", active: false },
   ]);
 
   const router = useRouter();
 
   const handleCategoryPress = (id: number) => {
-    const updatedItems = items.map(item =>
+    const updatedItems = items.map((item) =>
       item.id === id ? { ...item, active: !item.active } : item
     );
     setItems(updatedItems);
-    console.log('Updated Items:', updatedItems);
+    setWeek(updatedItems.map((item) => ({ dayName: item.dayName, active: item.active })));
+    console.log(week); // Log the updated items to console
   };
+
+  useEffect(() => {
+    console.log('Week state:', week); // Log the week state whenever it changes
+  }, [week]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -49,14 +52,18 @@ const GrafficWork: React.FC = () => {
             {items.map((item, index) => (
               <ServicesCategory
                 key={index}
-                title={item.name}
+                title={item.dayName}
                 isChecked={item.active}
                 onPress={() => handleCategoryPress(item.id)}
               />
             ))}
           </View>
           <View style={{ padding: 10 }}>
-            <Buttons title="Продолжить" onPress={() => router.push('/workMain')} />
+            <Buttons
+            
+              title="Продолжить"
+              onPress={() => router.push("/workMain")}
+            />
           </View>
         </View>
       </ScrollView>
@@ -69,11 +76,11 @@ export default GrafficWork;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#21212e',
+    backgroundColor: "#21212e",
   },
   section: {
     height: 430,
-    display: 'flex',
+    display: "flex",
     gap: 20,
   },
   fullHeightSection: {
@@ -82,11 +89,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    color: 'white',
+    color: "white",
     paddingHorizontal: 15,
   },
   categoriesContainer: {
-    flexDirection: 'column',
+    flexDirection: "column",
     paddingHorizontal: 10,
     gap: 5,
     paddingVertical: 10,
