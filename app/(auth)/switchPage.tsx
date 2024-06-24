@@ -5,7 +5,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 
 
-const MasterorClient: React.FC = () => {
+const SwitchPage: React.FC = () => {
     return (
         <SafeAreaView style={styles.container} >
             <View style={styles.logo}>
@@ -63,4 +63,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default MasterorClient;
+export default SwitchPage;
