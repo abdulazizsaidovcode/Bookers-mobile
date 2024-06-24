@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 
-const SettingsPage: React.FC = () => {
+const ApplicationSettings: React.FC = () => {
     const navigation = useNavigation();
 
     const navigateTo = (screen: string) => {
@@ -18,14 +18,9 @@ const SettingsPage: React.FC = () => {
             <ScrollView>
                 <NavigationMenu name='Настройки'/>
                 {[
-                    { icon: 'image', label: 'Галерея', screen: 'Gallery' },
+                    { icon: 'globe', label: 'Сменить язык', screen: '(profile)/(settings)/(childSettings)/(Application Settings)/components/language' },
                     { icon: 'check-square', label: 'Услуги', screen: 'Services' },
                     { icon: 'briefcase', label: 'Место работы', screen: 'WorkLocation' },
-                    { icon: 'calendar', label: 'Расписание работы', screen: 'WorkSchedule' },
-                    { icon: 'calendar-check', label: 'Онлайн бронирование', screen: 'OnlineBooking' },
-                    { icon: 'bell', label: 'Настройки уведомлений', screen: 'NotificationSettings' },
-                    { icon: 'cogs', label: 'Настройки приложения', screen: '(profile)/(settings)/(childSettings)/(Application Settings)/index' },
-                    { icon: 'user', label: 'Личные данные', screen: 'PersonalData' }
                 ].map((item, index) => (
                     <TouchableOpacity
                         key={index}
@@ -75,4 +70,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SettingsPage;
+export default ApplicationSettings;
