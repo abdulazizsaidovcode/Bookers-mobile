@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, TextInput, ScrollView, StatusBar, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
@@ -11,10 +11,15 @@ import { AntDesign } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
 const Process = () => {
-    const [image, setImage] = useState<string | null>(null);
+    const [image, setImage] = useState<boolean | null>(null);
+    const [service, setService] = useState('');
+    const [price, setPrice] = useState('');
+    const [time, setTime] = useState('');
+    const [description, setDescription] = useState('')
     const [isFormValid, setIsFormValid] = useState(false);
     const [textAreaValue, setTextAreaValue] = useState<string>('');
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [validate, setValidate] = useState(false)
 
     const Gender = [
         {
@@ -27,15 +32,31 @@ const Process = () => {
 
     const uslugi = [
         {
-            label: "Услуга"
+            label: "Услуга",
+            value: service,
+            onPress: setService
         },
         {
-            label: "Цена"
+            label: "Цена",
+            value: price,
+            onPress: setPrice
         },
         {
-            label: "Длительность (без учёта перерыва после процедуры)"
+            label: "Длительность (без учёта перерыва после процедуры)",
+            value: time,
+            onPress: setTime
         }
     ];
+
+    useEffect(() => {
+        if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0) {
+            setValidate(false)
+        }
+        else {
+            setValidate(true)
+        }
+    }, [service, price, time, description])
+
 
     const checkFormValidity = () => {
         if (textAreaValue.trim() !== '') {
@@ -60,6 +81,7 @@ const Process = () => {
         });
 
         if (!result.canceled) setImage(result.assets[0].uri)
+        setImage(true)
     };
     const takePhoto = async () => {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -102,6 +124,8 @@ const Process = () => {
                                 <LocationInput
                                     key={index}
                                     label={uslugi.label}
+                                    value={uslugi.value}
+                                    onChangeText={uslugi.onPress}
                                 />
                             ))}
                         </View>
@@ -111,10 +135,9 @@ const Process = () => {
                                 style={tw`bg-gray-500 p-2 rounded-xl text-lg text-white`}
                                 multiline
                                 numberOfLines={4}
-                                value={textAreaValue}
+                                value={description}
                                 onChangeText={(text) => {
-                                    setTextAreaValue(text);
-                                    checkFormValidity();
+                                    setDescription(text)
                                 }}
                                 scrollEnabled={true}
                             />
@@ -122,12 +145,12 @@ const Process = () => {
                         <View style={[tw`p-3 `, { backgroundColor: '#21212E' }]}>
                             <Text style={tw`text-gray-500 mb-2`}>Фото услуги</Text>
                             <TouchableOpacity onPress={pickImage} style={[tw`bg-gray-500 p-10  rounded-xl items-center justify-center`]}>
-                            {image ? (
-                                    <View style = {tw`flex flex-row`}>
+                                {image ? (
+                                    <View style={tw`flex flex-row`}>
                                         <AntDesign name="pluscircleo" size={22} color="gray" />
-                                        <Text style = {tw`text-gray-600`}>Добавить фото</Text>
+                                        <Text style={tw`text-gray-600`}>Добавить фото</Text>
                                     </View>
-                                    
+
                                 ) : (
                                     <Image source={{ uri: image }} style={[tw`w-full min-h-screen  rounded-xl`]} />
                                 )}
@@ -135,7 +158,7 @@ const Process = () => {
                         </View>
                     </View>
                     <View style={[tw`mb-3 p-3`, { backgroundColor: '#21212E' }]}>
-                        <Buttons title='Сохранить' onPress={() => router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen')}/>
+                        <Buttons title='Сохранить' isDisebled={validate} onPress={() => router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen')} />
                     </View>
                 </ScrollView>
             </View>

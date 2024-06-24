@@ -41,4 +41,6 @@ export const workday_save = `${base_url}workday/time/save/graphic`
 export const worktime_save = `${base_url}workday/time/save/time`
 export const workday_get = `${base_url}workday/time/weekday`
 export const worktime_get = `${base_url}workday/time/time/`
+// clients url
+export const client_statistics = `${base_url}user/master/client-count-by-status`
 
