@@ -30,7 +30,7 @@ export const getClientAddressBookSearch = async (setData: (val: ClientAddressBoo
             const {data} = await axios.get(`${client_address_book_search}${search}`, config);
             if (data.success) setData(data.body)
             else getClientAddressBook(setData)
-        }
+        } else getClientAddressBook(setData)
     } catch (err) {
         console.error(err)
         getClientAddressBook(setData)
