@@ -1,0 +1,9 @@
+{
+  "phone_number": "Ваш номер телефона.",
+  "sms_code": "Мы отправили вам SMS с кодом подтверждения.",
+  "phone_number_label": "Номер телефона.",
+  "invalid_phone_number": "Пожалуйста, введите корректный номер телефона.",
+  "login_google": "Войти через Google.",
+  "login_facebook": "Войти через Facebook.",
+  "login": "Войти"
+}

@@ -67,12 +67,12 @@ const ProfileImgUpload = () => {
         <>
             {/* =================== profile image =================== */}
             <View style={[tw`justify-center items-center`]}>
-                <View style={tw`bg-transparent text-center mt-5 relative`}>
+                <View style={tw`bg-transparent text-center relative`}>
                     <TouchableOpacity style={styles.imageContainer} onPress={openModal} activeOpacity={.8}>
                         {image ? (
                             <Image source={{uri: image}} style={styles.profileImage}/>
                         ) : (
-                            <Image source={require('../assets/avatar.png')} style={styles.profileImage}/>
+                            <Image source={require('../assets/avatar.png')} style={[styles.profileImage]}/>
                         )}
                     </TouchableOpacity>
                     {!image && (

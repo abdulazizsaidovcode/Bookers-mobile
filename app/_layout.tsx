@@ -60,6 +60,8 @@ import ClientDetails from "./(profile)/(client)/(detail)/ClientDetails";
 import AllClients from "./(profile)/(client)/components/AllClients";
 import AddressBookClients from "./(profile)/(client)/components/AddressBookClients";
 import SettingsPage from "./(profile)/(settings)/settings";
+import ApplicationSettings from "./(profile)/(settings)/(childSettings)/(Application Settings)";
+import LanguageSelection from "./(profile)/(settings)/(childSettings)/(Application Settings)/components/language";
 
 const Stack = createNativeStackNavigator();
 
@@ -334,6 +336,16 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(settings)/settings"
               component={SettingsPage}
+              options={{title: "Настройки ", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(settings)/(childSettings)/(Application Settings)/index"
+              component={ApplicationSettings}
+              options={{title: "Настройки ", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(settings)/(childSettings)/(Application Settings)/components/language"
+              component={LanguageSelection}
               options={{title: "Настройки ", headerShown: false }}
             />
             {/* profile settings end */}

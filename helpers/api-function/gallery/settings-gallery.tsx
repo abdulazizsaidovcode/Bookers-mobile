@@ -12,15 +12,10 @@ export const fetchData = async (setData: (data: GalleryData[]) => void) => {
     }
 }
 
-export const addData = async (setData: (data: GalleryData[]) => void, albumName: string, photos: string[], mainPhotos: string[]) => {
-    const payload = {
-        albumName: albumName,
-        photos: photos,
-        mainPhotos: mainPhotos,
-    }
+export const addData = async (formData: any) => {
     try {
-        const res = await axios.post(gallery_add, payload, config);
-        fetchData(setData)
+        const {data} = await axios.post(gallery_add, formData, config);
+        console.log(data)
     } catch (error) {
         console.log(error);
     }

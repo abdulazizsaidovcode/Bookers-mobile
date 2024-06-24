@@ -1,23 +1,43 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image, Alert } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Buttons from '@/components/(buttons)/button';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import { register_page } from '@/helpers/api';
 
 const PhoneNumberInput: React.FC = () => {
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [isValid, setIsValid] = useState<boolean>(true);
     const phoneInput = useRef<PhoneInput>(null);
 
+
     const handlePhoneNumberChange = (text: string) => {
         setPhoneNumber(text);
         setIsValid(phoneInput.current?.isValidNumber(text) ?? false);
     };
+    const { t } = useTranslation();
 
 
+    // API 
+    const registerFunction = () => {
+        const sentData = {
+            phoneNumber: phoneNumber
+        }
+        localStorage.setItem('phone', phoneNumber)
+        axios.post(`${register_page}sendCode?purpose=true`, sentData)
+            .then(res => {
+                console.log(res.data); // Javobni konsolga chiqarish
+                Alert.alert("Response", res.data.body);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
 
     return (
         <View style={styles.container}>
@@ -27,8 +47,8 @@ const PhoneNumberInput: React.FC = () => {
             </SafeAreaView>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center' }}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.title}>Ваш номер телефона</Text>
-                    <Text style={styles.subTitle}>Мы отправили вам SMS с кодом подтверждения.</Text>
+                    <Text style={styles.title}>{t("phone_number")}</Text>
+                    <Text style={styles.subTitle}>{t("sms_code")}</Text>
                 </View>
                 <StatusBar barStyle="dark-content" />
                 <View style={styles.phoneNumber}>
@@ -39,7 +59,7 @@ const PhoneNumberInput: React.FC = () => {
                             defaultCode="UZ"
                             layout="first"
                             onChangeFormattedText={handlePhoneNumberChange}
-                            placeholder="Номер телефона"
+                            placeholder={t("phone_number_label")}
                             containerStyle={styles.phoneInputContainer}
                             textContainerStyle={styles.phoneInputTextContainer}
                             textInputStyle={styles.phoneInputText}
@@ -53,24 +73,27 @@ const PhoneNumberInput: React.FC = () => {
                         />
                     </View>
                     {!isValid && (
-                        <Text style={styles.errorText}>Пожалуйста, введите корректный номер телефона</Text>
+                        <Text style={styles.errorText}>{t("invalid_phone_number")}</Text>
                     )}
                 </View>
                 <View style={{ marginVertical: 20, width: '100%' }}>
                     <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} onPress={() => console.log('Login with Google')}>
                         <Image source={require('../../assets/images/auth/google.png')} />
-                        <Text style={styles.socialButtonText}>Войти через Google</Text>
+                        <Text style={styles.socialButtonText}>{t('login_google')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} onPress={() => console.log('Login with Facebook')}>
                         <Image source={require('../../assets/images/auth/facebook.png')} />
-                        <Text style={styles.socialButtonText}>Войти через Facebook</Text>
+                        <Text style={styles.socialButtonText}>{t("login_facebook")}</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
             <View style={{ marginVertical: 20 }}>
                 <Buttons
-                    title="Войти"
-                    onPress={() => router.push('(auth)/otp_input')}
+                    title={t("login")}
+                    onPress={() => {
+                        router.push('(auth)/otp_input')
+                        registerFunction()
+                    }}
                     backgroundColor={'#9C0A35'}
                 />
             </View>
@@ -91,7 +114,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'white',
-        fontSize: 26,
+        fontSize: 18,
         letterSpacing: 1,
         marginBottom: 20,
         fontWeight: 'bold',
@@ -99,7 +122,7 @@ const styles = StyleSheet.create({
     subTitle: {
         color: '#828282',
         textAlign: 'center',
-        fontSize: 16,
+        fontSize: 14,
         lineHeight: 18,
     },
     phoneNumber: {

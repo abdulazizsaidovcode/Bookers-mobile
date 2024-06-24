@@ -2,21 +2,36 @@ import Buttons from '@/components/(buttons)/button';
 import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
-
-
+import { useTranslation } from 'react-i18next';
+import '../../i18next';
 const Auth: React.FC = () => {
+    const { t, i18n } = useTranslation();
+
+    const changeLanguage = (lng: string) => {
+        i18n.changeLanguage(lng);
+    };
     return (
         <SafeAreaView style={styles.container} >
             <View style={styles.logo}>
                 <Image source={require('../../assets/images/auth/logo.png')} />
             </View>
             <Text style={styles.title}>Bookers Beauty</Text>
-            <Text style={styles.welcome}>Добро пожаловать!</Text>
+            <Text style={styles.welcome}> </Text>
             <Text style={styles.selectLanguage}>Выберите язык</Text>
             <View style={styles.button}>
-                <Buttons title="Русский" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/number-create')} />
-                <Buttons title="O‘zbek" backgroundColor="#9C0A35" />
-                <Buttons title="English" backgroundColor="#9C0A35" />
+                <Buttons title="Русский" backgroundColor="#9C0A35" onPress={() => {
+                    router.push('(auth)/number-create');
+                    changeLanguage('ru');
+                }} />
+                <Buttons title="O‘zbek" backgroundColor="#9C0A35" onPress={() => {
+                    router.push('(auth)/number-create');
+                    changeLanguage('uz');
+                }} />
+                <Buttons title="English" backgroundColor="#9C0A35" onPress={() => {
+                    router.push('(auth)/number-create');
+                    changeLanguage('en');
+                }
+                } />
             </View>
         </SafeAreaView>
     );
