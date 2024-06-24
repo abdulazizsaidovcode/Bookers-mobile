@@ -14,7 +14,7 @@ const MasterorClient: React.FC = () => {
             <Text style={styles.title}>Bookers Beauty</Text>
             <Text style={styles.selectLanguage}>Кем ты хочешь стать?</Text>
             <View style={styles.button}>
-                <Buttons title="Master" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/number-create')} />
+                <Buttons title="Master" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/switchPage')} />
                 <Buttons title="Client" backgroundColor="#9C0A35" />
             </View>
         </SafeAreaView>

@@ -1,21 +1,18 @@
 import Buttons from '@/components/(buttons)/button';
-import NavigationMenu from '@/components/navigation/navigation-menu';
 import { router } from 'expo-router';
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, Image, SafeAreaView } from 'react-native';
 
 
 const SwitchPage: React.FC = () => {
     return (
-        <SafeAreaView style={styles.container} >
+        <SafeAreaView style={styles.container}>
             <View style={styles.logo}>
                 <Image source={require('../../assets/images/auth/logo.png')} />
             </View>
             <Text style={styles.title}>Bookers Beauty</Text>
-            <Text style={styles.selectLanguage}>Кем ты хочешь стать?</Text>
             <View style={styles.button}>
-                <Buttons title="Master" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/number-create')} />
-                <Buttons title="Client" backgroundColor="#9C0A35" />
+                <Buttons title="Kirish" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/number-create')} />
             </View>
         </SafeAreaView>
     );
@@ -59,6 +56,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         gap: 10,
         padding: 15,
+        marginTop: 20
 
     }
 });
