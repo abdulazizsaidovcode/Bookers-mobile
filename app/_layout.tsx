@@ -32,7 +32,7 @@ import Canceledentries from "./(profile)/(sessionhistory)/components/Canceledent
 import SettingsLocation from "./(settings)/(settings-location)/settings-locations";
 import SettingsLocationMain from "./(settings)/(settings-location)/settings-locations-main";
 import SettingsGallery from "./(settings)/(settings-gallery)/settings-gallery";
-import Settings from "./(profile)/(settings)";
+import Settings from "./(profile)/(settings)/settings";
 import { StompProvider } from "@/context/StompContext";
 import Expertise from "./(standart)/(services)/(expertise)/expertise";
 import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
@@ -59,6 +59,7 @@ import ClientPage from "./(profile)/(client)/ClientPage";
 import ClientDetails from "./(profile)/(client)/(detail)/ClientDetails";
 import AllClients from "./(profile)/(client)/components/AllClients";
 import AddressBookClients from "./(profile)/(client)/components/AddressBookClients";
+import SettingsPage from "./(profile)/(settings)/settings";
 
 
 const Stack = createNativeStackNavigator();
@@ -329,6 +330,15 @@ function RootLayoutNav() {
               options={{title: "Client", headerShown: false }}
             />
             {/* profile client end */}
+
+            {/* profile settings start */}
+            <Stack.Screen
+              name="(profile)/(settings)/settings"
+              component={SettingsPage}
+              options={{title: "Настройки ", headerShown: false }}
+            />
+            {/* profile settings end */}
+
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>
