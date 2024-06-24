@@ -35,3 +35,6 @@ export const services_list = `${base_url}category`
 // Register page 
 export const register_page = `${base_url}auth/`
 
+// clients url
+export const client_statistics = `${base_url}user/master/client-count-by-status`
+
