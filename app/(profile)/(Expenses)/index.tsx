@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import tw from 'tailwind-react-native-classnames';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import ExpenseCard from './(component)/card/index'
+import ExpenseCard from './(component)/card/index';
 import { FontAwesome } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import NavigationMenu from '@/components/navigation/navigation-menu';
 
 const expenses = [
   {
@@ -15,12 +16,13 @@ const expenses = [
   },
 ];
 
-const Expenses = () => {
+const Expenses: React.FC = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={tw`flex-1 bg-gray-900 p-4`}>
-      <Text style={tw`text-white text-lg font-bold mb-6`}>
+    <SafeAreaView style={styles.container}>
+      <NavigationMenu name='Expenses'/>
+      <Text style={styles.headerText}>
         Добавляйте свои расходы, что бы видеть свою прибыль
       </Text>
       <FlatList
@@ -29,14 +31,47 @@ const Expenses = () => {
         keyExtractor={(item) => item.id}
       />
       <TouchableOpacity
-        style={tw`absolute bottom-4 left-4 right-4 bg-red-700 p-4 rounded-lg flex-row justify-center items-center`}
+        style={styles.addButton}
         // onPress={() => navigation.navigate('CreateExpenseCategory')}
       >
-        <FontAwesome name="plus-circle" size={24} color="#fff" style={tw`mr-2`} />
-        <Text style={tw`text-white font-bold`}>Создать категорию расхода</Text>
+        <FontAwesome name="plus-circle" size={24} color="#fff" style={styles.addButtonIcon} />
+        <Text style={styles.addButtonText}>Создать категорию расхода</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#21212E',
+    padding: 16,
+  },
+  headerText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 24,
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    right: 16,
+    backgroundColor: '#E74C3C',
+    padding: 16,
+    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addButtonIcon: {
+    marginRight: 8,
+  },
+  addButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+});
 
 export default Expenses;

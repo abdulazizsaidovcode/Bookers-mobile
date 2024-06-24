@@ -55,6 +55,12 @@ import Welcome from "./(welcome)/Welcome";
 import ResponseLocation from "./(location)/(response-location)/ResponseLocation";
 import MyServicesScreen from "./(standart)/(services)/(myServicesScreen)/MyServicesScreen";
 
+import ClientPage from "./(profile)/(client)/ClientPage";
+import ClientDetails from "./(profile)/(client)/(detail)/ClientDetails";
+import AllClients from "./(profile)/(client)/components/AllClients";
+import AddressBookClients from "./(profile)/(client)/components/AddressBookClients";
+
+
 const Stack = createNativeStackNavigator();
 
 export { ErrorBoundary } from "expo-router";
@@ -301,6 +307,28 @@ function RootLayoutNav() {
               component={ResponseLocation}
               options={{ headerShown: false }}
             />
+            {/*  profile client start */}
+            <Stack.Screen
+              name="(profile)/(client)/ClientPage"
+              component={ClientPage}
+              options={{title: "salom", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(client)/components/AllClients"
+              component={AllClients}
+              options={{title: "salom", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(client)/components/AddressBookClients"
+              component={AddressBookClients}
+              options={{title: "salom", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(client)/(detail)/ClientDetails"
+              component={ClientDetails}
+              options={{title: "Client", headerShown: false }}
+            />
+            {/* profile client end */}
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>
