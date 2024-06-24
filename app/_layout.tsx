@@ -65,6 +65,7 @@ import LanguageSelection from "./(profile)/(settings)/(childSettings)/(Applicati
 import SwitchPage from "./(auth)/switchPage";
 import OfferScreen from "./(auth)/offerScreen";
 import EditProfile from "./(profile)/(settings)/(childSettings)/Personal data/PersonalData";
+import WebPage from "./(profile)/(WebPage)/WebPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -344,6 +345,17 @@ function RootLayoutNav() {
               options={{ title: "Client", headerShown: false }}
             />
             {/* profile client end */}
+
+
+            {/* Web page tariff start */}
+            <Stack.Screen
+              name="(profile)/(WebPage)/WebPage"
+              component={WebPage}
+              options={{ title: "CreatingClient", headerShown: false }}
+            />
+            {/* Web page tariff end */}
+
+
 
             {/* profile settings start */}
             <Stack.Screen

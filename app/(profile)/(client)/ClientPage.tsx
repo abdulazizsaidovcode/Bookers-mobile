@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import NavigationMenu from '@/components/navigation/navigation-menu';
 
 const ClientPage: React.FC = () => {
     const navigation = useNavigation();
@@ -12,7 +13,7 @@ const ClientPage: React.FC = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.header}>salom</Text>
+            <NavigationMenu name='Client' />
             <TouchableOpacity style={styles.item} onPress={() => handlePress('(profile)/(client)/components/AllClients')}>
                 <View style={styles.itemContent}>
                     <FontAwesome name="users" size={24} color="#9C0A35" />
@@ -42,7 +43,7 @@ const ClientPage: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1f1f1f',
+        backgroundColor: '#21212E',
         padding: 16,
     },
     header: {
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     item: {
-        backgroundColor: '#333',
+        backgroundColor: '#B9B9C9',
         padding: 16,
         borderRadius: 8,
         flexDirection: 'row',
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     itemText: {
-        color: '#fff',
+        color: 'black',
         marginLeft: 8,
     },
     button: {
