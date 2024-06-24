@@ -7,6 +7,10 @@ import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { router, useNavigation } from 'expo-router';
+import axios from 'axios';
+import { base_url } from '@/helpers/api';
+import { config } from '@/helpers/token';
+import servicesStore from '@/helpers/state_managment/services/servicesStore';
 
 interface Service {
     title: string;
@@ -16,29 +20,16 @@ const Expertise: React.FC = () => {
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [textAreaValue, setTextAreaValue] = useState<string>('');
-    const [services, setServices] = useState<Service[]>([
-        { title: "Здоровье и красота волос" },
-        { title: "Ногтевой сервис" },
-        { title: "Ресницы и брови" },
-        { title: "Уход за телом" },
-        { title: "Уход за лицом" },
-        { title: "Здоровье и красота волос" },
-        { title: "Ресницы и брови" },
-        { title: "Уход за телом" },
-        { title: "Уход за лицом" },
-        { title: "Здоровье и красота волос" },
-
-    ]);
     const openModal = () => setModalVisible(true);
     const closeModal = () => setModalVisible(false);
 
     const handleSave = () => {
         if (textAreaValue.trim() && textAreaValue !== '' && textAreaValue !== "''") {
-            setServices([...services, { title: textAreaValue }]);
             setTextAreaValue('');
             closeModal();
         }
     };
+   
 
     const handleAdd = () => {
         handleSave();
@@ -54,8 +45,8 @@ const Expertise: React.FC = () => {
                 >
                     <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                         <View style={tw`w-full`}>
-                            {services.length !== 0 && services.map((service, index) => (
-                                <ServicesCategory key={index} title={service.title} />
+                            {childCategoryData.length !== 0 && childCategoryData.map((item, index) => (
+                                <ServicesCategory key={index} title={childCategoryData.title} />
                             ))}
                         </View>
                         

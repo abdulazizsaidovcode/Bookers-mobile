@@ -9,7 +9,9 @@ const servicesStore = create<Services>((set) => ({
     childCategoryData: [],
     setChildCategoryData: (val: ChildCategory[]) => set({childCategoryData: val}),
     categoryFatherId: null,
-    setCategoryFatherId: (val: Data) => set({categoryFatherId: val})
+    setCategoryFatherId: (val: Data) => set({categoryFatherId: val}),
+    checkedIs: false,
+    setIsChecked: (val: boolean) => set({isChecked: val})
 }))
 
 export default servicesStore

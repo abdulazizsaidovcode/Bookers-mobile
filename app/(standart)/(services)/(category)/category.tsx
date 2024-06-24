@@ -13,8 +13,7 @@ import { config } from '@/helpers/token';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 
 const Category = () => {
-    const { setData, data, categoryFatherId } = servicesStore();
-    const { childCategoryData, setChildCategoryData } = servicesStore();
+    const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
     const [fatherId, setFatherId] = useState('');
 
@@ -33,19 +32,11 @@ const Category = () => {
         }
     };
 
-    const getChildCategory = async (fatherId) => {
+    const getChildCategory = async (id: string) => {
         try {
-            const response = await axios.get(`${base_url}category/byCategory/b417270e-10e8-4745-85b4-5e17ef936269`, config);
-            const childData =
-                response.data.body &&
-                response.data.body.map((item:any) => ({
-                    key: item.id,
-                    value: item.name,
-                }));
-                console.log(response.data);
-                
-
-            setChildCategoryData(childData);
+            const response = await axios.get(`${base_url}category/byCategory/${id}`, config);
+            if (response.data.success) setChildCategoryData(response.data.body)
+            else setChildCategoryData([])
         } catch (error) {
             console.error("Error fetching child categories:", error);
         }
@@ -58,8 +49,8 @@ const Category = () => {
 
     const openModal = () => {
         setModalVisible(true);
-        if (fatherId) {
-            getChildCategory(fatherId);
+        if (categoryFatherId && categoryFatherId.key) {
+            getChildCategory(categoryFatherId.key);
         }
     };
 
@@ -67,6 +58,9 @@ const Category = () => {
         setModalVisible(false);
         setChildCategoryData([]);
     };
+
+
+
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
@@ -80,7 +74,7 @@ const Category = () => {
                         <FlatList
                             data={data}
                             renderItem={({ item }) => (
-                                <ServicesCategory title={item && item.value} items={item} />
+                                <ServicesCategory onPress={() => openModal()} title={item.value} items={item} />
                             )}
                         />
                     </View>
@@ -88,7 +82,7 @@ const Category = () => {
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
                                 title="Сохранить"
-                                onPress={() => openModal()}
+                                onPress={() => {}}
                             />
                         </View>
                         <CenteredModal
@@ -97,24 +91,17 @@ const Category = () => {
                             btnRedText='Закрыть'
                             isFullBtn={true}
                             toggleModal={closeModal}
-                            onConfirm={() => router.push('/expertise')}
+                            onConfirm={() => closeModal()}
                         >
-                            <View style={tw`p-4`}>
+                            <View style={tw`p-4 text-center`}>
                                 <Text style={tw`text-white text-xl w-full text-2xl`}>Здоровье и красота волос</Text>
                                 <Text style={tw`text-center text-white text-xl`}>В эту категорию входят услуги таких специализаций как:</Text>
-                                {childCategoryData ?
-                                    <FlatList
-                                        data={childCategoryData}
-                                        renderItem={({ item }) =>
-                                            <Text key={item.id} style={{ color: 'white', fontSize: 20 }}>
-                                                { }. {item.name}
-                                            </Text>
-                                        }
-                                    />
-                                    :
-                                    <Text>salom</Text>}
+                                {childCategoryData && childCategoryData.map((item: any, idx: number) => (
+                                    <Text key={item.id} style={{ color: 'white', fontSize: 20 }}>
+                                        {idx + 1}. {item.name}
+                                    </Text>
+                                ))}
                             </View>
-
                         </CenteredModal>
                     </View>
                 </ScrollView>

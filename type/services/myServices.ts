@@ -14,6 +14,8 @@ export interface Services {
     setChildCategoryData: (val: ChildCategory[]) => void
     categoryFatherId: Data | null | any
     setCategoryFatherId: (val: Data) => void
+    checkedIs: boolean;
+    setIsChecked: (val: boolean) => void
 }
 
 export interface Data {

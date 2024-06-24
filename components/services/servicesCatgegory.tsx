@@ -13,7 +13,7 @@ const ServicesCategory: React.FC<ServicesProps> = ({
     isChecked = false,
     items
 }) => {
-    const { setCategoryFatherId } = servicesStore()
+    const { setCategoryFatherId, setIsChecked, checkedIs } = servicesStore()
     const [checked, setChecked] = useState(isChecked);
 
     useEffect(() => {
