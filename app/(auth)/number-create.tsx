@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image, Alert } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Buttons from '@/components/(buttons)/button';
@@ -7,12 +7,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import { register_page } from '@/helpers/api';
 
 const PhoneNumberInput: React.FC = () => {
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [isValid, setIsValid] = useState<boolean>(true);
     const phoneInput = useRef<PhoneInput>(null);
-    console.log(phoneNumber);
 
 
     const handlePhoneNumberChange = (text: string) => {
@@ -21,6 +22,22 @@ const PhoneNumberInput: React.FC = () => {
     };
     const { t } = useTranslation();
 
+
+    // API 
+    const registerFunction = () => {
+        const sentData = {
+            phoneNumber: phoneNumber
+        }
+        localStorage.setItem('phone', phoneNumber)
+        axios.post(`${register_page}sendCode?purpose=true`, sentData)
+            .then(res => {
+                console.log(res.data); // Javobni konsolga chiqarish
+                Alert.alert("Response", res.data.body);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
 
     return (
         <View style={styles.container}>
@@ -73,7 +90,10 @@ const PhoneNumberInput: React.FC = () => {
             <View style={{ marginVertical: 20 }}>
                 <Buttons
                     title={t("login")}
-                    onPress={() => router.push('(auth)/otp_input')}
+                    onPress={() => {
+                        router.push('(auth)/otp_input')
+                        registerFunction()
+                    }}
                     backgroundColor={'#9C0A35'}
                 />
             </View>
