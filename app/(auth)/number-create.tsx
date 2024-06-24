@@ -12,6 +12,8 @@ const PhoneNumberInput: React.FC = () => {
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [isValid, setIsValid] = useState<boolean>(true);
     const phoneInput = useRef<PhoneInput>(null);
+    console.log(phoneNumber);
+
 
     const handlePhoneNumberChange = (text: string) => {
         setPhoneNumber(text);
