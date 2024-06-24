@@ -28,3 +28,7 @@ export const postFilelist = `${base_url}attachment/upload/list`; // get chat lis
 // gallery
 export const gallery_list = `${base_url}gallery/master`;
 export const gallery_add = `${base_url}gallery`;
+
+// My services
+export const services_list = `${base_url}category`
+

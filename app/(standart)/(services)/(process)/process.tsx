@@ -8,6 +8,7 @@ import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/components/(location)/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import { AntDesign } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 const Process = () => {
     const [image, setImage] = useState<string | null>(null);
@@ -118,9 +119,9 @@ const Process = () => {
                                 scrollEnabled={true}
                             />
                         </View>
-                        <View style={[tw`p-3`, { backgroundColor: '#21212E' }]}>
+                        <View style={[tw`p-3 `, { backgroundColor: '#21212E' }]}>
                             <Text style={tw`text-gray-500 mb-2`}>Фото услуги</Text>
-                            <TouchableOpacity onPress={pickImage} style={[tw`bg-gray-500 p-14 rounded-xl items-center justify-center`]}>
+                            <TouchableOpacity onPress={pickImage} style={[tw`bg-gray-500 p-10  rounded-xl items-center justify-center`]}>
                             {image ? (
                                     <View style = {tw`flex flex-row`}>
                                         <AntDesign name="pluscircleo" size={22} color="gray" />
@@ -128,13 +129,13 @@ const Process = () => {
                                     </View>
                                     
                                 ) : (
-                                    <Image source={{ uri: image }} style={[tw`w-full h-full rounded-xl`]} />
+                                    <Image source={{ uri: image }} style={[tw`w-full min-h-screen  rounded-xl`]} />
                                 )}
                             </TouchableOpacity>
                         </View>
                     </View>
                     <View style={[tw`mb-3 p-3`, { backgroundColor: '#21212E' }]}>
-                        <Buttons title='Сохранить' isDisebled={!isFormValid} />
+                        <Buttons title='Сохранить' onPress={() => router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen')}/>
                     </View>
                 </ScrollView>
             </View>

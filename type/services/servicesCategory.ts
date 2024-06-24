@@ -4,7 +4,8 @@ export interface ServicesProps {
     onPress?: () => void;
     onToggle?: (label: string | null, isnewChecked: boolean | null) => void;
     isRadioButton?: boolean;
-    id?: string;
-    label?: string;
+    id?: string
     isChecked: boolean
+    label?: string
+    setId?: (val: string | undefined) => void
 }
