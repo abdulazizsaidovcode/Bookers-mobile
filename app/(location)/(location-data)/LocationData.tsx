@@ -37,7 +37,7 @@ const LocationData = () => {
   const [street, setStreet] = useState("");
   const [homeNumber, setHomeNumber] = useState("");
   const [target, setTarget] = useState("");
-  const [validate, setValidate] = useState(true);
+  const [validate, setValidate] = useState(false);
   const [isModal, setIsmodal] = useState(false);
   const [salonName, setSalonName] = useState("");
   const [message, setMessage] = useState("");
@@ -51,6 +51,8 @@ const LocationData = () => {
       homeNumber.length === 0 ||
       target.length === 0
     ) {
+      setValidate(false);
+    } else {
       setValidate(true);
     }
     console.log(validate);
@@ -67,13 +69,34 @@ const LocationData = () => {
     setData(listData);
   };
 
+  const resetForm = () => {
+    setCity("");
+    setStreet("");
+    setDistrictId("");
+    setHomeNumber("");
+    setTarget("");
+    setSalonId("");
+  };
+
   const handleSubmit = async () => {
-    await axios.post(
-      `${base_url}address`,
-      { districtId, street, homeNumber, target, salonId },
-      config
-    );
-    router.push("../(response-location)/ResponseLocation");
+    const data = {
+      districtId,
+      street,
+      homeNumber,
+      target,
+      salonId,
+    };
+    try {
+      const res = await axios.post(`${base_url}address`, data, config);
+
+      if (res.data.success === true)
+        router.push("../(response-location)/ResponseLocation");
+      else {
+        resetForm();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   const onConfirm = async () => {
     try {
@@ -82,8 +105,11 @@ const LocationData = () => {
         { salonName, message },
         config
       );
-      setToggle(true);
-      setIsmodal(false);
+      if (data.success === true) {
+        setToggle(true);
+        setIsmodal(false);
+        console.log(data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -166,7 +192,7 @@ const LocationData = () => {
               onPress={handleSubmit}
               title="Сохранить"
               // backgroundColor={"#9c0935"}
-              isDisebled={true}
+              isDisebled={validate}
             />
           </View>
         </ScrollView>
