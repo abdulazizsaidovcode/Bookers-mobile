@@ -6,9 +6,9 @@ import Buttons from '@/components/(buttons)/button';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
-import useGalleryStore from '@/helpers/state_managment/gallery/settings-galery';
 import { getFile } from '@/helpers/api';
-import { fetchData } from '@/helpers/api-function/gallery/settings-galery';
+import { fetchData } from '@/helpers/api-function/gallery/settings-gallery';
+import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-gallery-main'>;
 

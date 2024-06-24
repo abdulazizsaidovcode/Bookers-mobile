@@ -39,7 +39,7 @@ const Welcome = () => {
       description: "Создавайте фото и видео галереи своих работ",
       icon: <MaterialIcons name="photo" size={24} color="white" />,
       onPress: () =>
-        router.push("../(settings)/(settings-galery)/settings-galery-main"),
+        router.push("../(settings)/(settings-gallery)/settings-gallery-main"),
     },
     {
       title: "Онлайн бронирование",

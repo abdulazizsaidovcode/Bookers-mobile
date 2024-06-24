@@ -7,8 +7,8 @@ import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as ImagePicker from 'expo-image-picker';
-import { addData, fetchData } from '@/helpers/api-function/gallery/settings-galery';
-import useGalleryStore from '@/helpers/state_managment/gallery/settings-galery';
+import { addData, fetchData } from '@/helpers/api-function/gallery/settings-gallery';
+import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 
 const SettingsGallery: React.FC = () => {
