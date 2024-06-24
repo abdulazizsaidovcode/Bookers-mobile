@@ -5,5 +5,6 @@ export interface ServicesProps {
     onToggle?: (label: string | null, isnewChecked: boolean | null) => void;
     isRadioButton?: boolean;
     id?: string;
-    label?: string
+    label?: string;
+    isChecked: boolean
 }

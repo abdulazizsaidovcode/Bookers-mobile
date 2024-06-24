@@ -17,9 +17,7 @@ import Auth from "./(auth)/auth";
 import TabLayout from "./(tabs)/_layout";
 import ChatDetails from "./(chat)/(communicatie)/chatDetails";
 import Notification from "./(profile)/(notification)";
-import GraficWork from "./(free)/(work-grafic)/workGrafic";
 import WorkMain from "./(free)/(work-grafic)/workMain";
-import WorkDays from "./(free)/(work-grafic)/workDays";
 import MyServices from "./(standart)/(services)/(myServices)/myServices";
 import Expenses from "./(profile)/(Expenses)";
 import ExpensesDetail from "./(profile)/(Expenses)/(component)/(detail)/expenseDetail";
@@ -53,6 +51,8 @@ import Location from "./(location)/Location";
 import LocationData from "./(location)/(location-data)/LocationData";
 import Welcome from "./(welcome)/Welcome";
 import ResponseLocation from "./(location)/(response-location)/ResponseLocation";
+import GrafficWork from "./(free)/(work-grafic)/workGraffic";
+import TimeWork from "./(free)/(work-grafic)/workTime";
 
 const Stack = createNativeStackNavigator();
 
@@ -151,8 +151,8 @@ function RootLayoutNav() {
               options={{ title: "Services", headerShown: false }}
             />
             <Stack.Screen
-              name="(free)/(work-grafic)/workGrafic"
-              component={GraficWork}
+              name="(free)/(work-grafic)/workTime"
+              component={TimeWork}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -161,8 +161,8 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(free)/(work-grafic)/workDays"
-              component={WorkDays}
+              name="(free)/(work-grafic)/workGraffic"
+              component={GrafficWork}
               options={{ headerShown: false }}
             />
             <Stack.Screen
