@@ -1,8 +1,17 @@
 import tw from "tailwind-react-native-classnames";
 import {Text, TouchableOpacity} from "react-native";
 import CountNumber from "@/components/clients/count-number";
+import clientStore from "@/helpers/state_managment/client/clientStore";
 
-const ClientsBtn = ({countOrIcon, icon, name, clicks}: { countOrIcon: boolean, icon?: JSX.Element, name: string, clicks?: () => void }) => {
+const ClientsBtn = ({countOrIcon, icon, name, clicks}: {
+    countOrIcon: boolean,
+    icon?: JSX.Element,
+    name: string,
+    clicks?: () => void
+}) => {
+    const {statusData} = clientStore()
+    let counts;
+    if (statusData) counts = statusData.allClient + statusData.fromTheAddressBook
     return (
         <TouchableOpacity
             onPress={clicks}
@@ -12,7 +21,7 @@ const ClientsBtn = ({countOrIcon, icon, name, clicks}: { countOrIcon: boolean, i
             {countOrIcon
                 ? <>
                     <Text style={tw`text-white text-base font-semibold mr-2`}>{name}</Text>
-                    <CountNumber/>
+                    <CountNumber count={counts && counts}/>
                 </>
                 : <>
                     {icon}

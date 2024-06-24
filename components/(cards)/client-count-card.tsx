@@ -3,7 +3,7 @@ import tw from "tailwind-react-native-classnames";
 import CountNumber from "@/components/clients/count-number";
 import {MaterialIcons} from '@expo/vector-icons';
 
-const ClientCountCard = ({icon, title, clicks}: { icon: JSX.Element, title: string, clicks?: () => void }) => {
+const ClientCountCard = ({icon, title, clicks, counts}: { icon: JSX.Element, title: string, clicks?: () => void, counts?: number }) => {
     return (
         <TouchableOpacity
             onPress={clicks}
@@ -15,7 +15,7 @@ const ClientCountCard = ({icon, title, clicks}: { icon: JSX.Element, title: stri
                 <Text style={[tw`text-lg font-bold`]}>{title}</Text>
             </View>
             <View style={[tw`flex-row items-center justify-end`, {gap: 5}]}>
-                <CountNumber bg_color={`#9C0A35`} color={`white`}/>
+                <CountNumber bg_color={`#9C0A35`} color={`white`} count={counts && counts}/>
                 <MaterialIcons name="navigate-next" size={36} color='gray'/>
             </View>
         </TouchableOpacity>

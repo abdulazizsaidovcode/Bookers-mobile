@@ -43,4 +43,6 @@ export const workday_get = `${base_url}workday/time/weekday`
 export const worktime_get = `${base_url}workday/time/time/`
 // clients url
 export const client_statistics = `${base_url}user/master/client-count-by-status`
+export const client_address_book = `${base_url}user/master/client-addressBooks`
+export const client_address_book_search = `${base_url}client/search/for/from/contact?name=`
 

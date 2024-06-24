@@ -10,13 +10,20 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
+import {useEffect} from "react";
+import {getClientStatistics} from "@/helpers/api-function/client/client";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
 
 const MainClient = () => {
-    const {isClientModal, setIsClientModal} = clientStore()
+    const {isClientModal, setIsClientModal, setStatusData, statusData} = clientStore()
     const toggleClientModal = () => setIsClientModal(!isClientModal);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+
+    useEffect(() => {
+        getClientStatistics(setStatusData)
+    }, []);
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -39,11 +46,13 @@ const MainClient = () => {
                                 title={`Все клиенты`}
                                 icon={<Ionicons name="person-circle-outline" size={36} color="#9C0A35"/>}
                                 clicks={() => console.log('')}
+                                counts={statusData ? +statusData.allClient : 0}
                             />
                             <ClientCountCard
                                 title={`Из адресной книги`}
                                 icon={<Ionicons name="person-circle-outline" size={36} color="#9C0A35"/>}
                                 clicks={() => navigation.navigate('(free)/(client)/address-book')}
+                                counts={statusData ? +statusData.fromTheAddressBook : 0}
                             />
 
                             <Text style={tw`text-white text-base mt-5`}>

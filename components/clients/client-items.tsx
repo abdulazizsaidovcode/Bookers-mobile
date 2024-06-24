@@ -1,9 +1,10 @@
 import React from "react";
-import {ClientData, ClientItemProps} from "@/type/client/client";
+import {ClientAddressBook, ClientData, ClientItemProps} from "@/type/client/client";
 import {Image, Text, TouchableOpacity, View} from "react-native";
 import tw from "tailwind-react-native-classnames";
 import {Ionicons} from "@expo/vector-icons";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import {getFile} from "@/helpers/api";
 
 // client check un
 export const ClientItem: React.FC<ClientItemProps> = ({client, isSelected, onSelect}) => {
@@ -41,7 +42,7 @@ export const ClientItem: React.FC<ClientItemProps> = ({client, isSelected, onSel
 }
 
 // client info un
-export const FromAddressBookList = ({client, clicks}: {client: ClientData, clicks?: () => void}) => {
+export const FromAddressBookList = ({client, clicks}: {client: ClientAddressBook, clicks?: () => void}) => {
     return (
         <TouchableOpacity
             onPress={clicks}
@@ -51,10 +52,13 @@ export const FromAddressBookList = ({client, clicks}: {client: ClientData, click
             ]}
             activeOpacity={.8}
         >
-            <Image source={{uri: client.image}} style={tw`w-10 h-10 rounded-full`}/>
+            <Image
+                source={client.attachmentId !== null ? {uri: `${getFile}${client.attachmentId}`} : require('../../assets/avatar.png')}
+                style={tw`w-11 h-11 rounded-full`}
+            />
             <View style={tw`ml-4`}>
-                <Text style={[tw`text-black text-lg font-bold`, {lineHeight: 20}]}>{client.name}</Text>
-                <Text style={[tw`text-gray-500 text-base`, {lineHeight: 20}]}>{client.phone}</Text>
+                <Text style={[tw`text-black text-lg font-bold`, {lineHeight: 20}]}>{client.firstName} {client.lastName}</Text>
+                <Text style={[tw`text-gray-500 text-base`, {lineHeight: 20}]}>{client.phoneNumber}</Text>
             </View>
         </TouchableOpacity>
     );
