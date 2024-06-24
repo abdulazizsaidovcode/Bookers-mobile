@@ -9,12 +9,15 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import LocationInput from "@/components/(location)/locationInput";
 import CalendarComponent from "@/components/calendar/calendar";
 import PhoneInput from "react-native-phone-number-input";
+import {MaterialIcons} from "@expo/vector-icons";
+import ProfileImgUpload from "@/components/profile-img-upload";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
 
 const CreatingClient = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [isRegex, setIsRegex] = useState<boolean>(false);
     const phoneInput = useRef<PhoneInput>(null);
 
     const handlePhoneNumberChange = (text: string) => setPhoneNumber(text)
@@ -28,12 +31,13 @@ const CreatingClient = () => {
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
+                        <ProfileImgUpload />
                         <LocationInput label={`Имя`}/>
                         <LocationInput label={`Фамилия`}/>
                         <LocationInput label={`Профессия`}/>
                         <LocationInput label={`Предпочтения клинета`}/>
                         <Text style={[tw`text-gray-500 mb-2 text-base`]}>День рождения</Text>
-                        <CalendarComponent />
+                        <CalendarComponent/>
                         <Text style={[tw`text-gray-500 mb-2 mt-3 text-base`]}>Номер телефона</Text>
                         <PhoneInput
                             ref={phoneInput}
@@ -48,8 +52,39 @@ const CreatingClient = () => {
                             codeTextStyle={styles.codeText}
                             flagButtonStyle={styles.flagButton}
                         />
+                        <View style={tw`mb-5 mt-7 flex-row justify-between items-center`}>
+                            <Text style={tw`text-base text-white font-bold`}>
+                                Дополнительная информаци о клиенте
+                            </Text>
+                            <MaterialIcons
+                                onPress={() => {
+                                }}
+                                name="navigate-next"
+                                size={30}
+                                color="white"
+                                style={{transform: 'rotate(90deg)'}}
+                            />
+                        </View>
+                        <View>
+                            <LocationInput
+                                label={`Пол`}
+                                placeholder={`Пол`}
+                            />
+                            <LocationInput
+                                label={`Возраст`}
+                                placeholder={`Возраст`}
+                            />
+                            <LocationInput
+                                label={`Регион`}
+                                placeholder={`Регион`}
+                            />
+                            <LocationInput
+                                label={`Город`}
+                                placeholder={`Город`}
+                            />
+                        </View>
                     </View>
-                    <View style={tw`pb-5`}>
+                    <View style={tw`py-5`}>
                         <Buttons
                             title={`Сохранить`}
                             onPress={() => {
