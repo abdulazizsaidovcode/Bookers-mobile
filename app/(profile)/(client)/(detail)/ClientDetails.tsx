@@ -2,12 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 const ClientDetails: React.FC<{ route: any }> = ({ route }) => {
-  const { type } = route.params;
+  const { clientId } = route.params;
+
+  // Assume you fetch client details using clientId
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Детали клиента</Text>
-      <Text style={styles.details}>Тип клиента: {type === 'all' ? 'Все клиенты' : 'Из адресной книги'}</Text>
+      <Text style={styles.details}>ID клиента: {clientId}</Text>
+      {/* Add other client details here */}
     </View>
   );
 };
