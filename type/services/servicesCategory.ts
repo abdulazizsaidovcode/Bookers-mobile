@@ -6,4 +6,5 @@ export interface ServicesProps {
     isRadioButton?: boolean;
     id?: string;
     label?: string
+    setId?: (val: string | undefined) => void
 }

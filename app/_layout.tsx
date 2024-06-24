@@ -53,6 +53,7 @@ import Location from "./(location)/Location";
 import LocationData from "./(location)/(location-data)/LocationData";
 import Welcome from "./(welcome)/Welcome";
 import ResponseLocation from "./(location)/(response-location)/ResponseLocation";
+import MyServicesScreen from "./(standart)/(services)/(myServicesScreen)/MyServicesScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -228,6 +229,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(standart)/(services)/serviceStyle/serviceStyle"
               component={ServiceStyle}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(myServicesScreen)/MyServicesScreen"
+              component={MyServicesScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
