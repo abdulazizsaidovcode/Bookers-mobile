@@ -27,7 +27,7 @@ const timeList = [
   '22:00', '22:30', '23:00', '23:30'
 ];
 
-const GraficWork: React.FC = () => {
+const TimeWork: React.FC = () => {
   const [selectedWeekDays, setSelectedWeekDays] = useState<number[]>([]);
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -147,7 +147,7 @@ const GraficWork: React.FC = () => {
   );
 };
 
-export default GraficWork;
+export default TimeWork;
 
 const styles = StyleSheet.create({
   container: {

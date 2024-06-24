@@ -33,8 +33,8 @@ const WorkMain = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={{ height: '80%', paddingHorizontal: 15, marginTop: 20 }}>
-                <WorkMainCard icon={<AntDesign name="calendar" size={24} color="#9C0A35" />} title='График работы' subTitle='Рабочие дни недели не настроены!' to='(free)/(work-grafic)/workDays'/>
-                <WorkMainCard icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />} title='Время работы' subTitle='Рабочее время не настроено!' to='/workMain'/>
+                <WorkMainCard icon={<AntDesign name="calendar" size={24} color="#9C0A35" />} title='График работы' subTitle='Рабочие дни недели не настроены!' to='(free)/(work-grafic)/workGraffic'/>
+                <WorkMainCard icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />} title='Время работы' subTitle='Рабочее время не настроено!' to='(free)/(work-grafic)/workTime'/>
             </View>
             <View style={{ paddingHorizontal: 15, marginVertical: 20, height: '20%', alignItems: 'center', justifyContent: 'center' }}>
                 <Buttons title='На главную' onPress={() => router.push('/workMain')} />
