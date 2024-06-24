@@ -12,7 +12,7 @@ const SwitchPage: React.FC = () => {
             </View>
             <Text style={styles.title}>Bookers Beauty</Text>
             <View style={styles.button}>
-                <Buttons title="Kirish" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/number-create')} />
+                <Buttons title="Kirish" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/offerScreen')} />
             </View>
         </SafeAreaView>
     );

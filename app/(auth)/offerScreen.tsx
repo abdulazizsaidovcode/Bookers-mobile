@@ -1,3 +1,5 @@
+import Buttons from '@/components/(buttons)/button';
+import { router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 
@@ -18,7 +20,7 @@ const OfferScreen = () => {
                 </View>
             </ScrollView>
             <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Я согласен</Text>
+                <Buttons title="Kirish" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/offerScreen')} />
             </TouchableOpacity>
         </SafeAreaView>
     );
@@ -33,6 +35,7 @@ const styles = StyleSheet.create({
     },
     header: {
         padding: 16,
+        marginTop: 20,
         alignItems: 'center',
         borderBottomWidth: 1,
         borderBottomColor: '#333',
@@ -65,7 +68,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     button: {
-        backgroundColor: '#E70062',
+        // backgroundColor: '#E70062',
         paddingVertical: 12,
         alignItems: 'center',
         justifyContent: 'center',
