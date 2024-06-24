@@ -53,6 +53,8 @@ import Location from "./(location)/Location";
 import LocationData from "./(location)/(location-data)/LocationData";
 import Welcome from "./(welcome)/Welcome";
 import ResponseLocation from "./(location)/(response-location)/ResponseLocation";
+import ClientPage from "./(profile)/(client)/ClientPage";
+import ClientDetails from "./(profile)/(client)/(detail)/ClientDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -294,6 +296,16 @@ function RootLayoutNav() {
               name="(location)/(response-location)/ResponseLocation"
               component={ResponseLocation}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(client)/ClientPage"
+              component={ClientPage}
+              options={{title: "salom", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(client)/(detail)/ClientDetails"
+              component={ClientDetails}
+              options={{title: "Client", headerShown: false }}
             />
           </Stack.Navigator>
         </MenuProvider>
