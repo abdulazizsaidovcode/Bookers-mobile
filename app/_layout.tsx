@@ -63,6 +63,7 @@ import SettingsPage from "./(profile)/(settings)/settings";
 import ApplicationSettings from "./(profile)/(settings)/(childSettings)/(Application Settings)";
 import LanguageSelection from "./(profile)/(settings)/(childSettings)/(Application Settings)/components/language";
 import SwitchPage from "./(auth)/switchPage";
+import OfferScreen from "./(auth)/offerScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -148,6 +149,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/switchPage"
               component={SwitchPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/offerScreen"
+              component={OfferScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
