@@ -31,12 +31,12 @@ import PastEntries from "./(profile)/(sessionhistory)/components/Pastentries/Pas
 import Canceledentries from "./(profile)/(sessionhistory)/components/Canceledentries/Canceledentries";
 import SettingsLocation from "./(settings)/(settings-location)/settings-locations";
 import SettingsLocationMain from "./(settings)/(settings-location)/settings-locations-main";
-import SettingsGalery from "./(settings)/(settings-galery)/settings-galery";
+import SettingsGallery from "./(settings)/(settings-gallery)/settings-gallery";
 import Settings from "./(profile)/(settings)";
 import { StompProvider } from "@/context/StompContext";
 import Expertise from "./(standart)/(services)/(expertise)/expertise";
 import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
-import SettingsGaleryMain from "./(settings)/(settings-galery)/settings-galery-main";
+import SettingsGalleryMain from "./(settings)/(settings-gallery)/settings-gallery-main";
 import PhoneNumberInput from "./(auth)/number-create";
 import MainClient from "@/app/(free)/(client)/main";
 import OtpInput from "./(auth)/otp_input";
@@ -181,13 +181,13 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(settings)/(settings-galery)/settings-galery-main"
-              component={SettingsGaleryMain}
+              name="(settings)/(settings-gallery)/settings-gallery-main"
+              component={SettingsGalleryMain}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(settings)/(settings-galery)/settings-galery"
-              component={SettingsGalery}
+              name="(settings)/(settings-gallery)/settings-gallery"
+              component={SettingsGallery}
               options={{ headerShown: false }}
             />
             <Stack.Screen
