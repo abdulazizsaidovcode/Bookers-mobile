@@ -9,11 +9,13 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { register_page } from '@/helpers/api';
+import registerStory from '@/helpers/state_managment/auth/register';
+import { registerFunction } from '@/helpers/api-function/register/registrFC';
 
 const PhoneNumberInput: React.FC = () => {
-    const [phoneNumber, setPhoneNumber] = useState<string>('');
-    const [isValid, setIsValid] = useState<boolean>(true);
+    const { phoneNumber, setPhoneNumber, setIsValid, isValid, setCode } = registerStory()
     const phoneInput = useRef<PhoneInput>(null);
+
 
 
     const handlePhoneNumberChange = (text: string) => {
@@ -24,20 +26,6 @@ const PhoneNumberInput: React.FC = () => {
 
 
     // API 
-    const registerFunction = () => {
-        const sentData = {
-            phoneNumber: phoneNumber
-        }
-        localStorage.setItem('phone', phoneNumber)
-        axios.post(`${register_page}sendCode?purpose=true`, sentData)
-            .then(res => {
-                console.log(res.data); // Javobni konsolga chiqarish
-                Alert.alert("Response", res.data.body);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-    }
 
     return (
         <View style={styles.container}>
@@ -92,7 +80,7 @@ const PhoneNumberInput: React.FC = () => {
                     title={t("login")}
                     onPress={() => {
                         router.push('(auth)/otp_input')
-                        registerFunction()
+                        registerFunction(phoneNumber, setCode)
                     }}
                     backgroundColor={'#9C0A35'}
                 />
