@@ -1,0 +1,9 @@
+{
+  "phone_number": "Your phone number.",
+  "sms_code": "We have sent you an SMS with a confirmation code.",
+  "phone_number_label": "Phone number.",
+  "invalid_phone_number": "Please enter a valid phone number.",
+  "login_google": "Login with Google.",
+  "login_facebook": "Login with Facebook.",
+  "login": "Login"
+}

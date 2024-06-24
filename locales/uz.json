@@ -1,0 +1,9 @@
+{
+  "phone_number": "Sizning telefon raqamingiz.",
+  "sms_code": "Biz sizga tasdiqlash kodi bilan SMS yubordik.",
+  "phone_number_label": "Telefon raqami.",
+  "invalid_phone_number": "Iltimos, to'g'ri telefon raqamini kiriting.",
+  "login_google": "Google orqali kirish.",
+  "login_facebook": "Facebook orqali kirish.",
+  "login": "Kirish"
+}

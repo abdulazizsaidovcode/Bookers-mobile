@@ -6,6 +6,7 @@ import Buttons from '@/components/(buttons)/button';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 const PhoneNumberInput: React.FC = () => {
     const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -16,7 +17,7 @@ const PhoneNumberInput: React.FC = () => {
         setPhoneNumber(text);
         setIsValid(phoneInput.current?.isValidNumber(text) ?? false);
     };
-
+    const { t } = useTranslation();
 
 
     return (
@@ -27,8 +28,8 @@ const PhoneNumberInput: React.FC = () => {
             </SafeAreaView>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center' }}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.title}>Ваш номер телефона</Text>
-                    <Text style={styles.subTitle}>Мы отправили вам SMS с кодом подтверждения.</Text>
+                    <Text style={styles.title}>{t("phone_number")}</Text>
+                    <Text style={styles.subTitle}>{t("sms_code")}</Text>
                 </View>
                 <StatusBar barStyle="dark-content" />
                 <View style={styles.phoneNumber}>
@@ -39,7 +40,7 @@ const PhoneNumberInput: React.FC = () => {
                             defaultCode="UZ"
                             layout="first"
                             onChangeFormattedText={handlePhoneNumberChange}
-                            placeholder="Номер телефона"
+                            placeholder={t("phone_number_label")}
                             containerStyle={styles.phoneInputContainer}
                             textContainerStyle={styles.phoneInputTextContainer}
                             textInputStyle={styles.phoneInputText}
@@ -53,23 +54,23 @@ const PhoneNumberInput: React.FC = () => {
                         />
                     </View>
                     {!isValid && (
-                        <Text style={styles.errorText}>Пожалуйста, введите корректный номер телефона</Text>
+                        <Text style={styles.errorText}>{t("invalid_phone_number")}</Text>
                     )}
                 </View>
                 <View style={{ marginVertical: 20, width: '100%' }}>
                     <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} onPress={() => console.log('Login with Google')}>
                         <Image source={require('../../assets/images/auth/google.png')} />
-                        <Text style={styles.socialButtonText}>Войти через Google</Text>
+                        <Text style={styles.socialButtonText}>{t('login_google')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} onPress={() => console.log('Login with Facebook')}>
                         <Image source={require('../../assets/images/auth/facebook.png')} />
-                        <Text style={styles.socialButtonText}>Войти через Facebook</Text>
+                        <Text style={styles.socialButtonText}>{t("login_facebook")}</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
             <View style={{ marginVertical: 20 }}>
                 <Buttons
-                    title="Войти"
+                    title={t("login")}
                     onPress={() => router.push('(auth)/otp_input')}
                     backgroundColor={'#9C0A35'}
                 />
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'white',
-        fontSize: 26,
+        fontSize: 18,
         letterSpacing: 1,
         marginBottom: 20,
         fontWeight: 'bold',
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     subTitle: {
         color: '#828282',
         textAlign: 'center',
-        fontSize: 16,
+        fontSize: 14,
         lineHeight: 18,
     },
     phoneNumber: {
