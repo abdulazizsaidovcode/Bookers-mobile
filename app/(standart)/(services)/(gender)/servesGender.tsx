@@ -21,21 +21,7 @@ const ServesGender = () => {
                     <View style={[tw`flex w-full`, { backgroundColor: '#21212E' }]}>
                         <ServicesCategory title="Мужское напрвление" id="male" />
                         <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
+                
                     </View>
                     <View style={[tw`grid content-end mb-5`, { backgroundColor: '#21212E' }]}>
                         <Buttons title="Сохранить" onPress={() => router.push('/category')} />
