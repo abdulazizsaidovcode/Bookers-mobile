@@ -1,4 +1,5 @@
 import Buttons from '@/components/(buttons)/button';
+import NavigationMenu from '@/components/navigation/navigation-menu';
 import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
@@ -7,6 +8,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'r
 const MasterorClient: React.FC = () => {
     return (
         <SafeAreaView style={styles.container} >
+            <NavigationMenu name="" deleteIcon={false} key={1} />
             <View style={styles.logo}>
                 <Image source={require('../../assets/images/auth/logo.png')} />
             </View>
