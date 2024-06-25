@@ -33,6 +33,7 @@ export const gallery_add = `${base_url}gallery`;
 // My services
 export const services_list = `${base_url}category`
 
+
 // Register page 
 export const register_page = `${base_url}auth/`
 

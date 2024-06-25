@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, TextInput, ScrollView, StatusBar, TouchableOpacity, Image } from 'react-native';
+import { Text, View, TextInput, ScrollView, StatusBar, TouchableOpacity, Image, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import * as ImagePicker from 'expo-image-picker';
@@ -8,18 +8,22 @@ import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/components/(location)/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import { AntDesign } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import servicesStore from '@/helpers/state_managment/services/servicesStore';
 
 const Process = () => {
+    const { selectedServices } = useLocalSearchParams();
     const [image, setImage] = useState<boolean | null>(null);
     const [service, setService] = useState('');
     const [price, setPrice] = useState('');
     const [time, setTime] = useState('');
-    const [description, setDescription] = useState('')
+    const [description, setDescription] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
     const [textAreaValue, setTextAreaValue] = useState<string>('');
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [validate, setValidate] = useState(false)
+    const [validate, setValidate] = useState(false);
+    const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData, childCategoryOneData, setChildCategoryOneData } = servicesStore();
+  
 
     const Gender = [
         {
@@ -50,13 +54,11 @@ const Process = () => {
 
     useEffect(() => {
         if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0) {
-            setValidate(false)
+            setValidate(false);
+        } else {
+            setValidate(true);
         }
-        else {
-            setValidate(true)
-        }
-    }, [service, price, time, description])
-
+    }, [service, price, time, description]);
 
     const checkFormValidity = () => {
         if (textAreaValue.trim() !== '') {
@@ -80,9 +82,10 @@ const Process = () => {
             quality: 1,
         });
 
-        if (!result.canceled) setImage(result.assets[0].uri)
-        setImage(true)
+        if (!result.canceled) setImage(result.assets[0].uri);
+        setImage(true);
     };
+
     const takePhoto = async () => {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
@@ -96,8 +99,12 @@ const Process = () => {
             quality: 1,
         });
 
-        if (!result.canceled) setImage(result.assets[0].uri)
+        if (!result.canceled) setImage(result.assets[0].uri);
     };
+
+    const nimadir = ({ item }: { item: setChildCategoryData}) => (
+        <Text style={tw`text-black font-bold text-lg`}>{item.title}</Text>
+    );
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -111,7 +118,11 @@ const Process = () => {
                     <View style={[tw``, { backgroundColor: '#21212E' }]}>
                         <View style={[tw`w-full p-4 rounded-3xl mb-4`, { backgroundColor: '#B9B9C9' }]}>
                             <Text style={tw`text-gray-600`}>Ваша специализация</Text>
-                            <Text style={tw`text-black font-bold text-lg`}>Парикмахер, Стилист, Специалист по причёскам</Text>
+                            <FlatList
+                                data={childCategoryData}
+                                renderItem={nimadir}
+                                keyExtractor={(item, index) => index.toString()}
+                            />
                         </View>
                         {Gender.map((gender, index) => (
                             <ServicesCategory
@@ -137,7 +148,7 @@ const Process = () => {
                                 numberOfLines={4}
                                 value={description}
                                 onChangeText={(text) => {
-                                    setDescription(text)
+                                    setDescription(text);
                                 }}
                                 scrollEnabled={true}
                             />
@@ -150,7 +161,6 @@ const Process = () => {
                                         <AntDesign name="pluscircleo" size={22} color="gray" />
                                         <Text style={tw`text-gray-600`}>Добавить фото</Text>
                                     </View>
-
                                 ) : (
                                     <Image source={{ uri: image }} style={[tw`w-full min-h-screen  rounded-xl`]} />
                                 )}

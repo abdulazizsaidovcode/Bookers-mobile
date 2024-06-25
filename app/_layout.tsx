@@ -66,6 +66,11 @@ import SwitchPage from "./(auth)/switchPage";
 import OfferScreen from "./(auth)/offerScreen";
 import EditProfile from "./(profile)/(settings)/(childSettings)/Personal data/PersonalData";
 import WebPage from "./(profile)/(WebPage)/WebPage";
+import Help from "./(standart)/(help)/help";
+import AboutUs from "./(standart)/(help)/(aboutUs)/aboutUs";
+import Offer from "./(standart)/(help)/(offer)/offer";
+import Security from "./(standart)/(help)/(security)/security";
+import Certificate from "./(standart)/(help)/(certificate)/certificate";
 
 const Stack = createNativeStackNavigator();
 
@@ -113,6 +118,7 @@ function RootLayoutNav() {
               component={Index}
               options={{ headerShown: false }}
             />
+            
             <Stack.Screen
               name="(auth)/auth"
               component={Auth}
@@ -323,6 +329,33 @@ function RootLayoutNav() {
               component={ResponseLocation}
               options={{ headerShown: false }}
             />
+            {/*Help start */}
+            <Stack.Screen
+              name="(standart)/(help)/help"
+              component={Help}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(help)/(certificate)/certificate"
+              component={Certificate}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(help)/(aboutUs)/aboutUs"
+              component={AboutUs}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(help)/(offer)/offer"
+              component={Offer}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(help)/(security)/security"
+              component={Security}
+              options={{ headerShown: false }}
+            />
+            {/*Help end */}
             {/*  profile client start */}
             <Stack.Screen
               name="(profile)/(client)/ClientPage"
