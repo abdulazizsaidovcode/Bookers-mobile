@@ -67,6 +67,9 @@ import SwitchPage from "./(auth)/switchPage";
 import OfferScreen from "./(auth)/offerScreen";
 import EditProfile from "./(profile)/(settings)/(childSettings)/Personal data/PersonalData";
 import WebPage from "./(profile)/(WebPage)/WebPage";
+import GrafficWorkEdit from "./(free)/(work-grafic-edit)/workGraffic";
+import TimeWorkEdit from "./(free)/(work-grafic-edit)/workTime";
+import WorkMainEdit from "./(free)/(work-grafic-edit)/workMain";
 
 const Stack = createNativeStackNavigator();
 
@@ -187,6 +190,21 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(free)/(work-grafic)/workGraffic"
               component={GrafficWork}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(work-grafic-edit)/workTime"
+              component={TimeWorkEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(work-grafic-edit)/workMain"
+              component={WorkMainEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(work-grafic-edit)/workGraffic"
+              component={GrafficWorkEdit}
               options={{ headerShown: false }}
             />
             <Stack.Screen

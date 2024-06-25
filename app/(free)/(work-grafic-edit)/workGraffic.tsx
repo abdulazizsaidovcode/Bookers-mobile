@@ -5,12 +5,12 @@ import ServicesCategory from "@/components/services/servicesCatgegory";
 import Buttons from "@/components/(buttons)/button";
 import { useRouter } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import CalendarGraffic from "./calendar";
 import { Item } from "@/type/graficWork/graficWork";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import { postWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import { putWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import CalendarGrafficEdit from "./calendar";
 
-const GrafficWork: React.FC = () => {
+const GrafficWorkEdit: React.FC = () => {
   const { calendarDate, setWeek, week } = graficWorkStore();
 
   const [items, setItems] = useState<Item[]>([
@@ -44,7 +44,7 @@ const GrafficWork: React.FC = () => {
       <ScrollView>
         <View style={styles.section}>
           <Text style={styles.title}>График работы с</Text>
-          <CalendarGraffic />
+          <CalendarGrafficEdit />
         </View>
         <View style={styles.fullHeightSection}>
           <Text style={styles.title}>Выберите рабочие дни в неделю</Text>
@@ -61,7 +61,7 @@ const GrafficWork: React.FC = () => {
           <View style={{ padding: 10 }}>
             <Buttons
               title="Продолжить"
-              onPress={() => postWorkDay(week, calendarDate)}
+              onPress={() => putWorkDay(week, calendarDate)}
             />
           </View>
         </View>
@@ -70,7 +70,7 @@ const GrafficWork: React.FC = () => {
   );
 };
 
-export default GrafficWork;
+export default GrafficWorkEdit;
 
 const styles = StyleSheet.create({
   container: {

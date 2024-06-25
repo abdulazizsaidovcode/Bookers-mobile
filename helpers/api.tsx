@@ -35,6 +35,8 @@ export const services_list = `${base_url}category`
 export const register_page = `${base_url}auth/`
 
 // Grafic Work page
+export const workday_put = `${base_url}workday/time/edit/graphic`
+export const worktime_put = `${base_url}workday/time/edit/time`
 export const workday_save = `${base_url}workday/time/save/graphic`
 export const worktime_save = `${base_url}workday/time/save/time`
 export const workday_get = `${base_url}workday/time/weekday`
