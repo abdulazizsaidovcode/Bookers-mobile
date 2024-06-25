@@ -23,10 +23,7 @@ const AddressBook = () => {
         getClientAddressBook(setAddressBookData)
     }, []);
 
-    // user/master/client-addressBooks => get books ✔
-    // user/master/client-count-by-status => count chiqarish un ✔
     // user/add-client-from-address-book => teldan olingan malumotlarni list qilib qushish un
-    // client/{clientId} => book dagi client info edit qilish
     // user/create-client-by-master => create qilish client ni
     // user/master/client-not-visit => tashrif buyurmagan client chiqadi get
     // user/master/client-stoppedVisiting
@@ -44,7 +41,7 @@ const AddressBook = () => {
                         <View>
                             <View style={tw`mb-5`}>
                                 <LocationInput
-                                    onChangeText={() => getClientAddressBookSearch(setAddressBookData, '')}
+                                    onChangeText={(e) => getClientAddressBookSearch(setAddressBookData, e)}
                                     placeholder={`🔍 Поиск клиента по имени`}
                                 />
                             </View>
