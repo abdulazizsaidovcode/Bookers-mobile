@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -27,23 +27,33 @@ const SettingsGalleryMain = () => {
                     <NavigationMenu name='Моя галерея' />
                 </View>
                 <View style={styles.content}>
-                    <View style={{ height: '83%' }}>
+                    <View style={{ height: '83%', justifyContent: 'flex-start' }}>
                         <Text style={styles.title}>Фото галерея</Text>
                         {data.length === 0 ?
                             <Text style={styles.description}>Ваша галерея пустая, добавьте фотографии из проводника Вашего телефона</Text>
                             :
                             <View style={styles.imageGrid}>
                                 {data.map((item, index) => (
-                                    <View>
+                                    <View key={index} style={styles.albumContainer}>
                                         <View style={{ flexDirection: 'row', width: 170, flexWrap: 'wrap' }}>
-                                            {item.resGalleryAttachments.map((attachment, attIndex) => (
-                                                <View key={attIndex} style={styles.imageContainer}>
+                                            {item.resGalleryAttachments.slice(0, 4).map((attachment, attIndex) => (
+                                                <Pressable onPress={() => navigation.navigate('(auth)/auth')} key={attIndex} style={styles.imageContainer}>
                                                     <Image
                                                         source={{ uri: getFile + attachment.attachmentId }}
                                                         style={styles.image}
                                                     />
-                                                </View>
+                                                </Pressable>
                                             ))}
+                                            {item.resGalleryAttachments.length < 4 &&
+                                                Array.from({ length: 4 - item.resGalleryAttachments.length }).map((_, placeholderIndex) => (
+                                                    <Pressable key={placeholderIndex} style={styles.imageContainer}>
+                                                        <Image
+                                                            source={require('@/assets/images/defaultImg.jpeg')}
+                                                            style={styles.image}
+                                                        />
+                                                    </Pressable>
+                                                ))
+                                            }
                                         </View>
                                         <View>
                                             <Text style={{ color: 'white', margin: 5 }}>{item.albumName}</Text>
@@ -61,7 +71,7 @@ const SettingsGalleryMain = () => {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView >
+        </SafeAreaView>
     )
 }
 
@@ -98,6 +108,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
+    },
+    albumContainer: {
+        marginBottom: 10,
     },
     imageContainer: {
         margin: 5,

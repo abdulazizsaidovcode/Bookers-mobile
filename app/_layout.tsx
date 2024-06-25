@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 import { useColorScheme } from "@/components/useColorScheme";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
+import React from "react";
 import Index from "./index";
 import Auth from "./(auth)/auth";
 import TabLayout from "./(tabs)/_layout";
@@ -62,6 +62,7 @@ import AddressBookClients from "./(profile)/(client)/components/AddressBookClien
 import SettingsPage from "./(profile)/(settings)/settings";
 import ApplicationSettings from "./(profile)/(settings)/(childSettings)/(Application Settings)";
 import LanguageSelection from "./(profile)/(settings)/(childSettings)/(Application Settings)/components/language";
+import GalleryDetails from "./(settings)/(settings-gallery)/gallery-details";
 
 const Stack = createNativeStackNavigator();
 
@@ -182,6 +183,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(settings)/(settings-location)/settings-locations-main"
               component={SettingsLocationMain}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(settings)/(settings-location)/gallery-details"
+              component={GalleryDetails}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -313,22 +319,22 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(client)/ClientPage"
               component={ClientPage}
-              options={{title: "salom", headerShown: false }}
+              options={{ title: "salom", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(client)/components/AllClients"
               component={AllClients}
-              options={{title: "salom", headerShown: false }}
+              options={{ title: "salom", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(client)/components/AddressBookClients"
               component={AddressBookClients}
-              options={{title: "salom", headerShown: false }}
+              options={{ title: "salom", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(client)/(detail)/ClientDetails"
               component={ClientDetails}
-              options={{title: "Client", headerShown: false }}
+              options={{ title: "Client", headerShown: false }}
             />
             {/* profile client end */}
 
@@ -336,17 +342,17 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(settings)/settings"
               component={SettingsPage}
-              options={{title: "Настройки ", headerShown: false }}
+              options={{ title: "Настройки ", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(settings)/(childSettings)/(Application Settings)/index"
               component={ApplicationSettings}
-              options={{title: "Настройки ", headerShown: false }}
+              options={{ title: "Настройки ", headerShown: false }}
             />
             <Stack.Screen
               name="(profile)/(settings)/(childSettings)/(Application Settings)/components/language"
               component={LanguageSelection}
-              options={{title: "Настройки ", headerShown: false }}
+              options={{ title: "Настройки ", headerShown: false }}
             />
             {/* profile settings end */}
 
