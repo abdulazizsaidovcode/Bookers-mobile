@@ -2,7 +2,31 @@ export interface Client {
     isClientModal: boolean;
     setIsClientModal: (val: boolean) => void;
     selectedClientList: number[];
-    setSelectedClientList: (val: any) => void
+    setSelectedClientList: (val: any) => void;
+    statusData: ClientStatus | null
+    setStatusData: (val: ClientStatus | null) => void;
+    addressBookData: null | ClientAddressBook[]
+    setAddressBookData: (val: ClientAddressBook[] | null) => void;
+}
+
+export interface ClientStatus {
+    fromTheAddressBook: number
+    allClient: number
+    stoppedVisiting: number
+    didNotVisit: number
+    newClient: number
+    permanent: number
+}
+
+export interface ClientAddressBook {
+    id: string
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    attachmentId: null | string
+    orderDate: null | string
+    orderTime: null | string
+    clientBirthday: null | string
 }
 
 export interface ClientData {

@@ -36,7 +36,7 @@ const AddressBookClients: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1f1f1f',
+        backgroundColor: '#21212E',
         padding: 16,
     },
 });

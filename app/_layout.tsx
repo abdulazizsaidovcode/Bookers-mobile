@@ -63,6 +63,10 @@ import SettingsPage from "./(profile)/(settings)/settings";
 import ApplicationSettings from "./(profile)/(settings)/(childSettings)/(Application Settings)";
 import LanguageSelection from "./(profile)/(settings)/(childSettings)/(Application Settings)/components/language";
 import GalleryDetails from "./(settings)/(settings-gallery)/gallery-details";
+import SwitchPage from "./(auth)/switchPage";
+import OfferScreen from "./(auth)/offerScreen";
+import EditProfile from "./(profile)/(settings)/(childSettings)/Personal data/PersonalData";
+import WebPage from "./(profile)/(WebPage)/WebPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -143,6 +147,16 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/masterORclient"
               component={MasterorClient}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/switchPage"
+              component={SwitchPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/offerScreen"
+              component={OfferScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -338,6 +352,17 @@ function RootLayoutNav() {
             />
             {/* profile client end */}
 
+
+            {/* Web page tariff start */}
+            <Stack.Screen
+              name="(profile)/(WebPage)/WebPage"
+              component={WebPage}
+              options={{ title: "CreatingClient", headerShown: false }}
+            />
+            {/* Web page tariff end */}
+
+
+
             {/* profile settings start */}
             <Stack.Screen
               name="(profile)/(settings)/settings"
@@ -353,6 +378,11 @@ function RootLayoutNav() {
               name="(profile)/(settings)/(childSettings)/(Application Settings)/components/language"
               component={LanguageSelection}
               options={{ title: "Настройки ", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(settings)/(childSettings)/Personal data/PersonalData"
+              component={EditProfile}
+              options={{title: "Настройки ", headerShown: false }}
             />
             {/* profile settings end */}
 

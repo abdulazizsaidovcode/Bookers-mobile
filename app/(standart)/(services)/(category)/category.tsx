@@ -10,11 +10,11 @@ import { router } from 'expo-router';
 import axios from 'axios';
 import { base_url } from '@/helpers/api';
 import { config } from '@/helpers/token';
+import servicesStore from '@/helpers/state_managment/services/servicesStore';
 
 const Category = () => {
-    const [data, setData] = useState([]);
+    const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
-    const [childCategories, setChildCategories] = useState([]);
     const [fatherId, setFatherId] = useState('');
 
     const getCategory = async () => {
@@ -22,7 +22,7 @@ const Category = () => {
             const response = await axios.get(`${base_url}category`, config);
             const listData =
                 response.data.body &&
-                response.data.body.map((item) => ({
+                response.data.body.map((item: any) => ({
                     key: item.id,
                     value: item.name,
                 }));
@@ -32,20 +32,16 @@ const Category = () => {
         }
     };
 
-    const getChildCategory = async (id) => {
+    const getChildCategory = async (id: string) => {
         try {
             const response = await axios.get(`${base_url}category/byCategory/${id}`, config);
-            const childData =
-                response.data.body &&
-                response.data.body.map((item) => ({
-                    key: item.id,
-                    value: item.name,
-                }));
-            setChildCategories(childData);
+            if (response.data.success) setChildCategoryData(response.data.body)
+            else setChildCategoryData([])
         } catch (error) {
             console.error("Error fetching child categories:", error);
         }
     };
+
 
     useEffect(() => {
         getCategory();
@@ -53,15 +49,17 @@ const Category = () => {
 
     const openModal = () => {
         setModalVisible(true);
-        if (fatherId) {
-            getChildCategory(fatherId);
+        if (categoryFatherId && categoryFatherId.key) {
+            getChildCategory(categoryFatherId.key);
         }
     };
 
     const closeModal = () => {
         setModalVisible(false);
-        setChildCategories([]);
+        setChildCategoryData([]);
     };
+
+
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -76,16 +74,15 @@ const Category = () => {
                         <FlatList
                             data={data}
                             renderItem={({ item }) => (
-                                <ServicesCategory title={item.value} id={item.key} setId={setFatherId} />
+                                <ServicesCategory onPress={() => openModal()} title={item.value} items={item} />
                             )}
-                            keyExtractor={(item) => item.key.toString()}
                         />
                     </View>
                     <View style={tw`content-end mb-5`}>
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
                                 title="Сохранить"
-                                onPress={openModal}
+                                onPress={() => {}}
                             />
                         </View>
                         <CenteredModal
@@ -94,14 +91,14 @@ const Category = () => {
                             btnRedText='Закрыть'
                             isFullBtn={true}
                             toggleModal={closeModal}
-                            onConfirm={() => router.push('/expertise')}
+                            onConfirm={() => closeModal()}
                         >
                             <View style={tw`p-4 text-center`}>
                                 <Text style={tw`text-white text-xl w-full text-2xl`}>Здоровье и красота волос</Text>
                                 <Text style={tw`text-center text-white text-xl`}>В эту категорию входят услуги таких специализаций как:</Text>
-                                {childCategories.map((service, index) => (
-                                    <Text key={service.key} style={{ color: 'white', fontSize: 20 }}>
-                                        {index + 1}. {service.value}
+                                {childCategoryData && childCategoryData.map((item: any, idx: number) => (
+                                    <Text key={item.id} style={{ color: 'white', fontSize: 20 }}>
+                                        {idx + 1}. {item.name}
                                     </Text>
                                 ))}
                             </View>

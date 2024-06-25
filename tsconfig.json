@@ -9,7 +9,6 @@
     },
     "target": "esnext",
     "module": "commonjs",
-    "jsx": "react",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true

@@ -2,6 +2,7 @@ export const getFileId = "salom"
 
 // swagger url
 export const base_url: string = 'http://45.67.35.86:8080/';
+export const getMe = `${base_url}user/me`
 
 // get file
 export const getFile: string = `${base_url}attachment/getFile/`
@@ -34,4 +35,14 @@ export const services_list = `${base_url}category`
 
 // Register page 
 export const register_page = `${base_url}auth/`
+
+// Grafic Work page
+export const workday_save = `${base_url}workday/time/save/graphic`
+export const worktime_save = `${base_url}workday/time/save/time`
+export const workday_get = `${base_url}workday/time/weekday`
+export const worktime_get = `${base_url}workday/time/time/`
+// clients url
+export const client_statistics = `${base_url}user/master/client-count-by-status`
+export const client_address_book = `${base_url}user/master/client-addressBooks`
+export const client_address_book_search = `${base_url}client/search/for/from/contact?name=`
 
