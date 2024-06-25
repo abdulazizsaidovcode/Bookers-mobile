@@ -13,7 +13,7 @@ import {RootStackParamList} from "@/type/root";
 import {useEffect} from "react";
 import {getClientStatistics} from "@/helpers/api-function/client/client";
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/main'>;
 
 const MainClient = () => {
     const {isClientModal, setIsClientModal, setStatusData, statusData} = clientStore()

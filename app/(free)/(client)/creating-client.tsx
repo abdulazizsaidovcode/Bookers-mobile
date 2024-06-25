@@ -16,11 +16,15 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import {Picker} from "@react-native-picker/picker";
 import Select from "@/components/select/select";
 import {getAgeList, getDistrictList, getRegionList, updateClientData} from "@/helpers/api-function/client/client";
+import {RouteProp, useRoute} from '@react-navigation/native';
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
+type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/creating-client'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/creating-client'>;
 
 const CreatingClient = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+    const route = useRoute<CreatingClientScreenRouteProp>();
+    const {client} = route.params;
     const {date} = financeStore()
     const {
         updateClientDef,
@@ -35,12 +39,30 @@ const CreatingClient = () => {
         attachmentID
     } = clientStore()
     const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [regex, setRegex] = useState<boolean>(false);
     const phoneInput = useRef<PhoneInput>(null);
 
     useEffect(() => {
         getAgeList(setAgeData)
         getRegionList(setRegionData)
+        if (client) {
+            updateClient.phoneNumber = client.phoneNumber
+            updateClient.firstName = client.firstName
+            updateClient.lastName = client.lastName
+        }
     }, []);
+
+    useEffect(() => {
+        if (client) {
+            updateClient.phoneNumber = client.phoneNumber
+            updateClient.firstName = client.firstName
+            updateClient.lastName = client.lastName
+        }
+    }, [client]);
+
+    useEffect(() => {
+        setRegex(validateObject(updateClient))
+    }, [updateClient]);
 
     const handlePhoneNumberChange = (text: string) => {
         if (text.length <= 13) {
@@ -49,7 +71,7 @@ const CreatingClient = () => {
     };
 
     const handleInputChange = (name: string, value: any) => {
-        updateClient.attachmentId = '78cd54ba-2efa-4c9e-b7e7-991a1b7445d8'
+        attachmentID ? updateClient.attachmentId = attachmentID : updateClient.attachmentId = null;
         updateClient.birthDate = date
         updateClient.phoneNumber = phoneNumber
         setUpdateClient({
@@ -62,6 +84,23 @@ const CreatingClient = () => {
         {label: "Male", value: "true"},
         {label: "Female", value: "false"},
     ]
+
+    const sliceText = (text: string) => {
+        if (text) {
+            if (text.startsWith('+998')) return text.slice(4, 13)
+            else return text;
+        }
+    }
+
+    function validateObject(obj: any) {
+        for (let key in obj) {
+            if (key !== 'attachmentId' && !obj[key]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     console.log(updateClient)
 
     return (
@@ -74,19 +113,31 @@ const CreatingClient = () => {
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
-                        <ProfileImgUpload/>
-                        <LocationInput label={`Имя`} onChangeText={e => handleInputChange('firstName', e)}/>
-                        <LocationInput label={`Фамилия`} onChangeText={e => handleInputChange('lastName', e)}/>
-                        <LocationInput label={`Профессия`} onChangeText={e => handleInputChange('job', e)}/>
-                        <LocationInput label={`Предпочтения клинета`}/>
+                        <ProfileImgUpload attachmentID={client ? client.attachmentId : ''}/>
+                        <LocationInput
+                            value={updateClient.firstName}
+                            label={`Имя`}
+                            onChangeText={e => handleInputChange('firstName', e)}
+                        />
+                        <LocationInput
+                            value={updateClient.lastName}
+                            label={`Фамилия`}
+                            onChangeText={e => handleInputChange('lastName', e)}
+                        />
+                        <LocationInput
+                            value={updateClient.job}
+                            label={`Профессия`}
+                            onChangeText={e => handleInputChange('job', e)}
+                        />
+                        {/*<LocationInput label={`Предпочтения клинета`}/>*/}
                         <Text style={[tw`text-gray-500 mb-2 text-base`]}>День рождения</Text>
                         <CalendarComponent/>
                         <Text style={[tw`text-gray-500 mb-2 mt-3 text-base`]}>Номер телефона</Text>
                         <PhoneInput
                             ref={phoneInput}
-                            defaultValue={phoneNumber}
+                            defaultValue={sliceText(updateClient.phoneNumber)}
                             defaultCode="UZ"
-                            layout="second"
+                            layout="first"
                             onChangeFormattedText={handlePhoneNumberChange}
                             placeholder=" "
                             containerStyle={styles.phoneInputContainer}
@@ -142,9 +193,9 @@ const CreatingClient = () => {
                         <Buttons
                             title={`Сохранить`}
                             onPress={() => {
-                                // if (clientID) updateClientData(updateClient, clientID, navigation)
+                                if (client) updateClientData(updateClient, client.id, navigation)
                             }}
-                            // isDisebled={false}
+                            isDisebled={regex}
                         />
                     </View>
                 </ScrollView>

@@ -12,7 +12,7 @@ import {RootStackParamList} from "@/type/root";
 import {getClientAddressBook, getClientAddressBookSearch} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/address-book'>;
 
 const AddressBook = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
@@ -45,7 +45,7 @@ const AddressBook = () => {
                                     <FromAddressBookList
                                         key={item.id}
                                         client={item}
-                                        clicks={() => navigation.navigate('(free)/(client)/creating-client')}
+                                        clicks={() => navigation.navigate('(free)/(client)/creating-client', { client: item })}
                                     />
                                 )}
                             />

@@ -6,16 +6,21 @@ import tw from "tailwind-react-native-classnames";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import {MaterialIcons} from '@expo/vector-icons';
 import axios from "axios";
-import {postFileId} from "@/helpers/api";
+import {getFile, postFileId} from "@/helpers/api";
 import {config} from "@/helpers/token";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 
-const ProfileImgUpload = () => {
+const ProfileImgUpload = ({attachmentID}: {attachmentID?: string | null}) => {
     const {setAttachmentID} = clientStore();
     const [image, setImage] = useState<string | null>(null);
     const [imageApi, setImageApi] = useState<any>(null);
     const [isModal, setIsModal] = useState<boolean>(false);
     const [isDeleteImgModal, setIsDeleteImgModal] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (attachmentID) setImage(`${getFile}${attachmentID}`)
+        else setImage(null)
+    }, []);
 
     useEffect(() => {
         if (image) {

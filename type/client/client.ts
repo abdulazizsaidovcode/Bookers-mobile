@@ -50,7 +50,7 @@ export interface UpdateClient {
     birthDate: string | null
     districtId: number | string
     regionId: number | string
-    attachmentId: string
+    attachmentId: string | null
 }
 
 export interface AgeData {

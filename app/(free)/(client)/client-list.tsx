@@ -11,7 +11,7 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/client-list'>;
 
 const MainClientList: React.FC = () => {
     const {setSelectedClientList} = clientStore()
