@@ -15,20 +15,31 @@ import financeStore from "@/helpers/state_managment/finance/financeStore";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {Picker} from "@react-native-picker/picker";
 import Select from "@/components/select/select";
-import {getAgeList} from "@/helpers/api-function/client/client";
+import {getAgeList, getDistrictList, getRegionList, updateClientData} from "@/helpers/api-function/client/client";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
 
 const CreatingClient = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const {date} = financeStore()
-    const {updateClient, setUpdateClient, ageData, setAgeData} = clientStore()
+    const {
+        updateClientDef,
+        updateClient,
+        setUpdateClient,
+        ageData,
+        setAgeData,
+        regionData,
+        setRegionData,
+        districtData,
+        setDistrictData,
+        attachmentID
+    } = clientStore()
     const [phoneNumber, setPhoneNumber] = useState<string>('');
-    const [val, setVal] = useState('');
     const phoneInput = useRef<PhoneInput>(null);
 
     useEffect(() => {
         getAgeList(setAgeData)
+        getRegionList(setRegionData)
     }, []);
 
     const handlePhoneNumberChange = (text: string) => {
@@ -38,6 +49,7 @@ const CreatingClient = () => {
     };
 
     const handleInputChange = (name: string, value: any) => {
+        updateClient.attachmentId = '78cd54ba-2efa-4c9e-b7e7-991a1b7445d8'
         updateClient.birthDate = date
         updateClient.phoneNumber = phoneNumber
         setUpdateClient({
@@ -50,8 +62,7 @@ const CreatingClient = () => {
         {label: "Male", value: "true"},
         {label: "Female", value: "false"},
     ]
-
-    console.log('update data: ', updateClient)
+    console.log(updateClient)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -110,13 +121,20 @@ const CreatingClient = () => {
                                 onValueChange={(e) => handleInputChange('ageId', e)}
                                 child={ageData && ageData.map(item => <Picker.Item label={item.ageRange} value={item.id}/>)}
                             />
-                            <LocationInput
+                            <Select
                                 label={`Регион`}
-                                placeholder={`Регион`}
+                                value={updateClient.regionId}
+                                onValueChange={(e) => {
+                                    handleInputChange('regionId', e)
+                                    getDistrictList(setDistrictData, e)
+                                }}
+                                child={regionData && regionData.map(item => <Picker.Item label={item.name} value={item.id}/>)}
                             />
-                            <LocationInput
+                            <Select
                                 label={`Город`}
-                                placeholder={`Город`}
+                                value={updateClient.districtId}
+                                onValueChange={(e) => handleInputChange('districtId', e)}
+                                child={districtData && districtData.map(item => <Picker.Item label={item.name} value={item.id}/>)}
                             />
                         </View>
                     </View>
@@ -124,8 +142,9 @@ const CreatingClient = () => {
                         <Buttons
                             title={`Сохранить`}
                             onPress={() => {
+                                // if (clientID) updateClientData(updateClient, clientID, navigation)
                             }}
-                            isDisebled={false}
+                            // isDisebled={false}
                         />
                     </View>
                 </ScrollView>

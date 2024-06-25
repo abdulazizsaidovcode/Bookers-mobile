@@ -77,6 +77,8 @@ import Security from "./(standart)/(help)/(security)/security";
 import Certificate from "./(standart)/(help)/(certificate)/certificate";
 import UserInfo from "./(auth)/userInfo";
 import UserInfo2 from "./(auth)/userInfo2";
+import InstallPin from "./(auth)/installPin";
+import CheckPin from "./(auth)/checkPin";
 
 const Stack = createNativeStackNavigator();
 
@@ -124,7 +126,7 @@ function RootLayoutNav() {
               component={Index}
               options={{ headerShown: false }}
             />
-            
+
             <Stack.Screen
               name="(auth)/auth"
               component={Auth}
@@ -178,6 +180,16 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/userInfo2"
               component={UserInfo2}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/installPin"
+              component={InstallPin}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/checkPin"
+              component={CheckPin}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -236,7 +248,7 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(settings)/(settings-location)/gallery-details"
+              name="(settings)/(settings-gallery)/gallery-details"
               component={GalleryDetails}
               options={{ headerShown: false }}
             />
