@@ -8,34 +8,34 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import CalendarGraffic from "./calendar";
 import { Item } from "@/type/graficWork/graficWork";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
+import { postWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 
 const GrafficWork: React.FC = () => {
   const { calendarDate, setWeek, week } = graficWorkStore();
 
   const [items, setItems] = useState<Item[]>([
-    { id: 1, dayName: "Понедельник", active: false },
-    { id: 2, dayName: "Вторник", active: false },
-    { id: 3, dayName: "Среда", active: false },
-    { id: 4, dayName: "Четверг", active: false },
-    { id: 5, dayName: "Пятница", active: false },
-    { id: 6, dayName: "Суббота", active: false },
-    { id: 7, dayName: "Воскресенье", active: false },
+    { id: 1, dayValue: "monday", dayName: "Понедельник", active: false },
+    { id: 2, dayValue: "tuesday", dayName: "Вторник", active: false },
+    { id: 3, dayValue: "wednesday", dayName: "Среда", active: false },
+    { id: 4, dayValue: "thursday", dayName: "Четверг", active: false },
+    { id: 5, dayValue: "friday", dayName: "Пятница", active: false },
+    { id: 6, dayValue: "saturday", dayName: "Суббота", active: false },
+    { id: 7, dayValue: "sunday", dayName: "Воскресенье", active: false },
   ]);
 
   const router = useRouter();
+
+  
 
   const handleCategoryPress = (id: number) => {
     const updatedItems = items.map((item) =>
       item.id === id ? { ...item, active: !item.active } : item
     );
     setItems(updatedItems);
-    setWeek(updatedItems.map((item) => ({ dayName: item.dayName, active: item.active })));
-    console.log(week); // Log the updated items to console
+    setWeek(updatedItems.map((item) => ({ dayName: item.dayValue, active: item.active })));
   };
 
-  useEffect(() => {
-    console.log('Week state:', week); // Log the week state whenever it changes
-  }, [week]);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,9 +60,8 @@ const GrafficWork: React.FC = () => {
           </View>
           <View style={{ padding: 10 }}>
             <Buttons
-            
               title="Продолжить"
-              onPress={() => router.push("/workMain")}
+              onPress={() => postWorkDay(week, calendarDate)}
             />
           </View>
         </View>

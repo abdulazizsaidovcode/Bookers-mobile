@@ -3,9 +3,15 @@ export interface weekList {
     active: boolean
 }
 
+export interface saveweekList {
+    workDayWeeks: [],
+    date: string
+}
+
 export interface Item {
     id: number;
     dayName: string;
+    dayValue: string;
     active: boolean;
   }
   
@@ -25,4 +31,3 @@ export interface MarkedDates {
     year: number;
     timestamp: number;
   }
-  

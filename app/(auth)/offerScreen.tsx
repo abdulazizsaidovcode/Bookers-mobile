@@ -20,7 +20,7 @@ const OfferScreen = () => {
                 </View>
             </ScrollView>
             <TouchableOpacity style={styles.button}>
-                <Buttons title="Kirish" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/offerScreen')} />
+                <Buttons title="Kirish" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/userInfo')} />
             </TouchableOpacity>
         </SafeAreaView>
     );

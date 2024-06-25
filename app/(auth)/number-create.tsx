@@ -65,11 +65,11 @@ const PhoneNumberInput: React.FC = () => {
                     )}
                 </View>
                 <View style={{ marginVertical: 20, width: '100%' }}>
-                    <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} onPress={() => console.log('Login with Google')}>
+                    <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} >
                         <Image source={require('../../assets/images/auth/google.png')} />
                         <Text style={styles.socialButtonText}>{t('login_google')}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} onPress={() => console.log('Login with Facebook')}>
+                    <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} >
                         <Image source={require('../../assets/images/auth/facebook.png')} />
                         <Text style={styles.socialButtonText}>{t("login_facebook")}</Text>
                     </TouchableOpacity>

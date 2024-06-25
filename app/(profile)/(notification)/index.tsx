@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -14,23 +15,53 @@ import axios from "axios";
 import { config } from "@/helpers/token";
 import { base_url } from "@/helpers/api";
 import tw from "tailwind-react-native-classnames";
+import BottomModal from "@/components/(modals)/modal-bottom";
+import NotificationSelect from "@/helpers/state_managment/notification";
+import Buttons from "@/components/(buttons)/button";
+import CenteredModal from "@/components/(modals)/modal-centered";
 
 const Notification: React.FC = () => {
   const navigation = useNavigation();
   const [notifications, setNotifications] = useState([]);
+  const [isLoading, setisLoading] = useState(false);
+  const [toggle, setToggle] = useState(false);
+  const [deleteNot, setDeleteNot] = useState([]);
+  const { onClose, notification, isModal } = NotificationSelect();
 
   const getNotification = async () => {
+    setisLoading(true);
     try {
       const { data } = await axios.get(`${base_url}notification`, config);
-      if (data.succsess === true) setNotifications(data.body);
+      setNotifications(data.body);
     } catch (error) {
       console.log(error);
+    } finally {
+      setisLoading(false);
     }
+  };
+
+  const deleteNotification = async () => {
+    notifications.map((item) => setDeleteNot((state) => [...state, item.id]));
+    console.log(deleteNot);
+    try {
+    const { data } = await axios.delete(
+      `${base_url}notification`,
+      { notificationIds: deleteNot },
+      config
+    );
+    console.log(data);
+
+    setToggle(false);
+    } catch (error) {
+      console.log(error);
+
+    }
+    setDeleteNot([]);
   };
 
   useEffect(() => {
     getNotification();
-  }, []);
+  }, [deleteNot]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -40,21 +71,52 @@ const Notification: React.FC = () => {
             <FontAwesome name="arrow-left" size={24} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.headerText}>Уведомления</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setToggle(!toggle)}>
             <FontAwesome name="trash" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
-        {notifications.length === 0 && (
+        {isLoading && <ActivityIndicator size="large" color={"#888"} />}
+        {!isLoading && notifications.length === 0 && (
           <Text style={tw`text-2xl text-center text-white mt-10`}>
             Данные недоступны :(
           </Text>
         )}
         <FlatList
           data={notifications}
-          renderItem={({ item }) => <NotificationCard item={item} />}
+          renderItem={({ item }) => (
+            <NotificationCard item={item} isLoading={isLoading} />
+          )}
           keyExtractor={(item) => item.id}
         />
       </View>
+      <BottomModal isBottomModal={isModal} toggleBottomModal={onClose}>
+        <View style={tw`w-full`}>
+          <View>
+            <Text style={tw`text-white text-2xl`}>
+              {notification.title === null ? "Untitled" : notification.title}
+            </Text>
+            <Text style={tw`text-white text-lg mt-5`}>
+              {notification.content}
+            </Text>
+          </View>
+          <View style={tw`mt-5`}>
+            <Buttons title="Попробовать" onPress={onClose} />
+          </View>
+        </View>
+      </BottomModal>
+      <CenteredModal
+        isModal={toggle}
+        onConfirm={deleteNotification}
+        toggleModal={() => setToggle(!toggle)}
+        btnWhiteText="Отмена"
+        btnRedText="Да"
+        isFullBtn={true}
+      >
+        <FontAwesome name="trash" size={80} color="#9c0935" />
+        <Text style={tw`text-white my-5`}>
+          Вы хотите очистить все уведомлении?
+        </Text>
+      </CenteredModal>
     </SafeAreaView>
   );
 };

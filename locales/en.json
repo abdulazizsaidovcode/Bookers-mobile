@@ -5,5 +5,11 @@
   "invalid_phone_number": "Please enter a valid phone number.",
   "login_google": "Login with Google.",
   "login_facebook": "Login with Facebook.",
-  "login": "Login"
+  "login": "Login",
+  "Confirmation_Number": "Confirmation Number",
+  "Confirm": "Confirm",
+  "Book_beauty_and_health_services": "Book beauty and health services",
+  "in_your_favorite_beauty_salon": "in your favorite beauty salon",
+  "Hassle_free_date_booking_with_hair": "Hassle-free date booking with hair. Bookers allows you to select the day, time, and stylist, provides price and terms for all services in an easy-to-use menu.",
+  "Continue": "Continue"
 }

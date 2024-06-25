@@ -4,6 +4,7 @@ import { useNavigation } from "expo-router";
 import { INavigationProps } from "@/type/navigation/navigation";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
+import tw from "tailwind-react-native-classnames";
 
 const NavigationMenu = ({ toggleModal, name, deleteIcon, all = false, delOnPress, editOnPress, addOnPress }: INavigationProps) => {
     const navigation = useNavigation();
@@ -13,14 +14,14 @@ const NavigationMenu = ({ toggleModal, name, deleteIcon, all = false, delOnPress
             <Text style={styles.title}>{name}</Text>
             {deleteIcon
                 ? <MaterialIcons name="delete" size={25} color="white" onPress={toggleModal} />
-                : <Text></Text>
+                : <Text style={tw`mr-4`}></Text>
             }
             {all ?
                 <View style={{ gap: 10, flexDirection: 'row', alignItems: 'center' }}>
                     <Ionicons name="add-circle-outline" size={25} color="white" onPress={delOnPress} />
                     <AntDesign name="edit" size={25} color="white" onPress={editOnPress} />
                     <MaterialIcons name="delete" size={25} color="white" onPress={delOnPress} />
-                </View> : <Text></Text>}
+                </View> : ''}
         </View>
     );
 };
