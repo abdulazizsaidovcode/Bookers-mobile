@@ -16,9 +16,7 @@ export const setConfig = (): string | null =>
 export const getMee = ( setData: (val: any) => void ) => {
   axios.get(getMe, config)
   .then((res) => {
-    console.log(res.data);
-    
-    // setData(res.data)
+    setData(res.data.body);
   })
   .catch()
 

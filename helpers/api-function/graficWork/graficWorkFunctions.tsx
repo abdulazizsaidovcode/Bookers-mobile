@@ -7,8 +7,9 @@ import {
   worktime_save,
 } from "@/helpers/api";
 import { config } from "@/helpers/token";
-import { saveweekList, weekList } from "@/type/graficWork/graficWork";
+import { TimeList, saveweekList, weekList } from "@/type/graficWork/graficWork";
 import axios from "axios";
+import { router } from "expo-router";
 import { Alert } from "react-native";
 
 // Get api
@@ -17,26 +18,32 @@ export const getWorkDay = (setData: (val: weekList[]) => void) => {
   axios
     .get(`${workday_get}`, config)
     .then((res) => {
-      if (res.data.succsess) {
+      if (res.data.success) {
         setData(res.data.body);
       }
+      else {
+        setData([])
+      }
     })
-    .catch();
+    .catch(() => setData([]))
 };
 
 export const getWorkTime = (
-  setData: (val: weekList[]) => void,
+  setData: (val: any) => void,
   masterID: string
 ) => {
   if (masterID) {
     axios
       .get(`${worktime_get}${masterID}`, config)
       .then((res) => {
-        if (res.data.succsess) {
+        if (res.data.success) {
           setData(res.data.body);
         }
+        else {
+            setData([])
+        }
       })
-      .catch();
+      .catch(() => setData([]));
   } else {
   }
 };
@@ -48,8 +55,7 @@ export const postWorkDay = (workDayWeeks: any, date: string) => {
     workDayWeeks: workDayWeeks,
     date: date,
   };
-  console.log(workDayWeeks);
-  console.log(date);
+
 
   if (workDayWeeks && date) {
     axios
@@ -57,7 +63,6 @@ export const postWorkDay = (workDayWeeks: any, date: string) => {
       .then((res) => {
         if (res.data.success) {
           Alert.alert("succsess");
-          console.log(res.data);
         }
         else {
           Alert.alert(res.data.message);
@@ -65,7 +70,6 @@ export const postWorkDay = (workDayWeeks: any, date: string) => {
       })
       .catch((err) => {
         Alert.alert("errr");
-        console.log(err);
       });
   } else {
   }
@@ -87,7 +91,7 @@ export const postWorkTime = (
     axios
       .post(`${worktime_save}`, data, config)
       .then(() => {
-        Alert.alert("succsess");
+        Alert.alert("success");
       })
       .catch();
   } else {
@@ -107,8 +111,7 @@ export const putWorkDay = (workDayWeeks: any, date: string) => {
         .put(`${workday_put}`, data, config)
         .then((res) => {
           if (res.data.success) {
-            Alert.alert("succsess");
-            console.log(res.data);
+            router.push("(free)/(work-grafic-edit)/workMain");
           }
           else {
             Alert.alert(res.data.message);
@@ -116,7 +119,6 @@ export const putWorkDay = (workDayWeeks: any, date: string) => {
         })
         .catch((err) => {
           Alert.alert(err.config.data);
-          console.log(err.config.data);
         });
     } else {
     }
@@ -135,13 +137,16 @@ export const putWorkDay = (workDayWeeks: any, date: string) => {
       endTimeHour: endTimeHour,
       endTimeMin: endTimeMin,
     };
-    if (fromTimeHour && fromTimeMin && endTimeHour && endTimeMin) {
+    
+    
+    if (data) {
       axios
         .put(`${worktime_put}`, data, config)
         .then(() => {
-          Alert.alert("succsess");
+          router.push("(free)/(work-grafic-edit)/workMain")
         })
-        .catch();
+        .catch((err) =>  {}
+        );
     } else {
     }
   };
