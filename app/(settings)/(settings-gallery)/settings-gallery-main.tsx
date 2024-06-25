@@ -20,6 +20,10 @@ const SettingsGalleryMain = () => {
         fetchData(setData);
     }, []);
 
+    const handlePress = (id: number) => {
+        navigation.navigate('(settings)/(settings-gallery)/gallery-details', { id })
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -34,15 +38,15 @@ const SettingsGalleryMain = () => {
                             :
                             <View style={styles.imageGrid}>
                                 {data.map((item, index) => (
-                                    <View key={index} style={styles.albumContainer}>
+                                    <Pressable onPress={() => handlePress(item.id)} key={index} style={styles.albumContainer}>
                                         <View style={{ flexDirection: 'row', width: 170, flexWrap: 'wrap' }}>
                                             {item.resGalleryAttachments.slice(0, 4).map((attachment, attIndex) => (
-                                                <Pressable onPress={() => navigation.navigate('(auth)/auth')} key={attIndex} style={styles.imageContainer}>
+                                                <View key={attIndex} style={styles.imageContainer}>
                                                     <Image
                                                         source={{ uri: getFile + attachment.attachmentId }}
                                                         style={styles.image}
                                                     />
-                                                </Pressable>
+                                                </View>
                                             ))}
                                             {item.resGalleryAttachments.length < 4 &&
                                                 Array.from({ length: 4 - item.resGalleryAttachments.length }).map((_, placeholderIndex) => (
@@ -58,7 +62,7 @@ const SettingsGalleryMain = () => {
                                         <View>
                                             <Text style={{ color: 'white', margin: 5 }}>{item.albumName}</Text>
                                         </View>
-                                    </View>
+                                    </Pressable>
                                 ))}
                             </View>
                         }

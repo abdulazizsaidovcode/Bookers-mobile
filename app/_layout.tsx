@@ -200,7 +200,7 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(settings)/(settings-location)/gallery-details"
+              name="(settings)/(settings-gallery)/gallery-details"
               component={GalleryDetails}
               options={{ headerShown: false }}
             />
