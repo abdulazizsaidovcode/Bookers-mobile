@@ -68,6 +68,7 @@ import OfferScreen from "./(auth)/offerScreen";
 import EditProfile from "./(profile)/(settings)/(childSettings)/Personal data/PersonalData";
 import WebPage from "./(profile)/(WebPage)/WebPage";
 import UserInfo from "./(auth)/userInfo";
+import UserInfo2 from "./(auth)/userInfo2";
 
 const Stack = createNativeStackNavigator();
 
@@ -163,6 +164,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/userInfo"
               component={UserInfo}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/userInfo2"
+              component={UserInfo2}
               options={{ headerShown: false }}
             />
             <Stack.Screen
