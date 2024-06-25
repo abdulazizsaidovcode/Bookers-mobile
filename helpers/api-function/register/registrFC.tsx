@@ -9,7 +9,6 @@ export const registerFunction = (phoneNumber: string, setCode: (value: any) => v
     }
     axios.post(`${register_page}sendCode?purpose=true`, sentData)
         .then(res => {
-            console.log(res.data.body); // Javobni konsolga chiqarish
             setCode(res.data.body);
         })
         .catch(err => {

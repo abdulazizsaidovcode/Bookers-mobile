@@ -5,9 +5,11 @@ import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import registerStory from '@/helpers/state_managment/auth/register';
 import { checkCode } from '@/helpers/api-function/register/registrFC';
+import { useTranslation } from 'react-i18next';
 
 const OtpInputExample = () => {
     const { phoneNumber, code, otp, setOtp, otpErr, setOtpErr } = registerStory()
+    const { t } = useTranslation()
 
     return (
         <SafeAreaView style={styles.container}>
@@ -16,21 +18,21 @@ const OtpInputExample = () => {
                 <NavigationMenu name="" deleteIcon={false} key={1} />
             </SafeAreaView>
             <View style={styles.content}>
-                <Text style={styles.title}>Подтверждение номера</Text>
+                <Text style={styles.title}>{t("Confirmation_Number")}</Text>
                 <Text style={styles.phoneNumber}>{phoneNumber}</Text>
-                <Text style={styles.subTitle}>Мы отправили вам SMS с кодом подтверждения.</Text>
+                <Text style={styles.subTitle}>{t("sms_code")}</Text>
                 <OTPTextInput
                     inputCount={4}
                     handleTextChange={(text) => setOtp(text)}
                     containerStyle={styles.otpContainer}
                     textInputStyle={styles.otpInput}
-                    tintColor='#FF0078'
+                    tintColor='green'
                 />
                 <Text style={styles.code}>{code}</Text>
             </View>
 
             <View style={styles.buttonWrapper}>
-                <Buttons title='Подтвердить' onPress={() => {
+                <Buttons title={t("Confirm")} onPress={() => {
                     checkCode(phoneNumber, otp, setOtpErr)
                 }} />
             </View>
