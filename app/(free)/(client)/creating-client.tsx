@@ -2,7 +2,7 @@ import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import tw from "tailwind-react-native-classnames";
 import {ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -11,16 +11,48 @@ import CalendarComponent from "@/components/calendar/calendar";
 import PhoneInput from "react-native-phone-number-input";
 import {MaterialIcons} from "@expo/vector-icons";
 import ProfileImgUpload from "@/components/profile-img-upload";
+import financeStore from "@/helpers/state_managment/finance/financeStore";
+import clientStore from "@/helpers/state_managment/client/clientStore";
+import {Picker} from "@react-native-picker/picker";
+import Select from "@/components/select/select";
+import {getAgeList} from "@/helpers/api-function/client/client";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
 
 const CreatingClient = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+    const {date} = financeStore()
+    const {updateClient, setUpdateClient, ageData, setAgeData} = clientStore()
     const [phoneNumber, setPhoneNumber] = useState<string>('');
-    const [isRegex, setIsRegex] = useState<boolean>(false);
+    const [val, setVal] = useState('');
     const phoneInput = useRef<PhoneInput>(null);
 
-    const handlePhoneNumberChange = (text: string) => setPhoneNumber(text)
+    useEffect(() => {
+        getAgeList(setAgeData)
+    }, []);
+
+    const handlePhoneNumberChange = (text: string) => {
+        if (text.length <= 13) {
+            setPhoneNumber(text);
+        }
+    };
+
+    const handleInputChange = (name: string, value: any) => {
+        updateClient.birthDate = date
+        updateClient.phoneNumber = phoneNumber
+        setUpdateClient({
+            ...updateClient,
+            [name]: value
+        });
+    };
+
+    const genderData = [
+        {label: "Male", value: "true"},
+        {label: "Female", value: "false"},
+    ]
+
+    console.log('update data: ', updateClient)
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -31,10 +63,10 @@ const CreatingClient = () => {
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
-                        <ProfileImgUpload />
-                        <LocationInput label={`Имя`}/>
-                        <LocationInput label={`Фамилия`}/>
-                        <LocationInput label={`Профессия`}/>
+                        <ProfileImgUpload/>
+                        <LocationInput label={`Имя`} onChangeText={e => handleInputChange('firstName', e)}/>
+                        <LocationInput label={`Фамилия`} onChangeText={e => handleInputChange('lastName', e)}/>
+                        <LocationInput label={`Профессия`} onChangeText={e => handleInputChange('job', e)}/>
                         <LocationInput label={`Предпочтения клинета`}/>
                         <Text style={[tw`text-gray-500 mb-2 text-base`]}>День рождения</Text>
                         <CalendarComponent/>
@@ -66,13 +98,17 @@ const CreatingClient = () => {
                             />
                         </View>
                         <View>
-                            <LocationInput
+                            <Select
                                 label={`Пол`}
-                                placeholder={`Пол`}
+                                value={updateClient.gender}
+                                onValueChange={(e) => handleInputChange('gender', e)}
+                                child={genderData.map(item => <Picker.Item label={item.label} value={item.value}/>)}
                             />
-                            <LocationInput
+                            <Select
                                 label={`Возраст`}
-                                placeholder={`Возраст`}
+                                value={updateClient.ageId}
+                                onValueChange={(e) => handleInputChange('ageId', e)}
+                                child={ageData && ageData.map(item => <Picker.Item label={item.ageRange} value={item.id}/>)}
                             />
                             <LocationInput
                                 label={`Регион`}

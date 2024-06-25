@@ -1,6 +1,6 @@
 import axios from "axios";
 import {config} from "@/helpers/token";
-import {client_address_book, client_address_book_search, client_statistics} from "@/helpers/api";
+import {age_list, client_address_book, client_address_book_search, client_statistics} from "@/helpers/api";
 import {ClientAddressBook, ClientStatus} from "@/type/client/client";
 
 export const getClientStatistics = async (setData: (val: ClientStatus | null) => void) => {
@@ -34,5 +34,16 @@ export const getClientAddressBookSearch = async (setData: (val: ClientAddressBoo
     } catch (err) {
         console.error(err)
         getClientAddressBook(setData)
+    }
+}
+
+export const getAgeList = async (setData: (val: any | null) => void) => {
+    try {
+        const {data} = await axios.get(age_list, config);
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.error(err)
+        setData(null)
     }
 }
