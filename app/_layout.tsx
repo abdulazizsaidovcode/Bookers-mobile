@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 import { useColorScheme } from "@/components/useColorScheme";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
+import React from "react";
 import Index from "./index";
 import Auth from "./(auth)/auth";
 import TabLayout from "./(tabs)/_layout";
@@ -62,6 +62,7 @@ import AddressBookClients from "./(profile)/(client)/components/AddressBookClien
 import SettingsPage from "./(profile)/(settings)/settings";
 import ApplicationSettings from "./(profile)/(settings)/(childSettings)/(Application Settings)";
 import LanguageSelection from "./(profile)/(settings)/(childSettings)/(Application Settings)/components/language";
+import GalleryDetails from "./(settings)/(settings-gallery)/gallery-details";
 import SwitchPage from "./(auth)/switchPage";
 import OfferScreen from "./(auth)/offerScreen";
 import EditProfile from "./(profile)/(settings)/(childSettings)/Personal data/PersonalData";
@@ -196,6 +197,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(settings)/(settings-location)/settings-locations-main"
               component={SettingsLocationMain}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(settings)/(settings-location)/gallery-details"
+              component={GalleryDetails}
               options={{ headerShown: false }}
             />
             <Stack.Screen

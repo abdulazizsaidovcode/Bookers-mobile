@@ -11,7 +11,7 @@ export const ClientItem: React.FC<ClientItemProps> = ({client, isSelected, onSel
     const {selectedClientList} = clientStore()
     return (
         <TouchableOpacity
-            onPress={() => onSelect(client.id)}
+            onLongPress={() => onSelect(client.id)}
             style={[
                 tw`flex-row items-center p-4 mb-2 rounded-2xl`,
                 {backgroundColor: isSelected ? 'rgba(216,216,216,0.83)' : '#B9B9C9'},

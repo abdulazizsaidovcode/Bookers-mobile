@@ -1,18 +1,26 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { Feather, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from "expo-router";
 import { INavigationProps } from "@/type/navigation/navigation";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import React from 'react';
 
-const NavigationMenu = ({ toggleModal, name, deleteIcon }: INavigationProps) => {
+const NavigationMenu = ({ toggleModal, name, deleteIcon, all = false, delOnPress, editOnPress, addOnPress }: INavigationProps) => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <Feather name="chevron-left" size={30} color="white" onPress={() => navigation.goBack()} />
             <Text style={styles.title}>{name}</Text>
             {deleteIcon
-                ? <MaterialIcons name="delete" size={30} color="white" onPress={toggleModal} />
+                ? <MaterialIcons name="delete" size={25} color="white" onPress={toggleModal} />
                 : <Text></Text>
             }
+            {all ?
+                <View style={{ gap: 10, flexDirection: 'row', alignItems: 'center' }}>
+                    <Ionicons name="add-circle-outline" size={25} color="white" onPress={delOnPress} />
+                    <AntDesign name="edit" size={25} color="white" onPress={editOnPress} />
+                    <MaterialIcons name="delete" size={25} color="white" onPress={delOnPress} />
+                </View> : <Text></Text>}
         </View>
     );
 };
