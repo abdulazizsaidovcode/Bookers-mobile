@@ -3,7 +3,6 @@ import {FlatList, ScrollView, StatusBar, Text, View} from "react-native";
 import React, {useEffect} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import {clientsData} from "@/type/client/client";
 import {FromAddressBookList} from "@/components/clients/client-items";
 import IconsButtons from "@/components/(buttons)/icon-btn";
 import {Ionicons} from "@expo/vector-icons";
@@ -22,11 +21,6 @@ const AddressBook = () => {
     useEffect(() => {
         getClientAddressBook(setAddressBookData)
     }, []);
-
-    // user/add-client-from-address-book => teldan olingan malumotlarni list qilib qushish un
-    // user/create-client-by-master => create qilish client ni
-    // user/master/client-not-visit => tashrif buyurmagan client chiqadi get
-    // user/master/client-stoppedVisiting
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>

@@ -46,3 +46,7 @@ export const client_address_book: string = `${base_url}user/master/client-addres
 export const client_address_book_search: string = `${base_url}client/search/for/from/contact?name=`
 export const client_address_book_update: string = `${base_url}client/`
 export const client_address_book_create: string = `${base_url}user/add-client-from-address-book`
+// menga kk tegilmasin!!!!!
+// user/create-client-by-master => create qilish client ni
+// user/master/client-not-visit => tashrif buyurmagan client chiqadi get
+// user/master/client-stoppedVisiting
