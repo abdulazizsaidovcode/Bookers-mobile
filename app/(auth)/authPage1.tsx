@@ -3,20 +3,22 @@ import React from 'react';
 import Buttons from '@/components/(buttons)/button';
 import { router } from 'expo-router';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { useTranslation } from 'react-i18next';
 
 const AuthPage1: React.FC = () => {
+    const { t } = useTranslation()
     return (
         <SafeAreaView style={styles.container}>
             <NavigationMenu name="" deleteIcon={false} key={1} />
             <View style={styles.content}>
-                <Text style={styles.title}>Бронируйте услуги в области красоты и здоровья</Text>
+                <Text style={styles.title}>{t("Book_beauty_and_health_services")}</Text>
                 <Image source={require('../../assets/images/auth/Frame.png')} style={styles.image} />
-                <Text style={styles.subtitle}>в любимом салоне красоты</Text>
+                <Text style={styles.subtitle}>{t("in_your_favorite_beauty_salon")}</Text>
                 <Text style={styles.description}>
-                    Бронирование свиданий без хлопот с волосами. Bookers позволяет выбрать день, время и стилиста, дает цену и сроки на все услуги в простом в использовании меню.
+                    {t("Hassle_free_date_booking_with_hair")}
                 </Text>
             </View>
-            <Buttons title='Продолжить' onPress={() => router.push('(auth)/authPage2')} />
+            <Buttons title={t("Continue")} onPress={() => router.push('(auth)/authPage2')} />
         </SafeAreaView>
     );
 }

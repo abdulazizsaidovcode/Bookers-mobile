@@ -1,6 +1,6 @@
 export interface MyServicesProps {
     title: string;
-    subTitle: string;
+    subTitle?: string;
     onPress?: () => void;
 }
 
@@ -10,8 +10,10 @@ export interface Services {
     setData: (val: Data[] | null) => void
     isModal: boolean
     setIsModal: (val: boolean) => void
-    childCategoryData: ChildCategory[] | null
-    setChildCategoryData: (val: ChildCategory[]) => void
+    childCategoryData: any | null
+    setChildCategoryData: (val: any) => void
+    childCategoryOneData: any | null
+    setChildCategoryOneData: (val: any) => void
     categoryFatherId: Data | null | any
     setCategoryFatherId: (val: Data) => void
     checkedIs: boolean;

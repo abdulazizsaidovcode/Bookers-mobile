@@ -13,7 +13,7 @@ import { config } from '@/helpers/token';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 
 const Category = () => {
-    const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData } = servicesStore();
+    const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData, childCategoryOneData, setChildCategoryOneData } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
     const [fatherId, setFatherId] = useState('');
 
@@ -35,7 +35,9 @@ const Category = () => {
     const getChildCategory = async (id: string) => {
         try {
             const response = await axios.get(`${base_url}category/byCategory/${id}`, config);
-            if (response.data.success) setChildCategoryData(response.data.body)
+            if (response.data.success) {
+                setChildCategoryData(response.data.body)
+            }
             else setChildCategoryData([])
         } catch (error) {
             console.error("Error fetching child categories:", error);
@@ -74,7 +76,7 @@ const Category = () => {
                         <FlatList
                             data={data}
                             renderItem={({ item }) => (
-                                <ServicesCategory onPress={() => openModal()} title={item.value} items={item} />
+                                <ServicesCategory title={item.value} items={item} />
                             )}
                         />
                     </View>
@@ -82,7 +84,10 @@ const Category = () => {
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
                                 title="Сохранить"
-                                onPress={() => {}}
+                                onPress={() => {
+                                    openModal()
+                                }} 
+                               
                             />
                         </View>
                         <CenteredModal
@@ -91,7 +96,10 @@ const Category = () => {
                             btnRedText='Закрыть'
                             isFullBtn={true}
                             toggleModal={closeModal}
-                            onConfirm={() => closeModal()}
+                            onConfirm={() => {
+                                router.push('/expertise')
+                                closeModal()
+                            }}
                         >
                             <View style={tw`p-4 text-center`}>
                                 <Text style={tw`text-white text-xl w-full text-2xl`}>Здоровье и красота волос</Text>

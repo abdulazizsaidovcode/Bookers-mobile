@@ -1,136 +1,104 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 const UserInfo = () => {
-    const [inputs, setInputs] = useState([{ id: 1, value: '' }]);
-    const [activeStep, setActiveStep] = useState(1);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
 
-    const handleInputChange = (id, text) => {
-        const newInputs = inputs.map(input => {
-            if (input.id === id) {
-                return { ...input, value: text };
-            }
-            return input;
-        });
-
-        if (text !== '' && id === activeStep) {
-            setInputs([...newInputs, { id: inputs.length + 1, value: '' }]);
-            setActiveStep(activeStep + 1);
-        } else {
-            setInputs(newInputs);
-        }
-    };
-
-    const handleStepPress = (step) => {
-        setActiveStep(step);
-    };
+    const isButtonEnabled = firstName.length > 0 && lastName.length > 0;
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.progressContainer}>
-                {[1, 2, 3, 4].map((step) => (
-                    <View
-                        key={step}
-                        style={[
-                            styles.progressStep,
-                            step <= activeStep ? styles.activeStep : null,
-                        ]}
-                    />
-                ))}
+        <View style={styles.container}>
+            <View style={styles.topSection}>
+                <View style={styles.progressBar}>
+                    <View style={styles.progressIndicator} />
+                    <View style={styles.progressSegment} />
+                    <View style={styles.progressSegment} />
+                    <View style={styles.progressSegment} />
+                </View>
+                <Text style={styles.label}>Ваше имя и фамилия</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Имя"
+                    placeholderTextColor="#8A8A8A"
+                    value={firstName}
+                    onChangeText={setFirstName}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Фамилия"
+                    placeholderTextColor="#8A8A8A"
+                    value={lastName}
+                    onChangeText={setLastName}
+                />
             </View>
-            <ScrollView contentContainerStyle={styles.contentContainer}>
-                <Text style={styles.title}>Ваше имя и фамилия</Text>
-                {inputs.map((input, index) => (
-                    <TextInput
-                        key={input.id}
-                        style={styles.input}
-                        placeholder={index === 0 ? 'Имя' : 'Фамилия'}
-                        placeholderTextColor="#666"
-                        onChangeText={text => handleInputChange(input.id, text)}
-                        value={input.value}
-                    />
-                ))}
-            </ScrollView>
-            <View style={styles.buttonContainer}>
-                {[1, 2, 3, 4].map((step) => (
-                    <TouchableOpacity
-                        key={step}
-                        style={[
-                            styles.button,
-                            step === activeStep ? styles.activeButton : null,
-                        ]}
-                        onPress={() => handleStepPress(step)}
-                    >
-                        <Text style={styles.buttonText}>Step {step}</Text>
-                    </TouchableOpacity>
-                ))}
+            <View style={styles.bottomSection}>
+                <TouchableOpacity
+                    style={[
+                        styles.button,
+                        { backgroundColor: isButtonEnabled ? '#9C0A35' : '#8A8A8A' },
+                    ]}
+                    disabled={!isButtonEnabled}
+                >
+                    <Text style={styles.buttonText}>Продолжить</Text>
+                </TouchableOpacity>
             </View>
-        </SafeAreaView>
+        </View>
     );
 };
-
-export default UserInfo;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1C1B2E',
+        backgroundColor: '#21212E',
+        padding: 20,
+        justifyContent: 'space-between',
     },
-    progressContainer: {
-        flexDirection: 'row',
-        height: 4,
-        marginVertical: 16,
-        marginHorizontal: 16,
-    },
-    progressStep: {
+    topSection: {
         flex: 1,
-        height: 4,
-        backgroundColor: '#444',
-        marginHorizontal: 2,
     },
-    activeStep: {
-        backgroundColor: '#E70062',
+    progressBar: {
+        flexDirection: 'row',
+        height: 5,
+        marginTop: 40,
     },
-    contentContainer: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        padding: 16,
+    progressIndicator: {
+        flex: 1,
+        backgroundColor: '#9C0A35',
     },
-    title: {
-        fontSize: 20,
+    progressSegment: {
+        flex: 1,
+        backgroundColor: '#8A8A8A',
+        marginLeft: 5,
+    },
+    label: {
         color: '#FFFFFF',
+        fontSize: 18,
+        marginTop: 20,
         textAlign: 'center',
-        marginBottom: 16,
     },
     input: {
         height: 50,
-        borderColor: '#333',
+        borderColor: '#4B4B64',
+        backgroundColor: '#4B4B64',
         borderWidth: 1,
         borderRadius: 10,
-        backgroundColor: '#2A2A3D',
-        color: '#FFF',
-        paddingHorizontal: 16,
-        marginBottom: 16,
+        marginTop: 20,
+        paddingHorizontal: 10,
+        color: '#FFFFFF',
     },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginVertical: 16,
+    bottomSection: {
+        justifyContent: 'flex-end',
     },
     button: {
-        backgroundColor: '#444',
-        paddingVertical: 12,
-        paddingHorizontal: 24,
-        alignItems: 'center',
-        justifyContent: 'center',
         borderRadius: 10,
-    },
-    activeButton: {
-        backgroundColor: '#E70062',
+        paddingVertical: 15,
+        alignItems: 'center',
     },
     buttonText: {
-        fontSize: 16,
         color: '#FFFFFF',
-        fontWeight: 'bold',
+        fontSize: 16,
     },
 });
+
+export default UserInfo;

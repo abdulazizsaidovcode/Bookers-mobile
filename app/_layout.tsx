@@ -70,6 +70,13 @@ import WebPage from "./(profile)/(WebPage)/WebPage";
 import GrafficWorkEdit from "./(free)/(work-grafic-edit)/workGraffic";
 import TimeWorkEdit from "./(free)/(work-grafic-edit)/workTime";
 import WorkMainEdit from "./(free)/(work-grafic-edit)/workMain";
+import Help from "./(standart)/(help)/help";
+import AboutUs from "./(standart)/(help)/(aboutUs)/aboutUs";
+import Offer from "./(standart)/(help)/(offer)/offer";
+import Security from "./(standart)/(help)/(security)/security";
+import Certificate from "./(standart)/(help)/(certificate)/certificate";
+import UserInfo from "./(auth)/userInfo";
+import UserInfo2 from "./(auth)/userInfo2";
 
 const Stack = createNativeStackNavigator();
 
@@ -117,6 +124,7 @@ function RootLayoutNav() {
               component={Index}
               options={{ headerShown: false }}
             />
+            
             <Stack.Screen
               name="(auth)/auth"
               component={Auth}
@@ -160,6 +168,16 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/offerScreen"
               component={OfferScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/userInfo"
+              component={UserInfo}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/userInfo2"
+              component={UserInfo2}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -347,6 +365,33 @@ function RootLayoutNav() {
               component={ResponseLocation}
               options={{ headerShown: false }}
             />
+            {/*Help start */}
+            <Stack.Screen
+              name="(standart)/(help)/help"
+              component={Help}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(help)/(certificate)/certificate"
+              component={Certificate}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(help)/(aboutUs)/aboutUs"
+              component={AboutUs}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(help)/(offer)/offer"
+              component={Offer}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(help)/(security)/security"
+              component={Security}
+              options={{ headerShown: false }}
+            />
+            {/*Help end */}
             {/*  profile client start */}
             <Stack.Screen
               name="(profile)/(client)/ClientPage"
@@ -400,7 +445,7 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(settings)/(childSettings)/Personal data/PersonalData"
               component={EditProfile}
-              options={{title: "Настройки ", headerShown: false }}
+              options={{ title: "Настройки ", headerShown: false }}
             />
             {/* profile settings end */}
 
