@@ -101,8 +101,6 @@ export const putWorkDay = (workDayWeeks: any, date: string) => {
       workDayWeeks: workDayWeeks,
       date: date,
     };
-    console.log(workDayWeeks);
-    console.log(date);
   
     if (workDayWeeks && date) {
       axios
@@ -117,7 +115,7 @@ export const putWorkDay = (workDayWeeks: any, date: string) => {
           }
         })
         .catch((err) => {
-          Alert.alert("errr");
+          Alert.alert(err.config.data);
           console.log(err.config.data);
         });
     } else {
