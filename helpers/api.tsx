@@ -31,10 +31,13 @@ export const gallery_add = `${base_url}gallery`;
 // My services
 export const services_list = `${base_url}category`
 
+
 // Register page 
 export const register_page = `${base_url}auth/`
 
 // Grafic Work page
+export const workday_put = `${base_url}workday/time/edit/graphic`
+export const worktime_put = `${base_url}workday/time/edit/time`
 export const workday_save = `${base_url}workday/time/save/graphic`
 export const worktime_save = `${base_url}workday/time/save/time`
 export const workday_get = `${base_url}workday/time/weekday`
@@ -50,3 +53,12 @@ export const client_address_book_create: string = `${base_url}user/add-client-fr
 // user/create-client-by-master => create qilish client ni
 // user/master/client-not-visit => tashrif buyurmagan client chiqadi get
 // user/master/client-stoppedVisiting
+
+// age url
+export const age_list: string = `${base_url}age`
+
+// region url
+export const region_list: string = `${base_url}region`
+
+// district url
+export const district_list: string = `${base_url}district?regionId=`

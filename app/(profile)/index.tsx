@@ -55,6 +55,7 @@ const ProfilePage: React.FC = () => {
                     { icon: 'cogs', label: 'Настройки', screen: '(profile)/(settings)/settings' },
                     { icon: 'users', label: 'Клиенты', screen: '(profile)/(client)/ClientPage' },
                     { icon: 'sign-out', label: 'Выйти', screen: 'Logout' }
+                    
                 ].map((item, index) => (
                     <TouchableOpacity
                         key={index}

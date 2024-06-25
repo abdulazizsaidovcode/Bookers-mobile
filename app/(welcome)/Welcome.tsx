@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
+import Help from "../(standart)/(help)/help";
 
 const Welcome = () => {
   const data = [
@@ -26,7 +27,7 @@ const Welcome = () => {
       title: "График работы",
       description: "Планируйте своё рабочее время",
       icon: <FontAwesome5 name="calendar" size={24} color="white" />,
-      onPress: () => router.push("../(work-grafic)/workMain"),
+      onPress: () => router.push("../(work-grafic-edit)/workMain"),
     },
     {
       title: "Локация",
@@ -62,9 +63,9 @@ const Welcome = () => {
       title: "Помощь",
       description: "Ознакомьтесь с документацией сервиса",
       icon: <AntDesign name="questioncircleo" size={24} color="white" />,
+      onPress: () => router.push("../(standart)/(help)/help"),
     },
   ];
-
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />

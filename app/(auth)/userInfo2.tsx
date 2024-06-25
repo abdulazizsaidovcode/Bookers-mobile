@@ -2,11 +2,16 @@ import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const UserInfo = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+const UserInfo2 = () => {
+    const [nickname, setNickname] = useState('');
 
-    const isButtonEnabled = firstName.length > 0 && lastName.length > 0;
+    const handleSkip = () => {
+        // Handle the skip action (navigate to the next page)
+    };
+
+    const handleContinue = () => {
+        // Handle the continue action (navigate to the next page)
+    };
 
     return (
         <View style={styles.container}>
@@ -14,37 +19,36 @@ const UserInfo = () => {
                 <View style={styles.progressBar}>
                     <View style={styles.progressIndicator} />
                     <View style={styles.progressSegment} />
-                    <View style={styles.progressSegment} />
-                    <View style={styles.progressSegment} />
+                    <View style={styles.progressSegment1} />
+                    <View style={styles.progressSegment2} />
                 </View>
-                <Text style={styles.label}>Ваше имя и фамилия</Text>
+                <Text style={styles.label}>Ваш никнейм</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Имя"
+                    placeholder="Nick name"
                     placeholderTextColor="#8A8A8A"
-                    value={firstName}
-                    onChangeText={setFirstName}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Фамилия"
-                    placeholderTextColor="#8A8A8A"
-                    value={lastName}
-                    onChangeText={setLastName}
+                    value={nickname}
+                    onChangeText={setNickname}
                 />
             </View>
             <View style={styles.bottomSection}>
+                {nickname.length === 0 ? (
+                    <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
+                        <Text style={styles.skipButtonText}>Пропустить</Text>
+                    </TouchableOpacity>
+                ) : null}
                 <TouchableOpacity
                     style={[
-                        styles.button,
-                        { backgroundColor: isButtonEnabled ? '#9C0A35' : '#8A8A8A' },
+                        styles.continueButton,
+                        { backgroundColor: nickname.length > 0 ? '#9C0A35' : '#8A8A8A' },
                     ]}
-                    disabled={!isButtonEnabled}
                     onPress={() => {
-                        router.push('(auth)/userInfo2')
+                        handleContinue();
+                        router.push('(auth)/installPin');
                     }}
+                    disabled={nickname.length === 0}
                 >
-                    <Text style={styles.buttonText}>Продолжить</Text>
+                    <Text style={styles.continueButtonText}>Продолжить</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -74,6 +78,18 @@ const styles = StyleSheet.create({
     },
     progressSegment: {
         flex: 1,
+        backgroundColor: '#9C0A35',
+        marginLeft: 5,
+        borderRadius: 5,
+    },
+    progressSegment1: {
+        flex: 1,
+        backgroundColor: '#8A8A8A',
+        marginLeft: 5,
+        borderRadius: 5,
+    },
+    progressSegment2: {
+        flex: 1,
         backgroundColor: '#8A8A8A',
         marginLeft: 5,
         borderRadius: 5,
@@ -97,15 +113,26 @@ const styles = StyleSheet.create({
     bottomSection: {
         justifyContent: 'flex-end',
     },
-    button: {
+    skipButton: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        paddingVertical: 15,
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    skipButtonText: {
+        color: '#9C0A35',
+        fontSize: 16,
+    },
+    continueButton: {
         borderRadius: 10,
         paddingVertical: 15,
         alignItems: 'center',
     },
-    buttonText: {
+    continueButtonText: {
         color: '#FFFFFF',
         fontSize: 16,
     },
 });
 
-export default UserInfo;
+export default UserInfo2;
