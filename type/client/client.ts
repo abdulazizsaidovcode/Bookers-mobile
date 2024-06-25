@@ -7,6 +7,10 @@ export interface Client {
     setStatusData: (val: ClientStatus | null) => void;
     addressBookData: null | ClientAddressBook[]
     setAddressBookData: (val: ClientAddressBook[] | null) => void;
+    updateClient: UpdateClient
+    setUpdateClient: (val: any) => void;
+    ageData: AgeData[] | null
+    setAgeData: (val: AgeData[] | null) => void;
 }
 
 export interface ClientStatus {
@@ -28,6 +32,30 @@ export interface ClientAddressBook {
     orderTime: null | string
     clientBirthday: null | string
 }
+
+export interface UpdateClient {
+    firstName: string
+    lastName: string
+    job: string
+    ageId: number | string
+    phoneNumber: string
+    gender: boolean | null | string
+    birthDate: string | null
+    districtId: number | string
+    regionId: number | string
+    attachmentId: string
+}
+
+export interface AgeData {
+    id: number
+    ageRange: string
+}
+
+
+
+
+
+
 
 export interface ClientData {
     id: number;

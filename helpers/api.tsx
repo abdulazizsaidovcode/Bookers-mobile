@@ -50,3 +50,12 @@ export const client_address_book_create: string = `${base_url}user/add-client-fr
 // user/create-client-by-master => create qilish client ni
 // user/master/client-not-visit => tashrif buyurmagan client chiqadi get
 // user/master/client-stoppedVisiting
+
+// age url
+export const age_list: string = `${base_url}age`
+
+// region url
+export const region_list: string = `${base_url}region`
+
+// district url
+export const district_list: string = `${base_url}district?regionId=`
