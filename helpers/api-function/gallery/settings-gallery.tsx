@@ -1,7 +1,8 @@
-import { gallery_add, gallery_full_data, gallery_list } from "@/helpers/api";
+import { gallery_add, gallery_add_photo, gallery_full_data, gallery_list } from "@/helpers/api";
 import { config } from "@/helpers/token";
 import { GalleryData } from "@/type/gallery/gallery";
 import axios from "axios";
+import { Alert } from "react-native";
 
 export const fetchData = async (setData: (data: GalleryData[]) => void) => {
     try {
@@ -22,11 +23,15 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
     }
 }
 
-export const addData = async (formData: any) => {
+export const addData = async (formData: any, name: string) => {
+    console.log(formData);
+    
     try {
-        const { data } = await axios.post(gallery_add, formData, config);
+        const { data } = await axios.post(`${gallery_add}?name=${name}`, formData, config);
         console.log(data)
+        Alert.alert("success")
     } catch (error) {
+        Alert.alert("error")
         console.log(error);
     }
 }
@@ -55,4 +60,15 @@ export const delPhoto = async (id: number, attachmentId: string[], setFullData: 
     } catch (error) {
         console.log(error);
     }
-} 
+}
+
+export const addPhoto = async (galleryId: number, formData: any, setFullData: (data: GalleryData) => void) => {
+    console.log(formData);
+    
+    try {
+        const res = await axios.post(`${gallery_add_photo}/${galleryId}`, formData, config);
+        fetchFullData(galleryId, setFullData);
+    } catch (error) {
+        console.log(error);
+    }
+}

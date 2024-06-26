@@ -28,6 +28,7 @@ export const finance_day: string = `${base_url}finance/day`
 export const gallery_list = `${base_url}gallery/master`;
 export const gallery_full_data = `${base_url}gallery/one`;
 export const gallery_add = `${base_url}gallery`;
+export const gallery_add_photo = `${base_url}gallery/attachment`;
 
 // My services
 export const services_list = `${base_url}category`
