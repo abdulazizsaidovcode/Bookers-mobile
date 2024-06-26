@@ -1,11 +1,10 @@
+import registerStory from '@/helpers/state_managment/auth/register';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 const UserInfo = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-
+    const { firstName, setFirstName, lastName, setLastName } = registerStory()
     const isButtonEnabled = firstName.length > 0 && lastName.length > 0;
 
     return (

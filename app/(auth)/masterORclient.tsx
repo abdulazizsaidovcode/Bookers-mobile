@@ -1,11 +1,13 @@
 import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import registerStory from '@/helpers/state_managment/auth/register';
 import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 
 
 const MasterorClient: React.FC = () => {
+    const { setRole } = registerStory()
     return (
         <SafeAreaView style={styles.container} >
             <View style={styles.logo}>
@@ -14,8 +16,14 @@ const MasterorClient: React.FC = () => {
             <Text style={styles.title}>Bookers Beauty</Text>
             <Text style={styles.selectLanguage}>Кем ты хочешь стать?</Text>
             <View style={styles.button}>
-                <Buttons title="Master" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/switchPage')} />
-                <Buttons title="Client" backgroundColor="#9C0A35" />
+                <Buttons title="Master" backgroundColor="#9C0A35" onPress={() => {
+                    setRole("ROLE_MASTER")
+                    router.push('(auth)/switchPage');
+                }} />
+                <Buttons title="Client" backgroundColor="#9C0A35" onPress={() => {
+                    setRole("ROLE_CLIENT")
+                    router.push('(auth)/switchPage');
+                }} />
             </View>
         </SafeAreaView>
     );

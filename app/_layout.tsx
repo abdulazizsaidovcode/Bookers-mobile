@@ -81,6 +81,7 @@ import InstallPin from "./(auth)/installPin";
 import CheckPin from "./(auth)/checkPin";
 import Help from "./(standart)/(help)/help";
 import AboutUs from "./(standart)/(help)/(aboutUs)/aboutUs";
+import UserCameraInfo from "./(auth)/userCameraInfo";
 
 const Stack = createNativeStackNavigator();
 
@@ -192,6 +193,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/checkPin"
               component={CheckPin}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/userCameraInfo"
+              component={UserCameraInfo}
               options={{ headerShown: false }}
             />
             <Stack.Screen

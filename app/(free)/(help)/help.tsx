@@ -12,51 +12,79 @@ import heplStore from '@/helpers/state_managment/help/helpStore';
 
 
 const HelpFree = () => {
-    const { setHelpDate} = heplStore()
+    const { setNavigatName, setHelpDate} = heplStore()
 
     const services = [
         {
             title: "О сервисе",
-            onPress: () => {getHelp(setHelpDate, "ABOUT_SERVICE", "/aboutUs")}
+            onPress: () => {
+                getHelp(setHelpDate, "ABOUT_SERVICE", "/aboutUs")
+                setNavigatName("О сервисе")
+            }
         },
         {
             title: "Оферта",
-            onPress: () => {getHelp(setHelpDate, "OFFER", "/aboutUs")}
+            onPress: () => 
+                {
+                getHelp(setHelpDate, "OFFER", "/aboutUs")
+                setNavigatName("Оферта")
+            }
             // onPress: () => { router.push('/certificate') }
         },
         {
             title: "Политика конфиденциальности",
-            onPress: () => {getHelp(setHelpDate, "PRIVACY_POLICY", "/aboutUs")}
+            onPress: () => {
+                getHelp(setHelpDate, "PRIVACY_POLICY", "/aboutUs")
+                setNavigatName("Политика конфиденциальности")
+            }
             // onPress: () => { router.push('/offer') }
         },
         {
             title: "Лицензионное соглашение",
-            onPress: () => {getHelp(setHelpDate, "LICENSE_AGREEMENT", "/aboutUs")}
+            onPress: () => {
+                getHelp(setHelpDate, "LICENSE_AGREEMENT", "/aboutUs")
+                setNavigatName("Лицензионное соглашение")
+            }
             // onPress: () => { router.push('/certificate') }
         },
         {
             title: "Лицензии",
-            onPress: () => {getHelp(setHelpDate, "LICENSES", "/aboutUs")}
+            onPress: () => {
+                getHelp(setHelpDate, "LICENSES", "/aboutUs")
+                setNavigatName("Лицензии")
+            }
             // onPress: () => { router.push('/certificate') }
         },
         {
             title: "Сертификаты",
-            onPress: () => {getHelp(setHelpDate, "CERTIFICATES", "/aboutUs")}
+            onPress: () => {
+                getHelp(setHelpDate, "CERTIFICATES", "/aboutUs")
+                setNavigatName("Сертификаты")
+            }
             // onPress: () => { router.push('/certificate') }
         },
         {
             title: "Использование приложения",
-            onPress: () => {getHelp(setHelpDate, "USING_APPLICATION", "/aboutUs")}
+            onPress: () => {
+                getHelp(setHelpDate, "USING_APPLICATION", "/aboutUs")
+                setNavigatName("Использование приложения")
+            }
             // onPress: () => { router.push('/certificate') }
         },
         {
             title: "Спецификация услуги",
-            onPress: () => {getHelp(setHelpDate, "SERVICE_SPECIFICATION", "/aboutUs")}
+            onPress: () => {
+                getHelp(setHelpDate, "SERVICE_SPECIFICATION", "/aboutUs")
+                setNavigatName("Спецификация услуги")
+            }
             // onPress: () => { router.push('/certificate') }
         },
         {
             title: "Условия эксплуатации",
-            onPress: () => {getHelp(setHelpDate, "TERMS_OF_USE", "/aboutUs")}
+            onPress: () => {
+                getHelp(setHelpDate, "TERMS_OF_USE", "/aboutUs")
+                setNavigatName("Условия эксплуатации")
+            }
             // onPress: () => { router.push('/certificate') }
         },
     ];
