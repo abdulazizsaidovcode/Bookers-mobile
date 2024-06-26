@@ -5,11 +5,12 @@ import {
     client_address_book,
     client_address_book_search, client_address_book_update,
     client_statistics,
-    district_list,
+    district_list, master_client_create,
     region_list
 } from "@/helpers/api";
 import {AgeData, ClientAddressBook, ClientStatus, DistrictData, RegionData, UpdateClient} from "@/type/client/client";
 
+// client ga kirganda statistikalarni chiqazrish un yozilgan get function
 export const getClientStatistics = async (setData: (val: ClientStatus | null) => void) => {
     try {
         const {data} = await axios.get(client_statistics, config);
@@ -20,6 +21,7 @@ export const getClientStatistics = async (setData: (val: ClientStatus | null) =>
     }
 }
 
+// client address book ni listini get qilish
 export const getClientAddressBook = async (setData: (val: ClientAddressBook[] | null) => void) => {
     try {
         const {data} = await axios.get(client_address_book, config);
@@ -31,6 +33,7 @@ export const getClientAddressBook = async (setData: (val: ClientAddressBook[] | 
     }
 }
 
+// client address book ni search un
 export const getClientAddressBookSearch = async (setData: (val: ClientAddressBook[] | null) => void, search: string) => {
     try {
         if (search) {
@@ -44,6 +47,7 @@ export const getClientAddressBookSearch = async (setData: (val: ClientAddressBoo
     }
 }
 
+// age oraliqni list ini get qilish
 export const getAgeList = async (setData: (val: AgeData[] | null) => void) => {
     try {
         const {data} = await axios.get(age_list, config);
@@ -55,6 +59,7 @@ export const getAgeList = async (setData: (val: AgeData[] | null) => void) => {
     }
 }
 
+// region list ni get qilish
 export const getRegionList = async (setData: (val: RegionData[] | null) => void) => {
     try {
         const {data} = await axios.get(region_list, config);
@@ -66,6 +71,7 @@ export const getRegionList = async (setData: (val: RegionData[] | null) => void)
     }
 }
 
+// region id bn uziga tegishli district ni get qilish
 export const getDistrictList = async (setData: (val: DistrictData[] | null) => void, id: number | string) => {
     try {
         if (id) {
@@ -79,6 +85,19 @@ export const getDistrictList = async (setData: (val: DistrictData[] | null) => v
     }
 }
 
+// master client ni create qilish
+export const createClient = async (createData: UpdateClient, setNavigate: (val: boolean) => void) => {
+    try {
+        const {data} = await axios.post(master_client_create, createData, config)
+        if (data.success) setNavigate(true)
+        else setNavigate(false)
+    } catch (err) {
+        console.error(err)
+        setNavigate(false)
+    }
+}
+
+// address book da create qilgan client larni update qilish
 export const updateClientData = async (updateData: UpdateClient, clientID: string, setNavigate: (val: boolean) => void) => {
     try {
         const {data} = await axios.put(`${client_address_book_update}${clientID}`, updateData, config)

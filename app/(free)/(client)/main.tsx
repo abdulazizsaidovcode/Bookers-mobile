@@ -63,6 +63,7 @@ const MainClient = () => {
                                     name={`Создать`}
                                     countOrIcon={false}
                                     icon={<Ionicons name="add-circle-outline" size={36} color="white"/>}
+                                    clicks={() => navigation.navigate('(free)/(client)/creating-client')}
                                 />
                             </View>
                             <View style={[tw``, {alignSelf: 'flex-start'}]}>

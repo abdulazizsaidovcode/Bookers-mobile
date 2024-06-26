@@ -15,16 +15,18 @@ import financeStore from "@/helpers/state_managment/finance/financeStore";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {Picker} from "@react-native-picker/picker";
 import Select from "@/components/select/select";
-import {getAgeList, getDistrictList, getRegionList} from "@/helpers/api-function/client/client";
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {
+    createClient,
+    getAgeList,
+    getClientStatistics,
+    getDistrictList,
+    getRegionList
+} from "@/helpers/api-function/client/client";
 
-type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/creating-client'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/creating-client'>;
 
 const CreatingClient = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const route = useRoute<CreatingClientScreenRouteProp>();
-    const {client} = route.params;
     const {date} = financeStore()
     const {
         updateClientDef,
@@ -36,10 +38,12 @@ const CreatingClient = () => {
         setRegionData,
         districtData,
         setDistrictData,
-        attachmentID
+        attachmentID,
+        setStatusData
     } = clientStore()
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [regex, setRegex] = useState<boolean>(false);
+    const [navigate, setNavigate] = useState<boolean>(false);
     const phoneInput = useRef<PhoneInput>(null);
 
     useEffect(() => {
@@ -55,6 +59,14 @@ const CreatingClient = () => {
         updateClient.birthDate = date
         updateClient.phoneNumber = phoneNumber
     }, [date, phoneNumber]);
+
+    useEffect(() => {
+        if (navigate) {
+            navigation.navigate('(free)/(client)/main')
+            setUpdateClient(updateClientDef)
+            getClientStatistics(setStatusData)
+        }
+    }, [navigate]);
 
     const handlePhoneNumberChange = (text: string) => {
         if (text.length <= 13) {
@@ -73,6 +85,7 @@ const CreatingClient = () => {
     };
 
     const genderData = [
+        {label: "Gender ni tanlang", value: ""},
         {label: "Male", value: "true"},
         {label: "Female", value: "false"},
     ]
@@ -96,7 +109,7 @@ const CreatingClient = () => {
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
-                        <ProfileImgUpload attachmentID={client ? client.attachmentId : ''}/>
+                        <ProfileImgUpload/>
                         <LocationInput
                             value={updateClient.firstName}
                             label={`Имя`}
@@ -174,7 +187,9 @@ const CreatingClient = () => {
                     <View style={tw`py-5`}>
                         <Buttons
                             title={`Сохранить`}
-                            onPress={() => {}}
+                            onPress={() => {
+                                if (regex) createClient(updateClient, setNavigate)
+                            }}
                             isDisebled={regex}
                         />
                     </View>
