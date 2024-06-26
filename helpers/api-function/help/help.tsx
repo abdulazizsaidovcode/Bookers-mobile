@@ -1,19 +1,22 @@
-import { workday_get } from "@/helpers/api";
+import { help_url } from "@/helpers/api";
+import { Help } from "@/helpers/state_managment/help/helpStore";
 import { config } from "@/helpers/token";
 import axios from "axios";
+import { router } from "expo-router";
 
 
 
-export const getWorkDay = (setData: (val: []) => void) => {
+export const getHelp = (setData: (val: Help | null) => void, status: string, route: string) => {
     axios
-      .get(`${workday_get}`, config)
+      .get(`${help_url}${status}`, config)
       .then((res) => {
         if (res.data.success) {
           setData(res.data.body);
+          router.push(route)
         }
         else {
-          setData([])
+          setData(null)
         }
       })
-      .catch(() => setData([]))
+      .catch(() => setData(null))
   };

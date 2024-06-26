@@ -7,46 +7,57 @@ import { ScrollView, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";
 import MyServicesCard from '@/components/services/myServicesCard';
+import { getHelp } from '@/helpers/api-function/help/help';
+import heplStore from '@/helpers/state_managment/help/helpStore';
 
 
 const HelpFree = () => {
+    const { setHelpDate} = heplStore()
 
     const services = [
         {
             title: "О сервисе",
-            onPress: () => { router.push('/aboutUs') }
+            onPress: () => {getHelp(setHelpDate, "ABOUT_SERVICE", "/aboutUs")}
         },
         {
             title: "Оферта",
-            onPress: () => { router.push('/offer') }
+            onPress: () => {getHelp(setHelpDate, "OFFER", "/aboutUs")}
+            // onPress: () => { router.push('/certificate') }
         },
         {
             title: "Политика конфиденциальности",
-            onPress: () => { router.push('/security') }
+            onPress: () => {getHelp(setHelpDate, "PRIVACY_POLICY", "/aboutUs")}
+            // onPress: () => { router.push('/offer') }
         },
         {
             title: "Лицензионное соглашение",
-            onPress: () => { router.push('/certificate') }
+            onPress: () => {getHelp(setHelpDate, "LICENSE_AGREEMENT", "/aboutUs")}
+            // onPress: () => { router.push('/certificate') }
         },
         {
             title: "Лицензии",
-            onPress: () => { router.push('/certificate') }
+            onPress: () => {getHelp(setHelpDate, "LICENSES", "/aboutUs")}
+            // onPress: () => { router.push('/certificate') }
         },
         {
             title: "Сертификаты",
-            onPress: () => { router.push('/certificate') }
+            onPress: () => {getHelp(setHelpDate, "CERTIFICATES", "/aboutUs")}
+            // onPress: () => { router.push('/certificate') }
         },
         {
-            title: "Сертификаты",
-            onPress: () => { router.push('/certificate') }
+            title: "Использование приложения",
+            onPress: () => {getHelp(setHelpDate, "USING_APPLICATION", "/aboutUs")}
+            // onPress: () => { router.push('/certificate') }
         },
         {
-            title: "Сертификаты",
-            onPress: () => { router.push('/certificate') }
+            title: "Спецификация услуги",
+            onPress: () => {getHelp(setHelpDate, "SERVICE_SPECIFICATION", "/aboutUs")}
+            // onPress: () => { router.push('/certificate') }
         },
         {
-            title: "Сертификаты",
-            onPress: () => { router.push('/certificate') }
+            title: "Условия эксплуатации",
+            onPress: () => {getHelp(setHelpDate, "TERMS_OF_USE", "/aboutUs")}
+            // onPress: () => { router.push('/certificate') }
         },
     ];
 

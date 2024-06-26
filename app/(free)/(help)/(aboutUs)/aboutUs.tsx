@@ -7,9 +7,11 @@ import tw from 'tailwind-react-native-classnames';
 import Buttons from '@/components/(buttons)/button';
 import Description from '@/components/description/description';
 import { router } from 'expo-router';
+import heplStore from '@/helpers/state_managment/help/helpStore';
 
 
 const AboutUsFree = () => {
+    const {helpData} = heplStore()
     const descriptionData = {
         title: "Онлайн сервис для самостоятельного бронирования услуг специалистов в сфере красоты и ухода за внешностью",
         content: "На сервис уже на протяжении 2х лет дарит пользователям ...... Равным образом сложившаяся структура организации влечет за собой процесс внедрения и модернизации систем массового участия. Равным образом сложившаяся структура организации представляет собой интересный эксперимент проверки дальнейших направлений развития. Разнообразный и богатый опыт постоянный количественный рост и сфера нашей активности требуют от нас анализа позиций, занимаемых участниками в отношении поставленных задач. Равным образом сложившаяся структура организации представляет собой интересный эксперимент проверки дальнейших направлений развития. Разнообразный и богатый опыт постоянный количественный рост и сфера нашей активности требуют от нас анализа позиций, занимаемых участниками в отношении поставленных задач.",
@@ -37,7 +39,7 @@ const AboutUsFree = () => {
                             </View>
                             <Description
                                 title={descriptionData.title}
-                                content={descriptionData.content}
+                                content={helpData ? helpData.text : ""}
                                 contactTitle={descriptionData.contactTitle}
                                 contactInfo={descriptionData.contactInfo}
                             />

@@ -12,7 +12,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
-import Help from "../(standart)/(help)/help";
 
 const Welcome = () => {
   const data = [
