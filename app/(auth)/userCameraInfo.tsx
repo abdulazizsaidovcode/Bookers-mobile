@@ -1,129 +1,121 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React from 'react'
+import { router } from 'expo-router';
+import ProfileImgUpload from '@/components/profile-img-upload';
 
-const ProfilePicture = () => {
-    const [image, setImage] = useState(null);
-
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        if (!result.cancelled) {
-            setImage(result.uri);
-        }
-    };
-
+const UserCameraInfo = () => {
     const handleSkip = () => {
-        // Handle skip action
+        router.push('(auth)/installPin');
     };
 
-    const handleSave = () => {
-        // Handle save action
+    const handleContinue = () => {
+        router.push('(auth)/installPin');
     };
-
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Добавьте свою фотографию</Text>
-            <Text style={styles.subtitle}>
-                Не желаете добавить своё фото? Оно будет доступно только мастерам к которым вы записались
-            </Text>
-            <View style={styles.imageContainer}>
-                {image ? (
-                    <Image source={{ uri: image }} style={styles.image} />
-                ) : (
-                    <View style={styles.placeholder}>
-                        <Text style={styles.placeholderText}>+</Text>
-                    </View>
-                )}
-                <TouchableOpacity style={styles.addButton} onPress={pickImage}>
-                    <Text style={styles.addButtonText}>+</Text>
-                </TouchableOpacity>
+            <View style={styles.topSection}>
+                <View style={styles.progressBar}>
+                    <View style={styles.progressIndicator} />
+                    <View style={styles.progressSegment} />
+                    <View style={styles.progressSegment1} />
+                    <View style={styles.progressSegment2} />
+                </View>
+                <Text style={styles.label}>Добавьте свою фотографию</Text>
+                <Text style={styles.description}>Не желаете добавить своё фото? Оно будет доступно только мастерами к которым вы записались</Text>
+                <ProfileImgUpload />
             </View>
-            <View style={styles.buttonsContainer}>
+
+            <View style={styles.bottomSection}>
+
                 <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
                     <Text style={styles.skipButtonText}>Пропустить</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.saveButton} onPress={handleSave} disabled={!image}>
-                    <Text style={styles.saveButtonText}>Сохранить</Text>
+
+                <TouchableOpacity
+                    style={[
+                        styles.continueButton,
+                    ]}
+
+                >
+                    <Text style={styles.continueButtonText}>Продолжить</Text>
                 </TouchableOpacity>
             </View>
+
         </View>
-    );
-};
+    )
+}
+
+export default UserCameraInfo
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#21212E',
-        alignItems: 'center',
-        justifyContent: 'center',
         padding: 20,
+        justifyContent: 'space-between',
     },
-    title: {
+    topSection: {
+        flex: 1,
+    },
+    description: {
+        color: '#828282',
+        textAlign: 'center',
+        fontSize: 14,
+        lineHeight: 18,
+        marginTop: 10,
+    },
+    progressBar: {
+        flexDirection: 'row',
+        height: 5,
+        marginTop: 40,
+        borderRadius: 5,
+    },
+    progressIndicator: {
+        flex: 1,
+        backgroundColor: '#9C0A35',
+        borderRadius: 5,
+    },
+    progressSegment: {
+        flex: 1,
+        backgroundColor: '#9C0A35',
+        marginLeft: 5,
+        borderRadius: 5,
+    },
+    progressSegment1: {
+        flex: 1,
+        backgroundColor: '#9C0A35',
+        marginLeft: 5,
+        borderRadius: 5,
+    },
+    progressSegment2: {
+        flex: 1,
+        backgroundColor: '#8A8A8A',
+        marginLeft: 5,
+        borderRadius: 5,
+    },
+    label: {
         color: '#FFFFFF',
         fontSize: 18,
-        marginBottom: 10,
+        marginTop: 20,
         textAlign: 'center',
     },
-    subtitle: {
-        color: '#AAAAAA',
-        fontSize: 14,
-        marginBottom: 20,
-        textAlign: 'center',
-    },
-    imageContainer: {
-        position: 'relative',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 20,
-    },
-    placeholder: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+    input: {
+        height: 50,
+        borderColor: '#4B4B64',
         backgroundColor: '#4B4B64',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    placeholderText: {
+        borderWidth: 1,
+        borderRadius: 10,
+        marginTop: 20,
+        paddingHorizontal: 10,
         color: '#FFFFFF',
-        fontSize: 40,
     },
-    image: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-    },
-    addButton: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        backgroundColor: '#9C0A35',
-        borderRadius: 50,
-        width: 30,
-        height: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    addButtonText: {
-        color: '#FFFFFF',
-        fontSize: 20,
-    },
-    buttonsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
+    bottomSection: {
+        justifyContent: 'flex-end',
     },
     skipButton: {
         backgroundColor: '#FFFFFF',
         borderRadius: 10,
         paddingVertical: 15,
-        paddingHorizontal: 40,
         alignItems: 'center',
         marginBottom: 10,
     },
@@ -131,18 +123,13 @@ const styles = StyleSheet.create({
         color: '#9C0A35',
         fontSize: 16,
     },
-    saveButton: {
-        backgroundColor: '#8A8A8A',
+    continueButton: {
         borderRadius: 10,
         paddingVertical: 15,
-        paddingHorizontal: 40,
         alignItems: 'center',
-        marginBottom: 10,
     },
-    saveButtonText: {
+    continueButtonText: {
         color: '#FFFFFF',
         fontSize: 16,
     },
 });
-
-export default ProfilePicture;
