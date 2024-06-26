@@ -5,7 +5,7 @@ import {
     client_address_book,
     client_address_book_search, client_address_book_update,
     client_statistics,
-    district_list, master_client_create,
+    district_list, master_client_all_list, master_client_create,
     region_list
 } from "@/helpers/api";
 import {AgeData, ClientAddressBook, ClientStatus, DistrictData, RegionData, UpdateClient} from "@/type/client/client";
@@ -13,7 +13,7 @@ import {AgeData, ClientAddressBook, ClientStatus, DistrictData, RegionData, Upda
 // master uziga tegishli all client listini chgiqaruvchi get function
 export const getClientAll = async (setData: (val: any | null) => void) => {
     try {
-        const {data} = await axios.get(``, config)
+        const {data} = await axios.get(master_client_all_list, config)
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {

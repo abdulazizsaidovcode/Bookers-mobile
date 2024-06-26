@@ -11,16 +11,17 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import {useEffect} from "react";
-import {getClientStatistics} from "@/helpers/api-function/client/client";
+import {getClientAll, getClientStatistics} from "@/helpers/api-function/client/client";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/main'>;
 
 const MainClient = () => {
-    const {isClientModal, setIsClientModal, setStatusData, statusData} = clientStore()
+    const {isClientModal, setIsClientModal, setStatusData, statusData, setAllClients} = clientStore()
     const toggleClientModal = () => setIsClientModal(!isClientModal);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     useEffect(() => {
+        getClientAll(setAllClients)
         getClientStatistics(setStatusData)
     }, []);
 
