@@ -414,7 +414,6 @@ function RootLayoutNav() {
               component={Security}
               options={{ headerShown: false }}
             />
-
             <Stack.Screen
               name="(free)/(help)/help"
               component={HelpFree}
