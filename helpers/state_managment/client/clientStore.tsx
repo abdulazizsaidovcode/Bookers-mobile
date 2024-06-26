@@ -43,6 +43,8 @@ const clientStore = create<Client>((set) => ({
     setDistrictData: (val: DistrictData[] | null) => set({districtData: val}),
     attachmentID: null,
     setAttachmentID: (val: null | string) => set({attachmentID: val}),
+    allClientsList: null,
+    setAllClients: (val: any | null) => set({allClientsList: val}),
 }))
 
 export default clientStore

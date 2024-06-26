@@ -10,6 +10,18 @@ import {
 } from "@/helpers/api";
 import {AgeData, ClientAddressBook, ClientStatus, DistrictData, RegionData, UpdateClient} from "@/type/client/client";
 
+// master uziga tegishli all client listini chgiqaruvchi get function
+export const getClientAll = async (setData: (val: any | null) => void) => {
+    try {
+        const {data} = await axios.get(``, config)
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
+
 // client ga kirganda statistikalarni chiqazrish un yozilgan get function
 export const getClientStatistics = async (setData: (val: ClientStatus | null) => void) => {
     try {
