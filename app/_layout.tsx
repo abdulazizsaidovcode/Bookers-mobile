@@ -77,6 +77,8 @@ import Security from "./(standart)/(help)/(security)/security";
 import Certificate from "./(standart)/(help)/(certificate)/certificate";
 import UserInfo from "./(auth)/userInfo";
 import UserInfo2 from "./(auth)/userInfo2";
+import OnlineBooking from "./(standart)/(onlineBooking)/onlineBooking";
+import Booking from "./(standart)/(onlineBooking)/(booking)/booking";
 
 const Stack = createNativeStackNavigator();
 
@@ -392,6 +394,19 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             {/*Help end */}
+
+            {/* Online booking start  */}
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/onlineBooking"
+              component={OnlineBooking}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/(booking)/booking"
+              component={Booking}
+              options={{ headerShown: false }}
+            />
+            {/* Online booking end */}
             {/*  profile client start */}
             <Stack.Screen
               name="(profile)/(client)/ClientPage"
