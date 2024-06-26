@@ -3,7 +3,7 @@ import {config} from "@/helpers/token";
 import {
     age_list,
     client_address_book,
-    client_address_book_search, client_address_book_update, client_not_visit,
+    client_address_book_search, client_address_book_update, client_not_visit, client_not_visit_search,
     client_statistics, client_stopped_visiting,
     district_list, master_client_all_list, master_client_create,
     region_list
@@ -84,11 +84,25 @@ export const getClientAddressBookSearch = async (setData: (val: ClientAddressBoo
         if (search) {
             const {data} = await axios.get(`${client_address_book_search}${search}`, config);
             if (data.success) setData(data.body)
-            else getClientAddressBook(setData)
+            else setData(null)
         } else getClientAddressBook(setData)
     } catch (err) {
         console.error(err)
-        getClientAddressBook(setData)
+        setData(null)
+    }
+}
+
+// client not visit ni search un
+export const getClientNotVisitSearch = async (setData: (val: ClientNotVisit[] | null) => void, search: string) => {
+    try {
+        if (search) {
+            const {data} = await axios.get(`${client_not_visit_search}${search}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else getNotVisiting(setData)
+    } catch (err) {
+        console.error(err)
+        setData(null)
     }
 }
 

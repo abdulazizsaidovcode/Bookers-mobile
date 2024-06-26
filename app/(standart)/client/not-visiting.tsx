@@ -3,7 +3,7 @@ import tw from "tailwind-react-native-classnames";
 import {FlatList, ScrollView, StatusBar, Text, View} from "react-native";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import LocationInput from "@/components/(location)/locationInput";
-import {getNotVisiting} from "@/helpers/api-function/client/client";
+import {getClientNotVisitSearch, getNotVisiting} from "@/helpers/api-function/client/client";
 import {FromAddressBookList} from "@/components/clients/client-items";
 import IconsButtons from "@/components/(buttons)/icon-btn";
 import {Ionicons} from "@expo/vector-icons";
@@ -20,6 +20,7 @@ const NotVisiting = () => {
     useEffect(() => {
         getNotVisiting(setClientNotVisit)
     }, []);
+    console.log(clientNotVisit);
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -29,14 +30,14 @@ const NotVisiting = () => {
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
-                    {clientNotVisit ? (
-                        <View>
-                            <View style={tw`mb-5`}>
-                                <LocationInput
-                                    // onChangeText={(e) => getClientAddressBookSearch(setClientNotVisit, e)}
-                                    placeholder={`🔍 Поиск клиента по имени`}
-                                />
-                            </View>
+                    <View>
+                        <View style={tw`mb-5`}>
+                            <LocationInput
+                                onChangeText={(e) => getClientNotVisitSearch(setClientNotVisit, e)}
+                                placeholder={`🔍 Поиск клиента по имени`}
+                            />
+                        </View>
+                        {clientNotVisit ? (
                             <FlatList
                                 data={clientNotVisit}
                                 renderItem={({item}) => (
@@ -47,14 +48,15 @@ const NotVisiting = () => {
                                     />
                                 )}
                             />
-                        </View>
-                    ) : (
-                        <View style={tw`flex-1 items-center justify-center`}>
-                            <Text style={[tw`text-base font-medium`, {color: '#828282', letterSpacing: 1}]}>
-                                У вас пока нет ни одного клиента
-                            </Text>
-                        </View>
-                    )}
+                        ) : (
+                            <View style={tw`flex-1 items-center justify-center`}>
+                                <Text style={[tw`text-base font-medium`, {color: '#828282', letterSpacing: 1}]}>
+                                    У вас пока нет ни одного клиента
+                                </Text>
+                            </View>
+                        )}
+                    </View>
+
 
                     <View style={tw`pb-5`}>
                         <IconsButtons
