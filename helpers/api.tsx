@@ -78,3 +78,6 @@ export const master_service_list: string = `${base_url}service`
 // free Time url
 
 export const free_time_list: string = `${base_url}free-time`
+
+// help url
+export const help_url: string = `${base_url}help/one?HELP_STATUS=`

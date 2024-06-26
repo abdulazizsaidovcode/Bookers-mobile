@@ -36,8 +36,18 @@ const HelpFree = () => {
             title: "Сертификаты",
             onPress: () => { router.push('/certificate') }
         },
-        
-       
+        {
+            title: "Сертификаты",
+            onPress: () => { router.push('/certificate') }
+        },
+        {
+            title: "Сертификаты",
+            onPress: () => { router.push('/certificate') }
+        },
+        {
+            title: "Сертификаты",
+            onPress: () => { router.push('/certificate') }
+        },
     ];
 
     return (
