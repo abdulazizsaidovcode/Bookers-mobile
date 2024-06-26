@@ -20,6 +20,7 @@ export type RootStackParamList = {
     '(tabs)': undefined | string;
     '(welcome)/Welcome': undefined | string;
     '(profile)/(tariff)/tariff': undefined;
+    '(profile)/(client)/components/AllClients': undefined;
     '(settings)/(settings-gallery)/gallery-details': any;
   };
   
