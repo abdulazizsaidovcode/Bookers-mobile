@@ -92,7 +92,7 @@ const MainClient = () => {
                         </CenteredModal>
                     </View>
                     <View style={tw`pb-5`}>
-                        <Buttons title={`Настроить позже и перейти на главную`} onPress={() => navigation.navigate('(tabs)')}/>
+                        <Buttons title={`Настроить позже и перейти на главную`} onPress={() => navigation.navigate('(welcome)/Welcome')}/>
                     </View>
                 </ScrollView>
             </View>
