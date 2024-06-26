@@ -81,6 +81,8 @@ import InstallPin from "./(auth)/installPin";
 import CheckPin from "./(auth)/checkPin";
 import Help from "./(standart)/(help)/help";
 import AboutUs from "./(standart)/(help)/(aboutUs)/aboutUs";
+import NotVisiting from "@/app/(standart)/client/not-visiting";
+import StandardMain from "@/app/(standart)/client/standard-main";
 import UserCameraInfo from "./(auth)/userCameraInfo";
 
 const Stack = createNativeStackNavigator();
@@ -289,6 +291,16 @@ function RootLayoutNav() {
               name="(standart)/(services)/(process)/process"
               component={Process}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/client/standard-main"
+              component={StandardMain}
+              options={{ title: 'Standard', headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/client/not-visiting"
+              component={NotVisiting}
+              options={{ title: 'StandardNotVisiting', headerShown: false }}
             />
             <Stack.Screen
               name="(standart)/(services)/(myServices)/myServices"

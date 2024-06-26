@@ -72,7 +72,7 @@ export const FromAddressBookList = ({
                                         client,
                                         clicks,
                                     }: {
-    client: ClientAddressBook;
+    client: any;
     clicks?: () => void;
 }) => {
     return (

@@ -53,9 +53,8 @@ export const client_address_book_update: string = `${base_url}client/`
 export const client_address_book_create: string = `${base_url}user/add-client-from-address-book`
 export const master_client_create: string = `${base_url}user/create-client-by-master`
 export const master_client_all_list: string = `${base_url}user/master/all-client`
-// menga kk tegilmasin!!!!!
-// user/master/client-not-visit => tashrif buyurmagan client chiqadi get
-// user/master/client-stoppedVisiting
+export const client_not_visit: string = `${base_url}user/master/client-not-visit`
+export const client_stopped_visiting: string = `${base_url}user/master/client-stoppedVisiting`
 
 // age url
 export const age_list: string = `${base_url}age`

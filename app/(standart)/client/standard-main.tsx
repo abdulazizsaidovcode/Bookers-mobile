@@ -13,16 +13,22 @@ import {Ionicons, Entypo} from '@expo/vector-icons';
 import {RootStackParamList} from "@/type/root";
 import {View, Text, ScrollView, StatusBar} from 'react-native';
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(client)/standard-main'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
 
 const StandardMain = () => {
-    const {isClientModal, setIsClientModal, setStatusData, statusData} = clientStore()
+    const {
+        isClientModal,
+        setIsClientModal,
+        setStatusData,
+        statusData
+    } = clientStore()
     const [isFilter, setIsFilter] = useState<string>('all')
     const toggleClientModal = () => setIsClientModal(!isClientModal);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     useEffect(() => {
         getClientStatistics(setStatusData)
+        // getStoppedVisiting(setClientStoppedVisit)
     }, []);
 
     return (
@@ -67,14 +73,14 @@ const StandardMain = () => {
                         <View style={[tw``, {gap: 14}]}>
                             <ClientCountCard
                                 title={`Перестали посещать`}
-                                icon={<Entypo name="block" size={32} color="#9C0A35"/>}
+                                icon={<Entypo name="block" size={30} color="#9C0A35"/>}
                                 // clicks={() => navigation.navigate('')}
                                 counts={statusData ? +statusData.stoppedVisiting : 0}
                             />
                             <ClientCountCard
                                 title={`Не посещали`}
                                 icon={<Ionicons name="eye-off" size={34} color="#9C0A35"/>}
-                                // clicks={() => navigation.navigate('')}
+                                clicks={() => navigation.navigate('(standart)/client/not-visiting')}
                                 counts={statusData ? +statusData.didNotVisit : 0}
                             />
                             <ClientCountCard
@@ -121,7 +127,8 @@ const StandardMain = () => {
                         </CenteredModal>
                     </View>
                     <View style={tw`pb-5`}>
-                        <Buttons title={`Настроить позже и перейти на главную`} onPress={() => navigation.navigate('(welcome)/Welcome')}/>
+                        <Buttons title={`Настроить позже и перейти на главную`}
+                                 onPress={() => navigation.navigate('(welcome)/Welcome')}/>
                     </View>
                 </ScrollView>
             </View>

@@ -3,17 +3,49 @@ import {config} from "@/helpers/token";
 import {
     age_list,
     client_address_book,
-    client_address_book_search, client_address_book_update,
-    client_statistics,
+    client_address_book_search, client_address_book_update, client_not_visit,
+    client_statistics, client_stopped_visiting,
     district_list, master_client_all_list, master_client_create,
     region_list
 } from "@/helpers/api";
-import {AgeData, ClientAddressBook, ClientStatus, DistrictData, RegionData, UpdateClient} from "@/type/client/client";
+import {
+    AgeData,
+    ClientAddressBook, ClientNotVisit,
+    ClientStatus,
+    ClientStoppedVisiting,
+    DistrictData,
+    RegionData,
+    UpdateClient
+} from "@/type/client/client";
 
 // master uziga tegishli all client listini chgiqaruvchi get function
 export const getClientAll = async (setData: (val: any | null) => void) => {
     try {
         const {data} = await axios.get(master_client_all_list, config)
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
+
+// stopped visit git function
+export const getStoppedVisiting = async (setData: (val: null | ClientStoppedVisiting[]) => void) => {
+    try {
+        const {data} = await axios.get(client_stopped_visiting, config)
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
+
+// not visit git function
+export const getNotVisiting = async (setData: (val: null | ClientNotVisit[]) => void) => {
+    try {
+        const {data} = await axios.get(client_not_visit, config)
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
@@ -30,6 +62,7 @@ export const getClientStatistics = async (setData: (val: ClientStatus | null) =>
         else setData(null)
     } catch (err) {
         console.error(err)
+        setData(null)
     }
 }
 

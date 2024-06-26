@@ -1,5 +1,14 @@
 import {create} from 'zustand'
-import {AgeData, Client, ClientAddressBook, ClientStatus, DistrictData, RegionData, UpdateClient} from "@/type/client/client";
+import {
+    AgeData,
+    Client,
+    ClientAddressBook,
+    ClientNotVisit,
+    ClientStatus, ClientStoppedVisiting,
+    DistrictData,
+    RegionData,
+    UpdateClient
+} from "@/type/client/client";
 
 const clientStore = create<Client>((set) => ({
     isClientModal: false,
@@ -45,6 +54,10 @@ const clientStore = create<Client>((set) => ({
     setAttachmentID: (val: null | string) => set({attachmentID: val}),
     allClientsList: null,
     setAllClients: (val: any | null) => set({allClientsList: val}),
+    clientNotVisit: null,
+    setClientNotVisit: (val: null | ClientNotVisit[]) => set({clientNotVisit: val}),
+    clientStoppedVisiting: null,
+    setClientStoppedVisit: (val: null | ClientStoppedVisiting[]) => set({clientStoppedVisiting: val}),
 }))
 
 export default clientStore
