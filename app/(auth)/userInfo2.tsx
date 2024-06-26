@@ -12,12 +12,12 @@ const UserInfo2 = () => {
         // Nickname ni bo'sh qilib belgilash
         setNickname('');
         // Navigate to the next page
-        router.push('(auth)/installPin');
+        router.push('(auth)/userCameraInfo');
     };
 
     const handleContinue = () => {
         // Navigate to the next page
-        router.push('(auth)/installPin');
+        router.push('(auth)/userCameraInfo');
     };
 
     return (
