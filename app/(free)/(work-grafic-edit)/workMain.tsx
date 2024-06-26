@@ -6,7 +6,10 @@ import { router } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import { getWorkDay, getWorkTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import {
+  getWorkDay,
+  getWorkTime,
+} from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import { getMee } from "@/helpers/token";
 
 export const WorkMainCardEdit: React.FC<{
@@ -36,17 +39,23 @@ export const WorkMainCardEdit: React.FC<{
 };
 
 const WorkMainEdit = () => {
-  const { setWeekData, weekData, setTimeData, setGetMee, getme, timeData } = graficWorkStore();
+  const {
+    setWeekData,
+    weekData,
+    setTimeData,
+    setGetMee,
+    getme,
+    timeData,
+  } = graficWorkStore();
 
-  useEffect( () => {
-     getMee(setGetMee)
-     getWorkDay(setWeekData);
+  useEffect(() => {
+    getMee(setGetMee);
+    getWorkDay(setWeekData);
   }, []);
 
-  useEffect( () => {
-     getWorkTime(setTimeData, getme ? getme.id : "")
+  useEffect(() => {
+    getWorkTime(setTimeData, getme ? getme.id : "");
   }, [getme]);
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,21 +63,21 @@ const WorkMainEdit = () => {
         <WorkMainCardEdit
           icon={<AntDesign name="calendar" size={24} color="#9C0A35" />}
           title="График работы"
-          subTitle={`${
-            weekData.length !== 0 &&
-            weekData.map((item: any) => 
-              item.active && (
-                `${item.dayName.substring(0,3)}`
-               )
-            )
-          }`}
+          subTitle={
+            weekData
+              .filter((item: any) => item.active) // faqat active elementlarni filter qilamiz
+              .map((item: any) => item.dayName.substring(0, 3)) // har bir active elementning birinchi 3 harfini chiqaramiz
+              .join(", ") // elementlarni vergul bilan ajratamiz
+          }
           to="(free)/(work-grafic-edit)/workGraffic"
         />
 
         <WorkMainCardEdit
           icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
           title="Время работы"
-          subTitle={`From ${timeData ? timeData.from : "00:00"}  to ${timeData ? timeData.end : "00:00"}`}
+          subTitle={`From ${timeData ? timeData.from : "00:00"}  to ${
+            timeData ? timeData.end : "00:00"
+          }`}
           to="(free)/(work-grafic-edit)/workTime"
         />
       </View>
@@ -81,7 +90,10 @@ const WorkMainEdit = () => {
           justifyContent: "center",
         }}
       >
-        <Buttons title="На главную" onPress={() => router.push("(free)/(work-grafic-edit)/workMain")} />
+        <Buttons
+          title="На главную"
+          onPress={() => router.push("(welcome)/Welcome")}
+        />
       </View>
     </SafeAreaView>
   );
