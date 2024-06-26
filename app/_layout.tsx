@@ -79,6 +79,7 @@ import UserInfo from "./(auth)/userInfo";
 import UserInfo2 from "./(auth)/userInfo2";
 import InstallPin from "./(auth)/installPin";
 import CheckPin from "./(auth)/checkPin";
+import UpdatingAddressBook from "@/app/(free)/(client)/updating-address-book";
 
 const Stack = createNativeStackNavigator();
 
@@ -351,6 +352,11 @@ function RootLayoutNav() {
               name="(free)/(client)/creating-client"
               component={CreatingClient}
               options={{ title: "CreatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/updating-address-book"
+              component={UpdatingAddressBook}
+              options={{ title: "UpdatingClient", headerShown: false }}
             />
             <Stack.Screen
               name="(location)/Location"
