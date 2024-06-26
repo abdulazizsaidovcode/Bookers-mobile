@@ -63,3 +63,17 @@ export const region_list: string = `${base_url}region`
 
 // district url
 export const district_list: string = `${base_url}district?regionId=`
+
+
+// schedule url
+
+export const schedule_list: string = `${base_url}order/today/orders/for/master`
+
+//master servise url
+
+export const master_service_list: string = `${base_url}service`
+
+
+// free Time url
+
+export const free_time_list: string = `${base_url}free-time`
