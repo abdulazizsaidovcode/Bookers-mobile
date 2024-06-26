@@ -77,8 +77,6 @@ import Security from "./(standart)/(help)/(security)/security";
 import Certificate from "./(standart)/(help)/(certificate)/certificate";
 import UserInfo from "./(auth)/userInfo";
 import UserInfo2 from "./(auth)/userInfo2";
-import OnlineBooking from "./(standart)/(onlineBooking)/onlineBooking";
-import Booking from "./(standart)/(onlineBooking)/(booking)/booking";
 
 const Stack = createNativeStackNavigator();
 
@@ -126,7 +124,7 @@ function RootLayoutNav() {
               component={Index}
               options={{ headerShown: false }}
             />
-            
+
             <Stack.Screen
               name="(auth)/auth"
               component={Auth}
@@ -180,6 +178,16 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/userInfo2"
               component={UserInfo2}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/installPin"
+              component={InstallPin}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/checkPin"
+              component={CheckPin}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -238,7 +246,7 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(settings)/(settings-location)/gallery-details"
+              name="(settings)/(settings-gallery)/gallery-details"
               component={GalleryDetails}
               options={{ headerShown: false }}
             />
@@ -343,6 +351,11 @@ function RootLayoutNav() {
               options={{ title: "CreatingClient", headerShown: false }}
             />
             <Stack.Screen
+              name="(free)/(client)/updating-address-book"
+              component={UpdatingAddressBook}
+              options={{ title: "UpdatingClient", headerShown: false }}
+            />
+            <Stack.Screen
               name="(location)/Location"
               component={Location}
               options={{ headerShown: false }}
@@ -393,6 +406,31 @@ function RootLayoutNav() {
               component={Security}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="(free)/(help)/help"
+              component={HelpFree}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(help)/(certificate)/certificate"
+              component={CertificateFree}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(help)/(aboutUs)/aboutUs"
+              component={AboutUsFree}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(help)/(offer)/offer"
+              component={OfferFree}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(help)/(security)/security"
+              component={SecurityFree}
+              options={{ headerShown: false }}
+            />
             {/*Help end */}
 
             {/* Online booking start  */}
@@ -430,7 +468,6 @@ function RootLayoutNav() {
             />
             {/* profile client end */}
 
-
             {/* Web page tariff start */}
             <Stack.Screen
               name="(profile)/(WebPage)/WebPage"
@@ -438,8 +475,6 @@ function RootLayoutNav() {
               options={{ title: "CreatingClient", headerShown: false }}
             />
             {/* Web page tariff end */}
-
-
 
             {/* profile settings start */}
             <Stack.Screen
@@ -463,7 +498,6 @@ function RootLayoutNav() {
               options={{ title: "Настройки ", headerShown: false }}
             />
             {/* profile settings end */}
-
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>

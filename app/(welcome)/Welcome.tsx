@@ -63,7 +63,7 @@ const Welcome = () => {
       title: "Помощь",
       description: "Ознакомьтесь с документацией сервиса",
       icon: <AntDesign name="questioncircleo" size={24} color="white" />,
-      onPress: () => router.push("../(standart)/(help)/help"),
+      onPress: () => router.push("(free)/(help)/help"),
     },
   ];
   return (

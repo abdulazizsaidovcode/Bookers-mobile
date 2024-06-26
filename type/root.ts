@@ -1,3 +1,5 @@
+import {ClientAddressBook} from "@/type/client/client";
+
 export type RootStackParamList = {
     'index': undefined;
     'settings': undefined;
@@ -14,8 +16,12 @@ export type RootStackParamList = {
     '(free)/(client)/client-list': undefined | string;
     '(free)/(client)/address-book': undefined | string;
     '(free)/(client)/creating-client': undefined | string;
+    '(free)/(client)/updating-address-book': { client: ClientAddressBook };
     '(tabs)': undefined | string;
     '(welcome)/Welcome': undefined | string;
     '(profile)/(tariff)/tariff': undefined;
+    '(profile)/(client)/components/AllClients': undefined;
+    '(settings)/(settings-gallery)/gallery-details': any;
+    '(standart)/(client)/standard-main': undefined | string;
   };
   

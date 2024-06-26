@@ -2,6 +2,10 @@ export interface weekList {
     dayName: string,
     active: boolean
 }
+export interface TimeList {
+    from: string,
+    end: string
+}
 
 export interface saveweekList {
     workDayWeeks: [],

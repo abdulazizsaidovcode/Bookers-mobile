@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
@@ -39,6 +40,9 @@ const UserInfo = () => {
                         { backgroundColor: isButtonEnabled ? '#9C0A35' : '#8A8A8A' },
                     ]}
                     disabled={!isButtonEnabled}
+                    onPress={() => {
+                        router.push('(auth)/userInfo2')
+                    }}
                 >
                     <Text style={styles.buttonText}>Продолжить</Text>
                 </TouchableOpacity>
@@ -61,15 +65,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 5,
         marginTop: 40,
+        borderRadius: 5,
     },
     progressIndicator: {
         flex: 1,
         backgroundColor: '#9C0A35',
+        borderRadius: 5,
     },
     progressSegment: {
         flex: 1,
         backgroundColor: '#8A8A8A',
         marginLeft: 5,
+        borderRadius: 5,
     },
     label: {
         color: '#FFFFFF',

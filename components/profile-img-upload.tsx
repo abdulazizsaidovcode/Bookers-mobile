@@ -1,18 +1,35 @@
 import {TouchableOpacity, Image, Text, StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import * as ImagePicker from 'expo-image-picker';
 import CenteredModal from "@/components/(modals)/modal-centered";
 import tw from "tailwind-react-native-classnames";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import {MaterialIcons} from '@expo/vector-icons';
+import axios from "axios";
+import {getFile, postFileId} from "@/helpers/api";
+import {config} from "@/helpers/token";
+import clientStore from "@/helpers/state_managment/client/clientStore";
 
-const ProfileImgUpload = () => {
+const ProfileImgUpload = ({attachmentID}: {attachmentID?: string | null}) => {
+    const {setAttachmentID} = clientStore();
     const [image, setImage] = useState<string | null>(null);
-    const [isModal, setIsModal] = useState<boolean>(false)
-    const [isDeleteImgModal, setIsDeleteImgModal] = useState<boolean>(false)
+    const [imageApi, setImageApi] = useState<any>(null);
+    const [isModal, setIsModal] = useState<boolean>(false);
+    const [isDeleteImgModal, setIsDeleteImgModal] = useState<boolean>(false);
 
-    const openModal = () => setIsModal(!isModal)
-    const openDeleteModal = () => setIsDeleteImgModal(!isDeleteImgModal)
+    useEffect(() => {
+        if (attachmentID) setImage(`${getFile}${attachmentID}`)
+        else setImage(null)
+    }, []);
+
+    useEffect(() => {
+        if (image) {
+            uploadImage();
+        }
+    }, [image]);
+
+    const openModal = () => setIsModal(!isModal);
+    const openDeleteModal = () => setIsDeleteImgModal(!isDeleteImgModal);
 
     // ======================= gallery dan img yuklash uchun functions =======================
     const pickImage = async () => {
@@ -30,9 +47,8 @@ const ProfileImgUpload = () => {
         });
 
         if (!result.canceled) {
-            // image value olish un gallerydan
-            console.log(result.assets[0])
-            setImage(result.assets[0].uri)
+            setImageApi(result.assets[0]);
+            setImage(result.assets[0].uri);
         }
     };
 
@@ -51,17 +67,31 @@ const ProfileImgUpload = () => {
         });
 
         if (!result.canceled) {
-            // image value olish un cameradan
-            console.log(result.assets[0])
-            setImage(result.assets[0].uri)
+            setImageApi(result.assets[0]);
+            setImage(result.assets[0].uri);
         }
     };
 
     // ======================= image delete un function =======================
     const deletePhoto = () => {
         setImage(null);
-        openDeleteModal()
+        openDeleteModal();
     }
+
+    const uploadImage = async () => {
+        if (!imageApi) return;
+
+        const formData = new FormData();
+        formData.append('file', imageApi.uri);
+        formData.append('type', imageApi.mimeType);
+
+        try {
+            const {data} = await axios.post(postFileId, formData, config);
+            setAttachmentID(data.body);
+        } catch (err) {
+            console.error('Image upload failed:', err);
+        }
+    };
 
     return (
         <>
@@ -154,7 +184,6 @@ const ProfileImgUpload = () => {
                 </View>
             </CenteredModal>
         </>
-
     );
 };
 
@@ -176,6 +205,6 @@ const styles = StyleSheet.create({
     imagePlaceholder: {
         color: '#ffffff',
     },
-})
+});
 
 export default ProfileImgUpload;

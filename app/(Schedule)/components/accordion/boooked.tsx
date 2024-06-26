@@ -1,3 +1,4 @@
+import { useScheduleBookedStore } from '@/helpers/state_managment/schedule/schedule';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
@@ -10,6 +11,7 @@ const availableTimes = [
 
 const BookedAccordion: React.FC = () => {
     const [activeTab, setActiveTab] = useState('haircuts');
+    const { schedule } = useScheduleBookedStore()
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);

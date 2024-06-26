@@ -2,9 +2,9 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React from 'react';
 
 interface WeeklCardProps {
-    title: string;
-    onSelect: () => void;
-    isSelected: boolean;
+    title: string | boolean;
+    onSelect?: () => void;
+    isSelected?: boolean;
 }
 
 const WeeklCard: React.FC<WeeklCardProps> = ({ title, onSelect, isSelected }) => {

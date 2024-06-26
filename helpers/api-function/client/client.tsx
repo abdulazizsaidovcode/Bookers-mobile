@@ -1,8 +1,28 @@
 import axios from "axios";
 import {config} from "@/helpers/token";
-import {age_list, client_address_book, client_address_book_search, client_statistics} from "@/helpers/api";
-import {ClientAddressBook, ClientStatus} from "@/type/client/client";
+import {
+    age_list,
+    client_address_book,
+    client_address_book_search, client_address_book_update,
+    client_statistics,
+    district_list, master_client_all_list, master_client_create,
+    region_list
+} from "@/helpers/api";
+import {AgeData, ClientAddressBook, ClientStatus, DistrictData, RegionData, UpdateClient} from "@/type/client/client";
 
+// master uziga tegishli all client listini chgiqaruvchi get function
+export const getClientAll = async (setData: (val: any | null) => void) => {
+    try {
+        const {data} = await axios.get(master_client_all_list, config)
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
+
+// client ga kirganda statistikalarni chiqazrish un yozilgan get function
 export const getClientStatistics = async (setData: (val: ClientStatus | null) => void) => {
     try {
         const {data} = await axios.get(client_statistics, config);
@@ -13,6 +33,7 @@ export const getClientStatistics = async (setData: (val: ClientStatus | null) =>
     }
 }
 
+// client address book ni listini get qilish
 export const getClientAddressBook = async (setData: (val: ClientAddressBook[] | null) => void) => {
     try {
         const {data} = await axios.get(client_address_book, config);
@@ -24,6 +45,7 @@ export const getClientAddressBook = async (setData: (val: ClientAddressBook[] | 
     }
 }
 
+// client address book ni search un
 export const getClientAddressBookSearch = async (setData: (val: ClientAddressBook[] | null) => void, search: string) => {
     try {
         if (search) {
@@ -37,7 +59,8 @@ export const getClientAddressBookSearch = async (setData: (val: ClientAddressBoo
     }
 }
 
-export const getAgeList = async (setData: (val: any | null) => void) => {
+// age oraliqni list ini get qilish
+export const getAgeList = async (setData: (val: AgeData[] | null) => void) => {
     try {
         const {data} = await axios.get(age_list, config);
         if (data.success) setData(data.body)
@@ -45,5 +68,55 @@ export const getAgeList = async (setData: (val: any | null) => void) => {
     } catch (err) {
         console.error(err)
         setData(null)
+    }
+}
+
+// region list ni get qilish
+export const getRegionList = async (setData: (val: RegionData[] | null) => void) => {
+    try {
+        const {data} = await axios.get(region_list, config);
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
+// region id bn uziga tegishli district ni get qilish
+export const getDistrictList = async (setData: (val: DistrictData[] | null) => void, id: number | string) => {
+    try {
+        if (id) {
+            const {data} = await axios.get(`${district_list}${id}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else console.log('region id yuq!!!')
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
+// master client ni create qilish
+export const createClient = async (createData: UpdateClient, setNavigate: (val: boolean) => void) => {
+    try {
+        const {data} = await axios.post(master_client_create, createData, config)
+        if (data.success) setNavigate(true)
+        else setNavigate(false)
+    } catch (err) {
+        console.error(err)
+        setNavigate(false)
+    }
+}
+
+// address book da create qilgan client larni update qilish
+export const updateClientData = async (updateData: UpdateClient, clientID: string, setNavigate: (val: boolean) => void) => {
+    try {
+        const {data} = await axios.put(`${client_address_book_update}${clientID}`, updateData, config)
+        if (data.success) setNavigate(true)
+        else setNavigate(false)
+    } catch (err) {
+        console.error(err)
+        setNavigate(false)
     }
 }

@@ -11,16 +11,17 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import {useEffect} from "react";
-import {getClientStatistics} from "@/helpers/api-function/client/client";
+import {getClientAll, getClientStatistics} from "@/helpers/api-function/client/client";
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-locations-main'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/main'>;
 
 const MainClient = () => {
-    const {isClientModal, setIsClientModal, setStatusData, statusData} = clientStore()
+    const {isClientModal, setIsClientModal, setStatusData, statusData, setAllClients} = clientStore()
     const toggleClientModal = () => setIsClientModal(!isClientModal);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     useEffect(() => {
+        getClientAll(setAllClients)
         getClientStatistics(setStatusData)
     }, []);
 
@@ -45,7 +46,7 @@ const MainClient = () => {
                             <ClientCountCard
                                 title={`Все клиенты`}
                                 icon={<Ionicons name="person-circle-outline" size={36} color="#9C0A35"/>}
-                                clicks={() => console.log('')}
+                                clicks={() => navigation.navigate('(profile)/(client)/components/AllClients')}
                                 counts={statusData ? +statusData.allClient : 0}
                             />
                             <ClientCountCard
@@ -63,6 +64,7 @@ const MainClient = () => {
                                     name={`Создать`}
                                     countOrIcon={false}
                                     icon={<Ionicons name="add-circle-outline" size={36} color="white"/>}
+                                    clicks={() => navigation.navigate('(free)/(client)/creating-client')}
                                 />
                             </View>
                             <View style={[tw``, {alignSelf: 'flex-start'}]}>
@@ -91,7 +93,7 @@ const MainClient = () => {
                         </CenteredModal>
                     </View>
                     <View style={tw`pb-5`}>
-                        <Buttons title={`Настроить позже и перейти на главную`} onPress={() => navigation.navigate('(tabs)')}/>
+                        <Buttons title={`Настроить позже и перейти на главную`} onPress={() => navigation.navigate('(welcome)/Welcome')}/>
                     </View>
                 </ScrollView>
             </View>
