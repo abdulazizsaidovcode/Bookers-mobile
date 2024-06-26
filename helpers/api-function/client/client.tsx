@@ -4,7 +4,7 @@ import {
     age_list,
     client_address_book,
     client_address_book_search, client_address_book_update, client_not_visit, client_not_visit_search,
-    client_statistics, client_stopped_visit_search, client_stopped_visiting,
+    client_statistics, client_stopped_visit_search, client_stopped_visit_sms, client_stopped_visiting,
     district_list, master_client_all_list, master_client_create,
     region_list
 } from "@/helpers/api";
@@ -179,5 +179,19 @@ export const updateClientData = async (updateData: UpdateClient, clientID: strin
     } catch (err) {
         console.error(err)
         setNavigate(false)
+    }
+}
+
+// stopped client ga sms juantish
+export const addClientSMS = async (clientID: string, val: string, setTrue: (val: boolean) => void) => {
+    try {
+        if (clientID && val) {
+            const {data} = await axios.post(`${client_stopped_visit_sms}?clientId=${clientID}&text=${val}`, '', config)
+            if (data.success) setTrue(true)
+            else setTrue(false)
+        } else setTrue(false)
+    } catch (err) {
+        console.log(err)
+        setTrue(false)
     }
 }

@@ -5,6 +5,8 @@ import tw from "tailwind-react-native-classnames";
 import {Ionicons} from "@expo/vector-icons";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {getFile} from "@/helpers/api";
+import Buttons from "@/components/(buttons)/button";
+import FiltersButton from "@/components/(buttons)/filters-button";
 
 // client check un
 export const ClientItem: React.FC<ClientItemProps> = ({
@@ -72,14 +74,15 @@ export const FromAddressBookList = (
     {
         client,
         clicks,
+        isBtn
     }: {
         client: any;
         clicks?: () => void;
+        isBtn?: boolean
     }) => {
-    console.log(client)
     return (
         <TouchableOpacity
-            onPress={clicks}
+            onPress={!isBtn ? clicks : undefined}
             style={[
                 tw`flex-row items-center p-4 mb-3 rounded-2xl`,
                 {backgroundColor: "#B9B9C9"},
@@ -98,6 +101,11 @@ export const FromAddressBookList = (
                     {client.phoneNumber}
                 </Text>
             </View>
+            {isBtn && (
+                <View style={[tw``, {transform: 'scale(.8)'}]}>
+                    <FiltersButton title={`Пригласить`} onPress={isBtn ? clicks : undefined} />
+                </View>
+            )}
         </TouchableOpacity>
     );
 };

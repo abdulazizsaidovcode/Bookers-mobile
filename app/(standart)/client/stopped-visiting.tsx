@@ -1,9 +1,14 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import tw from "tailwind-react-native-classnames";
-import {FlatList, ScrollView, StatusBar, Text, View} from "react-native";
+import {FlatList, ScrollView, StatusBar, StyleSheet, Text, TextInput, View} from "react-native";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import LocationInput from "@/components/(location)/locationInput";
-import {getClientStoppedVisitSearch, getStoppedVisiting} from "@/helpers/api-function/client/client";
+import {
+    addClientSMS,
+    getClientStatistics,
+    getClientStoppedVisitSearch,
+    getStoppedVisiting
+} from "@/helpers/api-function/client/client";
 import {FromAddressBookList} from "@/components/clients/client-items";
 import IconsButtons from "@/components/(buttons)/icon-btn";
 import {Ionicons} from "@expo/vector-icons";
@@ -11,15 +16,38 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
+import CenteredModal from "@/components/(modals)/modal-centered";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/stopped-visiting'>;
 
 const StoppedVisiting = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const {setClientStoppedVisit, clientStoppedVisiting} = clientStore()
+    const {setClientStoppedVisit, clientStoppedVisiting, setStatusData} = clientStore()
+    const [clientID, setClientID] = useState('')
+    const [clientVal, setClientVal] = useState('')
+    const [isClientModal, setIsClientModal] = useState<boolean>(false)
+    const [trues, setTrues] = useState<boolean>(false)
+    const [height, setHeight] = useState(80);
+
     useEffect(() => {
         getStoppedVisiting(setClientStoppedVisit)
     }, []);
+
+    useEffect(() => {
+        if (trues) {
+            toggleClientModal()
+            navigation.navigate('(standart)/client/standard-main')
+            getClientStatistics(setStatusData)
+        }
+    }, [trues]);
+
+    const toggleClientModal = () => setIsClientModal(!isClientModal);
+
+    const handleContentSizeChange = (event: any) => {
+        const newHeight = Math.min(Math.max(80, event.nativeEvent.contentSize.height), 200);
+        setHeight(newHeight);
+    };
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -43,7 +71,11 @@ const StoppedVisiting = () => {
                                     <FromAddressBookList
                                         key={item.id}
                                         client={item}
-                                        // clicks={() => navigation.navigate('(free)/(client)/updating-address-book', { client: item })}
+                                        isBtn
+                                        clicks={() => {
+                                            setClientID(item.id);
+                                            toggleClientModal()
+                                        }}
                                     />
                                 )}
                             />
@@ -54,13 +86,35 @@ const StoppedVisiting = () => {
                                 </Text>
                             </View>
                         )}
+
+                        <CenteredModal
+                            btnWhiteText={`Закрыть`}
+                            btnRedText={`Отправить`}
+                            isFullBtn
+                            isModal={isClientModal}
+                            toggleModal={toggleClientModal}
+                            onConfirm={() => addClientSMS(clientID, clientVal, setTrues)}
+                        >
+                            <View>
+                                <Text style={[tw`text-lg font-semibold text-white text-center mb-5`, {opacity: .8}]}>
+                                    Приглашение на запись!
+                                </Text>
+                                <TextInput
+                                    value={clientVal}
+                                    style={[styles.textArea, { height }]}
+                                    multiline
+                                    placeholder="Ваш текст здесь..."
+                                    onContentSizeChange={handleContentSizeChange}
+                                    onChangeText={e => setClientVal(e)}
+                                />
+                            </View>
+                        </CenteredModal>
                     </View>
 
                     <View style={tw`pb-5`}>
                         <IconsButtons
                             name={`Создать`}
                             icon={<Ionicons name="add-circle-outline" size={36} color="white"/>}
-                            // clicks={() => navigation.navigate('(free)/(client)/client-list')}
                         />
                     </View>
                 </ScrollView>
@@ -68,5 +122,19 @@ const StoppedVisiting = () => {
         </SafeAreaView>
     );
 };
+
+const styles = StyleSheet.create({
+    textArea: {
+        width: 300,
+        padding: 10,
+        borderColor: '#444',
+        borderWidth: 1,
+        borderRadius: 10,
+        backgroundColor: '#4B4B64',
+        color: '#E0E0E0',
+        fontSize: 16,
+        textAlignVertical: 'top', // Align text to the top
+    },
+});
 
 export default StoppedVisiting;

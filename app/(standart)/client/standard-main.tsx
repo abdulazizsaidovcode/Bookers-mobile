@@ -28,7 +28,6 @@ const StandardMain = () => {
 
     useEffect(() => {
         getClientStatistics(setStatusData)
-        // getStoppedVisiting(setClientStoppedVisit)
     }, []);
 
     return (
