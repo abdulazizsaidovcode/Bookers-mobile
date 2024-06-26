@@ -77,6 +77,16 @@ import Security from "./(standart)/(help)/(security)/security";
 import Certificate from "./(standart)/(help)/(certificate)/certificate";
 import UserInfo from "./(auth)/userInfo";
 import UserInfo2 from "./(auth)/userInfo2";
+import OfferFree from "./(free)/(help)/(offer)/offer";
+import SecurityFree from "./(free)/(help)/(security)/security";
+import AboutUsFree from "./(free)/(help)/(aboutUs)/aboutUs";
+import CertificateFree from "./(free)/(help)/(certificate)/certificate";
+import HelpFree from "./(free)/(help)/help";
+import UpdatingAddressBook from "./(free)/(client)/updating-address-book";
+import OnlineBooking from "./(standart)/(onlineBooking)/onlineBooking";
+import Booking from "./(standart)/(onlineBooking)/(booking)/booking";
+import InstallPin from "./(auth)/installPin";
+import CheckPin from "./(auth)/checkPin";
 
 const Stack = createNativeStackNavigator();
 
