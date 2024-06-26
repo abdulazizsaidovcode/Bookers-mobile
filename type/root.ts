@@ -24,5 +24,6 @@ export type RootStackParamList = {
     '(settings)/(settings-gallery)/gallery-details': any;
     '(standart)/client/standard-main': undefined | string;
     '(standart)/client/not-visiting': undefined | string;
+    '(standart)/client/stopped-visiting': undefined | string;
   };
   

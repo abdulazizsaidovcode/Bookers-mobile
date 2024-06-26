@@ -4,7 +4,7 @@ import {
     age_list,
     client_address_book,
     client_address_book_search, client_address_book_update, client_not_visit, client_not_visit_search,
-    client_statistics, client_stopped_visiting,
+    client_statistics, client_stopped_visit_search, client_stopped_visiting,
     district_list, master_client_all_list, master_client_create,
     region_list
 } from "@/helpers/api";
@@ -100,6 +100,20 @@ export const getClientNotVisitSearch = async (setData: (val: ClientNotVisit[] | 
             if (data.success) setData(data.body)
             else setData(null)
         } else getNotVisiting(setData)
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
+// client stopped visit ni search un
+export const getClientStoppedVisitSearch = async (setData: (val: ClientStoppedVisiting[] | null) => void, search: string) => {
+    try {
+        if (search) {
+            const {data} = await axios.get(`${client_stopped_visit_search}${search}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else getStoppedVisiting(setData)
     } catch (err) {
         console.error(err)
         setData(null)

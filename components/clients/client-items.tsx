@@ -68,13 +68,15 @@ export const ClientItem: React.FC<ClientItemProps> = ({
 };
 
 // client info un
-export const FromAddressBookList = ({
-                                        client,
-                                        clicks,
-                                    }: {
-    client: any;
-    clicks?: () => void;
-}) => {
+export const FromAddressBookList = (
+    {
+        client,
+        clicks,
+    }: {
+        client: any;
+        clicks?: () => void;
+    }) => {
+    console.log(client)
     return (
         <TouchableOpacity
             onPress={clicks}

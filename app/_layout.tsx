@@ -84,6 +84,7 @@ import AboutUs from "./(standart)/(help)/(aboutUs)/aboutUs";
 import NotVisiting from "@/app/(standart)/client/not-visiting";
 import StandardMain from "@/app/(standart)/client/standard-main";
 import UserCameraInfo from "./(auth)/userCameraInfo";
+import StoppedVisiting from "@/app/(standart)/client/stopped-visiting";
 
 const Stack = createNativeStackNavigator();
 
@@ -301,6 +302,11 @@ function RootLayoutNav() {
               name="(standart)/client/not-visiting"
               component={NotVisiting}
               options={{ title: 'StandardNotVisiting', headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/client/stopped-visiting"
+              component={StoppedVisiting}
+              options={{ title: 'StandardStoppedVisiting', headerShown: false }}
             />
             <Stack.Screen
               name="(standart)/(services)/(myServices)/myServices"

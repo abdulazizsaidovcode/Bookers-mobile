@@ -74,7 +74,7 @@ const StandardMain = () => {
                             <ClientCountCard
                                 title={`Перестали посещать`}
                                 icon={<Entypo name="block" size={30} color="#9C0A35"/>}
-                                // clicks={() => navigation.navigate('')}
+                                clicks={() => navigation.navigate('(standart)/client/stopped-visiting')}
                                 counts={statusData ? +statusData.stoppedVisiting : 0}
                             />
                             <ClientCountCard
