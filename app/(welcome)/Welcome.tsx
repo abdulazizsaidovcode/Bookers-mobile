@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
-import Help from "../(standart)/(help)/help";
+
 
 const Welcome = () => {
   const data = [
@@ -46,7 +46,10 @@ const Welcome = () => {
       title: "Онлайн бронирование",
       description: "Настройте записи на Ваши услуги",
       icon: <FontAwesome6 name="calendar-plus" size={24} color="white" />,
+      onPress: () =>
+        router.push("../(standart)/(onlineBooking)/onlineBooking"),
     },
+    
     {
       title: "Уведомления",
       description: "Настройте уведомления",
