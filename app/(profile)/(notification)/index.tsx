@@ -41,21 +41,25 @@ const Notification: React.FC = () => {
   };
 
   const deleteNotification = async () => {
-    notifications.map((item) => setDeleteNot((state) => [...state, item.id]));
-    console.log(deleteNot);
+    const deleteData = notifications.map((item) => item.id);
+    console.log(deleteData);
+
     try {
-    const { data } = await axios.delete(
-      `${base_url}notification`,
-      { notificationIds: deleteNot },
-      config
-    );
-    console.log(data);
-
-    setToggle(false);
+      const response = await fetch(`${base_url}notification`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          ...config.headers, // config içindeki headers'ı buraya ekliyoruz
+        },
+        body: JSON.stringify({ notificationIds: deleteData }), // body'i JSON string formatında gönderiyoruz
+      });
+      const responseData = await response.json();
+      setDeleteNot(responseData);
+      setToggle(false);
     } catch (error) {
-      console.log(error);
-
+      console.error("Error deleting past entries:", error);
     }
+
     setDeleteNot([]);
   };
 
