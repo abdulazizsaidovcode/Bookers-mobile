@@ -45,7 +45,10 @@ const Welcome = () => {
       title: "Онлайн бронирование",
       description: "Настройте записи на Ваши услуги",
       icon: <FontAwesome6 name="calendar-plus" size={24} color="white" />,
+      onPress: () =>
+        router.push("../(standart)/(onlineBooking)/onlineBooking"),
     },
+    
     {
       title: "Уведомления",
       description: "Настройте уведомления",
