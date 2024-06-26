@@ -13,7 +13,6 @@ import { Fontisto } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
 
-
 const Welcome = () => {
   const data = [
     {
