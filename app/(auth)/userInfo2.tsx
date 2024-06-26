@@ -1,16 +1,23 @@
+import registerStory from '@/helpers/state_managment/auth/register';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 const UserInfo2 = () => {
-    const [nickname, setNickname] = useState('');
+    const { nickname, setNickname } = registerStory();
+    // const [nickname, setNickname] = useState('');
+    console.log(nickname);
 
     const handleSkip = () => {
-        // Handle the skip action (navigate to the next page)
+        // Nickname ni bo'sh qilib belgilash
+        setNickname('');
+        // Navigate to the next page
+        router.push('(auth)/installPin');
     };
 
     const handleContinue = () => {
-        // Handle the continue action (navigate to the next page)
+        // Navigate to the next page
+        router.push('(auth)/installPin');
     };
 
     return (
@@ -42,10 +49,7 @@ const UserInfo2 = () => {
                         styles.continueButton,
                         { backgroundColor: nickname.length > 0 ? '#9C0A35' : '#8A8A8A' },
                     ]}
-                    onPress={() => {
-                        handleContinue();
-                        router.push('(auth)/installPin');
-                    }}
+                    onPress={handleContinue}
                     disabled={nickname.length === 0}
                 >
                     <Text style={styles.continueButtonText}>Продолжить</Text>
