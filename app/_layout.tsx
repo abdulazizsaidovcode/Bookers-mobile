@@ -124,8 +124,8 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <StompProvider>
-        <MenuProvider>
+      <MenuProvider>
+        <StompProvider>
           <Stack.Navigator initialRouteName="index">
             <Stack.Screen
               name="index"
@@ -497,8 +497,8 @@ function RootLayoutNav() {
             />
             {/* profile settings end */}
           </Stack.Navigator>
-        </MenuProvider>
-      </StompProvider>
+        </StompProvider>
+      </MenuProvider>
     </ThemeProvider>
   );
 }

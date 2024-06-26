@@ -10,22 +10,31 @@ import fetchChatDataStore, { Data } from '@/helpers/state_managment/chat/chatfet
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ChatSupport = () => {
-    const { stompClient, adminId } = useStomp();
     const { chatData, setChatData } = chatStore();
     const { setmessageData, messageData } = fetchChatDataStore();
-
+    
     const [recipientId, setRecipientId] = useState<string | null>(null);
-
+    const { stompClient, adminId } = useStomp();
+    
     useEffect(() => {
-        if (stompClient) {
-            stompClient.subscribe(`/user/${adminId}/queue/messages`, (response: any) => {
-                const receivedMessage = JSON.parse(response.body);
-                setmessageData((prevMessages) => [...prevMessages, receivedMessage]);
-                console.log(receivedMessage);
-            });
+        let subscription = undefined;
+    
+        if (stompClient && adminId) {
+          subscription = stompClient.subscribe(`/user/${adminId}/queue/messages`, (response:any) => {
+            const receivedMessage = JSON.parse(response.body);
+            setMessageData((prevMessages) => [...prevMessages, receivedMessage]);
+            console.log(receivedMessage);
+          });
+    
+          getChatList({ setData: setChatData });
         }
-        getChatList({ setData: setChatData });
-    }, []);
+    
+        return () => {
+          if (subscription) {
+            subscription.unsubscribe();
+          }
+        };
+      }, [stompClient, adminId]);
 
     const handlePress = () => {
         console.log('Support button pressed');
