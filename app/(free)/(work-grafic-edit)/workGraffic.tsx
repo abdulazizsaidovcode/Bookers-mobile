@@ -1,4 +1,4 @@
-import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ServicesCategory from "@/components/services/servicesCatgegory";
@@ -9,6 +9,7 @@ import { Item } from "@/type/graficWork/graficWork";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { putWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import CalendarGrafficEdit from "./calendar";
+import Toast from 'react-native-simple-toast';
 
 const GrafficWorkEdit: React.FC = () => {
   const { calendarDate, setWeek, week } = graficWorkStore();
@@ -25,8 +26,6 @@ const GrafficWorkEdit: React.FC = () => {
 
   const router = useRouter();
 
-  
-
   const handleCategoryPress = (id: number) => {
     const updatedItems = items.map((item) =>
       item.id === id ? { ...item, active: !item.active } : item
@@ -35,7 +34,14 @@ const GrafficWorkEdit: React.FC = () => {
     setWeek(updatedItems.map((item) => ({ dayName: item.dayValue, active: item.active })));
   };
 
-
+  const handleContinuePress = () => {
+    if (!calendarDate || !week.some(day => day.active)) {
+      Toast.show('Пожалуйста, выберите дату начала работы и хотя бы один рабочий день.', Toast.LONG);
+      return;
+    }
+    
+    putWorkDay(week, calendarDate);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,7 +67,7 @@ const GrafficWorkEdit: React.FC = () => {
           <View style={{ padding: 10 }}>
             <Buttons
               title="Продолжить"
-              onPress={() => putWorkDay(week, calendarDate)}
+              onPress={handleContinuePress}
             />
           </View>
         </View>

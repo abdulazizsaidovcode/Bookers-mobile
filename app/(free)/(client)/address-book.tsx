@@ -45,7 +45,7 @@ const AddressBook = () => {
                                     <FromAddressBookList
                                         key={item.id}
                                         client={item}
-                                        clicks={() => navigation.navigate('(free)/(client)/creating-client', { client: item })}
+                                        clicks={() => navigation.navigate('(free)/(client)/updating-address-book', { client: item })}
                                     />
                                 )}
                             />

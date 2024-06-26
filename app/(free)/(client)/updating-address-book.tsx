@@ -16,17 +16,21 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import {Picker} from "@react-native-picker/picker";
 import Select from "@/components/select/select";
 import {
-    createClient,
     getAgeList,
     getClientStatistics,
     getDistrictList,
-    getRegionList
+    getRegionList,
+    updateClientData
 } from "@/helpers/api-function/client/client";
+import {RouteProp, useRoute} from '@react-navigation/native';
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/creating-client'>;
+type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/updating-address-book'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/updating-address-book'>;
 
-const CreatingClient = () => {
+const UpdatingAddressBook = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+    const route = useRoute<CreatingClientScreenRouteProp>();
+    const {client} = route.params;
     const {date} = financeStore()
     const {
         updateClientDef,
@@ -49,16 +53,29 @@ const CreatingClient = () => {
     useEffect(() => {
         getAgeList(setAgeData)
         getRegionList(setRegionData)
+        if (client) {
+            updateClient.phoneNumber = client.phoneNumber
+            updateClient.firstName = client.firstName
+            updateClient.lastName = client.lastName
+        }
     }, []);
 
     useEffect(() => {
-        setRegex(validateObject(updateClient))
-    }, [updateClient]);
+        if (client) {
+            updateClient.phoneNumber = client.phoneNumber
+            updateClient.firstName = client.firstName
+            updateClient.lastName = client.lastName
+        }
+    }, [client]);
 
     useEffect(() => {
         updateClient.birthDate = date
         updateClient.phoneNumber = phoneNumber
     }, [date, phoneNumber]);
+
+    useEffect(() => {
+        setRegex(validateObject(updateClient))
+    }, [updateClient]);
 
     useEffect(() => {
         if (navigate) {
@@ -85,10 +102,16 @@ const CreatingClient = () => {
     };
 
     const genderData = [
-        {label: "Gender ni tanlang", value: ""},
         {label: "Male", value: "true"},
         {label: "Female", value: "false"},
     ]
+
+    const sliceText = (text: string) => {
+        if (text) {
+            if (text.startsWith('+998')) return text.slice(4, 13)
+            else return text;
+        }
+    }
 
     function validateObject(obj: any) {
         for (let key in obj) {
@@ -109,7 +132,7 @@ const CreatingClient = () => {
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
-                        <ProfileImgUpload/>
+                        <ProfileImgUpload attachmentID={client ? client.attachmentId : ''}/>
                         <LocationInput
                             value={updateClient.firstName}
                             label={`Имя`}
@@ -131,7 +154,7 @@ const CreatingClient = () => {
                         <Text style={[tw`text-gray-500 mb-2 mt-3 text-base`]}>Номер телефона</Text>
                         <PhoneInput
                             ref={phoneInput}
-                            defaultValue={updateClient.phoneNumber}
+                            defaultValue={sliceText(updateClient.phoneNumber)}
                             defaultCode="UZ"
                             layout="first"
                             onChangeFormattedText={handlePhoneNumberChange}
@@ -147,7 +170,8 @@ const CreatingClient = () => {
                                 Дополнительная информаци о клиенте
                             </Text>
                             <MaterialIcons
-                                onPress={() => {}}
+                                onPress={() => {
+                                }}
                                 name="navigate-next"
                                 size={30}
                                 color="white"
@@ -188,9 +212,9 @@ const CreatingClient = () => {
                         <Buttons
                             title={`Сохранить`}
                             onPress={() => {
-                                if (regex) createClient(updateClient, setNavigate)
+                                if (client) updateClientData(updateClient, client.id, setNavigate)
                             }}
-                            isDisebled={regex}
+                            isDisebled={!!(regex && client.id)}
                         />
                     </View>
                 </ScrollView>
@@ -232,4 +256,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CreatingClient;
+export default UpdatingAddressBook;

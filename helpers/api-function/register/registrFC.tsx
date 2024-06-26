@@ -31,3 +31,20 @@ export const checkCode = (phoneNumber: string, otp: string, setOtpErr: (value: b
         })
 
 }
+
+export const masterData = (role: string) => {
+    const master_data = {
+        firstName: "",
+        lastName: "",
+        nickname: "",
+        phoneNumber: "",
+        ROLE: role,
+    }
+    axios.post(`${register_page}master?firstName=Sardorbek&lastName=Sayfullayev&nickname=Sardor&phoneNumber=%2B998942939447&ROLE=ROLE_MASTER`, master_data)
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}

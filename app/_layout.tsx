@@ -70,15 +70,18 @@ import WebPage from "./(profile)/(WebPage)/WebPage";
 import GrafficWorkEdit from "./(free)/(work-grafic-edit)/workGraffic";
 import TimeWorkEdit from "./(free)/(work-grafic-edit)/workTime";
 import WorkMainEdit from "./(free)/(work-grafic-edit)/workMain";
-import Help from "./(standart)/(help)/help";
-import AboutUs from "./(standart)/(help)/(aboutUs)/aboutUs";
-import Offer from "./(standart)/(help)/(offer)/offer";
-import Security from "./(standart)/(help)/(security)/security";
-import Certificate from "./(standart)/(help)/(certificate)/certificate";
 import UserInfo from "./(auth)/userInfo";
 import UserInfo2 from "./(auth)/userInfo2";
+import AboutUsFree from "./(free)/(help)/(aboutUs)/aboutUs";
+import HelpFree from "./(free)/(help)/help";
+import UpdatingAddressBook from "./(free)/(client)/updating-address-book";
+import OnlineBooking from "./(standart)/(onlineBooking)/onlineBooking";
+import Booking from "./(standart)/(onlineBooking)/(booking)/booking";
 import InstallPin from "./(auth)/installPin";
 import CheckPin from "./(auth)/checkPin";
+import Help from "./(standart)/(help)/help";
+import AboutUs from "./(standart)/(help)/(aboutUs)/aboutUs";
+import UserCameraInfo from "./(auth)/userCameraInfo";
 
 const Stack = createNativeStackNavigator();
 
@@ -190,6 +193,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/checkPin"
               component={CheckPin}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/userCameraInfo"
+              component={UserCameraInfo}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -353,6 +361,11 @@ function RootLayoutNav() {
               options={{ title: "CreatingClient", headerShown: false }}
             />
             <Stack.Screen
+              name="(free)/(client)/updating-address-book"
+              component={UpdatingAddressBook}
+              options={{ title: "UpdatingClient", headerShown: false }}
+            />
+            <Stack.Screen
               name="(location)/Location"
               component={Location}
               options={{ headerShown: false }}
@@ -384,26 +397,34 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(standart)/(help)/(certificate)/certificate"
-              component={Certificate}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="(standart)/(help)/(aboutUs)/aboutUs"
               component={AboutUs}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(standart)/(help)/(offer)/offer"
-              component={Offer}
+              name="(free)/(help)/help"
+              component={HelpFree}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(standart)/(help)/(security)/security"
-              component={Security}
+              name="(free)/(help)/(aboutUs)/aboutUs"
+              component={AboutUsFree}
               options={{ headerShown: false }}
             />
             {/*Help end */}
+
+            {/* Online booking start  */}
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/onlineBooking"
+              component={OnlineBooking}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/(booking)/booking"
+              component={Booking}
+              options={{ headerShown: false }}
+            />
+            {/* Online booking end */}
             {/*  profile client start */}
             <Stack.Screen
               name="(profile)/(client)/ClientPage"
@@ -427,7 +448,6 @@ function RootLayoutNav() {
             />
             {/* profile client end */}
 
-
             {/* Web page tariff start */}
             <Stack.Screen
               name="(profile)/(WebPage)/WebPage"
@@ -435,8 +455,6 @@ function RootLayoutNav() {
               options={{ title: "CreatingClient", headerShown: false }}
             />
             {/* Web page tariff end */}
-
-
 
             {/* profile settings start */}
             <Stack.Screen
@@ -460,7 +478,6 @@ function RootLayoutNav() {
               options={{ title: "Настройки ", headerShown: false }}
             />
             {/* profile settings end */}
-
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>

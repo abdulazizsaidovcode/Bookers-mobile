@@ -10,7 +10,7 @@ import { router } from 'expo-router';
 import heplStore from '@/helpers/state_managment/help/helpStore';
 
 
-const AboutUs = () => {
+const AboutUsFree = () => {
     const {helpData, navigatName} = heplStore()
     const descriptionData = {
         title: "Онлайн сервис для самостоятельного бронирования услуг специалистов в сфере красоты и ухода за внешностью",
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AboutUs;
+export default AboutUsFree;

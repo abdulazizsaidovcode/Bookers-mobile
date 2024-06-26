@@ -51,8 +51,9 @@ export const client_address_book: string = `${base_url}user/master/client-addres
 export const client_address_book_search: string = `${base_url}client/search/for/from/contact?name=`
 export const client_address_book_update: string = `${base_url}client/`
 export const client_address_book_create: string = `${base_url}user/add-client-from-address-book`
+export const master_client_create: string = `${base_url}user/create-client-by-master`
+export const master_client_all_list: string = `${base_url}user/master/all-client`
 // menga kk tegilmasin!!!!!
-// user/create-client-by-master => create qilish client ni
 // user/master/client-not-visit => tashrif buyurmagan client chiqadi get
 // user/master/client-stoppedVisiting
 
@@ -64,3 +65,20 @@ export const region_list: string = `${base_url}region`
 
 // district url
 export const district_list: string = `${base_url}district?regionId=`
+
+
+// schedule url
+
+export const schedule_list: string = `${base_url}order/today/orders/for/master`
+
+//master servise url
+
+export const master_service_list: string = `${base_url}service`
+
+
+// free Time url
+
+export const free_time_list: string = `${base_url}free-time`
+
+// help url
+export const help_url: string = `${base_url}help/one?HELP_STATUS=`

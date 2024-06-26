@@ -18,6 +18,8 @@ export interface Client {
     setDistrictData: (val: DistrictData[] | null) => void;
     attachmentID: null | string
     setAttachmentID: (val: null | string) => void;
+    allClientsList: any
+    setAllClients: (val: any | null) => void;
 }
 
 export interface ClientStatus {

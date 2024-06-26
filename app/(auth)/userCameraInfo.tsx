@@ -1,25 +1,16 @@
-import registerStory from '@/helpers/state_managment/auth/register';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React from 'react'
 import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import ProfileImgUpload from '@/components/profile-img-upload';
 
-const UserInfo2 = () => {
-    const { nickname, setNickname } = registerStory();
-    // const [nickname, setNickname] = useState('');
-    console.log(nickname);
-
+const UserCameraInfo = () => {
     const handleSkip = () => {
-        // Nickname ni bo'sh qilib belgilash
-        setNickname('');
-        // Navigate to the next page
-        router.push('(auth)/userCameraInfo');
+        router.push('(auth)/installPin');
     };
 
     const handleContinue = () => {
-        // Navigate to the next page
-        router.push('(auth)/userCameraInfo');
+        router.push('(auth)/installPin');
     };
-
     return (
         <View style={styles.container}>
             <View style={styles.topSection}>
@@ -29,35 +20,32 @@ const UserInfo2 = () => {
                     <View style={styles.progressSegment1} />
                     <View style={styles.progressSegment2} />
                 </View>
-                <Text style={styles.label}>Ваш никнейм</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Nick name"
-                    placeholderTextColor="#8A8A8A"
-                    value={nickname}
-                    onChangeText={setNickname}
-                />
+                <Text style={styles.label}>Добавьте свою фотографию</Text>
+                <Text style={styles.description}>Не желаете добавить своё фото? Оно будет доступно только мастерами к которым вы записались</Text>
+                <ProfileImgUpload />
             </View>
+
             <View style={styles.bottomSection}>
-                {nickname.length === 0 ? (
-                    <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-                        <Text style={styles.skipButtonText}>Пропустить</Text>
-                    </TouchableOpacity>
-                ) : null}
+
+                <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
+                    <Text style={styles.skipButtonText}>Пропустить</Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity
                     style={[
                         styles.continueButton,
-                        { backgroundColor: nickname.length > 0 ? '#9C0A35' : '#8A8A8A' },
                     ]}
-                    onPress={handleContinue}
-                    disabled={nickname.length === 0}
+
                 >
                     <Text style={styles.continueButtonText}>Продолжить</Text>
                 </TouchableOpacity>
             </View>
+
         </View>
-    );
-};
+    )
+}
+
+export default UserCameraInfo
 
 const styles = StyleSheet.create({
     container: {
@@ -68,6 +56,13 @@ const styles = StyleSheet.create({
     },
     topSection: {
         flex: 1,
+    },
+    description: {
+        color: '#828282',
+        textAlign: 'center',
+        fontSize: 14,
+        lineHeight: 18,
+        marginTop: 10,
     },
     progressBar: {
         flexDirection: 'row',
@@ -88,7 +83,7 @@ const styles = StyleSheet.create({
     },
     progressSegment1: {
         flex: 1,
-        backgroundColor: '#8A8A8A',
+        backgroundColor: '#9C0A35',
         marginLeft: 5,
         borderRadius: 5,
     },
@@ -138,5 +133,3 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 });
-
-export default UserInfo2;
