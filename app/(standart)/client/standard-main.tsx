@@ -1,27 +1,27 @@
-import {View, Text, ScrollView, StatusBar} from 'react-native';
-import tw from 'tailwind-react-native-classnames';
-import {SafeAreaView} from "react-native-safe-area-context";
+import {useEffect, useState} from "react";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import ClientCountCard from "@/components/(cards)/client-count-card";
-import {Ionicons} from '@expo/vector-icons';
 import ClientsBtn from "@/components/(buttons)/clients-btn";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import clientStore from "@/helpers/state_managment/client/clientStore";
+import tw from 'tailwind-react-native-classnames';
+import {getClientStatistics} from "@/helpers/api-function/client/client";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
+import clientStore from "@/helpers/state_managment/client/clientStore";
+import {SafeAreaView} from "react-native-safe-area-context";
+import {Ionicons, Entypo} from '@expo/vector-icons';
 import {RootStackParamList} from "@/type/root";
-import {useEffect} from "react";
-import {getClientAll, getClientStatistics} from "@/helpers/api-function/client/client";
+import {View, Text, ScrollView, StatusBar} from 'react-native';
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/main'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(client)/standard-main'>;
 
-const MainClient = () => {
-    const {isClientModal, setIsClientModal, setStatusData, statusData, setAllClients} = clientStore()
+const StandardMain = () => {
+    const {isClientModal, setIsClientModal, setStatusData, statusData} = clientStore()
+    const [isFilter, setIsFilter] = useState<string>('all')
     const toggleClientModal = () => setIsClientModal(!isClientModal);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     useEffect(() => {
-        getClientAll(setAllClients)
         getClientStatistics(setStatusData)
     }, []);
 
@@ -35,20 +35,47 @@ const MainClient = () => {
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
-                        <View style={[tw`mt-5 mb-10`, {alignSelf: 'flex-start'}]}>
+                        <View style={[tw`mt-5 mb-10 flex-row justify-between`, {gap: 10}]}>
                             <ClientsBtn
                                 name={`Все`}
                                 countOrIcon
-                                icon={<Ionicons name="person-circle-outline" size={30} color="white"/>}
-                                role={`free`}
+                                role={`all`}
+                                isActive={isFilter === 'all' ? false : true}
+                                clicks={() => {
+                                    setIsFilter('all')
+                                }}
+                            />
+                            <ClientsBtn
+                                name={`Новые`}
+                                countOrIcon
+                                role={`new`}
+                                isActive={isFilter === 'new' ? false : true}
+                                clicks={() => {
+                                    setIsFilter('new')
+                                }}
+                            />
+                            <ClientsBtn
+                                name={`Постоянные`}
+                                countOrIcon
+                                role={`constant`}
+                                isActive={isFilter === 'constant' ? false : true}
+                                clicks={() => {
+                                    setIsFilter('constant')
+                                }}
                             />
                         </View>
                         <View style={[tw``, {gap: 14}]}>
                             <ClientCountCard
-                                title={`Все клиенты`}
-                                icon={<Ionicons name="person-circle-outline" size={36} color="#9C0A35"/>}
-                                clicks={() => navigation.navigate('(profile)/(client)/components/AllClients')}
-                                counts={statusData ? +statusData.allClient : 0}
+                                title={`Перестали посещать`}
+                                icon={<Entypo name="block" size={32} color="#9C0A35"/>}
+                                // clicks={() => navigation.navigate('')}
+                                counts={statusData ? +statusData.stoppedVisiting : 0}
+                            />
+                            <ClientCountCard
+                                title={`Не посещали`}
+                                icon={<Ionicons name="eye-off" size={34} color="#9C0A35"/>}
+                                // clicks={() => navigation.navigate('')}
+                                counts={statusData ? +statusData.didNotVisit : 0}
                             />
                             <ClientCountCard
                                 title={`Из адресной книги`}
@@ -102,4 +129,4 @@ const MainClient = () => {
     );
 };
 
-export default MainClient;
+export default StandardMain;
