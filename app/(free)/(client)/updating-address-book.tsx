@@ -15,13 +15,19 @@ import financeStore from "@/helpers/state_managment/finance/financeStore";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {Picker} from "@react-native-picker/picker";
 import Select from "@/components/select/select";
-import {getAgeList, getDistrictList, getRegionList} from "@/helpers/api-function/client/client";
+import {
+    getAgeList,
+    getClientStatistics,
+    getDistrictList,
+    getRegionList,
+    updateClientData
+} from "@/helpers/api-function/client/client";
 import {RouteProp, useRoute} from '@react-navigation/native';
 
-type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/creating-client'>;
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/creating-client'>;
+type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/updating-address-book'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/updating-address-book'>;
 
-const CreatingClient = () => {
+const UpdatingAddressBook = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<CreatingClientScreenRouteProp>();
     const {client} = route.params;
@@ -36,25 +42,48 @@ const CreatingClient = () => {
         setRegionData,
         districtData,
         setDistrictData,
-        attachmentID
+        attachmentID,
+        setStatusData
     } = clientStore()
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [regex, setRegex] = useState<boolean>(false);
+    const [navigate, setNavigate] = useState<boolean>(false);
     const phoneInput = useRef<PhoneInput>(null);
 
     useEffect(() => {
         getAgeList(setAgeData)
         getRegionList(setRegionData)
+        if (client) {
+            updateClient.phoneNumber = client.phoneNumber
+            updateClient.firstName = client.firstName
+            updateClient.lastName = client.lastName
+        }
     }, []);
+
+    useEffect(() => {
+        if (client) {
+            updateClient.phoneNumber = client.phoneNumber
+            updateClient.firstName = client.firstName
+            updateClient.lastName = client.lastName
+        }
+    }, [client]);
+
+    useEffect(() => {
+        updateClient.birthDate = date
+        updateClient.phoneNumber = phoneNumber
+    }, [date, phoneNumber]);
 
     useEffect(() => {
         setRegex(validateObject(updateClient))
     }, [updateClient]);
 
     useEffect(() => {
-        updateClient.birthDate = date
-        updateClient.phoneNumber = phoneNumber
-    }, [date, phoneNumber]);
+        if (navigate) {
+            navigation.navigate('(free)/(client)/main')
+            setUpdateClient(updateClientDef)
+            getClientStatistics(setStatusData)
+        }
+    }, [navigate]);
 
     const handlePhoneNumberChange = (text: string) => {
         if (text.length <= 13) {
@@ -76,6 +105,13 @@ const CreatingClient = () => {
         {label: "Male", value: "true"},
         {label: "Female", value: "false"},
     ]
+
+    const sliceText = (text: string) => {
+        if (text) {
+            if (text.startsWith('+998')) return text.slice(4, 13)
+            else return text;
+        }
+    }
 
     function validateObject(obj: any) {
         for (let key in obj) {
@@ -118,7 +154,7 @@ const CreatingClient = () => {
                         <Text style={[tw`text-gray-500 mb-2 mt-3 text-base`]}>Номер телефона</Text>
                         <PhoneInput
                             ref={phoneInput}
-                            defaultValue={updateClient.phoneNumber}
+                            defaultValue={sliceText(updateClient.phoneNumber)}
                             defaultCode="UZ"
                             layout="first"
                             onChangeFormattedText={handlePhoneNumberChange}
@@ -134,7 +170,8 @@ const CreatingClient = () => {
                                 Дополнительная информаци о клиенте
                             </Text>
                             <MaterialIcons
-                                onPress={() => {}}
+                                onPress={() => {
+                                }}
                                 name="navigate-next"
                                 size={30}
                                 color="white"
@@ -174,8 +211,10 @@ const CreatingClient = () => {
                     <View style={tw`py-5`}>
                         <Buttons
                             title={`Сохранить`}
-                            onPress={() => {}}
-                            isDisebled={regex}
+                            onPress={() => {
+                                if (client) updateClientData(updateClient, client.id, setNavigate)
+                            }}
+                            isDisebled={!!(regex && client.id)}
                         />
                     </View>
                 </ScrollView>
@@ -217,4 +256,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CreatingClient;
+export default UpdatingAddressBook;

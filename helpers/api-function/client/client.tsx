@@ -79,13 +79,13 @@ export const getDistrictList = async (setData: (val: DistrictData[] | null) => v
     }
 }
 
-export const updateClientData = async (updateData: UpdateClient, clientID: string, navigation: any) => {
+export const updateClientData = async (updateData: UpdateClient, clientID: string, setNavigate: (val: boolean) => void) => {
     try {
         const {data} = await axios.put(`${client_address_book_update}${clientID}`, updateData, config)
-        if (data.success) navigation.navigate('(free)/(client)/main')
-        else navigation.navigate('(free)/(client)/creating-client')
+        if (data.success) setNavigate(true)
+        else setNavigate(false)
     } catch (err) {
         console.error(err)
-        navigation.navigate('(free)/(client)/creating-client')
+        setNavigate(false)
     }
 }
