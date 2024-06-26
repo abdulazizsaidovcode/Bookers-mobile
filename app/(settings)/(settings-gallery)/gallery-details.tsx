@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, CheckBox } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -8,6 +8,8 @@ import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery'
 import { getFile } from '@/helpers/api';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import Buttons from '@/components/(buttons)/button';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const GalleryDetails: React.FC = () => {
   const route = useRoute();
@@ -16,11 +18,20 @@ const GalleryDetails: React.FC = () => {
   const [name, setName] = useState('');
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
   const { id } = route.params as { id: number };
 
   useEffect(() => {
     fetchFullData(id, setFullData);
   }, [id, setFullData]);
+
+  useEffect(() => {
+    if (selectAll) {
+      setSelectedImages(fullData.resGalleryAttachments.map(item => item.attachmentId));
+    } else {
+      setSelectedImages([]);
+    }
+  }, [selectAll, fullData.resGalleryAttachments]);
 
   const toggleModal = () => {
     setName(fullData.albumName);
@@ -34,9 +45,10 @@ const GalleryDetails: React.FC = () => {
   const handleDeleteMode = () => {
     setIsDeleteMode(!isDeleteMode);
     setSelectedImages([]);
+    setSelectAll(false);
   };
 
-  const handleImageSelect = (imageId: number) => {
+  const handleImageSelect = (imageId: string) => {
     if (selectedImages.includes(imageId)) {
       setSelectedImages(selectedImages.filter(id => id !== imageId));
     } else {
@@ -46,27 +58,54 @@ const GalleryDetails: React.FC = () => {
 
   const handleDelete = () => {
     setIsDeleteMode(false);
-    delPhoto(id, selectedImages, setFullData)
+    delPhoto(id, selectedImages, setFullData);
     setSelectedImages([]);
+    setSelectAll(false);
   };
 
   return (
     <ScrollView style={styles.container}>
       <SafeAreaView>
-        <View>
-          <NavigationMenu all={true} name='' editOnPress={toggleModal} delOnPress={handleDeleteMode} />
-        </View>
+        {isDeleteMode ? (
+          <View style={styles.deleteModeBar}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', gap: 4 }}>
+                <AntDesign onPress={handleDeleteMode} name="close" size={24} color="white" />
+                <Text style={styles.deleteModeText}>{selectedImages.length}</Text>
+              </View>
+              <TouchableOpacity style={{ marginLeft: 20 }} onPress={() => setSelectAll(!selectAll)}>
+                <MaterialIcons
+                  name={selectAll ? "check-box" : "check-box-outline-blank"}
+                  size={24}
+                  color="#9C0A35"
+                />
+              </TouchableOpacity>
+              <Text style={styles.deleteModeText}>выделить все</Text>
+            </View>
+            <View>
+              <TouchableOpacity onPress={handleDeleteMode}>
+                <MaterialIcons name="delete" size={24} color="white" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : (
+          <View>
+            <NavigationMenu all={true} name='' editOnPress={toggleModal} delOnPress={handleDeleteMode} />
+          </View>
+        )}
         <View style={styles.content}>
           <Text style={styles.title}>{fullData.albumName}</Text>
           <View style={styles.imagesContainer}>
             {fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
               <View key={albumIndex} style={styles.imageWrapper}>
                 {isDeleteMode && (
-                  <CheckBox
-                    value={selectedImages.includes(albumItem.attachmentId)}
-                    onValueChange={() => handleImageSelect(albumItem.attachmentId)}
-                    style={styles.checkbox}
-                  />
+                  <View style={styles.checkIcon}>
+                    <TouchableOpacity onPress={() => handleImageSelect(albumItem.attachmentId)}>
+                      <MaterialIcons
+                        name={selectedImages.includes(albumItem.attachmentId) ? "check-box" : "check-box-outline-blank"}
+                        size={24} color={"#9C0A35"} />
+                    </TouchableOpacity>
+                  </View>
                 )}
                 <Image
                   style={styles.image}
@@ -74,6 +113,9 @@ const GalleryDetails: React.FC = () => {
                 />
               </View>
             ))}
+            {isDeleteMode && (
+              <Buttons title='Delete Selected' onPress={handleDelete} />
+            )}
           </View>
         </View>
         <CenteredModal
@@ -94,9 +136,6 @@ const GalleryDetails: React.FC = () => {
             />
           </View>
         </CenteredModal>
-        {isDeleteMode && (
-          <Buttons title='Delete Selected' onPress={handleDelete} />
-        )}
       </SafeAreaView>
     </ScrollView>
   );
@@ -128,12 +167,12 @@ const styles = StyleSheet.create({
   image: {
     width: 110,
     height: 110,
-    borderRadius: 15
+    borderRadius: 15,
   },
-  checkbox: {
+  checkIcon: {
     position: 'absolute',
     top: 5,
-    left: 5,
+    right: 5,
     zIndex: 1,
   },
   modalTitle: {
@@ -152,15 +191,17 @@ const styles = StyleSheet.create({
     color: 'white',
     backgroundColor: '#4b4b64',
   },
-  deleteButton: {
-    backgroundColor: 'red',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
+  deleteModeBar: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
+    paddingVertical: 20,
+    backgroundColor: '#21212e',
   },
-  deleteButtonText: {
+  deleteModeText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 18,
+    marginLeft: 5
   },
 });

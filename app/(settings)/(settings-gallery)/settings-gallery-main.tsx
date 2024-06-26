@@ -9,6 +9,7 @@ import { RootStackParamList } from '@/type/root';
 import { getFile } from '@/helpers/api';
 import { fetchData } from '@/helpers/api-function/gallery/settings-gallery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
+import { Ionicons } from '@expo/vector-icons';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-gallery-main'>;
 
@@ -32,7 +33,10 @@ const SettingsGalleryMain = () => {
                 </View>
                 <View style={styles.content}>
                     <View style={{ height: '83%', justifyContent: 'flex-start' }}>
-                        <Text style={styles.title}>Фото галерея</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10 }}>
+                            <Text style={styles.title}>Фото галерея</Text>
+                            {data.length === 0 ? '' : <Ionicons name="add-circle-outline" size={25} color="white" onPress={() => navigation.navigate('(settings)/(settings-gallery)/settings-gallery')}/>}
+                        </View>
                         {data.length === 0 ?
                             <Text style={styles.description}>Ваша галерея пустая, добавьте фотографии из проводника Вашего телефона</Text>
                             :

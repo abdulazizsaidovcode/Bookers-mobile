@@ -1,32 +1,32 @@
-import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View, Alert, Image, TouchableWithoutFeedback, Switch} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View, Alert, Image, TouchableWithoutFeedback, Switch } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import LocationInput from '@/components/(location)/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as ImagePicker from 'expo-image-picker';
-import {addData, fetchData} from '@/helpers/api-function/gallery/settings-gallery';
+import { addData, fetchData } from '@/helpers/api-function/gallery/settings-gallery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 
 const SettingsGallery: React.FC = () => {
-    const [images, setImages] = useState<any>([]);
+    const [images, setImages] = useState<any[]>([]);
     const [mainImageIndex, setMainImageIndex] = useState<number | null>(null);
     const [selectedImageIndices, setSelectedImageIndices] = useState<number[]>([]);
     const [showCheckboxes, setShowCheckboxes] = useState<boolean>(false);
     const [showMainSwitch, setShowMainSwitch] = useState<boolean>(false);
     const [albumName, setAlbumName] = useState<string>('');
 
-    const {data, setData} = useGalleryStore();
+    const { data, setData } = useGalleryStore();
 
     useEffect(() => {
         fetchData(setData);
     }, []);
 
     const pickImageFromCamera = async () => {
-        const {status} = await ImagePicker.requestCameraPermissionsAsync();
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== 'granted') {
             Alert.alert('Sorry, we need camera permissions to make this work!');
             return;
@@ -45,7 +45,7 @@ const SettingsGallery: React.FC = () => {
     };
 
     const pickImageFromGallery = async () => {
-        const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
             Alert.alert('Sorry, we need gallery permissions to make this work!');
             return;
@@ -94,25 +94,24 @@ const SettingsGallery: React.FC = () => {
 
     const saveAlbum = () => {
         const mainPhotos: any = mainImageIndex !== null ? [images[mainImageIndex]] : [];
-
+        
         const formData = new FormData()
-        formData.append('albumName ', albumName)
-        formData.append('photos', images)
+        formData.append('photos', images);
         formData.append('mainPhotos', mainPhotos)
-        if (albumName && images.length > 0 && mainPhotos.length > 0) addData(formData)
+        if (albumName && images.length > 0 && mainPhotos.length > 0) addData(formData, albumName)
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View>
-                    <NavigationMenu name='Создать альбом' deleteIcon toggleModal={toggleModal}/>
+                    <NavigationMenu name='Создать альбом' deleteIcon toggleModal={toggleModal} />
                 </View>
-                <View style={{paddingHorizontal: 10, flex: 1}}>
-                    <View style={{padding: 10}}>
+                <View style={{ paddingHorizontal: 10, flex: 1 }}>
+                    <View style={{ padding: 10 }}>
                         <Text style={styles.title}>Фото галерея</Text>
-                        <View style={{marginTop: 10}}>
-                            <LocationInput placeholder='Название альбома' labalVisible={true} onChangeText={setAlbumName}/>
+                        <View style={{ marginTop: 10 }}>
+                            <LocationInput placeholder='Название альбома' labalVisible={true} onChangeText={setAlbumName} />
                         </View>
                         {images && (
                             <>
@@ -124,12 +123,12 @@ const SettingsGallery: React.FC = () => {
                                             onPress={() => showCheckboxes && handleImageSelect(index)}
                                         >
                                             <View style={styles.imageContainer}>
-                                                <Image source={{uri: image}} style={styles.image}/>
+                                                <Image source={{ uri: image }} style={styles.image} />
                                                 {showCheckboxes && (
                                                     <View style={styles.checkIcon}>
                                                         <MaterialIcons
                                                             name={selectedImageIndices.includes(index) ? "check-circle" : "radio-button-unchecked"}
-                                                            size={24} color="#9C0A35"/>
+                                                            size={24} color="#9C0A35" />
                                                     </View>
                                                 )}
                                                 {showMainSwitch && (
@@ -137,7 +136,7 @@ const SettingsGallery: React.FC = () => {
                                                         <View style={styles.mainCheckIcon}>
                                                             <MaterialIcons
                                                                 name={mainImageIndex === index ? "check-circle" : "radio-button-unchecked"}
-                                                                size={24} color="#9C0A35"/>
+                                                                size={24} color="#9C0A35" />
                                                         </View>
                                                     </TouchableWithoutFeedback>
                                                 )}
@@ -147,16 +146,16 @@ const SettingsGallery: React.FC = () => {
                                 </View>
                                 {images.length === 0 ? '' : showCheckboxes && (
                                     <View style={styles.switchContainer}>
-                                        <View style={{width: "50%"}}>
-                                            <Buttons title="Удалить выбранные" textSize={15} onPress={deleteSelectedImage}/>
+                                        <View style={{ width: "50%" }}>
+                                            <Buttons title="Удалить выбранные" textSize={15} onPress={deleteSelectedImage} />
                                         </View>
-                                        <View style={{width: "50%"}}>
+                                        <View style={{ width: "50%" }}>
                                             <Buttons title="Назад" backgroundColor='white' textColor='#9C0A35' textSize={15}
-                                                     onPress={() => {
-                                                         setShowCheckboxes(false);
-                                                         setSelectedImageIndices([]);
-                                                         setShowMainSwitch(false);
-                                                     }}/>
+                                                onPress={() => {
+                                                    setShowCheckboxes(false);
+                                                    setSelectedImageIndices([]);
+                                                    setShowMainSwitch(false);
+                                                }} />
                                         </View>
                                     </View>
                                 )}
@@ -171,20 +170,20 @@ const SettingsGallery: React.FC = () => {
                                 )}
                             </>
                         )}
-                        <View style={{marginTop: 10}}>
-                            <View style={{width: 200}}>
-                                <Buttons icon={<Feather name="upload-cloud" size={20} color="white"/>} title={` Загрузить фото`}
-                                         onPress={pickImageFromGallery}/>
+                        <View style={{ marginTop: 10 }}>
+                            <View style={{ width: 200 }}>
+                                <Buttons icon={<Feather name="upload-cloud" size={20} color="white" />} title={` Загрузить фото`}
+                                    onPress={pickImageFromGallery} />
                             </View>
-                            <View style={{width: 180, marginTop: 10}}>
-                                <Buttons icon={<Ionicons name="camera-outline" size={20} color="white"/>} title={` Сделать фото`}
-                                         onPress={pickImageFromCamera}/>
+                            <View style={{ width: 180, marginTop: 10 }}>
+                                <Buttons icon={<Ionicons name="camera-outline" size={20} color="white" />} title={` Сделать фото`}
+                                    onPress={pickImageFromCamera} />
                             </View>
                         </View>
                     </View>
                 </View>
-                <View style={{paddingHorizontal: 10}}>
-                    <Buttons title={`Сохранить`} onPress={saveAlbum} isDisebled={images.length !== 0}/>
+                <View style={{ paddingHorizontal: 10 }}>
+                    <Buttons title={`Сохранить`} onPress={saveAlbum} isDisebled={images.length !== 0} />
                 </View>
             </ScrollView>
         </SafeAreaView>

@@ -18,7 +18,7 @@ const NavigationMenu = ({ toggleModal, name, deleteIcon, all = false, delOnPress
             }
             {all ?
                 <View style={{ gap: 10, flexDirection: 'row', alignItems: 'center' }}>
-                    <Ionicons name="add-circle-outline" size={25} color="white" onPress={delOnPress} />
+                    <Ionicons name="add-circle-outline" size={25} color="white" onPress={addOnPress} />
                     <AntDesign name="edit" size={25} color="white" onPress={editOnPress} />
                     <MaterialIcons name="delete" size={25} color="white" onPress={delOnPress} />
                 </View> : ''}
