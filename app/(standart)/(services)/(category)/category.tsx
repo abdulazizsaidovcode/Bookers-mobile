@@ -8,7 +8,7 @@ import Buttons from '@/components/(buttons)/button';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { router } from 'expo-router';
 import axios from 'axios';
-import { base_url } from '@/helpers/api';
+import { base_url, services_child } from '@/helpers/api';
 import { config } from '@/helpers/token';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 
@@ -34,7 +34,7 @@ const Category = () => {
 
     const getChildCategory = async (id: string) => {
         try {
-            const response = await axios.get(`${base_url}category/byCategory/${id}`, config);
+            const response = await axios.get(`${services_child}${id}`, config);
             if (response.data.success) {
                 setChildCategoryData(response.data.body)
             }
