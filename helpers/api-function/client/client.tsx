@@ -3,61 +3,33 @@ import {config} from "@/helpers/token";
 import {
     age_list,
     client_address_book,
-    client_address_book_search, client_address_book_update,
+    client_address_book_search,
+    client_address_book_update,
+    client_not_visit,
+    client_not_visit_search,
+    client_permanent, client_permanent_search,
     client_statistics,
-    district_list, master_client_all_list, master_client_create,
+    client_stopped_visit_search,
+    client_stopped_visit_sms,
+    client_stopped_visiting,
+    district_list,
+    master_client_all_list,
+    master_client_create,
+    new_client, new_client_search,
     region_list
 } from "@/helpers/api";
-import {AgeData, ClientAddressBook, ClientStatus, DistrictData, RegionData, UpdateClient} from "@/type/client/client";
-
-// master uziga tegishli all client listini chgiqaruvchi get function
-export const getClientAll = async (setData: (val: any | null) => void) => {
-    try {
-        const {data} = await axios.get(master_client_all_list, config)
-        if (data.success) setData(data.body)
-        else setData(null)
-    } catch (err) {
-        console.log(err)
-        setData(null)
-    }
-}
-
-// client ga kirganda statistikalarni chiqazrish un yozilgan get function
-export const getClientStatistics = async (setData: (val: ClientStatus | null) => void) => {
-    try {
-        const {data} = await axios.get(client_statistics, config);
-        if (data.success) setData(data.body)
-        else setData(null)
-    } catch (err) {
-        console.error(err)
-    }
-}
-
-// client address book ni listini get qilish
-export const getClientAddressBook = async (setData: (val: ClientAddressBook[] | null) => void) => {
-    try {
-        const {data} = await axios.get(client_address_book, config);
-        if (data.success) setData(data.body)
-        else setData(null)
-    } catch (err) {
-        console.error(err)
-        setData(null)
-    }
-}
-
-// client address book ni search un
-export const getClientAddressBookSearch = async (setData: (val: ClientAddressBook[] | null) => void, search: string) => {
-    try {
-        if (search) {
-            const {data} = await axios.get(`${client_address_book_search}${search}`, config);
-            if (data.success) setData(data.body)
-            else getClientAddressBook(setData)
-        } else getClientAddressBook(setData)
-    } catch (err) {
-        console.error(err)
-        getClientAddressBook(setData)
-    }
-}
+import {
+    AgeData,
+    ClientAddressBook,
+    ClientNotVisit,
+    ClientStatus,
+    ClientStoppedVisiting,
+    DistrictData,
+    NewClient,
+    PermanentClient,
+    RegionData,
+    UpdateClient
+} from "@/type/client/client";
 
 // age oraliqni list ini get qilish
 export const getAgeList = async (setData: (val: AgeData[] | null) => void) => {
@@ -97,6 +69,30 @@ export const getDistrictList = async (setData: (val: DistrictData[] | null) => v
     }
 }
 
+// client ga kirganda statistikalarni chiqazrish un yozilgan get function
+export const getClientStatistics = async (setData: (val: ClientStatus | null) => void) => {
+    try {
+        const {data} = await axios.get(client_statistics, config);
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
+// master uziga tegishli all client listini chgiqaruvchi get function
+export const getClientAll = async (setData: (val: any | null) => void) => {
+    try {
+        const {data} = await axios.get(master_client_all_list, config)
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
+
 // master client ni create qilish
 export const createClient = async (createData: UpdateClient, setNavigate: (val: boolean) => void) => {
     try {
@@ -109,6 +105,98 @@ export const createClient = async (createData: UpdateClient, setNavigate: (val: 
     }
 }
 
+// stopped visit git function
+export const getStoppedVisiting = async (setData: (val: null | ClientStoppedVisiting[]) => void) => {
+    try {
+        const {data} = await axios.get(client_stopped_visiting, config)
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
+
+// stopped visit search un
+export const getClientStoppedVisitSearch = async (setData: (val: ClientStoppedVisiting[] | null) => void, search: string) => {
+    try {
+        if (search) {
+            const {data} = await axios.get(`${client_stopped_visit_search}${search}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else getStoppedVisiting(setData)
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
+// stopped client ga sms juantish
+export const addClientSMS = async (clientID: string, val: string, setTrue: (val: boolean) => void) => {
+    try {
+        if (clientID && val) {
+            const {data} = await axios.post(`${client_stopped_visit_sms}?clientId=${clientID}&text=${val}`, '', config)
+            if (data.success) setTrue(true)
+            else setTrue(false)
+        } else setTrue(false)
+    } catch (err) {
+        console.log(err)
+        setTrue(false)
+    }
+}
+
+// not visit git function
+export const getNotVisiting = async (setData: (val: null | ClientNotVisit[]) => void) => {
+    try {
+        const {data} = await axios.get(client_not_visit, config)
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
+
+// not visit search un
+export const getClientNotVisitSearch = async (setData: (val: ClientNotVisit[] | null) => void, search: string) => {
+    try {
+        if (search) {
+            const {data} = await axios.get(`${client_not_visit_search}${search}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else getNotVisiting(setData)
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
+// client address book ni listini get qilish
+export const getClientAddressBook = async (setData: (val: ClientAddressBook[] | null) => void) => {
+    try {
+        const {data} = await axios.get(client_address_book, config);
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
+// client address book ni search un
+export const getClientAddressBookSearch = async (setData: (val: ClientAddressBook[] | null) => void, search: string) => {
+    try {
+        if (search) {
+            const {data} = await axios.get(`${client_address_book_search}${search}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else getClientAddressBook(setData)
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
 // address book da create qilgan client larni update qilish
 export const updateClientData = async (updateData: UpdateClient, clientID: string, setNavigate: (val: boolean) => void) => {
     try {
@@ -118,5 +206,57 @@ export const updateClientData = async (updateData: UpdateClient, clientID: strin
     } catch (err) {
         console.error(err)
         setNavigate(false)
+    }
+}
+
+// new client get function
+export const getNewClient = async (setData: (val: NewClient[] | null) => void) => {
+    try {
+        const {data} = await axios.get(new_client, config);
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
+// new client search qilish
+export const getNewClientSearch = async (setData: (val: NewClient[] | null) => void, search: string) => {
+    try {
+        if (search) {
+            const {data} = await axios.get(`${new_client_search}${search}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else getNewClient(setData)
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
+// permanent client get function
+export const getPermanentClient = async (setData: (val: PermanentClient[] | null) => void) => {
+    try {
+        const {data} = await axios.get(client_permanent, config);
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
+// permanent client search qilish
+export const getPermanentClientSearch = async (setData: (val: PermanentClient[] | null) => void, search: string) => {
+    try {
+        if (search) {
+            const {data} = await axios.get(`${client_permanent_search}${search}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else getPermanentClient(setData)
+    } catch (err) {
+        console.error(err)
+        setData(null)
     }
 }
