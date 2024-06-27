@@ -88,9 +88,9 @@ const SettingsGallery: React.FC = () => {
 
         const mainPhotos = [images[mainImageIndex]];
         const formData = new FormData();
-        
-        images.forEach(item => formData.append('photos', JSON.stringify(item)));
-        mainPhotos.forEach(item => formData.append('mainPhotos', JSON.stringify(item)));
+
+        formData.append('photos', images);
+        formData.append('mainPhotos', mainPhotos);
 
         addData(formData, albumName);
     };
