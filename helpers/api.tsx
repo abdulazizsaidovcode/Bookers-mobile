@@ -58,6 +58,8 @@ export const client_address_book_search: string = `${base_url}client/search/for/
 export const client_not_visit_search: string = `${base_url}client/search/for/not/visit?name=`
 export const client_stopped_visit_search: string = `${base_url}client/search/for/stopped/visiting?name=`
 export const client_stopped_visit_sms: string = `${base_url}sms/send-invite`
+export const client_permanent: string = `${base_url}user/master/client-permanent`
+export const new_client: string = `${base_url}user/master/client-new`
 
 // age url
 export const age_list: string = `${base_url}age`

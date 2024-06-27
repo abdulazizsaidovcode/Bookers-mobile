@@ -109,3 +109,43 @@ export const FromAddressBookList = (
         </TouchableOpacity>
     );
 };
+
+// client info un
+export const StandardNowAndConstClient = (
+    {
+        client,
+        clicks,
+        isBtn
+    }: {
+        client: any;
+        clicks?: () => void;
+        isBtn?: boolean
+    }) => {
+    return (
+        <TouchableOpacity
+            onPress={!isBtn ? clicks : undefined}
+            style={[
+                tw`flex-row items-center p-4 mb-3 rounded-2xl`,
+                {backgroundColor: "#B9B9C9"},
+            ]}
+            activeOpacity={0.8}
+        >
+            <Image
+                source={client.attachmentId !== null ? {uri: `${getFile}${client.attachmentId}`} : require('../../assets/avatar.png')}
+                style={tw`w-10 h-10 rounded-full`}
+            />
+            <View style={tw`ml-4 flex-col`}>
+                <Text style={[tw`text-black text-lg font-bold`, {lineHeight: 20}]}>
+                    {/*{client.firstName} {client.lastName}*/}sedfasjuf
+                </Text>
+                <Text style={[tw`text-gray-500 text-base`, {lineHeight: 20}]}>
+                    {/*{client.phoneNumber}*/}number
+                </Text>
+
+                <View style={[tw``]}>
+                    <FiltersButton title={`Пригласить`} onPress={isBtn ? clicks : undefined} />
+                </View>
+            </View>
+        </TouchableOpacity>
+    );
+};
