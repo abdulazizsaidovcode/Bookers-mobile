@@ -1,17 +1,19 @@
 // StompContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Stomp } from '@stomp/stompjs';
-import { WebSocket as RNWebSocket } from 'react-native-websocket';
-import { sockjs_url } from '@/helpers/api'; // Ensure this URL is compatible with WebSocket
+import SockJS from 'sockjs-client';
+import { sockjs_url } from '@/helpers/api';
 
+// Create a context
 const StompContext = createContext();
 
+// Create a provider component
 export const StompProvider = ({ children }) => {
   const [stompClient, setStompClient] = useState(null);
   const [adminId, setAdminId] = useState("");
 
   useEffect(() => {
-    const socket = new RNWebSocket(sockjs_url);
+    const socket = new SockJS(sockjs_url);
     const stomp = Stomp.over(socket);
 
     stomp.connect({}, (frame) => {
@@ -35,6 +37,7 @@ export const StompProvider = ({ children }) => {
   );
 };
 
+// Custom hook to use the Stomp context
 export const useStomp = () => {
   return useContext(StompContext);
 };

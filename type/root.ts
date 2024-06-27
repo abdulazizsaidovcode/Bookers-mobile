@@ -22,8 +22,6 @@ export type RootStackParamList = {
     '(profile)/(tariff)/tariff': undefined;
     '(profile)/(client)/components/AllClients': undefined;
     '(settings)/(settings-gallery)/gallery-details': any;
-    '(standart)/client/standard-main': undefined | string;
-    '(standart)/client/not-visiting': undefined | string;
-    '(standart)/client/stopped-visiting': undefined | string;
+    '(standart)/(client)/standard-main': undefined | string;
   };
   

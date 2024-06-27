@@ -1,5 +1,8 @@
+client tsx
+
+
 import axios from "axios";
-import {config} from "@/helpers/token";
+import { config } from "@/helpers/token";
 import {
     age_list,
     client_address_book,
@@ -34,7 +37,7 @@ import {
 // age oraliqni list ini get qilish
 export const getAgeList = async (setData: (val: AgeData[] | null) => void) => {
     try {
-        const {data} = await axios.get(age_list, config);
+        const { data } = await axios.get(age_list, config);
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
@@ -46,7 +49,7 @@ export const getAgeList = async (setData: (val: AgeData[] | null) => void) => {
 // region list ni get qilish
 export const getRegionList = async (setData: (val: RegionData[] | null) => void) => {
     try {
-        const {data} = await axios.get(region_list, config);
+        const { data } = await axios.get(region_list, config);
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
@@ -59,7 +62,7 @@ export const getRegionList = async (setData: (val: RegionData[] | null) => void)
 export const getDistrictList = async (setData: (val: DistrictData[] | null) => void, id: number | string) => {
     try {
         if (id) {
-            const {data} = await axios.get(`${district_list}${id}`, config);
+            const { data } = await axios.get(`${district_list}${id}`, config);
             if (data.success) setData(data.body)
             else setData(null)
         } else console.log('region id yuq!!!')
@@ -72,7 +75,7 @@ export const getDistrictList = async (setData: (val: DistrictData[] | null) => v
 // client ga kirganda statistikalarni chiqazrish un yozilgan get function
 export const getClientStatistics = async (setData: (val: ClientStatus | null) => void) => {
     try {
-        const {data} = await axios.get(client_statistics, config);
+        const { data } = await axios.get(client_statistics, config);
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
@@ -84,7 +87,7 @@ export const getClientStatistics = async (setData: (val: ClientStatus | null) =>
 // master uziga tegishli all client listini chgiqaruvchi get function
 export const getClientAll = async (setData: (val: any | null) => void) => {
     try {
-        const {data} = await axios.get(master_client_all_list, config)
+        const { data } = await axios.get(master_client_all_list, config)
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
@@ -96,7 +99,7 @@ export const getClientAll = async (setData: (val: any | null) => void) => {
 // master client ni create qilish
 export const createClient = async (createData: UpdateClient, setNavigate: (val: boolean) => void) => {
     try {
-        const {data} = await axios.post(master_client_create, createData, config)
+        const { data } = await axios.post(master_client_create, createData, config)
         if (data.success) setNavigate(true)
         else setNavigate(false)
     } catch (err) {
@@ -108,7 +111,7 @@ export const createClient = async (createData: UpdateClient, setNavigate: (val: 
 // stopped visit git function
 export const getStoppedVisiting = async (setData: (val: null | ClientStoppedVisiting[]) => void) => {
     try {
-        const {data} = await axios.get(client_stopped_visiting, config)
+        const { data } = await axios.get(client_stopped_visiting, config)
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
@@ -121,7 +124,7 @@ export const getStoppedVisiting = async (setData: (val: null | ClientStoppedVisi
 export const getClientStoppedVisitSearch = async (setData: (val: ClientStoppedVisiting[] | null) => void, search: string) => {
     try {
         if (search) {
-            const {data} = await axios.get(`${client_stopped_visit_search}${search}`, config);
+            const { data } = await axios.get(`${client_stopped_visit_search}${search}`, config);
             if (data.success) setData(data.body)
             else setData(null)
         } else getStoppedVisiting(setData)
@@ -131,11 +134,12 @@ export const getClientStoppedVisitSearch = async (setData: (val: ClientStoppedVi
     }
 }
 
+
 // stopped client ga sms juantish
 export const addClientSMS = async (clientID: string, val: string, setTrue: (val: boolean) => void) => {
     try {
         if (clientID && val) {
-            const {data} = await axios.post(`${client_stopped_visit_sms}?clientId=${clientID}&text=${val}`, '', config)
+            const { data } = await axios.post(`${client_stopped_visit_sms}?clientId=${clientID}&text=${val}`, '', config)
             if (data.success) setTrue(true)
             else setTrue(false)
         } else setTrue(false)
@@ -148,7 +152,7 @@ export const addClientSMS = async (clientID: string, val: string, setTrue: (val:
 // not visit git function
 export const getNotVisiting = async (setData: (val: null | ClientNotVisit[]) => void) => {
     try {
-        const {data} = await axios.get(client_not_visit, config)
+        const { data } = await axios.get(client_not_visit, config)
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
@@ -161,7 +165,7 @@ export const getNotVisiting = async (setData: (val: null | ClientNotVisit[]) => 
 export const getClientNotVisitSearch = async (setData: (val: ClientNotVisit[] | null) => void, search: string) => {
     try {
         if (search) {
-            const {data} = await axios.get(`${client_not_visit_search}${search}`, config);
+            const { data } = await axios.get(`${client_not_visit_search}${search}`, config);
             if (data.success) setData(data.body)
             else setData(null)
         } else getNotVisiting(setData)
@@ -174,7 +178,7 @@ export const getClientNotVisitSearch = async (setData: (val: ClientNotVisit[] | 
 // client address book ni listini get qilish
 export const getClientAddressBook = async (setData: (val: ClientAddressBook[] | null) => void) => {
     try {
-        const {data} = await axios.get(client_address_book, config);
+        const { data } = await axios.get(client_address_book, config);
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
@@ -187,7 +191,7 @@ export const getClientAddressBook = async (setData: (val: ClientAddressBook[] | 
 export const getClientAddressBookSearch = async (setData: (val: ClientAddressBook[] | null) => void, search: string) => {
     try {
         if (search) {
-            const {data} = await axios.get(`${client_address_book_search}${search}`, config);
+            const { data } = await axios.get(`${client_address_book_search}${search}`, config);
             if (data.success) setData(data.body)
             else setData(null)
         } else getClientAddressBook(setData)
@@ -200,7 +204,7 @@ export const getClientAddressBookSearch = async (setData: (val: ClientAddressBoo
 // address book da create qilgan client larni update qilish
 export const updateClientData = async (updateData: UpdateClient, clientID: string, setNavigate: (val: boolean) => void) => {
     try {
-        const {data} = await axios.put(`${client_address_book_update}${clientID}`, updateData, config)
+        const { data } = await axios.put(`${client_address_book_update}${clientID}`, updateData, config)
         if (data.success) setNavigate(true)
         else setNavigate(false)
     } catch (err) {
@@ -212,7 +216,7 @@ export const updateClientData = async (updateData: UpdateClient, clientID: strin
 // new client get function
 export const getNewClient = async (setData: (val: NewClient[] | null) => void) => {
     try {
-        const {data} = await axios.get(new_client, config);
+        const { data } = await axios.get(new_client, config);
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
@@ -225,7 +229,7 @@ export const getNewClient = async (setData: (val: NewClient[] | null) => void) =
 export const getNewClientSearch = async (setData: (val: NewClient[] | null) => void, search: string) => {
     try {
         if (search) {
-            const {data} = await axios.get(`${new_client_search}${search}`, config);
+            const { data } = await axios.get(`${new_client_search}${search}`, config);
             if (data.success) setData(data.body)
             else setData(null)
         } else getNewClient(setData)
@@ -238,7 +242,7 @@ export const getNewClientSearch = async (setData: (val: NewClient[] | null) => v
 // permanent client get function
 export const getPermanentClient = async (setData: (val: PermanentClient[] | null) => void) => {
     try {
-        const {data} = await axios.get(client_permanent, config);
+        const { data } = await axios.get(client_permanent, config);
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
@@ -247,11 +251,12 @@ export const getPermanentClient = async (setData: (val: PermanentClient[] | null
     }
 }
 
+
 // permanent client search qilish
 export const getPermanentClientSearch = async (setData: (val: PermanentClient[] | null) => void, search: string) => {
     try {
         if (search) {
-            const {data} = await axios.get(`${client_permanent_search}${search}`, config);
+            const { data } = await axios.get(`${client_permanent_search}${search}`, config);
             if (data.success) setData(data.body)
             else setData(null)
         } else getPermanentClient(setData)

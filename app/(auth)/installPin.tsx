@@ -44,14 +44,6 @@ const InstallPin: React.FC = () => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <View style={styles.topSection}>
-                <View style={styles.progressBar}>
-                    <View style={styles.progressIndicator} />
-                    <View style={styles.progressSegment} />
-                    <View style={styles.progressSegment1} />
-                    <View style={styles.progressSegment2} />
-                </View>
-            </View>
             <View style={styles.container}>
                 <View style={styles.topSection}>
                     <Text style={styles.label}>Установите ПИН код</Text>
@@ -104,12 +96,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'space-between',
+        marginTop: 50,
     },
     topSection: {
         alignItems: 'center',
-        marginTop: 10,
-        marginBottom: 60,
-        padding: 20,
+        marginTop: 50,
     },
     label: {
         color: '#FFFFFF',
@@ -145,35 +136,6 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontSize: 16,
-    },
-    progressBar: {
-        flexDirection: 'row',
-        height: 5,
-        marginTop: 40,
-        borderRadius: 5,
-    },
-    progressIndicator: {
-        flex: 1,
-        backgroundColor: '#9C0A35',
-        borderRadius: 5,
-    },
-    progressSegment: {
-        flex: 1,
-        backgroundColor: '#9C0A35',
-        marginLeft: 5,
-        borderRadius: 5,
-    },
-    progressSegment1: {
-        flex: 1,
-        backgroundColor: '#9C0A35',
-        marginLeft: 5,
-        borderRadius: 5,
-    },
-    progressSegment2: {
-        flex: 1,
-        backgroundColor: '#9C0A35',
-        marginLeft: 5,
-        borderRadius: 5,
     },
 });
 

@@ -31,10 +31,7 @@ export const gallery_add = `${base_url}gallery`;
 export const gallery_add_photo = `${base_url}gallery/attachment`;
 
 // My services
-export const category_Father = `${base_url}category`;
-export const category_child = `${base_url}category/byCategory/`;
-export const masterAdd_category = `${base_url}category`;
-export const masterEdit_category = `${base_url}categoty/master`;
+export const services_list = `${base_url}category`
 
 
 // Register page 
@@ -51,13 +48,13 @@ export const worktime_get = `${base_url}workday/time/time/`
 // clients url
 export const client_statistics: string = `${base_url}user/master/client-count-by-status`
 export const client_address_book: string = `${base_url}user/master/client-addressBooks`
+export const client_address_book_search: string = `${base_url}client/search/for/from/contact?name=`
 export const client_address_book_update: string = `${base_url}client/`
 export const client_address_book_create: string = `${base_url}user/add-client-from-address-book`
 export const master_client_create: string = `${base_url}user/create-client-by-master`
 export const master_client_all_list: string = `${base_url}user/master/all-client`
 export const client_not_visit: string = `${base_url}user/master/client-not-visit`
 export const client_stopped_visiting: string = `${base_url}user/master/client-stoppedVisiting`
-export const client_address_book_search: string = `${base_url}client/search/for/from/contact?name=`
 export const client_not_visit_search: string = `${base_url}client/search/for/not/visit?name=`
 export const client_stopped_visit_search: string = `${base_url}client/search/for/stopped/visiting?name=`
 export const client_stopped_visit_sms: string = `${base_url}sms/send-invite`
@@ -65,6 +62,9 @@ export const client_permanent: string = `${base_url}user/master/client-permanent
 export const client_permanent_search: string = `${base_url}client/search/for/regular/visit?name=`
 export const new_client: string = `${base_url}user/master/client-new`
 export const new_client_search: string = `${base_url}client/search/for/new?name=`
+// menga kk tegilmasin!!!!!
+// user/master/client-not-visit => tashrif buyurmagan client chiqadi get
+// user/master/client-stoppedVisiting
 
 // age url
 export const age_list: string = `${base_url}age`

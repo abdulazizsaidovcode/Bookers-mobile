@@ -10,7 +10,7 @@ import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import axios from 'axios';
-import { base_url, masterAdd_category } from '@/helpers/api';
+import { base_url } from '@/helpers/api';
 import { config } from '@/helpers/token';
 
 const Expertise: React.FC = () => {
@@ -41,7 +41,7 @@ const Expertise: React.FC = () => {
     };
     const postCategory = async (id: string , name: string) => {
         try {
-            const response = await axios.post(`${masterAdd_category}${id}?${name}`, config);
+            const response = await axios.post(`${base_url}category/${id}?${name}`, config);
             if (response.data.success) {
                 setChildCategoryData(response.data.body)
             }
