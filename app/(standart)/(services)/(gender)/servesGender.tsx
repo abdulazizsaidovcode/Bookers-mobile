@@ -16,7 +16,7 @@ const ServesGender = () => {
         { title: 'Женское направление', id: 'female' },
     ];
 
-    const handleCategorySelect = (id) => {
+    const handleCategorySelect = (id:any) => {
         setSelectedCategory(id);
     };
 
