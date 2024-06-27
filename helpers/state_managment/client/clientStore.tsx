@@ -10,8 +10,6 @@ import {
 } from "@/type/client/client";
 
 const clientStore = create<Client>((set) => ({
-    isLoading: false,
-    setIsLoading: (val: boolean) => set({isLoading: val}),
     isClientModal: false,
     setIsClientModal: (val: boolean) => set({isClientModal: val}),
     selectedClientList: [],

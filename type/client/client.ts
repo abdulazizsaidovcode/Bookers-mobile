@@ -1,6 +1,4 @@
 export interface Client {
-    isLoading: boolean;
-    setIsLoading: (val: boolean) => void;
     isClientModal: boolean;
     setIsClientModal: (val: boolean) => void;
     selectedClientList: number[];
