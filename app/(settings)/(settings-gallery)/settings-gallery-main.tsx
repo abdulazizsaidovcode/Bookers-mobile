@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, Pressable, Dimensions } from 'react-native';
 import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -12,6 +12,8 @@ import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery'
 import { Ionicons } from '@expo/vector-icons';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-gallery-main'>;
+const { width, height } = Dimensions.get('window');
+
 
 const SettingsGalleryMain = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
@@ -124,8 +126,8 @@ const styles = StyleSheet.create({
         margin: 5,
     },
     image: {
-        width: 75,
-        height: 75,
+        width: width / 5 - 3.7,
+        height: height / 11,
         borderRadius: 10,
     },
 });

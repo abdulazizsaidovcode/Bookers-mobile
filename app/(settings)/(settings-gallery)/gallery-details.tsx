@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert, Dimensions } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -10,6 +10,11 @@ import CenteredModal from '@/components/(modals)/modal-centered';
 import Buttons from '@/components/(buttons)/button';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import BottomModal from '@/components/(modals)/modal-bottom';
+import * as ImagePicker from 'expo-image-picker';
+
+const { width, height } = Dimensions.get('window');
+
 
 const GalleryDetails: React.FC = () => {
   const route = useRoute();
@@ -19,6 +24,7 @@ const GalleryDetails: React.FC = () => {
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [isBottomModalOpen, setIsBottomModalOpen] = useState(false);
   const { id } = route.params as { id: number };
 
   useEffect(() => {
@@ -63,6 +69,54 @@ const GalleryDetails: React.FC = () => {
     setSelectAll(false);
   };
 
+  const requestPermissions = async (type: 'camera' | 'gallery') => {
+    const { status } = type === 'camera'
+      ? await ImagePicker.requestCameraPermissionsAsync()
+      : await ImagePicker.requestMediaLibraryPermissionsAsync();
+    // if (status !== 'granted') {
+    //   Alert.alert(`Sorry, we need ${type} permissions to make this work!`);
+    //   return false;
+    // }
+    return true;
+  };
+
+  const pickImage = async (from: 'camera' | 'gallery') => {
+    const hasPermission = await requestPermissions(from);
+    if (!hasPermission) return;
+
+    const result = from === 'camera'
+      ? await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      })
+      : await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+        quality: 1,
+      });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const newImages = result.assets.map(asset => ({ uri: asset.uri }));
+      // Handle adding new images here
+    }
+  };
+
+  const toggleBottomModal = () => {
+    setIsBottomModalOpen(!isBottomModalOpen);
+  };
+
+  const addImageFromCamera = () => {
+    pickImage('camera');
+    toggleBottomModal();
+  };
+
+  const addImageFromGallery = () => {
+    pickImage('gallery');
+    toggleBottomModal();
+  };
+
   return (
     <ScrollView style={styles.container}>
       <SafeAreaView>
@@ -90,7 +144,7 @@ const GalleryDetails: React.FC = () => {
           </View>
         ) : (
           <View>
-            <NavigationMenu all={true} name='' editOnPress={toggleModal} delOnPress={handleDeleteMode} />
+            <NavigationMenu all={true} name='' editOnPress={toggleModal} delOnPress={handleDeleteMode} addOnPress={toggleBottomModal} />
           </View>
         )}
         <View style={styles.content}>
@@ -136,6 +190,19 @@ const GalleryDetails: React.FC = () => {
             />
           </View>
         </CenteredModal>
+        <BottomModal isBottomModal={isBottomModalOpen} toggleBottomModal={toggleBottomModal}>
+          <View style={styles.bottomModalContent}>
+            <TouchableOpacity onPress={addImageFromCamera}>
+              <Text style={styles.bottomModalText}>Сделать снимок</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={addImageFromGallery}>
+              <Text style={styles.bottomModalText}>Выбрать из галереи</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={toggleBottomModal}>
+              <Text style={styles.bottomModalCancelText}>Отмена</Text>
+            </TouchableOpacity>
+          </View>
+        </BottomModal>
       </SafeAreaView>
     </ScrollView>
   );
@@ -165,8 +232,8 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   image: {
-    width: 110,
-    height: 110,
+    width: width / 3 - 17,
+    height: height / 7,
     borderRadius: 15,
   },
   checkIcon: {
@@ -202,6 +269,20 @@ const styles = StyleSheet.create({
   deleteModeText: {
     color: 'white',
     fontSize: 18,
-    marginLeft: 5
+    marginLeft: 5,
+  },
+  bottomModalContent: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  bottomModalText: {
+    fontSize: 18,
+    color: '#fff',
+    marginVertical: 10,
+  },
+  bottomModalCancelText: {
+    fontSize: 18,
+    color: 'red',
+    marginVertical: 10,
   },
 });
