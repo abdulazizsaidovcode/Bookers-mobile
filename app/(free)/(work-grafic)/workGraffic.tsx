@@ -8,7 +8,7 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import { Item } from "@/type/graficWork/graficWork";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { putWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
-import CalendarGraffic from "./calendar";
+import CalendarGrafficEdit from "../(work-grafic-edit)/calendar";
 
 const GrafficWork: React.FC = () => {
   const { calendarDate, setWeek, week } = graficWorkStore();
@@ -44,7 +44,7 @@ const GrafficWork: React.FC = () => {
       <ScrollView>
         <View style={styles.section}>
           <Text style={styles.title}>График работы с</Text>
-          <CalendarGraffic />
+          <CalendarGrafficEdit />
         </View>
         <View style={styles.fullHeightSection}>
           <Text style={styles.title}>Выберите рабочие дни в неделю</Text>

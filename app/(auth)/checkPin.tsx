@@ -1,22 +1,28 @@
-import { t } from 'i18next';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
-import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
 
 const CheckPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
+    const [storedOtp, setStoredOtp] = useState<string | null>(null);
+    const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
     const inputs = useRef<TextInput[]>([]);
 
-    const handlePaste = (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-        const text = event.nativeEvent.text;
-        if (text.length === 4 && /^\d{4}$/.test(text)) {
-            const otpArray = text.split('');
-            setOtp(otpArray);
-            inputs.current[3].focus();
-        } else {
-            Alert.alert('Invalid OTP', 'Please enter a valid 4-digit OTP.');
-        }
-    };
+    const { t } = useTranslation();
+
+    useEffect(() => {
+        const getStoredOtp = async () => {
+            try {
+                const otp = await AsyncStorage.getItem('otp');
+                setStoredOtp(otp);
+            } catch (error) {
+                console.log('Failed to load OTP from storage', error);
+            }
+        };
+
+        getStoredOtp();
+    }, []);
 
     const handleChangeText = (text: string, index: number) => {
         if (/^\d*$/.test(text)) {
@@ -38,27 +44,35 @@ const CheckPin: React.FC = () => {
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
 
     const handleContinue = () => {
-        // Handle the continue action (navigate to the next page)
+        const enteredOtp = otp.join('');
+        if (enteredOtp === storedOtp) {
+            setIsCorrect(true);
+            // Handle the success action (navigate to the next page or perform other actions)
+        } else {
+            setIsCorrect(false);
+        }
     };
-    const {t}=useTranslation();
 
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <View style={styles.topSection}>
-                    <Text style={styles.label}>Подтвердите ПИН код</Text>
+                    <Text style={styles.label}>{t('Подтвердите ПИН код')}</Text>
                     <View style={styles.inputContainer}>
                         {otp.map((digit, index) => (
                             <TextInput
                                 key={index}
-                                style={styles.input}
+                                style={[
+                                    styles.input,
+                                    isCorrect === false && styles.inputError,
+                                    isCorrect === true && styles.inputSuccess,
+                                ]}
                                 value={digit}
                                 onChangeText={(text) => handleChangeText(text, index)}
                                 onKeyPress={(e) => handleKeyPress(e, index)}
                                 ref={(ref) => (inputs.current[index] = ref!)}
                                 maxLength={1}
                                 keyboardType="numeric"
-                                onPaste={handlePaste}
                             />
                         ))}
                     </View>
@@ -121,6 +135,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 20,
         color: '#FFFFFF',
+    },
+    inputError: {
+        borderColor: 'red',
+    },
+    inputSuccess: {
+        borderColor: 'green',
     },
     bottomSection: {
         padding: 20,

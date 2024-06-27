@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Alert, Image, TouchableWithoutFeedback, Switch } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Alert, Image, TouchableWithoutFeedback, Switch, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LocationInput from '@/components/(location)/locationInput';
 import Buttons from '@/components/(buttons)/button';
@@ -11,8 +11,10 @@ import { addData, fetchData } from '@/helpers/api-function/gallery/settings-gall
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 
+const { width, height } = Dimensions.get('window');
+
 const SettingsGallery: React.FC = () => {
-    const [images, setImages] = useState<any[]>([]);
+    const [images, setImages] = useState<{ uri: string }[]>([]);
     const [mainImageIndex, setMainImageIndex] = useState<number | null>(null);
     const [selectedImageIndices, setSelectedImageIndices] = useState<number[]>([]);
     const [showCheckboxes, setShowCheckboxes] = useState<boolean>(false);
@@ -40,17 +42,12 @@ const SettingsGallery: React.FC = () => {
         });
 
         if (!result.canceled && result.assets && result.assets.length > 0) {
-            setImages([...images, result.assets[0].uri]);
+            setImages([...images, { uri: result.assets[0].uri }]);
         }
     };
 
     const pickImageFromGallery = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-            Alert.alert('Sorry, we need gallery permissions to make this work!');
-            return;
-        }
-
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsMultipleSelection: true,
@@ -58,28 +55,22 @@ const SettingsGallery: React.FC = () => {
         });
 
         if (!result.canceled && result.assets && result.assets.length > 0) {
-            const newImages = result.assets.map(asset => asset.uri);
+            const newImages = result.assets.map(asset => ({ uri: asset.uri }));
             setImages([...images, ...newImages]);
         }
     };
 
-    const toggleModal = () => {
-        setShowCheckboxes(!showCheckboxes);
-    };
+    const toggleModal = () => setShowCheckboxes(!showCheckboxes);
 
     const handleImageSelect = (index: number) => {
-        setSelectedImageIndices((prevIndices) => {
-            if (prevIndices.includes(index)) {
-                return prevIndices.filter(i => i !== index);
-            } else {
-                return [...prevIndices, index];
-            }
-        });
+        setSelectedImageIndices((prevIndices) =>
+            prevIndices.includes(index)
+                ? prevIndices.filter(i => i !== index)
+                : [...prevIndices, index]
+        );
     };
 
-    const handleMainImageSelect = (index: number) => {
-        setMainImageIndex(index);
-    };
+    const handleMainImageSelect = (index: number) => setMainImageIndex(index);
 
     const deleteSelectedImage = () => {
         if (selectedImageIndices.length > 0) {
@@ -93,12 +84,15 @@ const SettingsGallery: React.FC = () => {
     };
 
     const saveAlbum = () => {
-        const mainPhotos: any = mainImageIndex !== null ? [images[mainImageIndex]] : [];
-        
-        const formData = new FormData()
+        if (!albumName || images.length === 0 || mainImageIndex === null) return;
+
+        const mainPhotos = [images[mainImageIndex]];
+        const formData = new FormData();
+
         formData.append('photos', images);
-        formData.append('mainPhotos', mainPhotos)
-        if (albumName && images.length > 0 && mainPhotos.length > 0) addData(formData, albumName)
+        formData.append('mainPhotos', mainPhotos);
+
+        addData(formData, albumName);
     };
 
     return (
@@ -113,7 +107,7 @@ const SettingsGallery: React.FC = () => {
                         <View style={{ marginTop: 10 }}>
                             <LocationInput placeholder='Название альбома' labalVisible={true} onChangeText={setAlbumName} />
                         </View>
-                        {images && (
+                        {images.length > 0 && (
                             <>
                                 <View style={styles.imageRow}>
                                     {images.map((image, index) => (
@@ -123,7 +117,7 @@ const SettingsGallery: React.FC = () => {
                                             onPress={() => showCheckboxes && handleImageSelect(index)}
                                         >
                                             <View style={styles.imageContainer}>
-                                                <Image source={{ uri: image }} style={styles.image} />
+                                                <Image source={{ uri: image.uri }} style={styles.image} />
                                                 {showCheckboxes && (
                                                     <View style={styles.checkIcon}>
                                                         <MaterialIcons
@@ -144,7 +138,7 @@ const SettingsGallery: React.FC = () => {
                                         </TouchableWithoutFeedback>
                                     ))}
                                 </View>
-                                {images.length === 0 ? '' : showCheckboxes && (
+                                {images.length > 0 && showCheckboxes && (
                                     <View style={styles.switchContainer}>
                                         <View style={{ width: "50%" }}>
                                             <Buttons title="Удалить выбранные" textSize={15} onPress={deleteSelectedImage} />
@@ -183,7 +177,7 @@ const SettingsGallery: React.FC = () => {
                     </View>
                 </View>
                 <View style={{ paddingHorizontal: 10 }}>
-                    <Buttons title={`Сохранить`} onPress={saveAlbum} isDisebled={images.length !== 0} />
+                    <Buttons title={`Сохранить`} onPress={saveAlbum} isDisebled={images.length === 0 || albumName === '' || mainImageIndex === null} />
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -212,8 +206,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     image: {
-        width: 108.33,
-        height: 108.33,
+        width: width / 3 - 25,
+        height: height / 7,
         borderRadius: 15,
     },
     checkIcon: {
