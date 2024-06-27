@@ -1,14 +1,30 @@
 import { router } from 'expo-router';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const InstallPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const inputs = useRef<TextInput[]>([]);
 
-    const handlePaste = (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-        const text = event.nativeEvent.text;
+    useEffect(() => {
+        const getStoredOtp = async () => {
+            try {
+                const storedOtp = await AsyncStorage.getItem('otp');
+                if (storedOtp) {
+                    setOtp(storedOtp.split(''));
+                }
+            } catch (error) {
+                console.log('Failed to load OTP from storage', error);
+            }
+        };
+
+        getStoredOtp();
+    }, []);
+
+    const handlePaste = async () => {
+        const text = await Clipboard.getString();
         if (text.length === 4 && /^\d{4}$/.test(text)) {
             const otpArray = text.split('');
             setOtp(otpArray);
@@ -37,10 +53,17 @@ const InstallPin: React.FC = () => {
 
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
 
-    const handleContinue = () => {
-        // Handle the continue action (navigate to the next page)
+    const handleContinue = async () => {
+        try {
+            await AsyncStorage.setItem('otp', otp.join(''));
+            // Handle the continue action (navigate to the next page)
+            router.push('(auth)/checkPin');
+        } catch (error) {
+            console.log('Failed to save OTP to storage', error);
+        }
     };
-    const { t } = useTranslation()
+
+    const { t } = useTranslation();
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -58,7 +81,7 @@ const InstallPin: React.FC = () => {
                                 ref={(ref) => (inputs.current[index] = ref!)}
                                 maxLength={1}
                                 keyboardType="numeric"
-                                onPaste={handlePaste}
+                                onFocus={() => handlePaste()}
                             />
                         ))}
                     </View>
@@ -69,10 +92,7 @@ const InstallPin: React.FC = () => {
                             styles.button,
                             { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
                         ]}
-                        onPress={() => {
-                            handleContinue();
-                            router.push('(auth)/checkPin')
-                        }}
+                        onPress={handleContinue}
                         disabled={!isButtonEnabled}
                     >
                         <Text style={[
