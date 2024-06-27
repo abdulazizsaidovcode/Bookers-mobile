@@ -5,9 +5,8 @@ import {
     ClientAddressBook,
     ClientNotVisit,
     ClientStatus, ClientStoppedVisiting,
-    DistrictData,
+    DistrictData, NewClient, PermanentClient,
     RegionData,
-    UpdateClient
 } from "@/type/client/client";
 
 const clientStore = create<Client>((set) => ({
@@ -58,6 +57,10 @@ const clientStore = create<Client>((set) => ({
     setClientNotVisit: (val: null | ClientNotVisit[]) => set({clientNotVisit: val}),
     clientStoppedVisiting: null,
     setClientStoppedVisit: (val: null | ClientStoppedVisiting[]) => set({clientStoppedVisiting: val}),
+    newClient: null,
+    setNewClient: (val: null | NewClient[]) => set({newClient: val}),
+    permanentClient: null,
+    setPermanentClient: (val: null | PermanentClient[]) => set({permanentClient: val}),
 }))
 
 export default clientStore

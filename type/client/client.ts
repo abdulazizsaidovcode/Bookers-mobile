@@ -24,6 +24,10 @@ export interface Client {
     setClientNotVisit: (val: ClientNotVisit[] | null) => void;
     clientStoppedVisiting: null | ClientStoppedVisiting[]
     setClientStoppedVisit: (val: ClientStoppedVisiting[] | null) => void;
+    newClient: NewClient[] | null
+    setNewClient: (val: NewClient[] | null) => void;
+    permanentClient: PermanentClient[] | null
+    setPermanentClient: (val: PermanentClient[] | null) => void;
 }
 
 export interface ClientStatus {
@@ -107,6 +111,34 @@ export interface ClientStoppedVisiting {
     "specialist": null | string
     "comment": null | string
     "attachmentId": null | string
+}
+
+export interface NewClient {
+    id: string
+    firstName: string
+    lastName: string | null
+    phoneNumber: string
+    gender: string | null
+    birthDate: string | null
+    role: string
+    telegram: null | string
+    ageId: null | string
+    email: null | string
+    status: string
+    specialist: null | string
+    comment: null | string
+    attachmentId: null | string
+}
+
+export interface PermanentClient {
+    "id": string
+    "firstName": string
+    "lastName": string | null
+    "phoneNumber": string
+    "attachmentId": null | string
+    "orderDate": null | string
+    "orderTime": null | string
+    "clientBirthday": null | string
 }
 
 

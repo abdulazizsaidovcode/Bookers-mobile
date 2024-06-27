@@ -103,7 +103,7 @@ export const FromAddressBookList = (
             </View>
             {isBtn && (
                 <View style={[tw``, {transform: 'scale(.8)'}]}>
-                    <FiltersButton title={`Пригласить`} onPress={isBtn ? clicks : undefined} />
+                    <FiltersButton title={`Пригласить`} onPress={isBtn ? clicks : undefined}/>
                 </View>
             )}
         </TouchableOpacity>
@@ -121,30 +121,46 @@ export const StandardNowAndConstClient = (
         clicks?: () => void;
         isBtn?: boolean
     }) => {
+    const sliceText = (firstName: string, lastName: string) => {
+        if (firstName && lastName) {
+            let text: string = `${firstName} ${lastName}`
+            if(text.length > 22 ) {
+                return `${text.slice(0, 22)}...`
+            } else return text
+        } else {
+            if (firstName) return firstName
+            else return lastName
+        }
+    }
     return (
         <TouchableOpacity
-            onPress={!isBtn ? clicks : undefined}
+            // onPress={!isBtn ? clicks : undefined}
             style={[
-                tw`flex-row items-center p-4 mb-3 rounded-2xl`,
+                tw`flex-row items-start justify-start p-4 mb-3 rounded-2xl`,
                 {backgroundColor: "#B9B9C9"},
             ]}
             activeOpacity={0.8}
         >
             <Image
                 source={client.attachmentId !== null ? {uri: `${getFile}${client.attachmentId}`} : require('../../assets/avatar.png')}
-                style={tw`w-10 h-10 rounded-full`}
+                style={tw`w-12 h-12 rounded-full`}
             />
             <View style={tw`ml-4 flex-col`}>
-                <Text style={[tw`text-black text-lg font-bold`, {lineHeight: 20}]}>
-                    {/*{client.firstName} {client.lastName}*/}sedfasjuf
+                <Text style={[tw`text-black text-lg font-bold`, {lineHeight: 22}]}>
+                    {sliceText(client.firstName, client.lastName)}
                 </Text>
-                <Text style={[tw`text-gray-500 text-base`, {lineHeight: 20}]}>
-                    {/*{client.phoneNumber}*/}number
+                <Text style={[tw`text-gray-500 text-base`, {lineHeight: 22}]}>
+                    {client.phoneNumber}
                 </Text>
-
-                <View style={[tw``]}>
-                    <FiltersButton title={`Пригласить`} onPress={isBtn ? clicks : undefined} />
-                </View>
+                {client.orderTime && (
+                    <View style={[tw`py-1.5 px-4 rounded-lg mt-2`, {
+                        alignSelf: 'flex-start',
+                        borderWidth: 2,
+                        borderColor: '#9C0A35'
+                    }]}>
+                        <Text style={[tw`text-base font-normal`, {color: '#9C0A35'}]}>{client.orderTime}</Text>
+                    </View>
+                )}
             </View>
         </TouchableOpacity>
     );
