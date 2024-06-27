@@ -69,9 +69,6 @@ export const client_permanent: string = `${base_url}user/master/client-permanent
 export const client_permanent_search: string = `${base_url}client/search/for/regular/visit?name=`
 export const new_client: string = `${base_url}user/master/client-new`
 export const new_client_search: string = `${base_url}client/search/for/new?name=`
-// menga kk tegilmasin!!!!!
-// user/master/client-not-visit => tashrif buyurmagan client chiqadi get
-// user/master/client-stoppedVisiting
 
 // age url
 export const age_list: string = `${base_url}age`
