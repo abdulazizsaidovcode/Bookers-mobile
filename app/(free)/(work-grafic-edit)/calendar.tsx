@@ -19,8 +19,9 @@ const CalendarGrafficEdit: React.FC = () => {
         selected: true,
         marked: true,
         dotColor: "red",
-        color: "#9C0A35",
+        color: "red",
       },
+      
     };
     setSelectedDate(newSelectedDate);
     setCalendarDate(today); // Default bugungi sanani saqlash
@@ -50,10 +51,33 @@ const CalendarGrafficEdit: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Calendar
-        style={[tw`w-80`]} // width va height ni tailwind orqali beramiz
-        onDayPress={onDayPress}
-        markedDates={selectedDate}
-      />
+  style={[tw`w-80`]}
+  onDayPress={onDayPress}
+  markedDates={selectedDate}
+  theme={{
+    calendarBackground: '#ffffff',
+    textSectionTitleColor: '#b6c1cd',
+    dayTextColor: 'black',
+    todayTextColor: '#9C0A35',
+    selectedDayTextColor: '#ffffff',
+    selectedDayBackgroundColor: '#9C0A35',
+    dotColor: '#fff',
+    selectedDotColor: '#ffffff',
+    arrowColor: '#9C0A35',
+    monthTextColor: '#9C0A35',
+    indicatorColor: '#9C0A35',
+    textDayFontFamily: 'monospace',
+    textMonthFontFamily: 'monospace',
+    textDayHeaderFontFamily: 'monospace',
+    textDayFontWeight: '300',
+    textMonthFontWeight: 'bold',
+    textDayHeaderFontWeight: '300',
+    textDayFontSize: 16,
+    textMonthFontSize: 16,
+    textDayHeaderFontSize: 16
+  }}
+/>
+
     </SafeAreaView>
   );
 };
