@@ -1,24 +1,25 @@
-import {create} from 'zustand'
+import { create } from 'zustand'
 import {
     AgeData,
     Client,
     ClientAddressBook,
     ClientNotVisit,
     ClientStatus, ClientStoppedVisiting,
-    DistrictData,
+    DistrictData, NewClient, PermanentClient,
     RegionData,
-    UpdateClient
 } from "@/type/client/client";
 
 const clientStore = create<Client>((set) => ({
+    isLoading: false,
+    setIsLoading: (val: boolean) => set({ isLoading: val }),
     isClientModal: false,
-    setIsClientModal: (val: boolean) => set({isClientModal: val}),
+    setIsClientModal: (val: boolean) => set({ isClientModal: val }),
     selectedClientList: [],
-    setSelectedClientList: (val: any) => set({selectedClientList: val}),
+    setSelectedClientList: (val: any) => set({ selectedClientList: val }),
     statusData: null,
-    setStatusData: (val: ClientStatus | null) => set({statusData: val}),
+    setStatusData: (val: ClientStatus | null) => set({ statusData: val }),
     addressBookData: null,
-    setAddressBookData: (val: ClientAddressBook[] | null) => set({addressBookData: val}),
+    setAddressBookData: (val: ClientAddressBook[] | null) => set({ addressBookData: val }),
     updateClientDef: {
         firstName: '',
         lastName: '',
@@ -43,21 +44,25 @@ const clientStore = create<Client>((set) => ({
         regionId: '',
         attachmentId: ''
     },
-    setUpdateClient: (val: any) => set({updateClient: val}),
+    setUpdateClient: (val: any) => set({ updateClient: val }),
     ageData: null,
-    setAgeData: (val: AgeData[] | null) => set({ageData: val}),
+    setAgeData: (val: AgeData[] | null) => set({ ageData: val }),
     regionData: null,
-    setRegionData: (val: RegionData[] | null) => set({regionData: val}),
+    setRegionData: (val: RegionData[] | null) => set({ regionData: val }),
     districtData: null,
-    setDistrictData: (val: DistrictData[] | null) => set({districtData: val}),
+    setDistrictData: (val: DistrictData[] | null) => set({ districtData: val }),
     attachmentID: null,
-    setAttachmentID: (val: null | string) => set({attachmentID: val}),
+    setAttachmentID: (val: null | string) => set({ attachmentID: val }),
     allClientsList: null,
-    setAllClients: (val: any | null) => set({allClientsList: val}),
+    setAllClients: (val: any | null) => set({ allClientsList: val }),
     clientNotVisit: null,
-    setClientNotVisit: (val: null | ClientNotVisit[]) => set({clientNotVisit: val}),
+    setClientNotVisit: (val: null | ClientNotVisit[]) => set({ clientNotVisit: val }),
     clientStoppedVisiting: null,
-    setClientStoppedVisit: (val: null | ClientStoppedVisiting[]) => set({clientStoppedVisiting: val}),
+    setClientStoppedVisit: (val: null | ClientStoppedVisiting[]) => set({ clientStoppedVisiting: val }),
+    newClient: null,
+    setNewClient: (val: null | NewClient[]) => set({ newClient: val }),
+    permanentClient: null,
+    setPermanentClient: (val: null | PermanentClient[]) => set({ permanentClient: val }),
 }))
 
 export default clientStore

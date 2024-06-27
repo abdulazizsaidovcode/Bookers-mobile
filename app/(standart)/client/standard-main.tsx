@@ -5,13 +5,21 @@ import ClientCountCard from "@/components/(cards)/client-count-card";
 import ClientsBtn from "@/components/(buttons)/clients-btn";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import tw from 'tailwind-react-native-classnames';
-import {getClientStatistics} from "@/helpers/api-function/client/client";
+import {
+    getClientStatistics,
+    getNewClient,
+    getNewClientSearch,
+    getPermanentClient,
+    getPermanentClientSearch
+} from "@/helpers/api-function/client/client";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Ionicons, Entypo} from '@expo/vector-icons';
 import {RootStackParamList} from "@/type/root";
-import {View, Text, ScrollView, StatusBar} from 'react-native';
+import {View, Text, ScrollView, StatusBar, FlatList} from 'react-native';
+import LocationInput from "@/components/(location)/locationInput";
+import {StandardNowAndConstClient} from "@/components/clients/client-items";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
 
@@ -20,7 +28,11 @@ const StandardMain = () => {
         isClientModal,
         setIsClientModal,
         setStatusData,
-        statusData
+        statusData,
+        newClient,
+        setNewClient,
+        permanentClient,
+        setPermanentClient
     } = clientStore()
     const [isFilter, setIsFilter] = useState<string>('all')
     const toggleClientModal = () => setIsClientModal(!isClientModal);
@@ -28,6 +40,8 @@ const StandardMain = () => {
 
     useEffect(() => {
         getClientStatistics(setStatusData)
+        getNewClient(setNewClient)
+        getPermanentClient(setPermanentClient)
     }, []);
 
     return (
@@ -131,22 +145,47 @@ const StandardMain = () => {
 
                         {isFilter === 'new' && (
                             <View>
-                                <Text>awjhdfiuye</Text>
+                                <View style={[{transform: 'translateY(-15px)'}]}>
+                                    <LocationInput
+                                        placeholder={`🔍 Поиск клиента по имени`}
+                                        onChangeText={e => getNewClientSearch(setNewClient, e)}
+                                    />
+                                </View>
+                                {newClient ? (
+                                    <FlatList
+                                        data={newClient}
+                                        renderItem={({item}) => <StandardNowAndConstClient client={item} key={item.id}/>}
+                                    />
+                                ) : (
+                                    <View style={tw`flex-1 justify-center items-center`}>
+                                        <Text style={[tw`text-base font-medium`, {color: '#828282'}]}>
+                                            У вас пока нет ни одного клиента
+                                        </Text>
+                                    </View>
+                                )}
                             </View>
                         )}
 
                         {isFilter === 'constant' && (
                             <View>
-                                <Text>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab architecto, at, dolore dolorem
-                                    eligendi enim error et fuga id illum iusto laboriosam libero maxime minus modi nemo neque
-                                    nesciunt nisi nobis non nostrum nulla obcaecati optio quas quo reiciendis repudiandae rerum
-                                    saepe sint unde vel velit vitae voluptatem! Ad amet asperiores aspernatur at cumque, deleniti
-                                    enim eum eveniet facere impedit itaque magnam minima minus necessitatibus odit optio
-                                    perspiciatis porro quae quas quibusdam quidem quos, ratione reiciendis repellat repellendus
-                                    totam voluptatibus voluptatum. Autem consectetur harum itaque molestiae porro quo tempore.
-                                    Dolore expedita illo itaque, odit quam quo soluta voluptatum. Est, in?
-                                </Text>
+                                <View style={[{transform: 'translateY(-15px)'}]}>
+                                    <LocationInput
+                                        placeholder={`🔍 Поиск клиента по имени`}
+                                        onChangeText={e => getPermanentClientSearch(setPermanentClient, e)}
+                                    />
+                                </View>
+                                {permanentClient ? (
+                                    <FlatList
+                                        data={permanentClient}
+                                        renderItem={({item}) => <StandardNowAndConstClient client={item} key={item.id}/>}
+                                    />
+                                ) : (
+                                    <View style={tw`flex-1 justify-center items-center`}>
+                                        <Text style={[tw`text-base font-medium`, {color: '#828282'}]}>
+                                            У вас пока нет ни одного клиента
+                                        </Text>
+                                    </View>
+                                )}
                             </View>
                         )}
                     </View>

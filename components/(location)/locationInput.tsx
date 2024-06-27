@@ -13,7 +13,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
     <SafeAreaView>
       <View style={{ width: "100%" }}>
         {labalVisible ? (
-          <Text style={tw`text-gray-500 mb-2 text-base`}>{label}</Text>
+          <Text style={tw`text-gray-500 text-base ${label ? 'mb-2' : ''}`}>{label}</Text>
         ) : (
           ""
         )}

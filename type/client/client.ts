@@ -1,4 +1,6 @@
 export interface Client {
+    isLoading: boolean;
+    setIsLoading: (val: boolean) => void;
     isClientModal: boolean;
     setIsClientModal: (val: boolean) => void;
     selectedClientList: number[];
@@ -24,6 +26,10 @@ export interface Client {
     setClientNotVisit: (val: ClientNotVisit[] | null) => void;
     clientStoppedVisiting: null | ClientStoppedVisiting[]
     setClientStoppedVisit: (val: ClientStoppedVisiting[] | null) => void;
+    newClient: NewClient[] | null
+    setNewClient: (val: NewClient[] | null) => void;
+    permanentClient: PermanentClient[] | null
+    setPermanentClient: (val: PermanentClient[] | null) => void;
 }
 
 export interface ClientStatus {
@@ -109,6 +115,34 @@ export interface ClientStoppedVisiting {
     "attachmentId": null | string
 }
 
+export interface NewClient {
+    id: string
+    firstName: string
+    lastName: string | null
+    phoneNumber: string
+    gender: string | null
+    birthDate: string | null
+    role: string
+    telegram: null | string
+    ageId: null | string
+    email: null | string
+    status: string
+    specialist: null | string
+    comment: null | string
+    attachmentId: null | string
+}
+
+export interface PermanentClient {
+    "id": string
+    "firstName": string
+    "lastName": string | null
+    "phoneNumber": string
+    "attachmentId": null | string
+    "orderDate": null | string
+    "orderTime": null | string
+    "clientBirthday": null | string
+}
+
 
 
 
@@ -130,12 +164,13 @@ export interface ClientItemProps {
     onSelect: (id: number) => void;
 }
 
+
 //vaqtinchalik data
 export const clientsData: ClientData[] = [
-    {id: 1, name: 'Гузаль Шерматова', phone: '+998 93 123-45-67', image: 'https://via.placeholder.com/150'},
-    {id: 2, name: 'Севара Юнусова', phone: '+998 93 171-63-80', image: 'https://via.placeholder.com/150'},
-    {id: 3, name: 'Ноила Азизова', phone: '+998 93 455-45-67', image: 'https://via.placeholder.com/150'},
-    {id: 4, name: 'Шахло Акбарова', phone: '+998 93 874-63-90', image: 'https://via.placeholder.com/150'},
-    {id: 5, name: 'Максуд Акбаров', phone: '+998 93 455-45-67', image: 'https://via.placeholder.com/150'},
-    {id: 6, name: 'Нодир Расулов', phone: '+998 93 874-63-90', image: 'https://via.placeholder.com/150'},
+    { id: 1, name: 'Гузаль Шерматова', phone: '+998 93 123-45-67', image: 'https://via.placeholder.com/150' },
+    { id: 2, name: 'Севара Юнусова', phone: '+998 93 171-63-80', image: 'https://via.placeholder.com/150' },
+    { id: 3, name: 'Ноила Азизова', phone: '+998 93 455-45-67', image: 'https://via.placeholder.com/150' },
+    { id: 4, name: 'Шахло Акбарова', phone: '+998 93 874-63-90', image: 'https://via.placeholder.com/150' },
+    { id: 5, name: 'Максуд Акбаров', phone: '+998 93 455-45-67', image: 'https://via.placeholder.com/150' },
+    { id: 6, name: 'Нодир Расулов', phone: '+998 93 874-63-90', image: 'https://via.placeholder.com/150' },
 ];

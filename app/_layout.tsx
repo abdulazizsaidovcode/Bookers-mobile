@@ -81,10 +81,10 @@ import InstallPin from "./(auth)/installPin";
 import CheckPin from "./(auth)/checkPin";
 import Help from "./(standart)/(help)/help";
 import AboutUs from "./(standart)/(help)/(aboutUs)/aboutUs";
-import NotVisiting from "@/app/(standart)/client/not-visiting";
-import StandardMain from "@/app/(standart)/client/standard-main";
 import UserCameraInfo from "./(auth)/userCameraInfo";
-import StoppedVisiting from "@/app/(standart)/client/stopped-visiting";
+import StoppedVisiting from "./(standart)/client/stopped-visiting";
+import NotVisiting from "./(standart)/client/not-visiting";
+import StandardMain from "./(standart)/client/standard-main";
 
 const Stack = createNativeStackNavigator();
 
@@ -199,6 +199,21 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="(standart)/client/stopped-visiting"
+              component={StoppedVisiting}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/client/standard-main"
+              component={StandardMain}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/client/not-visiting"
+              component={NotVisiting}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="(auth)/userCameraInfo"
               component={UserCameraInfo}
               options={{ headerShown: false }}
@@ -292,21 +307,6 @@ function RootLayoutNav() {
               name="(standart)/(services)/(process)/process"
               component={Process}
               options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="(standart)/client/standard-main"
-              component={StandardMain}
-              options={{ title: 'Standard', headerShown: false }}
-            />
-            <Stack.Screen
-              name="(standart)/client/not-visiting"
-              component={NotVisiting}
-              options={{ title: 'StandardNotVisiting', headerShown: false }}
-            />
-            <Stack.Screen
-              name="(standart)/client/stopped-visiting"
-              component={StoppedVisiting}
-              options={{ title: 'StandardStoppedVisiting', headerShown: false }}
             />
             <Stack.Screen
               name="(standart)/(services)/(myServices)/myServices"

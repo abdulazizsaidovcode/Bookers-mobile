@@ -1,4 +1,6 @@
+import { t } from 'i18next';
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
 
 const CheckPin: React.FC = () => {
@@ -38,6 +40,7 @@ const CheckPin: React.FC = () => {
     const handleContinue = () => {
         // Handle the continue action (navigate to the next page)
     };
+    const {t}=useTranslation();
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -73,7 +76,7 @@ const CheckPin: React.FC = () => {
                             styles.buttonText,
                             { color: isButtonEnabled ? '#FFF' : '#FFF' }
                         ]}>
-                            Продолжить
+                            {t("Continue")}
                         </Text>
                     </TouchableOpacity>
                 </View>

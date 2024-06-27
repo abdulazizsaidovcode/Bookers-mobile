@@ -22,7 +22,7 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standar
 
 const StoppedVisiting = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const {setClientStoppedVisit, clientStoppedVisiting, setStatusData} = clientStore()
+    const {setClientStoppedVisit, clientStoppedVisiting, setStatusData, setIsLoading, isLoading} = clientStore()
     const [clientID, setClientID] = useState('')
     const [clientVal, setClientVal] = useState('')
     const [isClientModal, setIsClientModal] = useState<boolean>(false)
@@ -38,6 +38,7 @@ const StoppedVisiting = () => {
             toggleClientModal()
             navigation.navigate('(standart)/client/standard-main')
             getClientStatistics(setStatusData)
+            setTrues(false)
         }
     }, [trues]);
 
@@ -89,11 +90,13 @@ const StoppedVisiting = () => {
 
                         <CenteredModal
                             btnWhiteText={`Закрыть`}
-                            btnRedText={`Отправить`}
+                            btnRedText={`${isLoading ? 'loading...' : 'Отправить'}`}
                             isFullBtn
                             isModal={isClientModal}
                             toggleModal={toggleClientModal}
-                            onConfirm={() => addClientSMS(clientID, clientVal, setTrues)}
+                            onConfirm={() => {
+                                isLoading ? console.log('malumot tuliqmas...') : addClientSMS(clientID, clientVal, setTrues, setIsLoading)
+                            }}
                         >
                             <View>
                                 <Text style={[tw`text-lg font-semibold text-white text-center mb-5`, {opacity: .8}]}>
@@ -101,7 +104,7 @@ const StoppedVisiting = () => {
                                 </Text>
                                 <TextInput
                                     value={clientVal}
-                                    style={[styles.textArea, { height }]}
+                                    style={[styles.textArea, {height}]}
                                     multiline
                                     placeholder="Ваш текст здесь..."
                                     onContentSizeChange={handleContentSizeChange}

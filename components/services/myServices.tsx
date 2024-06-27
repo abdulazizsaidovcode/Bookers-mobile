@@ -19,7 +19,7 @@ const MyServicess: React.FC<MyServicesProps> = ({ title, subTitle, onPress }) =>
                     <Text style={tw`text-black text-lg font-bold`}>{title}</Text>
                     <Text style={tw`text-gray-500`}>{subTitle}</Text>
                 </View>
-                <Text style={tw`text-gray-500 text-3xl`}>{'>'}</Text>
+                <Text style={tw`text-gray-500 text-lg`}>{'>'}</Text>
             </TouchableOpacity>
         </View>
        </View> 

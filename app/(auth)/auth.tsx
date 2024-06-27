@@ -28,7 +28,7 @@ const Auth: React.FC = () => {
                     changeLanguage('uz');
                 }} />
                 <Buttons title="English" backgroundColor="#9C0A35" onPress={() => {
-                    router.push('(auth)/switchPage');
+                    router.push('(auth)/number-create');
                     changeLanguage('en');
                 }
                 } />
