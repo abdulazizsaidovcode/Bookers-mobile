@@ -8,18 +8,25 @@ import Buttons from '@/components/(buttons)/button';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { router } from 'expo-router';
 import axios from 'axios';
-import { base_url } from '@/helpers/api';
+import { category_Father, category_child } from '@/helpers/api';
 import { config } from '@/helpers/token';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category'>;
 
 const Category = () => {
-    const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData, childCategoryOneData, setChildCategoryOneData } = servicesStore();
+    const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
-    const [fatherId, setFatherId] = useState('');
+
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
+
+
 
     const getCategory = async () => {
         try {
-            const response = await axios.get(`${base_url}category`, config);
+            const response = await axios.get(`${category_Father}`, config);
             const listData =
                 response.data.body &&
                 response.data.body.map((item: any) => ({
@@ -32,18 +39,22 @@ const Category = () => {
         }
     };
 
+
+
+
+
     const getChildCategory = async (id: string) => {
         try {
-            const response = await axios.get(`${base_url}category/byCategory/${id}`, config);
+            const response = await axios.get(`${category_child}${id}`, config);
             if (response.data.success) {
-                setChildCategoryData(response.data.body)
+                setChildCategoryData(response.data.body);
+            } else {
+                setChildCategoryData([]);
             }
-            else setChildCategoryData([])
         } catch (error) {
             console.error("Error fetching child categories:", error);
         }
     };
-
 
     useEffect(() => {
         getCategory();
@@ -61,6 +72,9 @@ const Category = () => {
         setChildCategoryData([]);
     };
 
+    const handlerPress = (id: string) => {
+        navigation.navigate('(standart)/(services)/(expertise)/expertise', { id });
+    }
 
 
     return (
@@ -84,10 +98,7 @@ const Category = () => {
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
                                 title="Сохранить"
-                                onPress={() => {
-                                    openModal()
-                                }} 
-                               
+                                onPress={openModal}
                             />
                         </View>
                         <CenteredModal
@@ -97,8 +108,8 @@ const Category = () => {
                             isFullBtn={true}
                             toggleModal={closeModal}
                             onConfirm={() => {
-                                router.push('/expertise')
-                                closeModal()
+                                handlerPress(categoryFatherId.key)
+                                closeModal();
                             }}
                         >
                             <View style={tw`p-4 text-center`}>

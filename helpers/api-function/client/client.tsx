@@ -1,6 +1,3 @@
-client tsx
-
-
 import axios from "axios";
 import { config } from "@/helpers/token";
 import {
@@ -250,7 +247,6 @@ export const getPermanentClient = async (setData: (val: PermanentClient[] | null
         setData(null)
     }
 }
-
 
 // permanent client search qilish
 export const getPermanentClientSearch = async (setData: (val: PermanentClient[] | null) => void, search: string) => {
