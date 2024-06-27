@@ -13,10 +13,15 @@ import {Ionicons, Entypo} from '@expo/vector-icons';
 import {RootStackParamList} from "@/type/root";
 import {View, Text, ScrollView, StatusBar} from 'react-native';
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(client)/standard-main'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
 
 const StandardMain = () => {
-    const {isClientModal, setIsClientModal, setStatusData, statusData} = clientStore()
+    const {
+        isClientModal,
+        setIsClientModal,
+        setStatusData,
+        statusData
+    } = clientStore()
     const [isFilter, setIsFilter] = useState<string>('all')
     const toggleClientModal = () => setIsClientModal(!isClientModal);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
@@ -64,65 +69,93 @@ const StandardMain = () => {
                                 }}
                             />
                         </View>
-                        <View style={[tw``, {gap: 14}]}>
-                            <ClientCountCard
-                                title={`Перестали посещать`}
-                                icon={<Entypo name="block" size={32} color="#9C0A35"/>}
-                                // clicks={() => navigation.navigate('')}
-                                counts={statusData ? +statusData.stoppedVisiting : 0}
-                            />
-                            <ClientCountCard
-                                title={`Не посещали`}
-                                icon={<Ionicons name="eye-off" size={34} color="#9C0A35"/>}
-                                // clicks={() => navigation.navigate('')}
-                                counts={statusData ? +statusData.didNotVisit : 0}
-                            />
-                            <ClientCountCard
-                                title={`Из адресной книги`}
-                                icon={<Ionicons name="person-circle-outline" size={36} color="#9C0A35"/>}
-                                clicks={() => navigation.navigate('(free)/(client)/address-book')}
-                                counts={statusData ? +statusData.fromTheAddressBook : 0}
-                            />
+                        {isFilter === 'all' && (
+                            <>
+                                <View style={[tw``, {gap: 14}]}>
+                                    <ClientCountCard
+                                        title={`Перестали посещать`}
+                                        icon={<Entypo name="block" size={30} color="#9C0A35"/>}
+                                        clicks={() => navigation.navigate('(standart)/client/stopped-visiting')}
+                                        counts={statusData ? +statusData.stoppedVisiting : 0}
+                                    />
+                                    <ClientCountCard
+                                        title={`Не посещали`}
+                                        icon={<Ionicons name="eye-off" size={34} color="#9C0A35"/>}
+                                        clicks={() => navigation.navigate('(standart)/client/not-visiting')}
+                                        counts={statusData ? +statusData.didNotVisit : 0}
+                                    />
+                                    <ClientCountCard
+                                        title={`Из адресной книги`}
+                                        icon={<Ionicons name="person-circle-outline" size={36} color="#9C0A35"/>}
+                                        clicks={() => navigation.navigate('(free)/(client)/address-book')}
+                                        counts={statusData ? +statusData.fromTheAddressBook : 0}
+                                    />
 
-                            <Text style={tw`text-white text-base mt-5`}>
-                                У вас пока нет ни одного клиента
-                            </Text>
-                            <View style={[tw``, {alignSelf: 'flex-start'}]}>
-                                <ClientsBtn
-                                    name={`Создать`}
-                                    countOrIcon={false}
-                                    icon={<Ionicons name="add-circle-outline" size={36} color="white"/>}
-                                    clicks={() => navigation.navigate('(free)/(client)/creating-client')}
-                                />
+                                    <Text style={tw`text-white text-base mt-5`}>
+                                        У вас пока нет ни одного клиента
+                                    </Text>
+                                    <View style={[tw``, {alignSelf: 'flex-start'}]}>
+                                        <ClientsBtn
+                                            name={`Создать`}
+                                            countOrIcon={false}
+                                            icon={<Ionicons name="add-circle-outline" size={36} color="white"/>}
+                                            clicks={() => navigation.navigate('(free)/(client)/creating-client')}
+                                        />
+                                    </View>
+                                    <View style={[tw``, {alignSelf: 'flex-start'}]}>
+                                        <ClientsBtn
+                                            clicks={toggleClientModal}
+                                            name={`Добавить из книги`}
+                                            countOrIcon={false}
+                                            icon={<Ionicons name="person-circle-outline" size={36} color="white"/>}
+                                        />
+                                    </View>
+                                </View>
+                                <CenteredModal
+                                    btnWhiteText={`Закрыть`}
+                                    btnRedText={`Разрешить`}
+                                    isFullBtn
+                                    isModal={isClientModal}
+                                    toggleModal={toggleClientModal}
+                                    onConfirm={() => {
+                                        navigation.navigate('(free)/(client)/client-list')
+                                        toggleClientModal()
+                                    }}
+                                >
+                                    <Text style={[tw`text-base text-white text-center mb-5`, {opacity: .8, lineHeight: 22}]}>
+                                        Разрешить приложению “Bookers” доступ к фото, мультимедиа и файлам на устройстве
+                                    </Text>
+                                </CenteredModal>
+                            </>
+                        )}
+
+                        {isFilter === 'new' && (
+                            <View>
+                                <Text>awjhdfiuye</Text>
                             </View>
-                            <View style={[tw``, {alignSelf: 'flex-start'}]}>
-                                <ClientsBtn
-                                    clicks={toggleClientModal}
-                                    name={`Добавить из книги`}
-                                    countOrIcon={false}
-                                    icon={<Ionicons name="person-circle-outline" size={36} color="white"/>}
-                                />
+                        )}
+
+                        {isFilter === 'constant' && (
+                            <View>
+                                <Text>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab architecto, at, dolore dolorem
+                                    eligendi enim error et fuga id illum iusto laboriosam libero maxime minus modi nemo neque
+                                    nesciunt nisi nobis non nostrum nulla obcaecati optio quas quo reiciendis repudiandae rerum
+                                    saepe sint unde vel velit vitae voluptatem! Ad amet asperiores aspernatur at cumque, deleniti
+                                    enim eum eveniet facere impedit itaque magnam minima minus necessitatibus odit optio
+                                    perspiciatis porro quae quas quibusdam quidem quos, ratione reiciendis repellat repellendus
+                                    totam voluptatibus voluptatum. Autem consectetur harum itaque molestiae porro quo tempore.
+                                    Dolore expedita illo itaque, odit quam quo soluta voluptatum. Est, in?
+                                </Text>
                             </View>
+                        )}
+                    </View>
+                    {isFilter === 'all' && (
+                        <View style={tw`pb-5`}>
+                            <Buttons title={`Настроить позже и перейти на главную`}
+                                     onPress={() => navigation.navigate('(welcome)/Welcome')}/>
                         </View>
-                        <CenteredModal
-                            btnWhiteText={`Закрыть`}
-                            btnRedText={`Разрешить`}
-                            isFullBtn
-                            isModal={isClientModal}
-                            toggleModal={toggleClientModal}
-                            onConfirm={() => {
-                                navigation.navigate('(free)/(client)/client-list')
-                                toggleClientModal()
-                            }}
-                        >
-                            <Text style={[tw`text-base text-white text-center mb-5`, {opacity: .8, lineHeight: 22}]}>
-                                Разрешить приложению “Bookers” доступ к фото, мультимедиа и файлам на устройстве
-                            </Text>
-                        </CenteredModal>
-                    </View>
-                    <View style={tw`pb-5`}>
-                        <Buttons title={`Настроить позже и перейти на главную`} onPress={() => navigation.navigate('(welcome)/Welcome')}/>
-                    </View>
+                    )}
                 </ScrollView>
             </View>
         </SafeAreaView>

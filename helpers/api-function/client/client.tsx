@@ -3,17 +3,49 @@ import {config} from "@/helpers/token";
 import {
     age_list,
     client_address_book,
-    client_address_book_search, client_address_book_update,
-    client_statistics,
+    client_address_book_search, client_address_book_update, client_not_visit, client_not_visit_search,
+    client_statistics, client_stopped_visit_search, client_stopped_visit_sms, client_stopped_visiting,
     district_list, master_client_all_list, master_client_create,
     region_list
 } from "@/helpers/api";
-import {AgeData, ClientAddressBook, ClientStatus, DistrictData, RegionData, UpdateClient} from "@/type/client/client";
+import {
+    AgeData,
+    ClientAddressBook, ClientNotVisit,
+    ClientStatus,
+    ClientStoppedVisiting,
+    DistrictData,
+    RegionData,
+    UpdateClient
+} from "@/type/client/client";
 
 // master uziga tegishli all client listini chgiqaruvchi get function
 export const getClientAll = async (setData: (val: any | null) => void) => {
     try {
         const {data} = await axios.get(master_client_all_list, config)
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
+
+// stopped visit git function
+export const getStoppedVisiting = async (setData: (val: null | ClientStoppedVisiting[]) => void) => {
+    try {
+        const {data} = await axios.get(client_stopped_visiting, config)
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
+
+// not visit git function
+export const getNotVisiting = async (setData: (val: null | ClientNotVisit[]) => void) => {
+    try {
+        const {data} = await axios.get(client_not_visit, config)
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
@@ -30,6 +62,7 @@ export const getClientStatistics = async (setData: (val: ClientStatus | null) =>
         else setData(null)
     } catch (err) {
         console.error(err)
+        setData(null)
     }
 }
 
@@ -51,11 +84,39 @@ export const getClientAddressBookSearch = async (setData: (val: ClientAddressBoo
         if (search) {
             const {data} = await axios.get(`${client_address_book_search}${search}`, config);
             if (data.success) setData(data.body)
-            else getClientAddressBook(setData)
+            else setData(null)
         } else getClientAddressBook(setData)
     } catch (err) {
         console.error(err)
-        getClientAddressBook(setData)
+        setData(null)
+    }
+}
+
+// client not visit ni search un
+export const getClientNotVisitSearch = async (setData: (val: ClientNotVisit[] | null) => void, search: string) => {
+    try {
+        if (search) {
+            const {data} = await axios.get(`${client_not_visit_search}${search}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else getNotVisiting(setData)
+    } catch (err) {
+        console.error(err)
+        setData(null)
+    }
+}
+
+// client stopped visit ni search un
+export const getClientStoppedVisitSearch = async (setData: (val: ClientStoppedVisiting[] | null) => void, search: string) => {
+    try {
+        if (search) {
+            const {data} = await axios.get(`${client_stopped_visit_search}${search}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else getStoppedVisiting(setData)
+    } catch (err) {
+        console.error(err)
+        setData(null)
     }
 }
 
@@ -118,5 +179,19 @@ export const updateClientData = async (updateData: UpdateClient, clientID: strin
     } catch (err) {
         console.error(err)
         setNavigate(false)
+    }
+}
+
+// stopped client ga sms juantish
+export const addClientSMS = async (clientID: string, val: string, setTrue: (val: boolean) => void) => {
+    try {
+        if (clientID && val) {
+            const {data} = await axios.post(`${client_stopped_visit_sms}?clientId=${clientID}&text=${val}`, '', config)
+            if (data.success) setTrue(true)
+            else setTrue(false)
+        } else setTrue(false)
+    } catch (err) {
+        console.log(err)
+        setTrue(false)
     }
 }

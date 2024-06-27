@@ -1,5 +1,5 @@
-import React from 'react';
-import { ScrollView, StatusBar } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, StatusBar, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from '@/components/Themed';
 import tw from 'tailwind-react-native-classnames';
@@ -9,6 +9,17 @@ import ServicesCategory from '@/components/services/servicesCatgegory';
 import { router } from 'expo-router';
 
 const ServesGender = () => {
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
+    const categories = [
+        { title: 'Мужское направление', id: 'male' },
+        { title: 'Женское направление', id: 'female' },
+    ];
+
+    const handleCategorySelect = (id) => {
+        setSelectedCategory(id);
+    };
+
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
@@ -19,17 +30,24 @@ const ServesGender = () => {
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
                 >
                     <View style={[tw`flex w-full`, { backgroundColor: '#21212E' }]}>
-                        <ServicesCategory title="Мужское напрвление" id="male" />
-                        <ServicesCategory title="Женское напрвление" id="female" />
-                
+                        {categories.map((category) => (
+                            <ServicesCategory
+                                key={category.id}
+                                title={category.title}
+                                id={category.id}
+                                onPress={() => handleCategorySelect(category.id)}
+                            />
+                        ))}
                     </View>
-                    <View style={[tw`grid content-end mb-5`, { backgroundColor: '#21212E' }]}>
-                        <Buttons title="Сохранить" onPress={() => router.push('/category')} />
+                    <View style={[tw`content-end mb-5`, { backgroundColor: '#21212E' }]}>
+                        <Buttons
+                            title="Сохранить"
+                            onPress={() => router.push('/category')}
+                            isDisebled={!selectedCategory}
+                        />
                     </View>
                 </ScrollView>
-
             </View>
-
         </SafeAreaView>
     );
 };
