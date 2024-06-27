@@ -1,5 +1,6 @@
 import { router } from 'expo-router';
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
 
 const InstallPin: React.FC = () => {
@@ -39,6 +40,7 @@ const InstallPin: React.FC = () => {
     const handleContinue = () => {
         // Handle the continue action (navigate to the next page)
     };
+    const { t } = useTranslation()
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -85,7 +87,7 @@ const InstallPin: React.FC = () => {
                             styles.buttonText,
                             { color: isButtonEnabled ? '#FFF' : '#FFF' }
                         ]}>
-                            Продолжить
+                            {t("Continue")}
                         </Text>
                     </TouchableOpacity>
                 </View>
