@@ -19,6 +19,7 @@ const Expertise: React.FC = () => {
     const { childCategoryData, categoryFatherId, setChildCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [name, setName] = useState<string>('');
+    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
     const [services, setServices] = useState([]);
     const [selectedServices, setSelectedServices] = useState([]);
     const { id } = route.params as { id: string };
@@ -56,9 +57,8 @@ const Expertise: React.FC = () => {
         try {
             const response = await axios.post(`${masterAdd_category}${id}?name=${name}`, {}, config);
             if (response.data.success) {
-                console.log(response.data.success);
                 setChildCategoryData(response.data.body);
-                getChildCategory(id);
+                getChildCategory(id);  
             } else {
                 setChildCategoryData([]);
             }
@@ -81,7 +81,9 @@ const Expertise: React.FC = () => {
     const handleAdd = () => {
         postCategory(id, name);
         closeModal();
+        console.log(name);
         console.log(id);
+        
     };
 
     const handleSelect = (item: any) => {
@@ -132,6 +134,7 @@ const Expertise: React.FC = () => {
                                     });
                                     saveSelectedServices(selectedServices);
                                 }}
+                                isDisebled={selectedCategories.length !== 0}
                             />
                         </View>
                         <CenteredModal

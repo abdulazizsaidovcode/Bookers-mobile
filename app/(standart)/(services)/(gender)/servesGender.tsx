@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ScrollView, StatusBar, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from '@/components/Themed';
 import tw from 'tailwind-react-native-classnames';
@@ -7,17 +7,40 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import Buttons from '@/components/(buttons)/button';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import { router } from 'expo-router';
+import axios from 'axios';
+import { gender_status } from '@/helpers/api';
+import { config } from '@/helpers/token';
 
 const ServesGender = () => {
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
     const categories = [
-        { title: 'Мужское направление', id: 'male' },
-        { title: 'Женское направление', id: 'female' },
+        { title: 'Мужское направление', id: 1 },
+        { title: 'Женское направление', id: 2 },
     ];
 
-    const handleCategorySelect = (id:any) => {
-        setSelectedCategory(id);
+    useEffect(() => {
+        console.log('Selected Categories:', selectedCategories);
+    }, [selectedCategories]);
+
+    const post = async () => {
+        try {
+            const queryParams = selectedCategories.map(item => `genders=${item}`).join('&');
+            const response = await axios.post(`${gender_status}${queryParams}`, '', config);
+            router.push("/category")
+        } catch (error) {
+            console.error("Error fetching services:", error);
+        }
+    };
+
+    const handleCategorySelect = (id: number) => {
+        setSelectedCategories((prevSelected) => {
+            if (prevSelected.includes(id)) {
+                return prevSelected.filter((categoryId) => categoryId !== id);
+            } else {
+                return [...prevSelected, id];
+            }
+        });
     };
 
     return (
@@ -42,8 +65,8 @@ const ServesGender = () => {
                     <View style={[tw`content-end mb-5`, { backgroundColor: '#21212E' }]}>
                         <Buttons
                             title="Сохранить"
-                            onPress={() => router.push('/category')}
-                            isDisebled={!selectedCategory}
+                            onPress={post}
+                            isDisebled={selectedCategories.length !== 0}
                         />
                     </View>
                 </ScrollView>
