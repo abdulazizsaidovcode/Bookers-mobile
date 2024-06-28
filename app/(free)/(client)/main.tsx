@@ -47,7 +47,7 @@ const MainClient = () => {
                             <ClientCountCard
                                 title={`Все клиенты`}
                                 icon={<Ionicons name="person-circle-outline" size={36} color="#9C0A35"/>}
-                                clicks={() => navigation.navigate('(profile)/(client)/components/AllClients')}
+                                clicks={() => navigation.navigate('(free)/(client)/all-client')}
                                 counts={statusData ? +statusData.allClient : 0}
                             />
                             <ClientCountCard

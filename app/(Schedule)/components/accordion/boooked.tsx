@@ -1,5 +1,8 @@
+import { getFreeTime } from '@/helpers/api-function/freeTime/freeTime';
+import { useScheduleFreeTime } from '@/helpers/state_managment/freeTime/freeTime';
+import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStore';
 import { useScheduleBookedStore } from '@/helpers/state_managment/schedule/schedule';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
 
@@ -11,7 +14,16 @@ const availableTimes = [
 
 const BookedAccordion: React.FC = () => {
     const [activeTab, setActiveTab] = useState('haircuts');
-    const { schedule } = useScheduleBookedStore()
+    const { FreeTime, setFreeTime } = useScheduleFreeTime()
+
+    const { calendarDate } = graficWorkStore()
+
+    useEffect(() => {
+        if (calendarDate) {
+            console.log("Fetching free time for date:", calendarDate);
+            getFreeTime(calendarDate, setFreeTime);
+        }
+    }, [calendarDate, setFreeTime]);
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
@@ -53,11 +65,11 @@ const BookedAccordion: React.FC = () => {
             <View style={styles.accordionContent}>
                 {activeTab === 'haircuts' && (
                     <View style={styles.timeContainer}>
-                        {availableTimes.map((time, index) => (
+                        {FreeTime ? FreeTime.map((time, index) => (
                             <TouchableOpacity key={index} style={styles.timeButton}>
                                 <Text style={styles.timeText}>{time}</Text>
                             </TouchableOpacity>
-                        ))}
+                        )) : "No data"}
                     </View>
                 )}
                 {/* Placeholder content for other tabs */}
@@ -118,7 +130,7 @@ const styles = StyleSheet.create({
     timeButton: {
         backgroundColor: '#f0f0f0',
         padding: 10,
-        width: 65,
+        width: 82,
         borderRadius: 5,
         margin: 5,
     },

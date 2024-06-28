@@ -16,6 +16,7 @@ export type RootStackParamList = {
   '(standart)/client/not-visiting': undefined;
   '(chat)/(communicatie)/chatDetails': any;
   '(free)/(client)/main': undefined | string;
+  '(free)/(client)/all-client': undefined | string;
   '(free)/(client)/client-list': undefined | string;
   '(free)/(client)/address-book': undefined | string;
   '(free)/(client)/creating-client': undefined | string;
