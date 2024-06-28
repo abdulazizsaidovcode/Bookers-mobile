@@ -14,7 +14,7 @@ import {
     client_stopped_visiting,
     district_list,
     master_client_all_list, master_client_all_list_search,
-    master_client_create, master_message_for_client,
+    master_client_create, master_message_for_client, master_service_list,
     new_client, new_client_search,
     region_list
 } from "@/helpers/api";
@@ -313,3 +313,10 @@ export const addClientMessage = async (clientID: string, message: string, setLoa
         alert('An error occurred on the server')
     }
 }
+
+// Services get
+export const fetchServices = (setData: (val: any[] | null) => void) => {
+    axios.get(master_service_list, config)
+        .then((res) => setData(res.data.body))
+        .catch((err) => console.error(err));
+};
