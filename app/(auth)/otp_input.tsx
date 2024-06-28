@@ -42,7 +42,6 @@ const OtpInputExample: React.FC = () => {
             inputs.current[index - 1].focus();
         }
     };
-
     return (
         <View style={styles.container}>
             <View style={styles.textContainer}>
