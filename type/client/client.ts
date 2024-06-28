@@ -33,14 +33,17 @@ export interface Client {
 }
 
 export interface AllClient {
-    "id": string
-    "firstName": string
-    "lastName": string
-    "phoneNumber": string
-    "attachmentId": string | null
-    "orderDate": null | string
-    "orderTime": null | string
-    "clientBirthday": null | string
+    id: string
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    attachmentId: null | string
+    orderDate: null | string
+    orderTime: null | string
+    clientBirthday: null | string
+    telegram: null | string
+    instagram: null | string
+    nickname: null | string
 }
 
 export interface ClientStatus {

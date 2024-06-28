@@ -1,4 +1,4 @@
-import {View, ScrollView, StatusBar, FlatList} from 'react-native';
+import {View, ScrollView, StatusBar, FlatList, Text} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -9,11 +9,12 @@ import {RootStackParamList} from "@/type/root";
 import LocationInput from "@/components/(location)/locationInput";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {StandardNowAndConstClient} from "@/components/clients/client-items";
+import {getClientAllSearch} from "@/helpers/api-function/client/client";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/all-client'>;
 
 const AllClient = () => {
-    const {allClientsList} = clientStore()
+    const {allClientsList, setAllClients} = clientStore()
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -33,20 +34,30 @@ const AllClient = () => {
                                 role={`free`}
                             />
                         </View>
-                        <LocationInput placeholder={`🔍  Поиск клиента по имени`}/>
+                        <LocationInput
+                            placeholder={`🔍  Поиск клиента по имени`}
+                            onChangeText={e => getClientAllSearch(setAllClients, e)}
+                        />
                         <View style={tw`mt-5`}>
-                            <FlatList
-                                data={allClientsList}
-                                renderItem={({item}) => (
-                                    <StandardNowAndConstClient
-                                        client={item}
-                                        clicks={() => navigation.navigate('(free)/(client)/details/detail-main', {infoClient: item})}
-                                    />
-                                )}
-                            />
+                            {allClientsList ? (
+                                <FlatList
+                                    data={allClientsList}
+                                    renderItem={({item}) => (
+                                        <StandardNowAndConstClient
+                                            client={item}
+                                            clicks={() => navigation.navigate('(free)/(client)/details/detail-main', {infoClient: item})}
+                                        />
+                                    )}
+                                />
+                            ) : (
+                                <View style={tw`flex-1 justify-center items-center`}>
+                                    <Text style={tw`text-center text-base font-semibold text-white`}>
+                                        У вас пока нет ни одного клиента
+                                    </Text>
+                                </View>
+                            )}
                         </View>
                     </View>
-
                 </ScrollView>
             </View>
         </SafeAreaView>
