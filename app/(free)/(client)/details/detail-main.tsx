@@ -12,6 +12,7 @@ import ClientDetailBasic from "@/components/clients/details/detail-basic";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import React, {useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import Textarea from "@/components/select/textarea";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(free)/(client)/details/detail-main'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
@@ -56,7 +57,12 @@ const DetailMain = () => {
                                 toggleBottomModalSMS()
                             }}
                         >
-                            <Text style={tw`text-center text-white text-lg font-semibold`}>Написать сообщение</Text>
+                            <>
+                                <Text style={tw`text-center text-white text-lg font-semibold mb-5`}>Написать сообщение</Text>
+                                <Textarea
+                                    placeholder={`Сообщение`}
+                                />
+                            </>
                         </CenteredModal>
                     </View>
                     <View style={[tw`pb-5`, {gap: 10}]}>

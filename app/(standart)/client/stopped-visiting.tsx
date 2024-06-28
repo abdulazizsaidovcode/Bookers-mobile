@@ -17,6 +17,7 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import CenteredModal from "@/components/(modals)/modal-centered";
+import Textarea from "@/components/select/textarea";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/stopped-visiting'>;
 
@@ -27,7 +28,6 @@ const StoppedVisiting = () => {
     const [clientVal, setClientVal] = useState('')
     const [isClientModal, setIsClientModal] = useState<boolean>(false)
     const [trues, setTrues] = useState<boolean>(false)
-    const [height, setHeight] = useState(80);
 
     useEffect(() => {
         getStoppedVisiting(setClientStoppedVisit)
@@ -43,11 +43,6 @@ const StoppedVisiting = () => {
     }, [trues]);
 
     const toggleClientModal = () => setIsClientModal(!isClientModal);
-
-    const handleContentSizeChange = (event: any) => {
-        const newHeight = Math.min(Math.max(80, event.nativeEvent.contentSize.height), 200);
-        setHeight(newHeight);
-    };
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -102,12 +97,9 @@ const StoppedVisiting = () => {
                                 <Text style={[tw`text-lg font-semibold text-white text-center mb-5`, {opacity: .8}]}>
                                     Приглашение на запись!
                                 </Text>
-                                <TextInput
+                                <Textarea
                                     value={clientVal}
-                                    style={[styles.textArea, {height}]}
-                                    multiline
-                                    placeholder="Ваш текст здесь..."
-                                    onContentSizeChange={handleContentSizeChange}
+                                    placeholder={`Ваш текст здесь...`}
                                     onChangeText={e => setClientVal(e)}
                                 />
                             </View>
@@ -125,19 +117,5 @@ const StoppedVisiting = () => {
         </SafeAreaView>
     );
 };
-
-const styles = StyleSheet.create({
-    textArea: {
-        width: 300,
-        padding: 10,
-        borderColor: '#444',
-        borderWidth: 1,
-        borderRadius: 10,
-        backgroundColor: '#4B4B64',
-        color: '#E0E0E0',
-        fontSize: 16,
-        textAlignVertical: 'top', // Align text to the top
-    },
-});
 
 export default StoppedVisiting;
