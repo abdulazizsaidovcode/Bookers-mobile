@@ -9,11 +9,12 @@ import BottomModal from "@/components/(modals)/modal-bottom";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const ClientDetailBasic = ({client}: { client?: any }) => {
-    const {isClientModal, setIsClientModal, setIsLoading, isLoading} = clientStore()
-    const [bottomModal, setBottomModal] = useState(false)
+    const {setIsLoading, isLoading} = clientStore()
+    const [isClientModalDelete, setIsClientModalDelete] = useState(false)
+    const [bottomModalNetwork, setBottomModalNetwork] = useState(false)
     const [useDefault, setUseDefault] = useState(false);
-    const toggleModal = () => setIsClientModal(!isClientModal)
-    const toggleBottomModal = () => setBottomModal(!bottomModal)
+    const toggleModalDelete = () => setIsClientModalDelete(!isClientModalDelete)
+    const toggleBottomModalNetwork = () => setBottomModalNetwork(!bottomModalNetwork)
 
     const callPhone = () => {
         const url: string = `tel:${client.phoneNumber}`;
@@ -46,7 +47,7 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                 activeOpacity={.7}
                 style={styles.deleteButton}
                 onPress={() => {
-                    toggleModal();
+                    toggleModalDelete();
                 }}
             >
                 <MaterialIcons name="delete" size={30} color="#9C0A35"/>
@@ -56,7 +57,7 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
             <Text style={styles.contactTitle}>Контактная информация</Text>
             <View style={styles.contactInfo}>
                 <TouchableOpacity
-                    onPress={() => toggleBottomModal()}
+                    onPress={() => toggleBottomModalNetwork()}
                     activeOpacity={.6}
                     style={styles.contactItem}
                 >
@@ -66,7 +67,7 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => toggleBottomModal()}
+                    onPress={() => toggleBottomModalNetwork()}
                     activeOpacity={.6}
                     style={styles.contactItem}
                 >
@@ -74,7 +75,7 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                     <Text style={styles.contactText}>@example_1987</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => toggleBottomModal()}
+                    onPress={() => toggleBottomModalNetwork()}
                     activeOpacity={.6}
                     style={styles.contactItem}
                 >
@@ -82,13 +83,15 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                     <Text style={styles.contactText}>@example_1987</Text>
                 </TouchableOpacity>
             </View>
+
+            {/*client delete*/}
             <CenteredModal
                 btnWhiteText={`Отмена`}
                 btnRedText={isLoading ? 'loading...' : `Да`}
                 isFullBtn
-                isModal={isClientModal}
+                isModal={isClientModalDelete}
                 toggleModal={() => {
-                    toggleModal()
+                    toggleModalDelete()
                 }}
             >
                 <View style={tw`items-center justify-center mb-5`} key={`profile image upload center modal`}>
@@ -98,10 +101,12 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                     </Text>
                 </View>
             </CenteredModal>
+
+            {/*networks un*/}
             <BottomModal
-                isBottomModal={bottomModal}
+                isBottomModal={bottomModalNetwork}
                 toggleBottomModal={() => {
-                    toggleBottomModal()
+                    toggleBottomModalNetwork()
                 }}
             >
                 <View style={tw`w-full`}>
