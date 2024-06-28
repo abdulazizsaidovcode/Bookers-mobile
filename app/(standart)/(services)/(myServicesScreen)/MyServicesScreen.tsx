@@ -17,7 +17,8 @@ const MyServicesScreen = () => {
     const route = useRoute();
     const { childCategoryData, categoryFatherId, setChildCategoryData } = servicesStore();
     const [gender, setGender] = useState([]);
-    const [category , setCategory] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const { id } = route.params as { id: string };
     const [categories, setCategories] = useState([
         'Красота и здоровье волос',
@@ -26,52 +27,42 @@ const MyServicesScreen = () => {
         'Массаж и СПА',
         'Фитнес и йога',
     ]);
-    const cardData = [
-        { title: 'Мужское', description: 'Взрослое, Детский', icon: 'man-outline' },
-        { title: 'Женское', description: 'Взрослое, Детский', icon: 'woman-outline' },
-        // Add more cards as needed
-    ];
 
     const getGender = async () => {
         try {
             const response = await axios.get(`${getGender_status}`, config);
-            setGender(response.data.body)  
+            setGender(response.data.body);
         } catch (error) {
-            console.error("Error fetching services:", error);
+            console.error("Error fetching gender services:", error);
         }
     };
+
     const getCategory = async () => {
         try {
             const response = await axios.get(`${getCategory_master}`, config);
-            setCategory(response.data.body)  
+            setCategory(response.data.body);
         } catch (error) {
-            console.error("Error fetching services:", error);
+            console.error("Error fetching categories:", error);
         }
     };
 
     const getSpecialization = async (categoryId: string) => {
         try {
             const response = await axios.get(`${getSpecialization}${categoryId}`, config);
-            console.log(response);
-            
             if (response.data.success) {
-                const child =
-                    response.data.body &&
-                    response.data.body.map((item: any) => ({
-                        key: item.id,
-                        name: item.name,
-                    }));
-                    console.log(child);
-                    
+                const child = response.data.body.map((item: any) => ({
+                    key: item.id,
+                    name: item.name,
+                }));
                 setChildCategoryData(child);
             } else {
                 setChildCategoryData([]);
             }
         } catch (error) {
-            console.error("Error fetching child categories:", error);
+            console.error("Error fetching specializations:", error);
         }
     };
-   
+
     useEffect(() => {
         getGender();
         getCategory();
@@ -84,7 +75,7 @@ const MyServicesScreen = () => {
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <NavigationMenu name={`Мои услуги`}  />
+            <NavigationMenu name={`Мои услуги`} />
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -102,11 +93,13 @@ const MyServicesScreen = () => {
                             contentContainerStyle={{ gap: 10, marginBottom: 5 }}
                             showsHorizontalScrollIndicator={false}
                         >
-                            {gender && gender.map(card => (
+                            {gender.map(card => (
                                 <HomeCards
+                                    key={card.gender}
                                     title={card.gender === 'MALE' ? 'Мужское' : 'Женское'}
                                     icon={() => <Ionicons name={card.gender === 'MALE' ? 'man-outline' : 'woman-outline'} size={30} color="white" />}
-                                   description={card.description === '' ? 'Взрослое, Детский': 'Взрослое, Детский'}/>
+                                    description={card.description || 'Взрослое, Детский'}
+                                />
                             ))}
                         </ScrollView>
                     </View>
@@ -122,10 +115,18 @@ const MyServicesScreen = () => {
                         contentContainerStyle={{ gap: 16, marginBottom: 10 }}
                         showsHorizontalScrollIndicator={false}
                     >
-                        {category && category.map((category, index) => (
-                            <View key={index}>
-                                <TouchableOpacity activeOpacity={0.6}>
-                                    <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{category.name}</Text>
+                        {category.map((categoryItem, index) => (
+                            <View key={categoryItem.id}>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    onPress={() => setSelectedCategory(index)}
+                                >
+                                    <Text style={[
+                                        tw`rounded-lg border border-gray-600 px-4 py-3 text-gray-600`,
+                                        selectedCategory === index ? tw`bg-white text-black` : tw`bg-transparent text-gray-600`
+                                    ]}>
+                                        {categoryItem.name}
+                                    </Text>
                                 </TouchableOpacity>
                             </View>
                         ))}

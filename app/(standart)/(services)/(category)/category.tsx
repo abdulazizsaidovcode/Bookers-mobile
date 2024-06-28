@@ -99,7 +99,7 @@ const Category = () => {
                             isModal={modalVisible}
                             btnWhiteText='Добавить'
                             btnRedText='Закрыть'
-                            isFullBtn={true}
+                            isFullBtn={false}
                             toggleModal={closeModal}
                             onConfirm={() => {
                                 handlerPress(categoryFatherId.key)

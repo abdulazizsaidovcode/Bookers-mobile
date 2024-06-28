@@ -5,6 +5,10 @@ export interface MyServicesProps {
 }
 
 
+export interface Gender {
+    id: number;
+    gende:string;
+}
 export interface Services {
     data: Data[] | null
     setData: (val: Data[] | null) => void
@@ -18,6 +22,12 @@ export interface Services {
     setCategoryFatherId: (val: Data) => void
     checkedIs: boolean;
     setIsChecked: (val: boolean) => void
+    routeName: string;
+    setRouteName: (val: string) => void
+    genderData:Gender[] | null
+    setGenderData:(val:Gender[] | null) => void
+    
+
 }
 
 export interface Data {
