@@ -13,16 +13,18 @@ import { config } from '@/helpers/token';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
+import { ActivityIndicator } from 'react-native-paper';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category'>;
 
 const Category = () => {
     const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
-
+    const [isLoading, setIsLoading] = useState(false)
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     const getCategory = async () => {
+        setIsLoading(true)
         try {
             const response = await axios.get(`${category_Father}`, config);
             const listData =
@@ -34,6 +36,8 @@ const Category = () => {
             setData(listData);
         } catch (error) {
             console.error("Error fetching services:", error);
+        }finally {
+            setIsLoading(false)
         }
     };
     const getChildCategory = async (id: string) => {
@@ -78,6 +82,7 @@ const Category = () => {
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
                 >
+                {isLoading && <ActivityIndicator size="large" color={"#888"} />}
                     <View style={tw`w-full`}>
                     <FlatList
                             data={data}
