@@ -6,7 +6,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
 import CenteredModal from '@/components/(modals)/modal-centered';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import axios from 'axios';
@@ -15,6 +15,8 @@ import { config } from '@/helpers/token';
 import { useRoute } from '@react-navigation/native';
 import Textarea from '@/components/select/textarea';
 import { ActivityIndicator } from 'react-native-paper';
+import { RootStackParamList } from '@/type/root';
+import Process from '../(process)/process';
 
 const Expertise: React.FC = () => {
     const route = useRoute();
@@ -56,8 +58,6 @@ const Expertise: React.FC = () => {
     }, [id]);
 
     const postCategory = async (id: string, name: string) => {
-        console.log({ id, name });
-
         try {
             const response = await axios.post(`${masterAdd_category}/${id}?name=${name}`, {}, config);
             if (response.data.success) {
@@ -70,16 +70,13 @@ const Expertise: React.FC = () => {
             console.error("Error fetching child categories:", error);
         }
     };
-
     const openModal = () => setModalVisible(true);
     const closeModal = () => setModalVisible(false);
-
     const handleAdd = () => {
         postCategory(id, value);
         closeModal();
         setValue("")
     };
-
     const handleSelect = (item: any) => {
         setSelectedServices((prevSelected) => {
             if (prevSelected.find((service: any) => service.name === item.name)) {
@@ -89,48 +86,41 @@ const Expertise: React.FC = () => {
             }
         });
     };
-
     const renderItem = ({ item }: { item: any }) => {
         const isSelected = selectedServices.find((service: any) => service.name === item.name);
         return (
             <TouchableOpacity onPress={() => handleSelect(item)}>
-                <ServicesCategory 
-                title={item.name}
-                 onPress={setSelectedCategories}
-                style={{ backgroundColor: isSelected ? 'gray' : 'transparent' }} 
+                <ServicesCategory
+                    title={item.name}
+                    onPress={setSelectedCategories}
+                    style={{ backgroundColor: isSelected ? 'gray' : 'transparent' }}
                 />
             </TouchableOpacity>
         );
     };
-
-    console.log(selectedCategories);
-
-
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
             <NavigationMenu name="Специализация" />
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
-                
                 <ScrollView
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
-                >
-                    <View style={tw`w-full`}>
+                    contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}  >
+                   <View style={tw`w-full`}>
                         <FlatList
                             data={childCategoryData}
                             renderItem={renderItem}
-                            keyExtractor={(item, index) => index.toString()}
-                        />
+                            keyExtractor={(item, index) => index.toString()}/>
                     </View>
                     <View style={tw`content-end mb-3`}>
                         <Buttons title="Другое" backgroundColor="white" textColor="red" onPress={openModal} />
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
-
                                 title="Сохранить"
-                                isDisebled={selectedCategories.length===0}
+                                onPress={() => router.push('../(process)/process')}
+                            // isDisebled={selectedCategories.length!==0}
                             />
+                            
                         </View>
                         <CenteredModal
                             isModal={modalVisible}
@@ -138,15 +128,13 @@ const Expertise: React.FC = () => {
                             btnRedText='Закрыть '
                             isFullBtn={false}
                             toggleModal={closeModal}
-                            onConfirm={handleAdd}
-                        >
+                            onConfirm={handleAdd}>
                             <View style={tw`p-4 text-center`}>
                                 <Text style={tw`text-white text-xl mb-2 w-full`}>Добавьте свою специализацию</Text>
                                 <Textarea
                                     placeholder=''
                                     onChangeText={(text) => setValue(text)}
-                                    value={value}
-                                />
+                                    value={value} />
                             </View>
                         </CenteredModal>
                     </View>
@@ -155,5 +143,4 @@ const Expertise: React.FC = () => {
         </SafeAreaView>
     );
 };
-
 export default Expertise;
