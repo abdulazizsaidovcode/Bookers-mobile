@@ -92,7 +92,7 @@ const Stack = createNativeStackNavigator();
 export {ErrorBoundary} from "expo-router";
 
 export const unstable_settings = {
-    initialRouteName: "(tabs)",
+    initialRouteName: "index",
 };
 
 SplashScreen.preventAutoHideAsync();
