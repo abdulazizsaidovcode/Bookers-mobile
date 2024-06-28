@@ -43,6 +43,7 @@ const GrafficWorkEdit: React.FC = () => {
     putWorkDay(week, calendarDate);
   };
 
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
