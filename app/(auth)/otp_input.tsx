@@ -1,20 +1,25 @@
+import { checkCode } from '@/helpers/api-function/register/registrFC';
+import registerStory from '@/helpers/state_managment/auth/register';
 import React, { useState, useRef, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Alert, TextInputKeyPressEventData, NativeSyntheticEvent, Text, TouchableOpacity } from 'react-native';
 
 const OtpInputExample: React.FC = () => {
-    const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
     const inputs = useRef<TextInput[]>([]);
+    const { code, phoneNumber, otpValue, setOtpValue } = registerStory()
+
+
 
     useEffect(() => {
-        setIsDisabled(otp.some(digit => digit === ''));
-    }, [otp]);
+        setIsDisabled(otpValue.some(digit => digit === ''));
+        console.log('Current OTP Value:', otpValue.join(''));
+    }, [otpValue]);
 
     const handlePaste = (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
         const text = event.nativeEvent.text;
         if (text.length === 4 && /^\d{4}$/.test(text)) {
             const otpArray = text.split('');
-            setOtp(otpArray);
+            setOtpValue(otpArray);
             inputs.current[3].focus();
         } else {
             Alert.alert('Noto\'g\'ri OTP', 'Iltimos, to\'g\'ri 4-raqamli OTP kiriting.');
@@ -23,28 +28,30 @@ const OtpInputExample: React.FC = () => {
 
     const handleChangeText = (text: string, index: number) => {
         if (/^\d*$/.test(text)) {
-            const newOtp = [...otp];
+            const newOtp = [...otpValue];
             newOtp[index] = text;
-            setOtp(newOtp);
+            setOtpValue(newOtp);
             if (text && index < 3) {
                 inputs.current[index + 1].focus();
             }
         }
     };
+
     const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
-        if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) {
+        if (e.nativeEvent.key === 'Backspace' && !otpValue[index] && index > 0) {
             inputs.current[index - 1].focus();
         }
     };
+
     return (
         <View style={styles.container}>
             <View style={styles.textContainer}>
                 <Text style={styles.title}>Tasdiqlash raqami</Text>
-                <Text style={styles.phoneNumber}>+99 888 517 11 98</Text>
+                <Text style={styles.phoneNumber}>{phoneNumber}</Text>
                 <Text style={styles.instruction}>Biz SMS orqali sizga tasdiqlash kodini yubordik.</Text>
             </View>
             <View style={styles.otpContainer}>
-                {otp.map((digit, index) => (
+                {otpValue.map((digit, index) => (
                     <TextInput
                         key={index}
                         style={styles.input}
@@ -57,11 +64,16 @@ const OtpInputExample: React.FC = () => {
                         onPaste={handlePaste}
                     />
                 ))}
+                <Text style={styles.code}>{code}</Text>
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={[styles.button, isDisabled && styles.disabledButton]}
                     disabled={isDisabled}
+                    onPress={() => {
+                        checkCode(phoneNumber, `${otpValue.map((value) => value).join('')}`);
+                        // console.log('Final OTP Value:', `${otpValue.map((value) => value).join('')}`)
+                    }}
                 >
                     <Text style={styles.buttonText}>Tasdiqlash</Text>
                 </TouchableOpacity>
@@ -132,6 +144,10 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
     },
+    code: {
+        color: '#fff',
+        fontSize: 24,
+    }
 });
 
 export default OtpInputExample;
