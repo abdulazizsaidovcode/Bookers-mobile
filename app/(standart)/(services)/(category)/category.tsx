@@ -36,7 +36,6 @@ const Category = () => {
             console.error("Error fetching services:", error);
         }
     };
-
     const getChildCategory = async (id: string) => {
         try {
             const response = await axios.get(`${category_child}${id}`, config);
@@ -83,8 +82,7 @@ const Category = () => {
                     <FlatList
                             data={data}
                             renderItem={({ item }) => (
-                           <ServicesCategory title={item.value} items={item}
-                       />
+                        <ServicesCategory title={item.value} items={item}/>
                      )}
                     />
                     </View>
