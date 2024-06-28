@@ -4,6 +4,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import '../../i18next';
+import NavigationMenu from '@/components/navigation/navigation-menu';
 const Auth: React.FC = () => {
     const { t, i18n } = useTranslation();
 
@@ -12,6 +13,7 @@ const Auth: React.FC = () => {
     };
     return (
         <SafeAreaView style={styles.container} >
+            <NavigationMenu name="" deleteIcon={false} key={1} />
             <View style={styles.logo}>
                 <Image source={require('../../assets/images/auth/logo.png')} />
             </View>

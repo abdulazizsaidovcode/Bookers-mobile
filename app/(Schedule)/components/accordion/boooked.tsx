@@ -12,6 +12,7 @@ import { List } from 'react-native-paper';
 const BookedAccordion: React.FC = () => {
     const [services, setServices] = useState([]);
     const [activeTab, setActiveTab] = useState('');
+    const [activeTime, setActiveTime] = useState('');
     const { FreeTime, setFreeTime } = useScheduleFreeTime();
     const { calendarDate } = graficWorkStore();
 
@@ -37,6 +38,11 @@ const BookedAccordion: React.FC = () => {
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
+        setActiveTime(''); // Reset active time when tab changes
+    };
+
+    const handleTimeSelect = (time: string) => {
+        setActiveTime(time);
     };
 
     return (
@@ -47,7 +53,7 @@ const BookedAccordion: React.FC = () => {
             theme={{ colors: { background: 'transParent' } }}
         >
             <View style={styles.tabContainer}>
-                {services.map((service:any) => (
+                {services.map((service: any) => (
                     <TouchableOpacity
                         key={service.id}
                         style={[styles.tabButton, activeTab === service.id && styles.activeTab]}
@@ -63,8 +69,14 @@ const BookedAccordion: React.FC = () => {
                 {activeTab && (
                     <View style={styles.timeContainer}>
                         {FreeTime ? FreeTime.map((time, index) => (
-                            <TouchableOpacity key={index} style={styles.timeButton}>
-                                <Text style={styles.timeText}>{time}</Text>
+                            <TouchableOpacity
+                                key={index}
+                                style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
+                                onPress={() => handleTimeSelect(time)}
+                            >
+                                <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
+                                    {time}
+                                </Text>
                             </TouchableOpacity>
                         )) : <Text style={styles.placeholderText}>No available times</Text>}
                     </View>
@@ -108,16 +120,23 @@ const styles = StyleSheet.create({
     timeContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
+        marginBottom: 20,
     },
     timeButton: {
         backgroundColor: '#f0f0f0',
         padding: 10,
         width: 82,
         borderRadius: 5,
-        margin: 5,
+        marginRight: 5,
+    },
+    activeTimeButton: {
+        backgroundColor: '#9C0A35',
     },
     timeText: {
         color: '#9C0A35',
+    },
+    activeTimeText: {
+        color: '#fff',
     },
     placeholderText: {
         color: 'gray',

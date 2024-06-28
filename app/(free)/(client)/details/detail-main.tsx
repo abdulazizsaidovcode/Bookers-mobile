@@ -10,11 +10,12 @@ import {RouteProp, useRoute} from '@react-navigation/native'
 import Buttons from "@/components/(buttons)/button";
 import ClientDetailBasic from "@/components/clients/details/detail-basic";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
+import {addClientMessage} from "@/helpers/api-function/client/client";
 
-type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(free)/(client)/details/detail-main'>;
+type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
 const DetailMain = () => {
@@ -23,9 +24,14 @@ const DetailMain = () => {
     const {infoClient} = route.params;
     const {isLoading, setIsLoading} = clientStore()
     const [bottomModalSMS, setBottomModalSMS] = useState(false)
+    const [messageVal, setMessageVal] = useState('')
+
+    useEffect(() => {
+        if (!isLoading && !bottomModalSMS) setMessageVal('')
+    }, [isLoading, bottomModalSMS]);
 
     const toggleBottomModalSMS = () => setBottomModalSMS(!bottomModalSMS)
-    console.log(infoClient)
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -55,19 +61,25 @@ const DetailMain = () => {
                             isModal={bottomModalSMS}
                             toggleModal={() => {
                                 toggleBottomModalSMS()
+                                setMessageVal('')
+                            }}
+                            onConfirm={() => {
+                                if (!isLoading) addClientMessage(infoClient.id, messageVal, setIsLoading, toggleBottomModalSMS)
                             }}
                         >
                             <>
                                 <Text style={tw`text-center text-white text-lg font-semibold mb-5`}>Написать сообщение</Text>
                                 <Textarea
                                     placeholder={`Сообщение`}
+                                    value={messageVal}
+                                    onChangeText={e => setMessageVal(e)}
                                 />
                             </>
                         </CenteredModal>
                     </View>
                     <View style={[tw`pb-5`, {gap: 10}]}>
                         <Buttons title={`Написать сообщение`} onPress={toggleBottomModalSMS}/>
-                        <Buttons title={`Записать`}/>
+                        <Buttons title={`Записать`} onPress={() => navigation.navigate('(free)/(client)/details/records', {record: infoClient})}/>
                     </View>
                 </ScrollView>
             </View>

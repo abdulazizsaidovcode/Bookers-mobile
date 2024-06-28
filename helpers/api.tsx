@@ -68,6 +68,7 @@ export const client_stopped_visiting: string = `${base_url}user/master/client-st
 export const client_not_visit_search: string = `${base_url}client/search/for/not/visit?name=`
 export const client_stopped_visit_search: string = `${base_url}client/search/for/stopped/visiting?name=`
 export const client_stopped_visit_sms: string = `${base_url}sms/send-invite`
+export const master_message_for_client: string = `${base_url}message/for/client/by/master`
 export const client_permanent: string = `${base_url}user/master/client-permanent`
 export const client_permanent_search: string = `${base_url}client/search/for/regular/visit?name=`
 export const new_client: string = `${base_url}user/master/client-new`

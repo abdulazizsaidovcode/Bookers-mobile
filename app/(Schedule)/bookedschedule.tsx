@@ -11,7 +11,7 @@ const Bookedschedule = () => {
             <CalendarGraffic/>
             <AvailableAccordion/>
             <BookedAccordion />
-            <Buttons title='salom'/>
+            <Buttons title='Записать клиента' isDisebled={false}/>
         </View>
     )
 }
