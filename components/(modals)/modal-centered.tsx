@@ -43,7 +43,6 @@ const CenteredModal: React.FC<ICenteredModalProps> = (props) => {
           >
             <View
               style={[
-                styles.buttonWrapper,
                 isFullBtn ? styles.fullWidthHalf : styles.marginVertical,
               ]}
             >
@@ -51,12 +50,11 @@ const CenteredModal: React.FC<ICenteredModalProps> = (props) => {
                 backgroundColor={"white"}
                 title={btnWhiteText}
                 textColor={"#9C0A35"}
-                onPress={toggleModal} // vazifa bajarilishiga qarab click uchun props
+                onPress={isFullBtn ? toggleModal : onConfirm}
               />
             </View>
             <View
               style={[
-                styles.buttonWrapper,
                 isFullBtn ? styles.fullWidthHalf : styles.marginVertical,
                 isFullBtn && styles.marginHorizontal,
               ]}
@@ -65,7 +63,7 @@ const CenteredModal: React.FC<ICenteredModalProps> = (props) => {
                 backgroundColor={"#9C0A35"}
                 title={btnRedText}
                 textColor={"white"}
-                onPress={onConfirm} // vazifa bajarilishiga qarab click uchun props
+                onPress={isFullBtn ? onConfirm : toggleModal}
               />
             </View>
           </View>
@@ -98,14 +96,14 @@ const styles = StyleSheet.create({
   flexColumn: {
     flexDirection: "column",
   },
-  buttonWrapper: {
-    flex: 1,
-  },
+  // buttonWrapper: {
+  //   flex: 1,
+  // },
   fullWidthHalf: {
     width: "48%",
   },
   marginVertical: {
-    marginVertical: 8,
+    marginVertical: 6,
   },
   marginHorizontal: {
     marginHorizontal: 6,

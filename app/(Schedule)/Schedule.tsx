@@ -1,6 +1,6 @@
 // Schedule.tsx
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import Tabs from './components/tabs';
 import Bookedschedule from './bookedschedule';
 import Availebleschedule from './availebleschedule';
@@ -37,18 +37,30 @@ const Schedule: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <Tabs activeTab={activeTab} onTabChange={handleTabChange} />
       {activeTab === 'booked' && <Bookedschedule />}
       {activeTab === 'requests' && <Availebleschedule />}
-    </SafeAreaView>
+    </ScrollView>
   );
 };
+
+// {
+//   "categoryId": "6d85520e-0509-4323-affb-3ca8f014ef7e",
+//   "name": "kalla kesins",
+//   "genderId": [
+//     1
+//   ],
+//   "price": 2000,
+//   "description": "ogritme sezdirme kalla kesamiz arra bilan",
+//   "attachmentId": "8bffe6cf-a163-414c-b621-5be315c90674",
+//   "active": true
+// }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 16,
     backgroundColor: '#21212E',
   },
 });

@@ -1,4 +1,4 @@
-import { ClientAddressBook } from "@/type/client/client";
+import {AllClient, ClientAddressBook} from "@/type/client/client";
 
 export type RootStackParamList = {
   'index': undefined;
@@ -21,6 +21,7 @@ export type RootStackParamList = {
   '(free)/(client)/address-book': undefined | string;
   '(free)/(client)/creating-client': undefined | string;
   '(free)/(client)/updating-address-book': { client: ClientAddressBook };
+  '(free)/(client)/details/detail-main': { infoClient: AllClient };
   '(tabs)': undefined | string;
   '(welcome)/Welcome': undefined | string;
   '(profile)/(tariff)/tariff': undefined;

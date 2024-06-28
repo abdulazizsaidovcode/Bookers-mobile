@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import {
-    AgeData,
+    AgeData, AllClient,
     Client,
     ClientAddressBook,
     ClientNotVisit,
@@ -54,7 +54,7 @@ const clientStore = create<Client>((set) => ({
     attachmentID: null,
     setAttachmentID: (val: null | string) => set({ attachmentID: val }),
     allClientsList: null,
-    setAllClients: (val: any | null) => set({ allClientsList: val }),
+    setAllClients: (val: AllClient[] | null) => set({ allClientsList: val }),
     clientNotVisit: null,
     setClientNotVisit: (val: null | ClientNotVisit[]) => set({ clientNotVisit: val }),
     clientStoppedVisiting: null,
