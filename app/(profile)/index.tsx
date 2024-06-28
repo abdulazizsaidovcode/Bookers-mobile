@@ -53,7 +53,7 @@ const ProfilePage: React.FC = () => {
                     { icon: 'wallet', label: 'Расходы', screen: '(profile)/(Expenses)/index' },
                     { icon: 'globe', label: 'Веб страница', screen: '(profile)/(WebPage)/WebPage' },
                     { icon: 'cogs', label: 'Настройки', screen: '(profile)/(settings)/settings' },
-                    { icon: 'users', label: 'Клиенты', screen: '(profile)/(client)/ClientPage' },
+                    { icon: 'users', label: 'Клиенты', screen: '(free)/(client)/main' },
                     { icon: 'sign-out', label: 'Выйти', screen: 'Logout' }
                     
                 ].map((item, index) => (

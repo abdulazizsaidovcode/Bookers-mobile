@@ -20,8 +20,8 @@ export interface Client {
     setDistrictData: (val: DistrictData[] | null) => void;
     attachmentID: null | string
     setAttachmentID: (val: null | string) => void;
-    allClientsList: any
-    setAllClients: (val: any | null) => void;
+    allClientsList: AllClient[]  | null
+    setAllClients: (val: AllClient[] | null) => void;
     clientNotVisit: ClientNotVisit[] | null
     setClientNotVisit: (val: ClientNotVisit[] | null) => void;
     clientStoppedVisiting: null | ClientStoppedVisiting[]
@@ -30,6 +30,20 @@ export interface Client {
     setNewClient: (val: NewClient[] | null) => void;
     permanentClient: PermanentClient[] | null
     setPermanentClient: (val: PermanentClient[] | null) => void;
+}
+
+export interface AllClient {
+    id: string
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    attachmentId: null | string
+    orderDate: null | string
+    orderTime: null | string
+    clientBirthday: null | string
+    telegram: null | string
+    instagram: null | string
+    nickname: null | string
 }
 
 export interface ClientStatus {

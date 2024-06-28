@@ -61,11 +61,13 @@ export const client_address_book_update: string = `${base_url}client/`
 export const client_address_book_create: string = `${base_url}user/add-client-from-address-book`
 export const master_client_create: string = `${base_url}user/create-client-by-master`
 export const master_client_all_list: string = `${base_url}user/master/all-client`
+export const master_client_all_list_search: string = `${base_url}client/search/for/all?name=`
 export const client_not_visit: string = `${base_url}user/master/client-not-visit`
 export const client_stopped_visiting: string = `${base_url}user/master/client-stoppedVisiting`
 export const client_not_visit_search: string = `${base_url}client/search/for/not/visit?name=`
 export const client_stopped_visit_search: string = `${base_url}client/search/for/stopped/visiting?name=`
 export const client_stopped_visit_sms: string = `${base_url}sms/send-invite`
+export const master_message_for_client: string = `${base_url}message/for/client/by/master`
 export const client_permanent: string = `${base_url}user/master/client-permanent`
 export const client_permanent_search: string = `${base_url}client/search/for/regular/visit?name=`
 export const new_client: string = `${base_url}user/master/client-new`
@@ -92,7 +94,10 @@ export const master_service_list: string = `${base_url}service`
 
 // free Time url
 
-export const free_time_list: string = `${base_url}free-time`
+export const free_time_list: string = `${base_url}order/free-time`
 
 // help url
 export const help_url: string = `${base_url}help/one?HELP_STATUS=`
+
+//order
+export const order_list: string = `${base_url}order/today/orders/for/master`

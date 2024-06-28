@@ -1,4 +1,4 @@
-import {TouchableOpacity, Image, Text, StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
+import {TouchableOpacity, Image, Text, StyleSheet, View, TouchableWithoutFeedback, Platform} from 'react-native';
 import React, {useState, useEffect} from "react";
 import * as ImagePicker from 'expo-image-picker';
 import CenteredModal from "@/components/(modals)/modal-centered";
@@ -10,10 +10,9 @@ import {getFile, postFileId} from "@/helpers/api";
 import {config} from "@/helpers/token";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 
-const ProfileImgUpload = ({attachmentID}: {attachmentID?: string | null}) => {
+const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
     const {setAttachmentID} = clientStore();
     const [image, setImage] = useState<string | null>(null);
-    const [imageApi, setImageApi] = useState<any>(null);
     const [isModal, setIsModal] = useState<boolean>(false);
     const [isDeleteImgModal, setIsDeleteImgModal] = useState<boolean>(false);
 
@@ -21,12 +20,6 @@ const ProfileImgUpload = ({attachmentID}: {attachmentID?: string | null}) => {
         if (attachmentID) setImage(`${getFile}${attachmentID}`)
         else setImage(null)
     }, []);
-
-    useEffect(() => {
-        if (image) {
-            uploadImage();
-        }
-    }, [image]);
 
     const openModal = () => setIsModal(!isModal);
     const openDeleteModal = () => setIsDeleteImgModal(!isDeleteImgModal);
@@ -47,8 +40,8 @@ const ProfileImgUpload = ({attachmentID}: {attachmentID?: string | null}) => {
         });
 
         if (!result.canceled) {
-            setImageApi(result.assets[0]);
             setImage(result.assets[0].uri);
+            uploadImage(result.assets[0]);
         }
     };
 
@@ -67,8 +60,8 @@ const ProfileImgUpload = ({attachmentID}: {attachmentID?: string | null}) => {
         });
 
         if (!result.canceled) {
-            setImageApi(result.assets[0]);
             setImage(result.assets[0].uri);
+            uploadImage(result.assets[0]);
         }
     };
 
@@ -78,19 +71,20 @@ const ProfileImgUpload = ({attachmentID}: {attachmentID?: string | null}) => {
         openDeleteModal();
     }
 
-    const uploadImage = async () => {
-        if (!imageApi) return;
+    const uploadImage = async (val: any) => {
+        if (!val) return;
 
         const formData = new FormData();
-        formData.append('file', imageApi.uri);
-        formData.append('type', imageApi.mimeType);
+        formData.append('file', val)
 
-        try {
-            const {data} = await axios.post(postFileId, formData, config);
-            setAttachmentID(data.body);
-        } catch (err) {
-            console.error('Image upload failed:', err);
-        }
+        axios.post(postFileId, formData, config)
+            .then(res => {
+                console.log('success: ', res)
+                if (res.data.success) setAttachmentID(res.data.body)
+            })
+            .catch(err => {
+                console.error('error: ', err)
+            })
     };
 
     return (

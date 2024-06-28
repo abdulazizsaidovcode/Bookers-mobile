@@ -1,4 +1,4 @@
-import { ClientAddressBook } from "@/type/client/client";
+import {AllClient, ClientAddressBook} from "@/type/client/client";
 
 export type RootStackParamList = {
   'index': undefined;
@@ -16,11 +16,13 @@ export type RootStackParamList = {
   '(standart)/client/not-visiting': undefined;
   '(chat)/(communicatie)/chatDetails': any;
   '(free)/(client)/main': undefined | string;
+  '(free)/(client)/all-client': undefined | string;
   '(free)/(client)/client-list': undefined | string;
   '(free)/(client)/address-book': undefined | string;
   '(free)/(client)/creating-client': undefined | string;
   '(free)/(client)/updating-address-book': { client: ClientAddressBook };
   '(tabs)/main': undefined | string;
+  '(free)/(client)/details/detail-main': { infoClient: AllClient };
   '(welcome)/Welcome': undefined | string;
   '(profile)/(tariff)/tariff': undefined;
   'category': any;

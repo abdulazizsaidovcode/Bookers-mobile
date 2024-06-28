@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { ChildCategory, Data, Services } from '@/type/services/myServices'
+import { ChildCategory, Data, Gender, Services } from '@/type/services/myServices'
 
 const servicesStore = create<Services>((set) => ({
     data: [],
@@ -13,7 +13,11 @@ const servicesStore = create<Services>((set) => ({
     categoryFatherId: null,
     setCategoryFatherId: (val: Data) => set({categoryFatherId: val}),
     checkedIs: false,
-    setIsChecked: (val: boolean) => set({isChecked: val})
+    setIsChecked: (val: boolean) => set({isChecked: val}),
+    routeName: "",
+    setRouteName: (val: string) => set({routeName: val}),
+    genderData:[],
+    setGenderData:(val:Gender[] | null) => set({genderData:val}),
 }))
 
 export default servicesStore

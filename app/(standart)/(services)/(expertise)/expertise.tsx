@@ -20,8 +20,8 @@ const Expertise: React.FC = () => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [name, setName] = useState<string>('');
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+    const [selectedServices, setSelectedServices] = useState<any[]>([]);
     const [services, setServices] = useState([]);
-    const [selectedServices, setSelectedServices] = useState([]);
     const { id } = route.params as { id: string };
 
     useEffect(() => {
@@ -58,20 +58,12 @@ const Expertise: React.FC = () => {
             const response = await axios.post(`${masterAdd_category}${id}?name=${name}`, {}, config);
             if (response.data.success) {
                 setChildCategoryData(response.data.body);
-                getChildCategory(id);  
+                getChildCategory(id);
             } else {
                 setChildCategoryData([]);
             }
         } catch (error) {
             console.error("Error fetching child categories:", error);
-        }
-    };
-
-    const saveSelectedServices = async (selectedServices: any[]) => {
-        try {
-            await AsyncStorage.setItem('selectedServices', JSON.stringify(selectedServices));
-        } catch (error) {
-            console.error('Failed to save selected services:', error);
         }
     };
 
@@ -81,9 +73,6 @@ const Expertise: React.FC = () => {
     const handleAdd = () => {
         postCategory(id, name);
         closeModal();
-        console.log(name);
-        console.log(id);
-        
     };
 
     const handleSelect = (item: any) => {
@@ -130,9 +119,7 @@ const Expertise: React.FC = () => {
                                 onPress={() => {
                                     router.push({
                                         pathname: '/process',
-                                        params: { selectedServices: JSON.stringify(selectedServices) },
                                     });
-                                    saveSelectedServices(selectedServices);
                                 }}
                                 isDisebled={selectedCategories.length !== 0}
                             />
@@ -141,7 +128,7 @@ const Expertise: React.FC = () => {
                             isModal={modalVisible}
                             btnWhiteText='Закрыть'
                             btnRedText='Добавить '
-                            isFullBtn={true}
+                            isFullBtn={false}
                             toggleModal={closeModal}
                             onConfirm={handleAdd}
                         >
