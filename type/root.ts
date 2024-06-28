@@ -20,7 +20,7 @@ export type RootStackParamList = {
   '(free)/(client)/address-book': undefined | string;
   '(free)/(client)/creating-client': undefined | string;
   '(free)/(client)/updating-address-book': { client: ClientAddressBook };
-  '(tabs)': undefined | string;
+  '(tabs)/main': undefined | string;
   '(welcome)/Welcome': undefined | string;
   '(profile)/(tariff)/tariff': undefined;
   'category': any;
