@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, StatusBar, FlatList, Alert } from 'react-native';
+import { ScrollView, View, Text, StatusBar, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -19,7 +19,6 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category
 const Category = () => {
     const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
@@ -55,22 +54,10 @@ const Category = () => {
         getCategory();
     }, []);
 
-    const handleCategorySelect = (id: number) => {
-        if (selectedCategory !== null && selectedCategory !== id) {
-            Alert.alert(
-                "Сохраните выбор",
-                "Вы уже выбрали категорию. Пожалуйста, сохраните её перед выбором другой категории.",
-                [{ text: "OK" }]
-            );
-        } else {
-            setSelectedCategory(id);
-        }
-    };
-
     const openModal = () => {
         setModalVisible(true);
-        if (selectedCategory) {
-            getChildCategory(selectedCategory.toString());
+        if (categoryFatherId && categoryFatherId.key) {
+            getChildCategory(categoryFatherId.key);
         }
     };
 
@@ -93,24 +80,19 @@ const Category = () => {
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
                 >
                     <View style={tw`w-full`}>
-                        <FlatList
+                    <FlatList
                             data={data}
                             renderItem={({ item }) => (
-                                <ServicesCategory
-                                    title={item.value}
-                                    items={item}
-                                    onPress={() => handleCategorySelect(item.key)}
-                                    isSelected={selectedCategory === item.key}
-                                />
-                            )}
-                        />
+                           <ServicesCategory title={item.value} items={item}
+                       />
+                     )}
+                    />
                     </View>
                     <View style={tw`content-end mb-5`}>
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
                                 title="Сохранить"
                                 onPress={openModal}
-                                isDisebled={selectedCategory !== null}
                             />
                         </View>
                         <CenteredModal
@@ -120,7 +102,7 @@ const Category = () => {
                             isFullBtn={true}
                             toggleModal={closeModal}
                             onConfirm={() => {
-                                handlerPress(selectedCategory?.toString() || '');
+                                handlerPress(categoryFatherId.key)
                                 closeModal();
                             }}
                         >
