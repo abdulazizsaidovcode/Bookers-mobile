@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
 import CardItem from '../CardItem';
+import { useScheduleBookedStore } from '@/helpers/state_managment/schedule/schedule';
+import { getBookedSchedule } from '@/helpers/api-function/schedule/schedule';
 
 const bookedItems = [
     {
@@ -23,6 +25,10 @@ const bookedItems = [
 ];
 
 const AvailableAccordion: React.FC = () => {
+
+    useEffect(() => {
+        getBookedSchedule("", () => { })
+    }, []);
     return (
         <List.Accordion
             title="Забронированное время"

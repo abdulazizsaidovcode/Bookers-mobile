@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const getBookedSchedule = (date: string, setData: (val: weekList[]) => void) => {
     axios
-        .get(`${schedule_list}${date ? `?localDate=${date}` : ''}`, config)
+        .get(`${schedule_list}?localDate=2024-06-26`, config)
         .then((res) => {
             if (res.data.success) {
                 setData(res.data.body);
@@ -16,6 +16,8 @@ export const getBookedSchedule = (date: string, setData: (val: weekList[]) => vo
         })
         .catch(() => setData([]))
 };
+
+
 export const getAvialable = (setData: (val: weekList[]) => void) => {
     axios
         .get(`${master_service_list}`, config)
