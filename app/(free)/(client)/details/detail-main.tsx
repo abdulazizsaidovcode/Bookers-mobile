@@ -31,6 +31,7 @@ const DetailMain = () => {
     }, [isLoading, bottomModalSMS]);
 
     const toggleBottomModalSMS = () => setBottomModalSMS(!bottomModalSMS)
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>

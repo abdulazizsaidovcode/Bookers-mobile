@@ -22,12 +22,12 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
     };
 
     const goInstagram = () => {
-        const url: string = `https://www.instagram.com/al1sher_o9o3/`;
+        const url: string = `https://www.instagram.com/${client.instagram}`;
         Linking.openURL(url).catch((err) => console.error('Error:', err));
     };
 
     const goTelegram = () => {
-        const url: string = `https://t.me/Sodiqov_Alisher`;
+        const url: string = `https://t.me/${client.telegram}`;
         Linking.openURL(url).catch((err) => console.error('Error:', err));
     };
 
@@ -59,29 +59,33 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                 <TouchableOpacity
                     onPress={() => toggleBottomModalNetwork()}
                     activeOpacity={.6}
-                    style={styles.contactItem}
+                    style={[styles.contactItem]}
                 >
                     <Feather name="phone" size={24} color="#9C0A35"/>
                     <Text style={styles.contactText}>
                         {client ? client.phoneNumber : ''}
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => toggleBottomModalNetwork()}
-                    activeOpacity={.6}
-                    style={styles.contactItem}
-                >
-                    <Entypo name="instagram" size={24} color="#9C0A35"/>
-                    <Text style={styles.contactText}>@example_1987</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => toggleBottomModalNetwork()}
-                    activeOpacity={.6}
-                    style={styles.contactItem}
-                >
-                    <FontAwesome5 name="telegram-plane" size={24} color="#9C0A35"/>
-                    <Text style={styles.contactText}>@example_1987</Text>
-                </TouchableOpacity>
+                {client.instagram && (
+                    <TouchableOpacity
+                        onPress={() => toggleBottomModalNetwork()}
+                        activeOpacity={.6}
+                        style={[styles.contactItem, {marginTop: 10}]}
+                    >
+                        <Entypo name="instagram" size={24} color="#9C0A35"/>
+                        <Text style={styles.contactText}>{client.instagram}</Text>
+                    </TouchableOpacity>
+                )}
+                {client.telegram && (
+                    <TouchableOpacity
+                        onPress={() => toggleBottomModalNetwork()}
+                        activeOpacity={.6}
+                        style={[styles.contactItem, {marginTop: 10}]}
+                    >
+                        <FontAwesome5 name="telegram-plane" size={24} color="#9C0A35"/>
+                        <Text style={styles.contactText}>{client.telegram}</Text>
+                    </TouchableOpacity>
+                )}
             </View>
 
             {/*client delete*/}
@@ -116,14 +120,18 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                             <FontAwesome name="phone-square" size={45} color="#45E760"/>
                             <Text style={styles.modalOptionText}>Телефон</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={goInstagram} activeOpacity={.7}>
-                            <FontAwesome5 name="instagram-square" size={44} color="#9C0A35"/>
-                            <Text style={styles.modalOptionText}>Инстаграм</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={goTelegram} activeOpacity={.7}>
-                            <FontAwesome name="telegram" size={42} color="#06BCEE"/>
-                            <Text style={styles.modalOptionText}>Телеграм</Text>
-                        </TouchableOpacity>
+                        {client.instagram && (
+                            <TouchableOpacity onPress={goInstagram} activeOpacity={.7}>
+                                <FontAwesome5 name="instagram-square" size={44} color="#9C0A35"/>
+                                <Text style={styles.modalOptionText}>Инстаграм</Text>
+                            </TouchableOpacity>
+                        )}
+                        {client.telegram && (
+                            <TouchableOpacity onPress={goTelegram} activeOpacity={.7}>
+                                <FontAwesome name="telegram" size={42} color="#06BCEE"/>
+                                <Text style={styles.modalOptionText}>Телеграм</Text>
+                            </TouchableOpacity>
+                        )}
                     </View>
                     <View style={styles.defaultOption}>
                         <TouchableOpacity
@@ -181,7 +189,6 @@ const styles = StyleSheet.create({
     contactItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
     },
     contactText: {
         color: '#4F4F4F',
