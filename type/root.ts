@@ -23,6 +23,7 @@ export type RootStackParamList = {
   '(free)/(client)/updating-address-book': { client: ClientAddressBook };
   '(tabs)': undefined;
   '(free)/(client)/details/detail-main': { infoClient: AllClient };
+  '(free)/(client)/details/records': { record: AllClient };
   '(welcome)/Welcome': undefined | string;
   '(profile)/(tariff)/tariff': undefined;
   'category': any;

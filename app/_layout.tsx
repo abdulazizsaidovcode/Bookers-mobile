@@ -86,6 +86,7 @@ import NotVisiting from "./(standart)/client/not-visiting";
 import StandardMain from "./(standart)/client/standard-main";
 import AllClient from "@/app/(free)/(client)/all-client";
 import DetailMain from "@/app/(free)/(client)/details/detail-main";
+import Records from "@/app/(free)/(client)/details/records";
 
 const Stack = createNativeStackNavigator();
 
@@ -388,6 +389,11 @@ function RootLayoutNav() {
                             name="(free)/(client)/updating-address-book"
                             component={UpdatingAddressBook}
                             options={{title: "UpdatingClient", headerShown: false}}
+                        />
+                        <Stack.Screen
+                            name="(free)/(client)/details/records"
+                            component={Records}
+                            options={{title: "Records", headerShown: false}}
                         />
                         <Stack.Screen
                             name="(free)/(client)/details/detail-main"

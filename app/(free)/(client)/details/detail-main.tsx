@@ -15,7 +15,7 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
 import {addClientMessage} from "@/helpers/api-function/client/client";
 
-type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(free)/(client)/details/detail-main'>;
+type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
 const DetailMain = () => {
@@ -79,7 +79,7 @@ const DetailMain = () => {
                     </View>
                     <View style={[tw`pb-5`, {gap: 10}]}>
                         <Buttons title={`Написать сообщение`} onPress={toggleBottomModalSMS}/>
-                        <Buttons title={`Записать`}/>
+                        <Buttons title={`Записать`} onPress={() => navigation.navigate('(free)/(client)/details/records', {record: infoClient})}/>
                     </View>
                 </ScrollView>
             </View>
