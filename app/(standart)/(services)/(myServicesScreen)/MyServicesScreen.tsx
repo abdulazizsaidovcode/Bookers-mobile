@@ -7,12 +7,18 @@ import Buttons from '@/components/(buttons)/button';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
-import { getGender_status } from '@/helpers/api';
+import { getCategory_master, getGender_status, getSpecialization } from '@/helpers/api';
 import { config } from '@/helpers/token';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { useRoute } from '@react-navigation/native';
+import servicesStore from '@/helpers/state_managment/services/servicesStore';
 
 const MyServicesScreen = () => {
+    const route = useRoute();
+    const { childCategoryData, categoryFatherId, setChildCategoryData } = servicesStore();
     const [gender, setGender] = useState([]);
+    const [category , setCategory] = useState([]);
+    const { id } = route.params as { id: string };
     const [categories, setCategories] = useState([
         'Красота и здоровье волос',
         'Маникюр и педикюр',
@@ -26,23 +32,59 @@ const MyServicesScreen = () => {
         // Add more cards as needed
     ];
 
-    const getCategory = async () => {
+    const getGender = async () => {
         try {
             const response = await axios.get(`${getGender_status}`, config);
-            setGender(response.data.body)
+            setGender(response.data.body)  
         } catch (error) {
             console.error("Error fetching services:", error);
         }
     };
+    const getCategory = async () => {
+        try {
+            const response = await axios.get(`${getCategory_master}`, config);
+            setCategory(response.data.body)  
+        } catch (error) {
+            console.error("Error fetching services:", error);
+        }
+    };
+
+    const getSpecialization = async (categoryId: string) => {
+        try {
+            const response = await axios.get(`${getSpecialization}${categoryId}`, config);
+            console.log(response);
+            
+            if (response.data.success) {
+                const child =
+                    response.data.body &&
+                    response.data.body.map((item: any) => ({
+                        key: item.id,
+                        name: item.name,
+                    }));
+                    console.log(child);
+                    
+                setChildCategoryData(child);
+            } else {
+                setChildCategoryData([]);
+            }
+        } catch (error) {
+            console.error("Error fetching child categories:", error);
+        }
+    };
    
     useEffect(() => {
+        getGender();
         getCategory();
     }, []);
+
+    useEffect(() => {
+        getSpecialization(id);
+    }, [id]);
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <NavigationMenu name={`Мои услуги`} />
+            <NavigationMenu name={`Мои услуги`}  />
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -62,9 +104,9 @@ const MyServicesScreen = () => {
                         >
                             {gender && gender.map(card => (
                                 <HomeCards
-                                    title={card.gender === 'FEMALE' ? 'Мужское' : 'Женское'}
-                                    icon={() => <Ionicons name={card.gender === 'FEMALE' ? 'man-outline' : 'woman-outline'} size={30} color="white" />}
-                                />
+                                    title={card.gender === 'MALE' ? 'Мужское' : 'Женское'}
+                                    icon={() => <Ionicons name={card.gender === 'MALE' ? 'man-outline' : 'woman-outline'} size={30} color="white" />}
+                                   description={card.description === '' ? 'Взрослое, Детский': 'Взрослое, Детский'}/>
                             ))}
                         </ScrollView>
                     </View>
@@ -80,10 +122,10 @@ const MyServicesScreen = () => {
                         contentContainerStyle={{ gap: 16, marginBottom: 10 }}
                         showsHorizontalScrollIndicator={false}
                     >
-                        {categories.map((category, index) => (
+                        {category && category.map((category, index) => (
                             <View key={index}>
-                                <TouchableOpacity activeOpacity={0.8}>
-                                    <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{category}</Text>
+                                <TouchableOpacity activeOpacity={0.6}>
+                                    <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{category.name}</Text>
                                 </TouchableOpacity>
                             </View>
                         ))}

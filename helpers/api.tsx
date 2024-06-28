@@ -37,7 +37,8 @@ export const masterAdd_category = `${base_url}category`;
 export const masterEdit_category = `${base_url}categoty/master`;
 export const gender_status = `${base_url}master-service/gender?`;
 export const getGender_status = `${base_url}master-service/gender`;
-export const getCategory_master = `${base_url}/master-service/category`;
+export const getCategory_master = `${base_url}master-service/category`;
+export const getSpecialization = `${base_url}master-service/specialization`
 
 
 
