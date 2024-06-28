@@ -13,26 +13,23 @@ import axios from 'axios';
 import { base_url, category_child, masterAdd_category } from '@/helpers/api';
 import { config } from '@/helpers/token';
 import { useRoute } from '@react-navigation/native';
+import Textarea from '@/components/select/textarea';
+import { ActivityIndicator } from 'react-native-paper';
 
 const Expertise: React.FC = () => {
     const route = useRoute();
     const { childCategoryData, categoryFatherId, setChildCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [name, setName] = useState<string>('');
-    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-    const [services, setServices] = useState([]);
-    const [selectedServices, setSelectedServices] = useState([]);
+    const [value, setValue] = useState('');
+    const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
+    const [selectedServices, setSelectedServices] = useState<any[]>([]);
     const { id } = route.params as { id: string };
-
     useEffect(() => {
         if (categoryFatherId && categoryFatherId.key) {
             postCategory(categoryFatherId.key, '');
         }
     }, []);
 
-    useEffect(() => {
-        getChildCategory(id);
-    }, [id]);
 
     const getChildCategory = async (id: string) => {
         try {
@@ -45,6 +42,7 @@ const Expertise: React.FC = () => {
                         name: item.name,
                     }));
                 setChildCategoryData(child);
+
             } else {
                 setChildCategoryData([]);
             }
@@ -52,26 +50,24 @@ const Expertise: React.FC = () => {
             console.error("Error fetching child categories:", error);
         }
     };
+
+    useEffect(() => {
+        getChildCategory(id);
+    }, [id]);
 
     const postCategory = async (id: string, name: string) => {
+        console.log({ id, name });
+
         try {
-            const response = await axios.post(`${masterAdd_category}${id}?name=${name}`, {}, config);
+            const response = await axios.post(`${masterAdd_category}/${id}?name=${name}`, {}, config);
             if (response.data.success) {
-                setChildCategoryData(response.data.body);
-                getChildCategory(id);  
+                setChildCategoryData([...childCategoryData, { id, name }]);
+                getChildCategory(id);
             } else {
                 setChildCategoryData([]);
             }
         } catch (error) {
             console.error("Error fetching child categories:", error);
-        }
-    };
-
-    const saveSelectedServices = async (selectedServices: any[]) => {
-        try {
-            await AsyncStorage.setItem('selectedServices', JSON.stringify(selectedServices));
-        } catch (error) {
-            console.error('Failed to save selected services:', error);
         }
     };
 
@@ -79,11 +75,9 @@ const Expertise: React.FC = () => {
     const closeModal = () => setModalVisible(false);
 
     const handleAdd = () => {
-        postCategory(id, name);
+        postCategory(id, value);
         closeModal();
-        console.log(name);
-        console.log(id);
-        
+        setValue("")
     };
 
     const handleSelect = (item: any) => {
@@ -100,10 +94,16 @@ const Expertise: React.FC = () => {
         const isSelected = selectedServices.find((service: any) => service.name === item.name);
         return (
             <TouchableOpacity onPress={() => handleSelect(item)}>
-                <ServicesCategory title={item.name} style={{ backgroundColor: isSelected ? 'gray' : 'transparent' }} />
+                <ServicesCategory 
+                title={item.name}
+                 onPress={setSelectedCategories}
+                style={{ backgroundColor: isSelected ? 'gray' : 'transparent' }} 
+                />
             </TouchableOpacity>
         );
     };
+
+    console.log(selectedCategories);
 
 
     return (
@@ -111,6 +111,7 @@ const Expertise: React.FC = () => {
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
             <NavigationMenu name="Специализация" />
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
+                
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
@@ -126,35 +127,25 @@ const Expertise: React.FC = () => {
                         <Buttons title="Другое" backgroundColor="white" textColor="red" onPress={openModal} />
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
+
                                 title="Сохранить"
-                                onPress={() => {
-                                    router.push({
-                                        pathname: '/process',
-                                        params: { selectedServices: JSON.stringify(selectedServices) },
-                                    });
-                                    saveSelectedServices(selectedServices);
-                                }}
-                                isDisebled={selectedCategories.length !== 0}
+                                isDisebled={selectedCategories.length===0}
                             />
                         </View>
                         <CenteredModal
                             isModal={modalVisible}
-                            btnWhiteText='Закрыть'
-                            btnRedText='Добавить '
-                            isFullBtn={true}
+                            btnWhiteText='Добавить'
+                            btnRedText='Закрыть '
+                            isFullBtn={false}
                             toggleModal={closeModal}
                             onConfirm={handleAdd}
                         >
                             <View style={tw`p-4 text-center`}>
                                 <Text style={tw`text-white text-xl mb-2 w-full`}>Добавьте свою специализацию</Text>
-                                <TextInput
-                                    style={tw`bg-white p-3 rounded-xl text-lg text-black`}
-                                    multiline
-                                    numberOfLines={4}
-                                    placeholder="Введите текст"
-                                    value={name}
-                                    onChangeText={setName}
-                                    scrollEnabled={true}
+                                <Textarea
+                                    placeholder=''
+                                    onChangeText={(text) => setValue(text)}
+                                    value={value}
                                 />
                             </View>
                         </CenteredModal>

@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import SettingsGallery from '@/app/(settings)/(settings-gallery)/settings-gallery';
 
 const SettingsPage: React.FC = () => {
     const navigation = useNavigation();
@@ -18,7 +19,7 @@ const SettingsPage: React.FC = () => {
             <ScrollView>
                 <NavigationMenu name='Настройки'/>
                 {[
-                    { icon: 'image', label: 'Галерея', screen: 'Gallery' },
+                    { icon: 'image', label: 'Галерея', screen: '(settings)/(settings-gallery)/settings-gallery' },
                     { icon: 'check-square', label: 'Услуги', screen: 'Services' },
                     { icon: 'briefcase', label: 'Место работы', screen: 'WorkLocation' },
                     { icon: 'calendar', label: 'Расписание работы', screen: 'WorkSchedule' },

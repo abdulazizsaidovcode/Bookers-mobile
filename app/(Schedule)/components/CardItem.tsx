@@ -5,7 +5,7 @@ interface CardItemProps {
     name: string;
     phone: string;
     service: string;
-    price: string;
+    price: number;
     startTime: string;
     endTime: string;
 }

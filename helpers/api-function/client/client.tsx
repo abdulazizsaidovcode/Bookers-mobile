@@ -13,13 +13,13 @@ import {
     client_stopped_visit_sms,
     client_stopped_visiting,
     district_list,
-    master_client_all_list,
-    master_client_create,
+    master_client_all_list, master_client_all_list_search,
+    master_client_create, master_message_for_client,
     new_client, new_client_search,
     region_list
 } from "@/helpers/api";
 import {
-    AgeData,
+    AgeData, AllClient,
     ClientAddressBook,
     ClientNotVisit,
     ClientStatus,
@@ -82,13 +82,27 @@ export const getClientStatistics = async (setData: (val: ClientStatus | null) =>
 }
 
 // master uziga tegishli all client listini chgiqaruvchi get function
-export const getClientAll = async (setData: (val: any | null) => void) => {
+export const getClientAll = async (setData: (val: AllClient[] | null) => void) => {
     try {
         const {data} = await axios.get(master_client_all_list, config)
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
         console.log(err)
+        setData(null)
+    }
+}
+
+// master all client buyicha search qiladi
+export const getClientAllSearch = async (setData: (val: AllClient[] | null) => void, search: string) => {
+    try {
+        if (search) {
+            const {data} = await axios.get(`${master_client_all_list_search}${search}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else getClientAll(setData)
+    } catch (err) {
+        console.error(err)
         setData(null)
     }
 }
@@ -265,5 +279,37 @@ export const getPermanentClientSearch = async (setData: (val: PermanentClient[] 
     } catch (err) {
         console.error(err)
         setData(null)
+    }
+}
+
+// ============================ CLIENT DETAILS ======================================
+// master client ga message junatish
+export const addClientMessage = async (clientID: string, message: string, setLoading: (val: boolean,) => void, toggle: () => void) => {
+    const addData = {
+        clientId: clientID,
+        masterId: null,
+        adminId: null,
+        message: message,
+        messageStatus: "MASTER_CLIENT_MESSAGE_FOR_WRITE"
+    }
+    setLoading(true)
+    try {
+        if (clientID && message) {
+            const {data} = await axios.post(master_message_for_client, addData, config)
+            if (data.success) {
+                toggle()
+                setLoading(false)
+            } else {
+                toggle()
+                setLoading(false)
+            }
+        } else {
+            alert('There is a message')
+            setLoading(false)
+        }
+    } catch (err) {
+        console.error(err)
+        setLoading(false)
+        alert('An error occurred on the server')
     }
 }

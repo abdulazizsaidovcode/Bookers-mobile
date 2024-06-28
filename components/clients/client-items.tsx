@@ -115,12 +115,10 @@ export const FromAddressBookList = (
 export const StandardNowAndConstClient = (
     {
         client,
-        clicks,
-        isBtn
+        clicks
     }: {
         client: any;
         clicks?: () => void;
-        isBtn?: boolean
     }) => {
     const sliceText = (firstName: string, lastName: string) => {
         if (firstName && lastName) {
@@ -135,7 +133,7 @@ export const StandardNowAndConstClient = (
     }
     return (
         <TouchableOpacity
-            // onPress={!isBtn ? clicks : undefined}
+            onPress={clicks}
             style={[
                 tw`flex-row items-start justify-start p-4 mb-3 rounded-2xl`,
                 { backgroundColor: "#B9B9C9" },

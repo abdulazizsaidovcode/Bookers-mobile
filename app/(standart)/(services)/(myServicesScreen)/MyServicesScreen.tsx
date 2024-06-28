@@ -7,12 +7,19 @@ import Buttons from '@/components/(buttons)/button';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
-import { getGender_status } from '@/helpers/api';
+import { getCategory_master, getGender_status, getSpecialization } from '@/helpers/api';
 import { config } from '@/helpers/token';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { useRoute } from '@react-navigation/native';
+import servicesStore from '@/helpers/state_managment/services/servicesStore';
 
 const MyServicesScreen = () => {
+    const route = useRoute();
+    const { childCategoryData, categoryFatherId, setChildCategoryData } = servicesStore();
     const [gender, setGender] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const { id } = route.params as { id: string };
     const [categories, setCategories] = useState([
         'Красота и здоровье волос',
         'Маникюр и педикюр',
@@ -20,24 +27,50 @@ const MyServicesScreen = () => {
         'Массаж и СПА',
         'Фитнес и йога',
     ]);
-    const cardData = [
-        { title: 'Мужское', description: 'Взрослое, Детский', icon: 'man-outline' },
-        { title: 'Женское', description: 'Взрослое, Детский', icon: 'woman-outline' },
-        // Add more cards as needed
-    ];
+
+    const getGender = async () => {
+        try {
+            const response = await axios.get(`${getGender_status}`, config);
+            setGender(response.data.body);
+        } catch (error) {
+            console.error("Error fetching gender services:", error);
+        }
+    };
 
     const getCategory = async () => {
         try {
-            const response = await axios.get(`${getGender_status}`, config);
-            setGender(response.data.body)
+            const response = await axios.get(`${getCategory_master}`, config);
+            setCategory(response.data.body);
         } catch (error) {
-            console.error("Error fetching services:", error);
+            console.error("Error fetching categories:", error);
         }
     };
-   
+
+    const getSpecialization = async (categoryId: string) => {
+        try {
+            const response = await axios.get(`${getSpecialization}${categoryId}`, config);
+            if (response.data.success) {
+                const child = response.data.body.map((item: any) => ({
+                    key: item.id,
+                    name: item.name,
+                }));
+                setChildCategoryData(child);
+            } else {
+                setChildCategoryData([]);
+            }
+        } catch (error) {
+            console.error("Error fetching specializations:", error);
+        }
+    };
+
     useEffect(() => {
+        getGender();
         getCategory();
     }, []);
+
+    useEffect(() => {
+        getSpecialization(id);
+    }, [id]);
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -60,10 +93,12 @@ const MyServicesScreen = () => {
                             contentContainerStyle={{ gap: 10, marginBottom: 5 }}
                             showsHorizontalScrollIndicator={false}
                         >
-                            {gender && gender.map(card => (
+                            {gender.map(card => (
                                 <HomeCards
-                                    title={card.gender === 'FEMALE' ? 'Мужское' : 'Женское'}
-                                    icon={() => <Ionicons name={card.gender === 'FEMALE' ? 'man-outline' : 'woman-outline'} size={30} color="white" />}
+                                    key={card.gender}
+                                    title={card.gender === 'MALE' ? 'Мужское' : 'Женское'}
+                                    icon={() => <Ionicons name={card.gender === 'MALE' ? 'man-outline' : 'woman-outline'} size={30} color="white" />}
+                                    description={card.description || 'Взрослое, Детский'}
                                 />
                             ))}
                         </ScrollView>
@@ -80,10 +115,18 @@ const MyServicesScreen = () => {
                         contentContainerStyle={{ gap: 16, marginBottom: 10 }}
                         showsHorizontalScrollIndicator={false}
                     >
-                        {categories.map((category, index) => (
-                            <View key={index}>
-                                <TouchableOpacity activeOpacity={0.8}>
-                                    <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{category}</Text>
+                        {category.map((categoryItem, index) => (
+                            <View key={categoryItem.id}>
+                                <TouchableOpacity
+                                    activeOpacity={0.7}
+                                    onPress={() => setSelectedCategory(index)}
+                                >
+                                    <Text style={[
+                                        tw`rounded-lg border border-gray-600 px-4 py-3 text-gray-600`,
+                                        selectedCategory === index ? tw`bg-white text-black` : tw`bg-transparent text-gray-600`
+                                    ]}>
+                                        {categoryItem.name}
+                                    </Text>
                                 </TouchableOpacity>
                             </View>
                         ))}

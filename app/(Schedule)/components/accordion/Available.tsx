@@ -1,28 +1,23 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 import { List } from 'react-native-paper';
 import CardItem from '../CardItem';
+import { useScheduleBookedStore } from '@/helpers/state_managment/schedule/schedule';
+import { getBookedSchedule } from '@/helpers/api-function/schedule/schedule';
+import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStore';
 
-const bookedItems = [
-    {
-        name: 'Гузаль Шерматова',
-        phone: '+998 93 123-45-67',
-        service: 'Стрижка, укладка',
-        price: '350 000 сум',
-        startTime: '08:00',
-        endTime: '08:30',
-    },
-    {
-        name: 'Гузаль Шерматова',
-        phone: '+998 93 123-45-67',
-        service: 'Стрижка, укладка',
-        price: '350 000 сум',
-        startTime: '09:00',
-        endTime: '09:30',
-    },
-];
 
 const AvailableAccordion: React.FC = () => {
+
+    const { calendarDate } = graficWorkStore();
+    const { schedule, setSchedule } = useScheduleBookedStore();
+
+    useEffect(() => {
+        getBookedSchedule(calendarDate, setSchedule)
+        console.log(schedule);
+
+    }, [calendarDate]);
+
     return (
         <List.Accordion
             title="Забронированное время"
@@ -31,17 +26,19 @@ const AvailableAccordion: React.FC = () => {
             theme={{ colors: { background: 'transparent' } }}
         >
             <View style={styles.accordionContent}>
-                {bookedItems.map((item, index) => (
+                {schedule ? schedule.map((item, index) => (
                     <CardItem
                         key={index}
-                        name={item.name}
-                        phone={item.phone}
-                        service={item.service}
+                        name={item.clientName}
+                        phone={item.phoneNumber}
+                        service={item.serviceName}
                         price={item.price}
                         startTime={item.startTime}
-                        endTime={item.endTime}
+                        endTime={item.finishTime}
                     />
-                ))}
+                )) :
+                    <Text>no Data</Text>
+                }
             </View>
         </List.Accordion>
     );
