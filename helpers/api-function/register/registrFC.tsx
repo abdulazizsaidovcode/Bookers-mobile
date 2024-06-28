@@ -16,11 +16,11 @@ export const registerFunction = (phoneNumber: string, setCode: (value: any) => v
         })
 }
 
-export const checkCode = (phoneNumber: string, otp: string,) => {
+export const checkCode = (phoneNumber: string, otpValue: string,) => {
     const setData = {
         phoneNumber: phoneNumber
     }
-    axios.post(`${register_page}checkCode?code=${otp}`, setData)
+    axios.post(`${register_page}checkCode?code=${otpValue}`, setData)
         .then(res => {
             Alert.alert("Muvaffaqiyatli ro'yxatdan o'tdingiz")
             router.push("(auth)/authPage1")
