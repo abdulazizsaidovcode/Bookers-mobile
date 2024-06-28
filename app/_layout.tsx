@@ -85,6 +85,7 @@ import UserCameraInfo from "./(auth)/userCameraInfo";
 import StoppedVisiting from "./(standart)/client/stopped-visiting";
 import NotVisiting from "./(standart)/client/not-visiting";
 import StandardMain from "./(standart)/client/standard-main";
+import AllClient from "@/app/(free)/(client)/all-client";
 
 const Stack = createNativeStackNavigator();
 
@@ -362,6 +363,11 @@ function RootLayoutNav() {
               name="(free)/(client)/main"
               component={MainClient}
               options={{ title: "Client", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/all-client"
+              component={AllClient}
+              options={{ title: "ClientAll", headerShown: false }}
             />
             <Stack.Screen
               name="(free)/(client)/address-book"

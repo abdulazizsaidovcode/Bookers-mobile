@@ -4,12 +4,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { LineChart, ProgressChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Buttons from "@/components/(buttons)/button";
+import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {RootStackParamList} from "@/type/root";
+
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
 
 const screenWidth = Dimensions.get("window").width;
 // shunaqa qilib ishlatsa xam buladi
 const { width, height, scale, fontScale } = Dimensions.get("window");
 
 export default function TabOneScreen() {
+	const navigation = useNavigation<SettingsScreenNavigationProp>();
 	return (
 		<SafeAreaView style={styles.container} >
 			<ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -23,6 +29,7 @@ export default function TabOneScreen() {
 
 				<View style={styles.scheduleContainer}>
 					<Text style={styles.scheduleTitle}>Расписание на сегодня</Text>
+					<Buttons title={`standard`} onPress={() => navigation.navigate('(standart)/client/standard-main')} />
 					<Text style={styles.scheduleSubtitle}>Время работы: с 8:00 до 22:00</Text>
 					<ScrollView horizontal>
 						<View style={styles.schedule}>
