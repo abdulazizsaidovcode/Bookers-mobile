@@ -1,122 +1,137 @@
-import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, Alert, View, StatusBar } from 'react-native';
-import OTPTextInput from 'react-native-otp-textinput';
-import Buttons from '@/components/(buttons)/button';
-import NavigationMenu from '@/components/navigation/navigation-menu';
-import registerStory from '@/helpers/state_managment/auth/register';
-import { checkCode } from '@/helpers/api-function/register/registrFC';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, TextInput, StyleSheet, Alert, TextInputKeyPressEventData, NativeSyntheticEvent, Text, TouchableOpacity } from 'react-native';
 
-const OtpInputExample = () => {
-    const { phoneNumber, code, otp, setOtp, otpErr, setOtpErr } = registerStory()
-    const { t } = useTranslation()
+const OtpInputExample: React.FC = () => {
+    const [otp, setOtp] = useState<string[]>(['', '', '', '']);
+    const [isDisabled, setIsDisabled] = useState<boolean>(true);
+    const inputs = useRef<TextInput[]>([]);
 
+    useEffect(() => {
+        setIsDisabled(otp.some(digit => digit === ''));
+    }, [otp]);
+
+    const handlePaste = (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+        const text = event.nativeEvent.text;
+        if (text.length === 4 && /^\d{4}$/.test(text)) {
+            const otpArray = text.split('');
+            setOtp(otpArray);
+            inputs.current[3].focus();
+        } else {
+            Alert.alert('Noto\'g\'ri OTP', 'Iltimos, to\'g\'ri 4-raqamli OTP kiriting.');
+        }
+    };
+
+    const handleChangeText = (text: string, index: number) => {
+        if (/^\d*$/.test(text)) {
+            const newOtp = [...otp];
+            newOtp[index] = text;
+            setOtp(newOtp);
+            if (text && index < 3) {
+                inputs.current[index + 1].focus();
+            }
+        }
+    };
+    const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
+        if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) {
+            inputs.current[index - 1].focus();
+        }
+    };
     return (
-        <SafeAreaView style={styles.container}>
-            <SafeAreaView style={{ marginTop: 32 }}>
-                <StatusBar barStyle="dark-content" backgroundColor="#21212E" />
-                <NavigationMenu name="" deleteIcon={false} key={1} />
-            </SafeAreaView>
-            <View style={styles.content}>
-                <Text style={styles.title}>{t("Confirmation_Number")}</Text>
-                <Text style={styles.phoneNumber}>{phoneNumber}</Text>
-                <Text style={styles.subTitle}>{t("sms_code")}</Text>
-                <OTPTextInput
-                    inputCount={4}
-                    handleTextChange={(text) => setOtp(text)}
-                    containerStyle={styles.otpContainer}
-                    textInputStyle={styles.otpInput}
-                    tintColor='green'
-                />
-                <Text style={styles.code}>{code}</Text>
+        <View style={styles.container}>
+            <View style={styles.textContainer}>
+                <Text style={styles.title}>Tasdiqlash raqami</Text>
+                <Text style={styles.phoneNumber}>+99 888 517 11 98</Text>
+                <Text style={styles.instruction}>Biz SMS orqali sizga tasdiqlash kodini yubordik.</Text>
             </View>
-
-            <View style={styles.buttonWrapper}>
-                <Buttons title={t("Confirm")} onPress={() => {
-                    checkCode(phoneNumber, otp, setOtpErr)
-                }} />
+            <View style={styles.otpContainer}>
+                {otp.map((digit, index) => (
+                    <TextInput
+                        key={index}
+                        style={styles.input}
+                        value={digit}
+                        onChangeText={(text) => handleChangeText(text, index)}
+                        onKeyPress={(e) => handleKeyPress(e, index)}
+                        ref={(ref) => (inputs.current[index] = ref!)}
+                        maxLength={1}
+                        keyboardType="numeric"
+                        onPaste={handlePaste}
+                    />
+                ))}
             </View>
-        </SafeAreaView>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    style={[styles.button, isDisabled && styles.disabledButton]}
+                    disabled={isDisabled}
+                >
+                    <Text style={styles.buttonText}>Tasdiqlash</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
     );
 };
-
-export default OtpInputExample;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#21212e',
-    },
-    header: {
-        width: '100%',
-        alignItems: 'flex-end',
-        padding: 16,
-    },
-    iconWrapper: {
-        backgroundColor: '#ff0078',
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        justifyContent: 'center',
+        backgroundColor: '#21212E',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        padding: 20,
     },
-    iconText: {
-        color: '#fff',
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
-    content: {
-        flex: 1,
+    textContainer: {
+        marginTop: 120,
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 16,
     },
     title: {
         fontSize: 20,
-        fontWeight: '400',
+        color: '#fff',
         marginBottom: 10,
-        color: '#ffffff',
     },
     phoneNumber: {
         fontSize: 18,
-        marginBottom: 10,
-        color: '#ffffff',
+        color: '#fff',
+        marginBottom: 5,
     },
-    subTitle: {
-        color: '#828282',
-        textAlign: 'center',
-        fontSize: 16,
-        lineHeight: 24,
-        marginBottom: 20,
+    instruction: {
+        fontSize: 14,
+        color: '#a1a1a1',
     },
     otpContainer: {
-        width: '80%',
-        height: 100,
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    otpInput: {
+    input: {
+        borderWidth: 1,
+        borderColor: '#4e4e50',
+        backgroundColor: '#2e2e3a',
+        borderRadius: 8,
         width: 50,
         height: 50,
-        borderWidth: 0,
-        borderRadius: 10,
-        backgroundColor: '#4B4B64',
+        margin: 10,
         textAlign: 'center',
-        color: '#ffffff',
         fontSize: 24,
+        color: '#fff',
     },
-    buttonWrapper: {
-        padding: 16,
+    buttonContainer: {
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'flex-end',
+        marginBottom: 30,
     },
-    code: {
-        color: '#ffffff',
-        fontSize: 18,
-        fontWeight: '600',
-        marginBottom: 10,
-        textAlign: 'center',
-    }
+    button: {
+        backgroundColor: '#9C0A35',
+        padding: 15,
+        borderRadius: 8,
+        width: '100%',
+        alignItems: 'center',
+    },
+    disabledButton: {
+        backgroundColor: '#a1a1a1',
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
 });
+
+export default OtpInputExample;

@@ -16,7 +16,7 @@ export const registerFunction = (phoneNumber: string, setCode: (value: any) => v
         })
 }
 
-export const checkCode = (phoneNumber: string, otp: string, setOtpErr: (value: boolean) => void) => {
+export const checkCode = (phoneNumber: string, otp: string,) => {
     const setData = {
         phoneNumber: phoneNumber
     }
@@ -24,10 +24,8 @@ export const checkCode = (phoneNumber: string, otp: string, setOtpErr: (value: b
         .then(res => {
             Alert.alert("Muvaffaqiyatli ro'yxatdan o'tdingiz")
             router.push("(auth)/authPage1")
-            setOtpErr(false)
         })
         .catch(r => {
-            setOtpErr(true)
         })
 
 }
