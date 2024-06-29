@@ -44,7 +44,6 @@ const Category = () => {
             const response = await axios.get(`${category_child}${id}`, config);
             if (response.data.success) {
                 setChildCategoryData(response.data.body);
-                console.log("Child Category IDs:", response.data.body.map((item: any) => item.id));
             } else {
                 setChildCategoryData([]);
             }
@@ -70,7 +69,7 @@ const Category = () => {
     };
 
     const handlerPress = (id: string) => {
-        setSelectedCategory(id);  // Set selected category
+        setSelectedCategory(id); 
         navigation.navigate('(standart)/(services)/(expertise)/expertise', { id });
     };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, TextInput, ScrollView, StatusBar, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, TextInput, ScrollView, StatusBar, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -19,7 +19,7 @@ const Process = () => {
     const [textAreaValue, setTextAreaValue] = useState<string>('');
     const [validate, setValidate] = useState(false);
     const [selectedGender, setSelectedGender] = useState<string | null>(null);
-    const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData, childCategoryOneData, setChildCategoryOneData } = servicesStore();
+    const {childCategoryData,} = servicesStore();
   
     const Gender = [
         {
@@ -72,9 +72,17 @@ const Process = () => {
         }
     };
 
-    const nimadir = ({ item }: { item: any }) => (
-        <Text style={tw`text-black font-bold text-lg`}>{item.title}</Text>
-    );
+    const nimadir = ({ item, index }: { item: any; index: number }) => {
+        const isLast = index === childCategoryData.length - 1;
+    
+        return (
+            <Text style={tw`flex flex-row flex-wrap text-black font-bold text-lg`}>
+                {item.name}
+                {!isLast && ", "}
+            </Text>
+        );
+    };
+    
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -88,11 +96,13 @@ const Process = () => {
                     <View style={[tw``, { backgroundColor: '#21212E' }]}>
                         <View style={[tw`w-full p-4 rounded-3xl mb-4`, { backgroundColor: '#B9B9C9' }]}>
                             <Text style={tw`text-gray-600`}>Ваша специализация</Text>
+                           <View style={tw`flex flex-row flex-wrap`}>
                             <FlatList
                                 data={childCategoryData}
                                 renderItem={nimadir}
                                 keyExtractor={(item, index) => index.toString()}
                             />
+                            </View>   
                         </View>
                         {Gender.map((gender, index) => (
                             <ServicesCategory
