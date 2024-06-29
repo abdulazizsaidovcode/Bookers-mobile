@@ -8,7 +8,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import SettingsGallery from '@/app/(settings)/(settings-gallery)/settings-gallery';
 
 const SettingsPage: React.FC = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
 
     const navigateTo = (screen: string) => {
         navigation.navigate(screen);

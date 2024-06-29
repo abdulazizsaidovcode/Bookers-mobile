@@ -1,6 +1,6 @@
 // Schedule.tsx
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Tabs from './components/tabs';
 import Bookedschedule from './bookedschedule';
 import Availebleschedule from './availebleschedule';
@@ -9,6 +9,7 @@ import { useScheduleAvialableStore, useScheduleBookedStore } from '@/helpers/sta
 import { getAvialable, getBookedSchedule } from '@/helpers/api-function/schedule/schedule';
 import { getFreeTime } from '@/helpers/api-function/freeTime/freeTime';
 import { useScheduleFreeTime } from '@/helpers/state_managment/freeTime/freeTime';
+import tw from 'tailwind-react-native-classnames';
 
 const Schedule: React.FC = () => {
   const [activeTab, setActiveTab] = useState('booked');
@@ -28,8 +29,8 @@ const Schedule: React.FC = () => {
 
   useEffect(() => {
     getFreeTime(new Date().toISOString().split('T')[0], setFreeTime);
-    console.log(FreeTime,"slaom");
-    
+    console.log(FreeTime, "slaom");
+
   }, [setSchedule]);
 
   const handleTabChange = (tab: string) => {
@@ -38,9 +39,13 @@ const Schedule: React.FC = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Tabs activeTab={activeTab} onTabChange={handleTabChange} />
-      {activeTab === 'booked' && <Bookedschedule />}
-      {activeTab === 'requests' && <Availebleschedule />}
+      <SafeAreaView>
+        <Text style={[tw`text-white text-3xl my-7 font-bold`, { letterSpacing: 2 }]}>Расписание</Text>
+
+        <Tabs activeTab={activeTab} onTabChange={handleTabChange} />
+        {activeTab === 'booked' && <Bookedschedule />}
+        {activeTab === 'requests' && <Availebleschedule />}
+      </SafeAreaView>
     </ScrollView>
   );
 };

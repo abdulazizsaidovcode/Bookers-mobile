@@ -30,6 +30,8 @@ export interface Client {
     setNewClient: (val: NewClient[] | null) => void;
     permanentClient: PermanentClient[] | null
     setPermanentClient: (val: PermanentClient[] | null) => void;
+    services: any[] | null;
+    setServices: (services: any[] | null) => void;
 }
 
 export interface AllClient {

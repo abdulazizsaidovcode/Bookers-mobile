@@ -63,6 +63,8 @@ const clientStore = create<Client>((set) => ({
     setNewClient: (val: null | NewClient[]) => set({ newClient: val }),
     permanentClient: null,
     setPermanentClient: (val: null | PermanentClient[]) => set({ permanentClient: val }),
+    services: null,
+    setServices: (val: any[] | null) => set({services: val})
 }))
 
 export default clientStore
