@@ -17,11 +17,11 @@ export const postOrder = ({ data, status = "OTHER", messageSatus, setOrderId }: 
         .then((response) => {
             console.log("Order set successfully", response);
             if (response.data.success) {
-                messageSatus?.(response.data.body);
+                setOrderId?.(response.data.body);
             }
         })
         .catch(error => {
-            setOrderId?.(error.response.data.message);
+            messageSatus?.(error.response.data.message);
             console.log(error);
         });
 };

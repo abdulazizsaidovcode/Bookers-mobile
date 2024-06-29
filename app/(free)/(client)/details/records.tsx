@@ -14,6 +14,7 @@ import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStor
 import {getFreeTime} from "@/helpers/api-function/freeTime/freeTime";
 import {fetchServices} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import {postOrder} from "@/helpers/api-function/oreder/oreder";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/records'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records'>;
@@ -29,6 +30,7 @@ const Records = () => {
     const [activeTime, setActiveTime] = useState('');
     const [categoryName, setCategoryName] = useState('');
     const [regex, setRegex] = useState(false);
+    const [data, setData] = useState<any>('');
 
     useEffect(() => {
         fetchServices(setServices);
@@ -42,6 +44,15 @@ const Records = () => {
     useEffect(() => {
         if (calendarDate && activeTime && activeTab) setRegex(true)
         else setRegex(false)
+        const data = {
+            serviceId: activeTab,
+            date: calendarDate,
+            timeHour: activeTime && activeTime.slice(0, 2),
+            timeMin: activeTime && activeTime.slice(3, 5),
+            clientId: record.id,
+            comment: ""
+        }
+        setData(data)
     }, [calendarDate, activeTab, activeTime]);
 
     const handleTimeSelect = (time: string) => setActiveTime(time)
@@ -50,6 +61,7 @@ const Records = () => {
         setActiveTime('')
         setCategoryName(name)
     };
+    console.log(data)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -115,6 +127,7 @@ const Records = () => {
                             title={`Записать`}
                             isDisebled={regex}
                             onPress={() => {
+                                postOrder()
                                 navigation.navigate('(free)/(client)/details/records-information', {orderID: '517a48f1-3024-432b-ad7b-120551d2506b'})
                             }}
                         />
