@@ -87,6 +87,8 @@ import StandardMain from "./(standart)/client/standard-main";
 import AllClient from "@/app/(free)/(client)/all-client";
 import DetailMain from "@/app/(free)/(client)/details/detail-main";
 import Records from "@/app/(free)/(client)/details/records";
+import ScheuleAllClient from "./(Schedule)/components/users";
+import Schedule from "./(Schedule)/Schedule";
 
 const Stack = createNativeStackNavigator();
 
@@ -513,6 +515,20 @@ function RootLayoutNav() {
                             options={{title: "Настройки ", headerShown: false}}
                         />
                         {/* profile settings end */}
+
+                        {/* schedule  start*/}
+                        <Stack.Screen
+                            name="(Schedule)/Schedule"
+                            component={Schedule}
+                            options={{title: "Настройки ", headerShown: false}}
+                        />
+                        <Stack.Screen
+                            name="(Schedule)/components/users"
+                            component={ScheuleAllClient}
+                            options={{title: "Настройки ", headerShown: false}}
+                        />
+                        {/* schedule  start*/}
+
                     </Stack.Navigator>
                 </MenuProvider>
             </StompProvider>

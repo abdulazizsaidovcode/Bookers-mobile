@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const ProfilePage: React.FC = () => {
     const [isInviteModalVisible, setInviteModalVisible] = useState(false);
     const [isShareModalVisible, setShareModalVisible] = useState(false);
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
 
     const openInviteModal = () => {
         setInviteModalVisible(true);
