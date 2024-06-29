@@ -114,6 +114,9 @@ const Records = () => {
                         <Buttons
                             title={`Записать`}
                             isDisebled={regex}
+                            onPress={() => {
+                                navigation.navigate('(free)/(client)/details/records-information', {orderID: '517a48f1-3024-432b-ad7b-120551d2506b'})
+                            }}
                         />
                     </View>
                 </ScrollView>

@@ -89,6 +89,7 @@ import DetailMain from "@/app/(free)/(client)/details/detail-main";
 import Records from "@/app/(free)/(client)/details/records";
 import ScheuleAllClient from "./(Schedule)/components/users";
 import Schedule from "./(Schedule)/Schedule";
+import RecordsInformation from "@/app/(free)/(client)/details/records-information";
 
 const Stack = createNativeStackNavigator();
 
@@ -396,6 +397,11 @@ function RootLayoutNav() {
                             name="(free)/(client)/details/records"
                             component={Records}
                             options={{title: "Records", headerShown: false}}
+                        />
+                        <Stack.Screen
+                            name="(free)/(client)/details/records-information"
+                            component={RecordsInformation}
+                            options={{title: "RecordsInformation", headerShown: false}}
                         />
                         <Stack.Screen
                             name="(free)/(client)/details/detail-main"
