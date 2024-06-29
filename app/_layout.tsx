@@ -137,7 +137,11 @@ function RootLayoutNav() {
                             component={Index}
                             options={{headerShown: false}}
                         />
-
+                        <Stack.Screen
+                            name="(tabs)"
+                            component={TabLayout}
+                            options={{headerShown: false}}
+                        />
                         <Stack.Screen
                             name="(auth)/auth"
                             component={Auth}
@@ -221,11 +225,6 @@ function RootLayoutNav() {
                         <Stack.Screen
                             name="(auth)/userCameraInfo"
                             component={UserCameraInfo}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(tabs)"
-                            component={TabLayout}
                             options={{headerShown: false}}
                         />
                         <Stack.Screen

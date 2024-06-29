@@ -32,4 +32,5 @@ export type RootStackParamList = {
   '(profile)/(client)/components/AllClients': undefined;
   '(settings)/(settings-gallery)/gallery-details': any;
   '(standart)/(client)/standard-main': undefined | string;
+  '(Schedule)/Schedule': string | undefined;
 };
