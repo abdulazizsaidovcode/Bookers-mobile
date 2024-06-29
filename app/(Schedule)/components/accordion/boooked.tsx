@@ -4,13 +4,12 @@ import { getFreeTime } from '@/helpers/api-function/freeTime/freeTime';
 import { useScheduleFreeTime } from '@/helpers/state_managment/freeTime/freeTime';
 import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStore';
 import { useOrderPosdData } from '@/helpers/state_managment/order/order';
-import { useScheduleBookedStore } from '@/helpers/state_managment/schedule/schedule';
-import { config } from '@/helpers/token';
-import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { List } from 'react-native-paper';
+import axios from 'axios';
+import { config } from '@/helpers/token';
 
 const BookedAccordion: React.FC = () => {
     const [services, setServices] = useState([]);
@@ -20,6 +19,18 @@ const BookedAccordion: React.FC = () => {
     const { calendarDate } = graficWorkStore();
     const { OrderData, setOrderData } = useOrderPosdData();
     const navigation = useNavigation<any>();
+    const [activeBtn, setActiveBtn] = useState<boolean>(false);
+
+    useFocusEffect(
+        useCallback(() => {
+            // Reset state when the page is focused or unfocused
+            return () => {
+                setActiveTab('');
+                setActiveTime('');
+                // setFreeTime([]);
+            };
+        }, [setFreeTime])
+    );
 
     useEffect(() => {
         if (calendarDate) {
@@ -28,7 +39,16 @@ const BookedAccordion: React.FC = () => {
     }, [calendarDate, setFreeTime]);
 
     useEffect(() => {
+        if (calendarDate && activeTime && activeTab) {
+            setActiveBtn(true);
+        }
+    }, [calendarDate, activeTime, activeTab]);
+
+    useEffect(() => {
         fetchServices();
+        // Clear selections when calendarDate changes
+        setActiveTab('');
+        setActiveTime('');
     }, [calendarDate]);
 
     const fetchServices = () => {
@@ -58,9 +78,8 @@ const BookedAccordion: React.FC = () => {
             timeMin: parseInt(activeTime.split(':')[1], 10),
             comment: "" // This should be dynamically set
         };
-        
+
         setOrderData(order);
-        
         navigation.navigate('(Schedule)/components/users');
     };
 
@@ -72,7 +91,10 @@ const BookedAccordion: React.FC = () => {
                 style={styles.accordionContainer}
                 theme={{ colors: { background: 'transparent' } }}
             >
-                <View style={styles.tabContainer}>
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.tabContainer}>
                     {services.map((service: any) => (
                         <TouchableOpacity
                             key={service.id}
@@ -84,7 +106,7 @@ const BookedAccordion: React.FC = () => {
                             </Text>
                         </TouchableOpacity>
                     ))}
-                </View>
+                </ScrollView>
                 <View style={styles.accordionContent}>
                     {activeTab && (
                         <View style={styles.timeContainer}>
@@ -105,7 +127,7 @@ const BookedAccordion: React.FC = () => {
             </List.Accordion>
             <Buttons
                 title='Записать клиента'
-                isDisabled={!calendarDate}
+                isDisebled={activeBtn}
                 onPress={setOrder}
             />
         </View>
@@ -131,6 +153,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: "gray",
         borderWidth: 1,
+        marginRight: 10,
     },
     activeTab: {
         backgroundColor: '#9C0A35',
