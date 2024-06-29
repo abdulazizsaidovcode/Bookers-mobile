@@ -26,6 +26,8 @@ export interface Services {
     setRouteName: (val: string) => void
     genderData:Gender[] | null
     setGenderData:(val:Gender[] | null) => void
+    selectedServices: [] | null ;
+    setSelectedServices: (data:[]) =>void
     
 
 }

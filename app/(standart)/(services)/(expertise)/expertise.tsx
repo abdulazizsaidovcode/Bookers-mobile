@@ -20,7 +20,6 @@ const Expertise: React.FC = () => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [value, setValue] = useState('');
     const [validate, setValidate] = useState(false);
-    const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
     const [selectedServices, setSelectedServices] = useState<any[]>([]);
     const { id } = route.params as { id: string };
 
@@ -30,14 +29,13 @@ const Expertise: React.FC = () => {
         }
     }, []);
 
-    useEffect(() =>{
-        if(value.trim() === ""){
+    useEffect(() => {
+        if (value.trim() === "") {
             setValidate(false);
-        }
-        else{
+        } else {
             setValidate(true);
         }
-    },  [value]);
+    }, [value]);
 
     const getChildCategory = async (id: string) => {
         try {
@@ -103,7 +101,6 @@ const Expertise: React.FC = () => {
             <TouchableOpacity onPress={() => handleSelect(item)}>
                 <ServicesCategory
                     title={item.name}
-                    onPress={setSelectedCategories}
                     style={{ backgroundColor: isSelected ? 'gray' : 'transparent' }}
                 />
             </TouchableOpacity>
@@ -130,7 +127,7 @@ const Expertise: React.FC = () => {
                             <Buttons
                                 title="Сохранить"
                                 onPress={() => router.push('../(process)/process')}
-                                // disabled={selectedCategories.length === 0}
+                                // disabled={selectedServices.length === 0}
                             />
                         </View>
                         <CenteredModal
@@ -140,7 +137,7 @@ const Expertise: React.FC = () => {
                             isFullBtn={false}
                             toggleModal={closeModal}
                             onConfirm={handleAdd}
-                            disabled={validate}>
+                            disabled={!validate}>
                             <View style={tw`p-4 text-center`}>
                                 <Text style={tw`text-white text-xl mb-2 w-full`}>Добавьте свою специализацию</Text>
                                 <Textarea

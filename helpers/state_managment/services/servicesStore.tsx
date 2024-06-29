@@ -18,6 +18,8 @@ const servicesStore = create<Services>((set) => ({
     setRouteName: (val: string) => set({routeName: val}),
     genderData:[],
     setGenderData:(val:Gender[] | null) => set({genderData:val}),
+    selectedServices: [],
+    setSelectedServices: (data) => set({ selectedServices: data }),
 }))
 
 export default servicesStore

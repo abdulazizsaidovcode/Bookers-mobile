@@ -20,8 +20,10 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category
 const Category = () => {
     const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+
     const getCategory = async () => {
         try {
             const response = await axios.get(`${category_Father}`, config);
@@ -36,11 +38,13 @@ const Category = () => {
             console.error("Error fetching services:", error);
         }
     };
+
     const getChildCategory = async (id: string) => {
         try {
             const response = await axios.get(`${category_child}${id}`, config);
             if (response.data.success) {
                 setChildCategoryData(response.data.body);
+                console.log("Child Category IDs:", response.data.body.map((item: any) => item.id));
             } else {
                 setChildCategoryData([]);
             }
@@ -66,6 +70,7 @@ const Category = () => {
     };
 
     const handlerPress = (id: string) => {
+        setSelectedCategory(id);  // Set selected category
         navigation.navigate('(standart)/(services)/(expertise)/expertise', { id });
     };
 
@@ -79,12 +84,12 @@ const Category = () => {
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
                 >
                     <View style={tw`w-full`}>
-                    <FlatList
+                        <FlatList
                             data={data}
                             renderItem={({ item }) => (
-                        <ServicesCategory title={item.value} items={item}/>
-                     )}
-                    />
+                                <ServicesCategory title={item.value} items={item} />
+                            )}
+                        />
                     </View>
                     <View style={tw`content-end mb-5`}>
                         <View style={tw`mt-2 content-end`}>
