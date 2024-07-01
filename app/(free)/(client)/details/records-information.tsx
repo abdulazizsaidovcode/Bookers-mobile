@@ -10,6 +10,8 @@ import React, {useEffect, useState} from "react";
 import {orderGetOne} from "@/helpers/api-function/oreder/oreder";
 import {getFile} from "@/helpers/api";
 import moment from "moment";
+import CenteredModal from "@/components/(modals)/modal-centered";
+import {addFeedbackMaster} from "@/helpers/api-function/client/client";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
@@ -41,10 +43,24 @@ const RecordsInformation = () => {
     const route = useRoute<CreatingClientScreenRouteProp>();
     const {orderID} = route.params;
     const [orderOneData, setOrderOneData] = useState<OrderOne | null>(null)
+    const [isModal, setIsModal] = useState<boolean>(true)
+    const [toast, setToast] = useState<boolean>(false)
+    const [rating, setRating] = useState(0);
 
     useEffect(() => {
         if (orderID) orderGetOne(orderID, setOrderOneData)
     }, []);
+
+    useEffect(() => {
+        if (toast) {
+            alert(`Siz ilovaga ${rating} baho berdingiz ✔`)
+            setRating(0)
+            setToast(false)
+        }
+    }, [toast]);
+
+    const toggleModal = () => setIsModal(!isModal)
+    const handleRating = (value: any) => setRating(value)
 
     const sliceText = (fullName: string) => {
         if (fullName) {
@@ -68,7 +84,12 @@ const RecordsInformation = () => {
             <View style={tw`flex-1`}>
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{paddingHorizontal: 16, paddingBottom: 16, flexGrow: 1, justifyContent: 'space-between'}}
+                    contentContainerStyle={{
+                        paddingHorizontal: 16,
+                        paddingBottom: 16,
+                        flexGrow: 1,
+                        justifyContent: 'space-between'
+                    }}
                 >
                     <View style={tw`mt-3`}>
                         <TouchableOpacity
@@ -162,17 +183,44 @@ const RecordsInformation = () => {
                         </View>
                         <Text style={styles.contactTitle}>Дополнительно</Text>
                         <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
-                            <Fontisto name="arrow-move" size={30} color="#9C0A35" />
+                            <Fontisto name="arrow-move" size={30} color="#9C0A35"/>
                             <Text style={[tw`font-bold text-lg ml-4`]}>
                                 Передвинуть
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
-                            <AntDesign name="closecircleo" size={30} color="#9C0A35" />
+                            <AntDesign name="closecircleo" size={30} color="#9C0A35"/>
                             <Text style={[tw`font-bold text-lg ml-4`]}>
                                 Отменить
                             </Text>
                         </TouchableOpacity>
+
+                        {/*fade back modal*/}
+                        <CenteredModal
+                            oneBtn
+                            isFullBtn
+                            isModal={isModal}
+                            btnWhiteText={``}
+                            btnRedText={`Закрыть`}
+                            onConfirm={() => {
+                                addFeedbackMaster(rating, setToast)
+                                toggleModal()
+                            }}
+                            toggleModal={() => console.log('toggle')}
+                        >
+                            <View style={styles.modalContainer}>
+                                <Feather name="check-circle" size={70} color="#9C0A35"/>
+                                <Text style={styles.message}>Клиент записан на процедуру</Text>
+                                <View style={styles.stars}>
+                                    {Array(5).fill(0).map((_, index) => (
+                                        <TouchableOpacity activeOpacity={.7} key={index} onPress={() => handleRating(index + 1)}>
+                                            <AntDesign name={index < rating ? "star" : "staro"} size={30} color="#B00000"
+                                                       style={styles.star}/>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+                            </View>
+                        </CenteredModal>
                     </View>
                 </ScrollView>
             </View>
@@ -181,6 +229,28 @@ const RecordsInformation = () => {
 };
 
 const styles = StyleSheet.create({
+    modalContainer: {
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center'
+    },
+    icon: {
+        marginBottom: 20
+    },
+    message: {
+        fontSize: 18,
+        color: '#FFFFFF',
+        marginVertical: 20,
+        textAlign: 'center',
+        opacity: .7
+    },
+    stars: {
+        flexDirection: 'row',
+        marginBottom: 20
+    },
+    star: {
+        marginHorizontal: 5
+    },
     button: {
         backgroundColor: '#B9B9C9',
         paddingVertical: 16,

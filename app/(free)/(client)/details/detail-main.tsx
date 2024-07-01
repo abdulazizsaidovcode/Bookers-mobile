@@ -2,8 +2,6 @@ import {View, ScrollView, StatusBar, Text} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import {Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
-import ClientsBtn from "@/components/(buttons)/clients-btn";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import {RouteProp, useRoute} from '@react-navigation/native'
@@ -15,8 +13,6 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
 import {addClientMessage, getHistoryCount} from "@/helpers/api-function/client/client";
 import FiltersButton from "@/components/(buttons)/filters-button";
-import ProfileHistoryCard from "@/components/(cards)/profile-history-card";
-import Entypo from "@expo/vector-icons/Entypo";
 import HistoryMain from "@/app/(free)/(client)/details/history/history-main";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/detail-main'>;

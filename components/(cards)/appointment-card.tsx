@@ -1,4 +1,3 @@
-import React from 'react';
 import {StyleSheet, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import tw from "tailwind-react-native-classnames";
 import IconsButtons from "@/components/(buttons)/icon-btn";
@@ -7,7 +6,7 @@ const AppointmentCard = ({clicks, data, isBtn}: { clicks?: () => void, data: any
     return (
         <TouchableOpacity
             style={[styles.container]}
-            activeOpacity={.9}
+            activeOpacity={.95}
             onPress={clicks}
         >
             <Text style={styles.date}>Четверг, 28 февраля — 12:40</Text>
@@ -17,7 +16,7 @@ const AppointmentCard = ({clicks, data, isBtn}: { clicks?: () => void, data: any
                     showsHorizontalScrollIndicator={false}
                 >
                     {data.map(client => (
-                        <Text style={[styles.option, {borderWidth: 1}]} key={client.id}>{client.name}</Text>
+                        <Text style={[styles.option, {borderWidth: 1}]}>{client.name}</Text>
                     ))}
                 </ScrollView>
             </View>
