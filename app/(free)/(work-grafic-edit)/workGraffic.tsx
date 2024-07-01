@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ServicesCategory from "@/components/services/servicesCatgegory";
 import Buttons from "@/components/(buttons)/button";
-import { useRouter } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { Item } from "@/type/graficWork/graficWork";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
@@ -24,7 +23,6 @@ const GrafficWorkEdit: React.FC = () => {
     { id: 7, dayValue: "sunday", dayName: "Воскресенье", active: false },
   ]);
 
-  const router = useRouter();
 
   const handleCategoryPress = (id: number) => {
     const updatedItems = items.map((item) =>
