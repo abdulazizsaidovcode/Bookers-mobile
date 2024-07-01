@@ -21,7 +21,7 @@ export type RootStackParamList = {
   '(free)/(client)/address-book': undefined | string;
   '(free)/(client)/creating-client': undefined | string;
   '(free)/(client)/updating-address-book': { client: ClientAddressBook };
-  '(tabs)': undefined;
+  '(tabs)': undefined | string;
   '(free)/(client)/details/detail-main': { infoClient: AllClient };
   '(free)/(client)/details/records': { record: AllClient };
   '(free)/(client)/details/records-information': {orderID: string};
@@ -32,4 +32,5 @@ export type RootStackParamList = {
   '(profile)/(client)/components/AllClients': undefined;
   '(settings)/(settings-gallery)/gallery-details': any;
   '(standart)/(client)/standard-main': undefined | string;
+  '(Schedule)/Schedule': string | undefined;
 };
