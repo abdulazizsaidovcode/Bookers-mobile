@@ -17,7 +17,7 @@ const MyServicesScreen = () => {
     const route = useRoute();
     const { childCategoryData, categoryFatherId, setChildCategoryData } = servicesStore();
     const [gender, setGender] = useState([]);
-    const [specialization, setSpecialization] = useState([{ name: "dfdss" }]); // Initial state with a placeholder
+    const [specialization, setSpecialization] = useState([]); // Initial state with a placeholder
     const [category, setCategory] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const { id } = route.params as { id: string };
@@ -52,7 +52,7 @@ const MyServicesScreen = () => {
     // Function to fetch specialization data based on categoryFatherId
     const getSpecializationData = async (categoryId: string) => {
         try {
-            const response = await axios.get(`http://45.67.35.86:8080/master-service/specialization?categoryId=${categoryId}`, config);
+            const response = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
             setSpecialization(response.data.body); // Assuming response.data.body is an array of specialization objects
         } catch (error) {
             console.error("Error fetching specializations:", error);
