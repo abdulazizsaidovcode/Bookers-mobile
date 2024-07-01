@@ -106,6 +106,10 @@ export const order_list: string = `${base_url}order/today/orders/for/master`
 export const order_add: string = `${base_url}order/save`
 export const order_get_one: string = `${base_url}order/one?orderId=`
 
+//order
+export const dashboard_daily_time_orders: string = `${base_url}user/today/calendar`
+export const dashboard_main_statistic: string = `${base_url}order/master/order-statistic`
+
 export const master_order_confirmed: string = `${base_url}order/master/clients-today/confirmed`
 export const master_order_wait: string = `${base_url}order/master/clients-today/wait`
 export const master_order_hall: string = `${base_url}order/master/clients-today/hall`
