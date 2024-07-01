@@ -104,3 +104,7 @@ export const help_url: string = `${base_url}help/one?HELP_STATUS=`
 export const order_list: string = `${base_url}order/today/orders/for/master`
 export const order_add: string = `${base_url}order/save`
 export const order_get_one: string = `${base_url}order/one?orderId=`
+
+export const master_order_confirmed: string = `${base_url}order/master/clients-today/confirmed`
+export const master_order_wait: string = `${base_url}order/master/clients-today/wait`
+export const master_order_hall: string = `${base_url}order/master/clients-today/hall`
