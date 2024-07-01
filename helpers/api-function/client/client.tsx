@@ -12,7 +12,7 @@ import {
     client_stopped_visit_search,
     client_stopped_visit_sms,
     client_stopped_visiting,
-    district_list,
+    district_list, history_count,
     master_client_all_list, master_client_all_list_search,
     master_client_create, master_message_for_client, master_service_list,
     new_client, new_client_search,
@@ -24,7 +24,7 @@ import {
     ClientNotVisit,
     ClientStatus,
     ClientStoppedVisiting,
-    DistrictData,
+    DistrictData, HistoryCount,
     NewClient,
     PermanentClient,
     RegionData,
@@ -311,6 +311,18 @@ export const addClientMessage = async (clientID: string, message: string, setLoa
         console.error(err)
         setLoading(false)
         alert('An error occurred on the server')
+    }
+}
+
+// history count
+export const getHistoryCount = async (setData: (val: HistoryCount | null) => void) => {
+    try {
+        const {data} = await axios.get(history_count, config);
+        if (data.success) setData(data.body)
+        else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
     }
 }
 

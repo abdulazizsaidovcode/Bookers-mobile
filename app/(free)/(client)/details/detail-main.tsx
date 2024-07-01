@@ -13,10 +13,11 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import React, {useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
-import {addClientMessage} from "@/helpers/api-function/client/client";
+import {addClientMessage, getHistoryCount} from "@/helpers/api-function/client/client";
 import FiltersButton from "@/components/(buttons)/filters-button";
 import ProfileHistoryCard from "@/components/(cards)/profile-history-card";
 import Entypo from "@expo/vector-icons/Entypo";
+import HistoryMain from "@/app/(free)/(client)/details/history/history-main";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
@@ -25,10 +26,14 @@ const DetailMain = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<CreatingClientScreenRouteProp>();
     const {infoClient} = route.params;
-    const {isLoading, setIsLoading} = clientStore()
+    const {isLoading, setIsLoading, historyCountData, setHistoryCountData} = clientStore()
     const [bottomModalSMS, setBottomModalSMS] = useState(false)
     const [messageVal, setMessageVal] = useState('')
     const [role, setRole] = useState('basics')
+
+    useEffect(() => {
+        getHistoryCount(setHistoryCountData)
+    }, []);
 
     useEffect(() => {
         if (!isLoading && !bottomModalSMS) setMessageVal('')
@@ -65,25 +70,7 @@ const DetailMain = () => {
                         </View>
                         <View>
                             {role === 'basics' && <ClientDetailBasic client={infoClient}/>}
-                            {role === 'history' && (
-                                <>
-                                    <ProfileHistoryCard
-                                        name={`Предстоящие записи`}
-                                        icon={<Entypo name="calendar" size={30} color="#9C0A35"/>}
-                                        count={0}
-                                    />
-                                    <ProfileHistoryCard
-                                        name={`Прошедшие записи`}
-                                        icon={<Entypo name="hour-glass" size={30} color="#9C0A35"/>}
-                                        count={0}
-                                    />
-                                    <ProfileHistoryCard
-                                        name={`Отменённые записи`}
-                                        icon={<MaterialCommunityIcons name="cancel" size={30} color="#9C0A35"/>}
-                                        count={0}
-                                    />
-                                </>
-                            )}
+                            {role === 'history' && <HistoryMain countData={historyCountData} />}
                             {role === 'profile' && ''}
                         </View>
 
