@@ -6,8 +6,11 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/components/(location)/locationInput';
 import Buttons from '@/components/(buttons)/button';
+import axios from 'axios';
 import { router, useLocalSearchParams } from 'expo-router';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
+import { masterAdd_service } from '@/helpers/api';
+import { config } from '@/helpers/token';
 
 const Process = () => {
     const { selectedServices } = useLocalSearchParams();
@@ -19,35 +22,52 @@ const Process = () => {
     const [textAreaValue, setTextAreaValue] = useState<string>('');
     const [validate, setValidate] = useState(false);
     const [selectedGender, setSelectedGender] = useState<string | null>(null);
-    const {childCategoryData,} = servicesStore();
-  
+    const { childCategoryData } = servicesStore();
+
+    // Gender options
     const Gender = [
-        {
-            title: "Мужская для взрослых"
-        },
-        {
-            title: "Мужская для детей"
-        }
+        { title: "Мужская для взрослых" },
+        { title: "Мужская для детей" }
     ];
 
+    // Form input fields
     const uslugi = [
-        {
-            label: "Услуга",
-            value: service,
-            onPress: setService
-        },
-        {
-            label: "Цена",
-            value: price,
-            onPress: setPrice
-        },
-        {
-            label: "Длительность (без учёта перерыва после процедуры)",
-            value: time,
-            onPress: setTime
-        }
+        { label: "Услуга", value: service, onPress: setService },
+        { label: "Цена", value: price, onPress: setPrice },
+        { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
 
+    // Function to post service data
+    const postService = async () => {
+        try {
+            const data = {
+                categoryId: "c8d966f7-dc2f-4a10-b4b1-2bd77db2da98",  // Replace with your categoryId
+                name: service,
+                genderId: selectedGender === "Мужская для взрослых" ? [1] : [2],  // Adjust based on your gender selection logic
+                price: parseFloat(price),
+                description: description,
+                attachmentId: null,  // Assuming attachmentId is not yet determined
+                active: true
+            };
+
+            const response = await axios.post(masterAdd_service, data, config);
+
+            if (response.data.success) {
+                // Handle success, e.g., reset form fields or navigate to another screen
+                console.log('Service added successfully:', response.data);
+                // Example navigation:
+                // router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
+            } else {
+                // Handle failure or show error message
+                console.error('Failed to add service:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error adding service:', error);
+            // Handle error state or show user a message
+        }
+    };
+
+    // Effect to validate form fields
     useEffect(() => {
         if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0 || !selectedGender) {
             setValidate(false);
@@ -56,25 +76,19 @@ const Process = () => {
         }
     }, [service, price, time, description, selectedGender]);
 
+    // Function to check validity of textarea
     const checkFormValidity = () => {
-        if (textAreaValue.trim() !== '') {
-            setIsFormValid(true);
-        } else {
-            setIsFormValid(false);
-        }
+        setIsFormValid(textAreaValue.trim() !== '');
     };
 
+    // Function to handle gender selection
     const handleGenderPress = (title: string) => {
-        if (selectedGender === title) {
-            setSelectedGender(null);
-        } else {
-            setSelectedGender(title);
-        }
+        setSelectedGender(selectedGender === title ? null : title);
     };
 
-    const nimadir = ({ item, index }: { item: any; index: number }) => {
+    // Render function for child categories
+    const renderChildCategories = ({ item, index }: { item: any; index: number }) => {
         const isLast = index === childCategoryData.length - 1;
-    
         return (
             <Text style={tw`flex flex-row flex-wrap text-black font-bold text-lg`}>
                 {item.name}
@@ -82,7 +96,6 @@ const Process = () => {
             </Text>
         );
     };
-    
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -96,13 +109,13 @@ const Process = () => {
                     <View style={[tw``, { backgroundColor: '#21212E' }]}>
                         <View style={[tw`w-full p-4 rounded-3xl mb-4`, { backgroundColor: '#B9B9C9' }]}>
                             <Text style={tw`text-gray-600`}>Ваша специализация</Text>
-                           <View style={tw`flex flex-row flex-wrap`}>
-                            <FlatList
-                                data={childCategoryData}
-                                renderItem={nimadir}
-                                keyExtractor={(item, index) => index.toString()}
-                            />
-                            </View>   
+                            <View style={tw`flex flex-row flex-wrap`}>
+                                <FlatList
+                                    data={childCategoryData}
+                                    renderItem={renderChildCategories}
+                                    keyExtractor={(item, index) => index.toString()}
+                                />
+                            </View>
                         </View>
                         {Gender.map((gender, index) => (
                             <ServicesCategory
@@ -130,15 +143,13 @@ const Process = () => {
                                 multiline
                                 numberOfLines={4}
                                 value={description}
-                                onChangeText={(text) => {
-                                    setDescription(text);
-                                }}
+                                onChangeText={(text) => setDescription(text)}
                                 scrollEnabled={true}
                             />
                         </View>
                     </View>
                     <View style={[tw`mb-3 p-3`, { backgroundColor: '#21212E' }]}>
-                        <Buttons title='Сохранить' isDisebled={validate} onPress={() => router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen')} />
+                        <Buttons title='Сохранить' isDisebled={validate} onPress={postService} />
                     </View>
                 </ScrollView>
             </View>
