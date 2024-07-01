@@ -9,22 +9,29 @@ interface OrderPost {
     messageSatus?: (val: string) => void;
     setOrderId?: (val: string) => void;
     setLoading?: (val: boolean) => void;
+    setStatus?: (val: string) => void; // Add setStatus to the interface
+    navigation?: any; // Add navigation prop
 }
 
-export const postOrder = ({data, status = "OTHER", messageSatus, setOrderId, setLoading}: OrderPost) => {
-    setLoading && setLoading(true)
+export const postOrder = ({ data, status = "OTHER", messageSatus, setOrderId, setLoading, setStatus, navigation }: OrderPost) => {
+    setLoading && setLoading(true);
     axios.post(`${order_add}?status=${status}`, data, config)
         .then((response) => {
-            setLoading && setLoading(false)
+            setLoading && setLoading(false);
             console.log("Order set successfully", response);
             if (response.data.success) {
                 setOrderId?.(response.data.body);
+                setStatus?.("success"); // Update status in the store
+                if(navigation){
+                    navigation.goBack()
+                } // Navigate back on success
             }
         })
         .catch(error => {
             messageSatus?.(error.response.data.message);
+            setStatus?.("error"); // Update status in the store
             console.log(error);
-            setLoading && setLoading(false)
+            setLoading && setLoading(false);
         });
 };
 
