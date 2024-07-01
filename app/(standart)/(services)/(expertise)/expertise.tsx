@@ -16,6 +16,7 @@ import Textarea from '@/components/select/textarea';
 
 const Expertise: React.FC = () => {
     const route = useRoute();
+    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
     const { childCategoryData, categoryFatherId, setChildCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [value, setValue] = useState('');
@@ -59,7 +60,6 @@ const Expertise: React.FC = () => {
     useEffect(() => {
         getChildCategory(id);
     }, [id]);
-
     const postCategory = async (id: string, name: string) => {
         try {
             const response = await axios.post(`${masterAdd_category}/${id}?name=${name}`, {}, config);
@@ -73,10 +73,8 @@ const Expertise: React.FC = () => {
             console.error("Error fetching child categories:", error);
         }
     };
-
     const openModal = () => setModalVisible(true);
     const closeModal = () => setModalVisible(false);
-
     const handleAdd = () => {
         if (value.trim() !== "") {
             postCategory(id, value);
@@ -85,12 +83,12 @@ const Expertise: React.FC = () => {
         }
     };
 
-    const handleSelect = (item: any) => {
-        setSelectedServices((prevSelected) => {
-            if (prevSelected.find((service: any) => service.name === item.name)) {
-                return prevSelected.filter((service: any) => service.name !== item.name);
+    const handleCategorySelect = (id: number) => {
+        setSelectedCategories((prevSelected) => {
+            if (prevSelected.includes(id)) {
+                return prevSelected.filter((categoryId) => categoryId !== id);
             } else {
-                return [...prevSelected, item];
+                return [...prevSelected, id];
             }
         });
     };
@@ -98,7 +96,7 @@ const Expertise: React.FC = () => {
     const renderItem = ({ item }: { item: any }) => {
         const isSelected = selectedServices.find((service: any) => service.name === item.name);
         return (
-            <TouchableOpacity onPress={() => handleSelect(item)}>
+            <TouchableOpacity onPress={() =>handleCategorySelect(item.id)}>
                 <ServicesCategory
                     title={item.name}
                     style={{ backgroundColor: isSelected ? 'gray' : 'transparent' }}
@@ -127,7 +125,7 @@ const Expertise: React.FC = () => {
                             <Buttons
                                 title="Сохранить"
                                 onPress={() => router.push('../(process)/process')}
-                                // disabled={selectedServices.length === 0}
+                                isDisebled={selectedServices.length === 0}
                             />
                         </View>
                         <CenteredModal
