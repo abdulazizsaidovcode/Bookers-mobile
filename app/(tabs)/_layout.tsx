@@ -20,6 +20,7 @@ import Location from "../(location)/Location";
 const Tab = createBottomTabNavigator();
 
 export default function TabLayout() {
+  
   const colorScheme = useColorScheme();
 
   return (

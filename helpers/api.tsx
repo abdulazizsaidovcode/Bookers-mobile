@@ -73,6 +73,7 @@ export const client_permanent: string = `${base_url}user/master/client-permanent
 export const client_permanent_search: string = `${base_url}client/search/for/regular/visit?name=`
 export const new_client: string = `${base_url}user/master/client-new`
 export const new_client_search: string = `${base_url}client/search/for/new?name=`
+export const history_count: string = `${base_url}order/session-history`
 
 // age url
 export const age_list: string = `${base_url}age`
@@ -102,3 +103,9 @@ export const help_url: string = `${base_url}help/one?HELP_STATUS=`
 
 //order
 export const order_list: string = `${base_url}order/today/orders/for/master`
+export const order_add: string = `${base_url}order/save`
+export const order_get_one: string = `${base_url}order/one?orderId=`
+
+export const master_order_confirmed: string = `${base_url}order/master/clients-today/confirmed`
+export const master_order_wait: string = `${base_url}order/master/clients-today/wait`
+export const master_order_hall: string = `${base_url}order/master/clients-today/hall`

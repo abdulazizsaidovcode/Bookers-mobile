@@ -4,14 +4,16 @@ import BookedAccordion from './components/accordion/boooked'
 import AvailableAccordion from './components/accordion/Available'
 import CalendarGraffic from '../(free)/(work-grafic)/calendar'
 import Buttons from '@/components/(buttons)/button'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import CalendarGrafficEdit from '../(free)/(work-grafic-edit)/calendar'
 
 const Bookedschedule = () => {
+
     return (
         <View style={styles.container}>
-            <CalendarGraffic/>
+            <CalendarGrafficEdit/>
             <AvailableAccordion/>
             <BookedAccordion />
-            <Buttons title='Записать клиента' isDisebled={false}/>
         </View>
     )
 }

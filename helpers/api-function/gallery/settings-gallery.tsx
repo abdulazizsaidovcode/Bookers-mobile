@@ -1,13 +1,8 @@
-import {
-  gallery_add,
-  gallery_add_photo,
-  gallery_full_data,
-  gallery_list,
-} from "@/helpers/api";
+import { Alert } from "react-native";
 import { config } from "@/helpers/token";
 import { GalleryData } from "@/type/gallery/gallery";
+import { gallery_add, gallery_add_photo, gallery_full_data, gallery_list, } from "@/helpers/api";
 import axios from "axios";
-import { Alert } from "react-native";
 
 export const fetchData = async (setData: (data: GalleryData[]) => void) => {
   try {
@@ -18,10 +13,7 @@ export const fetchData = async (setData: (data: GalleryData[]) => void) => {
   }
 };
 
-export const fetchFullData = async (
-  id: number,
-  setFullData: (data: GalleryData) => void
-) => {
+export const fetchFullData = async (id: number, setFullData: (data: GalleryData) => void) => {
   try {
     const res = await axios.get(`${gallery_full_data}/${id}`, config);
     console.log(res.data.body);
@@ -31,15 +23,11 @@ export const fetchFullData = async (
   }
 };
 
-export const addData = async (formData: any, name: string) => {
-  console.log("form data" + formData);
-
+export const addData = async (formData: FormData, name: string) => {
+  console.log(formData);
+  
   try {
-    const { data } = await axios.post(
-      `${gallery_add}?name=${name}`,
-      formData,
-      config
-    );
+    const { data } = await axios.post(`${gallery_add}?name=${name}`, formData, config);
     console.log(data);
     Alert.alert("success");
   } catch (error) {
@@ -48,12 +36,18 @@ export const addData = async (formData: any, name: string) => {
   }
 };
 
-export const editName = async (
-  id: number,
-  setFullData: (data: GalleryData) => void,
-  editedName: string,
-  toggleModal: () => void
-) => {
+export const addPhoto = async (galleryId: number, formData: any, setFullData: (data: GalleryData) => void) => {
+  console.log(formData);
+
+  try {
+    const res = await axios.post(`${gallery_add_photo}/${galleryId}`, formData, config);
+    fetchFullData(galleryId, setFullData);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const editName = async (id: number, setFullData: (data: GalleryData) => void, editedName: string, toggleModal: () => void) => {
   const payload = {
     name: editedName,
   };
@@ -70,15 +64,24 @@ export const editName = async (
 
 export const delPhoto = async (
   id: number,
-  attachmentId: string[],
+  attachmentIds: string[],
   setFullData: (data: GalleryData) => void
 ) => {
+  const url = `${gallery_add}/${id}/attachmentIds`;
+  console.log(url);
+
   try {
-    const res = await axios.delete(
-      `${gallery_add}/${id}/${attachmentId}`,
-      config
-    );
-    if (res.data.success) {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        ...config.headers,
+      },
+      body: JSON.stringify(attachmentIds),
+    });
+
+    const data = await response.json();
+    if (data.success) {
       fetchFullData(id, setFullData);
     }
   } catch (error) {
@@ -86,21 +89,15 @@ export const delPhoto = async (
   }
 };
 
-export const addPhoto = async (
-  galleryId: number,
-  formData: any,
-  setFullData: (data: GalleryData) => void
-) => {
-  console.log(formData);
 
+
+export const delGallery = async (id: number, setData: (data: GalleryData[]) => void) => {
   try {
-    const res = await axios.post(
-      `${gallery_add_photo}/${galleryId}`,
-      formData,
-      config
-    );
-    fetchFullData(galleryId, setFullData);
+    const res = await axios.delete(`${gallery_add}/${id}`, config);
+    if (res.data.success) {
+      fetchData(setData);
+    }
   } catch (error) {
-    console.log(error);
+    ;
   }
-};
+}

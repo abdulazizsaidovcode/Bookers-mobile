@@ -30,6 +30,10 @@ export interface Client {
     setNewClient: (val: NewClient[] | null) => void;
     permanentClient: PermanentClient[] | null
     setPermanentClient: (val: PermanentClient[] | null) => void;
+    services: any[] | null;
+    setServices: (services: any[] | null) => void;
+    historyCountData: null | HistoryCount;
+    setHistoryCountData: (val: HistoryCount | null) => void;
 }
 
 export interface AllClient {
@@ -155,6 +159,12 @@ export interface PermanentClient {
     "orderDate": null | string
     "orderTime": null | string
     "clientBirthday": null | string
+}
+
+export interface HistoryCount {
+    upcomingSessions: number
+    pastSessions: number
+    cancelledSessions: number
 }
 
 

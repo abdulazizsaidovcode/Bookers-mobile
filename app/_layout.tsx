@@ -87,6 +87,9 @@ import StandardMain from "./(standart)/client/standard-main";
 import AllClient from "@/app/(free)/(client)/all-client";
 import DetailMain from "@/app/(free)/(client)/details/detail-main";
 import Records from "@/app/(free)/(client)/details/records";
+import ScheuleAllClient from "./(Schedule)/components/users";
+import Schedule from "./(Schedule)/Schedule";
+import RecordsInformation from "@/app/(free)/(client)/details/records-information";
 
 const Stack = createNativeStackNavigator();
 
@@ -134,7 +137,11 @@ function RootLayoutNav() {
                             component={Index}
                             options={{headerShown: false}}
                         />
-
+                        <Stack.Screen
+                            name="(tabs)"
+                            component={TabLayout}
+                            options={{headerShown: false}}
+                        />
                         <Stack.Screen
                             name="(auth)/auth"
                             component={Auth}
@@ -218,11 +225,6 @@ function RootLayoutNav() {
                         <Stack.Screen
                             name="(auth)/userCameraInfo"
                             component={UserCameraInfo}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(tabs)"
-                            component={TabLayout}
                             options={{headerShown: false}}
                         />
                         <Stack.Screen
@@ -396,6 +398,11 @@ function RootLayoutNav() {
                             options={{title: "Records", headerShown: false}}
                         />
                         <Stack.Screen
+                            name="(free)/(client)/details/records-information"
+                            component={RecordsInformation}
+                            options={{title: "RecordsInformation", headerShown: false}}
+                        />
+                        <Stack.Screen
                             name="(free)/(client)/details/detail-main"
                             component={DetailMain}
                             options={{title: "ClientDetailMain", headerShown: false}}
@@ -513,6 +520,20 @@ function RootLayoutNav() {
                             options={{title: "Настройки ", headerShown: false}}
                         />
                         {/* profile settings end */}
+
+                        {/* schedule  start*/}
+                        <Stack.Screen
+                            name="(Schedule)/Schedule"
+                            component={Schedule}
+                            options={{title: "Настройки ", headerShown: false}}
+                        />
+                        <Stack.Screen
+                            name="(Schedule)/components/users"
+                            component={ScheuleAllClient}
+                            options={{title: "Настройки ", headerShown: false}}
+                        />
+                        {/* schedule  start*/}
+
                     </Stack.Navigator>
                 </MenuProvider>
             </StompProvider>

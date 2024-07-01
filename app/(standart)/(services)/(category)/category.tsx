@@ -20,8 +20,9 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category
 const Category = () => {
     const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
-
+    const [selectedCategory, setSelectedCategory] = useState('');
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+
     const getCategory = async () => {
         try {
             const response = await axios.get(`${category_Father}`, config);
@@ -36,6 +37,7 @@ const Category = () => {
             console.error("Error fetching services:", error);
         }
     };
+
     const getChildCategory = async (id: string) => {
         try {
             const response = await axios.get(`${category_child}${id}`, config);
@@ -50,7 +52,7 @@ const Category = () => {
     };
 
     useEffect(() => {
-        getCategory();
+        getCategory();     
     }, []);
 
     const openModal = () => {
@@ -66,6 +68,7 @@ const Category = () => {
     };
 
     const handlerPress = (id: string) => {
+        setSelectedCategory(id); 
         navigation.navigate('(standart)/(services)/(expertise)/expertise', { id });
     };
 
@@ -79,18 +82,24 @@ const Category = () => {
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
                 >
                     <View style={tw`w-full`}>
-                    <FlatList
+                        <FlatList
                             data={data}
                             renderItem={({ item }) => (
-                        <ServicesCategory title={item.value} items={item}/>
-                     )}
-                    />
+                                <ServicesCategory
+                                    title={item.value}
+                                    items={item}
+                                    onPress={() => setSelectedCategory(item.key)}
+                                    isSelected={selectedCategory === item.key}
+                                />
+                            )}
+                        />
                     </View>
                     <View style={tw`content-end mb-5`}>
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
                                 title="Сохранить"
                                 onPress={openModal}
+                                isDisebled={selectedCategory !== null} 
                             />
                         </View>
                         <CenteredModal
@@ -100,7 +109,7 @@ const Category = () => {
                             isFullBtn={false}
                             toggleModal={closeModal}
                             onConfirm={() => {
-                                handlerPress(categoryFatherId.key)
+                                handlerPress(categoryFatherId.key);
                                 closeModal();
                             }}
                         >

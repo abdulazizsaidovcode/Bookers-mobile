@@ -1,13 +1,16 @@
+import Buttons from '@/components/(buttons)/button';
 import { master_service_list } from '@/helpers/api';
 import { getFreeTime } from '@/helpers/api-function/freeTime/freeTime';
 import { useScheduleFreeTime } from '@/helpers/state_managment/freeTime/freeTime';
 import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStore';
-import { useScheduleBookedStore } from '@/helpers/state_managment/schedule/schedule';
-import { config } from '@/helpers/token';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useOrderPosdData } from '@/helpers/state_managment/order/order';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useState, useCallback, Children } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { List } from 'react-native-paper';
+import axios from 'axios';
+import { config } from '@/helpers/token';
+import CenteredModal from '@/components/(modals)/modal-centered';
 
 const BookedAccordion: React.FC = () => {
     const [services, setServices] = useState([]);
@@ -15,6 +18,25 @@ const BookedAccordion: React.FC = () => {
     const [activeTime, setActiveTime] = useState('');
     const { FreeTime, setFreeTime } = useScheduleFreeTime();
     const { calendarDate } = graficWorkStore();
+    const { OrderData, setOrderData, status ,setStatus } = useOrderPosdData();
+    const navigation = useNavigation<any>();
+    const [activeBtn, setActiveBtn] = useState<boolean>(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    useFocusEffect(
+        useCallback(() => {
+            // Reset state when the page is focused or unfocused
+            return () => {
+                setActiveTab('');
+                setActiveTime('');
+                // setFreeTime([]);
+            };
+        }, [setFreeTime])
+    );
+
+    useEffect(() => {
+        console.log(status);
+    },[status])
 
     useEffect(() => {
         if (calendarDate) {
@@ -23,7 +45,16 @@ const BookedAccordion: React.FC = () => {
     }, [calendarDate, setFreeTime]);
 
     useEffect(() => {
+        if (calendarDate && activeTime && activeTab) {
+            setActiveBtn(true);
+        }
+    }, [calendarDate, activeTime, activeTab]);
+
+    useEffect(() => {
         fetchServices();
+        // Clear selections when calendarDate changes
+        setActiveTab('');
+        setActiveTime('');
     }, [calendarDate]);
 
     const fetchServices = () => {
@@ -45,44 +76,82 @@ const BookedAccordion: React.FC = () => {
         setActiveTime(time);
     };
 
+    const setOrder = () => {
+        const order = {
+            serviceId: activeTab,
+            date: calendarDate,
+            timeHour: parseInt(activeTime.split(':')[0], 10),
+            timeMin: parseInt(activeTime.split(':')[1], 10),
+            comment: "" // This should be dynamically set
+        };
+
+        setOrderData(order);
+        navigation.navigate('(Schedule)/components/users');
+    };
+
+    const toggleModal = () => {
+        setIsModalVisible(!isModalVisible);
+        setStatus(""); // Reset status after closing the modal
+    };
+
     return (
-        <List.Accordion
-            title="Свободное время"
-            titleStyle={styles.title}
-            style={styles.accordionContainer}
-            theme={{ colors: { background: 'transParent' } }}
-        >
-            <View style={styles.tabContainer}>
-                {services.map((service: any) => (
-                    <TouchableOpacity
-                        key={service.id}
-                        style={[styles.tabButton, activeTab === service.id && styles.activeTab]}
-                        onPress={() => handleTabChange(service.id)}
-                    >
-                        <Text style={[styles.tabText, activeTab !== service.id && styles.inactiveText]}>
-                            {service.category.name.trim()}
-                        </Text>
-                    </TouchableOpacity>
-                ))}
-            </View>
-            <View style={styles.accordionContent}>
-                {activeTab && (
-                    <View style={styles.timeContainer}>
-                        {FreeTime ? FreeTime.map((time, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
-                                onPress={() => handleTimeSelect(time)}
-                            >
-                                <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
-                                    {time}
-                                </Text>
-                            </TouchableOpacity>
-                        )) : <Text style={styles.placeholderText}>No available times</Text>}
-                    </View>
-                )}
-            </View>
-        </List.Accordion>
+        <View>
+            <List.Accordion
+                title="Свободное время"
+                titleStyle={styles.title}
+                style={styles.accordionContainer}
+                theme={{ colors: { background: 'transparent' } }}
+            >
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.tabContainer}>
+                    {services.map((service: any) => (
+                        <TouchableOpacity
+                            key={service.id}
+                            style={[styles.tabButton, activeTab === service.id && styles.activeTab]}
+                            onPress={() => handleTabChange(service.id)}
+                        >
+                            <Text style={[styles.tabText, activeTab !== service.id && styles.inactiveText]}>
+                                {service.category.name.trim()}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
+                <View style={styles.accordionContent}>
+                    {activeTab && (
+                        <View style={styles.timeContainer}>
+                            {FreeTime ? FreeTime.map((time, index) => (
+                                <TouchableOpacity
+                                    key={index}
+                                    style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
+                                    onPress={() => handleTimeSelect(time)}
+                                >
+                                    <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
+                                        {time}
+                                    </Text>
+                                </TouchableOpacity>
+                            )) : <Text style={styles.placeholderText}>No available times</Text>}
+                        </View>
+                    )}
+                </View>
+            </List.Accordion>
+            <Buttons
+                title='Записать клиента'
+                isDisebled={activeBtn}
+                onPress={setOrder}
+            />
+            {<CenteredModal
+                isModal={isModalVisible}
+                toggleModal={toggleModal}
+                btnWhiteText="Close"
+                btnRedText="Confirm"
+                isFullBtn={false}
+                onConfirm={toggleModal}
+            >
+                <Text>Order successfully booked!</Text>
+            </CenteredModal>}
+        </View>
     );
 };
 
@@ -105,6 +174,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: "gray",
         borderWidth: 1,
+        marginRight: 10,
     },
     activeTab: {
         backgroundColor: '#9C0A35',
@@ -128,6 +198,7 @@ const styles = StyleSheet.create({
         width: 82,
         borderRadius: 5,
         marginRight: 5,
+        marginBottom: 5,
     },
     activeTimeButton: {
         backgroundColor: '#9C0A35',
