@@ -112,3 +112,8 @@ export const master_order_hall: string = `${base_url}order/master/clients-today/
 
 // feedback url
 export const add_feedback: string = `${base_url}feedback/for/app/by/master`
+
+// number settings
+
+export const master_put_number: string = `${base_url}user/master-setting-number`
+export const master_get_number: string = `${base_url}user/master-setting-count`
