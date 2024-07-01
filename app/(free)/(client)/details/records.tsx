@@ -38,6 +38,10 @@ const Records = () => {
     }, []);
 
     useEffect(() => {
+        if (orderID) navigation.navigate('(free)/(client)/details/records-information', {orderID})
+    }, [orderID]);
+
+    useEffect(() => {
         fetchServices(setServices);
         if (calendarDate) getFreeTime(calendarDate, setFreeTime)
     }, [calendarDate]);
@@ -62,7 +66,6 @@ const Records = () => {
         setActiveTime('')
         setCategoryName(name)
     };
-    console.log('zapis data: ', data)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -127,10 +130,7 @@ const Records = () => {
                         <Buttons
                             title={isLoading ? 'loading...' : 'Записать'}
                             isDisebled={isLoading ? false : regex}
-                            onPress={() => {
-                                postOrder({data, setOrderId: setOrderID, setLoading: setIsLoading})
-                                orderID && navigation.navigate('(free)/(client)/details/records-information', {orderID})
-                            }}
+                            onPress={() => postOrder({data, setOrderId: setOrderID, setLoading: setIsLoading})}
                         />
                     </View>
                 </ScrollView>

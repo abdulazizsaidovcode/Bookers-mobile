@@ -15,9 +15,6 @@ import { registerFunction } from '@/helpers/api-function/register/registrFC';
 const PhoneNumberInput: React.FC = () => {
     const { phoneNumber, setPhoneNumber, setIsValid, isValid, setCode } = registerStory()
     const phoneInput = useRef<PhoneInput>(null);
-
-
-
     const handlePhoneNumberChange = (text: string) => {
         setPhoneNumber(text);
         setIsValid(phoneInput.current?.isValidNumber(text) ?? false);

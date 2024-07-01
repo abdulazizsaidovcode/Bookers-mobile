@@ -24,6 +24,8 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
 };
 
 export const addData = async (formData: FormData, name: string) => {
+  console.log(formData);
+  
   try {
     const { data } = await axios.post(`${gallery_add}?name=${name}`, formData, config);
     console.log(data);

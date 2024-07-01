@@ -99,7 +99,7 @@ const Category = () => {
                             <Buttons
                                 title="Сохранить"
                                 onPress={openModal}
-                                isDisebled={selectedCategory === null} 
+                                isDisebled={selectedCategory !== null} 
                             />
                         </View>
                         <CenteredModal

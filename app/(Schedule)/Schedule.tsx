@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Tabs from './components/tabs';
 import Bookedschedule from './bookedschedule';
-import Availebleschedule from './availebleschedule';
+import Requestchedule from './availebleschedule';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useScheduleAvialableStore, useScheduleBookedStore } from '@/helpers/state_managment/schedule/schedule';
 import { getAvialable, getBookedSchedule } from '@/helpers/api-function/schedule/schedule';
@@ -44,7 +44,7 @@ const Schedule: React.FC = () => {
 
         <Tabs activeTab={activeTab} onTabChange={handleTabChange} />
         {activeTab === 'booked' && <Bookedschedule />}
-        {activeTab === 'requests' && <Availebleschedule />}
+        {activeTab === 'requests' && <Requestchedule />}
       </SafeAreaView>
     </ScrollView>
   );

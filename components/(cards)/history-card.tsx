@@ -11,9 +11,9 @@ interface ICardHistory {
 
 const HistoryCard: React.FC<ICardHistory> = ({name, orderStatus, statusName, description, btnOrText}): JSX.Element => {
     const statusRegex = (statusR: string) => {
-        if (orderStatus === 'CLIENT_CONFIRMED' || orderStatus === 'MASTER_CONFIRMED' || orderStatus === 'COMPLETED') return '#217355'
-        else if (orderStatus === 'CLIENT_REJECTED' || orderStatus === 'MASTER_REJECTED') return '#9C0A35'
-        else if (orderStatus === 'WAIT') return '#ffe200'
+        if (statusR === 'CLIENT_CONFIRMED' || statusR === 'MASTER_CONFIRMED' || statusR === 'COMPLETED') return '#217355'
+        else if (statusR === 'CLIENT_REJECTED' || statusR === 'MASTER_REJECTED') return '#9C0A35'
+        else if (statusR === 'WAIT') return '#ffe200'
         // else if (orderStatus === 'HALL') {
         //     return 'black'
         //     //     DEFAULT,
