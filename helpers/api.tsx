@@ -40,6 +40,7 @@ export const getGender_status = `${base_url}master-service/gender`;
 export const getCategory_master = `${base_url}master-service/category`;
 export const getSpecialization = `${base_url}master-service/specialization`
 export const masterAdd_service = `${base_url}service`
+export const master_get_Service = `${base_url}service/master/`
 
 
 
@@ -113,3 +114,11 @@ export const dashboard_main_statistic: string = `${base_url}order/master/order-s
 export const master_order_confirmed: string = `${base_url}order/master/clients-today/confirmed`
 export const master_order_wait: string = `${base_url}order/master/clients-today/wait`
 export const master_order_hall: string = `${base_url}order/master/clients-today/hall`
+
+// feedback url
+export const add_feedback: string = `${base_url}feedback/for/app/by/master`
+
+// number settings
+
+export const master_put_number: string = `${base_url}user/master-setting-number`
+export const master_get_number: string = `${base_url}user/master-setting-count`

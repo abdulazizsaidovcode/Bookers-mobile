@@ -1,6 +1,7 @@
 import axios from "axios";
 import {config} from "@/helpers/token";
 import {
+    add_feedback,
     age_list,
     client_address_book,
     client_address_book_search,
@@ -332,3 +333,24 @@ export const fetchServices = (setData: (val: any[] | null) => void) => {
         .then((res) => setData(res.data.body))
         .catch((err) => console.error(err));
 };
+
+// feedback master post
+export const addFeedbackMaster = (star: number | any, setToast: (val: boolean) => void) => {
+    const data = {
+        count: star ? star : 0,
+        masterId: null,
+        orderId: null,
+        text: null
+    }
+    if (data.count > 0) {
+        axios.post(add_feedback, data, config)
+            .then(res => {
+                if (res.data.success) setToast(true)
+                else setToast(false)
+            })
+            .catch(err => {
+                console.log(err)
+                setToast(false)
+            })
+    }
+}

@@ -14,4 +14,5 @@ export interface ICenteredModalProps {
   isModal: boolean; // modal ochish uchin state uzgaruvchi
   toggleModal: () => void; // modalni ochib yopish uchun function m: => const toggleModal = () => setIsModal(!isModal);
   onConfirm?: () => void; //tasdiqlash uchun function
+  oneBtn?: boolean
 }

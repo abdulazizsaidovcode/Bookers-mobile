@@ -2,9 +2,12 @@ import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import React from 'react'
 import { router } from 'expo-router';
 import ProfileImgUpload from '@/components/profile-img-upload';
+import registerStory from '@/helpers/state_managment/auth/register';
 
 const UserCameraInfo = () => {
+    const { setImg } = registerStory()
     const handleSkip = () => {
+        setImg(null)
         router.push('(auth)/installPin');
     };
 

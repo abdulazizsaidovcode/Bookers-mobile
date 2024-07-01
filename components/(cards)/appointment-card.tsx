@@ -1,25 +1,11 @@
-import React from 'react';
-import {StyleSheet, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Text, ScrollView} from 'react-native';
 import tw from "tailwind-react-native-classnames";
 import IconsButtons from "@/components/(buttons)/icon-btn";
 
-const datass = [
-    {id: 1, name: 'aaaa'},
-    {id: 2, name: 'bbbb'},
-    {id: 3, name: 'cccc'},
-    {id: 4, name: 'dddd'},
-    {id: 5, name: 'eeee'},
-    {id: 6, name: 'jikdsu'},
-    {id: 7, name: 'estgfa'},
-    {id: 8, name: 'eastfgw'},
-]
-
-const AppointmentCard = ({clicks, data, isBtn}: { clicks: () => void, data: any, isBtn: boolean }) => {
+const AppointmentCard = ({clicks, data, isBtn}: { clicks?: () => void, data: any[], isBtn?: boolean }) => {
     return (
-        <TouchableOpacity
+        <View
             style={[styles.container]}
-            activeOpacity={.9}
-            onPress={clicks}
         >
             <Text style={styles.date}>Четверг, 28 февраля — 12:40</Text>
             <View style={styles.options}>
@@ -27,8 +13,8 @@ const AppointmentCard = ({clicks, data, isBtn}: { clicks: () => void, data: any,
                     horizontal
                     showsHorizontalScrollIndicator={false}
                 >
-                    {datass.map(client => (
-                        <Text style={[styles.option, {borderWidth: 1}]} key={client.id}>{client.name}</Text>
+                    {data.map(client => (
+                        <Text style={[styles.option, {borderWidth: 1}]}>{client.name}</Text>
                     ))}
                 </ScrollView>
             </View>
@@ -47,7 +33,7 @@ const AppointmentCard = ({clicks, data, isBtn}: { clicks: () => void, data: any,
                     />
                 </View>
             )}
-        </TouchableOpacity>
+        </View>
     );
 };
 
@@ -59,14 +45,14 @@ const styles = StyleSheet.create({
     },
     date: {
         fontSize: 18,
-        marginBottom: 10,
+        marginBottom: 14,
         fontWeight: 'bold',
     },
     options: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
         width: '100%',
-        marginBottom: 10
+        marginBottom: 14
     },
     option: {
         backgroundColor: '#B9B9C9',

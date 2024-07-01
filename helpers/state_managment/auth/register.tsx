@@ -7,6 +7,8 @@ export interface IState {
     isValid: boolean;
     setCode: (val: any) => void;
     code: any;
+    img: any
+    setImg: (val: any) => void
     otpValue: string[];
     setOtpValue: (val: string[]) => void;
     role: string;
@@ -17,6 +19,10 @@ export interface IState {
     setLastName: (val: string) => void;
     nickname: string;
     setNickname: (val: string) => void;
+    firstNameError: string;
+    setFirstNameError: (val: string) => void;
+    lastNameError: string;
+    setLastNameError: (val: string) => void;
 }
 
 const registerStory = create<IState>((set) => ({
@@ -36,6 +42,12 @@ const registerStory = create<IState>((set) => ({
     setLastName: (val: string) => set({ lastName: val }),
     nickname: '',
     setNickname: (val: string) => set({ nickname: val }),
+    firstNameError: '',
+    setFirstNameError: (val: string) => set({ firstNameError: val }),
+    lastNameError: '',
+    setLastNameError: (val: string) => set({ lastNameError: val }),
+    img: null,
+    setImg: (val: any) => set({ img: val })
 }));
 
 export default registerStory;

@@ -18,7 +18,7 @@ export const postOrder = ({ data, status = "OTHER", messageSatus, setOrderId, se
     axios.post(`${order_add}?status=${status}`, data, config)
         .then((response) => {
             setLoading && setLoading(false);
-            console.log("Order set successfully", response);
+            // console.log("Order set successfully", response);
             if (response.data.success) {
                 setOrderId?.(response.data.body);
                 setStatus?.("success"); // Update status in the store
@@ -36,15 +36,16 @@ export const postOrder = ({ data, status = "OTHER", messageSatus, setOrderId, se
 };
 
 // get order one
-export const orderGetOne = (orderID: string) => {
+export const orderGetOne = (orderID: string, setData: (val: any | null) => void) => {
     if (orderID) {
         axios.get(`${order_get_one}${orderID}`, config)
             .then((response) => {
-                if (response.data.success) { }
-                else { }
+                if (response.data.success) setData(response.data.body);
+                else setData(null)
             })
             .catch(err => {
                 console.error(err)
+                setData(null)
             })
     }
 }
