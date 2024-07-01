@@ -2,14 +2,19 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
-
+import { masterData } from '@/helpers/api-function/register/registrFC';
+import registerStory from '@/helpers/state_managment/auth/register';
+import { RootStackParamList } from '@/type/root';
+import { useNavigation } from '@react-navigation/native';
 const CheckPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const [storedOtp, setStoredOtp] = useState<string | null>(null);
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
     const inputs = useRef<TextInput[]>([]);
+    const { role, firstName, lastName, nickname, phoneNumber } = registerStory()
 
     const { t } = useTranslation();
+    const navigation = useNavigation<any>();
 
     useEffect(() => {
         const getStoredOtp = async () => {
@@ -47,6 +52,8 @@ const CheckPin: React.FC = () => {
         const enteredOtp = otp.join('');
         if (enteredOtp === storedOtp) {
             setIsCorrect(true);
+            navigation.navigate('(tabs)')
+
             // Handle the success action (navigate to the next page or perform other actions)
         } else {
             setIsCorrect(false);
@@ -83,7 +90,17 @@ const CheckPin: React.FC = () => {
                             styles.button,
                             { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
                         ]}
-                        onPress={handleContinue}
+                        onPress={() => {
+                            handleContinue()
+                            masterData({
+                                firstName: firstName,
+                                lastName: lastName,
+                                nickname: nickname,
+                                phoneNumber: phoneNumber,
+                                role: role,
+                            })
+
+                        }}
                         disabled={!isButtonEnabled}
                     >
                         <Text style={[
