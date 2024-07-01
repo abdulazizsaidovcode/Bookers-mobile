@@ -20,6 +20,7 @@ import {RootStackParamList} from "@/type/root";
 import {View, Text, ScrollView, StatusBar, FlatList} from 'react-native';
 import LocationInput from "@/components/(location)/locationInput";
 import {StandardNowAndConstClient} from "@/components/clients/client-items";
+import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
 
@@ -192,7 +193,11 @@ const StandardMain = () => {
                     {isFilter === 'all' && (
                         <View style={tw`pb-5`}>
                             <Buttons title={`Настроить позже и перейти на главную`}
-                                     onPress={() => navigation.navigate('(welcome)/Welcome')}/>
+                                     onPress={() => {
+                                        putNumbers(2)
+                                       navigation.navigate('(welcome)/Welcome')
+                                     }
+                                    }/>
                         </View>
                     )}
                 </ScrollView>

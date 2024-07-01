@@ -8,7 +8,6 @@ const LocationInput: React.FC<LocationInputProps> = ({
   value,
   onChangeText,
   placeholder,
-  type,
 }) => {
   return (
     <SafeAreaView>
