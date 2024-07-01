@@ -62,7 +62,7 @@ const Records = () => {
         setActiveTime('')
         setCategoryName(name)
     };
-    console.log(data)
+    console.log('zapis data: ', data)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -92,10 +92,10 @@ const Records = () => {
                                         activeOpacity={.7}
                                         key={service.id}
                                         style={[styles.tabButton, activeTab === service.id && styles.activeTab, {marginRight: 15}]}
-                                        onPress={() => handleTabChange(service.id, service.category.name.trim())}
+                                        onPress={() => handleTabChange(service.id, service.name.trim())}
                                     >
                                         <Text style={[styles.tabText, activeTab !== service.id && styles.inactiveText]}>
-                                            {service.category.name.trim()}
+                                            {service.name.trim()}
                                         </Text>
                                     </TouchableOpacity>
                                 ))}
