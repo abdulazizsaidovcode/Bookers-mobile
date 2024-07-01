@@ -20,8 +20,7 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category
 const Category = () => {
     const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState(null);
-
+    const [selectedCategory, setSelectedCategory] = useState('');
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     const getCategory = async () => {
@@ -53,7 +52,7 @@ const Category = () => {
     };
 
     useEffect(() => {
-        getCategory();
+        getCategory();     
     }, []);
 
     const openModal = () => {
@@ -86,7 +85,12 @@ const Category = () => {
                         <FlatList
                             data={data}
                             renderItem={({ item }) => (
-                                <ServicesCategory title={item.value} items={item} />
+                                <ServicesCategory
+                                    title={item.value}
+                                    items={item}
+                                    onPress={() => setSelectedCategory(item.key)}
+                                    isSelected={selectedCategory === item.key}
+                                />
                             )}
                         />
                     </View>
@@ -95,6 +99,7 @@ const Category = () => {
                             <Buttons
                                 title="Сохранить"
                                 onPress={openModal}
+                                isDisebled={selectedCategory === null} 
                             />
                         </View>
                         <CenteredModal
@@ -104,7 +109,7 @@ const Category = () => {
                             isFullBtn={false}
                             toggleModal={closeModal}
                             onConfirm={() => {
-                                handlerPress(categoryFatherId.key)
+                                handlerPress(categoryFatherId.key);
                                 closeModal();
                             }}
                         >
