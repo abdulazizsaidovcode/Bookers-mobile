@@ -1,6 +1,6 @@
-import { order_add } from "@/helpers/api";
-import { useOrderPosdData } from "@/helpers/state_managment/order/order";
-import { config } from "@/helpers/token";
+import {order_add, order_get_one} from "@/helpers/api";
+import {useOrderPosdData} from "@/helpers/state_managment/order/order";
+import {config} from "@/helpers/token";
 import axios from "axios";
 
 interface OrderPost {
@@ -11,7 +11,7 @@ interface OrderPost {
     setLoading?: (val: boolean) => void;
 }
 
-export const postOrder = ({ data, status = "OTHER", messageSatus, setOrderId, setLoading }: OrderPost) => {
+export const postOrder = ({data, status = "OTHER", messageSatus, setOrderId, setLoading}: OrderPost) => {
     setLoading && setLoading(true)
     axios.post(`${order_add}?status=${status}`, data, config)
         .then((response) => {
@@ -27,3 +27,17 @@ export const postOrder = ({ data, status = "OTHER", messageSatus, setOrderId, se
             setLoading && setLoading(false)
         });
 };
+
+// get order one
+export const orderGetOne = (orderID: string) => {
+    if (orderID) {
+        axios.get(`${order_get_one}${orderID}`, config)
+            .then((response) => {
+                if (response.data.success) {}
+                else {}
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    }
+}
