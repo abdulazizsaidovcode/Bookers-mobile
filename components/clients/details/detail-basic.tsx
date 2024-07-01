@@ -33,7 +33,7 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
 
     return (
         <>
-            <View style={[tw`w-full flex-row justify-start items-center my-10`, {gap: 20}]}>
+            <View style={[tw`w-full flex-row justify-start items-center mb-10`, {gap: 20}]}>
                 <Image
                     source={(client && client.attachmentId) ? {uri: `${getFile}${client.attachmentId}`} : require('../../../assets/avatar.png')}
                     style={[tw`rounded-full`, styles.profileImage]}

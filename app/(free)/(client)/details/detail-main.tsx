@@ -2,7 +2,7 @@ import {View, ScrollView, StatusBar, Text} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import {Ionicons} from '@expo/vector-icons';
+import {Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
 import ClientsBtn from "@/components/(buttons)/clients-btn";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
@@ -13,7 +13,11 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import React, {useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
-import {addClientMessage} from "@/helpers/api-function/client/client";
+import {addClientMessage, getHistoryCount} from "@/helpers/api-function/client/client";
+import FiltersButton from "@/components/(buttons)/filters-button";
+import ProfileHistoryCard from "@/components/(cards)/profile-history-card";
+import Entypo from "@expo/vector-icons/Entypo";
+import HistoryMain from "@/app/(free)/(client)/details/history/history-main";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
@@ -22,9 +26,14 @@ const DetailMain = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<CreatingClientScreenRouteProp>();
     const {infoClient} = route.params;
-    const {isLoading, setIsLoading} = clientStore()
+    const {isLoading, setIsLoading, historyCountData, setHistoryCountData} = clientStore()
     const [bottomModalSMS, setBottomModalSMS] = useState(false)
     const [messageVal, setMessageVal] = useState('')
+    const [role, setRole] = useState('basics')
+
+    useEffect(() => {
+        getHistoryCount(setHistoryCountData)
+    }, []);
 
     useEffect(() => {
         if (!isLoading && !bottomModalSMS) setMessageVal('')
@@ -42,15 +51,27 @@ const DetailMain = () => {
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
-                        <View style={[tw`mt-4`, {alignSelf: 'flex-start'}]}>
-                            <ClientsBtn
-                                name={`Все`}
-                                countOrIcon
-                                icon={<Ionicons name="person-circle-outline" size={30} color="white"/>}
+                        <View style={[tw`mt-4 flex-row justify-start items-center mb-10`, {gap: 16}]}>
+                            <FiltersButton
+                                title={`Основное`}
+                                isDisebled={role !== 'basics' ? true : false}
+                                onPress={() => setRole('basics')}
+                            />
+                            <FiltersButton
+                                title={`История`}
+                                isDisebled={role !== 'history' ? true : false}
+                                onPress={() => setRole('history')}
+                            />
+                            <FiltersButton
+                                title={`Профиль`}
+                                isDisebled={role !== 'profile' ? true : false}
+                                onPress={() => setRole('profile')}
                             />
                         </View>
                         <View>
-                            <ClientDetailBasic client={infoClient}/>
+                            {role === 'basics' && <ClientDetailBasic client={infoClient}/>}
+                            {role === 'history' && <HistoryMain countData={historyCountData} />}
+                            {role === 'profile' && ''}
                         </View>
 
                         {/*client SMS*/}
@@ -77,10 +98,15 @@ const DetailMain = () => {
                             </>
                         </CenteredModal>
                     </View>
-                    <View style={[tw`pb-5`, {gap: 10}]}>
-                        <Buttons title={`Написать сообщение`} onPress={toggleBottomModalSMS}/>
-                        <Buttons title={`Записать`} onPress={() => navigation.navigate('(free)/(client)/details/records', {record: infoClient})}/>
-                    </View>
+                    {role === 'basics' && (
+                        <View style={[tw`pb-5`, {gap: 10}]}>
+                            <Buttons title={`Написать сообщение`} onPress={toggleBottomModalSMS}/>
+                            <Buttons
+                                title={`Записать`}
+                                onPress={() => navigation.navigate('(free)/(client)/details/records', {record: infoClient})}
+                            />
+                        </View>
+                    )}
                 </ScrollView>
             </View>
         </SafeAreaView>

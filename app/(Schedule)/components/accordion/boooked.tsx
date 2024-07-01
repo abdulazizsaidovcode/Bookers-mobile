@@ -5,11 +5,12 @@ import { useScheduleFreeTime } from '@/helpers/state_managment/freeTime/freeTime
 import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStore';
 import { useOrderPosdData } from '@/helpers/state_managment/order/order';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, Children } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { List } from 'react-native-paper';
 import axios from 'axios';
 import { config } from '@/helpers/token';
+import CenteredModal from '@/components/(modals)/modal-centered';
 
 const BookedAccordion: React.FC = () => {
     const [services, setServices] = useState([]);
@@ -17,9 +18,10 @@ const BookedAccordion: React.FC = () => {
     const [activeTime, setActiveTime] = useState('');
     const { FreeTime, setFreeTime } = useScheduleFreeTime();
     const { calendarDate } = graficWorkStore();
-    const { OrderData, setOrderData } = useOrderPosdData();
+    const { OrderData, setOrderData, status ,setStatus } = useOrderPosdData();
     const navigation = useNavigation<any>();
     const [activeBtn, setActiveBtn] = useState<boolean>(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
@@ -31,6 +33,10 @@ const BookedAccordion: React.FC = () => {
             };
         }, [setFreeTime])
     );
+
+    useEffect(() => {
+        console.log(status);
+    },[status])
 
     useEffect(() => {
         if (calendarDate) {
@@ -83,6 +89,11 @@ const BookedAccordion: React.FC = () => {
         navigation.navigate('(Schedule)/components/users');
     };
 
+    const toggleModal = () => {
+        setIsModalVisible(!isModalVisible);
+        setStatus(""); // Reset status after closing the modal
+    };
+
     return (
         <View>
             <List.Accordion
@@ -130,6 +141,16 @@ const BookedAccordion: React.FC = () => {
                 isDisebled={activeBtn}
                 onPress={setOrder}
             />
+            {<CenteredModal
+                isModal={isModalVisible}
+                toggleModal={toggleModal}
+                btnWhiteText="Close"
+                btnRedText="Confirm"
+                isFullBtn={false}
+                onConfirm={toggleModal}
+            >
+                <Text>Order successfully booked!</Text>
+            </CenteredModal>}
         </View>
     );
 };
