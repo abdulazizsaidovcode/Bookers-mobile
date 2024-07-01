@@ -23,7 +23,7 @@ const Records = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<CreatingClientScreenRouteProp>();
     const {record} = route.params;
-    const {services, setServices} = clientStore()
+    const {services, setServices, isLoading, setIsLoading} = clientStore()
     const {FreeTime, setFreeTime} = useScheduleFreeTime();
     const {calendarDate} = graficWorkStore();
     const [activeTab, setActiveTab] = useState('');
@@ -31,6 +31,7 @@ const Records = () => {
     const [categoryName, setCategoryName] = useState('');
     const [regex, setRegex] = useState(false);
     const [data, setData] = useState<any>('');
+    const [orderID, setOrderID] = useState<any>('');
 
     useEffect(() => {
         fetchServices(setServices);
@@ -124,11 +125,11 @@ const Records = () => {
                     </View>
                     <View style={[tw`pb-5`]}>
                         <Buttons
-                            title={`Записать`}
-                            isDisebled={regex}
+                            title={isLoading ? 'loading...' : 'Записать'}
+                            isDisebled={isLoading ? false : regex}
                             onPress={() => {
-                                postOrder()
-                                navigation.navigate('(free)/(client)/details/records-information', {orderID: '517a48f1-3024-432b-ad7b-120551d2506b'})
+                                postOrder({data, setOrderId: setOrderID, setLoading: setIsLoading})
+                                orderID && navigation.navigate('(free)/(client)/details/records-information', {orderID})
                             }}
                         />
                     </View>
