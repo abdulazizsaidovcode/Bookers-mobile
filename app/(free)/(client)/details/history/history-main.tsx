@@ -7,14 +7,14 @@ import {View} from "react-native";
 import AppointmentCard from "@/components/(cards)/appointment-card";
 
 const data = [
-    {id: 1, name: 'aaaa'},
-    {id: 2, name: 'bbbb'},
-    {id: 3, name: 'cccc'},
-    {id: 4, name: 'dddd'},
-    {id: 5, name: 'eeee'},
-    {id: 6, name: 'jikdsu'},
-    {id: 7, name: 'estgfa'},
-    {id: 8, name: 'eastfgw'},
+    {id: 1, name: 'aaaasertga'},
+    {id: 2, name: 'bbsdrthgbb'},
+    {id: 3, name: 'ccdscc'},
+    {id: 4, name: 'dddsgdd'},
+    {id: 5, name: 'eegdfee'},
+    {id: 6, name: 'jikgddsu'},
+    {id: 7, name: 'estdgfgfa'},
+    {id: 8, name: 'eassdgtfgw'},
 ]
 
 const HistoryMain = ({countData}: { countData: HistoryCount | null }) => {

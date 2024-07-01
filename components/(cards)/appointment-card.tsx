@@ -1,13 +1,11 @@
-import {StyleSheet, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Text, ScrollView} from 'react-native';
 import tw from "tailwind-react-native-classnames";
 import IconsButtons from "@/components/(buttons)/icon-btn";
 
 const AppointmentCard = ({clicks, data, isBtn}: { clicks?: () => void, data: any[], isBtn?: boolean }) => {
     return (
-        <TouchableOpacity
+        <View
             style={[styles.container]}
-            activeOpacity={.95}
-            onPress={clicks}
         >
             <Text style={styles.date}>Четверг, 28 февраля — 12:40</Text>
             <View style={styles.options}>
@@ -35,7 +33,7 @@ const AppointmentCard = ({clicks, data, isBtn}: { clicks?: () => void, data: any
                     />
                 </View>
             )}
-        </TouchableOpacity>
+        </View>
     );
 };
 
@@ -47,14 +45,14 @@ const styles = StyleSheet.create({
     },
     date: {
         fontSize: 18,
-        marginBottom: 10,
+        marginBottom: 14,
         fontWeight: 'bold',
     },
     options: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
         width: '100%',
-        marginBottom: 10
+        marginBottom: 14
     },
     option: {
         backgroundColor: '#B9B9C9',
