@@ -21,7 +21,7 @@ export type RootStackParamList = {
   '(free)/(client)/address-book': undefined | string;
   '(free)/(client)/creating-client': undefined | string;
   '(free)/(client)/updating-address-book': { client: ClientAddressBook };
-  '(tabs)': undefined;
+  '(tabs)': undefined | string;
   '(free)/(client)/details/detail-main': { infoClient: AllClient };
   '(free)/(client)/details/records': { record: AllClient };
   '(free)/(client)/details/records-information': {orderID: string};
