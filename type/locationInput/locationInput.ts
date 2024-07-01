@@ -1,7 +1,8 @@
 interface LocationInputProps {
-    label?:string;  
-    value?: string;
-    placeholder?: string;
-    labalVisible?: boolean;
-    onChangeText?: (text: string) => void;
+  label: string;
+  labalVisible?: boolean;
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder: string;
+  type?: "default" | "numeric" | "email-address" | "phone-pad";
   }

@@ -8,6 +8,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
   value,
   onChangeText,
   placeholder,
+  type,
 }) => {
   return (
     <SafeAreaView>
@@ -22,6 +23,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
           onChangeText={onChangeText}
           placeholder={placeholder}
           value={value}
+          keyboardType={type}
         />
       </View>
     </SafeAreaView>

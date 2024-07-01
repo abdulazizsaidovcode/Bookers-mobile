@@ -13,6 +13,7 @@ import { getCategory_master, getGender_status, getSpecialization, master_get_Ser
 import { config } from '@/helpers/token';
 import { router } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
+import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 
 const MyServicesScreen = () => {
     const route = useRoute();
@@ -207,7 +208,7 @@ const MyServicesScreen = () => {
                     {/* Navigation Button */}
                     <View style={tw`mb-10`}>
                         <Buttons onPress={() => {
-                            
+                            putNumbers(2)
                             router.push('(welcome)/Welcome')
                         }} title='На главную' />
                     </View>
