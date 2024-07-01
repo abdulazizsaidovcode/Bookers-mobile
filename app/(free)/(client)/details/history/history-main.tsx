@@ -3,27 +3,20 @@ import ProfileHistoryCard from "@/components/(cards)/profile-history-card";
 import Entypo from "@expo/vector-icons/Entypo";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {HistoryCount} from "@/type/client/client";
-import {View} from "react-native";
-import AppointmentCard from "@/components/(cards)/appointment-card";
+import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {RootStackParamList} from "@/type/root";
 
-const data = [
-    {id: 1, name: 'aaaasertga'},
-    {id: 2, name: 'bbsdrthgbb'},
-    {id: 3, name: 'ccdscc'},
-    {id: 4, name: 'dddsgdd'},
-    {id: 5, name: 'eegdfee'},
-    {id: 6, name: 'jikgddsu'},
-    {id: 7, name: 'estdgfgfa'},
-    {id: 8, name: 'eassdgtfgw'},
-]
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
 const HistoryMain = ({countData}: { countData: HistoryCount | null }) => {
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
     return (
         <>
             <ProfileHistoryCard
                 name={`Предстоящие записи`}
                 icon={<Entypo name="calendar" size={30} color="#9C0A35"/>}
                 count={countData ? countData.upcomingSessions : 0}
+                clicks={() => navigation.navigate('(free)/(client)/details/history/upcoming-history')}
             />
             <ProfileHistoryCard
                 name={`Прошедшие записи`}
@@ -35,9 +28,6 @@ const HistoryMain = ({countData}: { countData: HistoryCount | null }) => {
                 icon={<MaterialCommunityIcons name="cancel" size={30} color="#9C0A35"/>}
                 count={countData ? countData.cancelledSessions : 0}
             />
-            <View>
-                <AppointmentCard data={data}/>
-            </View>
         </>
     );
 };

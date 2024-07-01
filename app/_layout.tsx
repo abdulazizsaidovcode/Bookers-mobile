@@ -91,6 +91,7 @@ import ScheuleAllClient from "./(Schedule)/components/users";
 import Schedule from "./(Schedule)/Schedule";
 import RecordsInformation from "@/app/(free)/(client)/details/records-information";
 import CenseledSession from "@/app/(detail)/censeled-session";
+import UpcomingHistory from "@/app/(free)/(client)/details/history/upcoming-history";
 
 const Stack = createNativeStackNavigator();
 
@@ -407,6 +408,11 @@ function RootLayoutNav() {
               name="(free)/(client)/details/detail-main"
               component={DetailMain}
               options={{ title: "ClientDetailMain", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/details/history/upcoming-history"
+              component={UpcomingHistory}
+              options={{ title: "UpcomingHistory", headerShown: false }}
             />
             <Stack.Screen
               name="(location)/Location"

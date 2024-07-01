@@ -25,6 +25,7 @@ export type RootStackParamList = {
   '(free)/(client)/details/detail-main': { infoClient: AllClient };
   '(free)/(client)/details/records': { record: AllClient };
   '(free)/(client)/details/records-information': {orderID: string};
+  '(free)/(client)/details/history/upcoming-history': undefined | string;
   '(welcome)/Welcome': undefined | string;
   '(profile)/(tariff)/tariff': undefined;
   'category': any;

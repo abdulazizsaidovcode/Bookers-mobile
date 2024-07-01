@@ -3,11 +3,12 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import tw from "tailwind-react-native-classnames";
 import {MaterialIcons} from "@expo/vector-icons";
 
-const ProfileHistoryCard = ({icon, name, count}: { icon: JSX.Element, name: string, count: any }) => {
+const ProfileHistoryCard = ({icon, name, count, clicks}: { icon: JSX.Element, name: string, count: any, clicks?: () => void }) => {
     return (
         <TouchableOpacity
             style={styles.itemContainer}
             activeOpacity={.8}
+            onPress={clicks}
         >
             <View style={[styles.itemContent]}>
                 {icon}
@@ -15,7 +16,7 @@ const ProfileHistoryCard = ({icon, name, count}: { icon: JSX.Element, name: stri
             </View>
             <View style={styles.itemContent}>
                 <Text style={[styles.itemCount, tw`rounded-full px-2.5 py-1 pt-0.5`]}>{count}</Text>
-                <MaterialIcons name="navigate-next" size={40} color="#4F4F4F" />
+                <MaterialIcons name="navigate-next" size={40} color="#4F4F4F"/>
             </View>
         </TouchableOpacity>
     );
