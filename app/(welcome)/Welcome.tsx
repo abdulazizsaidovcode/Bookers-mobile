@@ -1,6 +1,12 @@
 import { Text, View } from "@/components/Themed";
 import React, { useEffect } from "react";
-import { Image, ScrollView, StatusBar, Pressable } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StatusBar,
+  Pressable,
+  StyleSheet,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -13,21 +19,22 @@ import { Fontisto } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
-import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import {
+  getNumbers,
+  putNumbers,
+} from "@/helpers/api-function/numberSittings/numbersetting";
 
 const Welcome = () => {
   const { number, setNumber } = numberSettingStore();
 
   useEffect(() => {
     if (number.length === 0) {
-      putNumbers(1)
-  }
+      putNumbers(1);
+    }
     getNumbers(setNumber);
   }, []);
 
   console.log(number);
-  
-  
 
   const data = [
     {
@@ -60,8 +67,7 @@ const Welcome = () => {
       title: "Онлайн бронирование",
       description: "Настройте записи на Ваши услуги",
       icon: <FontAwesome6 name="calendar-plus" size={24} color="white" />,
-      onPress: () =>
-        router.push("../(standart)/(onlineBooking)/onlineBooking"),
+      onPress: () => router.push("../(standart)/(onlineBooking)/onlineBooking"),
     },
     {
       title: "Уведомления",
@@ -95,8 +101,24 @@ const Welcome = () => {
           backgroundColor: "#21212E",
         }}
       >
+        {/* <View style={styles.topSection}> */}
+          <View style={styles.progressBar}>
+            {[...Array(8)].map((_, index) => (
+              <View
+                key={index}
+                style={
+                  number.includes(index + 1)
+                    ? styles.progressIndicator
+                    : styles.progressSegment
+                }
+              />
+            ))}
+          </View>
+        {/* </View> */}
         <View style={[tw`items-center`, { backgroundColor: "#21212E" }]}>
-          <Text style={tw`text-2xl font-bold text-white`}>Добро пожаловать!</Text>
+          <Text style={tw`text-2xl font-bold text-white`}>
+            Добро пожаловать!
+          </Text>
           <View style={tw`bg-transparent text-center mt-5 relative`}>
             <Image
               style={tw`w-24 h-24 rounded-full`}
@@ -111,7 +133,9 @@ const Welcome = () => {
               <MaterialIcons name="edit" size={24} color="white" />
             </View>
           </View>
-          <Text style={tw`text-2xl mt-4 font-bold text-white`}>Гузаль Шерматова</Text>
+          <Text style={tw`text-2xl mt-4 font-bold text-white`}>
+            Гузаль Шерматова
+          </Text>
           <View
             style={[
               tw`p-4 w-full mt-5 rounded-3xl`,
@@ -131,7 +155,7 @@ const Welcome = () => {
           ]}
         >
           {data.map((item, index) => {
-            const isEnabled = number.includes(index+1);
+            const isEnabled = number.includes(index + 1);
             return (
               <Pressable
                 onPress={item.onPress}
@@ -161,7 +185,9 @@ const Welcome = () => {
                     </View>
                   </View>
                   <Text
-                    style={[tw`text-lg text-black mt-3 font-bold text-center`]}
+                    style={[
+                      tw`text-lg text-black mt-3 font-bold text-center`,
+                    ]}
                   >
                     {item.title}
                   </Text>
@@ -179,3 +205,29 @@ const Welcome = () => {
 };
 
 export default Welcome;
+
+const styles = StyleSheet.create({
+  topSection: {
+    flex: 1,
+  },
+  progressBar: {
+    backgroundColor: "#1E1E1E",
+    flexDirection: "row",
+    height: 5,
+    marginTop: 40,
+    marginBottom: 40,
+    borderRadius: 5,
+  },
+  progressIndicator: {
+    flex: 1,
+    backgroundColor: "#9C0A35",
+    borderRadius: 5,
+    marginHorizontal: 1,
+  },
+  progressSegment: {
+    flex: 1,
+    backgroundColor: "#8A8A8A",
+    borderRadius: 5,
+    marginHorizontal: 1,
+  },
+});
