@@ -12,12 +12,16 @@ import {
 import CenteredModal from "@/components/(modals)/modal-centered";
 import tw from "tailwind-react-native-classnames";
 import NavigationMenu from "@/components/navigation/navigation-menu";
+import { useNavigation } from "expo-router";
+import History from "@/helpers/state_managment/history";
 
 const Canceledentries = () => {
   const [data, setData] = useState<any>([]);
   const [isChecked, setChecked] = useState(false);
   const [pastentries, setPastentries] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const navigation = useNavigation();
+  const { setProduct } = History();
 
   const getsessionDetails = async () => {
     try {
@@ -127,7 +131,11 @@ const Canceledentries = () => {
 
       {data &&
         data.map((item: any) => (
-          <View
+          <Pressable
+            onPress={() => {
+              navigation.navigate("(detail)/censeled-session"),
+                setProduct(item);
+            }}
             key={item.id}
             style={tw`bg-gray-700 p-4 rounded-lg mb-4 flex-row items-center`}
           >
@@ -178,7 +186,7 @@ const Canceledentries = () => {
                 {item.servicePrice} сум
               </Text>
             </View>
-          </View>
+          </Pressable>
         ))}
       <CenteredModal
         isModal={toggle}

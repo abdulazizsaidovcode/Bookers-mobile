@@ -1,6 +1,6 @@
 import { Text, View } from "@/components/Themed";
-import React from "react";
-import { Image, ScrollView, StatusBar, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
+import { Image, ScrollView, StatusBar, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -12,8 +12,23 @@ import { Ionicons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
+import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
+import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 
 const Welcome = () => {
+  const { number, setNumber } = numberSettingStore();
+
+  useEffect(() => {
+    if (number.length === 0) {
+      putNumbers(1)
+  }
+    getNumbers(setNumber);
+  }, []);
+
+  console.log(number);
+  
+  
+
   const data = [
     {
       title: "Услуги",
@@ -48,7 +63,6 @@ const Welcome = () => {
       onPress: () =>
         router.push("../(standart)/(onlineBooking)/onlineBooking"),
     },
-    
     {
       title: "Уведомления",
       description: "Настройте уведомления",
@@ -68,6 +82,7 @@ const Welcome = () => {
       onPress: () => router.push("(free)/(help)/help"),
     },
   ];
+
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
@@ -81,9 +96,7 @@ const Welcome = () => {
         }}
       >
         <View style={[tw`items-center`, { backgroundColor: "#21212E" }]}>
-          <Text style={tw`text-2xl font-bold text-white`}>
-            Добро пожаловать!
-          </Text>
+          <Text style={tw`text-2xl font-bold text-white`}>Добро пожаловать!</Text>
           <View style={tw`bg-transparent text-center mt-5 relative`}>
             <Image
               style={tw`w-24 h-24 rounded-full`}
@@ -98,9 +111,7 @@ const Welcome = () => {
               <MaterialIcons name="edit" size={24} color="white" />
             </View>
           </View>
-          <Text style={tw`text-2xl mt-4 font-bold text-white`}>
-            Гузаль Шерматова
-          </Text>
+          <Text style={tw`text-2xl mt-4 font-bold text-white`}>Гузаль Шерматова</Text>
           <View
             style={[
               tw`p-4 w-full mt-5 rounded-3xl`,
@@ -119,40 +130,48 @@ const Welcome = () => {
             { backgroundColor: "#21212e" },
           ]}
         >
-          {data.map((item, index) => (
-            <TouchableOpacity
-              onPress={item.onPress}
-              key={index}
-              style={tw`w-1/2 p-2`}
-              activeOpacity={0.8}
-            >
-              <View
-                style={[
-                  tw`flex rounded-3xl h-52 items-center py-5 px-2`,
-                  { backgroundColor: "#b9b9c9" },
+          {data.map((item, index) => {
+            const isEnabled = number.includes(index+1);
+            return (
+              <Pressable
+                onPress={item.onPress}
+                key={index}
+                disabled={!isEnabled}
+                style={({ pressed }) => [
+                  tw`w-1/2 p-2`,
+                  {
+                    opacity: pressed ? 0.8 : isEnabled ? 1 : 0.5,
+                  },
                 ]}
               >
-                <View style={[tw`w-full bg-transparent flex items-center`]}>
-                  <View
-                    style={[
-                      tw`p-5 rounded-full flex items-center justify-center`,
-                      { backgroundColor: "#9C0A35" },
-                    ]}
-                  >
-                    {item.icon}
-                  </View>
-                </View>
-                <Text
-                  style={[tw`text-lg text-black mt-3 font-bold text-center`]}
+                <View
+                  style={[
+                    tw`flex rounded-3xl h-52 items-center py-5 px-2`,
+                    { backgroundColor: "#b9b9c9" },
+                  ]}
                 >
-                  {item.title}
-                </Text>
-                <Text style={[tw`text-sm text-gray-600 text-center`]}>
-                  {item.description}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+                  <View style={[tw`w-full bg-transparent flex items-center`]}>
+                    <View
+                      style={[
+                        tw`p-5 rounded-full flex items-center justify-center`,
+                        { backgroundColor: "#9C0A35" },
+                      ]}
+                    >
+                      {item.icon}
+                    </View>
+                  </View>
+                  <Text
+                    style={[tw`text-lg text-black mt-3 font-bold text-center`]}
+                  >
+                    {item.title}
+                  </Text>
+                  <Text style={[tw`text-sm text-gray-600 text-center`]}>
+                    {item.description}
+                  </Text>
+                </View>
+              </Pressable>
+            );
+          })}
         </View>
       </ScrollView>
     </SafeAreaView>

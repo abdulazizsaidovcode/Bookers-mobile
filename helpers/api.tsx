@@ -110,3 +110,11 @@ export const order_get_one: string = `${base_url}order/one?orderId=`
 export const master_order_confirmed: string = `${base_url}order/master/clients-today/confirmed`
 export const master_order_wait: string = `${base_url}order/master/clients-today/wait`
 export const master_order_hall: string = `${base_url}order/master/clients-today/hall`
+
+// feedback url
+export const add_feedback: string = `${base_url}feedback/for/app/by/master`
+
+// number settings
+
+export const master_put_number: string = `${base_url}user/master-setting-number`
+export const master_get_number: string = `${base_url}user/master-setting-count`

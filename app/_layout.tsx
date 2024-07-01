@@ -1,16 +1,16 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
-    DarkTheme,
-    DefaultTheme,
-    ThemeProvider,
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
 } from "@react-navigation/native";
-import {MenuProvider} from "react-native-popup-menu";
-import {useFonts} from "expo-font";
+import { MenuProvider } from "react-native-popup-menu";
+import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import {useEffect} from "react";
+import { useEffect } from "react";
 import "react-native-reanimated";
-import {useColorScheme} from "@/components/useColorScheme";
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import { useColorScheme } from "@/components/useColorScheme";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import Index from "./index";
 import Auth from "./(auth)/auth";
@@ -31,7 +31,7 @@ import SettingsLocation from "./(settings)/(settings-location)/settings-location
 import SettingsLocationMain from "./(settings)/(settings-location)/settings-locations-main";
 import SettingsGallery from "./(settings)/(settings-gallery)/settings-gallery";
 import Settings from "./(profile)/(settings)/settings";
-import {StompProvider} from "@/context/StompContext";
+import { StompProvider } from "@/context/StompContext";
 import Expertise from "./(standart)/(services)/(expertise)/expertise";
 import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
 import SettingsGalleryMain from "./(settings)/(settings-gallery)/settings-gallery-main";
@@ -90,453 +90,458 @@ import Records from "@/app/(free)/(client)/details/records";
 import ScheuleAllClient from "./(Schedule)/components/users";
 import Schedule from "./(Schedule)/Schedule";
 import RecordsInformation from "@/app/(free)/(client)/details/records-information";
+import CenseledSession from "@/app/(detail)/censeled-session";
 
 const Stack = createNativeStackNavigator();
 
-export {ErrorBoundary} from "expo-router";
+export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
-    initialRouteName: "index",
+  initialRouteName: "index",
 };
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-    const [loaded, error] = useFonts({
-        SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-        ...FontAwesome.font,
-    });
+  const [loaded, error] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    ...FontAwesome.font,
+  });
 
-    useEffect(() => {
-        if (error) throw error;
-    }, [error]);
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
 
-    useEffect(() => {
-        if (loaded) {
-            SplashScreen.hideAsync();
-        }
-    }, [loaded]);
-
-    if (!loaded) {
-        return null;
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
     }
+  }, [loaded]);
 
-    return <RootLayoutNav/>;
+  if (!loaded) {
+    return null;
+  }
+
+  return <RootLayoutNav />;
 }
 
 function RootLayoutNav() {
-    const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme();
 
-    return (
-        <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-            <StompProvider>
-                <MenuProvider>
-                    <Stack.Navigator initialRouteName="index">
-                        <Stack.Screen
-                            name="index"
-                            component={Index}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(tabs)"
-                            component={TabLayout}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/auth"
-                            component={Auth}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/number-create"
-                            component={PhoneNumberInput}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/otp_input"
-                            component={OtpInput}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/authPage1"
-                            component={AuthPage1}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/authPage2"
-                            component={AuthPage2}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/authPage3"
-                            component={AuthPage3}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/masterORclient"
-                            component={MasterorClient}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/switchPage"
-                            component={SwitchPage}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/offerScreen"
-                            component={OfferScreen}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/userInfo"
-                            component={UserInfo}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/userInfo2"
-                            component={UserInfo2}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/installPin"
-                            component={InstallPin}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/checkPin"
-                            component={CheckPin}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/client/stopped-visiting"
-                            component={StoppedVisiting}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/client/standard-main"
-                            component={StandardMain}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/client/not-visiting"
-                            component={NotVisiting}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(auth)/userCameraInfo"
-                            component={UserCameraInfo}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(chat)/(communicatie)/chatDetails"
-                            component={ChatDetails}
-                            options={{title: "Chat Detail", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(notification)/index"
-                            component={Notification}
-                            options={{title: "Services", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(work-grafic)/workTime"
-                            component={TimeWork}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(work-grafic)/workMain"
-                            component={WorkMain}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(work-grafic)/workGraffic"
-                            component={GrafficWork}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(work-grafic-edit)/workTime"
-                            component={TimeWorkEdit}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(work-grafic-edit)/workMain"
-                            component={WorkMainEdit}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(work-grafic-edit)/workGraffic"
-                            component={GrafficWorkEdit}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(settings)/settings"
-                            component={Settings}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(settings)/(settings-location)/settings-locations-main"
-                            component={SettingsLocationMain}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(settings)/(settings-gallery)/gallery-details"
-                            component={GalleryDetails}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(settings)/(settings-location)/settings-locations"
-                            component={SettingsLocation}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(settings)/(settings-gallery)/settings-gallery-main"
-                            component={SettingsGalleryMain}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(settings)/(settings-gallery)/settings-gallery"
-                            component={SettingsGallery}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(Expenses)/index"
-                            component={Expenses}
-                            options={{title: "Services", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(Expenses)/(component)/(detail)/expenseDetail"
-                            component={ExpensesDetail}
-                            options={{title: "Services", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/(services)/(process)/process"
-                            component={Process}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/(services)/(myServices)/myServices"
-                            component={MyServices}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/(services)/(gender)/servesGender"
-                            component={ServesGender}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/(services)/(category)/category"
-                            component={Category}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/(services)/(expertise)/expertise"
-                            component={Expertise}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/(services)/serviceStyle/serviceStyle"
-                            component={ServiceStyle}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/(services)/(myServicesScreen)/MyServicesScreen"
-                            component={MyServicesScreen}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(sessionhistory)/sessionHistory"
-                            component={SessionHistory}
-                            options={{title: "Отменённые записи", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries"
-                            component={Upcomingentries}
-                            options={{title: "Отменённые записи", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(sessionhistory)/components/Pastentries/Pastentries"
-                            component={PastEntries}
-                            options={{title: "Отменённые записи", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries"
-                            component={Canceledentries}
-                            options={{title: "Отменённые записи", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(client)/main"
-                            component={MainClient}
-                            options={{title: "Client", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(client)/all-client"
-                            component={AllClient}
-                            options={{title: "ClientAll", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(client)/address-book"
-                            component={AddressBook}
-                            options={{title: "Client-book", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(client)/client-list"
-                            component={MainClientList}
-                            options={{title: "Client-list", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(client)/creating-client"
-                            component={CreatingClient}
-                            options={{title: "CreatingClient", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(client)/updating-address-book"
-                            component={UpdatingAddressBook}
-                            options={{title: "UpdatingClient", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(client)/details/records"
-                            component={Records}
-                            options={{title: "Records", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(client)/details/records-information"
-                            component={RecordsInformation}
-                            options={{title: "RecordsInformation", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(client)/details/detail-main"
-                            component={DetailMain}
-                            options={{title: "ClientDetailMain", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(location)/Location"
-                            component={Location}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(location)/(location-data)/LocationData"
-                            component={LocationData}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(tariff)/tariff"
-                            component={TariffsPage}
-                            options={{title: "CreatingClient", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(welcome)/Welcome"
-                            component={Welcome}
-                            options={{title: "CreatingClient", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(location)/(response-location)/ResponseLocation"
-                            component={ResponseLocation}
-                            options={{headerShown: false}}
-                        />
-                        {/*Help start */}
-                        <Stack.Screen
-                            name="(standart)/(help)/help"
-                            component={Help}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/(help)/(aboutUs)/aboutUs"
-                            component={AboutUs}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(help)/help"
-                            component={HelpFree}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(free)/(help)/(aboutUs)/aboutUs"
-                            component={AboutUsFree}
-                            options={{headerShown: false}}
-                        />
-                        {/*Help end */}
+  return (
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <StompProvider>
+        <MenuProvider>
+          <Stack.Navigator initialRouteName="index">
+            <Stack.Screen
+              name="index"
+              component={Index}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(tabs)"
+              component={TabLayout}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/auth"
+              component={Auth}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/number-create"
+              component={PhoneNumberInput}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/otp_input"
+              component={OtpInput}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/authPage1"
+              component={AuthPage1}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/authPage2"
+              component={AuthPage2}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/authPage3"
+              component={AuthPage3}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/masterORclient"
+              component={MasterorClient}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/switchPage"
+              component={SwitchPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/offerScreen"
+              component={OfferScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/userInfo"
+              component={UserInfo}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/userInfo2"
+              component={UserInfo2}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/installPin"
+              component={InstallPin}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/checkPin"
+              component={CheckPin}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/client/stopped-visiting"
+              component={StoppedVisiting}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/client/standard-main"
+              component={StandardMain}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/client/not-visiting"
+              component={NotVisiting}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/userCameraInfo"
+              component={UserCameraInfo}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(chat)/(communicatie)/chatDetails"
+              component={ChatDetails}
+              options={{ title: "Chat Detail", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(notification)/index"
+              component={Notification}
+              options={{ title: "Services", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(work-grafic)/workTime"
+              component={TimeWork}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(work-grafic)/workMain"
+              component={WorkMain}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(work-grafic)/workGraffic"
+              component={GrafficWork}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(work-grafic-edit)/workTime"
+              component={TimeWorkEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(work-grafic-edit)/workMain"
+              component={WorkMainEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(work-grafic-edit)/workGraffic"
+              component={GrafficWorkEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(settings)/settings"
+              component={Settings}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(settings)/(settings-location)/settings-locations-main"
+              component={SettingsLocationMain}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(settings)/(settings-gallery)/gallery-details"
+              component={GalleryDetails}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(settings)/(settings-location)/settings-locations"
+              component={SettingsLocation}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(settings)/(settings-gallery)/settings-gallery-main"
+              component={SettingsGalleryMain}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(settings)/(settings-gallery)/settings-gallery"
+              component={SettingsGallery}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(Expenses)/index"
+              component={Expenses}
+              options={{ title: "Services", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(Expenses)/(component)/(detail)/expenseDetail"
+              component={ExpensesDetail}
+              options={{ title: "Services", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(process)/process"
+              component={Process}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(myServices)/myServices"
+              component={MyServices}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(gender)/servesGender"
+              component={ServesGender}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(category)/category"
+              component={Category}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(expertise)/expertise"
+              component={Expertise}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/serviceStyle/serviceStyle"
+              component={ServiceStyle}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(services)/(myServicesScreen)/MyServicesScreen"
+              component={MyServicesScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(sessionhistory)/sessionHistory"
+              component={SessionHistory}
+              options={{ title: "Отменённые записи", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries"
+              component={Upcomingentries}
+              options={{ title: "Отменённые записи", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(sessionhistory)/components/Pastentries/Pastentries"
+              component={PastEntries}
+              options={{ title: "Отменённые записи", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(sessionhistory)/components/Canceledentries/Canceledentries"
+              component={Canceledentries}
+              options={{ title: "Отменённые записи", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/main"
+              component={MainClient}
+              options={{ title: "Client", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/all-client"
+              component={AllClient}
+              options={{ title: "ClientAll", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/address-book"
+              component={AddressBook}
+              options={{ title: "Client-book", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/client-list"
+              component={MainClientList}
+              options={{ title: "Client-list", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/creating-client"
+              component={CreatingClient}
+              options={{ title: "CreatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/updating-address-book"
+              component={UpdatingAddressBook}
+              options={{ title: "UpdatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/details/records"
+              component={Records}
+              options={{ title: "Records", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/details/records-information"
+              component={RecordsInformation}
+              options={{ title: "RecordsInformation", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/details/detail-main"
+              component={DetailMain}
+              options={{ title: "ClientDetailMain", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(location)/Location"
+              component={Location}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(location)/(location-data)/LocationData"
+              component={LocationData}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(tariff)/tariff"
+              component={TariffsPage}
+              options={{ title: "CreatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(welcome)/Welcome"
+              component={Welcome}
+              options={{ title: "CreatingClient", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(location)/(response-location)/ResponseLocation"
+              component={ResponseLocation}
+              options={{ headerShown: false }}
+            />
+            {/*Help start */}
+            <Stack.Screen
+              name="(standart)/(help)/help"
+              component={Help}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(help)/(aboutUs)/aboutUs"
+              component={AboutUs}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(help)/help"
+              component={HelpFree}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(help)/(aboutUs)/aboutUs"
+              component={AboutUsFree}
+              options={{ headerShown: false }}
+            />
+            {/*Help end */}
 
-                        {/* Online booking start  */}
-                        <Stack.Screen
-                            name="(standart)/(onlineBooking)/onlineBooking"
-                            component={OnlineBooking}
-                            options={{headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(standart)/(onlineBooking)/(booking)/booking"
-                            component={Booking}
-                            options={{headerShown: false}}
-                        />
-                        {/* Online booking end */}
-                        {/*  profile client start */}
-                        <Stack.Screen
-                            name="(profile)/(client)/ClientPage"
-                            component={ClientPage}
-                            options={{title: "salom", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(client)/components/AllClients"
-                            component={AllClients}
-                            options={{title: "salom", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(client)/components/AddressBookClients"
-                            component={AddressBookClients}
-                            options={{title: "salom", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(client)/(detail)/ClientDetails"
-                            component={ClientDetails}
-                            options={{title: "Client", headerShown: false}}
-                        />
-                        {/* profile client end */}
+            {/* Online booking start  */}
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/onlineBooking"
+              component={OnlineBooking}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/(booking)/booking"
+              component={Booking}
+              options={{ headerShown: false }}
+            />
+            {/* Online booking end */}
+            {/*  profile client start */}
+            <Stack.Screen
+              name="(profile)/(client)/ClientPage"
+              component={ClientPage}
+              options={{ title: "salom", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(client)/components/AllClients"
+              component={AllClients}
+              options={{ title: "salom", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(client)/components/AddressBookClients"
+              component={AddressBookClients}
+              options={{ title: "salom", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(client)/(detail)/ClientDetails"
+              component={ClientDetails}
+              options={{ title: "Client", headerShown: false }}
+            />
+            {/* profile client end */}
 
-                        {/* Web page tariff start */}
-                        <Stack.Screen
-                            name="(profile)/(WebPage)/WebPage"
-                            component={WebPage}
-                            options={{title: "CreatingClient", headerShown: false}}
-                        />
-                        {/* Web page tariff end */}
+            {/* Web page tariff start */}
+            <Stack.Screen
+              name="(profile)/(WebPage)/WebPage"
+              component={WebPage}
+              options={{ title: "CreatingClient", headerShown: false }}
+            />
+            {/* Web page tariff end */}
 
-                        {/* profile settings start */}
-                        <Stack.Screen
-                            name="(profile)/(settings)/settings"
-                            component={SettingsPage}
-                            options={{title: "Настройки ", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(settings)/(childSettings)/(Application Settings)/index"
-                            component={ApplicationSettings}
-                            options={{title: "Настройки ", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(settings)/(childSettings)/(Application Settings)/components/language"
-                            component={LanguageSelection}
-                            options={{title: "Настройки ", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(profile)/(settings)/(childSettings)/Personal data/PersonalData"
-                            component={EditProfile}
-                            options={{title: "Настройки ", headerShown: false}}
-                        />
-                        {/* profile settings end */}
+            {/* profile settings start */}
+            <Stack.Screen
+              name="(profile)/(settings)/settings"
+              component={SettingsPage}
+              options={{ title: "Настройки ", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(settings)/(childSettings)/(Application Settings)/index"
+              component={ApplicationSettings}
+              options={{ title: "Настройки ", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(settings)/(childSettings)/(Application Settings)/components/language"
+              component={LanguageSelection}
+              options={{ title: "Настройки ", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(settings)/(childSettings)/Personal data/PersonalData"
+              component={EditProfile}
+              options={{ title: "Настройки ", headerShown: false }}
+            />
+            {/* profile settings end */}
 
-                        {/* schedule  start*/}
-                        <Stack.Screen
-                            name="(Schedule)/Schedule"
-                            component={Schedule}
-                            options={{title: "Настройки ", headerShown: false}}
-                        />
-                        <Stack.Screen
-                            name="(Schedule)/components/users"
-                            component={ScheuleAllClient}
-                            options={{title: "Настройки ", headerShown: false}}
-                        />
-                        {/* schedule  start*/}
-
-                    </Stack.Navigator>
-                </MenuProvider>
-            </StompProvider>
-        </ThemeProvider>
-    );
+            {/* schedule  start*/}
+            <Stack.Screen
+              name="(Schedule)/Schedule"
+              component={Schedule}
+              options={{ title: "Настройки ", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(Schedule)/components/users"
+              component={ScheuleAllClient}
+              options={{ title: "Настройки ", headerShown: false }}
+            />
+            {/* schedule  start*/}
+            <Stack.Screen
+              name="(detail)/censeled-session"
+              component={CenseledSession}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </MenuProvider>
+      </StompProvider>
+    </ThemeProvider>
+  );
 }

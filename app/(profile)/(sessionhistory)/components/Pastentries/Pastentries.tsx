@@ -2,6 +2,7 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import { ClientItem } from "@/components/clients/client-items";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { base_url } from "@/helpers/api";
+import History from "@/helpers/state_managment/history";
 import Pastentries from "@/helpers/state_managment/pastentries/Pastentries";
 import { config } from "@/helpers/token";
 import {
@@ -11,6 +12,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import axios from "axios";
+import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
 import tw from "tailwind-react-native-classnames";
@@ -19,6 +21,8 @@ const PastEntries = () => {
   const [data, setData] = useState<any>([]);
   const { isChecked, setChecked, pastentries, setPastentries } = Pastentries();
   const [toggle, setToggle] = useState(false);
+  const { setProduct } = History();
+  const navigation = useNavigation();
 
   const getsessionDetails = async () => {
     try {
@@ -128,7 +132,11 @@ const PastEntries = () => {
 
       {data &&
         data.map((item: any) => (
-          <View
+          <Pressable
+            onPress={() => {
+              navigation.navigate("(detail)/censeled-session"),
+                setProduct(item);
+            }}
             key={item.id}
             style={tw`bg-gray-700 p-4 rounded-lg mb-4 flex-row items-center`}
           >
@@ -179,7 +187,7 @@ const PastEntries = () => {
                 {item.servicePrice} сум
               </Text>
             </View>
-          </View>
+          </Pressable>
         ))}
       <CenteredModal
         isModal={toggle}

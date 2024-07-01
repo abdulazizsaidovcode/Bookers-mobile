@@ -6,7 +6,18 @@ import {HistoryCount} from "@/type/client/client";
 import {View} from "react-native";
 import AppointmentCard from "@/components/(cards)/appointment-card";
 
-const HistoryMain = ({countData}: {countData: HistoryCount | null}) => {
+const data = [
+    {id: 1, name: 'aaaasertga'},
+    {id: 2, name: 'bbsdrthgbb'},
+    {id: 3, name: 'ccdscc'},
+    {id: 4, name: 'dddsgdd'},
+    {id: 5, name: 'eegdfee'},
+    {id: 6, name: 'jikgddsu'},
+    {id: 7, name: 'estdgfgfa'},
+    {id: 8, name: 'eassdgtfgw'},
+]
+
+const HistoryMain = ({countData}: { countData: HistoryCount | null }) => {
     return (
         <>
             <ProfileHistoryCard
@@ -25,7 +36,7 @@ const HistoryMain = ({countData}: {countData: HistoryCount | null}) => {
                 count={countData ? countData.cancelledSessions : 0}
             />
             <View>
-                <AppointmentCard />
+                <AppointmentCard data={data}/>
             </View>
         </>
     );

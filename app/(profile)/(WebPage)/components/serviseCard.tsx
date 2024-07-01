@@ -1,0 +1,139 @@
+import React from "react";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+
+const UserProfileCard = () => {
+  return (
+    <View style={styles.card}>
+      <View style={styles.header}>
+        <Image
+          source={{ uri: "https://picsum.photos/200/300" }} // Profil rasm manzili
+          style={styles.avatar}
+        />
+        <View style={styles.headerInfo}>
+          <View style={styles.headerInfoin}>
+            <Text style={styles.name}>Натали</Text>
+            <View style={styles.tag}>
+              <Text style={styles.tagText}>Beauty Wave</Text>
+            </View>
+          </View>
+          <Text style={styles.role}>Женский мастер</Text>
+          <Text style={styles.phone}>+99893 525 88 02</Text>
+        </View>
+        <View style={styles.rating}>
+          <Text style={styles.stars}>★★★★★</Text>
+          <Text style={styles.orderInfo}>52 заказа, 25 клиентов</Text>
+        </View>
+      </View>
+      <View style={styles.body}>
+        <View style={styles.buttons}>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Стрижка</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Укладка</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Ногтевой</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.address}>Мирабадский р-н, ул. Нурафшон, 32</Text>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: "#B9B9C9",
+    borderRadius: 10,
+    padding: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginBottom: 12
+  },
+  headerInfo: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  headerInfoin: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  tag: {
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#828282",
+    paddingVertical: 2,
+    paddingHorizontal: 5,
+    marginTop: 2,
+  },
+  tagText: {
+    color: "#4F4F4F",
+    fontSize: 11,
+  },
+  rating: {
+    alignItems: "flex-end",
+  },
+  stars: {
+    color: "red",
+    fontSize: 20,
+  },
+  orderInfo: {
+    color: "#4F4F4F",
+    fontSize: 10,
+  },
+  body: {
+    marginTop: 15,
+  },
+  role: {
+    color: "#4F4F4F",
+    fontSize: 13,
+    marginBottom: 5,
+  },
+  phone: {
+    color: "#4F4F4F",
+    fontSize: 13,
+    marginBottom: 15,
+  },
+  buttons: {
+    
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 15,
+  },
+  button: {
+    borderWidth: 1,
+    borderColor: "#828282",
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  buttonText: {
+    color: "#4F4F4F",
+    fontSize: 14,
+  },
+  address: {
+    color: "#4F4F4F",
+    fontSize: 14,
+  },
+});
+
+export default UserProfileCard;

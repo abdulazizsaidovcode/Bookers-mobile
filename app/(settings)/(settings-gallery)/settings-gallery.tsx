@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   StyleSheet,
   Text,
   View,
-  Alert,
   Image,
   TouchableWithoutFeedback,
   Switch,
@@ -14,165 +13,104 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import LocationInput from "@/components/(location)/locationInput";
 import Buttons from "@/components/(buttons)/button";
 import Feather from "@expo/vector-icons/Feather";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import * as ImagePicker from "expo-image-picker";
-import {
-  addData,
-  fetchData,
-} from "@/helpers/api-function/gallery/settings-gallery";
 import useGalleryStore from "@/helpers/state_managment/gallery/settings-gallery";
 import NavigationMenu from "@/components/navigation/navigation-menu";
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { addData } from "@/helpers/api-function/gallery/settings-gallery";
 
 const { width, height } = Dimensions.get("window");
 
 const SettingsGallery: React.FC = () => {
-  const [images, setImages] = useState<{ uri: string }[]>([]);
+  const [images, setImages] = useState<string[]>([]);
   const [mainImageIndex, setMainImageIndex] = useState<number | null>(null);
-  const [selectedImageIndices, setSelectedImageIndices] = useState<number[]>(
-    []
-  );
+  const [selectedImageIndices, setSelectedImageIndices] = useState<number[]>([]);
   const [showCheckboxes, setShowCheckboxes] = useState<boolean>(false);
   const [showMainSwitch, setShowMainSwitch] = useState<boolean>(false);
   const [albumName, setAlbumName] = useState<string>("");
 
   const { data, setData } = useGalleryStore();
 
-  useEffect(() => {
-    fetchData(setData);
-  }, []);
-
-  const pickImageFromCamera = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("Sorry, we need camera permissions to make this work!");
-      return;
-    }
-
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      setImages([...images, { uri: result.assets[0].uri }]);
-    }
-  };
-
-  const pickImageFromGallery = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: true,
-      quality: 1,
-    });
-
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      const newImages = result.assets.map((asset) => ({ uri: asset.uri }));
-      setImages([...images, ...newImages]);
-    }
-  };
-
-  const toggleModal = () => setShowCheckboxes(!showCheckboxes);
-
-  const handleImageSelect = (index: number) => {
-    setSelectedImageIndices((prevIndices) =>
-      prevIndices.includes(index)
-        ? prevIndices.filter((i) => i !== index)
-        : [...prevIndices, index]
-    );
-  };
-
-  const handleMainImageSelect = (index: number) => setMainImageIndex(index);
-
-  const deleteSelectedImage = () => {
-    if (selectedImageIndices.length > 0) {
-      const updatedImages = images.filter(
-        (_, index) => !selectedImageIndices.includes(index)
-      );
-      setImages(updatedImages);
-      setSelectedImageIndices([]);
-      setMainImageIndex(null);
-      setShowCheckboxes(false);
-      setShowMainSwitch(false);
-    }
-  };
-
-  const saveAlbum = async () => {
-    if (!albumName || images.length === 0 || mainImageIndex === null) {
-      Alert.alert(
-        "Please ensure all fields are filled and an image is selected."
-      );
-      return;
-    }
-
-    const formData = new FormData();
-
-    images.forEach((image, index) => {
-      formData.append("photos", {
-        uri: image.uri,
-        type: "image/jpeg",
-        name: `image_${index}.jpg`,
-      });
-    });
-
-    formData.append("mainPhoto", {
-      uri: images[mainImageIndex].uri,
-      type: "image/jpeg",
-      name: `main_image.jpg`,
-    });
-
-    formData.append("albumName", albumName);
-
+  const uploadImage = async (mode?: string) => {
     try {
-      await addData(formData, albumName);
-      Alert.alert("Album saved successfully!");
+      let result: ImagePicker.ImagePickerResult;
+      if (mode === "gallery") {
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+        result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 1,
+        });
+      } else {
+        await ImagePicker.requestCameraPermissionsAsync();
+        result = await ImagePicker.launchCameraAsync({
+          cameraType: ImagePicker.CameraType.front,
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 1,
+        });
+      }
+
+      if (!result.canceled && result.assets) {
+        await saveImages(result.assets[0].uri);
+      }
     } catch (error) {
-      Alert.alert("Failed to save album. Please try again.");
+      console.error("Error uploading image: ", error);
     }
   };
+
+  const saveImages = async (image: string) => {
+    setImages((prevImages) => [...prevImages, image]);
+  };
+
+  const saveAlbum = () => {
+    const formData = new FormData();
+    images.map((item) => {
+      formData.append("photos", item);
+    })
+    formData.append("mainPhotos", null);
+    addData(formData, albumName);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View>
-          <NavigationMenu
-            name="Создать альбом"
-            deleteIcon
-            toggleModal={toggleModal}
+        <NavigationMenu name="Создать альбом" deleteIcon />
+        <View style={styles.content}>
+          <Text style={styles.title}>Фото галерея</Text>
+          <LocationInput
+            placeholder="Название альбома"
+            labalVisible
+            onChangeText={setAlbumName}
           />
-        </View>
-        <View style={{ paddingHorizontal: 10, flex: 1 }}>
-          <View style={{ padding: 10 }}>
-            <Text style={styles.title}>Фото галерея</Text>
-            <View style={{ marginTop: 10 }}>
-              <LocationInput
-                placeholder="Название альбома"
-                labalVisible={true}
-                onChangeText={setAlbumName}
-              />
-            </View>
-            {images.length > 0 && (
-              <>
-                <View style={styles.imageRow}>
-                  {images.map((image, index) => (
-                    <TouchableWithoutFeedback
-                      key={index}
-                      onLongPress={() => setShowMainSwitch(true)}
-                      onPress={() => showCheckboxes && handleImageSelect(index)}
-                    >
-                      <View style={styles.imageContainer}>
-                        <Image
-                          source={{ uri: image.uri }}
-                          style={styles.image}
-                        />
-                        {showCheckboxes && (
-                          <View style={styles.checkIcon}>
+          {images.length > 0 && (
+            <>
+              <View style={styles.imageRow}>
+                {images.map((image, index) => (
+                  <TouchableWithoutFeedback key={index}>
+                    <View style={styles.imageContainer}>
+                      <Image source={{ uri: image }} style={styles.image} />
+                      {showCheckboxes && (
+                        <View style={styles.checkIcon}>
+                          <MaterialIcons
+                            name={
+                              selectedImageIndices.includes(index)
+                                ? "check-circle"
+                                : "radio-button-unchecked"
+                            }
+                            size={24}
+                            color="#9C0A35"
+                          />
+                        </View>
+                      )}
+                      {showMainSwitch && (
+                        <TouchableWithoutFeedback>
+                          <View style={styles.mainCheckIcon}>
                             <MaterialIcons
                               name={
-                                selectedImageIndices.includes(index)
+                                mainImageIndex === index
                                   ? "check-circle"
                                   : "radio-button-unchecked"
                               }
@@ -180,93 +118,48 @@ const SettingsGallery: React.FC = () => {
                               color="#9C0A35"
                             />
                           </View>
-                        )}
-                        {showMainSwitch && (
-                          <TouchableWithoutFeedback
-                            onPress={() => handleMainImageSelect(index)}
-                          >
-                            <View style={styles.mainCheckIcon}>
-                              <MaterialIcons
-                                name={
-                                  mainImageIndex === index
-                                    ? "check-circle"
-                                    : "radio-button-unchecked"
-                                }
-                                size={24}
-                                color="#9C0A35"
-                              />
-                            </View>
-                          </TouchableWithoutFeedback>
-                        )}
-                      </View>
-                    </TouchableWithoutFeedback>
-                  ))}
+                        </TouchableWithoutFeedback>
+                      )}
+                    </View>
+                  </TouchableWithoutFeedback>
+                ))}
+              </View>
+              {showCheckboxes && (
+                <View style={styles.switchContainer}>
+                  <Buttons title="Удалить выбранные" textSize={15} />
+                  <Buttons
+                    title="Назад"
+                    backgroundColor="white"
+                    textColor="#9C0A35"
+                    textSize={15}
+                  />
                 </View>
-                {images.length > 0 && showCheckboxes && (
-                  <View style={styles.switchContainer}>
-                    <View style={{ width: "50%" }}>
-                      <Buttons
-                        title="Удалить выбранные"
-                        textSize={15}
-                        onPress={deleteSelectedImage}
-                      />
-                    </View>
-                    <View style={{ width: "50%" }}>
-                      <Buttons
-                        title="Назад"
-                        backgroundColor="white"
-                        textColor="#9C0A35"
-                        textSize={15}
-                        onPress={() => {
-                          setShowCheckboxes(false);
-                          setSelectedImageIndices([]);
-                          setShowMainSwitch(false);
-                        }}
-                      />
-                    </View>
-                  </View>
-                )}
-                {showMainSwitch && (
-                  <View style={styles.mainSwitchContainer}>
-                    <Text style={styles.mainSwitchLabel}>
-                      Сделать фото основным
-                    </Text>
-                    <Switch
-                      value={mainImageIndex !== null}
-                      onValueChange={() => setShowMainSwitch(!showMainSwitch)}
-                    />
-                  </View>
-                )}
-              </>
-            )}
-            <View style={{ marginTop: 10 }}>
-              <View style={{ width: 200 }}>
-                <Buttons
-                  icon={<Feather name="upload-cloud" size={20} color="white" />}
-                  title={`Загрузить фото`}
-                  onPress={pickImageFromGallery}
-                />
-              </View>
-              <View style={{ width: 180, marginTop: 10 }}>
-                <Buttons
-                  icon={
-                    <Ionicons name="camera-outline" size={20} color="white" />
-                  }
-                  title={` Сделать фото`}
-                  onPress={pickImageFromCamera}
-                />
-              </View>
-            </View>
+              )}
+              {showMainSwitch && (
+                <View style={styles.mainSwitchContainer}>
+                  <Text style={styles.mainSwitchLabel}>
+                    Сделать фото основным
+                  </Text>
+                  <Switch value={mainImageIndex !== null} />
+                </View>
+              )}
+            </>
+          )}
+          <View style={styles.buttonContainer}>
+            <Buttons
+              icon={<Feather name="upload-cloud" size={20} color="white" />}
+              title="Загрузить фото"
+              onPress={() => uploadImage("gallery")}
+            />
+            <Buttons
+              icon={<Ionicons name="camera-outline" size={20} color="white" />}
+              title="Сделать фото"
+              onPress={uploadImage}
+            />
           </View>
         </View>
-        <View style={{ paddingHorizontal: 10 }}>
-          <Buttons
-            title={`Сохранить`}
-            onPress={saveAlbum}
-            // isDisebled={
-            //   images.length === 0 || albumName === "" || mainImageIndex === null
-            // }
-          />
+        <View style={styles.saveButtonContainer}>
+          <Buttons title="Сохранить" onPress={saveAlbum} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -280,13 +173,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#21212e",
   },
+  content: {
+    paddingHorizontal: 10,
+    flex: 1,
+  },
   title: {
     color: "white",
     fontSize: 27,
+    padding: 10,
   },
   imageRow: {
     flexDirection: "row",
     flexWrap: "wrap",
+    marginTop: 10,
   },
   imageContainer: {
     margin: 5,
@@ -336,5 +235,13 @@ const styles = StyleSheet.create({
     color: "white",
     marginRight: 10,
     fontSize: 16,
+  },
+  buttonContainer: {
+    marginTop: 10,
+    width: 200,
+  },
+  saveButtonContainer: {
+    paddingHorizontal: 10,
+    marginTop: 20,
   },
 });
