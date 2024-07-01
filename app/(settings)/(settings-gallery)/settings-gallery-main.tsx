@@ -45,7 +45,7 @@ const SettingsGalleryMain = () => {
                             <View style={styles.imageGrid}>
                                 {data.map((item, index) => (
                                     <Pressable onPress={() => handlePress(item.id)} key={index} style={styles.albumContainer}>
-                                        <View style={{ flexDirection: 'row', width: 170, flexWrap: 'wrap' }}>
+                                        <View style={{ flexDirection: 'row', width: width / 2.2, flexWrap: 'wrap' }}>
                                             {item.resGalleryAttachments.slice(0, 4).map((attachment, attIndex) => (
                                                 <View key={attIndex} style={styles.imageContainer}>
                                                     <Image
@@ -66,7 +66,7 @@ const SettingsGalleryMain = () => {
                                             }
                                         </View>
                                         <View>
-                                            <Text style={{ color: 'white', margin: 5 }}>{item.albumName}</Text>
+                                            <Text style={{ color: 'white', margin: 5, width: width / 2.5, }}>{item.albumName}</Text>
                                         </View>
                                     </Pressable>
                                 ))}
