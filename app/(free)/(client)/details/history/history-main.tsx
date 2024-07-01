@@ -22,11 +22,13 @@ const HistoryMain = ({countData}: { countData: HistoryCount | null }) => {
                 name={`Прошедшие записи`}
                 icon={<Entypo name="hour-glass" size={30} color="#9C0A35"/>}
                 count={countData ? countData.pastSessions : 0}
+                clicks={() => navigation.navigate('(free)/(client)/details/history/past-history')}
             />
             <ProfileHistoryCard
                 name={`Отменённые записи`}
                 icon={<MaterialCommunityIcons name="cancel" size={30} color="#9C0A35"/>}
                 count={countData ? countData.cancelledSessions : 0}
+                clicks={() => navigation.navigate('(free)/(client)/details/history/canceled-history')}
             />
         </>
     );

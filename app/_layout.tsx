@@ -92,6 +92,8 @@ import Schedule from "./(Schedule)/Schedule";
 import RecordsInformation from "@/app/(free)/(client)/details/records-information";
 import CenseledSession from "@/app/(detail)/censeled-session";
 import UpcomingHistory from "@/app/(free)/(client)/details/history/upcoming-history";
+import PastHistory from "@/app/(free)/(client)/details/history/past-history";
+import CanceledHistory from "@/app/(free)/(client)/details/history/canceled-history";
 
 const Stack = createNativeStackNavigator();
 
@@ -413,6 +415,16 @@ function RootLayoutNav() {
               name="(free)/(client)/details/history/upcoming-history"
               component={UpcomingHistory}
               options={{ title: "UpcomingHistory", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/details/history/past-history"
+              component={PastHistory}
+              options={{ title: "PastHistory", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/details/history/canceled-history"
+              component={CanceledHistory}
+              options={{ title: "CanceledHistory", headerShown: false }}
             />
             <Stack.Screen
               name="(location)/Location"
