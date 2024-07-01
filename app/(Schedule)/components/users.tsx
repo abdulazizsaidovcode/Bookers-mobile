@@ -6,13 +6,17 @@ import LocationInput from "@/components/(location)/locationInput";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { StandardNowAndConstClient } from "@/components/clients/client-items";
 import { getClientAll } from '@/helpers/api-function/client/client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useOrderPosdData } from '@/helpers/state_managment/order/order';
-import { postOder } from '@/helpers/api-function/oreder/oreder';
+import { postOrder } from '@/helpers/api-function/oreder/oreder';
+import Toast from 'react-native-simple-toast';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 
 const ScheuleAllClient = () => {
+    const navigation = useNavigation(); // Use useNavigation hook
     const { allClientsList, setAllClients } = clientStore();
-    const { OrderData, setOrderData } = useOrderPosdData();
+    const { OrderData, setOrderData, setStatus } = useOrderPosdData(); // Destructure setStatus
+    const [orderMessageStatus, setOrderMessageStatus] = useState<string>("");
 
     useEffect(() => {
         getClientAll(setAllClients);
@@ -26,13 +30,26 @@ const ScheuleAllClient = () => {
             };
             setOrderData(newOrderData);
             console.log(newOrderData);
-            
-            postOder({ data: newOrderData }); 
-            
+
+            await postOrder({ 
+                data: newOrderData, 
+                messageSatus: (message: string) => setOrderMessageStatus(message),
+                setStatus, // Pass setStatus to postOrder
+                navigation // Pass navigation to postOrder
+            });
+
         } catch (error) {
             console.error('Error setting client or posting order:', error);
         }
     };
+
+    useEffect(() => {
+        console.log(orderMessageStatus);
+        
+        if (orderMessageStatus) {
+            Toast.show(orderMessageStatus, Toast.LONG);
+        }
+    }, [orderMessageStatus]);
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
