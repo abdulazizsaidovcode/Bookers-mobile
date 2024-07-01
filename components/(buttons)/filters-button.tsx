@@ -10,7 +10,7 @@ const FiltersButton: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', 
                 {
                     backgroundColor: isDisebled ? '#21212E' : backgroundColor,
                     borderColor: isDisebled ? '#828282' : 'transparent',
-                    borderWidth: isDisebled ? 1 : 0,
+                    borderWidth: 1,
                 }
             ]}
             onPress={onPress}

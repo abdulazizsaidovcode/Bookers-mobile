@@ -14,6 +14,7 @@ import React, {useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
 import {addClientMessage} from "@/helpers/api-function/client/client";
+import FiltersButton from "@/components/(buttons)/filters-button";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
@@ -25,6 +26,7 @@ const DetailMain = () => {
     const {isLoading, setIsLoading} = clientStore()
     const [bottomModalSMS, setBottomModalSMS] = useState(false)
     const [messageVal, setMessageVal] = useState('')
+    const [role, setRole] = useState('basics')
 
     useEffect(() => {
         if (!isLoading && !bottomModalSMS) setMessageVal('')
@@ -42,15 +44,27 @@ const DetailMain = () => {
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
-                        <View style={[tw`mt-4`, {alignSelf: 'flex-start'}]}>
-                            <ClientsBtn
-                                name={`Все`}
-                                countOrIcon
-                                icon={<Ionicons name="person-circle-outline" size={30} color="white"/>}
+                        <View style={[tw`mt-4 flex-row justify-start items-center`, {gap: 16}]}>
+                            <FiltersButton
+                                title={`Основное`}
+                                isDisebled={role !== 'basics' ? true : false}
+                                onPress={() => setRole('basics')}
+                            />
+                            <FiltersButton
+                                title={`История`}
+                                isDisebled={role !== 'history' ? true : false}
+                                onPress={() => setRole('history')}
+                            />
+                            <FiltersButton
+                                title={`Профиль`}
+                                isDisebled={role !== 'profile' ? true : false}
+                                onPress={() => setRole('profile')}
                             />
                         </View>
                         <View>
-                            <ClientDetailBasic client={infoClient}/>
+                            {role === 'basics' && <ClientDetailBasic client={infoClient}/>}
+                            {role === 'history' && ''}
+                            {role === 'profile' && ''}
                         </View>
 
                         {/*client SMS*/}
@@ -77,10 +91,13 @@ const DetailMain = () => {
                             </>
                         </CenteredModal>
                     </View>
-                    <View style={[tw`pb-5`, {gap: 10}]}>
-                        <Buttons title={`Написать сообщение`} onPress={toggleBottomModalSMS}/>
-                        <Buttons title={`Записать`} onPress={() => navigation.navigate('(free)/(client)/details/records', {record: infoClient})}/>
-                    </View>
+                    {role === 'basics' && (
+                        <View style={[tw`pb-5`, {gap: 10}]}>
+                            <Buttons title={`Написать сообщение`} onPress={toggleBottomModalSMS}/>
+                            <Buttons title={`Записать`}
+                                     onPress={() => navigation.navigate('(free)/(client)/details/records', {record: infoClient})}/>
+                        </View>
+                    )}
                 </ScrollView>
             </View>
         </SafeAreaView>
