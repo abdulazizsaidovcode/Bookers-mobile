@@ -1,24 +1,13 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { List } from 'react-native-paper';
-import RequestCard from '../RequestCard';
+import { View, StyleSheet, Text } from 'react-native';
+import RequestCard from '@/components/(cards)/requestcard';
+import { OrderItem } from '../../availebleschedule';
 
-const requests = [
-  {
-    name: 'Мелисара',
-    service: 'Стрижка, укладка, милирование',
-    date: '08:00',
-    time: '09:30',
-  },
-  {
-    name: 'Мелисара',
-    service: 'Стрижка, укладка, милирование',
-    date: '08:00',
-    time: '09:30',
-  },
-];
+interface RequestsAccordionProps {
+  item: OrderItem[];
+}
 
-const RequestsAccordion: React.FC = () => {
+const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items = [] }) => {
   const handleApprove = (index: number) => {
     console.log(`Approved request ${index}`);
   };
@@ -28,45 +17,32 @@ const RequestsAccordion: React.FC = () => {
   };
 
   return (
-    <List.Accordion
-      title="Запросы клиентов на бронь"
-      titleStyle={styles.title}
-      style={styles.accordionContainer}
-      theme={{colors: { background: 'transParent' } }}
-    >
-      <View style={styles.accordionContent}>
-        {/* <Text style={styles.headerText}>Чт, Сегодня</Text> */}
-        {requests.map((request, index) => (
+    <View>
+      {items.length > 0 ? (
+        items.map((request: any, index: any) => (
           <RequestCard
             key={index}
-            name={request.name}
-            service={request.service}
-            date={request.date}
-            time={request.time}
+            name={request.clientName}
+            service={request.categoryName}
+            date={request.orderDate}
+            time={`${request.orderDate.split(' ')[1]}`} // Assuming `orderDate` is in "Today 12:00 - 13:10" format
             onApprove={() => handleApprove(index)}
             onReject={() => handleReject(index)}
           />
-        ))}
-      </View>
-    </List.Accordion>
+        ))
+      ) : (
+        <Text style={styles.noRequestsText}>No requests available</Text>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  accordionContainer: {
-    backgroundColor: 'transparent',
-    paddingLeft: 0,
-  },
-  title: {
-    color: '#fff',
-  },
-  accordionContent: {
-    padding: 10,
-  },
-  headerText: {
+
+  noRequestsText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    textAlign: 'center',
+    color: '#999',
   },
 });
 
