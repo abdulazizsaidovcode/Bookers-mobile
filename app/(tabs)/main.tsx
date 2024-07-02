@@ -6,79 +6,88 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import PieChart from 'react-native-pie-chart';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { RootStackParamList } from "@/type/root";
-import { fetchDaylyOrderTimes, fetchMainStatistic } from "@/helpers/api-function/dashboard/dashboard";
+import { editOrderStatus, fetchDaylyOrderTimes, fetchMainStatistic, fetchWaitingOrders } from "@/helpers/api-function/dashboard/dashboard";
 import useDashboardStore from "@/helpers/state_managment/dashboard/dashboard";
+import { DashboardDailyTimeOrders, DashboardWaitingOrder } from "@/type/dashboard/dashboard";
+import { getFile } from "@/helpers/api";
+import moment from "moment";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
-const timeSlots = [
-	{ time: '8:00', status: 'booked' },
-	{ time: '14:00', status: 'new' },
-	{ time: '16:30', status: 'vip' },
-	{ time: '18:30', status: 'booked' },
-	{ time: '20:30', status: 'free' },
-	{ time: '22:00', status: 'booked' }
-];
-
-const bookingRequests = [
-	{ id: '1', image: 'https://example.com/image1.jpg', name: 'John Doe', service: 'Haircut', time: '14:00' },
-	{ id: '2', image: 'https://example.com/image2.jpg', name: 'Jane Smith', service: 'Manicure', time: '16:30' },
-	// Add more booking requests as needed
-];
-
 export default function TabOneScreen() {
 	const navigation = useNavigation<SettingsScreenNavigationProp>();
-	const { mainStatisticData, setData, setMainStatisticData } = useDashboardStore()
+	const { mainStatisticData, waitingData, dailyTimeData, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
 
 	useEffect(() => {
-		fetchDaylyOrderTimes(setData)
-	}, [])
+		fetchDaylyOrderTimes(setDailyTimeData);
+	}, []);
+
 	useEffect(() => {
 		fetchMainStatistic(setMainStatisticData);
-	}, [])
-	let fraction = mainStatisticData.completedSessions;
-	let separatorIndex = fraction.indexOf('/');
-	let numerator = fraction.slice(0, separatorIndex);
-	let denominator = fraction.slice(separatorIndex + 1);
+	}, []);
 
-	const renderTimeSlot = ({ item }) => (
+	useEffect(() => {
+		fetchWaitingOrders(setWaitingData);
+	}, []);
+
+	let chartFraction = mainStatisticData.completedSessions;
+	let chartSeparatorIndex = chartFraction.indexOf('/');
+
+	let chartNumerator = chartFraction.slice(0, chartSeparatorIndex);
+	let chartDenominator = chartFraction.slice(chartSeparatorIndex + 1);
+
+	let statisticFraction = mainStatisticData.incomeToday;
+	let statisticSeparatorIndex = statisticFraction.indexOf('/');
+
+	let statisticNumerator = statisticFraction.slice(0, statisticSeparatorIndex);
+	let statisticDenominator = statisticFraction.slice(statisticSeparatorIndex + 1);
+	const regularVisitCount = dailyTimeData.filter(item => item.type === 'REGULAR_VISIT').length;
+	const notVisitCount = dailyTimeData.filter(item => item.type === 'NOT_VISIT').length;
+	const vipCientsCount = dailyTimeData.filter(item => item.type === 'VIP').length;
+	const newClientsCount = dailyTimeData.filter(item => item.type === 'NEW').length;
+
+
+	const renderTimeSlot: React.FC<{ item: DashboardDailyTimeOrders }> = ({ item }) => (
 		<View style={[styles.timeSlot,
-		item.status === 'booked' ? styles.bookedSlot :
-			item.status === 'free' ? styles.freeSlot :
-				item.status === 'vip' ? styles.vipSlot :
+		item.type === 'REGULAR_VISIT' ? styles.bookedSlot :
+			item.type === 'NOT_VISIT' ? styles.freeSlot :
+				item.type === 'VIP' ? styles.vipSlot :
 					styles.newSlot]}>
-			<Text style={{ color: 'white' }}>{item.time}</Text>
+			<Text style={{ color: 'white' }}>{item.time.slice(0, 5)}</Text>
 		</View>
 	);
 
-	const renderBookingRequest = ({ item }) => (
-		<View style={styles.bookingCard}>
-			<View style={styles.cardHeader}>
-				<Text style={styles.newRequestText}> <FontAwesome name="star" size={12} color="#217355" />Новый Запрос</Text>
-			</View>
-			<View style={{ flexDirection: 'row', gap: 5 }}>
-				<View>
-					<Image source={require('../../assets/avatar.png')} style={styles.profileImage} />
-				</View>
-				<View>
-					<Text style={styles.userName}>{item.name}</Text>
-					<Text style={styles.serviceText}>{item.service}</Text>
-				</View>
-			</View>
-			<Text style={styles.timeText}>{item.time}</Text>
-			<View style={styles.actionButtons}>
-				<TouchableOpacity style={styles.approveButton}>
-					<Text style={styles.buttonText}>Одобрить</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.rejectButton}>
-					<Text style={{ color: '#9C0A35', fontWeight: 'bold' }}>Отклонить</Text>
-				</TouchableOpacity>
-			</View>
-		</View>
-	);
+	// const renderBookingRequest: React.FC<{ item: DashboardWaitingOrder }> = ({ item }) => (
+	// 	<View style={styles.bookingCard}>
+	// 		<View style={styles.cardHeader}>
+	// 			<Text style={styles.newRequestText}> <FontAwesome name="star" size={12} color="#217355" />Новый Запрос</Text>
+	// 		</View>
+	// 		<View style={{ flexDirection: 'row', gap: 5 }}>
+	// 			<View>
+	// 				<Image source={item.clientAttachmentId ? getFile + item.clientAttachmentId : require('../../assets/avatar.png')} style={styles.profileImage} />
+	// 			</View>
+	// 			<View>
+	// 				<Text style={styles.userName}>{item.clientName}</Text>
+	// 				<Text style={styles.serviceText}>{item.categoryName}</Text>
+	// 			</View>
+	// 		</View>
+	// 		<View style={{ borderWidth: 1, borderColor: '#4F4F4F', width: 150, padding: 3, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
+	// 			<Text style={{ color: '#4F4F4F', fontSize: 12 }}>{item.categoryName}</Text>
+	// 		</View>
+	// 		<Text style={styles.timeText}>{item.orderDate}</Text>
+	// 		<View style={styles.actionButtons}>
+	// 			<TouchableOpacity style={styles.approveButton}>
+	// 				<Text style={styles.buttonText} onPress={() => editOrderStatus(setWaitingData, item.orderId, 'CONFIRMED')}>Одобрить</Text>
+	// 			</TouchableOpacity>
+	// 			<TouchableOpacity style={styles.rejectButton}>
+	// 				<Text style={{ color: '#9C0A35', fontWeight: 'bold' }} onPress={() => editOrderStatus(setWaitingData, item.orderId, 'REJECTED')}>Отклонить</Text>
+	// 			</TouchableOpacity>
+	// 		</View>
+	// 	</View>
+	// );
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -95,7 +104,7 @@ export default function TabOneScreen() {
 					<Text style={styles.sectionSubtitle}>Время работы: с 8:00 до 22:00</Text>
 				</View>
 				<FlatList
-					data={timeSlots}
+					data={dailyTimeData}
 					renderItem={renderTimeSlot}
 					keyExtractor={item => item.time}
 					horizontal
@@ -106,19 +115,19 @@ export default function TabOneScreen() {
 				<View style={styles.statusContainer}>
 					<View style={styles.daylyStatus}>
 						<View style={[styles.statusColor, { backgroundColor: '#219653' }]}></View>
-						<Text style={styles.statusText}>Забронировано (3)</Text>
+						<Text style={styles.statusText}>Забронировано ({regularVisitCount | 0})</Text>
 					</View>
 					<View style={styles.daylyStatus}>
 						<View style={[styles.statusColor, { backgroundColor: '#828282' }]}></View>
-						<Text style={styles.statusText}>Свободно (1)</Text>
+						<Text style={styles.statusText}>Свободно ({notVisitCount | 0})</Text>
 					</View>
 					<View style={styles.daylyStatus}>
 						<View style={[styles.statusColor, { backgroundColor: '#9C0A35' }]}></View>
-						<Text style={styles.statusText}>VIP клиенты (1)</Text>
+						<Text style={styles.statusText}>VIP клиенты ({vipCientsCount | 0})</Text>
 					</View>
 					<View style={styles.daylyStatus}>
 						<View style={[styles.statusColor, { backgroundColor: '#00A1D3' }]}></View>
-						<Text style={styles.statusText}>Новые клиенты (2)</Text>
+						<Text style={styles.statusText}>Новые клиенты ({newClientsCount | 0})</Text>
 					</View>
 				</View>
 				<View style={styles.statsSection}>
@@ -126,7 +135,7 @@ export default function TabOneScreen() {
 						<Text style={styles.statsTitle}>Выполнено сеансов</Text>
 						<PieChart
 							widthAndHeight={100}
-							series={[3, 4]}
+							series={[4, 1]}
 							sliceColor={['#9C0A35', '#21212E']}
 							coverRadius={0.6}
 							coverFill={'#B9B9C9'}
@@ -135,9 +144,9 @@ export default function TabOneScreen() {
 					</View>
 					<View style={styles.statsContainer}>
 						<Text style={styles.statsTitle}>Доход сегодня</Text>
-						<Text style={styles.incomeText}>600 000</Text>
+						<Text style={styles.incomeText}>{statisticNumerator ? statisticNumerator : 0}</Text>
 						<Text style={styles.incomeTextSmall}>из</Text>
-						<Text style={styles.incomeText}>1 200 000</Text>
+						<Text style={styles.incomeText}>{statisticDenominator ? statisticDenominator : 0}</Text>
 					</View>
 				</View>
 				<View style={styles.cardsSection}>
@@ -150,22 +159,24 @@ export default function TabOneScreen() {
 						<Text style={styles.cardValue}>{mainStatisticData.incomeThisMonth}</Text>
 					</View>
 				</View>
-				<View>
-					<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
-						<Text style={{ color: 'white', fontSize: 20 }}>Запросы на бронь</Text>
-						<View style={styles.headerRight}>
-							<Text style={styles.requestsCount}>4 заявки</Text>
+				{waitingData.length === 0 ? '' :
+					<View>
+						<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
+							<Text style={{ color: 'white', fontSize: 20 }}>Запросы на бронь</Text>
+							<View style={styles.headerRight}>
+								<Text style={styles.requestsCount}>{waitingData.length} заявки</Text>
+							</View>
 						</View>
+						<FlatList
+							data={waitingData}
+							renderItem={Requ}
+							keyExtractor={item => item.orderId}
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							contentContainerStyle={styles.bookingList}
+						/>
 					</View>
-					<FlatList
-						data={bookingRequests}
-						renderItem={renderBookingRequest}
-						keyExtractor={item => item.id}
-						horizontal
-						showsHorizontalScrollIndicator={false}
-						contentContainerStyle={styles.bookingList}
-					/>
-				</View>
+				}
 			</ScrollView>
 		</SafeAreaView>
 	);
@@ -352,7 +363,7 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 	},
 	userName: {
-		color: "white",
+		color: "",
 		fontSize: 16,
 		fontWeight: "bold",
 		marginTop: 10,
@@ -363,7 +374,7 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 	},
 	timeText: {
-		color: "#B9B9C9",
+		color: "#000",
 		fontSize: 14,
 		marginTop: 5,
 	},
@@ -374,15 +385,15 @@ const styles = StyleSheet.create({
 	},
 	approveButton: {
 		backgroundColor: "#9C0A35",
-		borderRadius: 5,
-		paddingVertical: 10,
-		paddingHorizontal: 20,
+		borderRadius: 7,
+		paddingVertical: 15,
+		paddingHorizontal: 30,
 	},
 	rejectButton: {
 		backgroundColor: "transparent",
-		borderRadius: 5,
-		paddingVertical: 10,
-		paddingHorizontal: 20,
+		borderRadius: 7,
+		paddingVertical: 15,
+		paddingHorizontal: 30,
 		borderWidth: 1,
 		borderColor: '#9C0A35'
 	},
