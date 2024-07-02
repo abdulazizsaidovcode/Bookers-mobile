@@ -1,9 +1,10 @@
-import { View, StyleSheet } from 'react-native';
-import React, { useEffect } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { masterOrderHWaitStore } from '@/helpers/state_managment/order/order';
 import { getMasterOrderWait } from '@/helpers/api-function/oreder/oreder';
 import RequestsAccordion from './components/accordion/RequestsAccordion';
 import { List } from 'react-native-paper';
+import CenteredModal from '@/components/(modals)/modal-centered';
 
 type ClientStatus = "REGULAR_VISIT" | string;
 
@@ -25,26 +26,31 @@ interface GroupedOrders {
 const groupByDate = (data: OrderItem[]): GroupedOrders => {
   if (!data) return {};
   return data.reduce((acc, item) => {
-    (acc[item.orderDate] = acc[item.orderDate] || []).push(item);
+    const datePart = item.orderDate.split(' ')[1]; // Assuming orderDate format is "16 JULY 19:30 - 20:40"
+    (acc[datePart] = acc[datePart] || []).push(item);
     return acc;
   }, {} as GroupedOrders);
 };
 
 const RequestSchedule: React.FC = () => {
   const { waitData, setWaitData } = masterOrderHWaitStore();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
+  const fetchData = async () => {
+    try {
+      const data = await getMasterOrderWait(setWaitData);
+      setWaitData(data);
+    } catch (error) {
+      console.error('Error fetching wait data:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getMasterOrderWait(setWaitData);
-        setWaitData(data);
-      } catch (error) {
-        console.error('Error fetching wait data:', error);
-      }
-    };
     fetchData();
-    console.log(waitData);
-    
   }, [setWaitData]);
 
   const groupedData = groupByDate(waitData);
@@ -59,9 +65,20 @@ const RequestSchedule: React.FC = () => {
           style={styles.accordionContainer}
           theme={{ colors: { background: 'transparent' } }}
         >
-          <RequestsAccordion items={groupedData[date]} />
+          <RequestsAccordion items={groupedData[date]} onActionSuccess={fetchData} onShowModal={toggleModal} />
         </List.Accordion>
       ))}
+      <CenteredModal
+        isModal={isModalVisible}
+        toggleModal={toggleModal}
+        btnWhiteText="Close"
+        btnRedText="Confirm"
+        isFullBtn={false}
+        onConfirm={toggleModal}
+        oneBtn
+      >
+        <Text style={styles.buttonText}>Muvoffaqiyatli amalga oshirildi !</Text>
+      </CenteredModal>
     </View>
   );
 };
@@ -73,6 +90,10 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#fff',
+  },
+  buttonText: {
+    color: '#fff',
+    marginBottom: 20,
   },
 });
 

@@ -3,7 +3,6 @@ import { config } from "@/helpers/token";
 import axios from "axios";
 import { router } from "expo-router";
 import { Alert } from "react-native";
-import { create } from "tailwind-react-native-classnames";
 
 export const registerFunction = (phoneNumber: string, setCode: (value: any) => void) => {
     const sentData = {

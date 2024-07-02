@@ -50,17 +50,17 @@ const DetailMain = () => {
                         <View style={[tw`mt-4 flex-row justify-start items-center mb-10`, {gap: 16}]}>
                             <FiltersButton
                                 title={`Основное`}
-                                isDisebled={role !== 'basics' ? true : false}
+                                isDisebled={role !== 'basics'}
                                 onPress={() => setRole('basics')}
                             />
                             <FiltersButton
                                 title={`История`}
-                                isDisebled={role !== 'history' ? true : false}
+                                isDisebled={role !== 'history'}
                                 onPress={() => setRole('history')}
                             />
                             <FiltersButton
                                 title={`Профиль`}
-                                isDisebled={role !== 'profile' ? true : false}
+                                isDisebled={role !== 'profile'}
                                 onPress={() => setRole('profile')}
                             />
                         </View>

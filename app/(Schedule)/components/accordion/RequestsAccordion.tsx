@@ -5,15 +5,21 @@ import { OrderItem } from '../../availebleschedule';
 
 interface RequestsAccordionProps {
   items: OrderItem[];
+  onActionSuccess: () => void;
+  onShowModal: () => void;
 }
 
-const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items }) => {
+const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items, onActionSuccess, onShowModal }) => {
   const handleApprove = (index: number) => {
     console.log(`Approved request ${index}`);
+    onActionSuccess();
+    onShowModal();
   };
 
   const handleReject = (index: number) => {
     console.log(`Rejected request ${index}`);
+    onActionSuccess();
+    onShowModal();
   };
 
   const extractTimeRange = (orderDate: string) => {
@@ -32,6 +38,7 @@ const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items }) => {
             clientAttachmentId={request.clientAttachmentId}
             date={request.orderDate.split(' ')[0]} // Extracting just the date part for simplicity
             time={extractTimeRange(request.orderDate)} // Extracting the time range
+            orderId={request.orderId} // Pass the orderId
             onApprove={() => handleApprove(index)}
             onReject={() => handleReject(index)}
           />
