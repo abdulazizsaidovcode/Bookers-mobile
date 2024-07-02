@@ -49,5 +49,4 @@ const registerStory = create<IState>((set) => ({
     img: null,
     setImg: (val: any) => set({ img: val })
 }));
-
 export default registerStory;
