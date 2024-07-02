@@ -25,9 +25,9 @@ export type RootStackParamList = {
   '(free)/(client)/details/detail-main': { infoClient: AllClient };
   '(free)/(client)/details/records': { record: AllClient };
   '(free)/(client)/details/records-information': {orderID: string};
-  '(free)/(client)/details/history/upcoming-history': undefined | string;
-  '(free)/(client)/details/history/past-history': undefined | string;
-  '(free)/(client)/details/history/canceled-history': undefined | string;
+  '(free)/(client)/details/history/upcoming-history': {clientID: string};
+  '(free)/(client)/details/history/past-history': {clientID: string};
+  '(free)/(client)/details/history/canceled-history': {clientID: string};
   '(welcome)/Welcome': undefined | string;
   '(profile)/(tariff)/tariff': undefined;
   'category': any;

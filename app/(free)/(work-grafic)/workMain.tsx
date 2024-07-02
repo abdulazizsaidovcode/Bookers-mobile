@@ -6,7 +6,10 @@ import { router } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import { getWorkDay, getWorkTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import {
+  getWorkDay,
+  getWorkTime,
+} from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import { getMee } from "@/helpers/token";
 
 export const WorkMainCard: React.FC<{
@@ -14,9 +17,10 @@ export const WorkMainCard: React.FC<{
   title: string;
   subTitle: string;
   to?: string;
-}> = ({ icon, title, subTitle, to }) => {
+  disabled?: boolean
+}> = ({ icon, title, subTitle, to, disabled=false  }) => {
   return (
-    <TouchableOpacity onPress={() => router.push(to || "")}>
+    <TouchableOpacity disabled={disabled} activeOpacity={0.7} onPress={() => router.push(to || "")}>
       <View style={styles.card}>
         <View>
           <View style={{ flexDirection: "row", gap: 5 }}>
@@ -36,17 +40,24 @@ export const WorkMainCard: React.FC<{
 };
 
 const WorkMain = () => {
-  const { setWeekData, weekData, setTimeData, setGetMee, getme, timeData } = graficWorkStore();
+  const {
+    setWeekData,
+    weekData,
+    setTimeData,
+    setGetMee,
+    getme,
+    timeData,
+    calendarDate
+  } = graficWorkStore();
 
-  useEffect( () => {
-     getMee(setGetMee)
-     getWorkDay(setWeekData);
+  useEffect(() => {
+    getMee(setGetMee);
+    getWorkDay(setWeekData);
   }, []);
 
-  useEffect( () => {
-     getWorkTime(setTimeData, getme ? getme.id : "")
+  useEffect(() => {
+    getWorkTime(setTimeData, getme ? getme.id : "");
   }, [getme]);
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,24 +66,29 @@ const WorkMain = () => {
           icon={<AntDesign name="calendar" size={24} color="#9C0A35" />}
           title="График работы"
           subTitle={`${
-            weekData.length !== 0 &&
-            weekData.map((item: any) => {
-              if (item.active) {
-                return item.dayName.substring(0,3)
-              } else {
-                return null;
-              }
-            })
+            weekData.length !== 0
+              ? weekData
+                  .filter((item: any) => item.active) // faqat active elementlarni filter qilamiz
+                  .map((item: any) => item.dayName.substring(0, 3)) // har bir active elementning birinchi 3 harfini chiqaramiz
+                  .join(", ") // elementlarni vergul bilan ajratamiz
+              : "Рабочие дни недели не настроены!"
           }`}
           to="(free)/(work-grafic)/workGraffic"
         />
-
-        <WorkMainCard
-          icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
-          title="Время работы"
-          subTitle={`From ${timeData ? timeData.from : "00:00"}  to ${timeData ? timeData.end : "00:00"}`}
-          to="(free)/(work-grafic)/workTime"
-        />
+        <TouchableOpacity activeOpacity={0.7} disabled>
+          <WorkMainCard
+            disabled={weekData.every(item => !item.active)}
+            icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
+            title="Время работы"
+            subTitle={
+              (timeData && timeData.from !== undefined && timeData.end !== undefined) ? 
+              `From ${timeData.from !== undefined ? timeData.from : "00:00"}  to ${
+              timeData.end !== undefined ? timeData.end : "00:00"
+            }` : "Рабочее время не настроено!"
+            }
+            to="(free)/(work-grafic)/workTime"
+          />
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -83,7 +99,10 @@ const WorkMain = () => {
           justifyContent: "center",
         }}
       >
-        <Buttons title="На главную" onPress={() => router.push("(free)/(work-grafic)/workMain")} />
+        <Buttons
+          title="На главную"
+          onPress={() => router.push("(free)/(work-grafic)/workMain")}
+        />
       </View>
     </SafeAreaView>
   );
