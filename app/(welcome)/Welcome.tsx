@@ -37,7 +37,6 @@ const Welcome = () => {
     getNumbers(setNumber);
   }, []);
 
-  console.log(number);
 
   const data = [
     {

@@ -8,7 +8,7 @@ import FinanceRevenuesDay from '@/components/(cards)/finance-revenues-day'
 import ClientCard from '@/components/(cards)/top-client-card'
 import FinanceCardMonth from '@/components/(cards)/finance-card-month'
 import {MaterialIcons} from '@expo/vector-icons';
-import {getFinanceDay, getFinanceMonth, getTopClients} from '@/helpers/api-function/finance/finance'
+import {getFinanceDay, getTopClients} from '@/helpers/api-function/finance/finance'
 import {setConfig} from '@/helpers/token'
 import financeStore from '@/helpers/state_managment/finance/financeStore'
 import FinanceRevenuesMonth from "@/components/(cards)/finance-revenues-month";
@@ -43,7 +43,6 @@ const Finance = () => {
     }, [isFilters]);
 
     const toggleMonth = () => setMonthShowHide(!monthShowHide)
-    console.log(monthData)
     return (
         <ScrollView
             showsHorizontalScrollIndicator={false}
@@ -57,17 +56,17 @@ const Finance = () => {
             <View style={[tw`flex-row justify-between items-center mb-5`, {gap: 5}]}>
                 <FiltersButton
                     title='По дням'
-                    isDisebled={isFilters !== 'day' ? true : false}
+                    isDisebled={isFilters !== 'day'}
                     onPress={() => setIsFilters('day')}
                 />
                 <FiltersButton
                     title='По периоду'
-                    isDisebled={isFilters !== 'month' ? true : false}
+                    isDisebled={isFilters !== 'month'}
                     onPress={() => setIsFilters('month')}
                 />
                 <FiltersButton
                     title='ТОП клинеты'
-                    isDisebled={isFilters !== 'top_clients' ? true : false}
+                    isDisebled={isFilters !== 'top_clients'}
                     onPress={() => setIsFilters('top_clients')}
                 />
             </View>

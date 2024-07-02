@@ -10,10 +10,10 @@ import {
 import TimesCard from "@/components/grafic/timesCard";
 import WeeklCard from "@/components/grafic/weeklCard";
 import Buttons from "@/components/(buttons)/button";
-import { router } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import { getWorkDay, putWorkTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import { postWorkTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import Toast from "react-native-simple-toast";
 
 const timeList = [
   "08:00",
@@ -51,23 +51,32 @@ const timeList = [
 ];
 
 const TimeWorkEdit: React.FC = () => {
-  const { weekData } = graficWorkStore();
+  const { weekData, timeData } = graficWorkStore();
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(true);
+
+  useEffect(() => {
+    if (timeData && timeData.from && timeData.end) {
+      const fromTime = timeData.from.substring(0, 5);
+      const endTime = timeData.end.substring(0, 5);
+      if (timeList.includes(fromTime) && timeList.includes(endTime)) {
+        setSelectedTimeSlots([fromTime, endTime]);
+      }
+    }
+  }, [timeData]);
 
   useEffect(() => {
     setIsDisabled(selectedTimeSlots.length < 2);
   }, [selectedTimeSlots]);
 
   const toggleTimeSlotSelection = (time: string) => {
-    setSelectedTimeSlots((prevSelectedTimeSlots) => {
-      if (prevSelectedTimeSlots.includes(time)) {
-        return prevSelectedTimeSlots.filter((slot) => slot !== time);
-      } else if (prevSelectedTimeSlots.length < 2) {
-        return [...prevSelectedTimeSlots, time];
-      }
-      return prevSelectedTimeSlots;
-    });
+    if (selectedTimeSlots.includes(time)) {
+      setSelectedTimeSlots((prevSelectedTimeSlots) =>
+        prevSelectedTimeSlots.filter((slot) => slot !== time)
+      );
+    } else if (selectedTimeSlots.length < 2) {
+      setSelectedTimeSlots((prevSelectedTimeSlots) => [...prevSelectedTimeSlots, time]);
+    }
   };
 
   const getRangeIndices = () => {
@@ -84,15 +93,8 @@ const TimeWorkEdit: React.FC = () => {
   const rangeIndices = getRangeIndices();
 
   const weekendDays = weekData
-    .filter((day, i) => !day.active)
+    .filter((day) => !day.active)
     .map((day) => day.dayName);
-
-  const workingHours =
-    selectedTimeSlots.length >= 2
-      ? `с ${selectedTimeSlots[0]} до ${
-          selectedTimeSlots[selectedTimeSlots.length - 1]
-        }`
-      : "";
 
   return (
     <SafeAreaView style={styles.container}>
@@ -103,15 +105,16 @@ const TimeWorkEdit: React.FC = () => {
           <Text style={styles.title}>Рабочие дни</Text>
         </View>
         <View style={styles.weekListContainer}>
-          {weekData && weekData.map(
-            (item, i) =>
-              item.active && (
-                <WeeklCard
-                  key={i}
-                  title={item.active && item.dayName.substring(0, 3)}
-                />
-              )
-          )}
+          {weekData &&
+            weekData.map(
+              (item, i) =>
+                item.active && (
+                  <WeeklCard
+                    key={i}
+                    title={item.active && item.dayName.substring(0, 3)}
+                  />
+                )
+            )}
         </View>
         <View>
           <Text style={[styles.title, { marginTop: 15 }]}>Время работы</Text>
@@ -161,7 +164,7 @@ const TimeWorkEdit: React.FC = () => {
         <Buttons
           title="Продолжить"
           onPress={() =>
-            putWorkTime(
+            postWorkTime(
               +selectedTimeSlots[0].substring(0, 1) === 0
                 ? +selectedTimeSlots[0].substring(1, 2)
                 : +selectedTimeSlots[0].substring(0, 2),
@@ -201,7 +204,6 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     flexWrap: "wrap",
-    // justifyContent: "space-between",
     paddingHorizontal: 10,
     alignItems: "center",
   },
@@ -210,17 +212,5 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "center",
     marginTop: 10,
-  },
-  resultsContainer: {
-    flex: 1,
-    padding: 20,
-  },
-  resultItem: {
-    padding: 10,
-    borderBottomColor: "white",
-    borderBottomWidth: 1,
-  },
-  resultText: {
-    color: "white",
   },
 });

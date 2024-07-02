@@ -11,7 +11,7 @@ import { getHelpOne } from '@/helpers/api-function/help/help';
 import heplStore from '@/helpers/state_managment/help/helpStore';
 
 
-const Help = () => {
+const HelpPage = () => {
     const { setNavigatName, setHelpDate} = heplStore()
 
     const services = [
@@ -114,4 +114,4 @@ const Help = () => {
         </SafeAreaView>
     );
 };
-export default Help;
+export default HelpPage;

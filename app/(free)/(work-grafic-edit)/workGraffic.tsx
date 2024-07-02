@@ -11,7 +11,7 @@ import CalendarGrafficEdit from "./calendar";
 import Toast from 'react-native-simple-toast';
 
 const GrafficWorkEdit: React.FC = () => {
-  const { calendarDate, setWeek, week } = graficWorkStore();
+  const { calendarDate, setWeek, week, weekData } = graficWorkStore();
 
   const [items, setItems] = useState<Item[]>([
     { id: 1, dayValue: "monday", dayName: "Понедельник", active: false },
@@ -23,6 +23,15 @@ const GrafficWorkEdit: React.FC = () => {
     { id: 7, dayValue: "sunday", dayName: "Воскресенье", active: false },
   ]);
 
+  useEffect(() => {
+    const updatedItems = items.map(item => {
+      const isWeekDataActive = weekData.some(
+        weekItem => weekItem.dayName.toLowerCase() === item.dayValue.toLowerCase() && weekItem.active
+      );
+      return { ...item, active: isWeekDataActive || item.active };
+    });
+    setItems(updatedItems);
+  }, [weekData]);
 
   const handleCategoryPress = (id: number) => {
     const updatedItems = items.map((item) =>
@@ -40,7 +49,6 @@ const GrafficWorkEdit: React.FC = () => {
     
     putWorkDay(week, calendarDate);
   };
-
 
   return (
     <SafeAreaView style={styles.container}>

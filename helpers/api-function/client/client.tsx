@@ -32,6 +32,7 @@ import {
     UpdateClient
 } from "@/type/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import Toast from "react-native-simple-toast";
 
 // id buyicha get me qiladi client ni
 export const getMeClient = async (setData: (val: any | null) => void, clientID: string) => {
@@ -352,22 +353,25 @@ export const fetchServices = (setData: (val: any[] | null) => void) => {
 };
 
 // feedback master post ilovaga baho berish
-export const addFeedbackMaster = (star: number | any, setToast: (val: boolean) => void) => {
+export const addFeedbackMaster = (star: number | any, setIsLoading: (val: boolean) => void, toggle?: () => void) => {
     const data = {
         count: star ? star : 0,
         masterId: null,
         orderId: null,
         text: null
     }
+    setIsLoading(true)
     if (data.count > 0) {
         axios.post(add_feedback, data, config)
             .then(res => {
-                if (res.data.success) setToast(true)
-                else setToast(false)
+                setIsLoading(false)
+                toggle && toggle()
+                if (res.data.success) Toast.show(`Вы оценили приложение на ${data.count}`, Toast.LONG)
             })
             .catch(err => {
+                setIsLoading(false)
                 console.log(err)
-                setToast(false)
+                toggle && toggle()
             })
     }
 }
