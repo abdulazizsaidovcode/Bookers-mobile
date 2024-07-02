@@ -4,7 +4,7 @@ import RequestCard from '@/components/(cards)/requestcard';
 import { OrderItem } from '../../availebleschedule';
 
 interface RequestsAccordionProps {
-  item: OrderItem[];
+  item: OrderItem[];  
 }
 
 const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items = [] }) => {
