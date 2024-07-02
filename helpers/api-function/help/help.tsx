@@ -6,7 +6,22 @@ import { router } from "expo-router";
 
 
 
-export const getHelp = (setData: (val: Help | null) => void, status: string, route: string) => {
+export const getHelpOne = (setData: (val: Help | null) => void, status: string, route: string) => {
+    axios
+      .get(`${help_url}${status}`, config)
+      .then((res) => {
+        if (res.data.success) {
+          setData(res.data.body);
+          router.push(route)
+        }
+        else {
+          setData(null)
+        }
+      })
+      .catch(() => setData(null))
+  };
+
+export const getHelpType = (setData: (val: Help | null) => void, status: string, route: string) => {
     axios
       .get(`${help_url}${status}`, config)
       .then((res) => {

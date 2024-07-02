@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, ScrollView, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { SelectList } from 'react-native-dropdown-select-list';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { getUser } from '@/helpers/api-function/getMe/getMee';
+import useGetMeeStore from '@/helpers/state_managment/getMee';
+import { getFile } from '@/helpers/api';
 
 const EditProfile: React.FC = () => {
-    const [name, setName] = useState<string>('Гузаль');
-    const [surname, setSurname] = useState<string>('Шерматова');
-    const [phone, setPhone] = useState<string>('93 171 63 80');
-    const [nickname, setNickname] = useState<string>('guzal_1987');
-    const [gender, setGender] = useState<string>('Женский');
-    const [age, setAge] = useState<string>('30-40 лет');
-    const [region, setRegion] = useState<string>('Ташкентский область');
+    const { getMee, setGetMee } = useGetMeeStore()
+
+    const [name, setName] = useState<string>(getMee.firstName);
+    const [surname, setSurname] = useState<string>(getMee.lastName);
+    const [phone, setPhone] = useState<string>(getMee.phoneNumber);
+    const [nickname, setNickname] = useState<string>(getMee.nickname);
+    const [gender, setGender] = useState<string>(getMee.gender);
+    const [age, setAge] = useState<string | null>(getMee.birthDate);
+    const [region, setRegion] = useState<string | null>(getMee.districtId);
     const [city, setCity] = useState<string>('Янгиюль');
-    const [telegram, setTelegram] = useState<string>('@guzal_1987');
-    const [instagram, setInstagram] = useState<string>('@guzalll_1987');
+    const [telegram, setTelegram] = useState<string | null>(getMee.telegram);
+    const [instagram, setInstagram] = useState<string | null>(getMee.instagram);
+
+
+    useEffect(() => {
+        getUser(setGetMee)
+        console.log(getMee);
+    }, [])
 
     const genderOptions = [
         { key: '1', value: 'Женский' },
@@ -47,14 +58,14 @@ const EditProfile: React.FC = () => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <NavigationMenu name='Мой профиль'/>
+                <NavigationMenu name='Мой профиль' />
 
                 <View style={styles.profileContainer}>
-                    <Image source={{ uri: 'https://picsum.photos/200/300' }} style={styles.avatar} />
+                    <Image source={getMee.attachmentId ? { uri: getFile + getMee.attachmentId } : require('@/assets/avatar.png')} style={styles.avatar} />
                     <View>
-                        <Text style={styles.profileName}>Гузаль Шерматова</Text>
-                        <Text style={styles.profilePhone}>+998 93 171 63 80</Text>
-                        <Text style={styles.profileUsername}>@guzal_1987</Text>
+                        <Text style={styles.profileName}>{getMee.firstName}{getMee.lastName}</Text>
+                        <Text style={styles.profilePhone}>{getMee.phoneNumber}</Text>
+                        <Text style={styles.profileUsername}>{getMee.nickname}</Text>
                     </View>
                 </View>
 

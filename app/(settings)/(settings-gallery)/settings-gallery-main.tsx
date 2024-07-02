@@ -10,6 +10,8 @@ import { getFile } from '@/helpers/api';
 import { fetchData } from '@/helpers/api-function/gallery/settings-gallery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import { Ionicons } from '@expo/vector-icons';
+import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
+import { router } from 'expo-router';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-gallery-main'>;
 const { width, height } = Dimensions.get('window');
@@ -77,7 +79,10 @@ const SettingsGalleryMain = () => {
                         {data.length === 0 ?
                             <Buttons onPress={() => navigation.navigate('(settings)/(settings-gallery)/settings-gallery')} icon={<AntDesign name="pluscircleo" size={20} color="white" />} title='Создать альбом' />
                             :
-                            <Buttons onPress={() => navigation.goBack()} title='На главную' />}
+                            <Buttons onPress={() => {
+                                putNumbers(5)
+                                router.push("(welcome)/Welcome");
+                            }} title='На главную' />}
                     </View>
                 </View>
             </ScrollView>

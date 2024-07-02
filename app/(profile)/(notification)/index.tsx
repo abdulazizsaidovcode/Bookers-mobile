@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { FontAwesome } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import NotificationCard from "./card/index";
 import axios from "axios";
 import { config } from "@/helpers/token";
@@ -19,6 +19,9 @@ import BottomModal from "@/components/(modals)/modal-bottom";
 import NotificationSelect from "@/helpers/state_managment/notification";
 import Buttons from "@/components/(buttons)/button";
 import CenteredModal from "@/components/(modals)/modal-centered";
+import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { router } from "expo-router";
+import NavigationMenu from "@/components/navigation/navigation-menu";
 
 const Notification: React.FC = () => {
   const navigation = useNavigation();
@@ -41,7 +44,7 @@ const Notification: React.FC = () => {
   };
 
   const deleteNotification = async () => {
-    const deleteData = notifications.map((item) => item.id);
+    const deleteData = notifications.map((item: any) => item.id);
     console.log(deleteData);
 
     try {
@@ -71,18 +74,23 @@ const Notification: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.padding}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <FontAwesome name="arrow-left" size={24} color="#fff" />
+          <TouchableOpacity onPress={() => {
+            putNumbers(7)
+            navigation.goBack()
+          }}>
+            <Feather name="chevron-left" size={30} color="white" onPress={() => navigation.goBack()} />
           </TouchableOpacity>
           <Text style={styles.headerText}>Уведомления</Text>
-          <TouchableOpacity onPress={() => setToggle(!toggle)}>
-            <FontAwesome name="trash" size={24} color="#fff" />
-          </TouchableOpacity>
+          {notifications && notifications.length > 0 ?
+            <TouchableOpacity onPress={() => setToggle(!toggle)}>
+              <FontAwesome name="trash" size={24} color="#fff" />
+            </TouchableOpacity>
+            : <View></View>}
         </View>
         {isLoading && <ActivityIndicator size="large" color={"#888"} />}
         {!isLoading && notifications.length === 0 && (
-          <Text style={tw`text-2xl text-center text-white mt-10`}>
-            Данные недоступны :(
+          <Text style={tw`text-xl text-center text-white mt-10`}>
+            Нет уведомлений
           </Text>
         )}
         <FlatList
@@ -90,7 +98,7 @@ const Notification: React.FC = () => {
           renderItem={({ item }) => (
             <NotificationCard item={item} isLoading={isLoading} />
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item: any) => item.id}
         />
       </View>
       <BottomModal isBottomModal={isModal} toggleBottomModal={onClose}>
@@ -133,17 +141,18 @@ const styles = StyleSheet.create({
   },
   padding: {
     padding: 16,
+    justifyContent: "center",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 16,
+    marginTop: 16,
   },
   headerText: {
     color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 20,
   },
 });
 

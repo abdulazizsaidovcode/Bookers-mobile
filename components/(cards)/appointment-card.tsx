@@ -1,27 +1,33 @@
-import React from 'react';
-import {StyleSheet, View, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Text, ScrollView} from 'react-native';
 import tw from "tailwind-react-native-classnames";
 import IconsButtons from "@/components/(buttons)/icon-btn";
+import {HistorySessions} from "@/type/client/client";
+import moment from "moment";
 
-const AppointmentCard = ({clicks, data, isBtn}: { clicks?: () => void, data: any[], isBtn?: boolean }) => {
+const AppointmentCard = ({clicks, serviceName, isBtn, data}: {
+    clicks?: () => void,
+    serviceName: string[],
+    isBtn?: boolean,
+    data: HistorySessions
+}) => {
     return (
-        <TouchableOpacity
+        <View
             style={[styles.container]}
-            activeOpacity={.9}
-            onPress={clicks}
         >
-            <Text style={styles.date}>Четверг, 28 февраля — 12:40</Text>
+            <Text style={styles.date}>
+                {moment(data.orderDate).format('dddd, DD MMMM')} {isBtn && `- ${data.startTime.slice(0, 5)}`}
+            </Text>
             <View style={styles.options}>
                 <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
                 >
-                    {data.map(client => (
-                        <Text style={[styles.option, {borderWidth: 1}]} key={client.id}>{client.name}</Text>
-                    ))}
+                    {serviceName.length > 0 && serviceName.map(item =>
+                        <Text style={[styles.option, {borderWidth: 1}]}>{item}</Text>
+                    )}
                 </ScrollView>
             </View>
-            <Text style={styles.price}>350 000 сум</Text>
+            <Text style={styles.price}>{data.servicePrice} сум</Text>
             {isBtn && (
                 <View style={[tw`flex-row items-center justify-between`]}>
                     <IconsButtons
@@ -36,7 +42,7 @@ const AppointmentCard = ({clicks, data, isBtn}: { clicks?: () => void, data: any
                     />
                 </View>
             )}
-        </TouchableOpacity>
+        </View>
     );
 };
 
@@ -48,21 +54,21 @@ const styles = StyleSheet.create({
     },
     date: {
         fontSize: 18,
-        marginBottom: 10,
+        marginBottom: 14,
         fontWeight: 'bold',
     },
     options: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
         width: '100%',
-        marginBottom: 10
+        marginBottom: 14
     },
     option: {
         backgroundColor: '#B9B9C9',
         paddingVertical: 5,
         paddingHorizontal: 10,
         borderRadius: 5,
-        marginRight: 10,
+        marginRight: 16,
         borderColor: '#4B4B64',
         color: '#4B4B64'
     },

@@ -9,16 +9,19 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import HomeCards from '@/components/(cards)/homeCard';
 import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
-import { getCategory_master, getGender_status, getSpecialization } from '@/helpers/api';
+import { getCategory_master, getGender_status, getSpecialization, master_get_Service } from '@/helpers/api';
 import { config } from '@/helpers/token';
 import { router } from 'expo-router';
+import { AntDesign } from '@expo/vector-icons';
+import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 
 const MyServicesScreen = () => {
     const route = useRoute();
     const { childCategoryData, categoryFatherId, setChildCategoryData } = servicesStore();
     const [gender, setGender] = useState([]);
-    const [specialization, setSpecialization] = useState([]); // Initial state with a placeholder
+    const [specialization, setSpecialization] = useState([]);
     const [category, setCategory] = useState([]);
+    const [categoryMaster, setCategoryMaster] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const { id } = route.params as { id: string };
     const [categories, setCategories] = useState([
@@ -49,26 +52,47 @@ const MyServicesScreen = () => {
         }
     };
 
-    // Function to fetch specialization data based on categoryFatherId
+    // Function to fetch specialization data based on categoryId
     const getSpecializationData = async (categoryId: string) => {
         try {
             const response = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
-            setSpecialization(response.data.body); // Assuming response.data.body is an array of specialization objects
+            setSpecialization(response.data.body);
         } catch (error) {
             console.error("Error fetching specializations:", error);
         }
     };
 
-    // Effect to fetch gender and category data on component mount
+    // Function to fetch master data based on categoryId
+    const getMasterData = async (categoryId: string) => {
+        try {
+            const response = await axios.get(`${master_get_Service}${categoryId}`, config);
+            setCategoryMaster(response.data.body);
+        } catch (error) {
+            console.error("Error fetching master services:", error);
+        }
+    };
+
+    // Function to translate gender names
+    const translateGender = (genders: string[]) => {
+        return genders.map((item) => {
+            if (item === "MALE") return "Мужская для взрослых";
+            else if (item === "FEMALE") return "Женское для взрослых";
+            else if (item === "MALE_CHILD") return "Мужская для детей";
+            else if (item === "FEMALE_CHILD") return "Женское для детей ";
+            else return item; // Handle other cases as needed
+        });
+    };
+
     useEffect(() => {
         getGender();
         getCategory();
     }, []);
 
-    // Function to handle category selection and fetch specialization data
+    // Handle category selection
     const handleCategorySelect = (categoryId: string, index: number) => {
         setSelectedCategory(index);
         getSpecializationData(categoryId);
+        getMasterData(categoryId);
     };
 
     return (
@@ -96,7 +120,7 @@ const MyServicesScreen = () => {
                             {gender.map((card) => (
                                 <HomeCards
                                     key={card.gender}
-                                    title={card.gender === 'MALE' ? 'Мужское' : 'Женское'}
+                                    title={card.gender === 'MALE' ? 'Мужское' : 'Женское'} // Translate gender name
                                     icon={() => <Ionicons name={card.gender === 'MALE' ? 'man-outline' : 'woman-outline'} size={30} color="white" />}
                                     description={card.description || 'Взрослое, Детский'}
                                 />
@@ -145,7 +169,7 @@ const MyServicesScreen = () => {
                         contentContainerStyle={{ gap: 16, marginBottom: 5 }}
                         showsHorizontalScrollIndicator={false}
                     >
-                        {specialization.map((item, index) => (
+                        {specialization.map((item) => (
                             <View key={item.id}>
                                 <TouchableOpacity>
                                     <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
@@ -158,31 +182,35 @@ const MyServicesScreen = () => {
                     <View style={tw`flex flex-row justify-between p-4 mb-2`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Процедуры услуг</Text>
                         <TouchableOpacity activeOpacity={0.6}>
-                            <MaterialIcons name="mode-edit" size={24} color="white" />
+                            <AntDesign name="pluscircleo" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
-                    <View style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
-                        <Text style={tw`font-bold text-xl`}>Мужская для взрослых</Text>
-                        <ScrollView
-                            horizontal
-                            contentContainerStyle={{ gap: 16, marginTop: 10, marginBottom: 5 }}
-                            showsHorizontalScrollIndicator={false}
-                        >
-                            {categories.map((category, index) => (
-                                <View key={index}>
-                                    <TouchableOpacity>
-                                        <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282] mb-2`}>{category}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            ))}
-                        </ScrollView>
-                        <Text style={[tw`font-bold text-xl mb-3`, { color: '#9C0A35' }]}>350 000 сум</Text>
-                        <Text style={tw`text-black mb-2`}>В услугу входит мытьё головы, массаж головы и Разнообразный и богатый опыт постоянный</Text>
-                    </View>
+                    {categoryMaster.map((item) => (
+                        <View key={item.id} style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
+                            <Text style = {tw`font-bold text-xl mb-3`}>{translateGender(item.genderNames).join(", ")}</Text>
+                            <ScrollView
+                                horizontal
+                                contentContainerStyle={{ gap: 16, marginBottom: 5 }}
+                                showsHorizontalScrollIndicator={false}
+                            >
+                                <TouchableOpacity>
+                                    <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
+                                </TouchableOpacity>
+                            </ScrollView>
+                            <Text style={[tw`font-bold text-xl mb-3`, { color: '#9C0A35' }]}>
+                                {item.price !== 0 ? `${item.price} сум` : 0}
+                            </Text>
+
+                            <Text style={tw`text-black mb-2`}>{item.description || 'Описание не предоставлено'}</Text>
+                        </View>
+                    ))}
 
                     {/* Navigation Button */}
                     <View style={tw`mb-10`}>
-                        <Buttons onPress={() => router.push('(welcome)/Welcome')} title='На главную' />
+                        <Buttons onPress={() => {
+                            putNumbers(2)
+                            router.push('(welcome)/Welcome')
+                        }} title='На главную' />
                     </View>
                 </ScrollView>
             </View>

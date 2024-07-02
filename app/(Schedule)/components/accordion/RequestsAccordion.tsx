@@ -1,72 +1,63 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { List } from 'react-native-paper';
-import RequestCard from '../RequestCard';
+import { View, StyleSheet, Text } from 'react-native';
+import RequestCard from '@/components/(cards)/requestcard';
+import { OrderItem } from '../../availebleschedule';
 
-const requests = [
-  {
-    name: 'Мелисара',
-    service: 'Стрижка, укладка, милирование',
-    date: '08:00',
-    time: '09:30',
-  },
-  {
-    name: 'Мелисара',
-    service: 'Стрижка, укладка, милирование',
-    date: '08:00',
-    time: '09:30',
-  },
-];
+interface RequestsAccordionProps {
+  items: OrderItem[];
+  onActionSuccess: () => void;
+  onShowModal: () => void;
+}
 
-const RequestsAccordion: React.FC = () => {
+const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items, onActionSuccess, onShowModal }) => {
   const handleApprove = (index: number) => {
     console.log(`Approved request ${index}`);
+    onActionSuccess();
+    onShowModal();
   };
 
   const handleReject = (index: number) => {
     console.log(`Rejected request ${index}`);
+    onActionSuccess();
+    onShowModal();
+  };
+
+  const extractTimeRange = (orderDate: string) => {
+    const timeRangeMatch = orderDate.match(/\d{2}:\d{2} - \d{2}:\d{2}/);
+    return timeRangeMatch ? timeRangeMatch[0] : '';
   };
 
   return (
-    <List.Accordion
-      title="Запросы клиентов на бронь"
-      titleStyle={styles.title}
-      style={styles.accordionContainer}
-      theme={{colors: { background: 'transParent' } }}
-    >
-      <View style={styles.accordionContent}>
-        {/* <Text style={styles.headerText}>Чт, Сегодня</Text> */}
-        {requests.map((request, index) => (
+    <View style={styles.accordionContent}>
+      {items.length > 0 ? (
+        items.map((request, index) => (
           <RequestCard
-            key={index}
-            name={request.name}
-            service={request.service}
-            date={request.date}
-            time={request.time}
+            key={request.orderId}
+            name={request.clientName}
+            service={request.categoryName}
+            clientAttachmentId={request.clientAttachmentId}
+            date={request.orderDate.split(' ')[0]} // Extracting just the date part for simplicity
+            time={extractTimeRange(request.orderDate)} // Extracting the time range
+            orderId={request.orderId} // Pass the orderId
             onApprove={() => handleApprove(index)}
             onReject={() => handleReject(index)}
           />
-        ))}
-      </View>
-    </List.Accordion>
+        ))
+      ) : (
+        <Text style={styles.noRequestsText}>No requests available</Text>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  accordionContainer: {
-    backgroundColor: 'transparent',
-    paddingLeft: 0,
-  },
-  title: {
-    color: '#fff',
-  },
   accordionContent: {
-    padding: 10,
+    // padding: 10,
   },
-  headerText: {
+  noRequestsText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    textAlign: 'center',
+    color: '#999',
   },
 });
 

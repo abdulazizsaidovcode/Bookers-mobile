@@ -1,6 +1,7 @@
 import {View, Text} from 'react-native'
 import tw from 'tailwind-react-native-classnames'
 import {FinanceMonth} from "@/type/finance/finance";
+import moment from "moment";
 
 const FinanceRevenuesMonth = ({items}: FinanceMonth | any) => {
     return (
@@ -14,7 +15,7 @@ const FinanceRevenuesMonth = ({items}: FinanceMonth | any) => {
                 </Text>
             </View>
             <Text style={[tw`text-base my-4`, {color: '#4F4F4F'}]}>
-                {items ? items.date : 'loading...'}
+                {items ? `${moment(items.date.slice(0, 10)).format('DD.MM.YYYY')} - ${moment(items.date.slice(12, 23)).format('DD.MM.YYYY')}` : 'loading...'}
             </Text>
             <View style={[tw`flex-row justify-between items-center`]}>
                 <Text style={[tw`text-base`, {color: '#4F4F4F'}]}>Доход:</Text>

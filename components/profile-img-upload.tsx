@@ -1,4 +1,4 @@
-import {TouchableOpacity, Image, Text, StyleSheet, View, TouchableWithoutFeedback, Platform} from 'react-native';
+import {TouchableOpacity, Image, Text, StyleSheet, View, TouchableWithoutFeedback, Alert} from 'react-native';
 import React, {useState, useEffect} from "react";
 import * as ImagePicker from 'expo-image-picker';
 import CenteredModal from "@/components/(modals)/modal-centered";
@@ -7,7 +7,7 @@ import BottomModal from "@/components/(modals)/modal-bottom";
 import {MaterialIcons} from '@expo/vector-icons';
 import axios from "axios";
 import {getFile, postFileId} from "@/helpers/api";
-import {config} from "@/helpers/token";
+import {imageConfig} from "@/helpers/token";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 
 const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
@@ -75,16 +75,19 @@ const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
         if (!val) return;
 
         const formData = new FormData();
-        formData.append('file', val)
+        formData.append('file', {
+            uri: val.uri,
+            name: val.fileName,
+            type: val.mimeType
+        });
 
-        axios.post(postFileId, formData, config)
-            .then(res => {
-                console.log('success: ', res)
-                if (res.data.success) setAttachmentID(res.data.body)
-            })
-            .catch(err => {
-                console.error('error: ', err)
-            })
+        try {
+            const response = await axios.post(postFileId, formData, imageConfig);
+            if (response.data.success) setAttachmentID(response.data.body)
+            else console.error('Upload failed:', response.data.message)
+        } catch (err) {
+            console.error('error:', err);
+        }
     };
 
     return (

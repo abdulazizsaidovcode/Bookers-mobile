@@ -1,17 +1,17 @@
-import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ServicesCategory from "@/components/services/servicesCatgegory";
 import Buttons from "@/components/(buttons)/button";
-import { useRouter } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { Item } from "@/type/graficWork/graficWork";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import { putWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
-import CalendarGrafficEdit from "../(work-grafic-edit)/calendar";
+import { postWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import CalendarGrafficEdit from "./calendar";
+import Toast from 'react-native-simple-toast';
 
-const GrafficWork: React.FC = () => {
-  const { calendarDate, setWeek, week } = graficWorkStore();
+const GrafficWorkEdit: React.FC = () => {
+  const { calendarDate, setWeek, week, weekData } = graficWorkStore();
 
   const [items, setItems] = useState<Item[]>([
     { id: 1, dayValue: "monday", dayName: "Понедельник", active: false },
@@ -23,9 +23,15 @@ const GrafficWork: React.FC = () => {
     { id: 7, dayValue: "sunday", dayName: "Воскресенье", active: false },
   ]);
 
-  const router = useRouter();
-
-  
+  useEffect(() => {
+    const updatedItems = items.map(item => {
+      const isWeekDataActive = weekData.some(
+        weekItem => weekItem.dayName.toLowerCase() === item.dayValue.toLowerCase() && weekItem.active
+      );
+      return { ...item, active: isWeekDataActive || item.active };
+    });
+    setItems(updatedItems);
+  }, [weekData]);
 
   const handleCategoryPress = (id: number) => {
     const updatedItems = items.map((item) =>
@@ -35,7 +41,14 @@ const GrafficWork: React.FC = () => {
     setWeek(updatedItems.map((item) => ({ dayName: item.dayValue, active: item.active })));
   };
 
-
+  const handleContinuePress = () => {
+    if (!calendarDate || !week.some(day => day.active)) {
+      Toast.show('Пожалуйста, выберите дату начала работы и хотя бы один рабочий день.', Toast.LONG);
+      return;
+    }
+    
+    postWorkDay(week, calendarDate);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,7 +74,7 @@ const GrafficWork: React.FC = () => {
           <View style={{ padding: 10 }}>
             <Buttons
               title="Продолжить"
-              onPress={() => putWorkDay(week, calendarDate)}
+              onPress={handleContinuePress}
             />
           </View>
         </View>
@@ -70,7 +83,7 @@ const GrafficWork: React.FC = () => {
   );
 };
 
-export default GrafficWork;
+export default GrafficWorkEdit;
 
 const styles = StyleSheet.create({
   container: {

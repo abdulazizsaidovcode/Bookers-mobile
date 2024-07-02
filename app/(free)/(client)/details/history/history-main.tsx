@@ -3,41 +3,33 @@ import ProfileHistoryCard from "@/components/(cards)/profile-history-card";
 import Entypo from "@expo/vector-icons/Entypo";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {HistoryCount} from "@/type/client/client";
-import {View} from "react-native";
-import AppointmentCard from "@/components/(cards)/appointment-card";
+import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {RootStackParamList} from "@/type/root";
 
-const HistoryMain = ({countData}: { countData: HistoryCount | null }) => {
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
+
+const HistoryMain = ({countData, clientID}: { countData: HistoryCount | null, clientID: string | any }) => {
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
     return (
         <>
             <ProfileHistoryCard
                 name={`Предстоящие записи`}
                 icon={<Entypo name="calendar" size={30} color="#9C0A35"/>}
                 count={countData ? countData.upcomingSessions : 0}
+                clicks={() => navigation.navigate('(free)/(client)/details/history/upcoming-history', {clientID})}
             />
             <ProfileHistoryCard
                 name={`Прошедшие записи`}
                 icon={<Entypo name="hour-glass" size={30} color="#9C0A35"/>}
                 count={countData ? countData.pastSessions : 0}
+                clicks={() => navigation.navigate('(free)/(client)/details/history/past-history', {clientID})}
             />
             <ProfileHistoryCard
                 name={`Отменённые записи`}
                 icon={<MaterialCommunityIcons name="cancel" size={30} color="#9C0A35"/>}
                 count={countData ? countData.cancelledSessions : 0}
+                clicks={() => navigation.navigate('(free)/(client)/details/history/canceled-history', {clientID})}
             />
-            <View>
-                <AppointmentCard
-                    data={[
-                        {id: 1, name: 'aaaa'},
-                        {id: 2, name: 'bbbb'},
-                        {id: 3, name: 'cccc'},
-                        {id: 4, name: 'dddd'},
-                        {id: 5, name: 'eeee'},
-                        {id: 6, name: 'jikdsu'},
-                        {id: 7, name: 'estgfa'},
-                        {id: 8, name: 'eastfgw'},
-                    ]}
-                />
-            </View>
         </>
     );
 };

@@ -2,8 +2,6 @@ import {View, ScrollView, StatusBar, Text} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import {Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
-import ClientsBtn from "@/components/(buttons)/clients-btn";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import {RouteProp, useRoute} from '@react-navigation/native'
@@ -15,8 +13,6 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
 import {addClientMessage, getHistoryCount} from "@/helpers/api-function/client/client";
 import FiltersButton from "@/components/(buttons)/filters-button";
-import ProfileHistoryCard from "@/components/(cards)/profile-history-card";
-import Entypo from "@expo/vector-icons/Entypo";
 import HistoryMain from "@/app/(free)/(client)/details/history/history-main";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
@@ -32,7 +28,7 @@ const DetailMain = () => {
     const [role, setRole] = useState('basics')
 
     useEffect(() => {
-        getHistoryCount(setHistoryCountData)
+        getHistoryCount(setHistoryCountData, infoClient.id)
     }, []);
 
     useEffect(() => {
@@ -54,23 +50,23 @@ const DetailMain = () => {
                         <View style={[tw`mt-4 flex-row justify-start items-center mb-10`, {gap: 16}]}>
                             <FiltersButton
                                 title={`Основное`}
-                                isDisebled={role !== 'basics' ? true : false}
+                                isDisebled={role !== 'basics'}
                                 onPress={() => setRole('basics')}
                             />
                             <FiltersButton
                                 title={`История`}
-                                isDisebled={role !== 'history' ? true : false}
+                                isDisebled={role !== 'history'}
                                 onPress={() => setRole('history')}
                             />
                             <FiltersButton
                                 title={`Профиль`}
-                                isDisebled={role !== 'profile' ? true : false}
+                                isDisebled={role !== 'profile'}
                                 onPress={() => setRole('profile')}
                             />
                         </View>
                         <View>
                             {role === 'basics' && <ClientDetailBasic client={infoClient}/>}
-                            {role === 'history' && <HistoryMain countData={historyCountData} />}
+                            {role === 'history' && <HistoryMain countData={historyCountData} clientID={infoClient.id} />}
                             {role === 'profile' && ''}
                         </View>
 

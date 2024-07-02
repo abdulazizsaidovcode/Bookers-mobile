@@ -27,8 +27,6 @@ import Category from "./(standart)/(services)/(category)/category";
 import Upcomingentries from "./(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries";
 import PastEntries from "./(profile)/(sessionhistory)/components/Pastentries/Pastentries";
 import Canceledentries from "./(profile)/(sessionhistory)/components/Canceledentries/Canceledentries";
-import SettingsLocation from "./(settings)/(settings-location)/settings-locations";
-import SettingsLocationMain from "./(settings)/(settings-location)/settings-locations-main";
 import SettingsGallery from "./(settings)/(settings-gallery)/settings-gallery";
 import Settings from "./(profile)/(settings)/settings";
 import { StompProvider } from "@/context/StompContext";
@@ -91,6 +89,10 @@ import ScheuleAllClient from "./(Schedule)/components/users";
 import Schedule from "./(Schedule)/Schedule";
 import RecordsInformation from "@/app/(free)/(client)/details/records-information";
 import CenseledSession from "@/app/(detail)/censeled-session";
+import UpcomingHistory from "@/app/(free)/(client)/details/history/upcoming-history";
+import PastHistory from "@/app/(free)/(client)/details/history/past-history";
+import CanceledHistory from "@/app/(free)/(client)/details/history/canceled-history";
+import NotificationSettings from "./(notifications)/notifications";
 
 const Stack = createNativeStackNavigator();
 
@@ -274,18 +276,8 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(settings)/(settings-location)/settings-locations-main"
-              component={SettingsLocationMain}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="(settings)/(settings-gallery)/gallery-details"
               component={GalleryDetails}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="(settings)/(settings-location)/settings-locations"
-              component={SettingsLocation}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -326,6 +318,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(standart)/(services)/(category)/category"
               component={Category}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/notifications"
+              component={NotificationSettings}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -407,6 +404,21 @@ function RootLayoutNav() {
               name="(free)/(client)/details/detail-main"
               component={DetailMain}
               options={{ title: "ClientDetailMain", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/details/history/upcoming-history"
+              component={UpcomingHistory}
+              options={{ title: "UpcomingHistory", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/details/history/past-history"
+              component={PastHistory}
+              options={{ title: "PastHistory", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/details/history/canceled-history"
+              component={CanceledHistory}
+              options={{ title: "CanceledHistory", headerShown: false }}
             />
             <Stack.Screen
               name="(location)/Location"

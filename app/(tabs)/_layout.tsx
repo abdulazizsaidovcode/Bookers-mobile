@@ -1,5 +1,5 @@
 // TabLayout.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   FontAwesome,
@@ -16,12 +16,25 @@ import ScheduleScreen from "./schedule";
 import Colors from "@/constants/Colors";
 import { TabBarIcon } from "../../components/navigation/TabBarIcon";
 import Location from "../(location)/Location";
+import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
+import { getMee } from "@/helpers/token";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabLayout() {
-  
   const colorScheme = useColorScheme();
+  const { getme, setGetMee } = graficWorkStore();
+  const [tariff, setTariff] = useState(null);
+
+  useEffect(() => {
+    getMee(setGetMee);
+  }, []);
+
+  useEffect(() => {
+    if (getme) {
+      setTariff(getme.tariff);
+    }
+  }, [getme]);
 
   return (
     <Tab.Navigator
@@ -29,7 +42,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: "#9c0935",
         tabBarInactiveTintColor: "gray",
         tabBarStyle: {
-          backgroundColor: "#2b2b2b",
+          backgroundColor: "#21212E",
         },
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
@@ -89,16 +102,18 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tab.Screen
-        name="finance"
-        component={Finance}
-        options={{
-          title: "Финансы",
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="finance" size={24} color={color} />
-          ),
-        }}
-      />
+      {tariff === "standart" && (
+        <Tab.Screen
+          name="finance"
+          component={Finance}
+          options={{
+            title: "Финансы",
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="finance" size={24} color={color} />
+            ),
+          }}
+        />
+      )}
       <Tab.Screen
         name="chat"
         component={ChatScreen}
