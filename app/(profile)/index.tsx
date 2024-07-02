@@ -4,7 +4,7 @@ import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
-import { getUser } from '@/helpers/api-function/getMee';
+import { getUser } from '@/helpers/api-function/getMe/getMee';
 import { getFile } from '@/helpers/api';
 
 const ProfilePage: React.FC = () => {
