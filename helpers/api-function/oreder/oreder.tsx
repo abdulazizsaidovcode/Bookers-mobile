@@ -102,6 +102,8 @@ export const getMasterOrderHall = (setHallData: any) => {
 
 // master orderni confirm reject qilish
 
+// status == CONFIRMED, REJECTED, COMPLETED
+
 export const masterOrderConfirm = (orderID: string, setLoading: any, status: string) => {
     setLoading(true)
     axios.put(`${master_order_confirm}?orderId=${orderID}&status=${status}`, {},config)
