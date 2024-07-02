@@ -6,208 +6,242 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import PieChart from 'react-native-pie-chart';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { RootStackParamList } from "@/type/root";
-import { editOrderStatus, fetchDaylyOrderTimes, fetchMainStatistic, fetchWaitingOrders } from "@/helpers/api-function/dashboard/dashboard";
+import { editOrderStatus, fetchDaylyOrderTimes, fetchHallingOrders, fetchMainStatistic, fetchWaitingOrders } from "@/helpers/api-function/dashboard/dashboard";
 import useDashboardStore from "@/helpers/state_managment/dashboard/dashboard";
-import { DashboardDailyTimeOrders, DashboardWaitingOrder } from "@/type/dashboard/dashboard";
+import { BookingRequestsHallProps, BookingRequestsProps, DashboardDailyTimeOrders, DashboardWaitingOrder, RenderBookingRequestProps, ScheduleSectionProps, StatisticsProps, StatusContainerProps } from "@/type/dashboard/dashboard";
 import { getFile } from "@/helpers/api";
 import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
-
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
+const COLORS = {
+	background: "#21212e",
+	white: "white",
+	gray: "gray",
+	booked: "#219653",
+	free: "#828282",
+	vip: "#9C0A35",
+	new: "#00A1D3",
+	cardBackground: "#B9B9C9",
+	mainRed: "#9C0A35",
+};
 
-export default function TabOneScreen() {
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
+
+const TabOneScreen: React.FC = () => {
 	const navigation = useNavigation<SettingsScreenNavigationProp>();
-	const { mainStatisticData, waitingData, dailyTimeData, isModal, setIsModal, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
+	const { mainStatisticData, waitingData, dailyTimeData, isModal, hallData, setHallData, setIsModal, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
 
 	useEffect(() => {
 		fetchDaylyOrderTimes(setDailyTimeData);
 		fetchMainStatistic(setMainStatisticData);
 		fetchWaitingOrders(setWaitingData);
+		fetchHallingOrders(setHallData);
 	}, []);
 
 	const toggleConfirmModal = () => {
 		setIsModal(!isModal)
 	}
 
-	let chartFraction = mainStatisticData.completedSessions;
-	let chartSeparatorIndex = chartFraction.indexOf('/');
+	const toggleRejectModal = () => {
+		setIsModal(!isModal)
+	}
 
-	let chartNumerator = chartFraction.slice(0, chartSeparatorIndex);
-	let chartDenominator = chartFraction.slice(chartSeparatorIndex + 1);
-
-	let statisticFraction = mainStatisticData.incomeToday;
-	let statisticSeparatorIndex = statisticFraction.indexOf('/');
-
-	let statisticNumerator = statisticFraction.slice(0, statisticSeparatorIndex);
-	let statisticDenominator = statisticFraction.slice(statisticSeparatorIndex + 1);
+	const chartFraction = mainStatisticData.completedSessions;
+	const [chartNumerator, chartDenominator] = chartFraction.split('/');
+	const statisticFraction = mainStatisticData.incomeToday;
+	const [statisticNumerator, statisticDenominator] = statisticFraction.split('/');
 	const regularVisitCount = dailyTimeData.filter(item => item.type === 'REGULAR_VISIT').length;
 	const notVisitCount = dailyTimeData.filter(item => item.type === 'NOT_VISIT').length;
 	const vipCientsCount = dailyTimeData.filter(item => item.type === 'VIP').length;
 	const newClientsCount = dailyTimeData.filter(item => item.type === 'NEW').length;
 
-
-	const renderTimeSlot: React.FC<{ item: DashboardDailyTimeOrders }> = ({ item }) => (
-		<View style={[styles.timeSlot,
-		item.type === 'REGULAR_VISIT' ? styles.bookedSlot :
-			item.type === 'NOT_VISIT' ? styles.freeSlot :
-				item.type === 'VIP' ? styles.vipSlot :
-					styles.newSlot]}>
-			<Text style={{ color: 'white' }}>{item.time.slice(0, 5)}</Text>
-		</View>
-	);
-
-	const renderBookingRequest: React.FC<{ item: DashboardWaitingOrder }> = ({ item }) => (
-		<View style={styles.bookingCard}>
-			<View style={styles.cardHeader}>
-				<Text style={styles.newRequestText}> <FontAwesome name="star" size={12} color="#217355" />Новый Запрос</Text>
-			</View>
-			<View style={{ flexDirection: 'row', gap: 10, paddingVertical: 10 }}>
-				<View>
-					<Image source={item.clientAttachmentId ? { uri: getFile + item.clientAttachmentId } : require('../../assets/avatar.png')} style={styles.profileImage} />
-				</View>
-				<View>
-					<Text style={styles.userName}>{item.clientName}</Text>
-					<Text style={styles.serviceText}>{item.categoryName}</Text>
-				</View>
-			</View>
-			<View style={{ borderWidth: 1, borderColor: '#4F4F4F', width: 150, padding: 3, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
-				<Text style={{ color: '#4F4F4F', fontSize: 12 }}>{item.categoryName}</Text>
-			</View>
-			<Text style={styles.timeText}>{item.orderDate}</Text>
-			<View style={styles.actionButtons}>
-				<TouchableOpacity style={styles.approveButton}>
-					<Text style={styles.buttonText} onPress={toggleConfirmModal}>Одобрить</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.rejectButton}>
-					<Text style={{ color: '#9C0A35', fontWeight: 'bold' }} onPress={() => editOrderStatus(setWaitingData, item.orderId, 'REJECTED')}>Отклонить</Text>
-				</TouchableOpacity>
-			</View>
-			<CenteredModal isModal={isModal} toggleModal={toggleConfirmModal} isFullBtn btnRedText="Отменить" onConfirm={() => editOrderStatus(setWaitingData, item.orderId, 'REJECTED', toggleConfirmModal)} btnWhiteText="Назад">
-				<View>
-					<Text style={{ fontSize: 17, color: 'white', textAlign: 'center' }}>Вы уверены, что хотите отменить этот заказ?</Text>
-				</View>
-			</CenteredModal>
-		</View>
-	);
-
 	return (
 		<SafeAreaView style={styles.container}>
 			<ScrollView>
-				<View style={styles.header}>
-					<Text style={styles.title}>Главная</Text>
-					<View style={styles.headerIcons}>
-						<Ionicons name="notifications" size={24} color="white" style={{ marginRight: 16 }} />
-						<Ionicons name="share-social-outline" size={24} color="white" />
-					</View>
-				</View>
-				<View style={styles.scheduleSection}>
-					<Text style={styles.sectionTitle}>Расписание на сегодня</Text>
-					<Text style={styles.sectionSubtitle}>Время работы: с 8:00 до 22:00</Text>
-				</View>
-				<FlatList
-					data={dailyTimeData}
-					renderItem={renderTimeSlot}
-					keyExtractor={item => item.time}
-					horizontal
-					style={{ paddingVertical: 10 }}
-					showsHorizontalScrollIndicator={false}
-					contentContainerStyle={styles.scheduleContainer}
-				/>
-				<View style={styles.statusContainer}>
-					<View style={styles.daylyStatus}>
-						<View style={[styles.statusColor, { backgroundColor: '#219653' }]}></View>
-						<Text style={styles.statusText}>Забронировано ({regularVisitCount | 0})</Text>
-					</View>
-					<View style={styles.daylyStatus}>
-						<View style={[styles.statusColor, { backgroundColor: '#828282' }]}></View>
-						<Text style={styles.statusText}>Свободно ({notVisitCount | 0})</Text>
-					</View>
-					<View style={styles.daylyStatus}>
-						<View style={[styles.statusColor, { backgroundColor: '#9C0A35' }]}></View>
-						<Text style={styles.statusText}>VIP клиенты ({vipCientsCount | 0})</Text>
-					</View>
-					<View style={styles.daylyStatus}>
-						<View style={[styles.statusColor, { backgroundColor: '#00A1D3' }]}></View>
-						<Text style={styles.statusText}>Новые клиенты ({newClientsCount | 0})</Text>
-					</View>
-				</View>
-				<View style={styles.statsSection}>
-					<View style={styles.statsContainer}>
-						<Text style={styles.statsTitle}>Выполнено сеансов</Text>
-						<PieChart
-							widthAndHeight={100}
-							series={[4, 1]}
-							sliceColor={['#9C0A35', '#21212E']}
-							coverRadius={0.6}
-							coverFill={'#B9B9C9'}
-						/>
-						<Text style={styles.statsText}>{mainStatisticData.completedSessions} Сеансы</Text>
-					</View>
-					<View style={styles.statsContainer}>
-						<Text style={styles.statsTitle}>Доход сегодня</Text>
-						<Text style={styles.incomeText}>{statisticNumerator ? statisticNumerator : 0}</Text>
-						<Text style={styles.incomeTextSmall}>из</Text>
-						<Text style={styles.incomeText}>{statisticDenominator ? statisticDenominator : 0}</Text>
-					</View>
-				</View>
-				<View style={styles.cardsSection}>
-					<View style={styles.card}>
-						<Text style={styles.cardTitle}>Отменённые сеансы</Text>
-						<Text style={{ color: '#9C0A35', fontSize: 24, fontWeight: 'bold', }}>{mainStatisticData.rejectedOrder}</Text>
-					</View>
-					<View style={[styles.card, styles.incomeCard]}>
-						<Text style={{ color: 'white' }}>Доход в этом месяце</Text>
-						<Text style={styles.cardValue}>{mainStatisticData.incomeThisMonth}</Text>
-					</View>
-				</View>
-				{waitingData.length === 0 ? '' :
-					<View>
-						<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
-							<Text style={{ color: 'white', fontSize: 20 }}>Запросы на бронь</Text>
-							<View style={styles.headerRight}>
-								<Text style={styles.requestsCount}>{waitingData.length} заявки</Text>
-							</View>
-						</View>
-						<FlatList
-							data={waitingData}
-							renderItem={renderBookingRequest}
-							keyExtractor={item => item.orderId}
-							horizontal
-							showsHorizontalScrollIndicator={false}
-							contentContainerStyle={styles.bookingList}
-						/>
-					</View>
-				}
-				{waitingData.length === 0 ? '' :
-					<View>
-						<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
-							<Text style={{ color: 'white', fontSize: 20 }}>Запросы окошка</Text>
-							<View style={styles.headerRight}>
-								<Text style={styles.requestsCount}>{waitingData.length} заявки</Text>
-							</View>
-						</View>
-						<FlatList
-							data={waitingData}
-							renderItem={renderBookingRequest}
-							keyExtractor={item => item.orderId}
-							horizontal
-							showsHorizontalScrollIndicator={false}
-							contentContainerStyle={styles.bookingList}
-						/>
-					</View>
-				}
+				<Header />
+				<ScheduleSection dailyTimeData={dailyTimeData} regularVisitCount={regularVisitCount} notVisitCount={notVisitCount} vipCientsCount={vipCientsCount} newClientsCount={newClientsCount} />
+				<Statistics mainStatisticData={mainStatisticData} chartNumerator={chartNumerator} chartDenominator={chartDenominator} statisticNumerator={statisticNumerator} statisticDenominator={statisticDenominator} />
+				<CardsSection mainStatisticData={mainStatisticData} />
+				<BookingRequests setWaitingData={setWaitingData} waitingData={waitingData} toggleConfirmModal={toggleConfirmModal} isModal={isModal} />
+				<BookingRequestsHall setHallData={setHallData} hallData={hallData} toggleConfirmModal={toggleConfirmModal} isModal={isModal} />
 			</ScrollView>
 		</SafeAreaView>
 	);
-}
+};
+
+const Header: React.FC = () => (
+	<View style={styles.header}>
+		<Text style={styles.title}>Главная</Text>
+		<View style={styles.headerIcons}>
+			<Ionicons name="notifications" size={24} color={COLORS.white} style={{ marginRight: 16 }} />
+			<Ionicons name="share-social-outline" size={24} color={COLORS.white} />
+		</View>
+	</View>
+);
+const ScheduleSection: React.FC<ScheduleSectionProps> = ({ dailyTimeData, regularVisitCount, notVisitCount, vipCientsCount, newClientsCount }) => (
+	<>
+		<View style={styles.scheduleSection}>
+			<Text style={styles.sectionTitle}>Расписание на сегодня</Text>
+			<Text style={styles.sectionSubtitle}>Время работы: с 8:00 до 22:00</Text>
+		</View>
+		<FlatList
+			data={dailyTimeData}
+			renderItem={renderTimeSlot}
+			keyExtractor={item => item.time}
+			horizontal
+			style={{ paddingVertical: 10 }}
+			showsHorizontalScrollIndicator={false}
+			contentContainerStyle={styles.scheduleContainer}
+		/>
+		<StatusContainer regularVisitCount={regularVisitCount} notVisitCount={notVisitCount} vipCientsCount={vipCientsCount} newClientsCount={newClientsCount} />
+	</>
+);
+
+const Statistics: React.FC<StatisticsProps> = ({ mainStatisticData, chartNumerator, chartDenominator, statisticNumerator, statisticDenominator }) => (
+	<View style={styles.statsSection}>
+		<View style={styles.statsContainer}>
+			<Text style={styles.statsTitle}>Выполнено сеансов</Text>
+			<PieChart
+				widthAndHeight={100}
+				series={[4, 1]}
+				sliceColor={[COLORS.mainRed, COLORS.background]}
+				coverRadius={0.6}
+				coverFill={COLORS.cardBackground}
+			/>
+			<Text style={styles.statsText}>{mainStatisticData.completedSessions} Сеансы</Text>
+		</View>
+		<View style={styles.statsContainer}>
+			<Text style={styles.statsTitle}>Доход сегодня</Text>
+			<Text style={styles.incomeText}>{statisticNumerator || 0}</Text>
+			<Text style={styles.incomeTextSmall}>из</Text>
+			<Text style={styles.incomeText}>{statisticDenominator || 0}</Text>
+		</View>
+	</View>
+);
+
+const CardsSection: React.FC<{ mainStatisticData: any; }> = ({ mainStatisticData }) => (
+	<View style={styles.cardsSection}>
+		<View style={styles.card}>
+			<Text style={styles.cardTitle}>Отменённые сеансы</Text>
+			<Text style={{ color: COLORS.mainRed, fontSize: 24, fontWeight: 'bold', }}>{mainStatisticData.rejectedOrder}</Text>
+		</View>
+		<View style={[styles.card, styles.incomeCard]}>
+			<Text style={{ color: COLORS.white }}>Доход в этом месяце</Text>
+			<Text style={styles.cardValue}>{mainStatisticData.incomeThisMonth}</Text>
+		</View>
+	</View>
+);
+
+const BookingRequests: React.FC<BookingRequestsProps> = ({ waitingData, toggleConfirmModal, isModal, setWaitingData }) => (
+	waitingData.length > 0 && (
+		<View>
+			<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
+				<Text style={{ color: COLORS.white, fontSize: 20 }}>Запросы на бронь</Text>
+				<View style={styles.headerRight}>
+					<Text style={styles.requestsCount}>{waitingData.length} заявки</Text>
+				</View>
+			</View>
+			<FlatList
+				data={waitingData}
+				renderItem={(props) => renderBookingRequest({ ...props, toggleConfirmModal, isModal, setWaitingData })}
+				keyExtractor={item => item.orderId}
+				horizontal
+				showsHorizontalScrollIndicator={false}
+				contentContainerStyle={styles.bookingList}
+			/>
+		</View>
+	)
+);
+
+const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({ hallData, toggleConfirmModal, isModal, setHallData }) => (
+	hallData.length > 0 && (
+		<View>
+			<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
+				<Text style={{ color: COLORS.white, fontSize: 20 }}>Запросы окошка</Text>
+				<View style={styles.headerRight}>
+					<Text style={styles.requestsCount}>{hallData.length} заявки</Text>
+				</View>
+			</View>
+			<FlatList
+				data={hallData}
+				renderItem={(props: any) => renderBookingRequest({ ...props, toggleConfirmModal, isModal, setHallData})}
+				keyExtractor={item => item.orderId}
+				horizontal
+				showsHorizontalScrollIndicator={false}
+				contentContainerStyle={styles.bookingList}
+			/>
+		</View>
+	)
+);
+
+const renderTimeSlot: React.FC<{ item: DashboardDailyTimeOrders }> = ({ item }) => (
+	<View style={[
+		styles.timeSlot,
+		item.type === 'REGULAR_VISIT' ? styles.bookedSlot :
+			item.type === 'NOT_VISIT' ? styles.freeSlot :
+				item.type === 'VIP' ? styles.vipSlot :
+					styles.newSlot
+	]}>
+		<Text style={{ color: COLORS.white }}>{item.time.slice(0, 5)}</Text>
+	</View>
+);
+
+const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({ item, toggleConfirmModal, isModal, setWaitingData }) => (
+	<View style={styles.bookingCard}>
+		<View style={styles.cardHeader}>
+			<Text style={styles.newRequestText}> <FontAwesome name="star" size={12} color="#217355" />Новый Запрос</Text>
+		</View>
+		<View style={{ flexDirection: 'row', gap: 10, paddingVertical: 10 }}>
+			<View>
+				<Image source={item.clientAttachmentId ? { uri: getFile + item.clientAttachmentId } : require('../../assets/avatar.png')} style={styles.profileImage} />
+			</View>
+			<View>
+				<Text style={styles.userName}>{item.clientName}</Text>
+				<Text style={styles.serviceText}>{item.categoryName}</Text>
+			</View>
+		</View>
+		<View style={{ borderWidth: 1, borderColor: '#4F4F4F', width: 150, padding: 3, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
+			<Text style={{ color: '#4F4F4F', fontSize: 12 }}>{item.categoryName}</Text>
+		</View>
+		<Text style={styles.timeText}>{item.orderDate}</Text>
+		<View style={styles.actionButtons}>
+			<TouchableOpacity style={styles.approveButton}>
+				<Text style={styles.buttonText} onPress={toggleConfirmModal}>Одобрить</Text>
+			</TouchableOpacity>
+			<TouchableOpacity style={styles.rejectButton}>
+				<Text style={{ color: COLORS.mainRed, fontWeight: 'bold' }} onPress={() => editOrderStatus(setWaitingData, item.orderId, 'REJECTED')}>Отклонить</Text>
+			</TouchableOpacity>
+		</View>
+		<CenteredModal isModal={isModal} toggleModal={toggleConfirmModal} isFullBtn btnRedText="Отменить" onConfirm={() => editOrderStatus(setWaitingData, item.orderId, 'REJECTED', toggleConfirmModal)} btnWhiteText="Назад">
+			<View>
+				<Text style={{ fontSize: 17, color: COLORS.white, textAlign: 'center' }}>Вы уверены, что хотите отменить этот заказ?</Text>
+			</View>
+		</CenteredModal>
+	</View>
+);
+
+const StatusContainer: React.FC<StatusContainerProps> = ({ regularVisitCount, notVisitCount, vipCientsCount, newClientsCount }) => (
+	<View style={styles.statusContainer}>
+		<StatusIndicator color={COLORS.booked} text={`Забронировано (${regularVisitCount || 0})`} />
+		<StatusIndicator color={COLORS.free} text={`Свободно (${notVisitCount || 0})`} />
+		<StatusIndicator color={COLORS.vip} text={`VIP клиенты (${vipCientsCount || 0})`} />
+		<StatusIndicator color={COLORS.new} text={`Новые клиенты (${newClientsCount || 0})`} />
+	</View>
+);
+
+const StatusIndicator: React.FC<{ color: string, text: string }> = ({ color, text }) => (
+	<View style={styles.daylyStatus}>
+		<View style={[styles.statusColor, { backgroundColor: color }]}></View>
+		<Text style={styles.statusText}>{text}</Text>
+	</View>
+);
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#21212e",
+		backgroundColor: COLORS.background,
 	},
 	header: {
 		flexDirection: "row",
@@ -219,7 +253,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 26,
 		fontWeight: "bold",
-		color: "white",
+		color: COLORS.white,
 	},
 	headerIcons: {
 		flexDirection: "row",
@@ -228,11 +262,11 @@ const styles = StyleSheet.create({
 		padding: 10,
 	},
 	sectionTitle: {
-		color: 'white',
+		color: COLORS.white,
 		fontSize: 18,
 	},
 	sectionSubtitle: {
-		color: 'gray',
+		color: COLORS.gray,
 	},
 	scheduleContainer: {
 		paddingHorizontal: 10,
@@ -245,16 +279,16 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	bookedSlot: {
-		backgroundColor: '#219653',
+		backgroundColor: COLORS.booked,
 	},
 	freeSlot: {
-		backgroundColor: '#828282',
+		backgroundColor: COLORS.free,
 	},
 	vipSlot: {
-		backgroundColor: '#9C0A35',
+		backgroundColor: COLORS.vip,
 	},
 	newSlot: {
-		backgroundColor: '#00A1D3',
+		backgroundColor: COLORS.new,
 	},
 	statusContainer: {
 		flexDirection: 'row',
@@ -267,7 +301,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 5,
 		paddingVertical: 7,
 		borderWidth: 1,
-		borderColor: 'gray',
+		borderColor: COLORS.gray,
 		borderRadius: 5,
 	},
 	statusColor: {
@@ -277,7 +311,7 @@ const styles = StyleSheet.create({
 	},
 	statusText: {
 		fontSize: 8,
-		color: 'white',
+		color: COLORS.white,
 		marginLeft: 4,
 	},
 	cardsSection: {
@@ -288,22 +322,22 @@ const styles = StyleSheet.create({
 	card: {
 		width: screenWidth / 2.15,
 		height: screenHeight / 10,
-		backgroundColor: '#B9B9C9',
+		backgroundColor: COLORS.cardBackground,
 		borderRadius: 15,
 		justifyContent: 'center',
 		alignItems: 'center',
 		padding: 10,
 	},
 	incomeCard: {
-		backgroundColor: '#9C0A35',
+		backgroundColor: COLORS.mainRed,
 	},
 	cardTitle: {
-		color: '#21212e',
+		color: COLORS.background,
 		fontSize: 16,
 		marginBottom: 5,
 	},
 	cardValue: {
-		color: 'white',
+		color: COLORS.white,
 		fontSize: 24,
 		fontWeight: 'bold',
 	},
@@ -315,29 +349,29 @@ const styles = StyleSheet.create({
 	statsContainer: {
 		width: screenWidth / 2.15,
 		height: screenHeight / 4.7,
-		backgroundColor: '#B9B9C9',
+		backgroundColor: COLORS.cardBackground,
 		borderRadius: 15,
 		justifyContent: 'center',
 		alignItems: 'center',
 		padding: 10,
 	},
 	statsTitle: {
-		color: '#21212e',
+		color: COLORS.background,
 		fontSize: 16,
 		marginBottom: 5,
 	},
 	statsText: {
-		color: '#9C0A35',
+		color: COLORS.mainRed,
 		fontSize: 16,
 		marginTop: 5,
 	},
 	incomeText: {
-		color: '#9C0A35',
+		color: COLORS.mainRed,
 		fontSize: 24,
 		fontWeight: 'bold',
 	},
 	incomeTextSmall: {
-		color: '#21212e',
+		color: COLORS.background,
 		fontSize: 14,
 	},
 	headerRight: {
@@ -345,8 +379,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	requestsCount: {
-		color: "white",
-		backgroundColor: "#9C0A35",
+		color: COLORS.white,
+		backgroundColor: COLORS.mainRed,
 		borderRadius: 5,
 		paddingVertical: 4,
 		paddingHorizontal: 8,
@@ -356,7 +390,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 10,
 	},
 	bookingCard: {
-		backgroundColor: "#B9B9C9",
+		backgroundColor: COLORS.cardBackground,
 		borderRadius: 10,
 		padding: 10,
 		marginRight: 10,
@@ -385,18 +419,15 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 	},
 	userName: {
-		color: "",
 		fontSize: 16,
 		fontWeight: "bold",
 		marginTop: 10,
 	},
 	serviceText: {
-		color: "#B9B9C9",
 		fontSize: 14,
 		marginTop: 5,
 	},
 	timeText: {
-		color: "#000",
 		fontSize: 14,
 		marginTop: 5,
 	},
@@ -406,7 +437,7 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 	},
 	approveButton: {
-		backgroundColor: "#9C0A35",
+		backgroundColor: COLORS.mainRed,
 		borderRadius: 7,
 		paddingVertical: 15,
 		paddingHorizontal: 30,
@@ -417,10 +448,12 @@ const styles = StyleSheet.create({
 		paddingVertical: 15,
 		paddingHorizontal: 30,
 		borderWidth: 1,
-		borderColor: '#9C0A35'
+		borderColor: COLORS.mainRed
 	},
 	buttonText: {
-		color: "white",
+		color: COLORS.white,
 		fontWeight: "bold",
 	},
 });
+
+export default TabOneScreen;

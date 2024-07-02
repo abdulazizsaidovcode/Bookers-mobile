@@ -45,7 +45,8 @@ const PastHistory = () => {
                             data={pastData}
                             renderItem={({item}) => (
                                 <AppointmentCard
-                                    data={serviceName ? serviceName : ['']}
+                                    data={item}
+                                    serviceName={serviceName ? serviceName : ['']}
                                     isBtn={item.orderStatus === 'WAIT'}
                                 />
                             )}

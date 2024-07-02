@@ -1,8 +1,9 @@
-import { DashboardDailyTimeOrders, DashboardMainStatistic, DashboardState, DashboardWaitingOrder } from '@/type/dashboard/dashboard';
+import { DashboardDailyTimeOrders, DashboardHallingOrder, DashboardMainStatistic, DashboardState, DashboardWaitingOrder } from '@/type/dashboard/dashboard';
 import { create } from 'zustand';
 
 const useDashboardStore = create<DashboardState>((set) => ({
     waitingData: [],
+    hallData: [],
     dailyTimeData: [],
     isModal: false,
     mainStatisticData: {
@@ -13,6 +14,7 @@ const useDashboardStore = create<DashboardState>((set) => ({
     },
     setDailyTimeData: (val: DashboardDailyTimeOrders[]) => set({ dailyTimeData: val }),
     setWaitingData: (val: DashboardWaitingOrder[]) => set({ waitingData: val }),
+    setHallData: (val: DashboardHallingOrder[]) => set({ waitingData: val }),
     setMainStatisticData: (val: DashboardMainStatistic) => set({ mainStatisticData: val }),
     setIsModal: (val: boolean) => set({ isModal: val }),
 }));

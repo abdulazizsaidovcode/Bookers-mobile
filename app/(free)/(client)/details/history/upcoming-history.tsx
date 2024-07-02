@@ -45,7 +45,8 @@ const UpcomingHistory = () => {
                             data={upcomingData}
                             renderItem={({item}) => (
                                 <AppointmentCard
-                                    data={serviceName ? serviceName : ['']}
+                                    data={item}
+                                    serviceName={serviceName ? serviceName : ['']}
                                     isBtn={item.orderStatus === 'WAIT'}
                                 />
                             )}

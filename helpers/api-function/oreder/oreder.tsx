@@ -105,11 +105,11 @@ export const getMasterOrderHall = (setHallData: any) => {
 
 export const masterOrderConfirm = (orderID: string, setLoading: any, status: string) => {
     setLoading(true)
-    axios.post(`${master_order_confirm}?orderId=${orderID}&status=${status}`, {}, config)
+    axios.put(`${master_order_confirm}?orderId=${orderID}&status=${status}`, {},config)
        .then((response) => {
             setLoading(false)
             if (response.data.success) {
-                console.log("Order set successfully", response);
+                console.log("Order set successfully", response.data);
             }
         })
        .catch(error => {

@@ -1,6 +1,6 @@
 import { dashboard_daily_time_orders, dashboard_edit_order_status, dashboard_hall_order, dashboard_main_statistic, dashboard_wait_order } from "@/helpers/api"
 import { config } from "@/helpers/token";
-import { DashboardDailyTimeOrders, DashboardMainStatistic, DashboardWaitingOrder } from "@/type/dashboard/dashboard";
+import { DashboardDailyTimeOrders, DashboardHallingOrder, DashboardMainStatistic, DashboardWaitingOrder } from "@/type/dashboard/dashboard";
 import axios from "axios"
 
 export const fetchDaylyOrderTimes = async (setDailyTimeData: (val: DashboardDailyTimeOrders[]) => void) => {
@@ -17,17 +17,17 @@ export const fetchMainStatistic = async (setMainStatisticData: (val: DashboardMa
     } catch { }
 }
 
-export const fetchWaitingOrders = async (setWaitingData: (val: DashboardWaitingOrder[]) => void) => {
+export const fetchWaitingOrders = async (setWaitingData: (val: DashboardHallingOrder[]) => void) => {
     try {
         const { data } = await axios.get(dashboard_wait_order, config);
         setWaitingData(data.body);
     } catch { }
 }
 
-export const fetchHallingOrders = async (setHallingData: (val: DashboardWaitingOrder[]) => void) => {
+export const fetchHallingOrders = async (setHallData: (val: DashboardWaitingOrder[]) => void) => {
     try {
         const { data } = await axios.get(dashboard_hall_order, config);
-        setHallingData(data.body);
+        setHallData(data.body);
     } catch { }
 }
 
@@ -35,10 +35,11 @@ export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrde
     console.log(orderId);
 
     try {
-        const { data } = await axios.put(`${dashboard_edit_order_status}?orderId=${orderId}&status=${status}`, {}, config);
+        const { data } = await 
+        axios.put(`${dashboard_edit_order_status}?orderId=${orderId}&status=${status}`, {}, config);
         if (data.success) {
             fetchWaitingOrders(setWaitingData);
-            toggleModal();
+            toggleModal(); 
         }
     } catch (error) {
         console.log(error);
