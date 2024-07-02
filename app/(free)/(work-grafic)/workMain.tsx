@@ -6,7 +6,10 @@ import { router } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import { getWorkDay, getWorkTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import {
+  getWorkDay,
+  getWorkTime,
+} from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import { getMee } from "@/helpers/token";
 
 export const WorkMainCard: React.FC<{
@@ -16,7 +19,7 @@ export const WorkMainCard: React.FC<{
   to?: string;
 }> = ({ icon, title, subTitle, to }) => {
   return (
-    <TouchableOpacity onPress={() => router.push(to || "")}>
+    <TouchableOpacity activeOpacity={0.7} onPress={() => router.push(to || "")}>
       <View style={styles.card}>
         <View>
           <View style={{ flexDirection: "row", gap: 5 }}>
@@ -36,17 +39,23 @@ export const WorkMainCard: React.FC<{
 };
 
 const WorkMain = () => {
-  const { setWeekData, weekData, setTimeData, setGetMee, getme, timeData } = graficWorkStore();
+  const {
+    setWeekData,
+    weekData,
+    setTimeData,
+    setGetMee,
+    getme,
+    timeData,
+  } = graficWorkStore();
 
-  useEffect( () => {
-     getMee(setGetMee)
-     getWorkDay(setWeekData);
+  useEffect(() => {
+    getMee(setGetMee);
+    getWorkDay(setWeekData);
   }, []);
 
-  useEffect( () => {
-     getWorkTime(setTimeData, getme ? getme.id : "")
+  useEffect(() => {
+    getWorkTime(setTimeData, getme ? getme.id : "");
   }, [getme]);
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -55,24 +64,28 @@ const WorkMain = () => {
           icon={<AntDesign name="calendar" size={24} color="#9C0A35" />}
           title="График работы"
           subTitle={`${
-            weekData.length !== 0 &&
-            weekData.map((item: any) => {
-              if (item.active) {
-                return item.dayName.substring(0,3)
-              } else {
-                return null;
-              }
-            })
+            weekData.length !== 0
+              ? weekData.map((item: any) => {
+                  if (item.active) {
+                    return item.dayName.substring(0, 3);
+                  } else {
+                    return null;
+                  }
+                })
+              : "bkjtjb"
           }`}
           to="(free)/(work-grafic)/workGraffic"
         />
-
-        <WorkMainCard
-          icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
-          title="Время работы"
-          subTitle={`From ${timeData ? timeData.from : "00:00"}  to ${timeData ? timeData.end : "00:00"}`}
-          to="(free)/(work-grafic)/workTime"
-        />
+        <TouchableOpacity activeOpacity={0.7}>
+          <WorkMainCard
+            icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
+            title="Время работы"
+            subTitle={`From ${timeData ? timeData.from : "00:00"}  to ${
+              timeData ? timeData.end : "00:00"
+            }`}
+            to="(free)/(work-grafic)/workTime"
+          />
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -83,7 +96,10 @@ const WorkMain = () => {
           justifyContent: "center",
         }}
       >
-        <Buttons title="На главную" onPress={() => router.push("(free)/(work-grafic)/workMain")} />
+        <Buttons
+          title="На главную"
+          onPress={() => router.push("(free)/(work-grafic)/workMain")}
+        />
       </View>
     </SafeAreaView>
   );
