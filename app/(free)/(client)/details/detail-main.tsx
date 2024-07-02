@@ -66,7 +66,7 @@ const DetailMain = () => {
                         </View>
                         <View>
                             {role === 'basics' && <ClientDetailBasic client={infoClient}/>}
-                            {role === 'history' && <HistoryMain countData={historyCountData} />}
+                            {role === 'history' && <HistoryMain countData={historyCountData} clientID={infoClient.id} />}
                             {role === 'profile' && ''}
                         </View>
 
