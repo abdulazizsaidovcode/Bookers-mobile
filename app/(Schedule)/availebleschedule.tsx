@@ -57,7 +57,7 @@ const RequestSchedule: React.FC = () => {
 
   return (
     <View>
-      {Object.keys(groupedData).map((date) => (
+      { waitData && waitData.length > 0 ? Object.keys(groupedData).map((date) => (
         <List.Accordion
           key={date}
           title={`${date}`}
@@ -67,7 +67,11 @@ const RequestSchedule: React.FC = () => {
         >
           <RequestsAccordion items={groupedData[date]} onActionSuccess={fetchData} onShowModal={toggleModal} />
         </List.Accordion>
-      ))}
+      )) :
+        <View>
+          <Text style={styles.placeholderText}>нет запросов</Text>
+        </View>
+      }
       <CenteredModal
         isModal={isModalVisible}
         toggleModal={toggleModal}
@@ -95,6 +99,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginBottom: 20,
   },
+  placeholderText: {
+    color: 'gray',
+},
 });
 
 export default RequestSchedule;

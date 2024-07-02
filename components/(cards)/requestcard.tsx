@@ -31,7 +31,7 @@ const RequestCard: React.FC<RequestCardProps> = ({ name, service, date, time,ord
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
-        <Image source={{ uri: getFile + clientAttachmentId }} style={styles.avatar} />
+        <Image source={clientAttachmentId ? {uri: getFile + clientAttachmentId} : require('@/assets/avatar.png')} style={styles.avatar} />
         <View>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.service}>{service}</Text>
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#b9b9c9',
     borderRadius: 10,
     padding: 10,
-    marginVertical: 5,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
   name: {
     fontWeight: 'bold',
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 2,
   },
   service: {
     backgroundColor: '#b9b9c9',

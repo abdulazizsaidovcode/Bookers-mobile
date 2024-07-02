@@ -78,8 +78,7 @@ export const getMasterOrderWait = (setWaitData: any) => {
                 setWaitData([])
             }
         })
-        .catch(err => {
-            console.error(err)
+        .catch(() => {
             setWaitData([])
         })
 }

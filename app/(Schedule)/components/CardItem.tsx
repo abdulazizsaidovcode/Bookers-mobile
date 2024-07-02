@@ -1,3 +1,4 @@
+import { getFile } from '@/helpers/api';
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
@@ -5,21 +6,22 @@ interface CardItemProps {
     name: string;
     phone: string;
     service: string;
+    attachmentId:string
     price: number;
     startTime: string;
     endTime: string;
 }
 
-const CardItem: React.FC<CardItemProps> = ({ name, phone, service, price, startTime, endTime }) => {
+const CardItem: React.FC<CardItemProps> = ({ name, phone,attachmentId, service, price, startTime, endTime }) => {
     return (
         <View style={styles.card}>
             <View style={styles.cardHeader}>
-                {/* <Image source={require('./path/to/avatar.png')} style={styles.avatar} /> */}
+                <Image source={attachmentId ? {uri: getFile + attachmentId} : require('@/assets/avatar.png')} style={styles.avatar} />
                 <View>
                     <Text style={styles.name}>{name}</Text>
                     <Text style={styles.phone}>{phone}</Text>
                     <Text style={styles.service}>{service}</Text>
-                    <Text style={styles.price}>{price}</Text>
+                    <Text style={styles.price}>{price} сум </Text>
                 </View>
             </View>
             <View style={styles.cardFooter}>
@@ -71,6 +73,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         borderRadius: 5,
         marginVertical: 5,
+        alignSelf: 'flex-start',
     },
     price: {
         color: '#9C0A35',
