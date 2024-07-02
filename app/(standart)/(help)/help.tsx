@@ -7,7 +7,7 @@ import { ScrollView, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";
 import MyServicesCard from '@/components/services/myServicesCard';
-import { getHelp } from '@/helpers/api-function/help/help';
+import { getHelpOne } from '@/helpers/api-function/help/help';
 import heplStore from '@/helpers/state_managment/help/helpStore';
 
 
@@ -18,7 +18,7 @@ const Help = () => {
         {
             title: "О сервисе",
             onPress: () => {
-                getHelp(setHelpDate, "ABOUT_SERVICE", "/aboutUs")
+                getHelpOne(setHelpDate, "ABOUT_SERVICE", "/aboutUs")
                 setNavigatName("О сервисе")
             }
         },
@@ -26,7 +26,7 @@ const Help = () => {
             title: "Оферта",
             onPress: () => 
                 {
-                getHelp(setHelpDate, "OFFER", "/aboutUs")
+                getHelpOne(setHelpDate, "OFFER", "/aboutUs")
                 setNavigatName("Оферта")
             }
             // onPress: () => { router.push('/certificate') }
@@ -34,7 +34,7 @@ const Help = () => {
         {
             title: "Политика конфиденциальности",
             onPress: () => {
-                getHelp(setHelpDate, "PRIVACY_POLICY", "/aboutUs")
+                getHelpOne(setHelpDate, "PRIVACY_POLICY", "/aboutUs")
                 setNavigatName("Политика конфиденциальности")
             }
             // onPress: () => { router.push('/offer') }
@@ -42,7 +42,7 @@ const Help = () => {
         {
             title: "Лицензионное соглашение",
             onPress: () => {
-                getHelp(setHelpDate, "LICENSE_AGREEMENT", "/aboutUs")
+                getHelpOne(setHelpDate, "LICENSE_AGREEMENT", "/aboutUs")
                 setNavigatName("Лицензионное соглашение")
             }
             // onPress: () => { router.push('/certificate') }
@@ -50,7 +50,7 @@ const Help = () => {
         {
             title: "Лицензии",
             onPress: () => {
-                getHelp(setHelpDate, "LICENSES", "/aboutUs")
+                getHelpOne(setHelpDate, "LICENSES", "/aboutUs")
                 setNavigatName("Лицензии")
             }
             // onPress: () => { router.push('/certificate') }
@@ -58,7 +58,7 @@ const Help = () => {
         {
             title: "Сертификаты",
             onPress: () => {
-                getHelp(setHelpDate, "CERTIFICATES", "/aboutUs")
+                getHelpOne(setHelpDate, "CERTIFICATES", "/aboutUs")
                 setNavigatName("Сертификаты")
             }
             // onPress: () => { router.push('/certificate') }
@@ -66,7 +66,7 @@ const Help = () => {
         {
             title: "Использование приложения",
             onPress: () => {
-                getHelp(setHelpDate, "USING_APPLICATION", "/aboutUs")
+                getHelpOne(setHelpDate, "USING_APPLICATION", "/aboutUs")
                 setNavigatName("Использование приложения")
             }
             // onPress: () => { router.push('/certificate') }
@@ -74,7 +74,7 @@ const Help = () => {
         {
             title: "Спецификация услуги",
             onPress: () => {
-                getHelp(setHelpDate, "SERVICE_SPECIFICATION", "/aboutUs")
+                getHelpOne(setHelpDate, "SERVICE_SPECIFICATION", "/aboutUs")
                 setNavigatName("Спецификация услуги")
             }
             // onPress: () => { router.push('/certificate') }
@@ -82,7 +82,7 @@ const Help = () => {
         {
             title: "Условия эксплуатации",
             onPress: () => {
-                getHelp(setHelpDate, "TERMS_OF_USE", "/aboutUs")
+                getHelpOne(setHelpDate, "TERMS_OF_USE", "/aboutUs")
                 setNavigatName("Условия эксплуатации")
             }
             // onPress: () => { router.push('/certificate') }

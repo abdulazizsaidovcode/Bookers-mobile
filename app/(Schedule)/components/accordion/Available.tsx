@@ -26,18 +26,19 @@ const AvailableAccordion: React.FC = () => {
             theme={{ colors: { background: 'transparent' } }}
         >
             <View style={styles.accordionContent}>
-                {schedule ? schedule.map((item, index) => (
+                {schedule && schedule.length > 0 ? schedule.map((item, index) => (
                     <CardItem
                         key={index}
                         name={item.clientName}
                         phone={item.phoneNumber}
+                        attachmentId={item.attachmentId}
                         service={item.serviceName}
                         price={item.price}
                         startTime={item.startTime}
                         endTime={item.finishTime}
                     />
                 )) :
-                    <Text>no Data</Text>
+                    <Text style={styles.placeholderText}>заказанных нет</Text>
                 }
             </View>
         </List.Accordion>
@@ -52,9 +53,11 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     accordionContent: {
-        // padding: 10,
         paddingLeft: 0
     },
+    placeholderText: {
+      color: 'gray',
+  },
 });
 
 export default AvailableAccordion;

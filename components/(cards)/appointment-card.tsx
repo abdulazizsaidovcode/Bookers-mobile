@@ -10,7 +10,6 @@ const AppointmentCard = ({clicks, serviceName, isBtn, data}: {
     isBtn?: boolean,
     data: HistorySessions
 }) => {
-    console.log('data: ', data)
     return (
         <View
             style={[styles.container]}

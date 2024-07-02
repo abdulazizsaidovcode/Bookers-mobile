@@ -78,8 +78,7 @@ export const getMasterOrderWait = (setWaitData: any) => {
                 setWaitData([])
             }
         })
-        .catch(err => {
-            console.error(err)
+        .catch(() => {
             setWaitData([])
         })
 }
@@ -102,6 +101,8 @@ export const getMasterOrderHall = (setHallData: any) => {
 }
 
 // master orderni confirm reject qilish
+
+// status == CONFIRMED, REJECTED, COMPLETED
 
 export const masterOrderConfirm = (orderID: string, setLoading: any, status: string) => {
     setLoading(true)

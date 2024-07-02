@@ -6,11 +6,13 @@ import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStor
 import { useOrderPosdData } from '@/helpers/state_managment/order/order';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import React, { useEffect, useState, useCallback, Children } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { List } from 'react-native-paper';
 import axios from 'axios';
 import { config } from '@/helpers/token';
 import CenteredModal from '@/components/(modals)/modal-centered';
+const { width , height } = Dimensions.get('window');
+
 
 const BookedAccordion: React.FC = () => {
     const [services, setServices] = useState([]);
@@ -18,7 +20,7 @@ const BookedAccordion: React.FC = () => {
     const [activeTime, setActiveTime] = useState('');
     const { FreeTime, setFreeTime } = useScheduleFreeTime();
     const { calendarDate } = graficWorkStore();
-    const { OrderData, setOrderData, status ,setStatus } = useOrderPosdData();
+    const { OrderData, setOrderData, status, setStatus } = useOrderPosdData();
     const navigation = useNavigation<any>();
     const [activeBtn, setActiveBtn] = useState<boolean>(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -36,7 +38,7 @@ const BookedAccordion: React.FC = () => {
 
     useEffect(() => {
         console.log(status);
-    },[status])
+    }, [status])
 
     useEffect(() => {
         if (calendarDate) {
@@ -106,7 +108,7 @@ const BookedAccordion: React.FC = () => {
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     style={styles.tabContainer}>
-                    {services.map((service: any) => (
+                    {services && services.length > 0 ? services.map((service: any) => (
                         <TouchableOpacity
                             key={service.id}
                             style={[styles.tabButton, activeTab === service.id && styles.activeTab]}
@@ -116,9 +118,9 @@ const BookedAccordion: React.FC = () => {
                                 {service.category.name.trim()}
                             </Text>
                         </TouchableOpacity>
-                    ))}
+                    )) : <Text style={styles.placeholderText}>Нет услуг</Text>}
                 </ScrollView>
-                <View style={styles.accordionContent}>
+                <View>
                     {activeTab && (
                         <View style={styles.timeContainer}>
                             {FreeTime ? FreeTime.map((time, index) => (
@@ -131,16 +133,18 @@ const BookedAccordion: React.FC = () => {
                                         {time}
                                     </Text>
                                 </TouchableOpacity>
-                            )) : <Text style={styles.placeholderText}>No available times</Text>}
+                            )) : <Text style={styles.placeholderText}>Нет свободного времени</Text>}
                         </View>
                     )}
                 </View>
             </List.Accordion>
-            <Buttons
-                title='Записать клиента'
-                isDisebled={activeBtn}
-                onPress={setOrder}
-            />
+            <View style={styles.buttonContainer}>
+                <Buttons
+                    title='Записать клиента'
+                    isDisebled={activeBtn}
+                    onPress={setOrder}
+                />
+            </View>
             {<CenteredModal
                 isModal={isModalVisible}
                 toggleModal={toggleModal}
@@ -186,19 +190,19 @@ const styles = StyleSheet.create({
     inactiveText: {
         color: 'gray',
     },
-    accordionContent: {},
     timeContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         marginBottom: 20,
+        // justifyContent: 'center',
+        gap: 8.830
     },
     timeButton: {
         backgroundColor: '#f0f0f0',
         padding: 10,
-        width: 82,
+        width: width / 4.7,
         borderRadius: 5,
-        marginRight: 5,
-        marginBottom: 5,
+        alignItems:'center'
     },
     activeTimeButton: {
         backgroundColor: '#9C0A35',
@@ -212,6 +216,12 @@ const styles = StyleSheet.create({
     placeholderText: {
         color: 'gray',
     },
+    buttonContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 25,
+    },
+
 });
 
 export default BookedAccordion;
