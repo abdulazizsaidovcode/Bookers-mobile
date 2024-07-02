@@ -1,6 +1,7 @@
 // swagger url
 export const base_url: string = 'http://45.67.35.86:8080/';
 export const getMe = `${base_url}user/me`
+export const getMeID = `${base_url}user/get/me/`
 
 // get file
 export const getFile: string = `${base_url}attachment/getFile/`
@@ -74,7 +75,7 @@ export const client_permanent: string = `${base_url}user/master/client-permanent
 export const client_permanent_search: string = `${base_url}client/search/for/regular/visit?name=`
 export const new_client: string = `${base_url}user/master/client-new`
 export const new_client_search: string = `${base_url}client/search/for/new?name=`
-export const history_count: string = `${base_url}order/session-history`
+export const history_count: string = `${base_url}order/client/session-history?clientId=`
 
 // age url
 export const age_list: string = `${base_url}age`
@@ -106,10 +107,14 @@ export const help_url: string = `${base_url}help/one?HELP_STATUS=`
 export const order_list: string = `${base_url}order/today/orders/for/master`
 export const order_add: string = `${base_url}order/save`
 export const order_get_one: string = `${base_url}order/one?orderId=`
+export const order_upcoming: string = `${base_url}order/client/upcoming-sessions`
+export const order_past: string = `${base_url}order/client/past-sessions`
+export const order_canceled: string = `${base_url}order/client/canceled-sessions`
 
-//order
 export const dashboard_daily_time_orders: string = `${base_url}user/today/calendar`
 export const dashboard_main_statistic: string = `${base_url}order/master/order-statistic`
+export const dashboard_wait_order: string = `${base_url}order/master/clients-today/wait`
+export const dashboard_edit_order_status: string = `${base_url}order/confirm-order`
 
 export const master_order_confirmed: string = `${base_url}order/master/clients-today/confirmed`
 export const master_order_wait: string = `${base_url}order/master/clients-today/wait`

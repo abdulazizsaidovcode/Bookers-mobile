@@ -20,7 +20,7 @@ export interface Client {
     setDistrictData: (val: DistrictData[] | null) => void;
     attachmentID: null | string
     setAttachmentID: (val: null | string) => void;
-    allClientsList: AllClient[]  | null
+    allClientsList: AllClient[] | null
     setAllClients: (val: AllClient[] | null) => void;
     clientNotVisit: ClientNotVisit[] | null
     setClientNotVisit: (val: ClientNotVisit[] | null) => void;
@@ -34,6 +34,12 @@ export interface Client {
     setServices: (services: any[] | null) => void;
     historyCountData: null | HistoryCount;
     setHistoryCountData: (val: HistoryCount | null) => void;
+    upcomingData: HistorySessions[] | null
+    setUpcomingData: (val: HistorySessions[] | null) => void;
+    pastData: HistorySessions[] | null
+    setPastData: (val: HistorySessions[] | null) => void;
+    canceledData: HistorySessions[] | null
+    setCanceledData: (val: HistorySessions[] | null) => void;
 }
 
 export interface AllClient {
@@ -167,12 +173,27 @@ export interface HistoryCount {
     cancelledSessions: number
 }
 
-
-
-
-
-
-
+export interface HistorySessions {
+    "id": string
+    "fullName": string
+    "clientStatus": string[]
+    "phone": string
+    "serviceName": string
+    "servicePrice": number
+    "serviceHour": number
+    "serviceMinute": number
+    "orderDate": string
+    "prePayment": number
+    "paid": number
+    "toPay": number
+    "startTime": string
+    "finishTime": string
+    "notifyForHour": number
+    "notifyForMinute": number
+    "orderStatus": string
+    "hallStatus": string
+    "attachmentId": null | string
+}
 
 
 export interface ClientData {
@@ -191,10 +212,10 @@ export interface ClientItemProps {
 
 //vaqtinchalik data
 export const clientsData: ClientData[] = [
-    { id: 1, name: 'Гузаль Шерматова', phone: '+998 93 123-45-67', image: 'https://via.placeholder.com/150' },
-    { id: 2, name: 'Севара Юнусова', phone: '+998 93 171-63-80', image: 'https://via.placeholder.com/150' },
-    { id: 3, name: 'Ноила Азизова', phone: '+998 93 455-45-67', image: 'https://via.placeholder.com/150' },
-    { id: 4, name: 'Шахло Акбарова', phone: '+998 93 874-63-90', image: 'https://via.placeholder.com/150' },
-    { id: 5, name: 'Максуд Акбаров', phone: '+998 93 455-45-67', image: 'https://via.placeholder.com/150' },
-    { id: 6, name: 'Нодир Расулов', phone: '+998 93 874-63-90', image: 'https://via.placeholder.com/150' },
+    {id: 1, name: 'Гузаль Шерматова', phone: '+998 93 123-45-67', image: 'https://via.placeholder.com/150'},
+    {id: 2, name: 'Севара Юнусова', phone: '+998 93 171-63-80', image: 'https://via.placeholder.com/150'},
+    {id: 3, name: 'Ноила Азизова', phone: '+998 93 455-45-67', image: 'https://via.placeholder.com/150'},
+    {id: 4, name: 'Шахло Акбарова', phone: '+998 93 874-63-90', image: 'https://via.placeholder.com/150'},
+    {id: 5, name: 'Максуд Акбаров', phone: '+998 93 455-45-67', image: 'https://via.placeholder.com/150'},
+    {id: 6, name: 'Нодир Расулов', phone: '+998 93 874-63-90', image: 'https://via.placeholder.com/150'},
 ];

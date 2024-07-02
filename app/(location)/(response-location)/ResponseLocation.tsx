@@ -3,6 +3,7 @@ import Buttons from "@/components/(buttons)/button";
 import { Text, View } from "@/components/Themed";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { base_url } from "@/helpers/api";
+import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { config } from "@/helpers/token";
 import { MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
@@ -82,10 +83,17 @@ const ResponseLocation = () => {
           </View>
         </View>
         <View style={tw`bg-transparent absolute bottom-5 w-full`}>
-          <Buttons
-            onPress={() => router.push("(welcome)/Welcome")}
-            title="На главную"
-          />
+        <Buttons
+          title="На главную"
+          onPress={() => {
+            if (data) {
+              putNumbers(4);
+              console.log(" 3 ketti");
+              
+            }
+            router.push("(welcome)/Welcome");
+          }}
+        />
         </View>
       </View>
     </View>
