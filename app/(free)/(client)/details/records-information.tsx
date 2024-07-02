@@ -12,6 +12,7 @@ import {getFile} from "@/helpers/api";
 import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import {addFeedbackMaster} from "@/helpers/api-function/client/client";
+import Toast from "react-native-simple-toast";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
@@ -52,11 +53,7 @@ const RecordsInformation = () => {
     }, []);
 
     useEffect(() => {
-        if (toast) {
-            alert(`Siz ilovaga ${rating} baho berdingiz ✔`)
-            setRating(0)
-            setToast(false)
-        }
+        if (toast) setRating(0)
     }, [toast]);
 
     const toggleModal = () => setIsModal(!isModal)
@@ -233,9 +230,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 20,
         alignItems: 'center'
-    },
-    icon: {
-        marginBottom: 20
     },
     message: {
         fontSize: 18,

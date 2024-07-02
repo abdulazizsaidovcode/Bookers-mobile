@@ -1,8 +1,14 @@
-import {StyleSheet, View, Text, ScrollView} from 'react-native';
+import {StyleSheet, View, Text, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import tw from "tailwind-react-native-classnames";
 import IconsButtons from "@/components/(buttons)/icon-btn";
 import {HistorySessions} from "@/type/client/client";
 import moment from "moment";
+import CenteredModal from "@/components/(modals)/modal-centered";
+import {AntDesign} from "@expo/vector-icons";
+import React, {useEffect, useState} from "react";
+import {addFeedbackMaster} from "@/helpers/api-function/client/client";
+import Toast from "react-native-simple-toast";
+import clientStore from "@/helpers/state_managment/client/clientStore";
 
 const AppointmentCard = ({clicks, serviceName, isBtn, data}: {
     clicks?: () => void,
@@ -10,39 +16,85 @@ const AppointmentCard = ({clicks, serviceName, isBtn, data}: {
     isBtn?: boolean,
     data: HistorySessions
 }) => {
+    const {isLoading, setIsLoading} = clientStore()
+    const [rating, setRating] = useState(0);
+    const [isModal, setIsModal] = useState(false);
+
+    useEffect(() => {
+        setRating(0)
+    }, [isModal]);
+
+    const handleRating = (value: any) => setRating(value)
+    const toggleModal = () => setIsModal(!isModal)
     return (
-        <View
-            style={[styles.container]}
-        >
-            <Text style={styles.date}>
-                {moment(data.orderDate).format('dddd, DD MMMM')} {isBtn && `- ${data.startTime.slice(0, 5)}`}
-            </Text>
-            <View style={styles.options}>
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {serviceName.length > 0 && serviceName.map(item =>
-                        <Text style={[styles.option, {borderWidth: 1}]}>{item}</Text>
-                    )}
-                </ScrollView>
-            </View>
-            <Text style={styles.price}>{data.servicePrice} сум</Text>
-            {isBtn && (
-                <View style={[tw`flex-row items-center justify-between`]}>
-                    <IconsButtons
-                        name={`Принять`}
-                        width={`47%`}
-                    />
-                    <IconsButtons
-                        name={`Отклонить`}
-                        color={`#9C0A35`}
-                        bg_color={`white`}
-                        width={`47%`}
-                    />
+        <>
+            <View
+                style={[styles.container]}
+            >
+                <Text style={styles.date}>
+                    {moment(data.orderDate).format('dddd, DD MMMM')} {isBtn && `- ${data.startTime.slice(0, 5)}`}
+                </Text>
+                <View style={styles.options}>
+                    <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {serviceName.length > 0 && serviceName.map(item =>
+                            <Text style={[styles.option, {borderWidth: 1}]}>{item}</Text>
+                        )}
+                    </ScrollView>
                 </View>
-            )}
-        </View>
+                <Text style={styles.price}>{data.servicePrice} сум</Text>
+                {isBtn && (
+                    <View style={[tw`flex-row items-center justify-between`]}>
+                        <IconsButtons
+                            name={`Принять`}
+                            width={`47%`}
+                        />
+                        <IconsButtons
+                            name={`Отклонить`}
+                            color={`#9C0A35`}
+                            bg_color={`white`}
+                            width={`47%`}
+                            clicks={() => toggleModal()}
+                        />
+                    </View>
+                )}
+            </View>
+
+            {/*fade back modal*/}
+            <CenteredModal
+                isFullBtn={false}
+                isModal={isModal}
+                btnWhiteText={isLoading ? 'loading...' : `Оценить`}
+                btnRedText={`Закрыть`}
+                onConfirm={() => {
+                    if (rating > 0) addFeedbackMaster(rating, setIsLoading, toggleModal)
+                    else Toast.show('Вы еще не оставили отзыв!', Toast.LONG)
+                }}
+                toggleModal={() => toggleModal()}
+            >
+                <View style={styles.modalContainer}>
+                    <AntDesign name="closecircleo" size={70} color="#9C0A35"/>
+                    <Text style={[styles.message, {marginTop: 14, opacity: .7}, tw`text-sm`]}>Запись Отклонена</Text>
+                    <Text style={[styles.message, {marginVertical: 20}, tw`text-center text-lg leading-6`]}>
+                        Спасибо что воспользовались нашим сервисом!
+                    </Text>
+                    <View style={styles.stars}>
+                        {Array(5).fill(0).map((_, index) => (
+                            <TouchableOpacity activeOpacity={.7} key={index} onPress={() => handleRating(index + 1)}>
+                                <AntDesign
+                                    name={index < rating ? "star" : "staro"}
+                                    size={30}
+                                    color="#B00000"
+                                    style={styles.star}
+                                />
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                </View>
+            </CenteredModal>
+        </>
     );
 };
 
@@ -77,6 +129,21 @@ const styles = StyleSheet.create({
         color: '#9C0A35',
         marginBottom: 10,
         fontWeight: 'bold'
+    },
+    modalContainer: {
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center'
+    },
+    message: {
+        color: '#FFFFFF',
+        opacity: .9
+    },
+    stars: {
+        flexDirection: 'row',
+    },
+    star: {
+        marginHorizontal: 5
     },
 });
 
