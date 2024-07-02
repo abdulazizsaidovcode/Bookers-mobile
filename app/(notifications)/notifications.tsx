@@ -1,46 +1,49 @@
 import React from 'react';
 import { View, Text, Switch, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { FontAwesome5, MaterialIcons, Feather } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const NotificationSettings = () => {
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.switchContainer}>
-                <Text style={styles.switchLabel}>Отключить все уведомления</Text>
-                <Switch value={false} />
-            </View>
-            <Text style={styles.header}>Настройте уведомления приложения</Text>
-            <NotificationOption
-                icon={<FontAwesome5 name="sms" size={24} color="#F76C6C" />}
-                label="Месенджеры"
-                subLabel="SMS"
-            />
-            <NotificationOption
-                icon={<MaterialIcons name="notifications" size={24} color="#F76C6C" />}
-                label="Напоминать о записи"
-                subLabel="Не настроено"
-            />
-            <NotificationOption
-                icon={<MaterialIcons name="cancel" size={24} color="#F76C6C" />}
-                label="Отмена записи"
-                subLabel="Не настроено"
-            />
-            <NotificationOption
-                icon={<Feather name="edit" size={24} color="#F76C6C" />}
-                label="Изменение записи"
-                subLabel="Не настроено"
-            />
-            <NotificationOption
-                icon={<Feather name="message-circle" size={24} color="#F76C6C" />}
-                label="Запрос отзыва"
-                subLabel="Не настроено"
-            />
-            <NotificationOption
-                icon={<Feather name="bell" size={24} color="#F76C6C" />}
-                label="Запрос окошка"
-                subLabel="Не настроено"
-            />
-        </ScrollView>
+        <SafeAreaView style={styles.container}>
+            <ScrollView>
+                <View style={styles.switchContainer}>
+                    <Text style={styles.switchLabel}>Отключить все уведомления</Text>
+                    <Switch value={true} />
+                </View>
+                <Text style={styles.header}>Настройте уведомления приложения</Text>
+                <NotificationOption
+                    icon={<FontAwesome5 name="sms" size={24} color="#F76C6C" />}
+                    label="Месенджеры"
+                    subLabel="SMS"
+                />
+                <NotificationOption
+                    icon={<MaterialIcons name="notifications" size={24} color="#F76C6C" />}
+                    label="Напоминать о записи"
+                    subLabel="Не настроено"
+                />
+                <NotificationOption
+                    icon={<MaterialIcons name="cancel" size={24} color="#F76C6C" />}
+                    label="Отмена записи"
+                    subLabel="Не настроено"
+                />
+                <NotificationOption
+                    icon={<Feather name="edit" size={24} color="#F76C6C" />}
+                    label="Изменение записи"
+                    subLabel="Не настроено"
+                />
+                <NotificationOption
+                    icon={<Feather name="message-circle" size={24} color="#F76C6C" />}
+                    label="Запрос отзыва"
+                    subLabel="Не настроено"
+                />
+                <NotificationOption
+                    icon={<Feather name="bell" size={24} color="#F76C6C" />}
+                    label="Запрос окошка"
+                    subLabel="Не настроено"
+                />
+            </ScrollView>
+        </SafeAreaView>
     );
 };
 
@@ -58,7 +61,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         padding: 16,
-        backgroundColor: '#1F1B2C'
+        backgroundColor: '#21212E'
     },
     switchContainer: {
         flexDirection: 'row',

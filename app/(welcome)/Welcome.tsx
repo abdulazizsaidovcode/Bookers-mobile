@@ -6,9 +6,9 @@ import {
   StatusBar,
   Pressable,
   StyleSheet,
+  Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import tw from "tailwind-react-native-classnames";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -23,6 +23,9 @@ import {
   getNumbers,
   putNumbers,
 } from "@/helpers/api-function/numberSittings/numbersetting";
+
+const screenWidht = Dimensions.get('window').width
+const screenHeight = Dimensions.get('window').height
 
 const Welcome = () => {
   const { number, setNumber } = numberSettingStore();
@@ -73,7 +76,7 @@ const Welcome = () => {
       title: "Уведомления",
       description: "Настройте уведомления",
       icon: <Ionicons name="notifications-outline" size={24} color="white" />,
-      onPress: () => router.push("../(profile)/(notification)"),
+      onPress: () => router.push("../(notifications)/notifications"),
     },
     {
       title: "Клиенты",
@@ -90,70 +93,44 @@ const Welcome = () => {
   ];
 
   return (
-    <SafeAreaView style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
-      <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar backgroundColor="#21212E" barStyle="light-content" />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingHorizontal: 16,
-          flexGrow: 1,
-          justifyContent: "flex-start",
-          backgroundColor: "#21212E",
-        }}
+        contentContainerStyle={styles.scrollView}
       >
-        {/* <View style={styles.topSection}> */}
-          <View style={styles.progressBar}>
-            {[...Array(8)].map((_, index) => (
-              <View
-                key={index}
-                style={
-                  number.includes(index + 1)
-                    ? styles.progressIndicator
-                    : styles.progressSegment
-                }
-              />
-            ))}
-          </View>
-        {/* </View> */}
-        <View style={[tw`items-center`, { backgroundColor: "#21212E" }]}>
-          <Text style={tw`text-2xl font-bold text-white`}>
-            Добро пожаловать!
-          </Text>
-          <View style={tw`bg-transparent text-center mt-5 relative`}>
+        <View style={styles.progressBar}>
+          {[...Array(8)].map((_, index) => (
+            <View
+              key={index}
+              style={
+                number.includes(index + 1)
+                  ? styles.progressIndicator
+                  : styles.progressSegment
+              }
+            />
+          ))}
+        </View>
+        <View style={styles.centeredView}>
+          <Text style={styles.welcomeText}>Добро пожаловать!</Text>
+          <View style={styles.imageContainer}>
             <Image
-              style={tw`w-24 h-24 rounded-full`}
+              style={styles.profileImage}
               source={require("../../assets/images/866-536x354.jpg")}
             />
-            <View
-              style={[
-                tw`w-10 h-10 rounded-full items-center justify-center absolute -bottom-3 -right-2 border-4`,
-                { backgroundColor: "#9c0935", borderColor: "#21212E" },
-              ]}
-            >
+            <View style={styles.editIconContainer}>
               <MaterialIcons name="edit" size={24} color="white" />
             </View>
           </View>
-          <Text style={tw`text-2xl mt-4 font-bold text-white`}>
-            Гузаль Шерматова
-          </Text>
-          <View
-            style={[
-              tw`p-4 w-full mt-5 rounded-3xl`,
-              { backgroundColor: "#b9b9c9" },
-            ]}
-          >
-            <Text style={tw`text-base text-center text-gray-500 p-2`}>
+          <Text style={styles.profileName}>Гузаль Шерматова</Text>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoText}>
               А теперь мы поможем Вам настроить приложение что бы клиенты могли
               начать бронировать Ваши услуги.
             </Text>
           </View>
         </View>
-        <View
-          style={[
-            tw`flex-1 w-full flex-row flex-wrap mt-6`,
-            { backgroundColor: "#21212e" },
-          ]}
-        >
+        <View style={styles.buttonContainer}>
           {data.map((item, index) => {
             const isEnabled = number.includes(index + 1);
             return (
@@ -162,38 +139,18 @@ const Welcome = () => {
                 key={index}
                 disabled={!isEnabled}
                 style={({ pressed }) => [
-                  tw`w-1/2 p-2`,
+                  styles.pressable,
                   {
                     opacity: pressed ? 0.8 : isEnabled ? 1 : 0.5,
                   },
                 ]}
               >
-                <View
-                  style={[
-                    tw`flex rounded-3xl h-52 items-center py-5 px-2`,
-                    { backgroundColor: "#b9b9c9" },
-                  ]}
-                >
-                  <View style={[tw`w-full bg-transparent flex items-center`]}>
-                    <View
-                      style={[
-                        tw`p-5 rounded-full flex items-center justify-center`,
-                        { backgroundColor: "#9C0A35" },
-                      ]}
-                    >
-                      {item.icon}
-                    </View>
+                <View style={styles.button}>
+                  <View style={styles.iconContainer}>
+                    <View style={styles.iconBackground}>{item.icon}</View>
                   </View>
-                  <Text
-                    style={[
-                      tw`text-lg text-black mt-3 font-bold text-center`,
-                    ]}
-                  >
-                    {item.title}
-                  </Text>
-                  <Text style={[tw`text-sm text-gray-600 text-center`]}>
-                    {item.description}
-                  </Text>
+                  <Text style={styles.buttonTitle}>{item.title}</Text>
+                  <Text style={styles.buttonDescription}>{item.description}</Text>
                 </View>
               </Pressable>
             );
@@ -207,8 +164,15 @@ const Welcome = () => {
 export default Welcome;
 
 const styles = StyleSheet.create({
-  topSection: {
+  safeArea: {
     flex: 1,
+    backgroundColor: "#21212E",
+  },
+  scrollView: {
+    paddingHorizontal: 10,
+    flexGrow: 1,
+    justifyContent: "flex-start",
+    backgroundColor: "#21212E",
   },
   progressBar: {
     backgroundColor: "#1E1E1E",
@@ -229,5 +193,101 @@ const styles = StyleSheet.create({
     backgroundColor: "#8A8A8A",
     borderRadius: 5,
     marginHorizontal: 1,
+  },
+  centeredView: {
+    alignItems: "center",
+    backgroundColor: "#21212E",
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+  },
+  imageContainer: {
+    backgroundColor: "transparent",
+    alignItems: "center",
+    marginTop: 20,
+    position: "relative",
+  },
+  profileImage: {
+    width: 96,
+    height: 96,
+    borderRadius: 50,
+  },
+  editIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: -12,
+    right: -8,
+    backgroundColor: "#9c0935",
+    borderColor: "#21212E",
+    borderWidth: 4,
+  },
+  profileName: {
+    fontSize: 24,
+    marginTop: 16,
+    fontWeight: "bold",
+    color: "white",
+  },
+  infoContainer: {
+    padding: 16,
+    width: "100%",
+    marginTop: 20,
+    borderRadius: 24,
+    backgroundColor: "#b9b9c9",
+  },
+  infoText: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "#6e6e6e",
+    padding: 8,
+  },
+  buttonContainer: {
+    flex: 1,
+    width: "100%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 24,
+    backgroundColor: "#21212e",
+  },
+  pressable: {
+    width: screenWidht / 2.18,
+    padding: 8,
+  },
+  button: {
+    borderRadius: 24,
+    height: screenHeight / 4.3,
+    alignItems: "center",
+    paddingVertical: 20,
+    paddingHorizontal: 8,
+    backgroundColor: "#b9b9c9",
+  },
+  iconContainer: {
+    width: "100%",
+    alignItems: "center",
+    backgroundColor: "transparent",
+  },
+  iconBackground: {
+    padding: 17,
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#9C0A35",
+  },
+  buttonTitle: {
+    fontSize: 18,
+    color: "black",
+    marginTop: 12,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  buttonDescription: {
+    fontSize: 14,
+    color: "#6e6e6e",
+    textAlign: "center",
   },
 });
