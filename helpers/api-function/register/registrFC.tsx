@@ -39,10 +39,8 @@ interface IRegister {
 export const masterData = ({ role, firstName, lastName, nickname, phoneNumber, img }: IRegister) => {
     const formData = new FormData();
     if (img) {
-        formData.append('image', img); // Rasm fayli form data ga qo'shiladi
+        formData.append('image', img);
     }
-
-    // phoneNumber ni tekshirish va kerakli o'zgartirishni kiritish
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
 
     const url = `${register_page}master?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${nickname ? `&nickname=${encodeURIComponent(nickname)}` : ''}&phoneNumber=${formattedPhoneNumber}&ROLE=${encodeURIComponent(role)}`;
