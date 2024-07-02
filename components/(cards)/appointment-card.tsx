@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#B9B9C9',
         borderRadius: 20,
         padding: 20,
+        marginBottom: 16
     },
     date: {
         fontSize: 18,
