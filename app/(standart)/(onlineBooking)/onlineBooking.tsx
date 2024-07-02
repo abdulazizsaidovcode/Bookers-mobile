@@ -11,6 +11,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 
 
 
@@ -89,7 +90,10 @@ const OnlineBooking = () => {
 
                     </View>
                     <View style={[tw`grid content-end mb-5`, { backgroundColor: '#21212E' }]}>
-                        <Buttons title="Сохранить" onPress={() => router.push('/category')} />
+                        <Buttons title="На главную" onPress={() =>  {
+                            putNumbers(6)
+                            router.push("(welcome)/Welcome")
+                        }} />
                     </View>
                 </ScrollView>
             </View>

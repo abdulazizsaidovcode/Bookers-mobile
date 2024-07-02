@@ -19,6 +19,8 @@ import BottomModal from "@/components/(modals)/modal-bottom";
 import NotificationSelect from "@/helpers/state_managment/notification";
 import Buttons from "@/components/(buttons)/button";
 import CenteredModal from "@/components/(modals)/modal-centered";
+import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { router } from "expo-router";
 
 const Notification: React.FC = () => {
   const navigation = useNavigation();
@@ -71,7 +73,10 @@ const Notification: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.padding}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => {
+            putNumbers(7)
+            router.push("(welcome)/Welcome")
+          }}>
             <FontAwesome name="arrow-left" size={24} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.headerText}>Уведомления</Text>
