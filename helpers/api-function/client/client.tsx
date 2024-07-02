@@ -16,7 +16,7 @@ import {
     district_list, history_count,
     master_client_all_list, master_client_all_list_search,
     master_client_create, master_message_for_client, master_service_list,
-    new_client, new_client_search,
+    new_client, new_client_search, order_upcoming,
     region_list
 } from "@/helpers/api";
 import {
@@ -145,7 +145,6 @@ export const getClientStoppedVisitSearch = async (setData: (val: ClientStoppedVi
         setData(null)
     }
 }
-
 
 // stopped client ga sms juantish
 export const addClientSMS = async (clientID: string, val: string, setTrue: (val: boolean) => void, setIsLoading: (val: boolean) => void) => {
@@ -315,7 +314,7 @@ export const addClientMessage = async (clientID: string, message: string, setLoa
     }
 }
 
-// history count
+// history count get function
 export const getHistoryCount = async (setData: (val: HistoryCount | null) => void) => {
     try {
         const {data} = await axios.get(history_count, config);
@@ -327,14 +326,14 @@ export const getHistoryCount = async (setData: (val: HistoryCount | null) => voi
     }
 }
 
-// Services get
+// Services get zapis bulimi un
 export const fetchServices = (setData: (val: any[] | null) => void) => {
     axios.get(master_service_list, config)
         .then((res) => setData(res.data.body))
         .catch((err) => console.error(err));
 };
 
-// feedback master post
+// feedback master post ilovaga baho berish
 export const addFeedbackMaster = (star: number | any, setToast: (val: boolean) => void) => {
     const data = {
         count: star ? star : 0,
@@ -352,5 +351,47 @@ export const addFeedbackMaster = (star: number | any, setToast: (val: boolean) =
                 console.log(err)
                 setToast(false)
             })
+    }
+}
+
+// client upcoming session get qilish
+export const getUpcomingClient = async (setData: (val: any[] | null) => void, clientID: string) => {
+    try {
+        if (clientID) {
+            const {data} = await axios.get(`${order_upcoming}?status=UPCOMING_SESSIONS&clientId=${clientID}`, config)
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
+
+// client past session get qilish
+export const getPastClient = async (setData: (val: any[] | null) => void, clientID: string) => {
+    try {
+        if (clientID) {
+            const {data} = await axios.get(`${order_upcoming}?status=PAST_SESSIONS&clientId=${clientID}`, config)
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
+
+// client canceled session get qilish
+export const getCanceledClient = async (setData: (val: any[] | null) => void, clientID: string) => {
+    try {
+        if (clientID) {
+            const {data} = await axios.get(`${order_upcoming}?status=CANCELED_SESSIONS&clientId=${clientID}`, config)
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else setData(null)
+    } catch (err) {
+        console.log(err)
+        setData(null)
     }
 }
