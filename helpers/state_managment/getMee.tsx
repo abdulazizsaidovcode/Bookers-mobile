@@ -1,6 +1,5 @@
 import { GetMee, GetMeeStore } from '@/type/getMee';
 import { create } from 'zustand';
-
 const useGetMeeStore = create<GetMeeStore>((set) => ({
     getMee: {
         id: '',
@@ -18,5 +17,4 @@ const useGetMeeStore = create<GetMeeStore>((set) => ({
     },
     setGetMee: (val: GetMee) => set({ getMee: val })
 }));
-
 export default useGetMeeStore;
