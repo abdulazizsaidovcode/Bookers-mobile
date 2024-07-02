@@ -12,20 +12,27 @@ import servicesStore from '@/helpers/state_managment/services/servicesStore';  /
 import { masterAdd_service } from '@/helpers/api';  // Importing API endpoint for adding services
 import { config } from '@/helpers/token';  // Importing authentication tokens or headers
 
-const Process = () => {
+type GenderOption = {
+    title: string;
+    id: number;
+};
+
+const Process: React.FC = () => {
     const { selectedServices } = useLocalSearchParams();  // Using local search params from expo-router
-    const [service, setService] = useState('');  // State for service name
-    const [price, setPrice] = useState('');  // State for service price
-    const [time, setTime] = useState('');  // State for service duration
-    const [description, setDescription] = useState('');  // State for service description
-    const [validate, setValidate] = useState(false);  // State for form validation
-    const [selectedGender, setSelectedGender] = useState<string | null>(null);  // State for selected gender
-    const { childCategoryData } = servicesStore();  // Fetching child category data from state management
+    const [service, setService] = useState<string>('');  // State for service name
+    const [price, setPrice] = useState<string>('');  // State for service price
+    const [time, setTime] = useState<string>('');  // State for service duration
+    const [description, setDescription] = useState<string>('');  // State for service description
+    const [validate, setValidate] = useState<boolean>();  // State for form validation
+    const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);  // State for selected gender
+    const { childCategoryData , categoryFatherId } = servicesStore();  // Fetching child category data from state management
 
     // Gender options
-    const Gender = [
-        { title: "Мужская для взрослых" },
-        { title: "Мужская для детей" }
+    const Gender: GenderOption[] = [
+        { title: "Мужская для взрослых", id: 1 },
+        { title: "Женское для взрослых", id: 2 },
+        { title: "Мужская для детей", id: 3 },
+        { title: "Женское для детей", id: 4 }
     ];
 
     // Form input fields
@@ -35,48 +42,45 @@ const Process = () => {
         { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
 
-    // Function to post service data to backend
+    
     const postService = async () => {
         try {
             const data = {
-                categoryId: "c8d966f7-dc2f-4a10-b4b1-2bd77db2da98",  // Replace with your categoryId
+                categoryId: categoryFatherId,  
                 name: service,
-                genderId: selectedGender === "Мужская для взрослых" ? [1] : [2],  // Adjust based on your gender selection logic
+                genderId: selectedGender ? [selectedGender.id] : [],  
                 price: parseFloat(price),
                 description: description,
-                attachmentId: null,  // Assuming attachmentId is not yet determined
+                attachmentId: null,  
                 active: true
             };
+
+            console.log('Sending data to backend:', data);  
 
             const response = await axios.post(masterAdd_service, data, config);
 
             if (response.data.success) {
-                // Handle success, e.g., reset form fields or navigate to another screen
                 console.log('Service added successfully:', response.data);
-                // Example navigation:
-                // router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
+                router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
             } else {
-                // Handle failure or show error message
+                
                 console.error('Failed to add service:', response.data.message);
             }
         } catch (error) {
             console.error('Error adding service:', error);
-            // Handle error state or show user a message
         }
     };
-
-    // Effect to validate form fields
     useEffect(() => {
         if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0 || !selectedGender) {
-            setValidate(false);
-        } else {
             setValidate(true);
+        } else {
+            setValidate(false);
         }
     }, [service, price, time, description, selectedGender]);
 
     // Function to handle gender selection
-    const handleGenderPress = (title: string) => {
-        setSelectedGender(selectedGender === title ? null : title);
+    const handleGenderPress = (gender: GenderOption) => {
+        setSelectedGender(selectedGender?.id === gender.id ? null : gender);
     };
 
     // Render function for child categories
@@ -115,8 +119,8 @@ const Process = () => {
                                 key={index}
                                 title={gender.title}
                                 isRadioButton
-                                isChecked={selectedGender === gender.title}
-                                onPress={() => handleGenderPress(gender.title)}
+                                isChecked={selectedGender?.id === gender.id}
+                                onPress={() => handleGenderPress(gender)}
                             />
                         ))}
                         <View style={[tw`mt-5 p-2 `, { backgroundColor: '#21212E' }]}>
