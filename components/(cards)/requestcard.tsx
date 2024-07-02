@@ -1,3 +1,4 @@
+import { getFile } from '@/helpers/api';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
@@ -6,19 +7,20 @@ interface RequestCardProps {
   service: string;
   date: string;
   time: string;
+  clientAttachmentId: string;
   onApprove: () => void;
   onReject: () => void;
 }
 
-const RequestCard: React.FC<RequestCardProps> = ({ name, service, date, time, onApprove, onReject }) => {
+const RequestCard: React.FC<RequestCardProps> = ({ name, service, date, time,clientAttachmentId, onApprove, onReject }) => {
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
-        {/* <Image source={require('./path/to/avatar.png')} style={styles.avatar} />/ */}
+        <Image source={{uri: getFile + clientAttachmentId}} style={styles.avatar} />
         <View>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.service}>{service}</Text>
-          <Text style={styles.dateTime}>Сегодня: {date} - {time}</Text>
+          <Text style={styles.dateTime}>{date} - {time}</Text>
         </View>
       </View>
       <View style={styles.cardFooter}>
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
   name: {
     fontWeight: 'bold',
     fontSize: 16,
-    marginBottom:10,
+    marginBottom: 10,
   },
   service: {
     backgroundColor: '#b9b9c9',
@@ -68,9 +70,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderRadius: 5,
     marginVertical: 5,
+    borderColor: '#4F4F4F',
+    alignSelf: 'flex-start'
   },
   dateTime: {
-    color: '#666',
+    color: '#000000',
   },
   cardFooter: {
     flexDirection: 'row',
@@ -79,7 +83,7 @@ const styles = StyleSheet.create({
   },
   approveButton: {
     backgroundColor: '#9C0A35',
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 10,
     alignItems: 'center',
     flex: 1,
@@ -87,7 +91,7 @@ const styles = StyleSheet.create({
   },
   rejectButton: {
     backgroundColor: 'transparent',
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 10,
     alignItems: 'center',
     flex: 1,
