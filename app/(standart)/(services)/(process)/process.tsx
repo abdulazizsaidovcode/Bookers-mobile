@@ -24,15 +24,13 @@ const Process = () => {
 
     // Gender options
     const Gender = [
-        { title: "Мужская для взрослых", id: 1 },
-        { title: "Женское для взрослых", id: 2 },
-        { title: "Мужская для детей", id: 3 },
-        { title: "Женское для детей", id: 4 }
+        { title: "Мужская для взрослых" },
+        { title: "Мужская для детей" }
     ];
 
     // Form input fields
     const uslugi = [
-        { label: "Услуга", value: service, onPress: setService,},
+        { label: "Услуга", value: service, onPress: setService },
         { label: "Цена", value: price, onPress: setPrice },
         { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
@@ -43,14 +41,12 @@ const Process = () => {
             const data = {
                 categoryId: "c8d966f7-dc2f-4a10-b4b1-2bd77db2da98",  // Replace with your categoryId
                 name: service,
-                genderId: selectedGender ? [selectedGender.id] : [],  // Adjust based on your gender selection logic
+                genderId: selectedGender === "Мужская для взрослых" ? [1] : [2],  // Adjust based on your gender selection logic
                 price: parseFloat(price),
                 description: description,
                 attachmentId: null,  // Assuming attachmentId is not yet determined
                 active: true
             };
-
-            console.log('Sending data to backend:', data);  // Log data being sent to backend
 
             const response = await axios.post(masterAdd_service, data, config);
 
@@ -79,8 +75,8 @@ const Process = () => {
     }, [service, price, time, description, selectedGender]);
 
     // Function to handle gender selection
-    const handleGenderPress = (gender: { title: string, id: number }) => {
-        setSelectedGender(selectedGender?.id === gender.id ? null : gender);
+    const handleGenderPress = (title: string) => {
+        setSelectedGender(selectedGender === title ? null : title);
     };
 
     // Render function for child categories
@@ -119,14 +115,13 @@ const Process = () => {
                                 key={index}
                                 title={gender.title}
                                 isRadioButton
-                                isChecked={selectedGender?.id === gender.id}
-                                onPress={() => handleGenderPress(gender)}
+                                isChecked={selectedGender === gender.title}
+                                onPress={() => handleGenderPress(gender.title)}
                             />
                         ))}
                         <View style={[tw`mt-5 p-2 `, { backgroundColor: '#21212E' }]}>
                             {uslugi.map((uslugi, index) => (
                                 <LocationInput
-                                   type=''
                                     key={index}
                                     label={uslugi.label}
                                     value={uslugi.value}
