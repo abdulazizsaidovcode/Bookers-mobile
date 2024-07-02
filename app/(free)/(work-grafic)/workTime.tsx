@@ -13,7 +13,7 @@ import Buttons from "@/components/(buttons)/button";
 import { router } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import { putWorkTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import { getWorkDay, putWorkTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 
 const timeList = [
   "08:00",
@@ -50,8 +50,8 @@ const timeList = [
   "23:30",
 ];
 
-const TimeWork: React.FC = () => {
-  const { week } = graficWorkStore();
+const TimeWorkEdit: React.FC = () => {
+  const { weekData } = graficWorkStore();
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -83,7 +83,7 @@ const TimeWork: React.FC = () => {
 
   const rangeIndices = getRangeIndices();
 
-  const weekendDays = week
+  const weekendDays = weekData
     .filter((day, i) => !day.active)
     .map((day) => day.dayName);
 
@@ -103,7 +103,7 @@ const TimeWork: React.FC = () => {
           <Text style={styles.title}>Рабочие дни</Text>
         </View>
         <View style={styles.weekListContainer}>
-          {week.map(
+          {weekData && weekData.map(
             (item, i) =>
               item.active && (
                 <WeeklCard
@@ -183,7 +183,7 @@ const TimeWork: React.FC = () => {
   );
 };
 
-export default TimeWork;
+export default TimeWorkEdit;
 
 const styles = StyleSheet.create({
   container: {

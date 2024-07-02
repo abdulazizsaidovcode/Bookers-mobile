@@ -17,9 +17,10 @@ export const WorkMainCard: React.FC<{
   title: string;
   subTitle: string;
   to?: string;
-}> = ({ icon, title, subTitle, to }) => {
+  disabled?: boolean
+}> = ({ icon, title, subTitle, to, disabled=false  }) => {
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={() => router.push(to || "")}>
+    <TouchableOpacity disabled={disabled} activeOpacity={0.7} onPress={() => router.push(to || "")}>
       <View style={styles.card}>
         <View>
           <View style={{ flexDirection: "row", gap: 5 }}>
@@ -46,6 +47,7 @@ const WorkMain = () => {
     setGetMee,
     getme,
     timeData,
+    calendarDate
   } = graficWorkStore();
 
   useEffect(() => {
@@ -65,24 +67,25 @@ const WorkMain = () => {
           title="График работы"
           subTitle={`${
             weekData.length !== 0
-              ? weekData.map((item: any) => {
-                  if (item.active) {
-                    return item.dayName.substring(0, 3);
-                  } else {
-                    return null;
-                  }
-                })
-              : "bkjtjb"
+              ? weekData
+                  .filter((item: any) => item.active) // faqat active elementlarni filter qilamiz
+                  .map((item: any) => item.dayName.substring(0, 3)) // har bir active elementning birinchi 3 harfini chiqaramiz
+                  .join(", ") // elementlarni vergul bilan ajratamiz
+              : "Рабочие дни недели не настроены!"
           }`}
           to="(free)/(work-grafic)/workGraffic"
         />
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity activeOpacity={0.7} disabled>
           <WorkMainCard
+            disabled={weekData.every(item => !item.active)}
             icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
             title="Время работы"
-            subTitle={`From ${timeData ? timeData.from : "00:00"}  to ${
-              timeData ? timeData.end : "00:00"
-            }`}
+            subTitle={
+              (timeData && timeData.from !== undefined && timeData.end !== undefined) ? 
+              `From ${timeData.from !== undefined ? timeData.from : "00:00"}  to ${
+              timeData.end !== undefined ? timeData.end : "00:00"
+            }` : "Рабочее время не настроено!"
+            }
             to="(free)/(work-grafic)/workTime"
           />
         </TouchableOpacity>
