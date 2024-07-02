@@ -42,7 +42,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: "#9c0935",
         tabBarInactiveTintColor: "gray",
         tabBarStyle: {
-          backgroundColor: "#2b2b2b",
+          backgroundColor: "#21212E",
         },
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
