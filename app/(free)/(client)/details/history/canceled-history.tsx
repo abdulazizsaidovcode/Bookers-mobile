@@ -34,12 +34,12 @@ const CanceledHistory = () => {
                 >
                     <AppointmentCard data={data}/>
                     <AppointmentCard data={data}/>
-                    <AppointmentCard data={data} isBtn/>
-                    <AppointmentCard data={data} isBtn/>
                     <AppointmentCard data={data}/>
-                    <AppointmentCard data={data} isBtn/>
                     <AppointmentCard data={data}/>
-                    <AppointmentCard data={data} isBtn/>
+                    <AppointmentCard data={data}/>
+                    <AppointmentCard data={data}/>
+                    <AppointmentCard data={data}/>
+                    <AppointmentCard data={data}/>
                 </ScrollView>
             </View>
         </SafeAreaView>

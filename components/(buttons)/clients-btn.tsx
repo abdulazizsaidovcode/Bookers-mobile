@@ -14,7 +14,7 @@ const ClientsBtn = ({countOrIcon, icon, name, clicks, role, isActive}: {
     const {statusData} = clientStore()
     let counts;
     if (statusData) {
-        if (role === 'all') counts = +statusData.didNotVisit + +statusData.fromTheAddressBook + +statusData.stoppedVisiting;
+        if (role === 'all') counts = +statusData.didNotVisit + +statusData.fromTheAddressBook + +statusData.stoppedVisiting + +statusData.newClient + +statusData.permanent;
         if (role === 'new') counts = +statusData.newClient;
         if (role === 'constant') counts = +statusData.permanent;
         if (role === 'free') counts = +statusData.allClient + +statusData.fromTheAddressBook;
