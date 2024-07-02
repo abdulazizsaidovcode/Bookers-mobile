@@ -1,11 +1,35 @@
 import registerStory from '@/helpers/state_managment/auth/register';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const UserInfo = () => {
-    const { firstName, setFirstName, lastName, setLastName } = registerStory()
-    const isButtonEnabled = firstName.length > 0 && lastName.length > 0;
+const UserInfo: React.FC = () => {
+    const { firstName, setFirstName, lastName, setLastName, firstNameError, setFirstNameError, lastNameError, setLastNameError } = registerStory();
+
+    const validateName = (name: string): boolean => {
+        const nameRegEx = /^[a-zA-Zа-яА-ЯёЁ]{2,30}$/;
+        return nameRegEx.test(name);
+    };
+
+    const handleFirstNameChange = (name: string): void => {
+        setFirstName(name);
+        if (!validateName(name)) {
+            setFirstNameError('Имя должно содержать только буквы и быть длиной от 2 до 30 символов');
+        } else {
+            setFirstNameError('');
+        }
+    };
+
+    const handleLastNameChange = (name: string): void => {
+        setLastName(name);
+        if (!validateName(name)) {
+            setLastNameError('Фамилия должна содержать только буквы и быть длиной от 2 до 30 символов');
+        } else {
+            setLastNameError('');
+        }
+    };
+
+    const isButtonEnabled = firstName.length > 0 && lastName.length > 0 && firstNameError === '' && lastNameError === '';
 
     return (
         <View style={styles.container}>
@@ -22,15 +46,17 @@ const UserInfo = () => {
                     placeholder="Имя"
                     placeholderTextColor="#8A8A8A"
                     value={firstName}
-                    onChangeText={setFirstName}
+                    onChangeText={handleFirstNameChange}
                 />
+                {firstNameError ? <Text style={styles.errorText}>{firstNameError}</Text> : null}
                 <TextInput
                     style={styles.input}
                     placeholder="Фамилия"
                     placeholderTextColor="#8A8A8A"
                     value={lastName}
-                    onChangeText={setLastName}
+                    onChangeText={handleLastNameChange}
                 />
+                {lastNameError ? <Text style={styles.errorText}>{lastNameError}</Text> : null}
             </View>
             <View style={styles.bottomSection}>
                 <TouchableOpacity
@@ -104,6 +130,10 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#FFFFFF',
         fontSize: 16,
+    },
+    errorText: {
+        color: '#FF0000',
+        marginTop: 5,
     },
 });
 

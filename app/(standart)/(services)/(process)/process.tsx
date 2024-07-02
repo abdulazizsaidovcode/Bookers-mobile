@@ -6,23 +6,21 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/components/(location)/locationInput';
 import Buttons from '@/components/(buttons)/button';
-import axios from 'axios';
-import { router, useLocalSearchParams } from 'expo-router';
-import servicesStore from '@/helpers/state_managment/services/servicesStore';
-import { masterAdd_service } from '@/helpers/api';
-import { config } from '@/helpers/token';
+import axios from 'axios';  // Axios is used for making HTTP requests
+import { router, useLocalSearchParams } from 'expo-router';  // Assuming you're using expo-router for navigation
+import servicesStore from '@/helpers/state_managment/services/servicesStore';  // Importing state management functions
+import { masterAdd_service } from '@/helpers/api';  // Importing API endpoint for adding services
+import { config } from '@/helpers/token';  // Importing authentication tokens or headers
 
 const Process = () => {
-    const { selectedServices } = useLocalSearchParams();
-    const [service, setService] = useState('');
-    const [price, setPrice] = useState('');
-    const [time, setTime] = useState('');
-    const [description, setDescription] = useState('');
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [textAreaValue, setTextAreaValue] = useState<string>('');
-    const [validate, setValidate] = useState(false);
-    const [selectedGender, setSelectedGender] = useState<string | null>(null);
-    const { childCategoryData } = servicesStore();
+    const { selectedServices } = useLocalSearchParams();  // Using local search params from expo-router
+    const [service, setService] = useState('');  // State for service name
+    const [price, setPrice] = useState('');  // State for service price
+    const [time, setTime] = useState('');  // State for service duration
+    const [description, setDescription] = useState('');  // State for service description
+    const [validate, setValidate] = useState(false);  // State for form validation
+    const [selectedGender, setSelectedGender] = useState<string | null>(null);  // State for selected gender
+    const { childCategoryData } = servicesStore();  // Fetching child category data from state management
 
     // Gender options
     const Gender = [
@@ -37,7 +35,7 @@ const Process = () => {
         { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
 
-    // Function to post service data
+    // Function to post service data to backend
     const postService = async () => {
         try {
             const data = {
@@ -75,11 +73,6 @@ const Process = () => {
             setValidate(true);
         }
     }, [service, price, time, description, selectedGender]);
-
-    // Function to check validity of textarea
-    const checkFormValidity = () => {
-        setIsFormValid(textAreaValue.trim() !== '');
-    };
 
     // Function to handle gender selection
     const handleGenderPress = (title: string) => {
@@ -149,7 +142,7 @@ const Process = () => {
                         </View>
                     </View>
                     <View style={[tw`mb-3 p-3`, { backgroundColor: '#21212E' }]}>
-                        <Buttons title='Сохранить' isDisebled={validate} onPress={postService} />
+                        <Buttons title='Сохранить' isDisebled={!validate} onPress={postService} />
                     </View>
                 </ScrollView>
             </View>
