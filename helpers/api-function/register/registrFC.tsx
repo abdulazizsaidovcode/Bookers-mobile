@@ -3,7 +3,6 @@ import { config } from "@/helpers/token";
 import axios from "axios";
 import { router } from "expo-router";
 import { Alert } from "react-native";
-
 export const registerFunction = (phoneNumber: string, setCode: (value: any) => void) => {
     const sentData = {
         phoneNumber: phoneNumber
@@ -28,7 +27,6 @@ export const checkCode = (phoneNumber: string, otpValue: string,) => {
         })
         .catch(r => {
         })
-
 }
 interface IRegister {
     phoneNumber: string
