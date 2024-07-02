@@ -2,7 +2,7 @@ import {StyleSheet, View, Text, ScrollView} from 'react-native';
 import tw from "tailwind-react-native-classnames";
 import IconsButtons from "@/components/(buttons)/icon-btn";
 
-const AppointmentCard = ({clicks, data, isBtn}: { clicks?: () => void, data: any[], isBtn?: boolean }) => {
+const AppointmentCard = ({clicks, data, isBtn}: { clicks?: () => void, data: string[], isBtn?: boolean }) => {
     return (
         <View
             style={[styles.container]}
@@ -13,9 +13,7 @@ const AppointmentCard = ({clicks, data, isBtn}: { clicks?: () => void, data: any
                     horizontal
                     showsHorizontalScrollIndicator={false}
                 >
-                    {data.map(client => (
-                        <Text style={[styles.option, {borderWidth: 1}]}>{client.name}</Text>
-                    ))}
+                    {data.length > 0 && data.map(client => <Text style={[styles.option, {borderWidth: 1}]}>{client}</Text>)}
                 </ScrollView>
             </View>
             <Text style={styles.price}>350 000 сум</Text>
