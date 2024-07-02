@@ -50,17 +50,6 @@ const Schedule: React.FC = () => {
   );
 };
 
-// {
-//   "categoryId": "6d85520e-0509-4323-affb-3ca8f014ef7e",
-//   "name": "kalla kesins",
-//   "genderId": [
-//     1
-//   ],
-//   "price": 2000,
-//   "description": "ogritme sezdirme kalla kesamiz arra bilan",
-//   "attachmentId": "8bffe6cf-a163-414c-b621-5be315c90674",
-//   "active": true
-// }
 
 const styles = StyleSheet.create({
   container: {
