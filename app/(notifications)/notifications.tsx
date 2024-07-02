@@ -12,7 +12,7 @@ const screenHeight = Dimensions.get('window').height;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(notifications)/notification'>;
 
 const NotificationSettings = () => {
-    const {isSwitch, setIsSwitch} = useNotificationsStore();'(notifications)/(pages)/messenger'
+    const {isSwitch, setIsSwitch} = useNotificationsStore();
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     const toggleSwitch = () => {

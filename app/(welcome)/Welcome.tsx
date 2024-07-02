@@ -23,12 +23,16 @@ import {
   getNumbers,
   putNumbers,
 } from "@/helpers/api-function/numberSittings/numbersetting";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
 
 const screenWidht = Dimensions.get('window').width
 const screenHeight = Dimensions.get('window').height
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(welcome)/welcome'>;
 
 const Welcome = () => {
   const { number, setNumber } = numberSettingStore();
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   useEffect(() => {
     if (number.length === 0) {
@@ -44,13 +48,13 @@ const Welcome = () => {
       description: "Ваша специализация и услуги",
       icon: <Feather name="check-circle" size={24} color="white" />,
       onPress: () =>
-        router.push("../(standart)/(services)/(myServices)/myServices"),
+        navigation.navigate("(standart)/(services)/(myServices)/myServices"),
     },
     {
       title: "График работы",
       description: "Планируйте своё рабочее время",
       icon: <FontAwesome5 name="calendar" size={24} color="white" />,
-      onPress: () => router.push("../(work-grafic)/workMain"),
+      onPress: () => navigation.navigate("(free)/(work-grafic)/workMain"),
     },
     {
       title: "Локация",
@@ -63,31 +67,31 @@ const Welcome = () => {
       description: "Создавайте фото и видео галереи своих работ",
       icon: <MaterialIcons name="photo" size={24} color="white" />,
       onPress: () =>
-        router.push("../(settings)/(settings-gallery)/settings-gallery-main"),
+        navigation.navigate("(settings)/(settings-gallery)/settings-gallery-main"),
     },
     {
       title: "Онлайн бронирование",
       description: "Настройте записи на Ваши услуги",
       icon: <FontAwesome6 name="calendar-plus" size={24} color="white" />,
-      onPress: () => router.push("../(standart)/(onlineBooking)/onlineBooking"),
+      onPress: () => navigation.navigate("(standart)/(onlineBooking)/onlineBooking"),
     },
     {
       title: "Уведомления",
       description: "Настройте уведомления",
       icon: <Ionicons name="notifications-outline" size={24} color="white" />,
-      onPress: () => router.push("../(notifications)/notifications"),
+      onPress: () => navigation.navigate("(notifications)/notifications"),
     },
     {
       title: "Клиенты",
       description: "Добавьте своих клинетов",
       icon: <Fontisto name="persons" size={24} color="white" />,
-      onPress: () => router.push("../(free)/(client)/main"),
+      onPress: () => navigation.navigate("(free)/(client)/main"),
     },
     {
       title: "Помощь",
       description: "Ознакомьтесь с документацией сервиса",
       icon: <AntDesign name="questioncircleo" size={24} color="white" />,
-      onPress: () => router.push("(free)/(help)/help"),
+      onPress: () => navigation.navigate("(free)/(help)/help"),
     },
   ];
 

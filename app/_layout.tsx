@@ -47,7 +47,6 @@ import MasterorClient from "./(auth)/masterORclient";
 import TariffsPage from "./(profile)/(tariff)/tariff";
 import Location from "./(location)/Location";
 import LocationData from "./(location)/(location-data)/LocationData";
-import Welcome from "./(welcome)/Welcome";
 import ResponseLocation from "./(location)/(response-location)/ResponseLocation";
 import GrafficWork from "./(free)/(work-grafic)/workGraffic";
 import TimeWork from "./(free)/(work-grafic)/workTime";
@@ -95,6 +94,7 @@ import CanceledHistory from "@/app/(free)/(client)/details/history/canceled-hist
 import NotificationSettings from "./(notifications)/notifications";
 import Messengers from "./(notifications)/(pages)/messengers";
 import HelpPage from "./(profile)/(help)/help";
+import Welcome from "./(welcome)/Welcome";
 
 const Stack = createNativeStackNavigator();
 
