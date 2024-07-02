@@ -7,10 +7,12 @@ export type RootStackParamList = {
   'settings-gallery-main': undefined;
   'settings-gallery': undefined;
   'settings-locations': undefined;
+  '(notifications)/notification': undefined;
   '(auth)/auth': undefined;
   '(settings)/(settings-location)/settings-locations-main': undefined;
   '(settings)/(settings-location)/settings-locations': undefined;
   '(standart)/client/standard-main': undefined;
+  '(notifications)/(pages)/messengers': undefined;
   '(settings)/(settings-gallery)/settings-gallery': undefined;
   '(standart)/client/stopped-visiting': undefined;
   '(standart)/client/not-visiting': undefined;

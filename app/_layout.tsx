@@ -93,6 +93,7 @@ import UpcomingHistory from "@/app/(free)/(client)/details/history/upcoming-hist
 import PastHistory from "@/app/(free)/(client)/details/history/past-history";
 import CanceledHistory from "@/app/(free)/(client)/details/history/canceled-history";
 import NotificationSettings from "./(notifications)/notifications";
+import Messengers from "./(notifications)/(pages)/messengers";
 
 const Stack = createNativeStackNavigator();
 
@@ -323,6 +324,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(notifications)/notifications"
               component={NotificationSettings}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/messengers"
+              component={Messengers}
               options={{ headerShown: false }}
             />
             <Stack.Screen
