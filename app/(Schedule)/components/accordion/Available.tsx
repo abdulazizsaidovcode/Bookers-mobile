@@ -31,6 +31,7 @@ const AvailableAccordion: React.FC = () => {
                         key={index}
                         name={item.clientName}
                         phone={item.phoneNumber}
+                        attachmentId={item.attachmentId}
                         service={item.serviceName}
                         price={item.price}
                         startTime={item.startTime}

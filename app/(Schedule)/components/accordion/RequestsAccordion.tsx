@@ -52,7 +52,7 @@ const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items, onActionSu
 
 const styles = StyleSheet.create({
   accordionContent: {
-    padding: 10,
+    // padding: 10,
   },
   noRequestsText: {
     fontSize: 16,
