@@ -93,6 +93,7 @@ import UpcomingHistory from "@/app/(free)/(client)/details/history/upcoming-hist
 import PastHistory from "@/app/(free)/(client)/details/history/past-history";
 import CanceledHistory from "@/app/(free)/(client)/details/history/canceled-history";
 import NotificationSettings from "./(notifications)/notifications";
+import HelpPage from "./(profile)/(help)/help";
 
 const Stack = createNativeStackNavigator();
 
@@ -551,6 +552,14 @@ function RootLayoutNav() {
               component={CenseledSession}
               options={{ headerShown: false }}
             />
+
+            {/*  help start  */}
+            <Stack.Screen
+              name="(profile)/(help)/help"
+              component={HelpPage}
+              options={{ headerShown: false }}
+            />
+            {/*  help end  */}
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>

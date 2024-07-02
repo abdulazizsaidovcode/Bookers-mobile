@@ -55,7 +55,7 @@ const ProfilePage: React.FC = () => {
                 {[
                     { icon: 'user', label: 'Подписка', screen: '(profile)/(tariff)/tariff' },
                     { icon: 'history', label: 'История сеансов', screen: '(profile)/(sessionhistory)/sessionHistory' },
-                    { icon: 'info-circle', label: 'Справка', screen: 'Help' },
+                    { icon: 'info-circle', label: 'Справка', screen: '(profile)/(help)/help' },
                     { icon: 'bell', label: 'Уведомления', screen: '(profile)/(notification)/index' },
                     { icon: 'wallet', label: 'Расходы', screen: '(profile)/(Expenses)/index' },
                     { icon: 'globe', label: 'Веб страница', screen: '(profile)/(WebPage)/WebPage' },
