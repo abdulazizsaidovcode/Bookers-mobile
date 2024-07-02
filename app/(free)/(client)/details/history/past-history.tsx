@@ -32,11 +32,11 @@ const PastHistory = () => {
                     contentContainerStyle={{paddingHorizontal: 16, paddingVertical: 24, gap: 16}}
                 >
                     <AppointmentCard data={data}/>
-                    <AppointmentCard data={data} isBtn/>
                     <AppointmentCard data={data}/>
-                    <AppointmentCard data={data} isBtn/>
                     <AppointmentCard data={data}/>
-                    <AppointmentCard data={data} isBtn/>
+                    <AppointmentCard data={data}/>
+                    <AppointmentCard data={data}/>
+                    <AppointmentCard data={data}/>
                 </ScrollView>
             </View>
         </SafeAreaView>
