@@ -1,15 +1,17 @@
-import { DashboardDailyTimeOrders, DashboardMainStatistic, DashboardState } from '@/type/dashboard/dashboard';
+import { DashboardDailyTimeOrders, DashboardMainStatistic, DashboardState, DashboardWaitingOrder } from '@/type/dashboard/dashboard';
 import { create } from 'zustand';
 
 const useDashboardStore = create<DashboardState>((set) => ({
-    data: [],
+    waitingData: [],
+    dailyTimeData: [],
     mainStatisticData: {
         completedSessions: '',
         incomeToday: '',
         rejectedOrder: 0,
         incomeThisMonth: 0
     },
-    setData: (val: DashboardDailyTimeOrders[]) => set({ data: val }),
+    setDailyTimeData: (val: DashboardDailyTimeOrders[]) => set({ dailyTimeData: val }),
+    setWaitingData: (val: DashboardWaitingOrder[]) => set({ waitingData: val }),
     setMainStatisticData: (val: DashboardMainStatistic) => set({ mainStatisticData: val }),
 }));
 

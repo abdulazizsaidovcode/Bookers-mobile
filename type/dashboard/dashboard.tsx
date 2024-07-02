@@ -1,14 +1,15 @@
 export interface DashboardState {
-    data: DashboardDailyTimeOrders[],
+    waitingData: DashboardWaitingOrder[],
+    dailyTimeData: DashboardDailyTimeOrders[],
     mainStatisticData: DashboardMainStatistic,
-    setData: (data: DashboardDailyTimeOrders[]) => void;
+    setDailyTimeData: (data: DashboardDailyTimeOrders[]) => void;
+    setWaitingData: (data: DashboardWaitingOrder[]) => void;
     setMainStatisticData: (data: DashboardMainStatistic) => void;
 }
 
 export interface DashboardDailyTimeOrders {
     type: string,
-    times: string[],
-    count: number
+    time: string,
 }
 
 export interface DashboardMainStatistic {
@@ -16,4 +17,15 @@ export interface DashboardMainStatistic {
     incomeToday: string,
     rejectedOrder: number,
     incomeThisMonth: number
+}
+
+export interface DashboardWaitingOrder {
+    orderId: string,
+    paid: number,
+    clientStatus: string[],
+    clientName: string,
+    categoryName: string,
+    clientAttachmentId: string,
+    orderDate: string,
+    request: string
 }
