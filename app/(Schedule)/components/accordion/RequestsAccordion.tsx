@@ -32,6 +32,7 @@ const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items }) => {
             clientAttachmentId={request.clientAttachmentId}
             date={request.orderDate.split(' ')[0]} // Extracting just the date part for simplicity
             time={extractTimeRange(request.orderDate)} // Extracting the time range
+            orderId={request.orderId}
             onApprove={() => handleApprove(index)}
             onReject={() => handleReject(index)}
           />

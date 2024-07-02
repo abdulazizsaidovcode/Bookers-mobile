@@ -109,7 +109,6 @@ export const masterOrderConfirm = (orderID: string, setLoading: any, status: str
        .then((response) => {
             setLoading(false)
             if (response.data.success) {
-            
                 console.log("Order set successfully", response);
             }
         })
