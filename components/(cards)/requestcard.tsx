@@ -43,7 +43,7 @@ const RequestCard: React.FC<RequestCardProps> = ({ name, service, date, time,ord
           {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Одобрить</Text>}
         </TouchableOpacity>
         <TouchableOpacity style={styles.rejectButton} onPress={handleReject} disabled={loading}>
-          {loading ? <ActivityIndicator color="#9C0A35" /> : <Text style={styles.buttonText}>Отклонить</Text>}
+          {loading ? <ActivityIndicator color="#9C0A35" /> : <Text style={styles.buttonTextR}>Отклонить</Text>}
         </TouchableOpacity>
       </View>
     </View>
