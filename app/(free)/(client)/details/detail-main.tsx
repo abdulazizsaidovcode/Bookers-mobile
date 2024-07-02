@@ -28,7 +28,7 @@ const DetailMain = () => {
     const [role, setRole] = useState('basics')
 
     useEffect(() => {
-        getHistoryCount(setHistoryCountData)
+        getHistoryCount(setHistoryCountData, infoClient.id)
     }, []);
 
     useEffect(() => {

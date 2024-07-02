@@ -13,10 +13,10 @@ import {
     client_stopped_visit_search,
     client_stopped_visit_sms,
     client_stopped_visiting,
-    district_list, history_count,
+    district_list, getMeID, history_count,
     master_client_all_list, master_client_all_list_search,
     master_client_create, master_message_for_client, master_service_list,
-    new_client, new_client_search, order_upcoming,
+    new_client, new_client_search, order_canceled, order_past, order_upcoming,
     region_list
 } from "@/helpers/api";
 import {
@@ -31,6 +31,22 @@ import {
     RegionData,
     UpdateClient
 } from "@/type/client/client";
+import clientStore from "@/helpers/state_managment/client/clientStore";
+
+// id buyicha get me qiladi client ni
+export const getMeClient = async (setData: (val: any | null) => void, clientID: string) => {
+    try {
+        if (clientID) {
+            const {data} = await axios.get(getMeID, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        }
+        alert('An error occurred. We will fix it soon')
+    } catch (err) {
+        console.log(err)
+        setData(null)
+    }
+}
 
 // age oraliqni list ini get qilish
 export const getAgeList = async (setData: (val: AgeData[] | null) => void) => {
@@ -315,11 +331,13 @@ export const addClientMessage = async (clientID: string, message: string, setLoa
 }
 
 // history count get function
-export const getHistoryCount = async (setData: (val: HistoryCount | null) => void) => {
+export const getHistoryCount = async (setData: (val: HistoryCount | null) => void, clientID: string) => {
     try {
-        const {data} = await axios.get(history_count, config);
-        if (data.success) setData(data.body)
-        else setData(null)
+        if (clientID) {
+            const {data} = await axios.get(`${history_count}${clientID}`, config);
+            if (data.success) setData(data.body)
+            else setData(null)
+        } else setData(null)
     } catch (err) {
         console.log(err)
         setData(null)
@@ -372,7 +390,7 @@ export const getUpcomingClient = async (setData: (val: any[] | null) => void, cl
 export const getPastClient = async (setData: (val: any[] | null) => void, clientID: string) => {
     try {
         if (clientID) {
-            const {data} = await axios.get(`${order_upcoming}?status=PAST_SESSIONS&clientId=${clientID}`, config)
+            const {data} = await axios.get(`${order_past}?status=PAST_SESSIONS&clientId=${clientID}`, config)
             if (data.success) setData(data.body)
             else setData(null)
         } else setData(null)
@@ -386,7 +404,7 @@ export const getPastClient = async (setData: (val: any[] | null) => void, client
 export const getCanceledClient = async (setData: (val: any[] | null) => void, clientID: string) => {
     try {
         if (clientID) {
-            const {data} = await axios.get(`${order_upcoming}?status=CANCELED_SESSIONS&clientId=${clientID}`, config)
+            const {data} = await axios.get(`${order_canceled}?status=CANCELED_SESSIONS&clientId=${clientID}`, config)
             if (data.success) setData(data.body)
             else setData(null)
         } else setData(null)

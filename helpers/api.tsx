@@ -75,7 +75,7 @@ export const client_permanent: string = `${base_url}user/master/client-permanent
 export const client_permanent_search: string = `${base_url}client/search/for/regular/visit?name=`
 export const new_client: string = `${base_url}user/master/client-new`
 export const new_client_search: string = `${base_url}client/search/for/new?name=`
-export const history_count: string = `${base_url}order/client/session-history`
+export const history_count: string = `${base_url}order/client/session-history?clientId=`
 
 // age url
 export const age_list: string = `${base_url}age`
