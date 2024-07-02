@@ -1,4 +1,4 @@
-import { dashboard_daily_time_orders, dashboard_edit_order_status, dashboard_main_statistic, dashboard_wait_order } from "@/helpers/api"
+import { dashboard_daily_time_orders, dashboard_edit_order_status, dashboard_hall_order, dashboard_main_statistic, dashboard_wait_order } from "@/helpers/api"
 import { config } from "@/helpers/token";
 import { DashboardDailyTimeOrders, DashboardMainStatistic, DashboardWaitingOrder } from "@/type/dashboard/dashboard";
 import axios from "axios"
@@ -21,21 +21,27 @@ export const fetchWaitingOrders = async (setWaitingData: (val: DashboardWaitingO
     try {
         const { data } = await axios.get(dashboard_wait_order, config);
         setWaitingData(data.body);
-        console.log(data.body);
     } catch { }
 }
 
-export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrder[]) => void, orderId: string, status: string) => {
+export const fetchHallingOrders = async (setHallingData: (val: DashboardWaitingOrder[]) => void) => {
+    try {
+        const { data } = await axios.get(dashboard_hall_order, config);
+        setHallingData(data.body);
+    } catch { }
+}
+
+export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrder[]) => void, orderId: string, status: string, toggleModal?: () => void) => {
     console.log(orderId);
-    
+
     try {
         const { data } = await axios.put(`${dashboard_edit_order_status}?orderId=${orderId}&status=${status}`, {}, config);
         if (data.success) {
             fetchWaitingOrders(setWaitingData);
-            console.log(data.body);
+            toggleModal();
         }
     } catch (error) {
         console.log(error);
-        
-     }
+
+    }
 }

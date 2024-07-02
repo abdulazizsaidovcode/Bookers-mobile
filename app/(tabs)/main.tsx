@@ -11,6 +11,7 @@ import useDashboardStore from "@/helpers/state_managment/dashboard/dashboard";
 import { DashboardDailyTimeOrders, DashboardWaitingOrder } from "@/type/dashboard/dashboard";
 import { getFile } from "@/helpers/api";
 import moment from "moment";
+import CenteredModal from "@/components/(modals)/modal-centered";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
 
@@ -19,19 +20,17 @@ const screenHeight = Dimensions.get("window").height;
 
 export default function TabOneScreen() {
 	const navigation = useNavigation<SettingsScreenNavigationProp>();
-	const { mainStatisticData, waitingData, dailyTimeData, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
+	const { mainStatisticData, waitingData, dailyTimeData, isModal, setIsModal, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
 
 	useEffect(() => {
 		fetchDaylyOrderTimes(setDailyTimeData);
-	}, []);
-
-	useEffect(() => {
 		fetchMainStatistic(setMainStatisticData);
-	}, []);
-
-	useEffect(() => {
 		fetchWaitingOrders(setWaitingData);
 	}, []);
+
+	const toggleConfirmModal = () => {
+		setIsModal(!isModal)
+	}
 
 	let chartFraction = mainStatisticData.completedSessions;
 	let chartSeparatorIndex = chartFraction.indexOf('/');
@@ -60,34 +59,39 @@ export default function TabOneScreen() {
 		</View>
 	);
 
-	// const renderBookingRequest: React.FC<{ item: DashboardWaitingOrder }> = ({ item }) => (
-	// 	<View style={styles.bookingCard}>
-	// 		<View style={styles.cardHeader}>
-	// 			<Text style={styles.newRequestText}> <FontAwesome name="star" size={12} color="#217355" />Новый Запрос</Text>
-	// 		</View>
-	// 		<View style={{ flexDirection: 'row', gap: 5 }}>
-	// 			<View>
-	// 				<Image source={item.clientAttachmentId ? getFile + item.clientAttachmentId : require('../../assets/avatar.png')} style={styles.profileImage} />
-	// 			</View>
-	// 			<View>
-	// 				<Text style={styles.userName}>{item.clientName}</Text>
-	// 				<Text style={styles.serviceText}>{item.categoryName}</Text>
-	// 			</View>
-	// 		</View>
-	// 		<View style={{ borderWidth: 1, borderColor: '#4F4F4F', width: 150, padding: 3, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
-	// 			<Text style={{ color: '#4F4F4F', fontSize: 12 }}>{item.categoryName}</Text>
-	// 		</View>
-	// 		<Text style={styles.timeText}>{item.orderDate}</Text>
-	// 		<View style={styles.actionButtons}>
-	// 			<TouchableOpacity style={styles.approveButton}>
-	// 				<Text style={styles.buttonText} onPress={() => editOrderStatus(setWaitingData, item.orderId, 'CONFIRMED')}>Одобрить</Text>
-	// 			</TouchableOpacity>
-	// 			<TouchableOpacity style={styles.rejectButton}>
-	// 				<Text style={{ color: '#9C0A35', fontWeight: 'bold' }} onPress={() => editOrderStatus(setWaitingData, item.orderId, 'REJECTED')}>Отклонить</Text>
-	// 			</TouchableOpacity>
-	// 		</View>
-	// 	</View>
-	// );
+	const renderBookingRequest: React.FC<{ item: DashboardWaitingOrder }> = ({ item }) => (
+		<View style={styles.bookingCard}>
+			<View style={styles.cardHeader}>
+				<Text style={styles.newRequestText}> <FontAwesome name="star" size={12} color="#217355" />Новый Запрос</Text>
+			</View>
+			<View style={{ flexDirection: 'row', gap: 10, paddingVertical: 10 }}>
+				<View>
+					<Image source={item.clientAttachmentId ? { uri: getFile + item.clientAttachmentId } : require('../../assets/avatar.png')} style={styles.profileImage} />
+				</View>
+				<View>
+					<Text style={styles.userName}>{item.clientName}</Text>
+					<Text style={styles.serviceText}>{item.categoryName}</Text>
+				</View>
+			</View>
+			<View style={{ borderWidth: 1, borderColor: '#4F4F4F', width: 150, padding: 3, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
+				<Text style={{ color: '#4F4F4F', fontSize: 12 }}>{item.categoryName}</Text>
+			</View>
+			<Text style={styles.timeText}>{item.orderDate}</Text>
+			<View style={styles.actionButtons}>
+				<TouchableOpacity style={styles.approveButton}>
+					<Text style={styles.buttonText} onPress={toggleConfirmModal}>Одобрить</Text>
+				</TouchableOpacity>
+				<TouchableOpacity style={styles.rejectButton}>
+					<Text style={{ color: '#9C0A35', fontWeight: 'bold' }} onPress={() => editOrderStatus(setWaitingData, item.orderId, 'REJECTED')}>Отклонить</Text>
+				</TouchableOpacity>
+			</View>
+			<CenteredModal isModal={isModal} toggleModal={toggleConfirmModal} isFullBtn btnRedText="Отменить" onConfirm={() => editOrderStatus(setWaitingData, item.orderId, 'REJECTED', toggleConfirmModal)} btnWhiteText="Назад">
+				<View>
+					<Text style={{ fontSize: 17, color: 'white', textAlign: 'center' }}>Вы уверены, что хотите отменить этот заказ?</Text>
+				</View>
+			</CenteredModal>
+		</View>
+	);
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -169,7 +173,25 @@ export default function TabOneScreen() {
 						</View>
 						<FlatList
 							data={waitingData}
-							renderItem={Requ}
+							renderItem={renderBookingRequest}
+							keyExtractor={item => item.orderId}
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							contentContainerStyle={styles.bookingList}
+						/>
+					</View>
+				}
+				{waitingData.length === 0 ? '' :
+					<View>
+						<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
+							<Text style={{ color: 'white', fontSize: 20 }}>Запросы окошка</Text>
+							<View style={styles.headerRight}>
+								<Text style={styles.requestsCount}>{waitingData.length} заявки</Text>
+							</View>
+						</View>
+						<FlatList
+							data={waitingData}
+							renderItem={renderBookingRequest}
 							keyExtractor={item => item.orderId}
 							horizontal
 							showsHorizontalScrollIndicator={false}

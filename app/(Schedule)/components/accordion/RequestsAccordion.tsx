@@ -4,10 +4,10 @@ import RequestCard from '@/components/(cards)/requestcard';
 import { OrderItem } from '../../availebleschedule';
 
 interface RequestsAccordionProps {
-  item: OrderItem[];  
+  items: OrderItem[];
 }
 
-const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items = [] }) => {
+const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items }) => {
   const handleApprove = (index: number) => {
     console.log(`Approved request ${index}`);
   };
@@ -16,16 +16,23 @@ const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items = [] }) => 
     console.log(`Rejected request ${index}`);
   };
 
+  const extractTimeRange = (orderDate: string) => {
+    const timeRangeMatch = orderDate.match(/\d{2}:\d{2} - \d{2}:\d{2}/);
+    return timeRangeMatch ? timeRangeMatch[0] : '';
+  };
+
   return (
-    <View>
+    <View style={styles.accordionContent}>
       {items.length > 0 ? (
-        items.map((request: any, index: any) => (
+        items.map((request, index) => (
           <RequestCard
-            key={index}
+            key={request.orderId}
             name={request.clientName}
             service={request.categoryName}
-            date={request.orderDate}
-            time={`${request.orderDate.split(' ')[1]}`} // Assuming `orderDate` is in "Today 12:00 - 13:10" format
+            clientAttachmentId={request.clientAttachmentId}
+            date={request.orderDate.split(' ')[0]} // Extracting just the date part for simplicity
+            time={extractTimeRange(request.orderDate)} // Extracting the time range
+            orderId={request.orderId}
             onApprove={() => handleApprove(index)}
             onReject={() => handleReject(index)}
           />
@@ -38,7 +45,9 @@ const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items = [] }) => 
 };
 
 const styles = StyleSheet.create({
-
+  accordionContent: {
+    padding: 10,
+  },
   noRequestsText: {
     fontSize: 16,
     textAlign: 'center',
