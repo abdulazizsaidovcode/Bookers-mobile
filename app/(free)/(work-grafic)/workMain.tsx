@@ -11,6 +11,7 @@ import {
   getWorkTime,
 } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import { getMee } from "@/helpers/token";
+import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 
 export const WorkMainCard: React.FC<{
   icon: any;
@@ -101,7 +102,14 @@ const WorkMain = () => {
       >
         <Buttons
           title="На главную"
-          onPress={() => router.push("(free)/(work-grafic)/workMain")}
+          onPress={() => {
+            if (calendarDate && timeData.from !== undefined && timeData.end !== undefined && weekData.some(item => !item.active)) {
+              putNumbers(3);
+              console.log(" 3 ketti");
+              
+            }
+            router.push("(welcome)/Welcome");
+          }}
         />
       </View>
     </SafeAreaView>

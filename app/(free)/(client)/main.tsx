@@ -12,6 +12,8 @@ import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import {useEffect} from "react";
 import {getClientAll, getClientStatistics} from "@/helpers/api-function/client/client";
+import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
+import { router } from 'expo-router';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/main'>;
 
@@ -94,7 +96,10 @@ const MainClient = () => {
                         </CenteredModal>
                     </View>
                     <View style={tw`pb-5`}>
-                        <Buttons title={`Настроить позже и перейти на главную`} onPress={() => navigation.navigate('(welcome)/Welcome')}/>
+                        <Buttons title={`Настроить позже и перейти на главную`} onPress={() => {
+                            putNumbers(8)
+                            router.push('(welcome)/Welcome')
+                        } }/>
                     </View>
                 </ScrollView>
             </View>

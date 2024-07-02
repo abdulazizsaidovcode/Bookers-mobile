@@ -121,6 +121,8 @@ export const master_order_confirmed: string = `${base_url}order/master/clients-t
 export const master_order_wait: string = `${base_url}order/master/clients-today/wait`
 export const master_order_hall: string = `${base_url}order/master/clients-today/hall`
 
+export const master_order_confirm: string = `${base_url}order/confirm-order`
+
 // feedback url
 export const add_feedback: string = `${base_url}feedback/for/app/by/master`
 

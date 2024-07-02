@@ -21,7 +21,8 @@ const Process: React.FC = () => {
     const { selectedServices } = useLocalSearchParams();  // Using local search params from expo-router
     const [service, setService] = useState<string>('');  // State for service name
     const [price, setPrice] = useState<string>('');  // State for service price
-    const [time, setTime] = useState<string>('');  // State for service duration
+    const [hours, setHours] = useState<string>('');  // State for service duration hours
+    const [minutes, setMinutes] = useState<string>('');  // State for service duration minutes
     const [description, setDescription] = useState<string>('');  // State for service description
     const [validate, setValidate] = useState<boolean>();  // State for form validation
     const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);  // State for selected gender
@@ -39,23 +40,33 @@ const Process: React.FC = () => {
     const uslugi = [
         { label: "Услуга", value: service, onPress: setService },
         { label: "Цена", value: price, onPress: setPrice },
-        { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
+        { label: "Часы", value: hours, onPress: setHours },
+        { label: "Минуты", value: minutes, onPress: setMinutes }
     ];
 
-    
+    // Function to convert hours and minutes to seconds
+    const convertToSeconds = (hours: number, minutes: number) => {
+        return (hours * 3600) + (minutes * 60);
+    };
+
     const postService = async () => {
         try {
+            const hoursInt = parseInt(hours) || 0;
+            const minutesInt = parseInt(minutes) || 0;
+            const durationInSeconds = convertToSeconds(hoursInt, minutesInt);
+
             const data = {
-                categoryId: categoryFatherId,  
+                categoryId: categoryFatherId.key,
                 name: service,
-                genderId: selectedGender ? [selectedGender.id] : [],  
+                genderId: selectedGender ? [selectedGender.id] : [],
                 price: parseFloat(price),
+                duration: durationInSeconds,  // Sending duration in seconds
                 description: description,
-                attachmentId: null,  
+                attachmentId: null,
                 active: true
             };
 
-            console.log('Sending data to backend:', data);  
+            console.log('Sending data to backend:', data);
 
             const response = await axios.post(masterAdd_service, data, config);
 
@@ -63,20 +74,20 @@ const Process: React.FC = () => {
                 console.log('Service added successfully:', response.data);
                 router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
             } else {
-                
                 console.error('Failed to add service:', response.data.message);
             }
         } catch (error) {
             console.error('Error adding service:', error);
         }
     };
+
     useEffect(() => {
-        if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0 || !selectedGender) {
+        if (service.length === 0 || price.length === 0 || (hours.length === 0 && minutes.length === 0) || description.length === 0 || !selectedGender) {
             setValidate(true);
         } else {
             setValidate(false);
         }
-    }, [service, price, time, description, selectedGender]);
+    }, [service, price, hours, minutes, description, selectedGender]);
 
     // Function to handle gender selection
     const handleGenderPress = (gender: GenderOption) => {

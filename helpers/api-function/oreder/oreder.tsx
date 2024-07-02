@@ -1,4 +1,4 @@
-import { master_order_confirmed, master_order_hall, master_order_wait, order_add, order_get_one } from "@/helpers/api";
+import { master_order_confirm, master_order_confirmed, master_order_hall, master_order_wait, order_add, order_get_one } from "@/helpers/api";
 import { useOrderPosdData } from "@/helpers/state_managment/order/order";
 import { config } from "@/helpers/token";
 import axios from "axios";
@@ -99,6 +99,24 @@ export const getMasterOrderHall = (setHallData: any) => {
             console.error(err)
             setHallData([])
         })
+}
+
+// master orderni confirm reject qilish
+
+export const masterOrderConfirm = (orderID: string, setLoading: any, status: string) => {
+    setLoading(true)
+    axios.post(`${master_order_confirm}?orderId=${orderID}&status=${status}`, {}, config)
+       .then((response) => {
+            setLoading(false)
+            if (response.data.success) {
+            
+                console.log("Order set successfully", response);
+            }
+        })
+       .catch(error => {
+            setLoading(false)
+            console.log(error);
+        });
 }
 
 
