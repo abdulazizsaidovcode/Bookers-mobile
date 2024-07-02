@@ -108,7 +108,7 @@ const BookedAccordion: React.FC = () => {
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     style={styles.tabContainer}>
-                    {services.map((service: any) => (
+                    {services && services.length > 0 ? services.map((service: any) => (
                         <TouchableOpacity
                             key={service.id}
                             style={[styles.tabButton, activeTab === service.id && styles.activeTab]}
@@ -118,7 +118,7 @@ const BookedAccordion: React.FC = () => {
                                 {service.category.name.trim()}
                             </Text>
                         </TouchableOpacity>
-                    ))}
+                    )) : <Text style={styles.placeholderText}>Нет услуг</Text>}
                 </ScrollView>
                 <View>
                     {activeTab && (
@@ -133,7 +133,7 @@ const BookedAccordion: React.FC = () => {
                                         {time}
                                     </Text>
                                 </TouchableOpacity>
-                            )) : <Text style={styles.placeholderText}>No available times</Text>}
+                            )) : <Text style={styles.placeholderText}>Нет свободного времени</Text>}
                         </View>
                     )}
                 </View>
