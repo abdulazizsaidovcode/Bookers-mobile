@@ -4,8 +4,10 @@ import {NavigationProp, RouteProp, useNavigation, useRoute} from "@react-navigat
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import tw from "tailwind-react-native-classnames";
 import {ScrollView, StatusBar, View} from "react-native";
-import React from "react";
+import React, {useEffect} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
+import {getUpcomingClient} from "@/helpers/api-function/client/client";
+import clientStore from "@/helpers/state_managment/client/clientStore";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/history/upcoming-history'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/upcoming-history'>;
@@ -25,6 +27,13 @@ const UpcomingHistory = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<CreatingClientScreenRouteProp>();
     const {clientID} = route.params;
+    const {upcomingData, setUpcomingData} = clientStore()
+
+    useEffect(() => {
+        getUpcomingClient(setUpcomingData, clientID)
+    }, []);
+
+    console.log('upcoming 36: ', upcomingData)
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>

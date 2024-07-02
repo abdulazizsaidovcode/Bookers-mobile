@@ -4,8 +4,10 @@ import {NavigationProp, RouteProp, useNavigation, useRoute} from "@react-navigat
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import tw from "tailwind-react-native-classnames";
 import {ScrollView, StatusBar, View} from "react-native";
-import React from "react";
+import React, {useEffect} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
+import {getCanceledClient} from "@/helpers/api-function/client/client";
+import clientStore from "@/helpers/state_managment/client/clientStore";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/history/canceled-history'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/canceled-history'>;
@@ -26,6 +28,12 @@ const CanceledHistory = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<CreatingClientScreenRouteProp>();
     const {clientID} = route.params;
+    const {canceledData, setCanceledData} = clientStore()
+
+    useEffect(() => {
+        getCanceledClient(setCanceledData, clientID)
+    }, []);
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
