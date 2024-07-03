@@ -44,6 +44,7 @@
     "react": "18.2.0",
     "react-async-hook": "^2.0.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.52.1",
     "react-i18next": "^14.1.2",
     "react-icon": "^1.0.0",
     "react-icons": "^5.2.1",

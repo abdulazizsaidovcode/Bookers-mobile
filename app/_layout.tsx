@@ -95,6 +95,11 @@ import NotificationSettings from "./(notifications)/notifications";
 import Messengers from "./(notifications)/(pages)/messengers";
 import HelpPage from "./(profile)/(help)/help";
 import Welcome from "./(welcome)/Welcome";
+import RemindAboutAppointment from "./(notifications)/(pages)/remind-about-appointment";
+import CancelRecording from "./(notifications)/(pages)/cancel-recording";
+import ChangingAnEntry from "./(notifications)/(pages)/changing-an-entry";
+import RequestFeedback from "./(notifications)/(pages)/request-feedback";
+import RequestWindow from "./(notifications)/(pages)/request-window";
 
 const Stack = createNativeStackNavigator();
 
@@ -330,6 +335,31 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(notifications)/(pages)/messengers"
               component={Messengers}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/remind-about-appointment"
+              component={RemindAboutAppointment}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/cancel-recording"
+              component={CancelRecording}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/changing-an-entry"
+              component={ChangingAnEntry}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/request-feedback"
+              component={RequestFeedback}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/request-window"
+              component={RequestWindow}
               options={{ headerShown: false }}
             />
             <Stack.Screen

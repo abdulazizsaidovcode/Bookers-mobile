@@ -5,6 +5,11 @@ export type RootStackParamList = {
   'settings': undefined;
   '(free)/(work-grafic)/workMain': undefined;
   '(welcome)/welcome': undefined;
+  '(notifications)/(pages)/remind-about-appointment': undefined;
+  '(notifications)/(pages)/cancel-recording': undefined;
+  '(notifications)/(pages)/request-window': undefined;
+  '(notifications)/(pages)/changing-an-entry': undefined;
+  '(notifications)/(pages)/request-feedback': undefined;
   '(standart)/(services)/(myServices)/myServices': undefined;
   'settings-gallery': undefined;
   'settings-locations': undefined;
