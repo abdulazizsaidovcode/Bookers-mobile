@@ -61,7 +61,6 @@ import LanguageSelection from "./(profile)/(settings)/(childSettings)/(Applicati
 import GalleryDetails from "./(settings)/(settings-gallery)/gallery-details";
 import SwitchPage from "./(auth)/switchPage";
 import OfferScreen from "./(auth)/offerScreen";
-import EditProfile from "./(profile)/(settings)/(childSettings)/Personal data/PersonalData";
 import WebPage from "./(profile)/(WebPage)/WebPage";
 import GrafficWorkEdit from "./(free)/(work-grafic-edit)/workGraffic";
 import TimeWorkEdit from "./(free)/(work-grafic-edit)/workTime";
@@ -92,14 +91,18 @@ import UpcomingHistory from "@/app/(free)/(client)/details/history/upcoming-hist
 import PastHistory from "@/app/(free)/(client)/details/history/past-history";
 import CanceledHistory from "@/app/(free)/(client)/details/history/canceled-history";
 import NotificationSettings from "./(notifications)/notifications";
-import Messengers from "./(notifications)/(pages)/messengers";
 import HelpPage from "./(profile)/(help)/help";
-import Welcome from "./(welcome)/Welcome";
+import EditProfile from "./(profile)/(settings)/(childSettings)/(Personal data)/PersonalData";
+import Messengers from "./(notifications)/(pages)/messengers";
 import RemindAboutAppointment from "./(notifications)/(pages)/remind-about-appointment";
 import CancelRecording from "./(notifications)/(pages)/cancel-recording";
 import ChangingAnEntry from "./(notifications)/(pages)/changing-an-entry";
 import RequestFeedback from "./(notifications)/(pages)/request-feedback";
 import RequestWindow from "./(notifications)/(pages)/request-window";
+import ServesGenderEdit from "./(standart)/(servicesEdit)/(gender)/servesGender";
+import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
+import ExpertiseEdit from "./(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit";
+import Welcome from "./(welcome)/Welcome";
 
 const Stack = createNativeStackNavigator();
 
@@ -377,6 +380,25 @@ function RootLayoutNav() {
               component={MyServicesScreen}
               options={{ headerShown: false }}
             />
+
+            {/* Service edit  */}
+
+            <Stack.Screen
+              name="(standart)/(servicesEdit)/(gender)/servesGender"
+              component={ServesGenderEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(servicesEdit)/(categoryEdit)/category"
+              component={CategoryEdit}
+              options={{ headerShown: false }}
+            />
+             <Stack.Screen
+              name="(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit"
+              component={ExpertiseEdit}
+              options={{ headerShown: false }}
+            />
+            {/* Service edit  */}
             <Stack.Screen
               name="(profile)/(sessionhistory)/sessionHistory"
               component={SessionHistory}

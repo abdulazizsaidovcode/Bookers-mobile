@@ -1,7 +1,12 @@
+import { Text } from 'react-native'
 import Schedule from '../(Schedule)/Schedule'
 
-const ScheduleScreen = () => {
-    return <Schedule />
+function ScheduleScreen() {
+    return (
+        <>
+            <Schedule />
+        </>
+    )
 }
 
 export default ScheduleScreen

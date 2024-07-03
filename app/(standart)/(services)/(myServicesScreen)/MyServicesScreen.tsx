@@ -94,7 +94,7 @@ const MyServicesScreen = () => {
         getSpecializationData(categoryId);
         getMasterData(categoryId);
     };
-
+    
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
@@ -107,7 +107,9 @@ const MyServicesScreen = () => {
                     {/* Gender Section */}
                     <View style={tw`flex flex-row justify-between p-4 mb-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Направление услуг по полу</Text>
-                        <TouchableOpacity activeOpacity={0.6}>
+                        <TouchableOpacity 
+                        activeOpacity={0.6}
+                        onPress={() => router.push('(standart)/(servicesEdit)/(gender)/servesGender')}>
                             <MaterialIcons name="mode-edit" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
@@ -131,7 +133,9 @@ const MyServicesScreen = () => {
                     {/* Category Section */}
                     <View style={tw`flex flex-row justify-between p-4 mb-2`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Категория услуг</Text>
-                        <TouchableOpacity activeOpacity={0.6}>
+                        <TouchableOpacity 
+                        onPress={() => router.push('(standart)/(servicesEdit)/(categoryEdit)/category')}
+                        activeOpacity={0.6}>
                             <MaterialIcons name="mode-edit" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
@@ -160,7 +164,9 @@ const MyServicesScreen = () => {
                     {/* Specialization Section */}
                     <View style={tw`flex flex-row justify-between mb-2 p-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Специализация услуг</Text>
-                        <TouchableOpacity activeOpacity={0.6}>
+                        <TouchableOpacity
+                        onPress={() => router.push('(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit')}
+                        activeOpacity={0.6}>
                             <MaterialIcons name="mode-edit" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
@@ -186,7 +192,10 @@ const MyServicesScreen = () => {
                         </TouchableOpacity>
                     </View>
                     {categoryMaster.map((item) => (
-                        <View key={item.id} style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
+                        <TouchableOpacity
+                        onPress={()=>router.push('')}
+                         activeOpacity={.8}>
+                             <View key={item.id} style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
                             <Text style = {tw`font-bold text-xl mb-3`}>{translateGender(item.genderNames).join(", ")}</Text>
                             <ScrollView
                                 horizontal
@@ -203,6 +212,8 @@ const MyServicesScreen = () => {
 
                             <Text style={tw`text-black mb-2`}>{item.description || 'Описание не предоставлено'}</Text>
                         </View>
+                        </TouchableOpacity>
+                       
                     ))}
 
                     {/* Navigation Button */}

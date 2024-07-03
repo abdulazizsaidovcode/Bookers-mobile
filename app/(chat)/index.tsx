@@ -34,7 +34,7 @@ const ChatSupport = () => {
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Чат</Text>
-            {!chatData && (
+            {chatData && chatData.length > 0 ? (
                 <View>
                     <Text style={styles.headerText}>Чат</Text>
                     <Ionicons name="chatbubble-ellipses-outline" size={80} color="gray" style={styles.icon} />
@@ -47,8 +47,9 @@ const ChatSupport = () => {
                         onPress={handlePress}
                     />
                 </View>
-            )}
-            <ChatList userData={chatData} />
+            ) :
+                <ChatList userData={chatData} />
+            }
         </SafeAreaView>
     );
 };
