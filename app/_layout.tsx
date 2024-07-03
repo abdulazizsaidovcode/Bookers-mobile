@@ -91,6 +91,18 @@ import CenseledSession from "@/app/(detail)/censeled-session";
 import UpcomingHistory from "@/app/(free)/(client)/details/history/upcoming-history";
 import PastHistory from "@/app/(free)/(client)/details/history/past-history";
 import CanceledHistory from "@/app/(free)/(client)/details/history/canceled-history";
+import NotificationSettings from "./(notifications)/notifications";
+import Messengers from "./(notifications)/(pages)/messengers";
+import RemindAboutAppointment from "./(notifications)/(pages)/remind-about-appointment";
+import CancelRecording from "./(notifications)/(pages)/cancel-recording";
+import ChangingAnEntry from "./(notifications)/(pages)/changing-an-entry";
+import RequestFeedback from "./(notifications)/(pages)/request-feedback";
+import RequestWindow from "./(notifications)/(pages)/request-window";
+import ServesGenderEdit from "./(standart)/(servicesEdit)/(gender)/servesGender";
+import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
+import ExpertiseEdit from "./(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit";
+import Welcome from "./(welcome)/Welcome";
+import HelpPage from "./(profile)/(help)/help";
 
 const Stack = createNativeStackNavigator();
 
