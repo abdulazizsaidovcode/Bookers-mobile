@@ -6,7 +6,7 @@ import moment from "moment";
 import financeStore from "@/helpers/state_managment/finance/financeStore";
 import tw from "tailwind-react-native-classnames";
 
-const CalendarComponent = ({setMonthDate}: { setMonthDate?: (val: string) => void }) => {
+const CalendarComponent = ({setMonthDate, defDate}: { setMonthDate?: (val: string) => void, defDate?: any }) => {
     const {setDate} = financeStore()
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [showCalendar, setShowCalendar] = useState<boolean>(false);
@@ -22,6 +22,11 @@ const CalendarComponent = ({setMonthDate}: { setMonthDate?: (val: string) => voi
         setMonthDate && setMonthDate(date)
     }, [selectedDate]);
 
+    useEffect(() => {
+        if (defDate) setSelectedDate(defDate)
+        else setSelectedDate(new Date())
+    }, [defDate]);
+
     const onChange = (event: DateTimePickerEvent, selectedDate?: Date | undefined) => {
         const currentDate = selectedDate || new Date();
         setShowCalendar(false);
@@ -30,8 +35,8 @@ const CalendarComponent = ({setMonthDate}: { setMonthDate?: (val: string) => voi
 
     const formatDate = (date: Date) => {
         if (!date) return '';
-        const options: Intl.DateTimeFormatOptions = {year: 'numeric', month: '2-digit', day: '2-digit'};
-        return date.toLocaleDateString('ru-RU', options);
+        const options: any = moment(date).format('DD.MM.YYYY')
+        return options
     };
 
     return (
@@ -47,7 +52,7 @@ const CalendarComponent = ({setMonthDate}: { setMonthDate?: (val: string) => voi
             {showCalendar && (
                 <DateTimePicker
                     testID="dateTimePicker"
-                    value={selectedDate}
+                    value={new Date()}
                     mode="date"
                     is24Hour={true}
                     display="default"

@@ -11,9 +11,10 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import React, {useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
-import {addClientMessage, getHistoryCount} from "@/helpers/api-function/client/client";
+import {addClientMessage, getAgeList, getHistoryCount, getMeClient, getRegionList} from "@/helpers/api-function/client/client";
 import FiltersButton from "@/components/(buttons)/filters-button";
 import HistoryMain from "@/app/(free)/(client)/details/history/history-main";
+import ProfileUpdate from "@/app/(free)/(client)/details/history/profile-update";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
@@ -22,13 +23,17 @@ const DetailMain = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<CreatingClientScreenRouteProp>();
     const {infoClient} = route.params;
-    const {isLoading, setIsLoading, historyCountData, setHistoryCountData} = clientStore()
+    const {isLoading, setIsLoading, historyCountData, setHistoryCountData, setAgeData, setRegionData} = clientStore()
     const [bottomModalSMS, setBottomModalSMS] = useState(false)
     const [messageVal, setMessageVal] = useState('')
     const [role, setRole] = useState('basics')
+    const [clientData, setClientData] = useState<any>(null);
 
     useEffect(() => {
         getHistoryCount(setHistoryCountData, infoClient.id)
+        getMeClient(setClientData, infoClient.id)
+            getAgeList(setAgeData)
+            getRegionList(setRegionData)
     }, []);
 
     useEffect(() => {
@@ -36,7 +41,6 @@ const DetailMain = () => {
     }, [isLoading, bottomModalSMS]);
 
     const toggleBottomModalSMS = () => setBottomModalSMS(!bottomModalSMS)
-
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -67,7 +71,7 @@ const DetailMain = () => {
                         <View>
                             {role === 'basics' && <ClientDetailBasic client={infoClient}/>}
                             {role === 'history' && <HistoryMain countData={historyCountData} clientID={infoClient.id} />}
-                            {role === 'profile' && ''}
+                            {role === 'profile' && <ProfileUpdate clientData={clientData}/>}
                         </View>
 
                         {/*client SMS*/}
