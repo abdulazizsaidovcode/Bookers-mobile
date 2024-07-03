@@ -1,17 +1,22 @@
 import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { editChangingOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Switch, TextInput, Button, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const ChangingEnEntry = () => {
-  const { isChangingEnabled, changingMessage, setChangingMessage, setIsChangingEnabled } = useNotificationsStore()
+  const { changingData, setChangingData } = useNotificationsStore()
 
-  const toggleSwitch = () => setIsChangingEnabled(!isChangingEnabled);
+  useEffect(() => {
+    fetchAllData(setChangingData, 'CHANGE_ORDER')
+  }, [])
+
+  const toggleSwitch = () => setChangingData({ ...changingData, isActive: !changingData.isActive });
+  const onMessageChange = (text: string) => setChangingData({ ...changingData, text });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,25 +33,25 @@ const ChangingEnEntry = () => {
             <View>
               <Switch
                 onValueChange={toggleSwitch}
-                value={isChangingEnabled}
+                value={changingData.isActive}
               />
             </View>
           </View>
-          {isChangingEnabled && (
+          {changingData.isActive && (
             <View style={styles.messageContainer}>
               <Text style={styles.messageLabel}>Шаблон сообщения</Text>
               <TextInput
                 style={styles.textInput}
                 multiline
                 numberOfLines={10}
-                onChangeText={setChangingMessage}
-                value={changingMessage}
+                onChangeText={onMessageChange}
+                value={changingData.text}
               />
             </View>
           )}
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons title="Сохранить" />
+          <Buttons title="Сохранить" onPress={() => editChangingOrder(changingData.isActive, changingData.text)}/>
         </View>
       </ScrollView>
     </SafeAreaView>

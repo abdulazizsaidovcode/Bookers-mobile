@@ -1,5 +1,6 @@
 import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { editWindowOrder } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
@@ -9,7 +10,9 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 const RequestWindow = () => {
-  const { windowMessage, setWindowMessage } = useNotificationsStore()
+  const { windowData, setWindowData } = useNotificationsStore();
+
+  const onMessageChange = (text: string) => setWindowData({ ...windowData, text })
 
   return (
     <SafeAreaView style={styles.container}>
@@ -25,13 +28,13 @@ const RequestWindow = () => {
               style={styles.textInput}
               multiline
               numberOfLines={10}
-              onChangeText={setWindowMessage}
-              value={windowMessage}
+              onChangeText={onMessageChange}
+              value={windowData.text}
             />
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons title="Сохранить" />
+          <Buttons title="Сохранить" onPress={() => editWindowOrder(windowData.text)} />
         </View>
       </ScrollView>
     </SafeAreaView>

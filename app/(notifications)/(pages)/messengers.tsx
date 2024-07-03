@@ -18,7 +18,6 @@ const Messengers = () => {
 
   const toggleSmsSwitch = () => {
     setSmsData({ ...smsData, isActive: !smsData.isActive });
-    editMessenger(!smsData.isActive)
   };
 
   return (
@@ -39,7 +38,7 @@ const Messengers = () => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons title='Сохранить' />
+          <Buttons title='Сохранить' onPress={() => editMessenger(!smsData.isActive)} />
         </View>
       </ScrollView>
     </SafeAreaView>

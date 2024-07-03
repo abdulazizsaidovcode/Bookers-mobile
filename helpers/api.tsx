@@ -138,3 +138,6 @@ export const notifications_main_data_edit: string = `${base_url}notification/set
 export const notifications_all_data: string = `${base_url}notification/settings`
 export const notifications_messengers_edit: string = `${base_url}notification/settings/messages`
 export const notifications_cancel_edit: string = `${base_url}notification/settings/cancel-order`
+export const notifications_changing_edit: string = `${base_url}notification/settings/change-order`
+export const notifications_window_edit: string = `${base_url}notification/settings/waiting/hall`
+export const notifications_feedback_edit: string = `${base_url}notification/settings/feedback`
