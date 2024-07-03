@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import UserProfileCard from "./serviseCard";
 import Buttons from "@/components/(buttons)/button";
+import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
 
 const servicesData = [
   {
@@ -22,6 +23,9 @@ const servicesData = [
 ];
 
 const Services: React.FC = () => {
+
+  const {servise} = webPageStore()
+  
   return (
     <ScrollView style={styles.contentContainer}>
       <View style={styles.profileCard}>

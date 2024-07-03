@@ -27,8 +27,6 @@ import Category from "./(standart)/(services)/(category)/category";
 import Upcomingentries from "./(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries";
 import PastEntries from "./(profile)/(sessionhistory)/components/Pastentries/Pastentries";
 import Canceledentries from "./(profile)/(sessionhistory)/components/Canceledentries/Canceledentries";
-import SettingsLocation from "./(settings)/(settings-location)/settings-locations";
-import SettingsLocationMain from "./(settings)/(settings-location)/settings-locations-main";
 import SettingsGallery from "./(settings)/(settings-gallery)/settings-gallery";
 import Settings from "./(profile)/(settings)/settings";
 import { StompProvider } from "@/context/StompContext";
@@ -49,7 +47,6 @@ import MasterorClient from "./(auth)/masterORclient";
 import TariffsPage from "./(profile)/(tariff)/tariff";
 import Location from "./(location)/Location";
 import LocationData from "./(location)/(location-data)/LocationData";
-import Welcome from "./(welcome)/Welcome";
 import ResponseLocation from "./(location)/(response-location)/ResponseLocation";
 import GrafficWork from "./(free)/(work-grafic)/workGraffic";
 import TimeWork from "./(free)/(work-grafic)/workTime";
@@ -94,9 +91,6 @@ import CenseledSession from "@/app/(detail)/censeled-session";
 import UpcomingHistory from "@/app/(free)/(client)/details/history/upcoming-history";
 import PastHistory from "@/app/(free)/(client)/details/history/past-history";
 import CanceledHistory from "@/app/(free)/(client)/details/history/canceled-history";
-import ServesGenderEdit from "./(standart)/(servicesEdit)/(gender)/servesGender";
-import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
-import ExpertiseEdit from "./(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit";
 
 const Stack = createNativeStackNavigator();
 
@@ -280,18 +274,8 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(settings)/(settings-location)/settings-locations-main"
-              component={SettingsLocationMain}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="(settings)/(settings-gallery)/gallery-details"
               component={GalleryDetails}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="(settings)/(settings-location)/settings-locations"
-              component={SettingsLocation}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -332,6 +316,41 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(standart)/(services)/(category)/category"
               component={Category}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/notifications"
+              component={NotificationSettings}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/messengers"
+              component={Messengers}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/remind-about-appointment"
+              component={RemindAboutAppointment}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/cancel-recording"
+              component={CancelRecording}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/changing-an-entry"
+              component={ChangingAnEntry}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/request-feedback"
+              component={RequestFeedback}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(notifications)/(pages)/request-window"
+              component={RequestWindow}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -579,6 +598,14 @@ function RootLayoutNav() {
               component={CenseledSession}
               options={{ headerShown: false }}
             />
+
+            {/*  help start  */}
+            <Stack.Screen
+              name="(profile)/(help)/help"
+              component={HelpPage}
+              options={{ headerShown: false }}
+            />
+            {/*  help end  */}
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>

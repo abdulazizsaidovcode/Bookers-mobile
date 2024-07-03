@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal, StyleSheet, Button, ScrollView } from 'react-native';
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import useGetMeeStore from '@/helpers/state_managment/getMee';
+import { getUser } from '@/helpers/api-function/getMe/getMee';
+import { getFile } from '@/helpers/api';
 
 const ProfilePage: React.FC = () => {
     const [isInviteModalVisible, setInviteModalVisible] = useState(false);
     const [isShareModalVisible, setShareModalVisible] = useState(false);
     const navigation = useNavigation<any>();
+    const { getMee, setGetMee } = useGetMeeStore()
 
+    useEffect(() => {
+        getUser(setGetMee)
+    }, [])
     const openInviteModal = () => {
         setInviteModalVisible(true);
     };
@@ -38,24 +45,24 @@ const ProfilePage: React.FC = () => {
             <SafeAreaView >
                 <Text style={styles.title}>Профиль</Text>
                 <View style={styles.profileHeader}>
-                    <Image source={{ uri: 'https://picsum.photos/200/300' }} style={styles.avatar} />
+                    <Image source={getMee.attachmentId ? { uri: getFile + getMee.attachmentId }: require('@/assets/avatar.png')} style={styles.avatar} />
                     <View>
-                        <Text style={styles.profileName}>Гузаль Шерматова</Text>
-                        <Text style={styles.profilePhone}>+998 93 123-45-67</Text>
+                        <Text style={styles.profileName}>{getMee.firstName} {getMee.lastName}</Text>
+                        <Text style={styles.profilePhone}>{getMee.phoneNumber}</Text>
                     </View>
                 </View>
 
                 {[
                     { icon: 'user', label: 'Подписка', screen: '(profile)/(tariff)/tariff' },
                     { icon: 'history', label: 'История сеансов', screen: '(profile)/(sessionhistory)/sessionHistory' },
-                    { icon: 'info-circle', label: 'Справка', screen: 'Help' },
+                    { icon: 'info-circle', label: 'Справка', screen: '(profile)/(help)/help' },
                     { icon: 'bell', label: 'Уведомления', screen: '(profile)/(notification)/index' },
                     { icon: 'wallet', label: 'Расходы', screen: '(profile)/(Expenses)/index' },
                     { icon: 'globe', label: 'Веб страница', screen: '(profile)/(WebPage)/WebPage' },
                     { icon: 'cogs', label: 'Настройки', screen: '(profile)/(settings)/settings' },
                     { icon: 'users', label: 'Клиенты', screen: '(free)/(client)/main' },
                     { icon: 'sign-out', label: 'Выйти', screen: 'Logout' }
-                    
+
                 ].map((item, index) => (
                     <TouchableOpacity
                         key={index}

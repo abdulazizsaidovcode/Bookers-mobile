@@ -2,6 +2,7 @@ import { master_order_confirm, master_order_confirmed, master_order_hall, master
 import { useOrderPosdData } from "@/helpers/state_managment/order/order";
 import { config } from "@/helpers/token";
 import axios from "axios";
+import Toast from "react-native-simple-toast";
 
 interface OrderPost {
     data: any;
@@ -18,18 +19,17 @@ export const postOrder = ({ data, status = "OTHER", messageSatus, setOrderId, se
     axios.post(`${order_add}?status=${status}`, data, config)
         .then((response) => {
             setLoading && setLoading(false);
-            // console.log("Order set successfully", response);
             if (response.data.success) {
+                Toast.show('Successfully saved order', Toast.LONG)
                 setOrderId?.(response.data.body);
-                setStatus?.("success"); // Update status in the store
-                if (navigation) {
-                    navigation.goBack()
-                } // Navigate back on success
+                setStatus?.("success");
+                if (navigation) navigation.goBack()
             }
         })
         .catch(error => {
+            Toast.show(error.response.data.message, Toast.LONG)
             messageSatus?.(error.response.data.message);
-            setStatus?.("error"); // Update status in the store
+            setStatus?.("error");
             console.log(error);
             setLoading && setLoading(false);
         });
@@ -78,8 +78,7 @@ export const getMasterOrderWait = (setWaitData: any) => {
                 setWaitData([])
             }
         })
-        .catch(err => {
-            console.error(err)
+        .catch(() => {
             setWaitData([])
         })
 }
@@ -102,6 +101,8 @@ export const getMasterOrderHall = (setHallData: any) => {
 }
 
 // master orderni confirm reject qilish
+
+// status == CONFIRMED, REJECTED, COMPLETED
 
 export const masterOrderConfirm = (orderID: string, setLoading: any, status: string) => {
     setLoading(true)

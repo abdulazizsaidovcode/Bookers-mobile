@@ -12,6 +12,8 @@ import { BookingRequestsHallProps, BookingRequestsProps, DashboardDailyTimeOrder
 import { getFile } from "@/helpers/api";
 import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
+import useGetMeeStore from "@/helpers/state_managment/getMee";
+import { getUser } from "@/helpers/api-function/getMe/getMee";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -31,13 +33,15 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standar
 
 const TabOneScreen: React.FC = () => {
 	const navigation = useNavigation<SettingsScreenNavigationProp>();
+	const {getMee, setGetMee} = useGetMeeStore()
 	const { mainStatisticData, waitingData, dailyTimeData, isModal, hallData, setHallData, setIsModal, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
 
 	useEffect(() => {
-		fetchDaylyOrderTimes(setDailyTimeData);
+		fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
 		fetchMainStatistic(setMainStatisticData);
 		fetchWaitingOrders(setWaitingData);
 		fetchHallingOrders(setHallData);
+		getUser(setGetMee);
 	}, []);
 
 	const toggleConfirmModal = () => {

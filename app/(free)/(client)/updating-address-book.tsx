@@ -16,7 +16,7 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import {Picker} from "@react-native-picker/picker";
 import Select from "@/components/select/select";
 import {
-    getAgeList,
+    getAgeList, getClientAll,
     getClientStatistics,
     getDistrictList,
     getRegionList,
@@ -43,12 +43,14 @@ const UpdatingAddressBook = () => {
         districtData,
         setDistrictData,
         attachmentID,
-        setStatusData
+        setStatusData,
+        setAllClients
     } = clientStore()
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [regex, setRegex] = useState<boolean>(false);
     const [navigate, setNavigate] = useState<boolean>(false);
     const phoneInput = useRef<PhoneInput>(null);
+    const [showHide, setShowHide] = useState<boolean>(false);
 
     useEffect(() => {
         getAgeList(setAgeData)
@@ -82,6 +84,7 @@ const UpdatingAddressBook = () => {
             navigation.navigate('(free)/(client)/main')
             setUpdateClient(updateClientDef)
             getClientStatistics(setStatusData)
+            getClientAll(setAllClients)
         }
     }, [navigate]);
 
@@ -106,13 +109,6 @@ const UpdatingAddressBook = () => {
         {label: "Female", value: "false"},
     ]
 
-    const sliceText = (text: string) => {
-        if (text) {
-            if (text.startsWith('+998')) return text.slice(4, 13)
-            else return text;
-        }
-    }
-
     function validateObject(obj: any) {
         for (let key in obj) {
             if (key !== 'attachmentId' && !obj[key]) {
@@ -121,6 +117,8 @@ const UpdatingAddressBook = () => {
         }
         return true;
     }
+
+    const toggleShowHide = () => setShowHide(!showHide)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -148,13 +146,12 @@ const UpdatingAddressBook = () => {
                             label={`Профессия`}
                             onChangeText={e => handleInputChange('job', e)}
                         />
-                        {/*<LocationInput label={`Предпочтения клинета`}/>*/}
                         <Text style={[tw`text-gray-500 mb-2 text-base`]}>День рождения</Text>
                         <CalendarComponent/>
                         <Text style={[tw`text-gray-500 mb-2 mt-3 text-base`]}>Номер телефона</Text>
                         <PhoneInput
                             ref={phoneInput}
-                            defaultValue={sliceText(updateClient.phoneNumber)}
+                            defaultValue={updateClient.phoneNumber.slice(4, 13)}
                             defaultCode="UZ"
                             layout="first"
                             onChangeFormattedText={handlePhoneNumberChange}
@@ -170,15 +167,14 @@ const UpdatingAddressBook = () => {
                                 Дополнительная информаци о клиенте
                             </Text>
                             <MaterialIcons
-                                onPress={() => {
-                                }}
+                                onPress={() => toggleShowHide()}
                                 name="navigate-next"
                                 size={30}
                                 color="white"
-                                style={{transform: 'rotate(90deg)'}}
+                                style={{transform: showHide ? 'rotate(90deg)' : ''}}
                             />
                         </View>
-                        <View>
+                        <View style={tw`${showHide ? '' : 'hidden'}`}>
                             <Select
                                 label={`Пол`}
                                 value={updateClient.gender}
