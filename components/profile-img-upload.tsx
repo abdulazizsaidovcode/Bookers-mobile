@@ -9,6 +9,7 @@ import axios from "axios";
 import {getFile, postFileId} from "@/helpers/api";
 import {imageConfig} from "@/helpers/token";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import Toast from "react-native-simple-toast";
 
 const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
     const {setAttachmentID} = clientStore();
@@ -18,7 +19,6 @@ const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
 
     useEffect(() => {
         if (attachmentID) setImage(`${getFile}${attachmentID}`)
-        else setImage(null)
     }, []);
 
     const openModal = () => setIsModal(!isModal);
@@ -75,18 +75,23 @@ const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
         if (!val) return;
 
         const formData = new FormData();
-        formData.append('file', {
+        let files: any = {
             uri: val.uri,
             name: val.fileName,
             type: val.mimeType
-        });
+        }
+        formData.append('file', files);
 
         try {
             const response = await axios.post(postFileId, formData, imageConfig);
-            if (response.data.success) setAttachmentID(response.data.body)
-            else console.error('Upload failed:', response.data.message)
+            if (response.data.success) {
+                console.log(response.data.body)
+                Toast.show('Success', Toast.LONG)
+                setAttachmentID(response.data.body)
+            } else Toast.show(response.data.message, Toast.LONG)
         } catch (err) {
             console.error('error:', err);
+            Toast.show(`error`, Toast.LONG)
         }
     };
 

@@ -322,18 +322,20 @@ export const addClientMessage = async (clientID: string, message: string, setLoa
             if (data.success) {
                 toggle()
                 setLoading(false)
+                Toast.show('Successfully message feedback✔', Toast.LONG)
             } else {
+                Toast.show('An error occurred on the server❌', Toast.LONG)
                 toggle()
                 setLoading(false)
             }
         } else {
-            alert('There is a message')
+            Toast.show('There is a message', Toast.LONG)
             setLoading(false)
         }
     } catch (err) {
         console.error(err)
         setLoading(false)
-        alert('An error occurred on the server')
+        Toast.show('An error occurred on the server', Toast.LONG)
     }
 }
 
