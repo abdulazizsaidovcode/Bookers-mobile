@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -10,44 +10,92 @@ import {
 import UserProfileCard from "./serviseCard";
 import Buttons from "@/components/(buttons)/button";
 import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
-
-const servicesData = [
-  {
-    title: "Женская для взрослых",
-    subtitle: "Маникюр Обычный",
-    description:
-      "Стрижка и укладка – это одно из важнейших вещей при создании красивого образа Стрижка и укладка – это одно из важнейших вещей при создании красивого образа Стрижка и укладка – это одно из важнейших вещей при создании красивого образа Стрижка и укладка – это одно из важнейших вещей при создании красивого образаСтрижка и укладка – это одно из важнейших вещей при создании красивого образаСтрижка и укладка – это одно из важнейших вещей при создании красивого образа",
-    price: "350 000 сум",
-    image: "https://picsum.photos/200/300",
-  },
-];
+import { getServiseWith } from "@/helpers/api-function/wepPage/wepPage";
+import { getFile } from "@/helpers/api";
 
 const Services: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("");
 
-  const {servise} = webPageStore()
-  
+  const { servise, category, setServise, getme } = webPageStore();
+
+  const getServise = (id: any) => {
+    if (id) {
+      getServiseWith(setServise, id);
+    }
+  };
+
   return (
     <ScrollView style={styles.contentContainer}>
       <View style={styles.profileCard}>
         <UserProfileCard />
       </View>
 
-      <Text style={styles.sectionTitle}>Услуги Натали</Text>
-      {servicesData.map((service, index) => (
-        <View key={index} style={styles.serviceCard}>
-          <Text style={styles.title}>{service.title}</Text>
-          <View style={styles.header}>
-            <Text style={styles.subtitle}>{service.subtitle}</Text>
-            <Text style={styles.price}>{service.price}</Text>
+      <Text style={styles.sectionTitle}>
+        Услуги {getme ? getme.firstName : ""}
+      </Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.tabContainer}
+      >
+        {category && category.length > 0 ? (
+          category.map((item: any) => (
+            <TouchableOpacity
+              key={item.id}
+              style={[
+                styles.tabButton,
+                activeTab === item.id && styles.activeTab,
+              ]}
+              onPress={() => {
+                setActiveTab(item.id); // Update activeTab state
+                getServise(item.id);
+              }}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab !== item.id && styles.inactiveText,
+                ]}
+              >
+                {item.name.trim()}
+              </Text>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text style={styles.placeholderText}>Category not found</Text>
+        )}
+      </ScrollView>
+
+      {servise && servise.length !== 0 ? (
+        servise.map((item: any, index: number) => (
+          <View key={index} style={styles.serviceCard}>
+            <Text style={styles.title}>{item.name}</Text>
+            <View style={styles.header}>
+              <Text style={styles.subtitle}>{item.category.name}</Text>
+              <Text style={styles.price}>{item.price} so'm</Text>
+            </View>
+            <Image
+              source={{
+                uri: item.attachmentId
+                  ? getFile + item.attachmentId
+                  : "https://img.freepik.com/free-photo/gray-stone-background_24972-1659.jpg?size=626&ext=jpg&ga=GA1.1.1413502914.1719878400&semt=ais_user",
+              }} // Rasmingiz manzili
+              style={styles.image}
+            />
+            <Text style={styles.serviceDescription}>{item.description}</Text>
+            <Buttons title="Подробнее" />
           </View>
-          <Image
-            source={{ uri: service.image }} // Rasmingiz manzili
-            style={styles.image}
-          />
-          <Text style={styles.serviceDescription}>{service.description}</Text>
-          <Buttons title="Подробнее"/>
-        </View>
-      ))}
+        ))
+      ) : (
+        <Text
+          style={[
+            styles.subtitle,
+            { textAlign: "center", color: "#fff", borderColor: "#fff" },
+          ]}
+        >
+          Hozircha servise yo'q
+        </Text>
+      )}
     </ScrollView>
   );
 };
@@ -58,7 +106,34 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#21212E",
   },
-
+  tabContainer: {
+    flexDirection: "row",
+    overflow: "scroll",
+    marginVertical: 10,
+    paddingLeft: 0,
+    gap: 10,
+    marginBottom: 25,
+  },
+  tabButton: {
+    padding: 10,
+    borderRadius: 5,
+    borderColor: "gray",
+    borderWidth: 1,
+    marginRight: 10,
+  },
+  activeTab: {
+    backgroundColor: "#9C0A35",
+    borderColor: "#9C0A35",
+  },
+  tabText: {
+    color: "#fff",
+  },
+  placeholderText: {
+    color: "gray",
+  },
+  inactiveText: {
+    color: "gray",
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -83,7 +158,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#555",
     padding: 6,
-    borderRadius: 5
+    borderRadius: 5,
   },
   image: {
     width: "100%",

@@ -8,14 +8,16 @@ import { fetchData } from '@/helpers/api-function/gallery/settings-gallery';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
 import { getUser } from '@/helpers/api-function/getMe/getMee';
 import { fetchServices } from '@/helpers/api-function/client/client';
+import { getCategoryF, getspecialization } from '@/helpers/api-function/wepPage/wepPage';
 
 const WebPage: React.FC = () => {
-    const {setGaleriya, setGetMee, setServise} = webPageStore()
+    const {setGaleriya, setGetMee, setCategory, setspecialization, getme} = webPageStore()
     const [activeTab, setActiveTab] = useState('services');
     useEffect(() => {
         fetchData(setGaleriya)
         getUser(setGetMee)
-        fetchServices(setServise)
+        getCategoryF(setCategory)
+        getspecialization(setspecialization, getme && getme.id ? getme.id : null)
     }, [])
 
     return (

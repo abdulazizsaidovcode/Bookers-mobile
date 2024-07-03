@@ -43,6 +43,7 @@ export const getCategory_masterAdd = `${base_url}master-service/category?`;
 export const getSpecialization = `${base_url}master-service/specialization`
 export const masterAdd_service = `${base_url}service`
 export const master_get_Service = `${base_url}service/master/`
+export const master_get_specialization = `${base_url}master-service/specialization`
 
 
 
