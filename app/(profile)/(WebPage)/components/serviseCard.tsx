@@ -1,23 +1,27 @@
+import { getFile } from "@/helpers/api";
+import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
 import React from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
 const UserProfileCard = () => {
+  const {getme} = webPageStore()
+  
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <Image
-          source={{ uri: "https://picsum.photos/200/300" }} // Profil rasm manzili
+          source={{ uri: getme ?(getme.attachmentId ? getFile + getme.attachmentId : "https://static.thenounproject.com/png/363639-200.png") : "noData" }} // Profil rasm manzili
           style={styles.avatar}
         />
         <View style={styles.headerInfo}>
           <View style={styles.headerInfoin}>
-            <Text style={styles.name}>Натали</Text>
+            <Text style={styles.name}>{getme ? (getme.firstName ? getme.firstName : "No data"): ""}</Text>
             <View style={styles.tag}>
               <Text style={styles.tagText}>Beauty Wave</Text>
             </View>
           </View>
-          <Text style={styles.role}>Женский мастер</Text>
-          <Text style={styles.phone}>+99893 525 88 02</Text>
+          <Text style={styles.role}>{getme ? (getme.gender ? (getme.gender === "MALE" ? "Erkak master" : getme.gender === "FEMALE" ? "Женский мастер" : "") : "No data"): ""}</Text>
+          <Text style={styles.phone}>{getme ? (getme.phoneNumber ? getme.phoneNumber : "No data"): ""}</Text>
         </View>
         <View style={styles.rating}>
           <Text style={styles.stars}>★★★★★</Text>
