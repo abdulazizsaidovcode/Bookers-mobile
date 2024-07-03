@@ -1,7 +1,7 @@
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { DateObject } from "@/type/graficWork/graficWork";
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet, Platform } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
 import tw from "tailwind-react-native-classnames";
@@ -21,7 +21,6 @@ const CalendarGrafficEdit: React.FC = () => {
         dotColor: "red",
         color: "red",
       },
-      
     };
     setSelectedDate(newSelectedDate);
     setCalendarDate(today); // Default bugungi sanani saqlash
@@ -48,36 +47,43 @@ const CalendarGrafficEdit: React.FC = () => {
     setCalendarDate(day.dateString); // Tanlangan sanani saqlash
   };
 
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      console.log('Running on iOS');
+    } else {
+      console.log('Running on Android');
+    }
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <Calendar
-  style={[tw`w-80`]}
-  onDayPress={onDayPress}
-  markedDates={selectedDate}
-  theme={{
-    calendarBackground: '#ffffff',
-    textSectionTitleColor: '#b6c1cd',
-    dayTextColor: 'black',
-    todayTextColor: '#9C0A35',
-    selectedDayTextColor: '#ffffff',
-    selectedDayBackgroundColor: '#9C0A35',
-    dotColor: '#fff',
-    selectedDotColor: '#ffffff',
-    arrowColor: '#9C0A35',
-    monthTextColor: '#9C0A35',
-    indicatorColor: '#9C0A35',
-    textDayFontFamily: 'monospace',
-    textMonthFontFamily: 'monospace',
-    textDayHeaderFontFamily: 'monospace',
-    textDayFontWeight: '300',
-    textMonthFontWeight: 'bold',
-    textDayHeaderFontWeight: '300',
-    textDayFontSize: 16,
-    textMonthFontSize: 16,
-    textDayHeaderFontSize: 16
-  }}
-/>
-
+        style={[tw`w-80`]}
+        onDayPress={onDayPress}
+        markedDates={selectedDate}
+        theme={{
+          calendarBackground: '#ffffff',
+          textSectionTitleColor: '#b6c1cd',
+          dayTextColor: 'black',
+          todayTextColor: '#9C0A35',
+          selectedDayTextColor: '#ffffff',
+          selectedDayBackgroundColor: '#9C0A35',
+          dotColor: '#fff',
+          selectedDotColor: '#ffffff',
+          arrowColor: '#9C0A35',
+          monthTextColor: '#9C0A35',
+          indicatorColor: '#9C0A35',
+          textDayFontFamily: 'monospace',
+          textMonthFontFamily: 'monospace',
+          textDayHeaderFontFamily: 'monospace',
+          textDayFontWeight: '300',
+          textMonthFontWeight: 'bold',
+          textDayHeaderFontWeight: '300',
+          textDayFontSize: 16,
+          textMonthFontSize: 16,
+          textDayHeaderFontSize: 16
+        }}
+      />
     </SafeAreaView>
   );
 };
