@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,21 +15,25 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import { RootStackParamList } from '@/type/root';
+import { editMainDataStatus, fetchMainData } from '@/helpers/api-function/notifications/notifications';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
-type SettingsScreenNavigationProp = NavigationProp<
-  RootStackParamList,
-  '(notifications)/notification'
->;
+
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(notifications)/notification'>;
 
 const NotificationSettings: React.FC = () => {
   const { isMainSwitch, setIsMainSwitch } = useNotificationsStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
-  const toggleSwitch = () => {
+  const toggleSwitch = (isMainSwitch: boolean) => {
     setIsMainSwitch(!isMainSwitch);
+    editMainDataStatus(!isMainSwitch)
   };
+
+  useEffect(() => {
+    fetchMainData(setIsMainSwitch)
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -39,7 +43,7 @@ const NotificationSettings: React.FC = () => {
         </View>
         <View style={styles.switchContainer}>
           <Text style={styles.switchLabel}>Отключить все уведомления</Text>
-          <Switch value={isMainSwitch} onValueChange={toggleSwitch} />
+          <Switch value={isMainSwitch} onValueChange={() => toggleSwitch(isMainSwitch)} />
         </View>
         <Text style={styles.header}>Настройте уведомления приложения</Text>
         <NotificationOption
@@ -47,7 +51,7 @@ const NotificationSettings: React.FC = () => {
           label="Месенджеры"
           subLabel="SMS"
           onPress={() => navigation.navigate('(notifications)/(pages)/messengers')}
-          />
+        />
         <NotificationOption
           icon={<MaterialIcons name="notifications" size={30} color="#9C0A35" />}
           label="Напоминать о записи"

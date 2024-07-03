@@ -1,17 +1,23 @@
 import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { editCancelOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Switch, TextInput, Button, Dimensions } from 'react-native';
+import React, { useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, View, Switch, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 const CancelRecording = () => {
-  const { isCancelEnabled, cacelMessage, setCacelMessage, setIsCancelEnabled } = useNotificationsStore()
+  const { cancelData, setCancelData } = useNotificationsStore();
 
-  const toggleSwitch = () => setIsCancelEnabled(!isCancelEnabled);
+  const toggleSwitch = () => setCancelData({ ...cancelData, isActive: !cancelData.isActive });
+  const onMessageChange = (text: string) => setCancelData({ ...cancelData, text });
+
+  useEffect(() => {
+    fetchAllData(setCancelData, 'CANCEL_ORDER');
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -27,25 +33,25 @@ const CancelRecording = () => {
             <View>
               <Switch
                 onValueChange={toggleSwitch}
-                value={isCancelEnabled}
+                value={cancelData.isActive}
               />
             </View>
           </View>
-          {isCancelEnabled && (
+          {cancelData.isActive && (
             <View style={styles.messageContainer}>
               <Text style={styles.messageLabel}>Шаблон сообщения</Text>
               <TextInput
                 style={styles.textInput}
                 multiline
                 numberOfLines={10}
-                onChangeText={setCacelMessage}
-                value={cacelMessage}
+                onChangeText={onMessageChange}
+                value={cancelData.text}
               />
             </View>
           )}
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons title="Сохранить" />
+          <Buttons title="Сохранить" onPress={() => editCancelOrder(cancelData.isActive, cancelData.text)} />
         </View>
       </ScrollView>
     </SafeAreaView>

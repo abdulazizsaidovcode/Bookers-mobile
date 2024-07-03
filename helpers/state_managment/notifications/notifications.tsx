@@ -1,23 +1,31 @@
-import { NotificationsStore } from "@/type/notifications/notifications";
+import { NotificationsAllData, NotificationsStore } from "@/type/notifications/notifications";
 import { create } from "zustand";
 
 const useNotificationsStore = create<NotificationsStore>((set) => ({
     isMainSwitch: false,
     isReminderEnabled: false,
-    isCancelEnabled: false,
+    cancelData: {
+        id: '',
+        isActive: false,
+        text: ''
+    },
     isChangingEnabled: false,
-    cacelMessage: '',
     changingMessage: '',
     feedbackMessage: '',
     windowMessage: '',
+    smsData:  {
+        id: '',
+        isActive: false,
+        text: ''
+    },
     setChangingMessage: (val: string) => set({ changingMessage: val }),
+    setSmsData: (val: NotificationsAllData) => set({ smsData: val }),
     setFeedbackMessage: (val: string) => set({ feedbackMessage: val }),
     setWindowMessage: (val: string) => set({ windowMessage: val }),
-    setCacelMessage: (val: string) => set({ cacelMessage: val }),
     setIsMainSwitch: (val: boolean) => set({ isMainSwitch: val }),
     setIsReminderEnabled: (val: boolean) => set({ isReminderEnabled: val }),
-    setIsCancelEnabled: (val: boolean) => set({ isCancelEnabled: val }),
+    setCancelData: (val: NotificationsAllData) => set({ cancelData: val }),
     setIsChangingEnabled: (val: boolean) => set({ isChangingEnabled: val }),
 }));
 
-export default useNotificationsStore
+export default useNotificationsStore;

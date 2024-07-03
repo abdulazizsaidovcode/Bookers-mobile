@@ -130,3 +130,10 @@ export const add_feedback: string = `${base_url}feedback/for/app/by/master`
 
 export const master_put_number: string = `${base_url}user/master-setting-number`
 export const master_get_number: string = `${base_url}user/master-setting-count`
+
+// notifications url
+export const notifications_main_data: string = `${base_url}notification/settings/all`
+export const notifications_main_data_edit: string = `${base_url}notification/settings/all/turn-off-turn-on`
+export const notifications_all_data: string = `${base_url}notification/settings`
+export const notifications_messengers_edit: string = `${base_url}notification/settings/messages`
+export const notifications_cancel_edit: string = `${base_url}notification/settings/cancel-order`
