@@ -94,6 +94,9 @@ import CenseledSession from "@/app/(detail)/censeled-session";
 import UpcomingHistory from "@/app/(free)/(client)/details/history/upcoming-history";
 import PastHistory from "@/app/(free)/(client)/details/history/past-history";
 import CanceledHistory from "@/app/(free)/(client)/details/history/canceled-history";
+import ServesGenderEdit from "./(standart)/(servicesEdit)/(gender)/servesGender";
+import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
+import ExpertiseEdit from "./(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit";
 
 const Stack = createNativeStackNavigator();
 
@@ -346,6 +349,25 @@ function RootLayoutNav() {
               component={MyServicesScreen}
               options={{ headerShown: false }}
             />
+
+            {/* Service edit  */}
+
+            <Stack.Screen
+              name="(standart)/(servicesEdit)/(gender)/servesGender"
+              component={ServesGenderEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(servicesEdit)/(categoryEdit)/category"
+              component={CategoryEdit}
+              options={{ headerShown: false }}
+            />
+             <Stack.Screen
+              name="(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit"
+              component={ExpertiseEdit}
+              options={{ headerShown: false }}
+            />
+            {/* Service edit  */}
             <Stack.Screen
               name="(profile)/(sessionhistory)/sessionHistory"
               component={SessionHistory}
