@@ -21,7 +21,7 @@ import { getMee } from "@/helpers/token";
 
 const Tab = createBottomTabNavigator();
 
-export default function TabLayout() {
+function TabLayout() {
   const colorScheme = useColorScheme();
   const { getme, setGetMee } = graficWorkStore();
   const [tariff, setTariff] = useState(null);
@@ -52,6 +52,8 @@ export default function TabLayout() {
             iconName = focused ? "home" : "home";
           } else if (route.name === "Schedule") {
             iconName = focused ? "calendar" : "calendar";
+          }else if (route.name === "(location)/Location") {
+            iconName = focused ? "map" : "map";
           } else if (route.name === "finance") {
             iconName = focused ? "finance" : "finance";
           } else if (route.name === "chat") {
@@ -83,7 +85,7 @@ export default function TabLayout() {
         }}
       />
       <Tab.Screen
-        name="Schedule"
+        name="schedule"
         component={ScheduleScreen}
         options={{
           title: "Расписание",
@@ -137,3 +139,5 @@ export default function TabLayout() {
     </Tab.Navigator>
   );
 }
+
+export default TabLayout

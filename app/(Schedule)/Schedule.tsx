@@ -1,23 +1,23 @@
-// Schedule.tsx
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import tw from 'tailwind-react-native-classnames';
+
 import Tabs from './components/tabs';
 import Bookedschedule from './bookedschedule';
-import Requestchedule from './availebleschedule';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import RequestSchedule from './availebleschedule';
+
 import { useScheduleAvialableStore, useScheduleBookedStore } from '@/helpers/state_managment/schedule/schedule';
 import { getAvialable, getBookedSchedule } from '@/helpers/api-function/schedule/schedule';
 import { getFreeTime } from '@/helpers/api-function/freeTime/freeTime';
 import { useScheduleFreeTime } from '@/helpers/state_managment/freeTime/freeTime';
-import tw from 'tailwind-react-native-classnames';
 
 const Schedule: React.FC = () => {
   const [activeTab, setActiveTab] = useState('booked');
 
-  const { schedule, setSchedule } = useScheduleBookedStore()
-  const { scheduleBooked, setScheduleBooked } = useScheduleAvialableStore()
-  const { FreeTime, setFreeTime } = useScheduleFreeTime()
-
+  const { schedule, setSchedule } = useScheduleBookedStore();
+  const { scheduleBooked, setScheduleBooked } = useScheduleAvialableStore();
+  const { FreeTime, setFreeTime } = useScheduleFreeTime();
 
   useEffect(() => {
     getBookedSchedule(new Date().toISOString().split('T')[0], setSchedule);
@@ -29,9 +29,7 @@ const Schedule: React.FC = () => {
 
   useEffect(() => {
     getFreeTime(new Date().toISOString().split('T')[0], setFreeTime);
-    console.log(FreeTime, "slaom");
-
-  }, [setSchedule]);
+  }, [setFreeTime]);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -44,12 +42,11 @@ const Schedule: React.FC = () => {
 
         <Tabs activeTab={activeTab} onTabChange={handleTabChange} />
         {activeTab === 'booked' && <Bookedschedule />}
-        {activeTab === 'requests' && <Requestchedule />}
+        {/* {activeTab === 'requests' && <RequestSchedule />} */}
       </SafeAreaView>
     </ScrollView>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {

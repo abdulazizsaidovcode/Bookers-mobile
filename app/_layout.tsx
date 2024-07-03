@@ -61,7 +61,6 @@ import LanguageSelection from "./(profile)/(settings)/(childSettings)/(Applicati
 import GalleryDetails from "./(settings)/(settings-gallery)/gallery-details";
 import SwitchPage from "./(auth)/switchPage";
 import OfferScreen from "./(auth)/offerScreen";
-import EditProfile from "./(profile)/(settings)/(childSettings)/Personal data/PersonalData";
 import WebPage from "./(profile)/(WebPage)/WebPage";
 import GrafficWorkEdit from "./(free)/(work-grafic-edit)/workGraffic";
 import TimeWorkEdit from "./(free)/(work-grafic-edit)/workTime";
@@ -92,6 +91,8 @@ import UpcomingHistory from "@/app/(free)/(client)/details/history/upcoming-hist
 import PastHistory from "@/app/(free)/(client)/details/history/past-history";
 import CanceledHistory from "@/app/(free)/(client)/details/history/canceled-history";
 import NotificationSettings from "./(notifications)/notifications";
+import HelpPage from "./(profile)/(help)/help";
+import EditProfile from "./(profile)/(settings)/(childSettings)/(Personal data)/PersonalData";
 import Messengers from "./(notifications)/(pages)/messengers";
 import RemindAboutAppointment from "./(notifications)/(pages)/remind-about-appointment";
 import CancelRecording from "./(notifications)/(pages)/cancel-recording";
@@ -102,7 +103,6 @@ import ServesGenderEdit from "./(standart)/(servicesEdit)/(gender)/servesGender"
 import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
 import ExpertiseEdit from "./(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit";
 import Welcome from "./(welcome)/Welcome";
-import HelpPage from "./(profile)/(help)/help";
 
 const Stack = createNativeStackNavigator();
 

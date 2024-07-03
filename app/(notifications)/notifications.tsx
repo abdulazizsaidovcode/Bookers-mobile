@@ -7,6 +7,7 @@ import {
   ScrollView,
   Dimensions,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import { FontAwesome5, MaterialIcons, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,11 +24,11 @@ type SettingsScreenNavigationProp = NavigationProp<
 >;
 
 const NotificationSettings: React.FC = () => {
-  const { isSwitch, setIsSwitch } = useNotificationsStore();
+  const { isMainSwitch, setIsMainSwitch } = useNotificationsStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const toggleSwitch = () => {
-    setIsSwitch(!isSwitch);
+    setIsMainSwitch(!isMainSwitch);
   };
 
   return (
@@ -38,7 +39,7 @@ const NotificationSettings: React.FC = () => {
         </View>
         <View style={styles.switchContainer}>
           <Text style={styles.switchLabel}>Отключить все уведомления</Text>
-          <Switch value={isSwitch} onValueChange={toggleSwitch} />
+          <Switch value={isMainSwitch} onValueChange={toggleSwitch} />
         </View>
         <Text style={styles.header}>Настройте уведомления приложения</Text>
         <NotificationOption
@@ -95,7 +96,7 @@ const NotificationOption: React.FC<NotificationOptionProps> = ({
   subLabel,
   onPress,
 }) => (
-  <Pressable onPress={onPress} style={styles.optionContainer}>
+  <TouchableOpacity onPress={onPress} style={styles.optionContainer}>
     <View style={styles.optionContent}>
       <View style={styles.iconContainer}>{icon}</View>
       <View>
@@ -104,7 +105,7 @@ const NotificationOption: React.FC<NotificationOptionProps> = ({
       </View>
     </View>
     <MaterialIcons name="chevron-right" size={30} color="#4F4F4F" />
-  </Pressable>
+  </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
