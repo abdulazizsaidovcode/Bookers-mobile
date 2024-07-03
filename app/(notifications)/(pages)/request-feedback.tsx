@@ -1,7 +1,8 @@
 import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { editFeedbeckOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -9,7 +10,13 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 const RequestFeedback = () => {
-  const { feedbackMessage, setFeedbackMessage } = useNotificationsStore()
+  const { feedbackData, setFeedbackData } = useNotificationsStore();
+
+  useEffect(() => {
+    fetchAllData(setFeedbackData, 'FEEDBACK')
+  }, [])
+
+  const onMessageChange = (text: string) => setFeedbackData({ ...feedbackData, text })
 
   return (
     <SafeAreaView style={styles.container}>
@@ -25,13 +32,13 @@ const RequestFeedback = () => {
               style={styles.textInput}
               multiline
               numberOfLines={10}
-              onChangeText={setFeedbackMessage}
-              value={feedbackMessage}
+              onChangeText={onMessageChange}
+              value={feedbackData.text}
             />
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons title="Сохранить" />
+          <Buttons title="Сохранить" onPress={() => editFeedbeckOrder(feedbackData.text)} />
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -104,6 +104,8 @@ import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
 import ExpertiseEdit from "./(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit";
 import Welcome from "./(welcome)/Welcome";
 import ProcessEdit from "./(standart)/(servicesEdit)/(processEdit)/processEdit";
+import GalleryDetail from "./(profile)/(WebPage)/components/galleryDetail";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -624,6 +626,11 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             {/*  help end  */}
+            <Stack.Screen
+              name="(WebPage)/(components)/galleryDetail"
+              component={GalleryDetail}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>

@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
-import { View, Text, Switch, StyleSheet, Dimensions, Pressable, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, Switch, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import Buttons from '@/components/(buttons)/button';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { editMessenger, fetchAllData } from '@/helpers/api-function/notifications/notifications';
+import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Messengers = () => {
-  const [isSmsEnabled, setIsSmsEnabled] = useState(false);
+  const { smsData, setSmsData } = useNotificationsStore();
 
-  const toggleSmsSwitch = () => setIsSmsEnabled(previousState => !previousState);
+  useEffect(() => {
+    fetchAllData(setSmsData, 'MESSENGERS');
+  }, []);
+
+  const toggleSmsSwitch = () => {
+    setSmsData({ ...smsData, isActive: !smsData.isActive });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={{ height: screenHeight / 1.13 }}>
-          <NavigationMenu name='Месенджеры'/>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.mainContent}>
+          <NavigationMenu name='Месенджеры' />
           <Text style={styles.description}>Настройте через какие мессенджеры отправлять уведомления</Text>
           <View style={styles.switchContainer}>
             <View style={styles.optionContent}>
@@ -26,12 +33,12 @@ const Messengers = () => {
             </View>
             <Switch
               onValueChange={toggleSmsSwitch}
-              value={isSmsEnabled}
+              value={smsData.isActive}
             />
           </View>
         </View>
-        <View>
-          <Buttons title='Сохранить' />
+        <View style={styles.buttonContainer}>
+          <Buttons title='Сохранить' onPress={() => editMessenger(!smsData.isActive)} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -41,14 +48,15 @@ const Messengers = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: '#21212E',
   },
-  title: {
-    color: '#FFFFFF',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
+  scrollContainer: {
+    flexGrow: 1,
+    padding: 16,
+  },
+  mainContent: {
+    flex: 1,
+    height: screenHeight / 1.13,
   },
   description: {
     color: '#B0B0B0',
@@ -61,8 +69,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#B9B9C9',
     borderRadius: 15,
-    padding: 1,
-    paddingHorizontal: 15,
+    padding: 15,
     marginBottom: 16,
   },
   optionContent: {
@@ -74,6 +81,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 8,
+  },
+  buttonContainer: {
+    marginVertical: 16,
   },
 });
 

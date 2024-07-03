@@ -1,18 +1,22 @@
 export interface NotificationsStore {
     isMainSwitch: boolean;
-    cacelMessage: string;
-    windowMessage: string;
-    changingMessage: string;
-    feedbackMessage: string;
+    windowData: NotificationsAllData;
+    smsData: NotificationsAllData;
+    feedbackData: NotificationsAllData;
     isReminderEnabled: boolean;
-    isChangingEnabled: boolean;
-    isCancelEnabled: boolean;
-    setIsCancelEnabled: (val: boolean) => void;
-    setCacelMessage: (val: string) => void;
-    setChangingMessage: (val: string) => void;
-    setWindowMessage: (val: string) => void;
-    setFeedbackMessage: (val: string) => void;
+    changingData: NotificationsAllData;
+    cancelData: NotificationsAllData;
+    setCancelData: (val: NotificationsAllData) => void;
+    setSmsData: (val: NotificationsAllData) => void;
+    setChangingData: (val: NotificationsAllData) => void;
+    setWindowData: (val: NotificationsAllData) => void;
+    setFeedbackData: (val: NotificationsAllData) => void;
     setIsReminderEnabled: (val: boolean) => void;
     setIsMainSwitch: (val: boolean) => void;
-    setIsChangingEnabled: (val: boolean) => void;
+  }
+
+export interface NotificationsAllData {
+    id: string;
+    isActive: boolean;
+    text: string;
 }

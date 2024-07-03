@@ -67,6 +67,8 @@ const Records = () => {
         setCategoryName(name)
     };
 
+    console.log(FreeTime)
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -110,15 +112,15 @@ const Records = () => {
                             </Text>
                             {activeTab && (
                                 <View style={[tw`flex-row flex-wrap items-center mb-10`, {justifyContent: 'center', gap: 10}]}>
-                                    {FreeTime ? FreeTime.map((time, index) => (
+                                    {FreeTime ? FreeTime.map((time: string, index: number) => (
                                         <TouchableOpacity
                                             activeOpacity={.7}
                                             key={index}
                                             style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
                                             onPress={() => handleTimeSelect(time)}
                                         >
-                                            <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
-                                                {time}
+                                            <Text style={[styles.timeText, {textAlign: 'center'}, activeTime === time && styles.activeTimeText]}>
+                                                {time.slice(0, 5)}
                                             </Text>
                                         </TouchableOpacity>
                                     )) : <Text style={styles.placeholderText}>No available times</Text>}

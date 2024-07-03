@@ -30,7 +30,8 @@ const clientStore = create<Client>((set) => ({
         birthDate: '',
         districtId: '',
         regionId: '',
-        attachmentId: ''
+        attachmentId: '',
+        clientPreferences: ''
     },
     updateClient: {
         firstName: '',
@@ -42,7 +43,8 @@ const clientStore = create<Client>((set) => ({
         birthDate: '',
         districtId: '',
         regionId: '',
-        attachmentId: ''
+        attachmentId: '',
+        clientPreferences: ''
     },
     setUpdateClient: (val: any) => set({updateClient: val}),
     ageData: null,

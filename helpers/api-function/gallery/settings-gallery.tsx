@@ -6,8 +6,8 @@ import axios from "axios";
 
 export const fetchData = async (setData: (data: GalleryData[]) => void) => {
   try {
-    const res = await axios.get(gallery_list, config);
-    setData(res.data.body);
+    const { data } = await axios.get(gallery_list, config);
+    setData(data.body);
   } catch (error) {
     console.log(error);
   }
@@ -15,9 +15,8 @@ export const fetchData = async (setData: (data: GalleryData[]) => void) => {
 
 export const fetchFullData = async (id: number, setFullData: (data: GalleryData) => void) => {
   try {
-    const res = await axios.get(`${gallery_full_data}/${id}`, config);
-    console.log(res.data.body);
-    setFullData(res.data.body);
+    const { data } = await axios.get(`${gallery_full_data}/${id}`, config);
+    setFullData(data.body);
   } catch (error) {
     console.log(error);
   }
@@ -25,7 +24,7 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
 
 export const addData = async (formData: FormData, name: string) => {
   console.log(formData);
-  
+
   try {
     const { data } = await axios.post(`${gallery_add}?name=${name}`, formData, config);
     console.log(data);
@@ -40,20 +39,19 @@ export const addPhoto = async (galleryId: number, formData: any, setFullData: (d
   console.log(formData);
 
   try {
-    const res = await axios.post(`${gallery_add_photo}/${galleryId}`, formData, config);
-    fetchFullData(galleryId, setFullData);
+    const { data } = await axios.post(`${gallery_add_photo}/${galleryId}`, formData, config);
+    if (data.success) {
+      fetchFullData(galleryId, setFullData);
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
 export const editName = async (id: number, setFullData: (data: GalleryData) => void, editedName: string, toggleModal: () => void) => {
-  const payload = {
-    name: editedName,
-  };
   try {
-    const res = await axios.put(`${gallery_add}/${id}`, payload, config);
-    if (res.data.success) {
+    const { data } = await axios.put(`${gallery_add}/${id}?name=${editedName}`, {}, config);
+    if (data.success) {
       fetchFullData(id, setFullData);
       toggleModal();
     }
@@ -68,8 +66,6 @@ export const delPhoto = async (
   setFullData: (data: GalleryData) => void
 ) => {
   const url = `${gallery_add}/${id}/attachmentIds`;
-  console.log(url);
-
   try {
     const response = await fetch(url, {
       method: 'DELETE',

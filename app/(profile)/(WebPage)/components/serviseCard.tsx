@@ -3,42 +3,81 @@ import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
 import React from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
-const UserProfileCard = () => {
-  const {getme} = webPageStore()
-  
+const UserProfileCard: React.FC = () => {
+  const { getme, specialization } = webPageStore();
+
+
+  // Function to generate star rating
+  const generateStars = (count: number) => {
+    let stars = '';
+    for (let i = 0; i < count; i++) {
+      stars += '★';
+    }
+    for (let i = count; i < 5; i++) {
+      stars += '☆';
+    }
+    return stars;
+  };
+
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <Image
-          source={{ uri: getme ?(getme.attachmentId ? getFile + getme.attachmentId : "https://static.thenounproject.com/png/363639-200.png") : "noData" }} // Profil rasm manzili
+          source={{
+            uri: getme
+              ? getme.attachmentId
+                ? getFile + getme.attachmentId
+                : "https://static.thenounproject.com/png/363639-200.png"
+              : "noData"
+          }} // Profil rasm manzili
           style={styles.avatar}
         />
         <View style={styles.headerInfo}>
           <View style={styles.headerInfoin}>
-            <Text style={styles.name}>{getme ? (getme.firstName ? getme.firstName : "No data"): ""}</Text>
+            <Text style={styles.name}>
+              {getme && getme.firstName ? getme.firstName : "No data"}
+            </Text>
             <View style={styles.tag}>
               <Text style={styles.tagText}>Beauty Wave</Text>
             </View>
           </View>
-          <Text style={styles.role}>{getme ? (getme.gender ? (getme.gender === "MALE" ? "Erkak master" : getme.gender === "FEMALE" ? "Женский мастер" : "") : "No data"): ""}</Text>
-          <Text style={styles.phone}>{getme ? (getme.phoneNumber ? getme.phoneNumber : "No data"): ""}</Text>
+          <Text style={styles.role}>
+            {getme && getme.gender
+              ? getme.gender === "MALE"
+                ? "Erkak master"
+                : getme.gender === "FEMALE"
+                ? "Женский мастер"
+                : ""
+              : "No data"}
+          </Text>
+          <Text style={styles.phone}>
+            {getme && getme.phoneNumber ? getme.phoneNumber : "No data"}
+          </Text>
         </View>
         <View style={styles.rating}>
-          <Text style={styles.stars}>★★★★★</Text>
-          <Text style={styles.orderInfo}>52 заказа, 25 клиентов</Text>
+          <Text style={styles.stars}>
+            {getme && getme.starCount ? generateStars(getme.starCount) : generateStars(0)}
+          </Text>
+          <Text style={styles.orderInfo}>
+            {getme && getme.orderCount ? getme.orderCount : "No data"} заказа,{" "}
+            {getme && getme.clientCount ? getme.clientCount : "No data"} клиентов
+          </Text>
         </View>
       </View>
       <View style={styles.body}>
         <View style={styles.buttons}>
+          {
+            specialization ? specialization.map((item: any) => 
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Стрижка</Text>
+            <Text style={styles.buttonText}>{item.name}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Укладка</Text>
+            ) : 
+            <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Malumot topilmadi</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Ногтевой</Text>
-          </TouchableOpacity>
+
+          }
+          
         </View>
         <Text style={styles.address}>Мирабадский р-н, ул. Нурафшон, 32</Text>
       </View>
@@ -65,7 +104,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    marginBottom: 12
+    marginBottom: 12,
   },
   headerInfo: {
     flex: 1,
@@ -74,7 +113,7 @@ const styles = StyleSheet.create({
   headerInfoin: {
     display: "flex",
     flexDirection: "row",
-    gap: 10
+    gap: 10,
   },
   name: {
     fontSize: 18,
@@ -118,7 +157,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   buttons: {
-    
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: 15,
