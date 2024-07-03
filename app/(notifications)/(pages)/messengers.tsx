@@ -30,7 +30,7 @@ const Messengers = () => {
             />
           </View>
         </View>
-        <View style={{ height: screenHeight / 3 }}>
+        <View>
           <Buttons title='Сохранить' />
         </View>
       </ScrollView>
