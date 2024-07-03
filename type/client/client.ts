@@ -87,6 +87,7 @@ export interface UpdateClient {
     districtId: number | string
     regionId: number | string
     attachmentId: string | null
+    clientPreferences: string | null
 }
 
 export interface AgeData {

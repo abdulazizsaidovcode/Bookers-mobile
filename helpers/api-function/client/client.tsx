@@ -1,23 +1,11 @@
 import axios from "axios";
 import {config} from "@/helpers/token";
 import {
-    add_feedback,
-    age_list,
-    client_address_book,
-    client_address_book_search,
-    client_address_book_update,
-    client_not_visit,
-    client_not_visit_search,
-    client_permanent, client_permanent_search,
-    client_statistics,
-    client_stopped_visit_search,
-    client_stopped_visit_sms,
-    client_stopped_visiting,
-    district_list, getMeID, history_count,
-    master_client_all_list, master_client_all_list_search,
-    master_client_create, master_message_for_client, master_service_list,
-    new_client, new_client_search, order_canceled, order_past, order_upcoming,
-    region_list
+    add_feedback, age_list, client_address_book, client_address_book_search, client_address_book_update, client_not_visit,
+    client_not_visit_search, client_permanent, client_permanent_search, client_statistics, client_stopped_visit_search,
+    client_stopped_visit_sms, client_stopped_visiting, district_list, getMeID, history_count, master_client_all_list,
+    master_client_all_list_search, master_client_create, master_message_for_client, master_service_list, new_client,
+    new_client_search, order_canceled, order_past, order_upcoming, region_list
 } from "@/helpers/api";
 import {
     AgeData, AllClient,
@@ -31,18 +19,16 @@ import {
     RegionData,
     UpdateClient
 } from "@/type/client/client";
-import clientStore from "@/helpers/state_managment/client/clientStore";
 import Toast from "react-native-simple-toast";
 
 // id buyicha get me qiladi client ni
 export const getMeClient = async (setData: (val: any | null) => void, clientID: string) => {
     try {
         if (clientID) {
-            const {data} = await axios.get(getMeID, config);
+            const {data} = await axios.get(`${getMeID}${clientID}`, config);
             if (data.success) setData(data.body)
             else setData(null)
-        }
-        alert('An error occurred. We will fix it soon')
+        } else Toast.show('An error occurred, it will be fixed soon!', Toast.LONG)
     } catch (err) {
         console.log(err)
         setData(null)
@@ -126,13 +112,23 @@ export const getClientAllSearch = async (setData: (val: AllClient[] | null) => v
 }
 
 // master client ni create qilish
-export const createClient = async (createData: UpdateClient, setNavigate: (val: boolean) => void) => {
+export const createClient = async (createData: UpdateClient, setNavigate: (val: boolean) => void, setLoading: (val: boolean) => void) => {
+    setLoading(true)
     try {
         const {data} = await axios.post(master_client_create, createData, config)
-        if (data.success) setNavigate(true)
-        else setNavigate(false)
+        if (data.success) {
+            setNavigate(true)
+            setLoading(false)
+            Toast.show('Successfully saved client✔', Toast.LONG)
+        } else {
+            Toast.show('Error saved client✔', Toast.LONG)
+            setLoading(false)
+            setNavigate(false)
+        }
     } catch (err) {
         console.error(err)
+        Toast.show('Error saved client✔', Toast.LONG)
+        setLoading(false)
         setNavigate(false)
     }
 }
@@ -236,14 +232,24 @@ export const getClientAddressBookSearch = async (setData: (val: ClientAddressBoo
 }
 
 // address book da create qilgan client larni update qilish
-export const updateClientData = async (updateData: UpdateClient, clientID: string, setNavigate: (val: boolean) => void) => {
+export const updateClientData = async (updateData: UpdateClient, clientID: string, setNavigate: (val: boolean) => void, setLoading: (val: boolean) => void) => {
+    setLoading(true)
     try {
         const {data} = await axios.put(`${client_address_book_update}${clientID}`, updateData, config)
-        if (data.success) setNavigate(true)
-        else setNavigate(false)
+        if (data.success) {
+            setNavigate(true)
+            setLoading(false)
+            Toast.show('Successfully update client ✔', Toast.LONG)
+        } else {
+            setLoading(false)
+            setNavigate(false)
+            Toast.show('Error update client❌', Toast.LONG)
+        }
     } catch (err) {
         console.error(err)
+        setLoading(false)
         setNavigate(false)
+        Toast.show('Error update client❌', Toast.LONG)
     }
 }
 

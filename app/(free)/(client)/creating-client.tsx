@@ -50,7 +50,9 @@ const CreatingClient = () => {
         setDistrictData,
         attachmentID,
         setStatusData,
-        setAllClients
+        setAllClients,
+        isLoading,
+        setIsLoading
     } = clientStore()
     const {control, formState: {errors}} = useForm<FormData>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -79,8 +81,14 @@ const CreatingClient = () => {
             setUpdateClient(updateClientDef)
             getClientStatistics(setStatusData)
             getClientAll(setAllClients)
+            setNavigate(false)
+            setRegex(false)
         }
     }, [navigate]);
+
+    useEffect(() => {
+        isLoading ? setRegex(false) : setRegex(true)
+    }, [isLoading]);
 
     const handleInputChange = (name: string, value: any) => {
         attachmentID ? updateClient.attachmentId = attachmentID : updateClient.attachmentId = null;
@@ -131,6 +139,11 @@ const CreatingClient = () => {
                             value={updateClient.job}
                             label={`Профессия`}
                             onChangeText={e => handleInputChange('job', e)}
+                        />
+                        <LocationInput
+                            value={updateClient.clientPreferences ? updateClient.clientPreferences : ''}
+                            label={`Предпочтения клинета`}
+                            onChangeText={e => handleInputChange('clientPreferences', e)}
                         />
                         <Text style={[tw`text-gray-500 mb-2 text-base`]}>День рождения</Text>
                         <CalendarComponent/>
@@ -205,9 +218,9 @@ const CreatingClient = () => {
                     </View>
                     <View style={tw`py-5`}>
                         <Buttons
-                            title={`Сохранить`}
+                            title={isLoading ? 'loading...' : `Сохранить`}
                             onPress={() => {
-                                if (regex) createClient(updateClient, setNavigate)
+                                if (regex) createClient(updateClient, setNavigate, setIsLoading)
                             }}
                             isDisebled={regex}
                         />

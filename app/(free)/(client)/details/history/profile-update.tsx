@@ -5,11 +5,8 @@ import {ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
 import React, {useEffect, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
-import NavigationMenu from "@/components/navigation/navigation-menu";
 import LocationInput from "@/components/(location)/locationInput";
 import CalendarComponent from "@/components/calendar/calendar";
-import {useForm, Controller} from 'react-hook-form';
-import PhoneInput from 'react-native-phone-input';
 import {MaterialIcons} from "@expo/vector-icons";
 import ProfileImgUpload from "@/components/profile-img-upload";
 import financeStore from "@/helpers/state_managment/finance/financeStore";
@@ -17,74 +14,64 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import {Picker} from "@react-native-picker/picker";
 import Select from "@/components/select/select";
 import {
-    getAgeList, getClientAll,
+    createClient,
+    getClientAll,
     getClientStatistics,
     getDistrictList,
-    getRegionList,
-    updateClientData
+    updateClientData,
 } from "@/helpers/api-function/client/client";
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {useForm, Controller} from 'react-hook-form';
+import PhoneInput from 'react-native-phone-input';
+import Toast from "react-native-simple-toast";
 
-type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/updating-address-book'>;
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/updating-address-book'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
 interface FormData {
-    phoneNumber: string
+    phoneNumber: string;
 }
 
-const UpdatingAddressBook = () => {
+const genderData = [
+    {label: "Gender ni tanlang", value: ""},
+    {label: "Male", value: "true"},
+    {label: "Female", value: "false"},
+]
+
+const ProfileUpdate = ({clientData}: { clientData: any }) => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const route = useRoute<CreatingClientScreenRouteProp>();
-    const {client} = route.params;
     const {date} = financeStore()
     const {
-        updateClientDef,
-        updateClient,
-        setUpdateClient,
         ageData,
-        setAgeData,
         regionData,
-        setRegionData,
         districtData,
         setDistrictData,
         attachmentID,
-        setStatusData,
-        setAllClients,
         isLoading,
-        setIsLoading
+        setIsLoading,
+        setStatusData,
+        setAllClients
     } = clientStore()
     const {control, formState: {errors}} = useForm<FormData>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [regex, setRegex] = useState<boolean>(false);
-    const [navigate, setNavigate] = useState<boolean>(false);
     const [showHide, setShowHide] = useState<boolean>(false);
+    const [navigate, setNavigate] = useState<boolean>(false);
+    const [newUpdateClient, setNewUpdateClient] = useState<any>(clientData);
 
     useEffect(() => {
-        getAgeList(setAgeData)
-        getRegionList(setRegionData)
-        if (client) {
-            updateClient.phoneNumber = client.phoneNumber
-            updateClient.firstName = client.firstName
-            updateClient.lastName = client.lastName
-        }
-    }, []);
+        setRegex(validateObject(newUpdateClient))
+        newUpdateClient.attachmentId = attachmentID ? attachmentID : null
+        newUpdateClient.phoneNumber = phoneNumber ? phoneNumber : newUpdateClient.phoneNumber;
+        newUpdateClient.birthDate = date ? date : newUpdateClient.birthDate
+    }, [newUpdateClient]);
 
     useEffect(() => {
-        if (client) {
-            updateClient.phoneNumber = client.phoneNumber
-            updateClient.firstName = client.firstName
-            updateClient.lastName = client.lastName
-        }
-    }, [client]);
+        newUpdateClient.attachmentId = attachmentID ? attachmentID : null
+        newUpdateClient.phoneNumber = phoneNumber ? phoneNumber : newUpdateClient.phoneNumber;
+    }, [attachmentID, phoneNumber]);
 
     useEffect(() => {
-        updateClient.birthDate = date
-        updateClient.phoneNumber = phoneNumber
-    }, [date, phoneNumber]);
-
-    useEffect(() => {
-        setRegex(validateObject(updateClient))
-    }, [updateClient]);
+        newUpdateClient.districtId = ''
+    }, [newUpdateClient.regionId]);
 
     useEffect(() => {
         isLoading ? setRegex(false) : setRegex(true)
@@ -93,7 +80,6 @@ const UpdatingAddressBook = () => {
     useEffect(() => {
         if (navigate) {
             navigation.navigate('(free)/(client)/main')
-            setUpdateClient(updateClientDef)
             getClientStatistics(setStatusData)
             getClientAll(setAllClients)
             setNavigate(false)
@@ -101,67 +87,65 @@ const UpdatingAddressBook = () => {
         }
     }, [navigate]);
 
+    const handleInputChange = (name: string, value: any) => {
+        setNewUpdateClient({
+            ...newUpdateClient,
+            [name]: value
+        });
+    };
+
+    function validateObject(obj: any) {
+        for (let key in obj) {
+            if ((
+                key !== 'attachmentId' &&
+                key !== 'comment' &&
+                key !== 'email' &&
+                key !== 'specialist' &&
+                key !== 'telegram'
+            ) && !obj[key]) return false
+        }
+        return true;
+    }
+
     const handleSubmitChange = (e: any) => {
         if (e.length === 13) setPhoneNumber(e)
         else setPhoneNumber('')
     }
 
-    const handleInputChange = (name: string, value: any) => {
-        attachmentID ? updateClient.attachmentId = attachmentID : updateClient.attachmentId = null;
-        updateClient.birthDate = date
-        updateClient.phoneNumber = phoneNumber
-        setUpdateClient({
-            ...updateClient,
-            [name]: value
-        });
-    };
-
-    const genderData = [
-        {label: "Male", value: "true"},
-        {label: "Female", value: "false"},
-    ]
-
-    function validateObject(obj: any) {
-        for (let key in obj) {
-            if (key !== 'attachmentId' && !obj[key]) return false
-        }
-        return true;
-    }
-
     const toggleShowHide = () => setShowHide(!showHide)
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
-            <NavigationMenu name={`Создание клиента`}/>
-            <View style={tw`flex-1`}>
+            <View style={[tw`flex-1`, {transform: 'translateY(-30px)'}]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
+                    contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
-                        <ProfileImgUpload attachmentID={client ? client.attachmentId : ''}/>
+                        <ProfileImgUpload attachmentID={clientData.attachmentId}/>
                         <LocationInput
-                            value={updateClient.firstName}
+                            value={newUpdateClient.firstName}
                             label={`Имя`}
                             onChangeText={e => handleInputChange('firstName', e)}
                         />
                         <LocationInput
-                            value={updateClient.lastName}
+                            value={newUpdateClient.lastName}
                             label={`Фамилия`}
                             onChangeText={e => handleInputChange('lastName', e)}
                         />
                         <LocationInput
-                            value={updateClient.job}
+                            value={newUpdateClient.job}
                             label={`Профессия`}
                             onChangeText={e => handleInputChange('job', e)}
                         />
                         <LocationInput
-                            value={updateClient.clientPreferences ? updateClient.clientPreferences : ''}
+                            value={newUpdateClient.clientPreferences ? newUpdateClient.clientPreferences : ''}
                             label={`Предпочтения клинета`}
                             onChangeText={e => handleInputChange('clientPreferences', e)}
                         />
                         <Text style={[tw`text-gray-500 mb-2 text-base`]}>День рождения</Text>
-                        <CalendarComponent/>
+                        <CalendarComponent defDate={newUpdateClient.birthDate}/>
                         <Text style={[tw`text-gray-500 mb-2 mt-3 text-base`]}>Номер телефона</Text>
                         <Controller
                             name="phoneNumber"
@@ -176,9 +160,9 @@ const UpdatingAddressBook = () => {
                             render={({field: {value}}) => (
                                 <PhoneInput
                                     ref={(ref) => {
-                                        this.phone = ref
+                                        this.phone = ref;
                                     }}
-                                    initialValue={client.phoneNumber}
+                                    initialValue={newUpdateClient.phoneNumber}
                                     initialCountry="uz"
                                     onChangePhoneNumber={handleSubmitChange}
                                     style={styles.phoneInputContainer}
@@ -187,7 +171,8 @@ const UpdatingAddressBook = () => {
                                 />
                             )}
                         />
-                        {errors.phoneNumber && <Text style={{color: 'red'}}>{errors.phoneNumber.message}</Text>}
+                        {errors.phoneNumber && <Text style={styles.errorText}>{errors.phoneNumber.message}</Text>}
+
                         <View style={tw`mb-5 mt-7 flex-row justify-between items-center`}>
                             <Text style={tw`text-base text-white font-bold`}>
                                 Дополнительная информаци о клиенте
@@ -203,19 +188,19 @@ const UpdatingAddressBook = () => {
                         <View style={tw`${showHide ? '' : 'hidden'}`}>
                             <Select
                                 label={`Пол`}
-                                value={updateClient.gender}
+                                value={newUpdateClient.gender !== 'MALE' ? newUpdateClient.gender : newUpdateClient.gender === 'MALE' ? 'true' : 'false'}
                                 onValueChange={(e) => handleInputChange('gender', e)}
                                 child={genderData.map(item => <Picker.Item label={item.label} value={item.value}/>)}
                             />
                             <Select
                                 label={`Возраст`}
-                                value={updateClient.ageId}
+                                value={newUpdateClient.ageId}
                                 onValueChange={(e) => handleInputChange('ageId', e)}
                                 child={ageData && ageData.map(item => <Picker.Item label={item.ageRange} value={item.id}/>)}
                             />
                             <Select
                                 label={`Регион`}
-                                value={updateClient.regionId}
+                                value={newUpdateClient.regionId ? newUpdateClient.regionId : ''}
                                 onValueChange={(e) => {
                                     handleInputChange('regionId', e)
                                     getDistrictList(setDistrictData, e)
@@ -224,19 +209,32 @@ const UpdatingAddressBook = () => {
                             />
                             <Select
                                 label={`Город`}
-                                value={updateClient.districtId}
+                                value={newUpdateClient.districtId ? newUpdateClient.districtId : ''}
                                 onValueChange={(e) => handleInputChange('districtId', e)}
                                 child={districtData && districtData.map(item => <Picker.Item label={item.name} value={item.id}/>)}
                             />
                         </View>
                     </View>
-                    <View style={tw`py-5`}>
+                    <View style={tw`mt-5`}>
                         <Buttons
                             title={isLoading ? 'loading...' : `Сохранить`}
                             onPress={() => {
-                                if (client) updateClientData(updateClient, client.id, setNavigate, setIsLoading)
+                                if (regex && !isLoading) updateClientData({
+                                    firstName: newUpdateClient.firstName,
+                                    lastName: newUpdateClient.lastName,
+                                    job: newUpdateClient.job,
+                                    ageId: newUpdateClient.ageId,
+                                    phoneNumber: newUpdateClient.phoneNumber,
+                                    gender: newUpdateClient.gender,
+                                    birthDate: newUpdateClient.birthDate,
+                                    districtId: newUpdateClient.districtId,
+                                    regionId: newUpdateClient.regionId,
+                                    attachmentId: attachmentID ? attachmentID : null,
+                                    clientPreferences: newUpdateClient.clientPreferences
+                                }, newUpdateClient.id, setNavigate, setIsLoading)
+                                else Toast.show('Ma\'lumotlar yuklanmoqda.....', Toast.LONG)
                             }}
-                            isDisebled={!!(regex && client.id)}
+                            isDisebled={regex}
                         />
                     </View>
                 </ScrollView>
@@ -276,6 +274,9 @@ const styles = StyleSheet.create({
     flagButton: {
         marginLeft: 8,
     },
+    errorText: {
+        color: 'red',
+    },
 });
 
-export default UpdatingAddressBook;
+export default ProfileUpdate;
