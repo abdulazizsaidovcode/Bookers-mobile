@@ -103,6 +103,7 @@ import ServesGenderEdit from "./(standart)/(servicesEdit)/(gender)/servesGender"
 import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
 import ExpertiseEdit from "./(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit";
 import Welcome from "./(welcome)/Welcome";
+import ProcessEdit from "./(standart)/(servicesEdit)/(processEdit)/processEdit";
 
 const Stack = createNativeStackNavigator();
 
@@ -381,7 +382,7 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
 
-            {/* Service edit  */}
+            {/* Service edit start */}
 
             <Stack.Screen
               name="(standart)/(servicesEdit)/(gender)/servesGender"
@@ -398,7 +399,12 @@ function RootLayoutNav() {
               component={ExpertiseEdit}
               options={{ headerShown: false }}
             />
-            {/* Service edit  */}
+             <Stack.Screen
+              name="(standart)/(servicesEdit)/(processEdit)/processEdit"
+              component={ProcessEdit}
+              options={{ headerShown: false }}
+            />
+            {/* Service edit end */}
             <Stack.Screen
               name="(profile)/(sessionhistory)/sessionHistory"
               component={SessionHistory}

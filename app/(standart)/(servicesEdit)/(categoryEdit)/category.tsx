@@ -15,6 +15,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import { ActivityIndicator } from 'react-native-paper';
 import Toast from "react-native-simple-toast";
+import MyServicesScreen from '../../(services)/(myServicesScreen)/MyServicesScreen';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category'>;
 
@@ -22,6 +23,7 @@ const CategoryEdit = () => {
     const { setData, data, categoryFatherId, setChildCategoryData, childCategoryData } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
     
     const getCategory = async () => {
         try {
@@ -59,12 +61,9 @@ const addCategory = async () => {
         console.log("Sending data:", selectedCategories);
         const queryParams = selectedCategories.map(item => `categoryIds=${item}`).join('&');
         const response = await axios.post(`${getCategory_masterAdd}?${queryParams}`, '', config);
-        console.log("Received response:", response.data);
-
-        // Check if the response indicates success
         if (response.data.success) {
             Toast.show('✅ Вы изменили категории', Toast.LONG)
-            router.push("/MyServicesScreen");
+            router.push("../../(services)/(myServicesScreen)/MyServicesScreen");
         } else {
             Toast.show('⚠️ Вы не меняли категории', Toast.LONG) 
         }
@@ -72,7 +71,6 @@ const addCategory = async () => {
         console.log("Error", error);
     }
 };
-
 
     const handleCategorySelect = (category: string) => {
         setSelectedCategories((prev) => {
