@@ -1,8 +1,8 @@
 import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { editWindowOrder } from '@/helpers/api-function/notifications/notifications';
+import { editWindowOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -11,6 +11,10 @@ const screenHeight = Dimensions.get('window').height;
 
 const RequestWindow = () => {
   const { windowData, setWindowData } = useNotificationsStore();
+
+  useEffect(() => {
+    fetchAllData(setWindowData, 'WAITING_HALL')
+  }, [])
 
   const onMessageChange = (text: string) => setWindowData({ ...windowData, text })
 
