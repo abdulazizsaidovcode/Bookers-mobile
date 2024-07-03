@@ -1,5 +1,6 @@
 import { getFile } from "@/helpers/api";
 import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
+import { router } from "expo-router";
 import React from "react";
 import {
   View,
@@ -56,6 +57,7 @@ const Gallery: React.FC = () => {
             item.resGalleryAttachments.length > 0 && (
               <TouchableOpacity onPress={() => {
                 setGaleriyaDetail(item)
+                router.push("(WebPage)/(components)/galleryDetail")
               }} activeOpacity={0.7}>
                 <View style={styles.galleryContainer} key={item.id}>
                   {renderRows(item.resGalleryAttachments)}
