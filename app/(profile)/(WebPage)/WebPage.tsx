@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Services from './components/Services';
 import Gallery from './components/galery';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { fetchData } from '@/helpers/api-function/gallery/settings-gallery';
+import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
+import { getUser } from '@/helpers/api-function/getMe/getMee';
+import { fetchServices } from '@/helpers/api-function/client/client';
 
 const WebPage: React.FC = () => {
+    const {setGaleriya, setGetMee, setServise} = webPageStore()
     const [activeTab, setActiveTab] = useState('services');
+    useEffect(() => {
+        fetchData(setGaleriya)
+        getUser(setGetMee)
+        fetchServices(setServise)
+    }, [])
 
     return (
         <SafeAreaView style={styles.container}>

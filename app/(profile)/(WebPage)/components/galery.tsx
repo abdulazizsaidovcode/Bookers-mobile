@@ -1,3 +1,4 @@
+import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
 import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 
@@ -8,6 +9,8 @@ const galleryData = [
 ];
 
 const Gallery: React.FC = () => {
+    const {galeriya} = webPageStore()
+    
     return (
         <ScrollView style={styles.contentContainer}>
             {galleryData.map((item, index) => (
@@ -16,6 +19,7 @@ const Gallery: React.FC = () => {
                     <Text style={styles.galleryDescription}>{item.description}</Text>
                 </View>
             ))}
+            
         </ScrollView>
     );
 };
