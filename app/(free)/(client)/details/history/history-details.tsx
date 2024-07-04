@@ -13,8 +13,8 @@ import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import {addFeedbackMaster} from "@/helpers/api-function/client/client";
 
-// type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
-// type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
+type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
 
 export interface OrderOne {
     id: string
@@ -39,9 +39,9 @@ export interface OrderOne {
 }
 
 const HistoryDetailsInformation = () => {
-    // const navigation = useNavigation<SettingsScreenNavigationProp>();
-    // const route = useRoute<CreatingClientScreenRouteProp>();
-    // const {orderID} = route.params;
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
+    const route = useRoute<CreatingClientScreenRouteProp>();
+    const {historyData} = route.params;
 
     // const handleRating = (value: any) => setRating(value)
 

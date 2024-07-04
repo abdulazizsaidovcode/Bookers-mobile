@@ -105,6 +105,7 @@ import ExpertiseEdit from "./(standart)/(servicesEdit)/(expertiseEdit)/expertise
 import Welcome from "./(welcome)/Welcome";
 import ProcessEdit from "./(standart)/(servicesEdit)/(processEdit)/processEdit";
 import GalleryDetail from "./(profile)/(WebPage)/components/galleryDetail";
+import HistoryDetailsInformation from "@/app/(free)/(client)/details/history/history-details";
 
 
 const Stack = createNativeStackNavigator();
@@ -486,6 +487,11 @@ function RootLayoutNav() {
               name="(free)/(client)/details/history/canceled-history"
               component={CanceledHistory}
               options={{ title: "CanceledHistory", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(client)/details/history/history-details"
+              component={HistoryDetailsInformation}
+              options={{ title: "HistoryDetailsInformation", headerShown: false }}
             />
             <Stack.Screen
               name="(location)/Location"
