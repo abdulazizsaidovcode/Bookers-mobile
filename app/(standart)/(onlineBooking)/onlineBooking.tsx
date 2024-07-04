@@ -6,7 +6,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import SwitchWithLabel from '@/components/switchWithLabel/switchWithLabel';
 import Buttons from '@/components/(buttons)/button';
 import MessageOption from '@/components/messageOption/messageOption';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
@@ -30,16 +30,23 @@ const data = [
     },
     {
         id: '3',
-        title: 'Перерыв между сеансами',
+        title: 'Подтверждение записи',
         subtitle: 'Не настроено',
         IconComponent: <Feather name="check-circle" size={30} color="#9C0A35" />,
         onPress: () => { router.push('/booking') }
     },
     {
         id: '4',
-        title: 'Перерыв между сеансами',
+        title: 'Запрос окошка',
         subtitle: 'Не настроено',
         IconComponent: <Feather name="watch" size={30} color="#9C0A35" />,
+        onPress: () => { router.push('/booking') }
+    },
+    {
+        id: '5',
+        title: 'Время для VIP клиентов',
+        subtitle: 'Не настроено',
+        IconComponent: <FontAwesome name="diamond" size={24} color="#9C0A35" />,
         onPress: () => { router.push('/booking') }
     },
 ]
