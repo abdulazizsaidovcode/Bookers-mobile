@@ -5,7 +5,7 @@ import { TextInput } from 'react-native-paper';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 // import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const CreateExpense: React.FC = () => {
+const CreateExpenseCategory: React.FC = () => {
     const [date, setDate] = useState(new Date());
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [amount, setAmount] = useState('');
@@ -112,4 +112,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CreateExpense;
+export default CreateExpenseCategory;
