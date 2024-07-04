@@ -33,8 +33,8 @@ export const gallery_add = `${base_url}gallery`;
 export const gallery_add_photo = `${base_url}gallery/attachment`;
 
 // My services
-export const category_Father = `${base_url}category`;
-export const category_child = `${base_url}category/byCategory/`;
+export const category_Father = `${base_url}category`;// get all category
+export const category_child = `${base_url}category/byCategory/`;// get 
 export const masterAdd_category = `${base_url}category`;
 export const masterEdit_category = `${base_url}categoty/master`;
 export const gender_status = `${base_url}master-service/gender?`;
