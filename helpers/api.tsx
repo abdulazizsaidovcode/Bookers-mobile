@@ -147,3 +147,8 @@ export const notifications_cancel_edit: string = `${base_url}notification/settin
 export const notifications_changing_edit: string = `${base_url}notification/settings/change-order`
 export const notifications_window_edit: string = `${base_url}notification/settings/waiting/hall`
 export const notifications_feedback_edit: string = `${base_url}notification/settings/feedback`
+
+
+// expene url 
+
+export const expene_category_list: string = `${base_url}expense-category/master/expense-categories`
