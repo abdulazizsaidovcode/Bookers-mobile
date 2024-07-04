@@ -26,7 +26,7 @@ const data = [
         title: 'Перерыв между сеансами',
         subtitle: 'Не настроено',
         IconComponent: <Ionicons name="wine" size={30} color="#9C0A35" />,
-        onPress: () => { router.push('/booking') }
+        onPress: () => { router.push('/breakBetweenSessions') }
     },
     {
         id: '3',

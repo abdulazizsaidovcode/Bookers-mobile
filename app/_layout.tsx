@@ -106,6 +106,7 @@ import Welcome from "./(welcome)/Welcome";
 import ProcessEdit from "./(standart)/(servicesEdit)/(processEdit)/processEdit";
 import GalleryDetail from "./(profile)/(WebPage)/components/galleryDetail";
 import HistoryDetailsInformation from "@/app/(free)/(client)/details/history/history-details";
+import BreakBetweenSession from "./(standart)/(onlineBooking)/(booking)/breakBetweenSessions";
 
 
 const Stack = createNativeStackNavigator();
@@ -397,12 +398,12 @@ function RootLayoutNav() {
               component={CategoryEdit}
               options={{ headerShown: false }}
             />
-             <Stack.Screen
+            <Stack.Screen
               name="(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit"
               component={ExpertiseEdit}
               options={{ headerShown: false }}
             />
-             <Stack.Screen
+            <Stack.Screen
               name="(standart)/(servicesEdit)/(processEdit)/processEdit"
               component={ProcessEdit}
               options={{ headerShown: false }}
@@ -550,6 +551,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(standart)/(onlineBooking)/(booking)/booking"
               component={Booking}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/(booking)/breakBetweenSessions"
+              component={BreakBetweenSession}
               options={{ headerShown: false }}
             />
             {/* Online booking end */}
