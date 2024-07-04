@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const ExpenseCard = ({ item }: any) => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
 
 
     return (
