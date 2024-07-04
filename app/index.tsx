@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { router } from 'expo-router';
-import MyServicesCard from '@/components/services/myServicesCard';
+
 
 
 
