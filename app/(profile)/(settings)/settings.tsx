@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
@@ -37,7 +37,7 @@ const SettingsPage: React.FC = () => {
                             <FontAwesome name={item.icon} size={20} color="#9C0A35" />
                             <Text style={styles.menuItemText}>{item.label}</Text>
                         </View>
-                        <FontAwesome name="chevron-right" size={20} color="#9C0A35" />
+                        <MaterialIcons name="navigate-next" size={36} color='#9c0935'/>
                     </TouchableOpacity>
                 ))}
             </ScrollView>

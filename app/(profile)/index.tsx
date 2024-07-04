@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, Modal, StyleSheet, Button, ScrollView } from 'react-native';
-import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
+import { FontAwesome5, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
@@ -73,7 +73,7 @@ const ProfilePage: React.FC = () => {
                             <FontAwesome5 name={item.icon} size={20} color="#9c0935" />
                             <Text style={styles.menuItemText}>{item.label}</Text>
                         </View>
-                        <FontAwesome name="chevron-right" size={20} color="#9c0935" />
+                        <MaterialIcons name="navigate-next" size={36} color='#9c0935'/>
                     </TouchableOpacity>
                 ))}
 

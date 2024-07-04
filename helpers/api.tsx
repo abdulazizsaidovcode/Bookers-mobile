@@ -53,7 +53,7 @@ export const master_get_specialization = `${base_url}master-service/specializati
 export const register_page = `${base_url}auth/`
 // Booking API
 
-export const switchBtn = `${base_url}online-booking-settings/allow-client?allowClient`
+export const switchBtn = `${base_url}online-booking-settings/allow-client`
 
 // Grafic Work page
 export const workday_put = `${base_url}workday/time/edit/graphic`

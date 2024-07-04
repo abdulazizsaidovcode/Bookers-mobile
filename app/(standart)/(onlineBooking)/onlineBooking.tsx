@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StatusBar, ScrollView, SafeAreaView, FlatList } from 'react-native';
 import { router } from 'expo-router';
 import tw from 'tailwind-react-native-classnames';
@@ -6,13 +6,12 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import SwitchWithLabel from '@/components/switchWithLabel/switchWithLabel';
 import Buttons from '@/components/(buttons)/button';
 import MessageOption from '@/components/messageOption/messageOption';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
-import { SwithBTN } from '@/helpers/api-function/BookingFC/bookingFC';
-
-
+import { SwitchBtnGet, SwithBTN } from '@/helpers/api-function/BookingFC/bookingFC';
+import OnlineBookingStory from '@/helpers/state_managment/onlinBooking/onlineBooking';
 
 const data = [
     {
@@ -23,45 +22,61 @@ const data = [
         onPress: () => { router.push('/booking') }
     },
     {
-        id: '1',
+        id: '2',
         title: 'Перерыв между сеансами',
         subtitle: 'Не настроено',
         IconComponent: <Ionicons name="wine" size={30} color="#9C0A35" />,
-        onPress: () => { router.push('/booking') }
+        onPress: () => { router.push('/breakBetweenSessions') }
     },
     {
-        id: '1',
-        title: 'Перерыв между сеансами',
+        id: '3',
+        title: 'Подтверждение записи',
         subtitle: 'Не настроено',
         IconComponent: <Feather name="check-circle" size={30} color="#9C0A35" />,
         onPress: () => { router.push('/booking') }
     },
     {
-        id: '1',
-        title: 'Перерыв между сеансами',
+        id: '4',
+        title: 'Запрос окошка',
         subtitle: 'Не настроено',
         IconComponent: <Feather name="watch" size={30} color="#9C0A35" />,
+        onPress: () => { router.push('/booking') }
+    },
+    {
+        id: '5',
+        title: 'Время для VIP клиентов',
+        subtitle: 'Не настроено',
+        IconComponent: <FontAwesome name="diamond" size={24} color="#9C0A35" />,
         onPress: () => { router.push('/booking') }
     },
 ]
 
 const OnlineBooking = () => {
+    const { allowClient, setAllowClient } = OnlineBookingStory();
 
-    const renderItem = ({ item }) => (
+    const [isEnabled, setIsEnabled] = useState(allowClient);
+
+    const toggleSwitch = () => {
+        const newValue = !isEnabled;
+        setIsEnabled(newValue);
+        setAllowClient(newValue); // Update the global state
+    };
+
+    const renderItem = ({ item }: { item: any }) => (
         <MessageOption
             title={item.title}
             subtitle={item.subtitle}
             onPress={item.onPress}
             IconComponent={item.IconComponent}
-
         />
     );
+    useEffect(() => {
+        SwitchBtnGet(setAllowClient);
+    }, []);
 
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-    console.log(isEnabled);
-
-
+    useEffect(() => {
+        setIsEnabled(allowClient);
+    }, [allowClient]);
 
     return (
         <SafeAreaView style={[tw`flex-1 mt-6`, { backgroundColor: '#21212E' }]}>
@@ -91,16 +106,14 @@ const OnlineBooking = () => {
                     </View>
                     <View style={[tw` content-end mb-5`, { backgroundColor: '#21212E' }]}>
                         <Buttons title="На главную" onPress={() => {
-                            putNumbers(6)
-                            SwithBTN(isEnabled)
-                            router.push("(onlineBooking)/test")
-                        }
-                        } />
+                            putNumbers(6);
+                            SwithBTN(isEnabled);
+                            router.push("(onlineBooking)/test");
+                        }} />
                     </View>
                 </ScrollView>
             </View>
         </SafeAreaView>
     );
 };
-
 export default OnlineBooking;

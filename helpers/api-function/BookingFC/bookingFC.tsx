@@ -4,13 +4,38 @@ import axios from "axios"
 import { Alert } from "react-native"
 
 export const SwithBTN = (isEnabled: boolean) => {
-    axios.post(`${switchBtn}=${isEnabled}`, "", config)
+    if (isEnabled === true || isEnabled === false) {
+        axios.put(`${switchBtn}?allowClient=${isEnabled}`, {}, config)
+            .then(res => {
+                if (res.data.success) {
+                    Alert.alert("success")
+                }
+                else {
+                    Alert.alert("Ular bizni aldashdi😣🫥")
+                }
+            })
+            .catch(err => {
+                Alert.alert("error")
+            })
+    }
+
+    else {
+
+        Alert.alert("Biza xato ish qildik!++")
+    }
+}
+export const SwitchBtnGet = (setData: (val: boolean) => void) => {
+    axios.get(`${switchBtn}`, config)
         .then(res => {
-            console.log(res.data)
-            Alert.alert("success")
+            if (res.data.success) {
+                setData(res.data.body)
+            }
+            else {
+                setData(false)
+            }
         })
         .catch(err => {
-            console.log(err)
-            Alert.alert("error")
+            setData(false)
         })
 }
+
