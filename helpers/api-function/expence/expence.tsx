@@ -1,13 +1,23 @@
-import { expene_category_list } from "@/helpers/api";
+import { expene_category_list, expene_list } from "@/helpers/api";
 import axios from "axios"
 
 
-export const getExpence = (setCategory: any) => {
+export const getExpenceCategory = (setExpenceCategory: any) => {
     axios.get(expene_category_list)
         .then((res) => {
-            setCategory(res.data.body)
+            setExpenceCategory(res.data.body)
         }).catch((err) => {
             console.log(err);
-            setCategory([])
+            setExpenceCategory([])
+        })
+}
+
+export const getExpence = (categoryid: string, setExpence: any) => {
+    axios.get(`${expene_list}?categoryid=${categoryid}`)
+        .then((res) => {
+            setExpence(res.data.body)
+        }).catch((err) => {
+            console.log(err);
+            setExpence([])
         })
 }

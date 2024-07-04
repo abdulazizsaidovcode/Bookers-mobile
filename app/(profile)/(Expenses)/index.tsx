@@ -6,7 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { masterExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
-import { getExpence } from '@/helpers/api-function/expence/expence';
+import { getExpence, getExpenceCategory } from '@/helpers/api-function/expence/expence';
 
 const expenses = [
   {
@@ -23,7 +23,7 @@ const Expenses: React.FC = () => {
   const { setExpenseCategory, expenseCategory } = masterExpenseCategory()
 
   useEffect(() => {
-    getExpence(setExpenseCategory)
+    getExpenceCategory(setExpenseCategory)
     console.log(expenseCategory);
     
   }, [setExpenseCategory])
