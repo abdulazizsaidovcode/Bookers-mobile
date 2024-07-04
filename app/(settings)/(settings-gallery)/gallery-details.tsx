@@ -18,7 +18,7 @@ const { width, height } = Dimensions.get('window');
 
 const GalleryDetails: React.FC = () => {
   const route = useRoute();
-  const { fullData, setFullData } = useGalleryStore();
+  const { fullData, setFullData, setData } = useGalleryStore();
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState('');
   const [isDeleteMode, setIsDeleteMode] = useState(false);
@@ -45,7 +45,7 @@ const GalleryDetails: React.FC = () => {
   };
 
   const handleConfirm = () => {
-    editName(id, setFullData, name, toggleModal);
+    editName(id, setFullData, name, toggleModal, setData);
   };
 
   const handleDeleteMode = () => {
@@ -64,7 +64,7 @@ const GalleryDetails: React.FC = () => {
 
   const handleDelete = () => {
     setIsDeleteMode(false);
-    delPhoto(id, selectedImages, setFullData);
+    delPhoto(id, selectedImages, setFullData, setData);
     setSelectedImages([]);
     setSelectAll(false);
   };
