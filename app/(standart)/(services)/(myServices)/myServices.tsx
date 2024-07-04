@@ -45,7 +45,7 @@ const MyServices = () => {
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
                 >
                     <View style = {[tw``, {backgroundColor:'#21212E'}]}>
-                        <View style={[tw`mb-5`,{backgroundColor:'#21212E'}]}>
+                        <View style={[tw``,{backgroundColor:'#21212E'}]}>
                             {services.map((service, index) => (
                                 <MyServicess
                                     key={index}
