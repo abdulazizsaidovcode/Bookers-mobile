@@ -9,7 +9,7 @@ import CenteredModal from '@/components/(modals)/modal-centered';
 import { router } from 'expo-router';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import axios from 'axios';
-import { category_child, masterAdd_category } from '@/helpers/api';
+import { category_child, getSpecialization, masterAdd_category } from '@/helpers/api';
 import { config } from '@/helpers/token';
 import { useRoute } from '@react-navigation/native';
 import Textarea from '@/components/select/textarea';
@@ -21,6 +21,7 @@ const ExpertiseEdit: React.FC = () => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [value, setValue] = useState('');
     const [validate, setValidate] = useState(false);
+    const [specialization, setSpecialization] = useState([]);
     const [selectedServices, setSelectedServices] = useState<any[]>([]);
     const { id } = route.params as { id: string };
 
@@ -60,6 +61,17 @@ const ExpertiseEdit: React.FC = () => {
     useEffect(() => {
         getChildCategory(id);
     }, [id]);
+
+    const getSpecializationData = async (categoryId: string) => {
+        try {
+            const response = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
+            console.log("Fetched specialization data:", response.data.body); // Log the fetched data
+            setSpecialization(response.data.body);
+        } catch (error) {
+            console.error("Error fetching specializations:", error);
+        }
+    };
+    
     const postCategory = async (id: string, name: string) => {
         try {
             const response = await axios.post(`${masterAdd_category}/${id}?name=${name}`, {}, config);

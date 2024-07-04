@@ -17,7 +17,7 @@ import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting'
 
 const MyServicesScreen = () => {
     const route = useRoute();
-    const { childCategoryData, categoryFatherId, setChildCategoryData } = servicesStore();
+    const { childCategoryData, categoryFatherId, setChildCategoryData, setProdseduraUslug } = servicesStore();
     const [gender, setGender] = useState([]);
     const [specialization, setSpecialization] = useState([]);
     const [category, setCategory] = useState([]);
@@ -94,7 +94,7 @@ const MyServicesScreen = () => {
         getSpecializationData(categoryId);
         getMasterData(categoryId);
     };
-    
+
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
@@ -107,9 +107,9 @@ const MyServicesScreen = () => {
                     {/* Gender Section */}
                     <View style={tw`flex flex-row justify-between p-4 mb-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Направление услуг по полу</Text>
-                        <TouchableOpacity 
-                        activeOpacity={0.6}
-                        onPress={() => router.push('(standart)/(servicesEdit)/(gender)/servesGender')}>
+                        <TouchableOpacity
+                            activeOpacity={0.6}
+                            onPress={() => router.push('(standart)/(servicesEdit)/(gender)/servesGender')}>
                             <MaterialIcons name="mode-edit" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
@@ -133,9 +133,9 @@ const MyServicesScreen = () => {
                     {/* Category Section */}
                     <View style={tw`flex flex-row justify-between p-4 mb-2`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Категория услуг</Text>
-                        <TouchableOpacity 
-                        onPress={() => router.push('(standart)/(servicesEdit)/(categoryEdit)/category')}
-                        activeOpacity={0.6}>
+                        <TouchableOpacity
+                            onPress={() => router.push('(standart)/(servicesEdit)/(categoryEdit)/category')}
+                            activeOpacity={0.6}>
                             <MaterialIcons name="mode-edit" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
@@ -165,8 +165,8 @@ const MyServicesScreen = () => {
                     <View style={tw`flex flex-row justify-between mb-2 p-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Специализация услуг</Text>
                         <TouchableOpacity
-                        onPress={() => router.push('(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit')}
-                        activeOpacity={0.6}>
+                            onPress={() => router.push('(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit')}
+                            activeOpacity={0.6}>
                             <MaterialIcons name="mode-edit" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
@@ -193,29 +193,37 @@ const MyServicesScreen = () => {
                     </View>
                     {categoryMaster.map((item) => (
                         <TouchableOpacity
-                        onPress={()=>router.push('')}
-                         activeOpacity={.8}>
-                             <View key={item.id} style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
-                            <Text style = {tw`font-bold text-xl mb-3`}>{translateGender(item.genderNames).join(", ")}</Text>
-                            <ScrollView
-                                horizontal
-                                contentContainerStyle={{ gap: 16, marginBottom: 5 }}
-                                showsHorizontalScrollIndicator={false}
-                            >
-                                <TouchableOpacity>
-                                    <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
-                                </TouchableOpacity>
-                            </ScrollView>
-                            <Text style={[tw`font-bold text-xl mb-3`, { color: '#9C0A35' }]}>
-                                {item.price !== 0 ? `${item.price} сум` : 0}
-                            </Text>
+                            key={item.id}
+                            onPress={() => {
+                                setProdseduraUslug(item);
+                                router.push({
+                                    pathname: '(standart)/(servicesEdit)/(processEdit)/processEdit',
+                                    params: {
+                                        item: JSON.stringify(item)
+                                    }
+                                });
+                            }}
+                            activeOpacity={0.8}
+                        >
+                            <View style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
+                                <Text style={tw`font-bold text-xl mb-3`}>{translateGender(item.genderNames).join(", ")}</Text>
+                                <ScrollView
+                                    horizontal
+                                    contentContainerStyle={{ gap: 16, marginBottom: 5 }}
+                                    showsHorizontalScrollIndicator={false}
+                                >
+                                    <TouchableOpacity>
+                                        <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
+                                    </TouchableOpacity>
+                                </ScrollView>
+                                <Text style={[tw`font-bold text-xl mb-3`, { color: '#9C0A35' }]}>
+                                    {item.price !== 0 ? `${item.price} сум` : '0'}
+                                </Text>
 
-                            <Text style={tw`text-black mb-2`}>{item.description || 'Описание не предоставлено'}</Text>
-                        </View>
+                                <Text style={tw`text-black mb-2`}>{item.description || 'Описание не предоставлено'}</Text>
+                            </View>
                         </TouchableOpacity>
-                       
                     ))}
-
                     {/* Navigation Button */}
                     <View style={tw`mb-10`}>
                         <Buttons onPress={() => {

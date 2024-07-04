@@ -32,8 +32,8 @@ const DetailMain = () => {
     useEffect(() => {
         getHistoryCount(setHistoryCountData, infoClient.id)
         getMeClient(setClientData, infoClient.id)
-            getAgeList(setAgeData)
-            getRegionList(setRegionData)
+        getAgeList(setAgeData)
+        getRegionList(setRegionData)
     }, []);
 
     useEffect(() => {
@@ -41,6 +41,14 @@ const DetailMain = () => {
     }, [isLoading, bottomModalSMS]);
 
     const toggleBottomModalSMS = () => setBottomModalSMS(!bottomModalSMS)
+
+    const handleChange = (e: string) => {
+        const trimmedValue = e.trim();
+        const regex = /^[a-zA-Z0-9а-яА-ЯёЁ.,!?;:()\s]+$/
+
+        if (regex.test(trimmedValue) && !/\s\s+/.test(e)) setMessageVal(e)
+        else if (e === '') setMessageVal('')
+    };
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -70,7 +78,7 @@ const DetailMain = () => {
                         </View>
                         <View>
                             {role === 'basics' && <ClientDetailBasic client={infoClient}/>}
-                            {role === 'history' && <HistoryMain countData={historyCountData} clientID={infoClient.id} />}
+                            {role === 'history' && <HistoryMain countData={historyCountData} clientID={infoClient.id}/>}
                             {role === 'profile' && <ProfileUpdate clientData={clientData}/>}
                         </View>
 
@@ -93,7 +101,7 @@ const DetailMain = () => {
                                 <Textarea
                                     placeholder={`Сообщение`}
                                     value={messageVal}
-                                    onChangeText={e => setMessageVal(e)}
+                                    onChangeText={e => handleChange(e)}
                                 />
                             </>
                         </CenteredModal>

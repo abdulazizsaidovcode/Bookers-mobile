@@ -28,7 +28,8 @@ export interface Services {
     setGenderData:(val:Gender[] | null) => void
     selectedServices: [] | null ;
     setSelectedServices: (data:[]) =>void
-    
+    prodseduraUslug: any,
+    setProdseduraUslug: (data: any) => void
 
 }
 
