@@ -1,6 +1,6 @@
 import { getFile } from "@/helpers/api";
 import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import React from "react";
 import {
   View,
@@ -17,6 +17,7 @@ const isSmallDevice = width < 375;
 
 const Gallery: React.FC = () => {
   const { galeriya, setGaleriyaDetail } = webPageStore();
+  const navigation = useNavigation<any>();
 
   const renderRows = (attachments: any[]) => {
     let filteredAttachments = attachments.filter(
@@ -57,7 +58,7 @@ const Gallery: React.FC = () => {
             item.resGalleryAttachments.length > 0 && (
               <TouchableOpacity onPress={() => {
                 setGaleriyaDetail(item)
-                router.push("(WebPage)/(components)/galleryDetail")
+                navigation.navigate("(profile)/(WebPage)/components/galleryDetail")
               }} activeOpacity={0.7}>
                 <View style={styles.galleryContainer} key={item.id}>
                   {renderRows(item.resGalleryAttachments)}

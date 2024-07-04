@@ -1,97 +1,120 @@
-import { getFile } from '@/helpers/api';
-import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
-import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import NavigationMenu from "@/components/navigation/navigation-menu";
+import { getFile } from "@/helpers/api";
+import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
+import { useNavigation } from "expo-router";
+import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 const isSmallDevice = width < 375;
 
-const galleryData = [
-    {
-        id: 42,
-        albumName: 'test',
-        date: '2024-06-27',
-        photos: null,
-        mainPhotos: null,
-        resGalleryAttachments: [
-            {
-                attachmentId: '29287b44-deaa-4e08-a402-e6ad9752ed84',
-                main: true,
-                newStatus: false
-            },
-            {
-                attachmentId: 'eead07b9-277a-4f62-8459-d4c210dd90ea',
-                main: false,
-                newStatus: false
-            },
-            {
-                attachmentId: '91d3c3ab-e7da-48b8-9733-0fe709f313fa',
-                main: false,
-                newStatus: false
-            }
-        ]
-    },
-    // Add more items as needed
-];
-
 const GalleryDetail: React.FC = () => {
-    const { galeriya } = webPageStore();
+  const { galeriyaDetail } = webPageStore();
+  const navigation = useNavigation<any>();
 
-    const renderRows = (data: typeof galleryData) => {
-        const rows: any = [];
-        data.forEach(item => {
-            const rowItems = item.resGalleryAttachments.map((attachment, index) => (
-                <Image key={index} source={{ uri: getFile + attachment.attachmentId }} style={styles.image} />
-            ));
-            rows.push(
-                <View style={styles.imageRow} key={item.id}>
-                    {rowItems}
-                </View>
-            );
-        });
-        return rows;
-    };
-
-    return (
-        <ScrollView style={styles.contentContainer}>
-            {galleryData.map((item, index) => (
-                <View style={styles.galleryContainer} key={item.id}>
-                    {renderRows([item])}
-                    <Text style={styles.caption}>{item.albumName}</Text>
-                </View>
-            ))}
-        </ScrollView>
+  const renderRows = (attachments: any[]) => {
+    let filteredAttachments = attachments.filter(
+      (attachment) => attachment.main
     );
+
+    if (filteredAttachments.length === 0) {
+      // If there are no main attachments, use the first 4 attachments instead
+      filteredAttachments = attachments.slice(0, 4);
+    }
+
+    const rows: any[] = [];
+    for (let i = 0; i < filteredAttachments.length; i += 4) {
+      const rowItems = filteredAttachments
+        .slice(i, i + 4)
+        .map((attachment: any, index: number) => (
+          <Image
+            key={index}
+            source={{ uri: getFile + attachment.attachmentId }}
+            style={styles.image}
+          />
+        ));
+      rows.push(
+        <View style={styles.imageRow} key={i}>
+          {rowItems}
+        </View>
+      );
+    }
+    return rows;
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+<NavigationMenu name='https://bookers/link/natali...' />
+    <ScrollView style={styles.contentContainer}>
+      {galeriyaDetail && galeriyaDetail.length > 0 ? (
+        galeriyaDetail.map(
+          (item: any) =>
+            item.resGalleryAttachments &&
+            item.resGalleryAttachments.length > 0 && (
+              <TouchableOpacity onPress={() => {
+              }} activeOpacity={0.7}>
+                <View style={styles.galleryContainer} key={item.id}>
+                  {renderRows(item.resGalleryAttachments)}
+                  <Text style={styles.caption}>{item.albumName}</Text>
+                </View>
+              </TouchableOpacity>
+            )
+        )
+      ) : (
+        <Text style={styles.noDataText}>No gallery data available</Text>
+      )}
+    </ScrollView>
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
-    contentContainer: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#21212E',
-    },
-    galleryContainer: {
-        alignItems: 'center',
-        marginBottom: 16,
-    },
-    imageRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 10,
-        width: '100%',
-    },
-    image: {
-        width: isSmallDevice ? 75 : (width - 64) / 4 - 10,
-        height: isSmallDevice ? 75 : (width - 64) / 4 - 10,
-        borderRadius: 10,
-        margin: 5,
-    },
-    caption: {
-        marginTop: 10,
-        fontSize: 16,
-        color: 'white',
-        textAlign: 'center',
-    },
+  contentContainer: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#21212E",
+  },
+    
+  container: {
+    flex: 1,
+    backgroundColor: '#21212E',
+},
+  galleryContainer: {
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  imageRow: {
+    flexDirection: "row",
+    marginBottom: 10,
+    width: "100%",
+  },
+  image: {
+    width: isSmallDevice ? 75 : (width - 64) / 4 - 10,
+    height: isSmallDevice ? 75 : (width - 64) / 4 - 10,
+    borderRadius: 10,
+    margin: 5,
+  },
+  caption: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "white",
+    textAlign: "center",
+  },
+  noDataText: {
+    color: "white",
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 18,
+  },
 });
 
 export default GalleryDetail;

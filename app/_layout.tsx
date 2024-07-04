@@ -611,6 +611,11 @@ function RootLayoutNav() {
               component={CenseledSession}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="(profile)/(WebPage)/components/galleryDetail"
+              component={GalleryDetail}
+              options={{ headerShown: false }}
+            />
 
             {/*  help start  */}
             <Stack.Screen
@@ -619,11 +624,6 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             {/*  help end  */}
-            <Stack.Screen
-              name="(WebPage)/(components)/galleryDetail"
-              component={GalleryDetail}
-              options={{ headerShown: false }}
-            />
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>
