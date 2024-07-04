@@ -22,6 +22,8 @@ const Index: React.FC = () => {
             <Buttons title={`Go Login page`} onPress={() => navigation.navigate('(auth)/auth')} />
             <View style={tw`mb-5`}></View>
             <Buttons title={`Go Web page`} onPress={() => router.push('(profile)/(WebPage)/WebPage')} />
+            <View style={tw`mb-5`}></View>
+            <Buttons title={`Go Online boooking page`} onPress={() => navigation.navigate('(standart)/(onlineBooking)/onlineBooking')} />
         </SafeAreaView>
     )
 }
