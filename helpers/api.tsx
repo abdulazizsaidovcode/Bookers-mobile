@@ -34,18 +34,18 @@ export const gallery_add_photo = `${base_url}gallery/attachment`;
 
 // My services
 export const category_Father = `${base_url}category`;// get all category
-export const category_child = `${base_url}category/byCategory/`;// get 
-export const masterAdd_category = `${base_url}category`;
-export const masterEdit_category = `${base_url}categoty/master`;
-export const gender_status = `${base_url}master-service/gender?`;
-export const getGender_status = `${base_url}master-service/gender`;
-export const getCategory_master = `${base_url}master-service/category`;
-export const getCategory_masterAdd = `${base_url}master-service/category?`;
-export const getSpecialization = `${base_url}master-service/specialization`
-export const masterAdd_service = `${base_url}service`
-export const masterEdit_service = `${base_url}service`
-export const master_get_Service = `${base_url}service/master/`
-export const master_get_specialization = `${base_url}master-service/specialization`
+export const category_child = `${base_url}category/byCategory/`;// get child category {fatherid}
+export const masterAdd_category = `${base_url}category`; // master add category
+export const masterEdit_category = `${base_url}categoty/master`; //master edit category 
+export const gender_status = `${base_url}master-service/gender?`; // master add gender
+export const getGender_status = `${base_url}master-service/gender`;// master get gender
+export const getCategory_master = `${base_url}master-service/category`;// master get service
+export const getCategory_masterAdd = `${base_url}master-service/category?`;// master add service
+export const getSpecialization = `${base_url}master-service/specialization`// master get Specialization
+export const masterAdd_service = `${base_url}service`// master add service
+export const masterEdit_service = `${base_url}service`// master edit service
+export const master_get_Service = `${base_url}service/master/` //service belonging to the category
+export const master_get_specialization = `${base_url}master-service/specialization`//servicga tegishli bo'lgan hizmat
 
 
 
