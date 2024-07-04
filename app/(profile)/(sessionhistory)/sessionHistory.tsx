@@ -11,7 +11,7 @@ const sessionData = [
 ];
 
 const SessionHistory: React.FC = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
 
     const renderItem = ({ item }: any) => (
         <TouchableOpacity
