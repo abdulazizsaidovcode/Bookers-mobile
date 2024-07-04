@@ -11,9 +11,7 @@ import {
 import { router } from "expo-router";
 import tw from "tailwind-react-native-classnames";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import SwitchWithLabel from "@/components/switchWithLabel/switchWithLabel";
 import Buttons from "@/components/(buttons)/button";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { SelectList } from "react-native-dropdown-select-list";
 import axios from "axios";
 import { base_url } from "@/helpers/api";
