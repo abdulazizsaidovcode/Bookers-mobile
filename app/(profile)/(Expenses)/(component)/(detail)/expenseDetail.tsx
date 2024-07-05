@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import CreateExpense from '../../(component)/CreateExpense/CreateExpense';  // Make sure this is the correct path to your CreateExpense component
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from 'expo-router';
 
 const ExpenseDetail: React.FC = () => {
     const [showCreateExpense, setShowCreateExpense] = useState(false);
+    const navigation = useNavigation<any>();
+
 
     const handleAddExpense = () => {
         setShowCreateExpense(true);
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <NavigationMenu name='Expense' />
             <View style={styles.container}>
-                {showCreateExpense ? (
+                {!showCreateExpense ? (
                     <>
                         <Text style={styles.infoText}>У вас еще нет расходов по аренде</Text>
                         <TouchableOpacity
-                            onPress={handleAddExpense}
+                            onPress={() => navigation.navigate("(profile)/(Expenses)/(component)/(detail)/expenseDetail")}
                             style={styles.addButton}
                         >
                             <FontAwesome name="plus-circle" size={24} color="#fff" style={styles.addButtonIcon} />
@@ -28,10 +29,10 @@ const ExpenseDetail: React.FC = () => {
                         </TouchableOpacity>
                     </>
                 ) : (
-                    <CreateExpense setShowCreateExpense={setShowCreateExpense} />
+                    <Text style={styles.infoText}>Расходы по аренде</Text>
                 )}
             </View>
-        </SafeAreaView>
+        </View>
     );
 };
 
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
+        backgroundColor: '#21212E',
     },
     infoText: {
         color: '#cccccc',
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
         bottom: 16,
         left: 16,
         right: 16,
-        backgroundColor: '#E74C3C',
+        backgroundColor: '#9C0A35',
         padding: 16,
         borderRadius: 8,
         flexDirection: 'row',
