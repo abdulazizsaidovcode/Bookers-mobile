@@ -13,13 +13,14 @@ import {
 import { router } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
+import { MaterialIcons } from '@expo/vector-icons';
 
 const BreakBetweenSession = () => {
     const [selectedTime, setSelectedTime] = useState("");
     const [activeButton, setActiveButton] = useState("everyService");
     const [modalVisible, setModalVisible] = useState(false);
-    const [hour, setHour] = useState("0ч.");
-    const [minute, setMinute] = useState("0 мин.");
+    const [hour, setHour] = useState("1 ч.");
+    const [minute, setMinute] = useState("45 мин.");
 
     const hours = ["1 ч.", "2 ч.", "3 ч.", "4 ч.", "5 ч."];
     const minutes = ["5 мин.", "10 мин.", "15 мин.", "30 мин.", "45 мин.", "50 мин.", "55 мин.", "60 мин."];
@@ -100,7 +101,10 @@ const BreakBetweenSession = () => {
                                         style={styles.selectButton}
                                         onPress={() => setModalVisible(true)}
                                     >
-                                        <Text style={styles.selectButtonText}>{`${hour} ${minute}`}</Text>
+                                        <View style={styles.timeContainer}>
+                                            <Text style={styles.selectButtonText}>{`${hour} ${minute}`}</Text>
+                                            <MaterialIcons name="access-time" size={24} color="white" />
+                                        </View>
                                     </TouchableOpacity>
                                 </View>
                                 <View style={styles.procedureContainer}>
@@ -112,7 +116,10 @@ const BreakBetweenSession = () => {
                                         style={styles.selectButton}
                                         onPress={() => setModalVisible(true)}
                                     >
-                                        <Text style={styles.selectButtonText}>{`${hour} ${minute}`}</Text>
+                                        <View style={styles.timeContainer}>
+                                            <Text style={styles.selectButtonText}>{`${hour} ${minute}`}</Text>
+                                            <MaterialIcons name="access-time" size={24} color="white" />
+                                        </View>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -121,7 +128,10 @@ const BreakBetweenSession = () => {
                                 style={styles.selectButton}
                                 onPress={() => setModalVisible(true)}
                             >
-                                <Text style={styles.selectButtonText}>{`${hour} ${minute}`}</Text>
+                                <View style={styles.timeContainer}>
+                                    <Text style={styles.selectButtonText}>{`${hour} ${minute}`}</Text>
+                                    <MaterialIcons name="access-time" size={24} color="white" />
+                                </View>
                             </TouchableOpacity>
                         )}
                     </View>
@@ -236,7 +246,15 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 8,
         alignItems: "center",
+        flexDirection: "row",
+        justifyContent: "space-between",
         marginBottom: 10,
+    },
+    timeContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
     },
     selectButtonText: {
         color: "white",
