@@ -3,10 +3,10 @@ import { Text, View, TextInput, ScrollView, StatusBar, FlatList } from 'react-na
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import axios from 'axios';  // Axios is used for making HTTP requests
-import { router, useLocalSearchParams } from 'expo-router';  // Assuming you're using expo-router for navigation
-import { masterAdd_service } from '@/helpers/api';  // Importing API endpoint for adding services
-import { config } from '@/helpers/token';  // Importing authentication tokens or headers
+import axios from 'axios';
+import { router, useLocalSearchParams } from 'expo-router';
+import { masterAdd_service } from '@/helpers/api';
+import { config } from '@/helpers/token';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/app/locationInput';
 import Buttons from '@/components/(buttons)/button';
@@ -18,16 +18,19 @@ type GenderOption = {
 };
 
 const Process: React.FC = () => {
-    const { selectedServices } = useLocalSearchParams();  // Using local search params from expo-router
-    const [service, setService] = useState<string>('');  // State for service name
-    const [price, setPrice] = useState<string>('');  // State for service price
-    const [time, setTime] = useState<string>('');  // State for service duration
-    const [description, setDescription] = useState<string>('');  // State for service description
-    const [validate, setValidate] = useState<boolean>(false);  // State for form validation
-    const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);  // State for selected gender
-    const { childCategoryData , categoryFatherId } = servicesStore();  // Fetching child category data from state management
+    const { selectedServices } = useLocalSearchParams();
+    const [service, setService] = useState<string>('');  
+    const [price, setPrice] = useState<string>('');  
+    const [time, setTime] = useState<string>('');  
+    const [description, setDescription] = useState<string>('');  
+    const [validate, setValidate] = useState<boolean>(false);  
+    const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);  
+    const { childCategoryData, categoryFatherId } = servicesStore();  
 
-    // Gender options
+    useEffect(() => {
+        console.log("categoryFatherId:", categoryFatherId); // Log the categoryFatherId
+    }, [categoryFatherId]);
+
     const Gender: GenderOption[] = [
         { title: "Мужская для взрослых", id: 1 },
         { title: "Женское для взрослых", id: 2 },
@@ -35,35 +38,37 @@ const Process: React.FC = () => {
         { title: "Женское для детей", id: 4 }
     ];
 
-    // Form input fields
     const uslugi = [
         { label: "Услуга", value: service, onPress: setService },
         { label: "Цена", value: price, onPress: setPrice },
         { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
-    
-    
+
     const postService = async () => {
         try {
             const data = {
-                categoryId: categoryFatherId.key,
+                categoryId: categoryFatherId.key, // Send the key from categoryFatherId to the backend
                 genderId: selectedGender ? [selectedGender.id] : [],  
                 name: service, 
                 price: parseFloat(price),
                 description: description,
                 attachmentId: null,  
                 active: true
-            }; 
-            const response = await axios.post(masterAdd_service, data, config);
-            if (response.data.success) {
-                router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
-            } else {
-                console.error('Failed to add service:', response.data.message);
-            }
+            };
+
+            console.log(data.categoryId);
+            
+            // const response = await axios.post(masterAdd_service, data, config);
+            // if (response.data.success) {
+            //     router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
+            // } else {
+            //     console.error('Failed to add service:', response.data.message);
+            // }
         } catch (error) {
             console.error('Error adding service:', error);
         }
     };
+
     useEffect(() => {
         if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0 || !selectedGender) {
             setValidate(true);
@@ -71,9 +76,11 @@ const Process: React.FC = () => {
             setValidate(false);
         }
     }, [service, price, time, description, selectedGender]);
+
     const handleGenderPress = (gender: GenderOption) => {
         setSelectedGender(selectedGender?.id === gender.id ? null : gender);
     };
+
     const renderChildCategories = ({ item, index }: { item: any; index: number }) => {
         const isLast = index === childCategoryData.length - 1;
         return (
@@ -83,6 +90,7 @@ const Process: React.FC = () => {
             </Text>
         );
     };
+
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
