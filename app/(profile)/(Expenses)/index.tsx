@@ -19,13 +19,13 @@ const expenses = [
 ];
 
 const Expenses: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const { setExpenseCategory, expenseCategory } = masterExpenseCategory()
 
   useEffect(() => {
     getExpenceCategory(setExpenseCategory)
     console.log(expenseCategory);
-    
+
   }, [setExpenseCategory])
 
   return (
@@ -34,14 +34,14 @@ const Expenses: React.FC = () => {
       <Text style={styles.headerText}>
         Добавляйте свои расходы, что бы видеть свою прибыль
       </Text>
-      <FlatList
+      {expenseCategory ? <FlatList
         data={expenses}
         renderItem={({ item }) => <ExpenseCard item={item} />}
         keyExtractor={(item) => item.id}
-      />
+      /> : <Text style={styles.headerText}>Нет категорий расходов</Text>}
       <TouchableOpacity
         style={styles.addButton}
-      // onPress={() => navigation.navigate('CreateExpenseCategory')}
+        onPress={() => navigation.navigate('(profile)/(Expenses)/(component)/CreateExpense/CreateExpense')}
       >
         <FontAwesome name="plus-circle" size={24} color="#fff" style={styles.addButtonIcon} />
         <Text style={styles.addButtonText}>Создать категорию расхода</Text>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     bottom: 16,
     left: 16,
     right: 16,
-    backgroundColor: '#E74C3C',
+    backgroundColor: '#9C0A35',
     padding: 16,
     borderRadius: 8,
     flexDirection: 'row',
