@@ -28,7 +28,6 @@ const Booking = () => {
       setData(data.body);
     } catch (error) {
       console.log(error);
-      console.log(error);
     }
   };
 
@@ -104,7 +103,7 @@ const Booking = () => {
               dropdownStyles={[tw``, { backgroundColor: "#4B4B64" }]}
               dropdownTextStyles={tw`text-white text-lg`}
               setSelected={(val: string) => setSalonId(val)}
-              data={data.map((item, i) => ({ key: i, value: item }))}
+              data={data.map((item, i) => ({ key: i, value: `${item} day` }))}
               save="key"
               search={false}
             />

@@ -1,6 +1,6 @@
 // swagger url
-// export const base_url: string = 'http://45.67.35.86:8080/';
-export const base_url: string = 'http://192.168.0.126/';
+// export const base_url: string = 'http://45.67.35.86:8080/' ;
+export const base_url: string = 'http://192.168.0.126/'; 
 export const getMe = `${base_url}user/me`
 export const getMeID = `${base_url}user/get/me/`
 

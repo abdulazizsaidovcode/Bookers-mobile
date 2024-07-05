@@ -106,6 +106,10 @@ import Welcome from "./(welcome)/Welcome";
 import ProcessEdit from "./(standart)/(servicesEdit)/(processEdit)/processEdit";
 import GalleryDetail from "./(profile)/(WebPage)/components/galleryDetail";
 import HistoryDetailsInformation from "@/app/(free)/(client)/details/history/history-details";
+import BreakBetweenSession from "./(standart)/(onlineBooking)/(booking)/breakBetweenSessions";
+import ExpenseDetail from "./(profile)/(Expenses)/(component)/(detail)/expenseDetail";
+import CreateExpenseCategory from "./(profile)/(Expenses)/(component)/CreateExpenseCategoty/CreateExpenseCategory";
+import CreateExpense from "./(profile)/(Expenses)/(component)/CreateExpense/CreateExpense";
 
 
 const Stack = createNativeStackNavigator();
@@ -304,6 +308,8 @@ function RootLayoutNav() {
               component={SettingsGallery}
               options={{ headerShown: false }}
             />
+
+            {/* expense start */}
             <Stack.Screen
               name="(profile)/(Expenses)/index"
               component={Expenses}
@@ -311,9 +317,21 @@ function RootLayoutNav() {
             />
             <Stack.Screen
               name="(profile)/(Expenses)/(component)/(detail)/expenseDetail"
-              component={ExpensesDetail}
+              component={ExpenseDetail}
               options={{ title: "Services", headerShown: false }}
             />
+            <Stack.Screen
+              name="(profile)/(Expenses)/(component)/CreateExpense/CreateExpense"
+              component={CreateExpense}
+              options={{ title: "Services", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(Expenses)/(component)/CreateExpenseCategoty/CreateExpenseCategory"
+              component={CreateExpenseCategory}
+              options={{ title: "Services", headerShown: false }}
+            />
+            {/* expense start */}
+
             <Stack.Screen
               name="(standart)/(services)/(process)/process"
               component={Process}
@@ -397,12 +415,12 @@ function RootLayoutNav() {
               component={CategoryEdit}
               options={{ headerShown: false }}
             />
-             <Stack.Screen
+            <Stack.Screen
               name="(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit"
               component={ExpertiseEdit}
               options={{ headerShown: false }}
             />
-             <Stack.Screen
+            <Stack.Screen
               name="(standart)/(servicesEdit)/(processEdit)/processEdit"
               component={ProcessEdit}
               options={{ headerShown: false }}
@@ -550,6 +568,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(standart)/(onlineBooking)/(booking)/booking"
               component={Booking}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/(booking)/breakBetweenSessions"
+              component={BreakBetweenSession}
               options={{ headerShown: false }}
             />
             {/* Online booking end */}
