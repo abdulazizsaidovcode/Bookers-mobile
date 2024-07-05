@@ -6,8 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const RequestWindow = () => {
   const { windowData, setWindowData } = useNotificationsStore();
@@ -16,7 +15,7 @@ const RequestWindow = () => {
     fetchAllData(setWindowData, 'WAITING_HALL')
   }, [])
 
-  const onMessageChange = (text: string) => setWindowData({ ...windowData, text })
+  const onMessageChange = (text: string) => setWindowData({ ...windowData, text: text })
 
   return (
     <SafeAreaView style={styles.container}>

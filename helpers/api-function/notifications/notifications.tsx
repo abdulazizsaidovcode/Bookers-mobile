@@ -1,4 +1,4 @@
-import { notifications_all_data, notifications_cancel_edit, notifications_changing_edit, notifications_feedback_edit, notifications_main_data, notifications_main_data_edit, notifications_messengers_edit, notifications_window_edit } from "@/helpers/api";
+import { notifications_all_data, notifications_appointment_edit, notifications_cancel_edit, notifications_changing_edit, notifications_feedback_edit, notifications_main_data, notifications_main_data_edit, notifications_messengers_edit, notifications_window_edit } from "@/helpers/api";
 import { config } from "@/helpers/token";
 import { NotificationsAllData } from "@/type/notifications/notifications";
 import axios from "axios"
@@ -70,9 +70,17 @@ export const editFeedbeckOrder = async (text: string) => {
     }
 }
 
+export const editAppoinmentOrder = async (text: string, hour: string, minute: string, isActive: boolean) => {
+    try {
+        await axios.put(`${notifications_window_edit}?hour=${hour}&minute=${minute}&text=${text}&isActive=${isActive}`, { text }, config);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const editWindowOrder = async (text: string) => {
     try {
-        await axios.put(notifications_window_edit, { text }, config);
+        await axios.put(notifications_appointment_edit, {}, config);
     } catch (error) {
         console.log(error)
     }

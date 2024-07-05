@@ -3,7 +3,14 @@ import { create } from "zustand";
 
 const useNotificationsStore = create<NotificationsStore>((set) => ({
     isMainSwitch: false,
-    isReminderEnabled: false,
+    appoinmentData: {
+        id: '',
+        text: '',
+        minute: 0,
+        hour: 0,
+        isActive: false
+    },
+    isAppoinmentModal: false,
     feedbackData: {
         text: '',
         id: '',
@@ -35,7 +42,8 @@ const useNotificationsStore = create<NotificationsStore>((set) => ({
     setWindowData: (val: NotificationsAllData) => set({ windowData: val }),
     setFeedbackData: (val: NotificationsAllData) => set({ feedbackData: val }),
     setIsMainSwitch: (val: boolean) => set({ isMainSwitch: val }),
-    setIsReminderEnabled: (val: boolean) => set({ isReminderEnabled: val }),
+    setAppoinmentData: (val: NotificationsAllData) => set({ appoinmentData: val }),
+    setIsAppoinmentModal: (val: boolean) => set({ isAppoinmentModal: val }),
 }));
 
 export default useNotificationsStore;
