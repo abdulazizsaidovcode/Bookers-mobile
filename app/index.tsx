@@ -16,7 +16,8 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'index'>;
 const Index: React.FC = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     return (
-       <RemindAboutAppointment/>
+        <RemindAboutAppointment />
+        //bu joyga hamma ham yozurib zerikib ketmadimi margeni olurib 
     )
 }
 export default Index;
