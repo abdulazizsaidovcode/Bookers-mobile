@@ -7,7 +7,6 @@ import '../../i18next';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 const Auth: React.FC = () => {
     const { t, i18n } = useTranslation();
-
     const changeLanguage = (lng: string) => {
         i18n.changeLanguage(lng);
     };

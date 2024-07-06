@@ -1,13 +1,13 @@
 // CustomButton.tsx
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 
 type Props = {
   title: string;
   backgroundColor: string;
   textColor: string;
-  borderColor?: string; // Optional borderColor prop
+  borderColor?: string;
   onPress: () => void;
 };
 
