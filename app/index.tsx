@@ -1,23 +1,14 @@
 import React from 'react';
-import Buttons from "@/components/(buttons)/button";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "@/type/root";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar, View } from "react-native";
-import tw from "tailwind-react-native-classnames";
-import { router } from 'expo-router';
-import RemindAboutAppointment from './(notifications)/(pages)/remind-about-appointment';
-
-
-
-
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'index'>;
+import TabLayout from './(tabs)/_layout';
 
 const Index: React.FC = () => {
-    const navigation = useNavigation<SettingsScreenNavigationProp>();
     return (
+<<<<<<< HEAD
         <RemindAboutAppointment />
         //bu joyga hamma ham yozurib zerikib ketmadimi margeni olurib 
+=======
+       <TabLayout/>
+>>>>>>> af798d0d80e3f63bdbee18de6ae2d2d4b1a0d32a
     )
 }
 export default Index;

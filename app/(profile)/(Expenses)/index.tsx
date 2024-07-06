@@ -6,7 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { masterExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
-import { getExpence, getExpenceCategory } from '@/helpers/api-function/expence/expence';
+import { getExpenceCategory } from '@/helpers/api-function/expence/expence';
 
 const expenses = [
   {
@@ -24,7 +24,7 @@ const Expenses: React.FC = () => {
 
   useEffect(() => {
     getExpenceCategory(setExpenseCategory)
-    console.log(expenseCategory);
+    console.log(expenseCategory,"aa");
 
   }, [setExpenseCategory])
 
@@ -35,13 +35,13 @@ const Expenses: React.FC = () => {
         Добавляйте свои расходы, что бы видеть свою прибыль
       </Text>
       {expenseCategory ? <FlatList
-        data={expenses}
+        data={expenseCategory}
         renderItem={({ item }) => <ExpenseCard item={item} />}
         keyExtractor={(item) => item.id}
       /> : <Text style={styles.headerText}>Нет категорий расходов</Text>}
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate('(profile)/(Expenses)/(component)/CreateExpense/CreateExpense')}
+        onPress={() => navigation.navigate('(profile)/(Expenses)/(component)/CreateExpenseCategoty/CreateExpenseCategory')}
       >
         <FontAwesome name="plus-circle" size={24} color="#fff" style={styles.addButtonIcon} />
         <Text style={styles.addButtonText}>Создать категорию расхода</Text>

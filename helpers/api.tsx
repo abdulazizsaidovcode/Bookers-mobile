@@ -1,6 +1,7 @@
 // swagger url
 // export const base_url: string = 'http://45.67.35.86:8080/' ;
-export const base_url: string = 'http://192.168.0.126/'; 
+export const base_url: string = 'http://134.122.77.107:8080/'; 
+// export const base_url: string = 'http://192.168.0.126/'; 
 export const getMe = `${base_url}user/me`
 export const getMeID = `${base_url}user/get/me/`
 
@@ -153,4 +154,5 @@ export const notifications_feedback_edit: string = `${base_url}notification/sett
 // expene url 
 
 export const expene_category_list: string = `${base_url}expense-category/master/expense-categories`
-export const expene_list: string = `${base_url}/expense/`
+export const expene_category_post: string = `${base_url}expense-category`
+export const expene_list: string = `${base_url}expense/`

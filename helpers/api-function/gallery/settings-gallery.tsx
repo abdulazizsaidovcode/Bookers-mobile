@@ -30,7 +30,7 @@ export const addData = async (formData: FormData, name: string) => {
     console.log(data);
     Alert.alert("success");
   } catch (error) {
-    Alert.alert("error");
+    Alert.alert(`${error}`);
     console.log(error);
   }
 };
