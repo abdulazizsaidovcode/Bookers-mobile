@@ -6,7 +6,7 @@ type expenseCategoryType = {
 };
 type expenseType = {
     expense: masterOrderWaitType[];
-    setExpenseCategory: (newSchedule: any) => void;
+    setExpense: (newSchedule: any) => void;
 };
 interface masterOrderWaitType {
     id: string,
@@ -24,5 +24,5 @@ export const masterExpenseCategory = create<expenseCategoryType>((set) => ({
 
 export const masterExpense = create<expenseType>((set) => ({
     expense: [],
-    setExpenseCategory: (expence) => set({ expense: expence }),
+    setExpense: (expence) => set({ expense: expence }),
 }));

@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useNavigation } from 'expo-router';
+import { masterExpense } from '@/helpers/state_managment/expence/ecpense';
+import ExpenseCard from '../card';
 
 const ExpenseDetail: React.FC = () => {
     const [showCreateExpense, setShowCreateExpense] = useState(false);
     const navigation = useNavigation<any>();
+    const { expense } = masterExpense()
 
+    useEffect(() => {
+        console.log(expense);
+    }, [expense])
 
     const handleAddExpense = () => {
         setShowCreateExpense(true);
@@ -17,20 +23,13 @@ const ExpenseDetail: React.FC = () => {
         <View style={styles.container}>
             <NavigationMenu name='Expense' />
             <View style={styles.container}>
-                {!showCreateExpense ? (
-                    <>
-                        <Text style={styles.infoText}>У вас еще нет расходов по аренде</Text>
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate("(profile)/(Expenses)/(component)/(detail)/expenseDetail")}
-                            style={styles.addButton}
-                        >
-                            <FontAwesome name="plus-circle" size={24} color="#fff" style={styles.addButtonIcon} />
-                            <Text style={styles.addButtonText}>Добавить расход по аренде</Text>
-                        </TouchableOpacity>
-                    </>
-                ) : (
-                    <Text style={styles.infoText}>Расходы по аренде</Text>
-                )}
+                {
+                    expense ? <FlatList
+                        data={expense}
+                        renderItem={({ item }) => <ExpenseCard item={item} />}
+                        keyExtractor={(item) => item.id}
+                    /> : <Text style={styles.infoText}>Расходы по аренде</Text>
+                }
             </View>
         </View>
     );

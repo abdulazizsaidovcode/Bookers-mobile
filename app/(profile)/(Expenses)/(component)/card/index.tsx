@@ -2,27 +2,37 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { masterExpense } from '@/helpers/state_managment/expence/ecpense';
+import { getExpence } from '@/helpers/api-function/expence/expence';
 
 const ExpenseCard = ({ item }: any) => {
     const navigation = useNavigation<any>();
 
+    const { setExpense, expense } = masterExpense()
+
+    function getExpense(id: string) {
+        getExpence(id, setExpense)
+    }
     return (
-        <TouchableOpacity 
-            onPress={() => navigation.navigate("(profile)/(Expenses)/(component)/(detail)/expenseDetail")} 
+        <TouchableOpacity
+            onPress={() => {
+                getExpense(item.id)
+                navigation.navigate("(profile)/(Expenses)/(component)/(detail)/expenseDetail")
+            }}
             style={styles.container}
         >
-            <FontAwesome 
-                name={item.icon} 
-                size={24} 
-                color="#9C0A35" 
-                style={styles.icon} 
+            <FontAwesome
+                name='home'
+                size={24}
+                color="#9C0A35"
+                style={styles.icon}
             />
             <View style={styles.textContainer}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.description}>{item.description}</Text>
+                <Text style={styles.title}>{item.name}</Text>
+                <Text style={styles.description}>{item.expensePrice > 0 ? "" : "Не добавлено"}</Text>
             </View>
-            <Text style={styles.amount}>{item.amount}</Text>
-            <MaterialIcons name="navigate-next" size={36} color='gray'/>
+            <Text style={styles.amount}>{item.expensePrice}</Text>
+            <MaterialIcons name="navigate-next" size={36} color='gray' />
         </TouchableOpacity>
     );
 };
