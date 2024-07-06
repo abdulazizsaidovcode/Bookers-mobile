@@ -154,4 +154,5 @@ export const notifications_feedback_edit: string = `${base_url}notification/sett
 // expene url 
 
 export const expene_category_list: string = `${base_url}expense-category/master/expense-categories`
-export const expene_list: string = `${base_url}/expense/`
+export const expene_category_post: string = `${base_url}expense-category`
+export const expene_list: string = `${base_url}expense/`

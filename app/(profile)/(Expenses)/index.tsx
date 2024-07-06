@@ -41,7 +41,7 @@ const Expenses: React.FC = () => {
       /> : <Text style={styles.headerText}>Нет категорий расходов</Text>}
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate('(profile)/(Expenses)/(component)/CreateExpense/CreateExpense')}
+        onPress={() => navigation.navigate('(profile)/(Expenses)/(component)/CreateExpenseCategoty/CreateExpenseCategory')}
       >
         <FontAwesome name="plus-circle" size={24} color="#fff" style={styles.addButtonIcon} />
         <Text style={styles.addButtonText}>Создать категорию расхода</Text>
