@@ -2,7 +2,7 @@ import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editCancelOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Switch, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -11,13 +11,26 @@ const screenHeight = Dimensions.get('window').height;
 
 const CancelRecording = () => {
   const { cancelData, setCancelData } = useNotificationsStore();
+  const [hasChanges, setHasChanges] = useState(false);
 
-  const toggleSwitch = () => setCancelData({ ...cancelData, isActive: !cancelData.isActive });
-  const onMessageChange = (text: string) => setCancelData({ ...cancelData, text });
+  const toggleSwitch = () => {
+    setCancelData({ ...cancelData, isActive: !cancelData.isActive });
+    setHasChanges(true);
+  };
+
+  const onMessageChange = (text: string) => {
+    setCancelData({ ...cancelData, text });
+    setHasChanges(true);
+  };
 
   useEffect(() => {
     fetchAllData(setCancelData, 'CANCEL_ORDER');
   }, []);
+
+  const handleSave = () => {
+    editCancelOrder(cancelData.isActive, cancelData.text);
+    setHasChanges(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,7 +64,7 @@ const CancelRecording = () => {
           )}
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons title="Сохранить" onPress={() => editCancelOrder(cancelData.isActive, cancelData.text)} />
+          <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />
         </View>
       </ScrollView>
     </SafeAreaView>

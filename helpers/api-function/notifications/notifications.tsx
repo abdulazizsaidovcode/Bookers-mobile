@@ -1,4 +1,4 @@
-import { notifications_all_data, notifications_appointment_edit, notifications_cancel_edit, notifications_changing_edit, notifications_feedback_edit, notifications_main_data, notifications_main_data_edit, notifications_messengers_edit, notifications_window_edit } from "@/helpers/api";
+import { notifications_all_data, notifications_appointment, notifications_appointment_edit, notifications_cancel_edit, notifications_changing_edit, notifications_feedback_edit, notifications_main_data, notifications_main_data_edit, notifications_messengers_edit, notifications_window_edit } from "@/helpers/api";
 import { config } from "@/helpers/token";
 import { NotificationsAllData } from "@/type/notifications/notifications";
 import axios from "axios"
@@ -36,15 +36,12 @@ export const fetchAllData = async (setOneData: (val: NotificationsAllData) => vo
 export const editMessenger = async (isMessage: boolean) => {
     try {
         await axios.put(`${notifications_messengers_edit}?isMessage=${isMessage}`, {}, config);
-        console.log('Ketdi');
-        console.log(isMessage);
-
     } catch (error) {
         console.log(error)
     }
 }
 
-export const editCancelOrder = async (isActive: boolean, text: string) => {
+export const editCancelOrder = async (isActive: boolean | undefined, text: string | undefined) => {
     const payload = { isActive, text }
     try {
         await axios.put(notifications_cancel_edit, payload, config);
@@ -53,7 +50,7 @@ export const editCancelOrder = async (isActive: boolean, text: string) => {
     }
 }
 
-export const editChangingOrder = async (isActive: boolean, text: string) => {
+export const editChangingOrder = async (isActive: boolean | undefined, text: string | undefined) => {
     const payload = { isActive, text }
     try {
         await axios.put(notifications_changing_edit, payload, config);
@@ -62,7 +59,7 @@ export const editChangingOrder = async (isActive: boolean, text: string) => {
     }
 }
 
-export const editFeedbeckOrder = async (text: string) => {
+export const editFeedbeckOrder = async (text: string | undefined) => {
     try {
         await axios.put(notifications_feedback_edit, { text }, config);
     } catch (error) {
@@ -70,7 +67,7 @@ export const editFeedbeckOrder = async (text: string) => {
     }
 }
 
-export const editAppoinmentOrder = async (text: string, hour: string, minute: string, isActive: boolean) => {
+export const editAppoinmentOrder = async (text: string | undefined, hour: string, minute: string, isActive: boolean | undefined) => {
     try {
         await axios.put(`${notifications_window_edit}?hour=${hour}&minute=${minute}&text=${text}&isActive=${isActive}`, { text }, config);
     } catch (error) {
@@ -78,10 +75,21 @@ export const editAppoinmentOrder = async (text: string, hour: string, minute: st
     }
 }
 
-export const editWindowOrder = async (text: string) => {
+export const editWindowOrder = async (text: string | undefined) => {
     try {
         await axios.put(notifications_appointment_edit, {}, config);
     } catch (error) {
         console.log(error)
+    }
+}
+
+export const fetchAppoinmentActiveData = async (setAppoinmentActiveData: (val: boolean) => void) => {
+    try {
+        const { data } = await axios.get(notifications_appointment, config);
+        if (data.success) {
+            setAppoinmentActiveData(data.body)
+        }
+    } catch (error) {
+
     }
 }

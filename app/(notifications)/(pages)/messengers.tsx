@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Switch, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,6 +11,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Messengers = () => {
   const { smsData, setSmsData } = useNotificationsStore();
+  const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
     fetchAllData(setSmsData, 'MESSENGERS');
@@ -18,6 +19,12 @@ const Messengers = () => {
 
   const toggleSmsSwitch = () => {
     setSmsData({ ...smsData, isActive: !smsData.isActive });
+    setHasChanges(true);
+  };
+
+  const handleSave = () => {
+    editMessenger(!smsData.isActive);
+    setHasChanges(false);
   };
 
   return (
@@ -38,7 +45,7 @@ const Messengers = () => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons title='Сохранить' onPress={() => editMessenger(!smsData.isActive)} />
+          <Buttons title='Сохранить' onPress={handleSave} isDisebled={hasChanges} />
         </View>
       </ScrollView>
     </SafeAreaView>

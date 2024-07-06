@@ -3,20 +3,33 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editChangingOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Switch, TextInput, Button, Dimensions } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Switch, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const ChangingEnEntry = () => {
-  const { changingData, setChangingData } = useNotificationsStore()
+  const { changingData, setChangingData } = useNotificationsStore();
+  const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    fetchAllData(setChangingData, 'CHANGE_ORDER')
-  }, [])
+    fetchAllData(setChangingData, 'CHANGE_ORDER');
+  }, []);
 
-  const toggleSwitch = () => setChangingData({ ...changingData, isActive: !changingData.isActive });
-  const onMessageChange = (text: string) => setChangingData({ ...changingData, text });
+  const toggleSwitch = () => {
+    setChangingData({ ...changingData, isActive: !changingData.isActive });
+    setHasChanges(true);
+  };
+
+  const onMessageChange = (text: string) => {
+    setChangingData({ ...changingData, text });
+    setHasChanges(true);
+  };
+
+  const handleSave = () => {
+    editChangingOrder(changingData.isActive, changingData.text);
+    setHasChanges(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,7 +64,7 @@ const ChangingEnEntry = () => {
           )}
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons title="Сохранить" onPress={() => editChangingOrder(changingData.isActive, changingData.text)}/>
+          <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -74,7 +87,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
-    height: screenHeight / 1.35
+    height: screenHeight / 1.35,
   },
   switchContainer: {
     flexDirection: 'row',
@@ -84,7 +97,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#B9B9C9',
     padding: 13,
     borderRadius: 15,
-    marginTop: 10
+    marginTop: 10,
   },
   label: {
     color: '#000',
@@ -111,6 +124,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 20,
-    padding: 10
+    padding: 10,
   },
 });

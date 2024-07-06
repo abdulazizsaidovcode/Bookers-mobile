@@ -148,7 +148,9 @@ export const notifications_cancel_edit: string = `${base_url}notification/settin
 export const notifications_changing_edit: string = `${base_url}notification/settings/change-order`
 export const notifications_window_edit: string = `${base_url}notification/settings/waiting/hall`
 export const notifications_appointment_edit: string = `${base_url}notification/settings/appointment`
+export const notifications_appointment_edit_active: string = `${base_url}notification/appointment/is-active`
 export const notifications_feedback_edit: string = `${base_url}notification/settings/feedback`
+export const notifications_appointment: string = `${base_url}notification/appointment/is-active`
 
 
 // expene url 
