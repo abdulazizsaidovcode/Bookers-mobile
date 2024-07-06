@@ -7,7 +7,7 @@ type Props = {
   title: string;
   backgroundColor: string;
   textColor: string;
-  borderColor?: string; // Optional borderColor prop
+  borderColor?: string;
   onPress: () => void;
 };
 
