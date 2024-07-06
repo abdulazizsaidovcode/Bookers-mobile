@@ -1,6 +1,6 @@
 // CustomButton.tsx
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 
 type Props = {
