@@ -13,7 +13,7 @@ const CreateExpenseCategory: React.FC = () => {
     const navigation = useNavigation<any>();
 
     useEffect(() => {
-        if (response === 'true') {
+        if (response) {
             setLoading(false);
             navigation.navigate("(profile)/(Expenses)/index");
         }

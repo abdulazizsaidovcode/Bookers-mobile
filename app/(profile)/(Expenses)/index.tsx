@@ -1,47 +1,44 @@
 import React, { useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import {  Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ExpenseCard from './(component)/card/index';
 import { FontAwesome } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { masterExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
+import { masterExpenseCategory, selectedExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
 import { getExpenceCategory } from '@/helpers/api-function/expence/expence';
-
-const expenses = [
-  {
-    id: '1',
-    title: 'Аренда',
-    description: 'Не добавлено',
-    amount: '0,00 сум',
-    icon: 'home',
-  },
-];
 
 const Expenses: React.FC = () => {
   const navigation = useNavigation<any>();
-  const { setExpenseCategory, expenseCategory } = masterExpenseCategory()
+  const { setExpenseCategory, expenseCategory } = masterExpenseCategory();
+  const { setExpenseId } = selectedExpenseCategory();
 
   useEffect(() => {
-    getExpenceCategory(setExpenseCategory)
-    console.log(expenseCategory,"aa");
+    getExpenceCategory(setExpenseCategory);
+  }, [setExpenseCategory]);
 
-  }, [setExpenseCategory])
+  const handleCreateCategory = () => {
+    navigation.navigate('(profile)/(Expenses)/(component)/CreateExpenseCategoty/CreateExpenseCategory');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <NavigationMenu name='Expenses' />
       <Text style={styles.headerText}>
-        Добавляйте свои расходы, что бы видеть свою прибыль
+        Добавляйте свои расходы, чтобы видеть свою прибыль
       </Text>
-      {expenseCategory ? <FlatList
-        data={expenseCategory}
-        renderItem={({ item }) => <ExpenseCard item={item} />}
-        keyExtractor={(item) => item.id}
-      /> : <Text style={styles.headerText}>Нет категорий расходов</Text>}
+      {expenseCategory ? (
+        <FlatList
+          data={expenseCategory}
+          renderItem={({ item }) => <ExpenseCard item={item} />}
+          keyExtractor={(item) => item.id}
+        />
+      ) : (
+        <Text style={styles.headerText}>Нет категорий расходов</Text>
+      )}
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate('(profile)/(Expenses)/(component)/CreateExpenseCategoty/CreateExpenseCategory')}
+        onPress={() => handleCreateCategory()}
       >
         <FontAwesome name="plus-circle" size={24} color="#fff" style={styles.addButtonIcon} />
         <Text style={styles.addButtonText}>Создать категорию расхода</Text>

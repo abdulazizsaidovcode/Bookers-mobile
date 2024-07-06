@@ -92,7 +92,7 @@ import PastHistory from "@/app/(free)/(client)/details/history/past-history";
 import CanceledHistory from "@/app/(free)/(client)/details/history/canceled-history";
 import NotificationSettings from "./(notifications)/notifications";
 import HelpPage from "./(profile)/(help)/help";
-import EditProfile from "./(profile)/(settings)/(childSettings)/(Personal data)/PersonalData";
+import EditProfile from "./(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData";
 import Messengers from "./(notifications)/(pages)/messengers";
 import RemindAboutAppointment from "./(notifications)/(pages)/remind-about-appointment";
 import CancelRecording from "./(notifications)/(pages)/cancel-recording";
@@ -316,7 +316,7 @@ function RootLayoutNav() {
               options={{ title: "Services", headerShown: false }}
             />
             <Stack.Screen
-              name="(profile)/(Expenses)/(component)/(detail)/expenseDetail"
+              name="(profile)/(Expenses)/(component)/(detail)/expenseDetail:id"
               component={ExpenseDetail}
               options={{ title: "Services", headerShown: false }}
             />
@@ -624,7 +624,7 @@ function RootLayoutNav() {
               options={{ title: "Настройки ", headerShown: false }}
             />
             <Stack.Screen
-              name="(profile)/(settings)/(childSettings)/Personal data/PersonalData"
+              name="(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData"
               component={EditProfile}
               options={{ title: "Настройки ", headerShown: false }}
             />

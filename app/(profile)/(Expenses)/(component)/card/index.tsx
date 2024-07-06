@@ -2,11 +2,12 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { masterExpense } from '@/helpers/state_managment/expence/ecpense';
+import { masterExpense, selectedExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
 import { getExpence } from '@/helpers/api-function/expence/expence';
 
 const ExpenseCard = ({ item }: any) => {
     const navigation = useNavigation<any>();
+    const { setExpenseId } = selectedExpenseCategory();
 
     const { setExpense, expense } = masterExpense()
 
@@ -16,6 +17,7 @@ const ExpenseCard = ({ item }: any) => {
     return (
         <TouchableOpacity
             onPress={() => {
+                setExpenseId(item.id);
                 getExpense(item.id)
                 navigation.navigate("(profile)/(Expenses)/(component)/(detail)/expenseDetail")
             }}

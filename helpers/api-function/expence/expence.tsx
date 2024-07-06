@@ -15,9 +15,10 @@ export const getExpenceCategory = (setExpenceCategory: any) => {
 
 export const getExpence = (categoryid: string, setExpence: any) => {
     if (categoryid) {
-        axios.get(`${expene_list}${categoryid}`, config)
+        axios.get(`${expene_list}/${categoryid}`, config)
             .then((res) => {
                 setExpence(res.data.body)
+                console.log(res.data.body);
 
             }).catch((err) => {
                 console.log(err);
@@ -26,14 +27,20 @@ export const getExpence = (categoryid: string, setExpence: any) => {
     }
 }
 
-export const postExpence = (data: any) => {
-    axios.post(expene_list, data, config)
-        .then((res) => {
-            console.log(res);
-        }).catch((err) => {
-            console.log(err);
-        })
-}
+export const postExpence = (data: any, setResponse: any) => {
+    if (data) {
+        axios.post(expene_list, data, config)
+            .then((res) => {
+                setResponse(res.data.success);
+                console.log(res.data);
+                
+            }).catch((err) => {
+                setResponse(err.response?.data?.status || 'error');
+                console.log(err.data);
+            });
+            
+    }
+};
 
 export const postExpenceCategory = (data: any, setResponse: any) => {
     if (data) {
@@ -46,3 +53,5 @@ export const postExpenceCategory = (data: any, setResponse: any) => {
             })
     }
 }
+
+
