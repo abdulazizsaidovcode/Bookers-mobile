@@ -33,6 +33,17 @@ export const fetchAllData = async (setOneData: (val: NotificationsAllData) => vo
     }
 }
 
+export const fetchAppoinmentActiveData = async (setAppoinmentActiveData: (val: boolean) => void) => {
+    try {
+        const { data } = await axios.get(notifications_appointment, config);
+        if (data.success) {
+            setAppoinmentActiveData(data.body)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const editMessenger = async (isMessage: boolean) => {
     try {
         await axios.put(`${notifications_messengers_edit}?isMessage=${isMessage}`, {}, config);
@@ -77,19 +88,16 @@ export const editAppoinmentOrder = async (text: string | undefined, hour: string
 
 export const editWindowOrder = async (text: string | undefined) => {
     try {
-        await axios.put(notifications_appointment_edit, {}, config);
+        await axios.put(notifications_appointment_edit, { text }, config);
     } catch (error) {
         console.log(error)
     }
 }
 
-export const fetchAppoinmentActiveData = async (setAppoinmentActiveData: (val: boolean) => void) => {
+export const editAppoinmentActive = async (isActive: boolean) => {
     try {
-        const { data } = await axios.get(notifications_appointment, config);
-        if (data.success) {
-            setAppoinmentActiveData(data.body)
-        }
+        await axios.post(`${notifications_appointment_edit}&isActive=${isActive}`, {}, config);
     } catch (error) {
-
+        console.log(error)
     }
 }

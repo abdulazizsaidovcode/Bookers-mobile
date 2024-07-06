@@ -41,7 +41,7 @@ const RequestWindow = () => {
               multiline
               numberOfLines={10}
               onChangeText={onMessageChange}
-              value={windowData.text}
+              defaultValue={windowData.text}
             />
           </View>
         </View>

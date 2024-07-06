@@ -33,7 +33,7 @@ const RequestFeedback = () => {
               multiline
               numberOfLines={10}
               onChangeText={onMessageChange}
-              value={feedbackData.text}
+              defaultValue={feedbackData.text}
             />
           </View>
         </View>

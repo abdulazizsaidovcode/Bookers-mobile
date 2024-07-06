@@ -58,7 +58,7 @@ const ChangingEnEntry = () => {
                 multiline
                 numberOfLines={10}
                 onChangeText={onMessageChange}
-                value={changingData.text}
+                defaultValue={changingData.text}
               />
             </View>
           )}

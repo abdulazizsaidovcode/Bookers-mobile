@@ -106,7 +106,7 @@ const RemindAboutAppointment: React.FC = () => {
                   multiline
                   numberOfLines={10}
                   onChangeText={onMessageChange}
-                  value={appoinmentData.content}
+                  defaultValue={appoinmentData.content}
                 />
               </View>
             </View>
@@ -127,6 +127,8 @@ const RemindAboutAppointment: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+export default RemindAboutAppointment;
 
 const styles = StyleSheet.create({
   container: {
@@ -213,5 +215,3 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
 });
-
-export default RemindAboutAppointment;

@@ -58,7 +58,7 @@ const CancelRecording = () => {
                 multiline
                 numberOfLines={10}
                 onChangeText={onMessageChange}
-                value={cancelData.text}
+                defaultValue={cancelData.text}
               />
             </View>
           )}
