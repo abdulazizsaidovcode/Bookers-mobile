@@ -12,21 +12,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const RemindAboutAppointment: React.FC = () => {
-  const {
-    isAppoinmentModal,
-    appoinmentData,
-    appoinmentActiveData,
-    setAppoinmentActiveData,
-    setAppoinmentData,
-    setIsAppoinmentModal
-  } = useNotificationsStore();
+  const { isAppoinmentModal, appoinmentData, appoinmentActiveData, setAppoinmentActiveData, setAppoinmentData, setIsAppoinmentModal } = useNotificationsStore();
 
   useEffect(() => {
-    fetchAllData((data: any) => setAppoinmentData(data), 'APPOINTMENT');
+    fetchAllData(setAppoinmentData, 'APPOINTMENT');
   }, [setAppoinmentData]);
 
   useEffect(() => {
-    fetchAppoinmentActiveData((data: any) => setAppoinmentActiveData(data));
+    fetchAppoinmentActiveData(setAppoinmentActiveData);
   }, [setAppoinmentActiveData]);
 
   const toggleSwitch = () => setAppoinmentActiveData(!appoinmentActiveData);
@@ -45,7 +38,7 @@ const RemindAboutAppointment: React.FC = () => {
           onPress={() => onSelectItem(item)}
           style={styles.pickerItem}
         >
-          <Text style={[styles.pickerItemText, selectedItem === item && styles.selectedPickerItemText]}>
+          <Text style={[styles.pickerItemText]}>
             {item} {items === hours ? 'ч.' : 'мин.'}
           </Text>
         </TouchableOpacity>
@@ -57,7 +50,7 @@ const RemindAboutAppointment: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <NavigationMenu name='Напоминание о записи' />
-        <View style={{ padding: 15 }}>
+        <View style={{ padding: 15, height: screenHeight / 1.23 }}>
           <View>
             <Text style={styles.title}>Отправка сообщений клиенту перед сеансом</Text>
           </View>
@@ -112,12 +105,23 @@ const RemindAboutAppointment: React.FC = () => {
             </View>
           )}
         </View>
+        <View style={{ padding: 15 }}>
+          <Buttons title="Сохранить" />
+        </View>
         <BottomModal isBottomModal={isAppoinmentModal} toggleBottomModal={toggleModal}>
           <View style={{ width: screenWidth / 1.3 }}>
             <View style={styles.modalContent}>
               <View style={styles.customPickerContainer}>
-                {renderPickerItems(hours, appoinmentData.hour, (hour: number) => setAppoinmentData({ ...appoinmentData, hour }))}
-                {renderPickerItems(minutes, appoinmentData.minute, (minute: number) => setAppoinmentData({ ...appoinmentData, minute }))}
+                <View>
+                  {renderPickerItems(hours, appoinmentData.hour, (hour: number) => setAppoinmentData({ ...appoinmentData, hour }))}
+                  <View style={styles.currentSelected}>
+                  </View>
+                </View>
+                <View>
+                  {renderPickerItems(minutes, appoinmentData.minute, (minute: number) => setAppoinmentData({ ...appoinmentData, minute }))}
+                  <View style={styles.currentSelected}>
+                  </View>
+                </View>
               </View>
             </View>
             <Buttons title="Выбрать" onPress={toggleModal} />
@@ -153,6 +157,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16
   },
+  currentSelected: {
+    backgroundColor: '#9C0B35',
+    width: screenWidth / 4,
+    height: screenHeight / 15,
+    borderRadius: 10
+  },
   title: {
     color: 'white',
     fontSize: 17,
@@ -171,7 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   picker: {
-    maxHeight: 200,
+    maxHeight: screenHeight / 3,
   },
   pickerItem: {
     paddingVertical: 10,
