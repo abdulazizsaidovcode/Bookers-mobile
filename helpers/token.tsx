@@ -1,14 +1,6 @@
 import axios from "axios";
 import { getMe } from "./api";
 
-// export const config = {
-//   headers: {
-//     Authorization:
-//       "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTk4OTAwMDQzMDUxIn0.K-7YCoydy9DsZOkdan4QTWcnrWnFhSWRhqSXqa_PrxfOx4K_VCffMjfdejuZKSuWF4055eHy1m3Y81qxYfg2og",
-//   },
-// };
-
-// local hostda ishlash uchun 
 export const config = {
   headers: {
     Authorization:
