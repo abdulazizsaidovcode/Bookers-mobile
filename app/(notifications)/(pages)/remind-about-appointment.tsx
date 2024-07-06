@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Switch, SafeAreaView, TouchableOpacity, Dimensions, Pressable } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Switch, TouchableOpacity, Dimensions, Pressable } from 'react-native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import BottomModal from '@/components/(modals)/modal-bottom';
@@ -7,6 +7,7 @@ import Buttons from '@/components/(buttons)/button';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { TextInput } from 'react-native-paper';
 import { fetchAllData } from '@/helpers/api-function/notifications/notifications';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window')
 
@@ -54,7 +55,7 @@ const RemindAboutAppointment = () => {
             <View>
               <Switch
                 onValueChange={toggleSwitch}
-                value={!appoinmentData.isActive}
+                value={appoinmentData.isActive}
               />
             </View>
           </View>
