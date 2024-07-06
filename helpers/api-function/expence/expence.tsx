@@ -46,3 +46,5 @@ export const postExpenceCategory = (data: any, setResponse: any) => {
             })
     }
 }
+
+

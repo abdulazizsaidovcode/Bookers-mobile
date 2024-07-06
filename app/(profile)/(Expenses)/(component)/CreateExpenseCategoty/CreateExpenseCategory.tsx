@@ -5,6 +5,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import { postExpenceCategory } from '@/helpers/api-function/expence/expence';
 import Buttons from '@/components/(buttons)/button';
 import { useNavigation } from '@react-navigation/native';
+import { selectedExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
 
 const CreateExpenseCategory: React.FC = () => {
     const [amount, setAmount] = useState('');
@@ -13,7 +14,7 @@ const CreateExpenseCategory: React.FC = () => {
     const navigation = useNavigation<any>();
 
     useEffect(() => {
-        if (response === 'true') {
+        if (response) {
             setLoading(false);
             navigation.navigate("(profile)/(Expenses)/index");
         }

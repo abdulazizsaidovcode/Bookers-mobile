@@ -316,7 +316,7 @@ function RootLayoutNav() {
               options={{ title: "Services", headerShown: false }}
             />
             <Stack.Screen
-              name="(profile)/(Expenses)/(component)/(detail)/expenseDetail"
+              name="(profile)/(Expenses)/(component)/(detail)/expenseDetail:id"
               component={ExpenseDetail}
               options={{ title: "Services", headerShown: false }}
             />

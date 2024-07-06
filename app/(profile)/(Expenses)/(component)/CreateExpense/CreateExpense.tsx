@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ToastAndroid } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { TextInput } from 'react-native-paper';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-// import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { selectedExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
+import { postExpence } from '@/helpers/api-function/expence/expence';
 
 const CreateExpense: React.FC = () => {
     const [date, setDate] = useState(new Date());
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
+    const { expenseId } = selectedExpenseCategory();
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -25,8 +27,23 @@ const CreateExpense: React.FC = () => {
     };
 
     const handleSave = () => {
-        // Save the expense details here
+        const expenseData = {
+            date: date.toISOString().split('T')[0], // Format the date as YYYY-MM-DD
+            price: parseFloat(amount),
+            comment: description,
+            expenseCategoryId: expenseId
+        };
+
+        if (amount.trim() && description.trim()) {
+            postExpence(expenseData);                   
+        }else {
+            alert('Заполните все поля');
+        }
     };
+
+    useEffect(() => {
+        console.log(expenseId);
+    }, [expenseId]);
 
     return (
         <View style={styles.container}>
@@ -45,7 +62,6 @@ const CreateExpense: React.FC = () => {
                 value={amount}
                 onChangeText={setAmount}
             />
-
             <Text style={styles.label}>Описание</Text>
             <TextInput
                 style={styles.textarea}
@@ -56,7 +72,6 @@ const CreateExpense: React.FC = () => {
                 value={description}
                 onChangeText={setDescription}
             />
-
             <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
                 <Text style={styles.saveButtonText}>Сохранить</Text>
             </TouchableOpacity>
