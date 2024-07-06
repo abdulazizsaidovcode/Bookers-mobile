@@ -26,7 +26,7 @@ const SettingsPage: React.FC = () => {
                     { icon: 'calendar-check', label: 'Онлайн бронирование', screen: 'OnlineBooking' },
                     { icon: 'bell', label: 'Настройки уведомлений', screen: 'NotificationSettings' },
                     { icon: 'cogs', label: 'Настройки приложения', screen: '(profile)/(settings)/(childSettings)/(Application Settings)/index' },
-                    { icon: 'user', label: 'Личные данные', screen: '(profile)/(settings)/(childSettings)/Personal data/PersonalData' }
+                    { icon: 'user', label: 'Личные данные', screen: '(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData' }
                 ].map((item, index) => (
                     <TouchableOpacity
                         key={index}
