@@ -94,22 +94,31 @@ const SettingsGallery: React.FC = () => {
     }
   };
 
-  const saveAlbum = () => {
-    const mainPhotos: any = mainImageIndex !== null ? [images[mainImageIndex]] : [];
+  const saveAlbum = async () => {
+    if (albumName && images.length > 0) {
+      const mainPhotos = mainImageIndex !== null ? [images[mainImageIndex]] : [];
 
-    const formData = new FormData();
-    formData.append('photos', {
-      uri: images,
-      name: 'photos.img',
-      type: 'image/jpeg'
-    });
-    formData.append('mainPhotos', {
-      uri: mainPhotos,
-      name: 'photos.img',
-      type: 'image/jpeg'
-    });
-    if (albumName && images.length > 0 && mainPhotos.length > 0) addData(formData, albumName);
+      const formData = new FormData();
+      images.forEach((image, index) => {
+        formData.append('photos', {
+          uri: image,
+          name: `photo_${index}.jpg`,
+          type: 'image/jpeg',
+        });
+      });
+
+      mainPhotos.forEach((image, index) => {
+        formData.append('mainPhotos', {
+          uri: image,
+          name: `mainPhoto_${index}.jpg`,
+          type: 'image/jpeg',
+        });
+      });
+
+      addData(formData, albumName);
+    }
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -197,7 +206,7 @@ const SettingsGallery: React.FC = () => {
             </View>
           </View>
         </View>
-        <View style={{ paddingHorizontal: 10 }}>
+        <View style={{ paddingHorizontal: 20 }}>
           <Buttons
             title={`Сохранить`}
             onPress={saveAlbum}
