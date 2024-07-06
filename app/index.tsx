@@ -7,6 +7,7 @@ import { StatusBar, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { router } from 'expo-router';
 import RemindAboutAppointment from './(notifications)/(pages)/remind-about-appointment';
+import TabLayout from './(tabs)/_layout';
 
 
 
@@ -16,7 +17,7 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'index'>;
 const Index: React.FC = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     return (
-       <RemindAboutAppointment/>
+       <TabLayout/>
     )
 }
 export default Index;
