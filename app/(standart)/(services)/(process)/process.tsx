@@ -1,3 +1,4 @@
+// Process.tsx
 import React, { useEffect, useState } from 'react';
 import { Text, View, TextInput, ScrollView, StatusBar, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,6 +12,8 @@ import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/app/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
+import CenteredModal from '@/components/(modals)/modal-centered';
+import { AntDesign } from '@expo/vector-icons';
 
 type GenderOption = {
     title: string;
@@ -19,13 +22,15 @@ type GenderOption = {
 
 const Process: React.FC = () => {
     const { selectedServices } = useLocalSearchParams();
-    const [service, setService] = useState<string>('');  
-    const [price, setPrice] = useState<string>('');  
-    const [time, setTime] = useState<string>('');  
-    const [description, setDescription] = useState<string>('');  
-    const [validate, setValidate] = useState<boolean>(false);  
-    const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);  
-    const { childCategoryData, categoryFatherId } = servicesStore(); 
+    const [service, setService] = useState<string>('');
+    const [price, setPrice] = useState<string>('');
+    const [time, setTime] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [validate, setValidate] = useState<boolean>(false);
+    const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);
+    const { childCategoryData, categoryFatherId } = servicesStore();
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [value, setValue] = useState('');
 
     const Gender: GenderOption[] = [
         { title: "Мужская для взрослых", id: 1 },
@@ -42,14 +47,14 @@ const Process: React.FC = () => {
 
     const postService = async () => {
         try {
-        
+
             const data = {
-                categoryId: categoryFatherId.key, // Use the key property
-                genderId: selectedGender ? [selectedGender.id] : [],  
-                name: service, 
+                categoryId: categoryFatherId.key,
+                genderId: selectedGender ? [selectedGender.id] : [],
+                name: service,
                 price: parseFloat(price),
                 description: description,
-                attachmentId: null,  
+                attachmentId: null,
                 active: true
             };
             console.log(data.categoryId);
@@ -70,7 +75,7 @@ const Process: React.FC = () => {
         } else {
             setValidate(false);
         }
-    },[service, price, time, description]);
+    }, [service, price, time, description]);
 
     const handleGenderPress = (gender: GenderOption) => {
         setSelectedGender(selectedGender?.id === gender.id ? null : gender);
@@ -85,11 +90,19 @@ const Process: React.FC = () => {
             </Text>
         );
     };
+    const toggleModal = () => setModalVisible(!modalVisible);
+    const handleAdd = () => {
+        {
+            toggleModal();
+            console.log(toggleModal);
+            
+        }
+    };    
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <NavigationMenu name={`Процедура услуг`} deleteIcon />
+            <NavigationMenu name={`Процедура услуг`} deleteIcon toggleModal={toggleModal} />
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -140,6 +153,19 @@ const Process: React.FC = () => {
                     <View style={[tw`mb-3 p-3`, { backgroundColor: '#21212E' }]}>
                         <Buttons title='Сохранить' isDisebled={!validate} onPress={postService} />
                     </View>
+                    <CenteredModal
+                        isModal={modalVisible}
+                        btnWhiteText='Закрыть'
+                        btnRedText=' Да '
+                        isFullBtn={true}
+                        toggleModal={toggleModal}
+                        onConfirm={handleAdd}
+                    >
+                        <>
+                            <AntDesign name="delete" size={120} color="#9C0A35" style={tw`mb-3`} />
+                            <Text style={tw`text-white mb-4`}>Вы хотите удалить удалить процедуру?</Text>
+                        </>
+                    </CenteredModal>
                 </ScrollView>
             </View>
         </SafeAreaView>

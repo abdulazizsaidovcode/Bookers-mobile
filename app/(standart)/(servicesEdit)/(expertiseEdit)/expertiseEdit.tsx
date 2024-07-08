@@ -146,8 +146,7 @@ const ExpertiseEdit: React.FC = () => {
                             btnRedText='Закрыть '
                             isFullBtn={false}
                             toggleModal={closeModal}
-                            onConfirm={handleAdd}
-                            disabled={!validate}>
+                            onConfirm={handleAdd}>
                             <View style={tw`p-4 text-center`}>
                                 <Text style={tw`text-white text-xl mb-2 w-full`}>Добавьте свою специализацию</Text>
                                 <Textarea

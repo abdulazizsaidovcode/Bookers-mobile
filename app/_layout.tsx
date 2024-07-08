@@ -113,6 +113,7 @@ import MyServicesEdit from "./(standart)/(servicesEdit)/(processEdit)/(uslugi)/u
 import ConfirmationRecord from "./(standart)/(onlineBooking)/(booking)/confirmationRecor";
 import WebPageStandart from "./(profile)/(WebPage-standart)/WebPage";
 import GalleryDetailStandart from "./(profile)/(WebPage-standart)/components/galleryDetail";
+import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
 
 
 const Stack = createNativeStackNavigator();
@@ -411,6 +412,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(standart)/(servicesEdit)/(gender)/servesGender"
               component={ServesGenderEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(servicesEdit)/(categoryEdit)/category"
+              component={CategoryEdit}
               options={{ headerShown: false }}
             />
             <Stack.Screen
