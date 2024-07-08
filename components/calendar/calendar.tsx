@@ -1,13 +1,13 @@
-import {useEffect, useState} from 'react';
-import {Text, StyleSheet, TouchableOpacity} from 'react-native';
-import DateTimePicker, {Event as DateTimePickerEvent} from '@react-native-community/datetimepicker';
-import {MaterialIcons} from '@expo/vector-icons';
+import { useEffect, useState } from 'react';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import DateTimePicker, { Event as DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { MaterialIcons } from '@expo/vector-icons';
 import moment from "moment";
 import financeStore from "@/helpers/state_managment/finance/financeStore";
 import tw from "tailwind-react-native-classnames";
 
-const CalendarComponent = ({setMonthDate, defDate}: { setMonthDate?: (val: string) => void, defDate?: any }) => {
-    const {setDate} = financeStore()
+const CalendarComponent = ({ setMonthDate, defDate, color }: { setMonthDate?: (val: string) => void, defDate?: any, color?: string }) => {
+    const { setDate } = financeStore()
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [showCalendar, setShowCalendar] = useState<boolean>(false);
 
@@ -42,12 +42,12 @@ const CalendarComponent = ({setMonthDate, defDate}: { setMonthDate?: (val: strin
     return (
         <>
             <TouchableOpacity
-                style={[styles.datePicker, tw`h-12 bg-gray-500`]}
+                style={[styles.datePicker, tw`h-12`, {backgroundColor: color ? color : '#6b7280'}]}
                 onPress={() => setShowCalendar(true)}
                 activeOpacity={.8}
             >
                 <Text style={styles.dateText}>{formatDate(selectedDate)}</Text>
-                <MaterialIcons name="date-range" size={24} color="white"/>
+                <MaterialIcons name="date-range" size={24} color="white" />
             </TouchableOpacity>
             {showCalendar && (
                 <DateTimePicker

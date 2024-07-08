@@ -5,11 +5,12 @@ const useNotificationsStore = create<NotificationsStore>((set) => ({
     isMainSwitch: false,
     appoinmentData: {
         id: '',
-        text: '',
+        content: '',
         minute: 0,
         hour: 0,
-        isActive: false
     },
+    appoinmentActiveData: false,
+    setAppoinmentActiveData: (val: boolean) => set({ appoinmentActiveData: val }),
     isAppoinmentModal: false,
     feedbackData: {
         text: '',

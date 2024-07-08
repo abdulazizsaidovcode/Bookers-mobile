@@ -2,40 +2,25 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { masterExpense, selectedExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
+import { masterExpense } from '@/helpers/state_managment/expence/ecpense';
 import { getExpence } from '@/helpers/api-function/expence/expence';
 
-const ExpenseCard = ({ item }: any) => {
+const ExpenseArendaCard = ({ item }: any) => {
     const navigation = useNavigation<any>();
-    const { setExpenseId } = selectedExpenseCategory();
 
     const { setExpense, expense } = masterExpense()
 
-    function getExpense(id: string) {
-        getExpence(id, setExpense)
-    }
+   console.log(expense);
+   
     return (
-        <TouchableOpacity
-            onPress={() => {
-                setExpenseId(item.id);
-                getExpense(item.id)
-                navigation.navigate("(profile)/(Expenses)/(component)/(detail)/expenseDetail")
-            }}
+        <View
             style={styles.container}
         >
-            <FontAwesome
-                name='home'
-                size={24}
-                color="#9C0A35"
-                style={styles.icon}
-            />
             <View style={styles.textContainer}>
-                <Text style={styles.title}>{item.name}</Text>
-                <Text style={styles.description}>{item.expensePrice > 0 ? "" : "Не добавлено"}</Text>
+                <Text style={styles.title}>{item.date}</Text>
             </View>
-            <Text style={styles.amount}>{item.expensePrice}</Text>
-            <MaterialIcons name="navigate-next" size={36} color='gray' />
-        </TouchableOpacity>
+            <Text style={styles.amount}>{item.price}</Text>
+        </View>
     );
 };
 
@@ -43,26 +28,22 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#B9B9C9', // equivalent to bg-gray-700
         padding: 16, // equivalent to p-4
+        paddingVertical: 28, // equivalent to pt-2
         borderRadius: 8, // equivalent to rounded-lg
         marginBottom: 16, // equivalent to mb-4
         flexDirection: 'row', // equivalent to flex-row
         alignItems: 'center', // equivalent to items-center
     },
-    icon: {
-        marginRight: 16, // equivalent to mr-4
-    },
     textContainer: {
         flex: 1, // equivalent to flex-1
     },
     title: {
+        fontSize: 16, // equivalent to text-lg
         color: '#333', // equivalent to text-white
         fontWeight: 'bold', // equivalent to font-bold
     },
-    description: {
-        color: '#4F4F4F', // equivalent to text-gray-400
-        marginTop: 4, // equivalent to mt-1
-    },
     amount: {
+        fontSize: 16, // equivalent to text-lg
         color: '#9C0A35', // equivalent to text-red-500
         fontWeight: 'bold', // equivalent to font-bold
     },
@@ -71,4 +52,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ExpenseCard;
+export default ExpenseArendaCard;

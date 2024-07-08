@@ -10,12 +10,21 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const RequestWindow = () => {
   const { windowData, setWindowData } = useNotificationsStore();
+  const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    fetchAllData(setWindowData, 'WAITING_HALL')
-  }, [])
+    fetchAllData(setWindowData, 'WAITING_HALL');
+  }, []);
 
-  const onMessageChange = (text: string) => setWindowData({ ...windowData, text: text })
+  const onMessageChange = (text: string) => {
+    setWindowData({ ...windowData, text });
+    setHasChanges(true);
+  };
+
+  const handleSave = () => {
+    editWindowOrder(windowData.text);
+    setHasChanges(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -24,7 +33,7 @@ const RequestWindow = () => {
           <NavigationMenu name='Напоминание о отзыве' />
         </View>
         <View style={styles.content}>
-          <Text style={{ color: 'white', fontSize: 20 }}>Уведомление о попадании клиента в сводобное окошко</Text>
+          <Text style={{ color: 'white', fontSize: 20 }}>Уведомление о попадании клиента в свободное окошко</Text>
           <View style={styles.messageContainer}>
             <Text style={styles.messageLabel}>Шаблон сообщения</Text>
             <TextInput
@@ -32,12 +41,12 @@ const RequestWindow = () => {
               multiline
               numberOfLines={10}
               onChangeText={onMessageChange}
-              value={windowData.text}
+              defaultValue={windowData.text}
             />
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons title="Сохранить" onPress={() => editWindowOrder(windowData.text)} />
+          <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -60,19 +69,19 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
-    height: screenHeight / 1.35
+    height: screenHeight / 1.35,
   },
   messageContainer: {
     backgroundColor: '#B9B9C9',
     padding: 15,
     borderRadius: 15,
-    marginTop: 10
+    marginTop: 10,
   },
   messageLabel: {
     color: '#000',
     marginBottom: 10,
     fontSize: 17,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   textInput: {
     backgroundColor: '#3a3a4e',
@@ -85,6 +94,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 20,
-    padding: 10
+    padding: 10,
   },
 });

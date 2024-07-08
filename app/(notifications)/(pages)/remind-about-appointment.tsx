@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, Switch, TouchableOpacity, Dimensions, Pressable } from 'react-native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
@@ -6,33 +6,39 @@ import BottomModal from '@/components/(modals)/modal-bottom';
 import Buttons from '@/components/(buttons)/button';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { TextInput } from 'react-native-paper';
-import { fetchAllData } from '@/helpers/api-function/notifications/notifications';
+import { fetchAllData, fetchAppoinmentActiveData } from '@/helpers/api-function/notifications/notifications';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window')
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-const RemindAboutAppointment = () => {
-  const { isAppoinmentModal, appoinmentData, setAppoinmentData, setIsAppoinmentModal } = useNotificationsStore();
-  const [selectedHour, setSelectedHour] = useState('0');
-  const [selectedMinute, setSelectedMinute] = useState('0');
+const RemindAboutAppointment: React.FC = () => {
+  const { isAppoinmentModal, appoinmentData, appoinmentActiveData, setAppoinmentActiveData, setAppoinmentData, setIsAppoinmentModal } = useNotificationsStore();
 
   useEffect(() => {
-    fetchAllData(setAppoinmentData, 'APPOINTMENT')
-  })
+    fetchAllData(setAppoinmentData, 'APPOINTMENT');
+  }, [setAppoinmentData]);
 
-  const toggleSwitch = () => setAppoinmentData({ ...appoinmentData, isActive: !appoinmentData.isActive });
+  useEffect(() => {
+    fetchAppoinmentActiveData(setAppoinmentActiveData);
+  }, [setAppoinmentActiveData]);
+
+  const toggleSwitch = () => setAppoinmentActiveData(!appoinmentActiveData);
   const toggleModal = () => setIsAppoinmentModal(!isAppoinmentModal);
 
-  const onMessageChange = (text: string) => setAppoinmentData({ ...appoinmentData, text})
+  const onMessageChange = (text: string) => setAppoinmentData({ ...appoinmentData, content: text });
 
-  const hours = Array.from({ length: 25 }, (_, i) => i.toString());
-  const minutes = Array.from({ length: 60 }, (_, i) => i.toString());
+  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const minutes = Array.from({ length: 60 }, (_, i) => i);
 
-  const renderPickerItems = (items: string[], selectedItem: string, onSelectItem: (val: string) => void) => (
+  const renderPickerItems = (items: number[], selectedItem: number | undefined, onSelectItem: (val: number) => void) => (
     <ScrollView style={styles.picker}>
       {items.map((item) => (
-        <TouchableOpacity key={item} onPress={() => onSelectItem(item)} style={styles.pickerItem}>
-          <Text style={[styles.pickerItemText, selectedItem === item && styles.selectedPickerItemText]}>
+        <TouchableOpacity
+          key={item}
+          onPress={() => onSelectItem(item)}
+          style={styles.pickerItem}
+        >
+          <Text style={[styles.pickerItemText]}>
             {item} {items === hours ? 'ч.' : 'мин.'}
           </Text>
         </TouchableOpacity>
@@ -44,7 +50,7 @@ const RemindAboutAppointment = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <NavigationMenu name='Напоминание о записи' />
-        <View style={{ padding: 15 }}>
+        <View style={{ padding: 15, height: screenHeight / 1.23 }}>
           <View>
             <Text style={styles.title}>Отправка сообщений клиенту перед сеансом</Text>
           </View>
@@ -55,17 +61,35 @@ const RemindAboutAppointment = () => {
             <View>
               <Switch
                 onValueChange={toggleSwitch}
-                value={appoinmentData.isActive}
+                value={appoinmentActiveData}
               />
             </View>
           </View>
-          {appoinmentData.isActive ?
+          {appoinmentActiveData && (
             <View style={{ marginTop: 10 }}>
-              <View style={styles.mainComtainer}>
+              <View style={styles.mainContainer}>
                 <Text style={styles.timeText}>Перед сеансом</Text>
-                <Pressable onPress={toggleModal} style={{ backgroundColor: '#4B4B64', height: 50, marginTop: 5, paddingHorizontal: 10, alignItems: 'center', flexDirection: 'row', borderRadius: 10, justifyContent: 'space-between' }}>
-                  <Text style={{ color: '#fff', fontSize: 16 }}>{selectedHour} час. {selectedMinute} мин</Text>
-                  <MaterialIcons name={isAppoinmentModal ? 'keyboard-arrow-up' : "keyboard-arrow-down"} size={26} color="white" />
+                <Pressable
+                  onPress={toggleModal}
+                  style={{
+                    backgroundColor: '#4B4B64',
+                    height: 50,
+                    marginTop: 5,
+                    paddingHorizontal: 10,
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    borderRadius: 10,
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <Text style={{ color: '#fff', fontSize: 16 }}>
+                    {appoinmentData.hour} час. {appoinmentData.minute} мин
+                  </Text>
+                  <MaterialIcons
+                    name={isAppoinmentModal ? 'keyboard-arrow-up' : "keyboard-arrow-down"}
+                    size={26}
+                    color="white"
+                  />
                 </Pressable>
               </View>
               <View style={styles.messageContainer}>
@@ -74,18 +98,30 @@ const RemindAboutAppointment = () => {
                   style={styles.textInput}
                   multiline
                   numberOfLines={10}
-                onChangeText={onMessageChange}
-                value={appoinmentData.text}
+                  onChangeText={onMessageChange}
+                  defaultValue={appoinmentData.content}
                 />
               </View>
-            </View> : ''}
+            </View>
+          )}
+        </View>
+        <View style={{ padding: 15 }}>
+          <Buttons title="Сохранить" />
         </View>
         <BottomModal isBottomModal={isAppoinmentModal} toggleBottomModal={toggleModal}>
           <View style={{ width: screenWidth / 1.3 }}>
             <View style={styles.modalContent}>
               <View style={styles.customPickerContainer}>
-                {renderPickerItems(hours, selectedHour, setSelectedHour)}
-                {renderPickerItems(minutes, selectedMinute, setSelectedMinute)}
+                <View>
+                  {renderPickerItems(hours, appoinmentData.hour, (hour: number) => setAppoinmentData({ ...appoinmentData, hour }))}
+                  <View style={styles.currentSelected}>
+                  </View>
+                </View>
+                <View>
+                  {renderPickerItems(minutes, appoinmentData.minute, (minute: number) => setAppoinmentData({ ...appoinmentData, minute }))}
+                  <View style={styles.currentSelected}>
+                  </View>
+                </View>
               </View>
             </View>
             <Buttons title="Выбрать" onPress={toggleModal} />
@@ -95,6 +131,8 @@ const RemindAboutAppointment = () => {
     </SafeAreaView>
   );
 };
+
+export default RemindAboutAppointment;
 
 const styles = StyleSheet.create({
   container: {
@@ -109,7 +147,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10
   },
-  mainComtainer: {
+  mainContainer: {
     justifyContent: 'space-between',
     backgroundColor: '#B9B9C9',
     padding: 12,
@@ -118,6 +156,12 @@ const styles = StyleSheet.create({
   label: {
     color: '#fff',
     fontSize: 16
+  },
+  currentSelected: {
+    backgroundColor: '#9C0B35',
+    width: screenWidth / 4,
+    height: screenHeight / 15,
+    borderRadius: 10
   },
   title: {
     color: 'white',
@@ -137,7 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   picker: {
-    maxHeight: 200,
+    maxHeight: screenHeight / 3,
   },
   pickerItem: {
     paddingVertical: 10,
@@ -181,5 +225,3 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
 });
-
-export default RemindAboutAppointment;

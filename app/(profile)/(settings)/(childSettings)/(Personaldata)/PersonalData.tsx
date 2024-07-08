@@ -140,11 +140,11 @@ const EditProfile: React.FC = () => {
                 </View>
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>Telegram</Text>
-                    <TextInput style={styles.input} value={telegram} onChangeText={setTelegram} />
+                    {/* <TextInput style={styles.input} value={telegram} onChangeText={setTelegram} /> */}
                 </View>
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>Instagram</Text>
-                    <TextInput style={styles.input} value={instagram} onChangeText={setInstagram} />
+                    {/* <TextInput style={styles.input} value={instagram} onChangeText={setInstagram} /> */}
                 </View>
 
                 <TouchableOpacity style={styles.saveButton} onPress={() => { /* save function */ }}>

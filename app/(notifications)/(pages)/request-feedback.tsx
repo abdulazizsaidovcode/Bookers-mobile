@@ -24,7 +24,7 @@ const RequestFeedback = () => {
         <View style={styles.navigationMenu}>
           <NavigationMenu name='Напоминание о отзыве' />
         </View>
-        <View style={styles.content}>
+         <View style={styles.content}>
           <Text style={{ color: 'white', fontSize: 20 }}>Уведомление с просьбой оставить отзыв о мастере и об оказанных услугах</Text>
           <View style={styles.messageContainer}>
             <Text style={styles.messageLabel}>Шаблон сообщения</Text>
@@ -33,7 +33,7 @@ const RequestFeedback = () => {
               multiline
               numberOfLines={10}
               onChangeText={onMessageChange}
-              value={feedbackData.text}
+              defaultValue={feedbackData.text}
             />
           </View>
         </View>

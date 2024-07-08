@@ -1,5 +1,6 @@
 export interface NotificationsStore {
     appoinmentData: NotificationsAllData;
+    appoinmentActiveData: boolean;
     isMainSwitch: boolean;
     windowData: NotificationsAllData;
     smsData: NotificationsAllData;
@@ -15,12 +16,14 @@ export interface NotificationsStore {
     setIsAppoinmentModal: (val: boolean) => void;
     setIsMainSwitch: (val: boolean) => void;
     setAppoinmentData: (val: NotificationsAllData) => void;
+    setAppoinmentActiveData: (val: boolean) => void;
   }
 
 export interface NotificationsAllData {
     id: string;
     isActive?: boolean;
-    text: string;
     hour?: number,
+    text?: string;
+    content?: string;
     minute?: number,
 }

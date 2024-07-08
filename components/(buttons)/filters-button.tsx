@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default FiltersButton
+export default FiltersButton //Filter buttoni tayyor 
