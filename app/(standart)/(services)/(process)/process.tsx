@@ -25,11 +25,7 @@ const Process: React.FC = () => {
     const [description, setDescription] = useState<string>('');  
     const [validate, setValidate] = useState<boolean>(false);  
     const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);  
-    const { childCategoryData, categoryFatherId } = servicesStore();  
-
-    useEffect(() => {
-        console.log("categoryFatherId:", categoryFatherId); // Log the categoryFatherId
-    }, []);
+    const { childCategoryData, categoryFatherId } = servicesStore(); 
 
     const Gender: GenderOption[] = [
         { title: "Мужская для взрослых", id: 1 },
@@ -46,8 +42,9 @@ const Process: React.FC = () => {
 
     const postService = async () => {
         try {
+        
             const data = {
-                categoryId: categoryFatherId, // Ensure this is the correct key
+                categoryId: categoryFatherId.key, // Use the key property
                 genderId: selectedGender ? [selectedGender.id] : [],  
                 name: service, 
                 price: parseFloat(price),
@@ -55,28 +52,25 @@ const Process: React.FC = () => {
                 attachmentId: null,  
                 active: true
             };
-
-            console.log(data);
-
-            // Uncomment to enable API call
-            // const response = await axios.post(masterAdd_service, data, config);
-            // if (response.data.success) {
-            //     router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
-            // } else {
-            //     console.error('Failed to add service:', response.data.message);
-            // }
+            console.log(data.categoryId);
+            const response = await axios.post(masterAdd_service, data, config);
+            if (response.data.success) {
+                router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
+            } else {
+                console.error('Failed to add service:', response.data.message);
+            }
         } catch (error) {
             console.error('Error adding service:', error);
         }
     };
 
     useEffect(() => {
-        if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0 || !selectedGender) {
+        if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0) {
             setValidate(true);
         } else {
             setValidate(false);
         }
-    },[service, price, time, description, selectedGender]);
+    },[service, price, time, description]);
 
     const handleGenderPress = (gender: GenderOption) => {
         setSelectedGender(selectedGender?.id === gender.id ? null : gender);

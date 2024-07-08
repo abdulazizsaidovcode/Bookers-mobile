@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
-import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
@@ -12,7 +12,6 @@ import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import { getCategory_master, getGender_status, getSpecialization, master_get_Service } from '@/helpers/api';
 import { config } from '@/helpers/token';
 import { router } from 'expo-router';
-import { AntDesign } from '@expo/vector-icons';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 
 const MyServicesScreen = () => {
@@ -32,7 +31,6 @@ const MyServicesScreen = () => {
         'Фитнес и йога',
     ]);
 
-    // Function to fetch gender data
     const getGender = async () => {
         try {
             const response = await axios.get(getGender_status, config);
@@ -42,7 +40,6 @@ const MyServicesScreen = () => {
         }
     };
 
-    // Function to fetch category data
     const getCategory = async () => {
         try {
             const response = await axios.get(getCategory_master, config);
@@ -52,7 +49,6 @@ const MyServicesScreen = () => {
         }
     };
 
-    // Function to fetch specialization data based on categoryId
     const getSpecializationData = async (categoryId: string) => {
         try {
             const response = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
@@ -62,7 +58,6 @@ const MyServicesScreen = () => {
         }
     };
 
-    // Function to fetch master data based on categoryId
     const getMasterData = async (categoryId: string) => {
         try {
             const response = await axios.get(`${master_get_Service}${categoryId}`, config);
@@ -72,14 +67,13 @@ const MyServicesScreen = () => {
         }
     };
 
-    // Function to translate gender names
     const translateGender = (genders: string[]) => {
         return genders.map((item) => {
             if (item === "MALE") return "Мужская для взрослых";
             else if (item === "FEMALE") return "Женское для взрослых";
             else if (item === "MALE_CHILD") return "Мужская для детей";
             else if (item === "FEMALE_CHILD") return "Женское для детей ";
-            else return item; // Handle other cases as needed
+            else return item;
         });
     };
 
@@ -88,7 +82,6 @@ const MyServicesScreen = () => {
         getCategory();
     }, []);
 
-    // Handle category selection
     const handleCategorySelect = (categoryId: string, index: number) => {
         setSelectedCategory(index);
         getSpecializationData(categoryId);
@@ -104,7 +97,6 @@ const MyServicesScreen = () => {
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
                 >
-                    {/* Gender Section */}
                     <View style={tw`flex flex-row justify-between p-4 mb-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Направление услуг по полу</Text>
                         <TouchableOpacity
@@ -122,7 +114,7 @@ const MyServicesScreen = () => {
                             {gender.map((card) => (
                                 <HomeCards
                                     key={card.gender}
-                                    title={card.gender === 'MALE' ? 'Мужское' : 'Женское'} // Translate gender name
+                                    title={card.gender === 'MALE' ? 'Мужское' : 'Женское'}
                                     icon={() => <Ionicons name={card.gender === 'MALE' ? 'man-outline' : 'woman-outline'} size={30} color="white" />}
                                     description={card.description || 'Взрослое, Детский'}
                                 />
@@ -130,7 +122,6 @@ const MyServicesScreen = () => {
                         </ScrollView>
                     </View>
 
-                    {/* Category Section */}
                     <View style={tw`flex flex-row justify-between p-4 mb-2`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Категория услуг</Text>
                         <TouchableOpacity
@@ -161,7 +152,6 @@ const MyServicesScreen = () => {
                         ))}
                     </ScrollView>
 
-                    {/* Specialization Section */}
                     <View style={tw`flex flex-row justify-between mb-2 p-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Специализация услуг</Text>
                         <TouchableOpacity
@@ -170,64 +160,75 @@ const MyServicesScreen = () => {
                             <MaterialIcons name="mode-edit" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
-                    <ScrollView
-                        horizontal
-                        contentContainerStyle={{ gap: 16, marginBottom: 5 }}
-                        showsHorizontalScrollIndicator={false}
-                    >
-                        {specialization.map((item) => (
-                            <View key={item.id}>
-                                <TouchableOpacity>
-                                    <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
-                                </TouchableOpacity>
-                            </View>
-                        ))}
-                    </ScrollView>
+                    {specialization.length > 0 ? (
+                        <ScrollView
+                            horizontal
+                            contentContainerStyle={{ gap: 16, marginBottom: 5 }}
+                            showsHorizontalScrollIndicator={false}
+                        >
+                            {specialization.map((item) => (
+                                <View key={item.id}>
+                                    <TouchableOpacity>
+                                        <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                        </ScrollView>
+                    ) : (
+                        <View style={tw`flex flex-row justify-center mb-2 p-4`}>
+                            <Text style={tw`text-gray-600 mb-2 text-lg`}>Нет доступных специализаций для выбранной категории</Text>
+                        </View>
+                    )}
 
-                    {/* Procedures Section */}
                     <View style={tw`flex flex-row justify-between p-4 mb-2`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Процедуры услуг</Text>
                         <TouchableOpacity activeOpacity={0.6}>
                             <AntDesign name="pluscircleo" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
-                    {categoryMaster.map((item) => (
-                        <TouchableOpacity
-                            key={item.id}
-                            onPress={() => {
-                                setProdseduraUslug(item);
-                                router.push({
-                                    pathname: '(standart)/(servicesEdit)/(processEdit)/processEdit',
-                                    params: {
-                                        item: JSON.stringify(item)
-                                    }
-                                });
-                            }}
-                            activeOpacity={0.8}
-                        >
-                            <View style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
-                                <Text style={tw`font-bold text-xl mb-3`}>{translateGender(item.genderNames).join(", ")}</Text>
-                                <ScrollView
-                                    horizontal
-                                    contentContainerStyle={{ gap: 16, marginBottom: 5 }}
-                                    showsHorizontalScrollIndicator={false}
-                                >
-                                    <TouchableOpacity>
-                                        <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
-                                    </TouchableOpacity>
-                                </ScrollView>
-                                <Text style={[tw`font-bold text-xl mb-3`, { color: '#9C0A35' }]}>
-                                    {item.price !== 0 ? `${item.price} сум` : '0'}
-                                </Text>
+                    {categoryMaster.length > 0 ? (
+                        categoryMaster.map((item) => (
+                            <TouchableOpacity
+                                key={item.id}
+                                onPress={() => {
+                                    setProdseduraUslug(item);
+                                    router.push({
+                                        pathname: '(standart)/(servicesEdit)/(processEdit)/processEdit',
+                                        params: {
+                                            item: JSON.stringify(item)
+                                        }
+                                    });
+                                }}
+                                activeOpacity={0.8}
+                            >
+                                <View style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
+                                    <Text style={tw`font-bold text-xl mb-3`}>{translateGender(item.genderNames).join(", ")}</Text>
+                                    <ScrollView
+                                        horizontal
+                                        contentContainerStyle={{ gap: 16, marginBottom: 5 }}
+                                        showsHorizontalScrollIndicator={false}
+                                    >
+                                        <TouchableOpacity>
+                                            <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
+                                        </TouchableOpacity>
+                                    </ScrollView>
+                                    <Text style={[tw`font-bold text-xl mb-3`, { color: '#9C0A35' }]}>
+                                        {item.price !== 0 ? `${item.price} сум` : '0'}
+                                    </Text>
 
-                                <Text style={tw`text-black mb-2`}>{item.description || 'Описание не предоставлено'}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                    {/* Navigation Button */}
+                                    <Text style={tw`text-black mb-2`}>{item.description || 'Описание не предоставлено'}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))
+                    ) : (
+                        <View style={tw`flex flex-row justify-center mb-2 p-4`}>
+                            <Text style={tw`text-gray-600 mb-2 text-lg`}>Нет доступных процедур для выбранной категории</Text>
+                        </View>
+                    )}
+                    
                     <View style={tw`mb-10`}>
                         <Buttons onPress={() => {
-                            putNumbers(2)
+                            putNumbers(1)
                             router.push('(welcome)/Welcome')
                         }} title='На главную' />
                     </View>
