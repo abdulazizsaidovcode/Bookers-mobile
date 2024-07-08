@@ -4,10 +4,11 @@ import { StatusBar } from 'expo-status-bar'
 import NavigationMenu from '@/components/navigation/navigation-menu'
 import SwitchWithLabel from '@/components/switchWithLabel/switchWithLabel'
 import SwitchWithLabelBlack from '@/components/switchWithLabel/switchWithLabelBlack'
+import { OnlineBookingStory } from '@/helpers/state_managment/onlinBooking/onlineBooking'
 
 const ConfirmationRecord = () => {
-    const [isEnabled, setIsEnabled] = useState(false);
 
+    const { isEnabled, setIsEnabled } = OnlineBookingStory();
     const toggleSwitch = () => {
         const newValue = !isEnabled;
         setIsEnabled(newValue);
@@ -20,19 +21,20 @@ const ConfirmationRecord = () => {
             <Text style={{ marginBottom: 10, }}></Text>
             <NavigationMenu name={`Онлайн бронирование`} />
             <StatusBar style="auto" />
-            <View style={{ paddingHorizontal: 16, marginBottom: 10, backgroundColor: 'white', borderRadius: 15 }}>
+            <View style={{ paddingHorizontal: 16, marginBottom: 10, backgroundColor: '#B9B9C9', borderRadius: 15 }}>
                 <SwitchWithLabelBlack
                     label="Подтверждать записи для всех клиентов"
                     value={isEnabled}
                     onToggle={toggleSwitch} />
             </View>
-            <View style={{ paddingHorizontal: 16, marginBottom: 10, backgroundColor: 'white', borderRadius: 15 }}>
+            <View style={{ paddingHorizontal: 16, marginBottom: 10, backgroundColor: '#B9B9C9', borderRadius: 15 }}>
                 <SwitchWithLabelBlack
-                    label="Подтверждать записи только для новых клиентов"
+                    label="Подтверждать записи только 
+                    для новых клиентов"
                     value={isEnabled}
                     onToggle={toggleSwitch} />
             </View>
-            <View style={{ paddingHorizontal: 16, marginBottom: 20, backgroundColor: 'white', borderRadius: 15 }}>
+            <View style={{ paddingHorizontal: 16, marginBottom: 20, backgroundColor: '#B9B9C9', borderRadius: 15 }}>
                 <SwitchWithLabelBlack
                     label="Не подтверждать записи"
                     value={isEnabled}

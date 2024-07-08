@@ -18,6 +18,7 @@ import { TabBarIcon } from "../../components/navigation/TabBarIcon";
 import Location from "../(location)/Location";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { getMee } from "@/helpers/token";
+import OnlineBooking from "../(standart)/(onlineBooking)/onlineBooking";
 
 const Tab = createBottomTabNavigator();
 
@@ -52,7 +53,7 @@ function TabLayout() {
             iconName = focused ? "home" : "home";
           } else if (route.name === "Schedule") {
             iconName = focused ? "calendar" : "calendar";
-          }else if (route.name === "(location)/Location") {
+          } else if (route.name === "(location)/Location") {
             iconName = focused ? "map" : "map";
           } else if (route.name === "finance") {
             iconName = focused ? "finance" : "finance";
@@ -118,7 +119,7 @@ function TabLayout() {
       )}
       <Tab.Screen
         name="chat"
-        component={ChatScreen}
+        component={OnlineBooking}
         options={{
           title: "Чат",
           tabBarIcon: ({ color }) => (
