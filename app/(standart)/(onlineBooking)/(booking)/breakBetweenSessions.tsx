@@ -19,22 +19,30 @@ const BreakBetweenSession = () => {
     const [selectedTime, setSelectedTime] = useState("");
     const [activeButton, setActiveButton] = useState("everyService");
     const [modalVisible, setModalVisible] = useState(false);
-    const [hour, setHour] = useState("1 ч.");
-    const [minute, setMinute] = useState("45 мин.");
+    const [hour, setHour] = useState("0 ч.");
+    const [minute, setMinute] = useState("0 мин.");
 
-    const hours = ["1 ч.", "2 ч.", "3 ч.", "4 ч.", "5 ч."];
-    const minutes = ["5 мин.", "10 мин.", "15 мин.", "30 мин.", "45 мин.", "50 мин.", "55 мин.", "60 мин."];
+    const hours = [
+        { title: "0 ч.", minutes: ["0 мин.", "30 мин."] },
+        { title: "1 ч.", minutes: ["0 мин.", "30 мин."] },
+        { title: "2 ч.", minutes: ["0 мин.", "15 мин.", "30 мин.", "45 мин."] }
+    ];
 
     const saveSettings = () => {
         console.log("Selected Time:", `${hour} ${minute}`);
         router.push("/category");
     };
 
-    const renderItem = ({ item, onPress, isActive }) => (
+    const renderItem = ({ item, onPress, isActive }: any) => (
         <TouchableOpacity onPress={onPress} style={[styles.modalItem, isActive && styles.activeItem]}>
             <Text style={[styles.modalItemText, isActive && styles.activeItemText]}>{item}</Text>
         </TouchableOpacity>
     );
+
+    const handleHourPress = (selectedHour: any) => {
+        setHour(selectedHour);
+        setMinute(hours && hours.find(h => h.title === selectedHour).minutes[0]);
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -136,7 +144,7 @@ const BreakBetweenSession = () => {
                         )}
                     </View>
                     <View style={styles.buttonContainer}>
-                        <Buttons isDisabled={false} title="Сохранить" onPress={saveSettings} />
+                        <Buttons isDisebled={hour !== "0 ч." || minute !== "0 мин."} title="Сохранить" onPress={saveSettings} />
                     </View>
                 </ScrollView>
             </View>
@@ -150,11 +158,11 @@ const BreakBetweenSession = () => {
                     <View style={styles.modalContent}>
                         <View style={styles.modalColumn}>
                             <FlatList
-                                data={hours}
+                                data={hours.map(h => h.title)}
                                 renderItem={({ item }) =>
                                     renderItem({
                                         item,
-                                        onPress: () => setHour(item),
+                                        onPress: () => handleHourPress(item),
                                         isActive: item === hour,
                                     })
                                 }
@@ -165,7 +173,7 @@ const BreakBetweenSession = () => {
                         </View>
                         <View style={styles.modalColumn}>
                             <FlatList
-                                data={minutes}
+                                data={hours.find(h => h.title === hour)?.minutes || []}
                                 renderItem={({ item }) =>
                                     renderItem({
                                         item,
@@ -179,15 +187,17 @@ const BreakBetweenSession = () => {
                             />
                         </View>
                     </View>
-                    <TouchableOpacity
-                        style={styles.selectButtonModal}
-                        onPress={() => {
-                            setModalVisible(false);
-                            setSelectedTime(`${hour} ${minute}`);
-                        }}
-                    >
-                        <Text style={styles.selectButtonTextModal}>Выбрать</Text>
-                    </TouchableOpacity>
+                    <View style={styles.buttonCont}>
+                        <TouchableOpacity
+                            style={styles.selectButtonModal}
+                            onPress={() => {
+                                setModalVisible(false);
+                                setSelectedTime(`${hour} ${minute}`);
+                            }}
+                        >
+                            <Text style={styles.selectButtonTextModal}>Выбрать</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </Modal>
         </SafeAreaView>
@@ -276,8 +286,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     procedurePrice: {
-        color: "#FF5733",
-        fontSize: 14,
+        color: "gray",
         marginBottom: 10,
     },
     modalView: {
@@ -297,41 +306,46 @@ const styles = StyleSheet.create({
     },
     modalColumn: {
         flex: 1,
-        alignItems: "center",
     },
     modalItem: {
-        color: "gray",
-        fontSize: 18,
+        margin: 5,
         paddingVertical: 10,
-        paddingHorizontal: 20,
-        textAlign: "center",
+        alignItems: "center",
+        justifyContent: "center",
     },
     activeItem: {
         backgroundColor: "#9C0A35",
-        borderRadius: 8,
     },
     modalItemText: {
         color: "white",
     },
     activeItemText: {
         color: "white",
-    },
-    flatList: {
-        maxHeight: 200,
-        width: '100%',
+        fontWeight: "bold",
+
     },
     selectButtonModal: {
         backgroundColor: "#9C0A35",
-        padding: 15,
+        padding: 10,
         borderRadius: 8,
-        alignItems: "center",
-        width: "90%",
         marginTop: 10,
-        marginBottom: 20,
+        width: "80%",
+        alignItems: "center",
+        marginBottom: 10,
+
     },
     selectButtonTextModal: {
         color: "white",
         fontSize: 18,
+    },
+    buttonCont: {
+        backgroundColor: "#21212E",
+        width: "100%",
+        alignItems: "center",
+        paddingBottom: 10,
+    },
+    flatList: {
+        maxHeight: 200,
     },
 });
 

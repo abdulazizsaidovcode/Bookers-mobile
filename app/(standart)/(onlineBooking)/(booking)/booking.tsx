@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -24,6 +24,7 @@ const Booking = () => {
   const [salonId, setSalonId] = useState("");
   const [isEnabled, setIsEnabled] = useState(Urgently);
   const [data, setData] = useState([]);
+  const navigation = useNavigation<any>();
 
   const getData = async () => {
     try {
@@ -41,7 +42,7 @@ const Booking = () => {
         { day: salonId },
         config
       );
-      router.push("/category");
+      navigation.goBack();
     } catch (error) {
       console.log(error);
     }
