@@ -122,7 +122,7 @@ const ProcessEdit: React.FC = () => {
                 <View style={[tw``, { backgroundColor: '#21212E' }]}>
                     <Text style={tw`text-gray-500 mb-2`}>Описание</Text>
                     <TextInput
-                        style={tw`bg-gray-500 p-2 rounded-xl text-lg text-white`}
+                        style={tw`bg-gray-500 p-2 mb-3 rounded-xl text-lg text-white`}
                         multiline
                         numberOfLines={4}
                         value={description}
@@ -130,10 +130,10 @@ const ProcessEdit: React.FC = () => {
                         scrollEnabled={true}
                     />
                 </View>
-                <View style={[tw`p-4`, { backgroundColor: '#21212E' }]}>
+                <View style={[tw`mb-3`, { backgroundColor: '#21212E' }]}>
                     <Buttons
                         title="Сохранить"
-                        disabled={!validate}
+                        isDisebled={!validate}
                         onPress={editUslugi}
                     />
                 </View>

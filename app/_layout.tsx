@@ -100,7 +100,6 @@ import ChangingAnEntry from "./(notifications)/(pages)/changing-an-entry";
 import RequestFeedback from "./(notifications)/(pages)/request-feedback";
 import RequestWindow from "./(notifications)/(pages)/request-window";
 import ServesGenderEdit from "./(standart)/(servicesEdit)/(gender)/servesGender";
-import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
 import ExpertiseEdit from "./(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit";
 import Welcome from "./(welcome)/Welcome";
 import ProcessEdit from "./(standart)/(servicesEdit)/(processEdit)/processEdit";
@@ -110,6 +109,7 @@ import BreakBetweenSession from "./(standart)/(onlineBooking)/(booking)/breakBet
 import ExpenseDetail from "./(profile)/(Expenses)/(component)/(detail)/expenseDetail";
 import CreateExpenseCategory from "./(profile)/(Expenses)/(component)/CreateExpenseCategoty/CreateExpenseCategory";
 import CreateExpense from "./(profile)/(Expenses)/(component)/CreateExpense/CreateExpense";
+import MyServicesEdit from "./(standart)/(servicesEdit)/(processEdit)/(uslugi)/uslugi";
 
 
 const Stack = createNativeStackNavigator();
@@ -411,11 +411,6 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(standart)/(servicesEdit)/(categoryEdit)/category"
-              component={CategoryEdit}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit"
               component={ExpertiseEdit}
               options={{ headerShown: false }}
@@ -423,6 +418,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(standart)/(servicesEdit)/(processEdit)/processEdit"
               component={ProcessEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(servicesEdit)/(processEdit)/(uslugi)/uslugi"
+              component={MyServicesEdit}
               options={{ headerShown: false }}
             />
             {/* Service edit end */}
