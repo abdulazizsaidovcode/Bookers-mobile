@@ -44,12 +44,6 @@ const ExpenseDetail: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-    head: {
-        flex: 1,
-        backgroundColor: '#21212E',
-        width: '100%',
-
-    },
     container: {
         padding: 8,
         flex: 1,

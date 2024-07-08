@@ -28,7 +28,7 @@ const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items, onActionSu
   };
 
   return (
-    <View style={styles.accordionContent}>
+    <View>
       {items.length > 0 ? (
         items.map((request, index) => (
           <RequestCard
@@ -51,9 +51,7 @@ const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items, onActionSu
 };
 
 const styles = StyleSheet.create({
-  accordionContent: {
-    // padding: 10,
-  },
+
   noRequestsText: {
     fontSize: 16,
     textAlign: 'center',

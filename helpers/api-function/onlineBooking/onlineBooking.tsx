@@ -1,9 +1,7 @@
-import { onlineBookingAllowClient_url, onlineBookingUgly_url, onlineBookingUserviceTimeAll_url, onlineBookingUserviceTimeservice_url } from "@/helpers/api";
+import { onlineBookingAllowClient_url, onlineBookingUgly_url, onlineBookingUserviceTimeAll_url, onlineBookingUserviceTimeservice_url, onlineConfirmationServices_url } from "@/helpers/api";
 import axios from "axios";
 import { config } from "@/helpers/token"
 import { Alert } from "react-native"
-
-
 
 export const onlineBookingAllowClient = (isEnabled: boolean) => {
     if (isEnabled == true || isEnabled == false) {
@@ -68,36 +66,60 @@ export const GetOnlineBookingSettingsUrgently = (setStatus: any) => {
 export const OnlineBookingUserviceTimeAll = (val: object) => {
     if (val) {
         axios.post(`${onlineBookingUserviceTimeAll_url}`, val, config)
-        .then(res => {
-            if (res.data.success) {
-                Alert.alert("Изменения сохранены")
-            }
-            else {
+            .then(res => {
+                if (res.data.success) {
+                    Alert.alert("Изменения сохранены")
+                }
+                else {
+                    Alert.alert("Произошла ошибка при конвертации")
+                }
+            }).catch(() => {
                 Alert.alert("Произошла ошибка при конвертации")
-            }
-        }).catch(() => {
-            Alert.alert("Произошла ошибка при конвертации")
-        })
+            })
     }
 }
 export const OnlineBookingUserviceTimeService = (val: object) => {
     let data = [
-        {...val}
+        { ...val }
     ]
     if (val) {
         axios.post(`${onlineBookingUserviceTimeservice_url}`, data, config)
-        .then(res => {
-            if (res.data.success) {
-                Alert.alert("Изменения сохранены")
-            }
-            else {
-                Alert.alert("Произошла ошибка при конвертаци")
-            }
-        }).catch((err) => {
-            console.log(err);
-            
-            Alert.alert("Произошла ошибка при конвертации")
-        })
+            .then(res => {
+                if (res.data.success) {
+                    Alert.alert("Изменения сохранены")
+                }
+                else {
+                    Alert.alert("Произошла ошибка при конвертаци")
+                }
+            }).catch((err) => {
+                console.log(err);
+
+                Alert.alert("Произошла ошибка при конвертации")
+            })
     }
 }
 
+export const onlineConfirmationServices = (isEnabled: boolean, isEnabled2: boolean, isEnabled3: boolean) => {
+    const data = {
+        "allClient": isEnabled,
+        "newClient": isEnabled2,
+        "notConfirm": isEnabled3
+    }
+    axios.post(`${onlineConfirmationServices_url}`, data, config)
+        .then(res => {
+            Alert.alert("Succes")
+        })
+        .catch((err) => {
+            Alert.alert("Not succes")
+        })
+}
+
+export const getOnlineConfirmationServices = (setData: (val: boolean) => void) => {
+    axios.get(`${onlineConfirmationServices_url}`, config)
+        .then(res => {
+            setData(res.data.body)
+        })
+        .catch((err) => {
+            setData(false)
+        })
+}

@@ -2,9 +2,8 @@ import {View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet} from 'r
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
-import {RouteProp, useRoute} from '@react-navigation/native'
 import Buttons from "@/components/(buttons)/button";
 import CalendarGraffic from "@/app/(free)/(work-grafic)/calendar";
 import {StandardNowAndConstClient} from "@/components/clients/client-items";
@@ -15,20 +14,16 @@ import {getFreeTime} from "@/helpers/api-function/freeTime/freeTime";
 import {fetchServices} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {postOrder} from "@/helpers/api-function/oreder/oreder";
-// import {getMee} from "@/helpers/token";
-// import useGetMeeStore from "@/helpers/state_managment/getMee";
 
-type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/records'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records'>;
 
 const Records = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const route = useRoute<CreatingClientScreenRouteProp>();
+    const route = useRoute<any>();
     const {record} = route.params;
     const {services, setServices, isLoading, setIsLoading} = clientStore()
     const {FreeTime, setFreeTime} = useScheduleFreeTime();
     const {calendarDate} = graficWorkStore();
-    // const {userMee, setUserMee} = useGetMeeStore()
     const [activeTab, setActiveTab] = useState('');
     const [activeTime, setActiveTime] = useState('');
     const [categoryName, setCategoryName] = useState('');
@@ -38,7 +33,6 @@ const Records = () => {
 
     useEffect(() => {
         fetchServices(setServices);
-        // getMee(setUserMee)
     }, []);
 
     useEffect(() => {
@@ -121,7 +115,8 @@ const Records = () => {
                                             style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
                                             onPress={() => handleTimeSelect(time)}
                                         >
-                                            <Text style={[styles.timeText, {textAlign: 'center'}, activeTime === time && styles.activeTimeText]}>
+                                            <Text
+                                                style={[styles.timeText, {textAlign: 'center'}, activeTime === time && styles.activeTimeText]}>
                                                 {time.slice(0, 5)}
                                             </Text>
                                         </TouchableOpacity>

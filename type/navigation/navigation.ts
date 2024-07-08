@@ -6,5 +6,6 @@ export interface INavigationProps {
     delOnPress?: () => void;
     addOnPress?: () => void;
     editOnPress?: () => void;
-    clicks?: () => void
+    clicks?: () => void;
+    navigate?: () => void
 }

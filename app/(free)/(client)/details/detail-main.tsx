@@ -2,13 +2,12 @@ import {View, ScrollView, StatusBar, Text} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
-import {RouteProp, useRoute} from '@react-navigation/native'
 import Buttons from "@/components/(buttons)/button";
 import ClientDetailBasic from "@/components/clients/details/detail-basic";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
 import {addClientMessage, getAgeList, getHistoryCount, getMeClient, getRegionList} from "@/helpers/api-function/client/client";
@@ -17,13 +16,13 @@ import HistoryMain from "@/app/(free)/(client)/details/history/history-main";
 import ProfileUpdate from "@/app/(free)/(client)/details/history/profile-update";
 import {getMee} from "@/helpers/token";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
+import {useFocusEffect} from 'expo-router'
 
-type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
 const DetailMain = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const route = useRoute<CreatingClientScreenRouteProp>();
+    const route = useRoute<any>();
     const {infoClient} = route.params;
     const {isLoading, setIsLoading, historyCountData, setHistoryCountData, setAgeData, setRegionData} = clientStore()
     const {setGetMee} = useGetMeeStore()
@@ -40,6 +39,12 @@ const DetailMain = () => {
         getMee(setGetMee)
     }, []);
 
+    useFocusEffect(
+        useCallback(() => {
+            getMeClient(setClientData, infoClient.id)
+        }, [])
+    )
+
     useEffect(() => {
         if (!isLoading && !bottomModalSMS) setMessageVal('')
     }, [isLoading, bottomModalSMS]);
@@ -53,6 +58,7 @@ const DetailMain = () => {
         if (regex.test(trimmedValue) && !/\s\s+/.test(e)) setMessageVal(e)
         else if (e === '') setMessageVal('')
     };
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
