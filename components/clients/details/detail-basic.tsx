@@ -7,6 +7,7 @@ import React, {useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import {sliceText} from "@/helpers/api-function/client/client";
 
 const ClientDetailBasic = ({client}: { client?: any }) => {
     const {setIsLoading, isLoading} = clientStore()
@@ -39,7 +40,7 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                     style={[tw`rounded-full`, styles.profileImage]}
                 />
                 <Text style={styles.profileName}>
-                    {client ? client.firstName + ' ' + client.lastName : ''}
+                    {sliceText(client.firstName, client.lastName)}
                 </Text>
             </View>
 

@@ -7,6 +7,7 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import { getFile } from "@/helpers/api";
 import Buttons from "@/components/(buttons)/button";
 import FiltersButton from "@/components/(buttons)/filters-button";
+import {sliceText} from "@/helpers/api-function/client/client";
 
 // client check un
 export const ClientItem: React.FC<ClientItemProps> = ({
@@ -120,17 +121,7 @@ export const StandardNowAndConstClient = (
         client: any;
         clicks?: () => void;
     }) => {
-    const sliceText = (firstName: string, lastName: string) => {
-        if (firstName && lastName) {
-            let text: string = `${firstName} ${lastName}`
-            if (text.length > 22) {
-                return `${text.slice(0, 22)}...`
-            } else return text
-        } else {
-            if (firstName) return firstName
-            else return lastName
-        }
-    }
+
     return (
         <TouchableOpacity
             onPress={clicks}
