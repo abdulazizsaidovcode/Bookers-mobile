@@ -20,6 +20,7 @@ const Gallery: React.FC = () => {
   const navigation = useNavigation<any>();
 
   const renderRows = (attachments: any[]) => {
+    
     let filteredAttachments = attachments.filter(
       (attachment) => attachment.main
     );
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
   },
   galleryContainer: {
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: 20,
   },
   imageRow: {
     flexDirection: "row",
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
   },
   caption: {
     marginTop: 10,
+    marginBottom: 10,
     fontSize: 16,
     color: "white",
     textAlign: "center",

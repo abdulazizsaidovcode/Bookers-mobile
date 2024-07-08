@@ -8,7 +8,6 @@ import {
   ScrollView,
 } from "react-native";
 import UserProfileCard from "./serviseCard";
-import Buttons from "@/components/(buttons)/button";
 import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
 import { getServiseWith } from "@/helpers/api-function/wepPage/wepPage";
 import { getFile } from "@/helpers/api";
@@ -83,7 +82,6 @@ const Services: React.FC = () => {
               style={styles.image}
             />
             <Text style={styles.serviceDescription}>{item.description}</Text>
-            <Buttons title="Подробнее" />
           </View>
         ))
       ) : (
