@@ -42,7 +42,7 @@ const CalendarComponent = ({ setMonthDate, defDate, color }: { setMonthDate?: (v
     return (
         <>
             <TouchableOpacity
-                style={[styles.datePicker, tw`h-12`, {backgroundColor: color ? color : 'gray'}]}
+                style={[styles.datePicker, tw`h-12`, {backgroundColor: color ? color : '#6b7280'}]}
                 onPress={() => setShowCalendar(true)}
                 activeOpacity={.8}
             >

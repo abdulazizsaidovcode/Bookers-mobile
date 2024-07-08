@@ -5,7 +5,7 @@ import CancelRecording from './(notifications)/(pages)/cancel-recording';
 
 const Index: React.FC = () => {
     return (
-        <RemindAboutAppointment />
+        <TabLayout />
     )
 }
 export default Index;
