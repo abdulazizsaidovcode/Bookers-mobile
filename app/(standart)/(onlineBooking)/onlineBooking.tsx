@@ -33,7 +33,7 @@ const data = [
         title: 'Подтверждение записи',
         subtitle: 'Не настроено',
         IconComponent: <Feather name="check-circle" size={30} color="#9C0A35" />,
-        onPress: () => { router.push('/booking') }
+        onPress: () => { router.push('/confirmationRecor') }
     },
     {
         id: '4',
