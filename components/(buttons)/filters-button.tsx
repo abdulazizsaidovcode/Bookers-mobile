@@ -35,5 +35,4 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
 });
-
 export default FiltersButton //Filter buttoni tayyor 
