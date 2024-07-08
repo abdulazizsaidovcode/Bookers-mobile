@@ -7,7 +7,6 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import { fetchData } from '@/helpers/api-function/gallery/settings-gallery';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
 import { getUser } from '@/helpers/api-function/getMe/getMee';
-import { fetchServices } from '@/helpers/api-function/client/client';
 import { getCategoryF, getspecialization } from '@/helpers/api-function/wepPage/wepPage';
 
 const WebPage: React.FC = () => {
