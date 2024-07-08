@@ -3,8 +3,6 @@ import axios from "axios";
 import { config } from "@/helpers/token"
 import { Alert } from "react-native"
 
-
-
 export const onlineBookingAllowClient = (isEnabled: boolean) => {
     if (isEnabled == true || isEnabled == false) {
         axios.put(`${onlineBookingAllowClient_url}?allowClient=${isEnabled}`, {}, config)
@@ -113,5 +111,15 @@ export const onlineConfirmationServices = (isEnabled: boolean, isEnabled2: boole
         })
         .catch((err) => {
             Alert.alert("Not succes")
+        })
+}
+
+export const getOnlineConfirmationServices = (setData: (val: boolean) => void) => {
+    axios.get(`${onlineConfirmationServices_url}`, config)
+        .then(res => {
+            setData(res.data.body)
+        })
+        .catch((err) => {
+            setData(false)
         })
 }

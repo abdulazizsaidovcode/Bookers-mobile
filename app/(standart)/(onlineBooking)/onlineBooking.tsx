@@ -61,7 +61,6 @@ const OnlineBooking = () => {
         setIsEnabled(newValue);
         setAllowClient(newValue); // Update the global state
         onlineBookingAllowClient(newValue)
-        console.log(newValue);
     };
 
     const renderItem = ({ item }: { item: any }) => (

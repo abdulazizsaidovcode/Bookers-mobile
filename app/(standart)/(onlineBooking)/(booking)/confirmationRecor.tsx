@@ -1,21 +1,23 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import NavigationMenu from '@/components/navigation/navigation-menu'
 import SwitchWithLabel from '@/components/switchWithLabel/switchWithLabel'
 import SwitchWithLabelBlack from '@/components/switchWithLabel/switchWithLabelBlack'
 import { OnlineBookingStory } from '@/helpers/state_managment/onlinBooking/onlineBooking'
 import Buttons from '@/components/(buttons)/button'
-import { onlineConfirmationServices } from '@/helpers/api-function/onlineBooking/onlineBooking'
+import { getOnlineConfirmationServices, onlineConfirmationServices } from '@/helpers/api-function/onlineBooking/onlineBooking'
 import { router } from 'expo-router'
 
 const ConfirmationRecord = () => {
 
-    const { isEnabled, setIsEnabled, isEnabled2, setIsEnabled2, isEnabled3, setIsEnabled3 } = OnlineBookingStory();
+    const { isEnabled, setIsEnabled, isEnabled2, setIsEnabled2, isEnabled3, setIsEnabled3, setData, data } = OnlineBookingStory();
+    useEffect(() => {
+        getOnlineConfirmationServices(setData);
+    }, [])
     const toggleSwitch = () => {
         const newValue = !isEnabled;
         setIsEnabled(newValue);
-        // setAllowClient(newValue); // Update the global state
         // onlineBookingAllowClient(newValue)
         console.log(newValue);
     };
