@@ -110,6 +110,7 @@ import BreakBetweenSession from "./(standart)/(onlineBooking)/(booking)/breakBet
 import ExpenseDetail from "./(profile)/(Expenses)/(component)/(detail)/expenseDetail";
 import CreateExpenseCategory from "./(profile)/(Expenses)/(component)/CreateExpenseCategoty/CreateExpenseCategory";
 import CreateExpense from "./(profile)/(Expenses)/(component)/CreateExpense/CreateExpense";
+import ConfirmationRecord from "./(standart)/(onlineBooking)/(booking)/confirmationRecor";
 
 
 const Stack = createNativeStackNavigator();
@@ -573,6 +574,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(standart)/(onlineBooking)/(booking)/breakBetweenSessions"
               component={BreakBetweenSession}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/(booking)/confirmationRecor"
+              component={ConfirmationRecord}
               options={{ headerShown: false }}
             />
             {/* Online booking end */}
