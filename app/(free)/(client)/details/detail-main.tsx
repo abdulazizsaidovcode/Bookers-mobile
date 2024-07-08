@@ -15,6 +15,8 @@ import {addClientMessage, getAgeList, getHistoryCount, getMeClient, getRegionLis
 import FiltersButton from "@/components/(buttons)/filters-button";
 import HistoryMain from "@/app/(free)/(client)/details/history/history-main";
 import ProfileUpdate from "@/app/(free)/(client)/details/history/profile-update";
+import {getMee} from "@/helpers/token";
+import useGetMeeStore from "@/helpers/state_managment/getMee";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
@@ -24,6 +26,7 @@ const DetailMain = () => {
     const route = useRoute<CreatingClientScreenRouteProp>();
     const {infoClient} = route.params;
     const {isLoading, setIsLoading, historyCountData, setHistoryCountData, setAgeData, setRegionData} = clientStore()
+    const {setGetMee} = useGetMeeStore()
     const [bottomModalSMS, setBottomModalSMS] = useState(false)
     const [messageVal, setMessageVal] = useState('')
     const [role, setRole] = useState('basics')
@@ -34,6 +37,7 @@ const DetailMain = () => {
         getMeClient(setClientData, infoClient.id)
         getAgeList(setAgeData)
         getRegionList(setRegionData)
+        getMee(setGetMee)
     }, []);
 
     useEffect(() => {

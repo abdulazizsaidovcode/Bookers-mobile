@@ -8,9 +8,11 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {sliceText} from "@/helpers/api-function/client/client";
+import useGetMeeStore from "@/helpers/state_managment/getMee";
 
 const ClientDetailBasic = ({client}: { client?: any }) => {
     const {setIsLoading, isLoading} = clientStore()
+    const {getMee} = useGetMeeStore()
     const [isClientModalDelete, setIsClientModalDelete] = useState(false)
     const [bottomModalNetwork, setBottomModalNetwork] = useState(false)
     const [useDefault, setUseDefault] = useState(false);
@@ -18,17 +20,17 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
     const toggleBottomModalNetwork = () => setBottomModalNetwork(!bottomModalNetwork)
 
     const callPhone = () => {
-        const url: string = `tel:${client.phoneNumber}`;
+        const url: string = `tel:${getMee.phoneNumber}`;
         Linking.openURL(url).catch((err) => console.error('Error:', err));
     };
 
     const goInstagram = () => {
-        const url: string = `https://www.instagram.com/${client.instagram}`;
+        const url: string = `https://www.instagram.com/${getMee.instagram}`;
         Linking.openURL(url).catch((err) => console.error('Error:', err));
     };
 
     const goTelegram = () => {
-        const url: string = `https://t.me/${client.telegram}`;
+        const url: string = `https://t.me/${getMee.telegram}`;
         Linking.openURL(url).catch((err) => console.error('Error:', err));
     };
 
@@ -64,27 +66,27 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                 >
                     <Feather name="phone" size={24} color="#9C0A35"/>
                     <Text style={styles.contactText}>
-                        {client ? client.phoneNumber : ''}
+                        {getMee.phoneNumber}
                     </Text>
                 </TouchableOpacity>
-                {client.instagram && (
+                {getMee.instagram && (
                     <TouchableOpacity
                         onPress={() => toggleBottomModalNetwork()}
                         activeOpacity={.6}
                         style={[styles.contactItem, {marginTop: 10}]}
                     >
                         <Entypo name="instagram" size={24} color="#9C0A35"/>
-                        <Text style={styles.contactText}>{client.instagram}</Text>
+                        <Text style={styles.contactText}>{getMee.instagram}</Text>
                     </TouchableOpacity>
                 )}
-                {client.telegram && (
+                {getMee.telegram && (
                     <TouchableOpacity
                         onPress={() => toggleBottomModalNetwork()}
                         activeOpacity={.6}
                         style={[styles.contactItem, {marginTop: 10}]}
                     >
                         <FontAwesome5 name="telegram-plane" size={24} color="#9C0A35"/>
-                        <Text style={styles.contactText}>{client.telegram}</Text>
+                        <Text style={styles.contactText}>{getMee.telegram}</Text>
                     </TouchableOpacity>
                 )}
             </View>
@@ -121,13 +123,13 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                             <FontAwesome name="phone-square" size={45} color="#45E760"/>
                             <Text style={styles.modalOptionText}>Телефон</Text>
                         </TouchableOpacity>
-                        {client.instagram && (
+                        {getMee.instagram && (
                             <TouchableOpacity onPress={goInstagram} activeOpacity={.7}>
                                 <FontAwesome5 name="instagram-square" size={44} color="#9C0A35"/>
                                 <Text style={styles.modalOptionText}>Инстаграм</Text>
                             </TouchableOpacity>
                         )}
-                        {client.telegram && (
+                        {getMee.telegram && (
                             <TouchableOpacity onPress={goTelegram} activeOpacity={.7}>
                                 <FontAwesome name="telegram" size={42} color="#06BCEE"/>
                                 <Text style={styles.modalOptionText}>Телеграм</Text>
