@@ -6,11 +6,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import React from 'react';
 import tw from "tailwind-react-native-classnames";
 
-const NavigationMenu = ({ toggleModal, name, deleteIcon, all = false, delOnPress, editOnPress, addOnPress }: INavigationProps) => {
+const NavigationMenu = ({ toggleModal, name, deleteIcon, all = false, delOnPress, editOnPress, addOnPress, navigate }: INavigationProps) => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            <Feather name="chevron-left" size={30} color="white" onPress={() => navigation.goBack()} />
+            <Feather name="chevron-left" size={30} color="white" onPress={navigate ? navigate : () => navigation.goBack()} />
             <Text style={styles.title}>{name}</Text>
             {deleteIcon
                 ? <MaterialIcons name="delete" size={25} color="white" onPress={toggleModal} />

@@ -32,7 +32,7 @@ const UpcomingHistory = () => {
     }, [upcomingData])
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
-            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
+            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} showHideTransition={`fade`}/>
             <NavigationMenu name={`Предстоящие записи`}/>
             <View style={tw`flex-1`}>
                 {upcomingData ? (

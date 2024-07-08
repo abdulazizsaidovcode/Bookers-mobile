@@ -36,9 +36,12 @@ const HistoryCard: React.FC<ICardHistory> = ({name, orderStatus, statusName, des
                 {btnOrText
                     ? <Text style={[styles.cardText, {color: '#9C0A35'}]}>{statusName}</Text>
                     : statusName && (
-                    <TouchableOpacity style={[styles.btn, {
-                        borderColor: orderStatus ? statusRegex(orderStatus) : '#9C0A35'
-                    }]}>
+                    <TouchableOpacity
+                        style={[styles.btn, {
+                            borderColor: orderStatus ? statusRegex(orderStatus) : '#9C0A35'
+                        }]}
+                        activeOpacity={.8}
+                    >
                         <Text style={[{fontSize: 13, color: orderStatus ? statusRegex(orderStatus) : '#9C0A35'}]}>
                             {statusName}
                         </Text>
