@@ -222,7 +222,7 @@ const MyServicesScreen = () => {
                         ))
                     ) : (
                         <View style={tw`flex flex-row justify-center mb-2 p-4`}>
-                            <Text style={tw`text-gray-600 mb-2 text-lg`}>Нет доступных процедур для выбранной категории</Text>
+                            <Text style={tw`text-white mb-2 text-lg`}>Нет доступных процедур для выбранной категории</Text>
                         </View>
                     )}
                     
