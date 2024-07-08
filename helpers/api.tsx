@@ -57,6 +57,8 @@ export const register_page = `${base_url}auth/`
 
 export const onlineBookingAllowClient_url = `${base_url}online-booking-settings/allow-client`
 export const onlineBookingUgly_url = `${base_url}online-booking-settings/urgent`
+export const onlineBookingUserviceTimeAll_url = `${base_url}online-booking-settings/service-time/all`
+export const onlineBookingUserviceTimeservice_url = `${base_url}online-booking-settings/service-time`
 
 // Grafic Work page
 export const workday_put = `${base_url}workday/time/edit/graphic`
@@ -161,3 +163,4 @@ export const notifications_appointment: string = `${base_url}notification/appoin
 export const expene_category_list: string = `${base_url}expense-category/master/expense-categories`
 export const expene_category_post: string = `${base_url}expense-category`
 export const expene_list: string = `${base_url}expense`
+export const address_url: string = `${base_url}address`

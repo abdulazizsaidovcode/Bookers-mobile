@@ -18,6 +18,8 @@ interface wepPage {
     setCategoryId: (val: any) => void
     specialization: any
     setspecialization: (val: any) => void
+    address: any
+    setAddress: (val: any) => void
   }
 
   const webPageStore = create<wepPage>((set) => ({
@@ -36,7 +38,9 @@ interface wepPage {
     categoryId: null,
     setCategoryId: (val: any) => set({categoryId: val}),
     specialization: null,
-    setspecialization: (val: any) => set({specialization: val})
+    setspecialization: (val: any) => set({specialization: val}),
+    address: null,
+    setAddress: (val: any) => set({address: val})
   }));
   
   export default webPageStore;
