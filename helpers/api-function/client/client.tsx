@@ -380,12 +380,12 @@ export const fetchServices = (setData: (val: any[] | null) => void) => {
 };
 
 // feedback master post ilovaga baho berish
-export const addFeedbackMaster = (star: number | any, setIsLoading: (val: boolean) => void, toggle?: () => void) => {
+export const addFeedbackMaster = (star: number | any, setIsLoading: (val: boolean) => void, toggle?: () => void, text?: string) => {
     const data = {
         count: star ? star : 0,
         masterId: null,
         orderId: null,
-        text: null
+        text: text ? text : null
     }
     setIsLoading(true)
     if (data.count > 0) {
@@ -399,6 +399,7 @@ export const addFeedbackMaster = (star: number | any, setIsLoading: (val: boolea
                 setIsLoading(false)
                 console.log(err)
                 toggle && toggle()
+                Toast.show(`An error occurred on the server`, Toast.LONG)
             })
     }
 }

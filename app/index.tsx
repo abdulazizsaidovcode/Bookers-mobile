@@ -4,8 +4,8 @@ import MyServices from './(standart)/(services)/(myServices)/myServices';
 
 const Index: React.FC = () => {
     return (
-        // <TabLayout /> 
-        <MyServices/>
+        <TabLayout />
+        // <MyServices/>
     )
 }
 export default Index;

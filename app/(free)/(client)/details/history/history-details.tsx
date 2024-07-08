@@ -11,8 +11,9 @@ import {getFile} from "@/helpers/api";
 import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import {
+    addFeedbackMaster,
     getCanceledClient,
-    getClientAll, getHistoryCount,
+    getHistoryCount,
     getPastClient,
     getUpcomingClient,
     sliceTextFullName,
@@ -20,6 +21,8 @@ import {
 } from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Buttons from "@/components/(buttons)/button";
+import Textarea from "@/components/select/textarea";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
 
@@ -29,11 +32,21 @@ const HistoryDetailsInformation = () => {
     const {historyData} = route.params;
     const {isLoading, setIsLoading, setUpcomingData, setPastData, setCanceledData, setHistoryCountData} = clientStore()
     const [serviceName, setServiceName] = useState([]);
-    const [isConfirm, setIsConfirm] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState('');
     const [successStatus, setSuccessStatus] = useState('');
+    const [isConfirm, setIsConfirm] = useState(false);
     const [isFeedback, setIsFeedback] = useState(false);
+    const [isRejected, setIsRejected] = useState(false);
     const [userID, setUserID] = useState<string>('');
+    const [textVal, setTextVal] = useState<string>('');
+    const [rating, setRating] = useState<number>(0);
+
+    useEffect(() => {
+        if (!isFeedback) {
+            setTextVal('')
+            setRating(0)
+        }
+    }, [isFeedback]);
 
     useEffect(() => {
         getData();
@@ -57,9 +70,9 @@ const HistoryDetailsInformation = () => {
         }
     }, [successStatus]);
 
-    // const handleRating = (value: any) => setRating(value)
-
+    const handleRating = (value: number) => setRating(value)
     const toggleConfirm = () => setIsConfirm(!isConfirm)
+    const toggleRejected = () => setIsRejected(!isRejected)
     const toggleFeedback = () => setIsFeedback(!isFeedback)
 
     const statusName = (statusN: string) => {
@@ -220,46 +233,67 @@ const HistoryDetailsInformation = () => {
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                        <Text style={styles.contactTitle}>Дополнительно</Text>
-                        <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
-                            <Fontisto name="arrow-move" size={30} color="#9C0A35"/>
-                            <Text style={[tw`font-bold text-lg ml-4`]}>
-                                Передвинуть
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
-                            <AntDesign name="closecircleo" size={30} color="#9C0A35"/>
-                            <Text style={[tw`font-bold text-lg ml-4`]}>
-                                Отменить
-                            </Text>
-                        </TouchableOpacity>
+                        {historyData.orderStatus !== 'WAIT' && (
+                            <Text style={styles.contactTitle}>Дополнительно</Text>
+                        )}
+                        {(historyData.orderStatus === 'CLIENT_CONFIRMED' || historyData.orderStatus === 'MASTER_CONFIRMED') && (
+                            <>
+                                <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
+                                    <Fontisto name="arrow-move" size={30} color="#9C0A35"/>
+                                    <Text style={[tw`font-bold text-lg ml-4`]}>
+                                        Передвинуть
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
+                                    <AntDesign name="closecircleo" size={30} color="#9C0A35"/>
+                                    <Text style={[tw`font-bold text-lg ml-4`]}>
+                                        Отменить
+                                    </Text>
+                                </TouchableOpacity>
+                            </>
+                        )}
+                        {(historyData.orderStatus === 'COMPLETED' || historyData.orderStatus === 'CLIENT_REJECTED' || historyData.orderStatus === 'MASTER_REJECTED') && (
+                            <Buttons
+                                title={`Оставить отзыв`}
+                                backgroundColor={`white`}
+                                textColor={`#9C0A35`}
+                                onPress={toggleFeedback}
+                            />
+                        )}
 
                         {/*fade back modal*/}
-                        {/*<CenteredModal*/}
-                        {/*    oneBtn*/}
-                        {/*    isFullBtn*/}
-                        {/*    isModal={isModal}*/}
-                        {/*    btnWhiteText={``}*/}
-                        {/*    btnRedText={`Закрыть`}*/}
-                        {/*    onConfirm={() => {*/}
-                        {/*        addFeedbackMaster(rating, setToast)*/}
-                        {/*        toggleModal()*/}
-                        {/*    }}*/}
-                        {/*    toggleModal={() => console.log('toggle')}*/}
-                        {/*>*/}
-                        {/*    <View style={styles.modalContainer}>*/}
-                        {/*        <Feather name="check-circle" size={70} color="#9C0A35"/>*/}
-                        {/*        <Text style={styles.message}>Клиент записан на процедуру</Text>*/}
-                        {/*        <View style={styles.stars}>*/}
-                        {/*            {Array(5).fill(0).map((_, index) => (*/}
-                        {/*                <TouchableOpacity activeOpacity={.7} key={index} onPress={() => handleRating(index + 1)}>*/}
-                        {/*                    <AntDesign name={index < rating ? "star" : "staro"} size={30} color="#B00000"*/}
-                        {/*                               style={styles.star}/>*/}
-                        {/*                </TouchableOpacity>*/}
-                        {/*            ))}*/}
-                        {/*        </View>*/}
-                        {/*    </View>*/}
-                        {/*</CenteredModal>*/}
+                        <CenteredModal
+                            isFullBtn={false}
+                            isModal={isFeedback}
+                            btnWhiteText={isLoading ? 'loading...' : `Отправить`}
+                            btnRedText={`Закрыть`}
+                            onConfirm={() => addFeedbackMaster(rating, setIsLoading, toggleFeedback, textVal)}
+                            toggleModal={() => {
+                                toggleFeedback()
+                                setRating(0)
+                            }}
+                        >
+                            <View style={styles.modalContainer}>
+                                <Text style={styles.message}>Оцените клиента!</Text>
+                                <View style={styles.stars}>
+                                    {Array(5).fill(0).map((_, index) => (
+                                        <TouchableOpacity activeOpacity={.7} key={index} onPress={() => handleRating(index + 1)}>
+                                            <AntDesign
+                                                name={index < rating ? "star" : "staro"}
+                                                size={30}
+                                                color="#B00000"
+                                                style={styles.star}
+                                            />
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+                                    <Textarea
+                                        placeholder={`Оставить отзыв`}
+                                        value={textVal}
+                                        onChangeText={e => setTextVal(e)}
+                                    />
+                            </View>
+                        </CenteredModal>
 
                         {/*confirm modal*/}
                         <CenteredModal
@@ -310,7 +344,6 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         borderRadius: 10,
-        padding: 20,
         alignItems: 'center'
     },
     message: {
