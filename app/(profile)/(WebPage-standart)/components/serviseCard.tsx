@@ -4,7 +4,7 @@ import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
 import React, { useEffect } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
-const UserProfileCard: React.FC = () => {
+const UserProfileCardStandart: React.FC = () => {
   const { getme, specialization, setAddress, address } = webPageStore();
 
   useEffect(() => {
@@ -183,4 +183,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserProfileCard;
+export default UserProfileCardStandart;
