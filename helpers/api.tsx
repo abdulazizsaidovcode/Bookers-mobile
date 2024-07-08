@@ -52,9 +52,13 @@ export const master_get_specialization = `${base_url}master-service/specializati
 
 // Register page 
 export const register_page = `${base_url}auth/`
+
 // Booking API
 
-export const switchBtn = `${base_url}online-booking-settings/allow-client`
+export const onlineBookingAllowClient_url = `${base_url}online-booking-settings/allow-client`
+export const onlineBookingUgly_url = `${base_url}online-booking-settings/urgent`
+export const onlineBookingUserviceTimeAll_url = `${base_url}online-booking-settings/service-time/all`
+export const onlineBookingUserviceTimeservice_url = `${base_url}online-booking-settings/service-time`
 
 // Grafic Work page
 export const workday_put = `${base_url}workday/time/edit/graphic`
@@ -118,6 +122,7 @@ export const order_get_one: string = `${base_url}order/one?orderId=`
 export const order_upcoming: string = `${base_url}order/client/upcoming-sessions`
 export const order_past: string = `${base_url}order/client/past-sessions`
 export const order_canceled: string = `${base_url}order/client/canceled-sessions`
+export const order_status_update: string = `${base_url}order/confirm-order`
 
 export const dashboard_daily_time_orders: string = `${base_url}user/today/calendar`
 export const dashboard_main_statistic: string = `${base_url}order/master/order-statistic`
@@ -158,3 +163,4 @@ export const notifications_appointment: string = `${base_url}notification/appoin
 export const expene_category_list: string = `${base_url}expense-category/master/expense-categories`
 export const expene_category_post: string = `${base_url}expense-category`
 export const expene_list: string = `${base_url}expense`
+export const address_url: string = `${base_url}address`

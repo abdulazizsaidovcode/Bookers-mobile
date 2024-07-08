@@ -15,7 +15,7 @@ import {
 const { width } = Dimensions.get("window");
 const isSmallDevice = width < 375;
 
-const Gallery: React.FC = () => {
+const GalleryStandart: React.FC = () => {
   const { galeriya, setGaleriyaDetail } = webPageStore();
   const navigation = useNavigation<any>();
 
@@ -55,11 +55,11 @@ const Gallery: React.FC = () => {
       {galeriya && galeriya.length > 0 ? (
         galeriya.map(
           (item: any) =>
-            item.resGalleryAttachments &&
+            item.resStandartAttachments &&
             item.resGalleryAttachments.length > 0 && (
               <TouchableOpacity onPress={() => {
                 setGaleriyaDetail(item)
-                navigation.navigate("(profile)/(WebPage)/components/galleryDetail")
+                navigation.navigate("(profile)/(WebPage-standart)/components/galleryDetail")
               }} activeOpacity={0.7}>
                 <View style={styles.galleryContainer} key={item.id}>
                   {renderRows(item.resGalleryAttachments)}
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Gallery;
+export default GalleryStandart;

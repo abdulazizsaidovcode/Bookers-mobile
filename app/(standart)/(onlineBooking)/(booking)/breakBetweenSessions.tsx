@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -10,31 +10,72 @@ import {
     Modal,
     FlatList,
 } from "react-native";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import { MaterialIcons } from '@expo/vector-icons';
+import { OnlineBookingUserviceTimeAll, OnlineBookingUserviceTimeService } from "@/helpers/api-function/onlineBooking/onlineBooking";
+import { fetchServices } from "@/helpers/api-function/client/client";
+import clientStore from "@/helpers/state_managment/client/clientStore";
+import axios from "axios";
+import { master_service_list } from "@/helpers/api";
+import { config } from "@/helpers/token";
 
 const BreakBetweenSession = () => {
     const [selectedTime, setSelectedTime] = useState("");
     const [activeButton, setActiveButton] = useState("everyService");
     const [modalVisible, setModalVisible] = useState(false);
-    const [hour, setHour] = useState("1 ч.");
-    const [minute, setMinute] = useState("45 мин.");
+    const [hour, setHour] = useState("0 ч.");
+    const [minute, setMinute] = useState("0 мин.");
+    const [servicesId, setServicesId] = useState('');
+    const navigation = useNavigation<any>();
+    const { services, setServices } = clientStore();
 
-    const hours = ["1 ч.", "2 ч.", "3 ч.", "4 ч.", "5 ч."];
-    const minutes = ["5 мин.", "10 мин.", "15 мин.", "30 мин.", "45 мин.", "50 мин.", "55 мин.", "60 мин."];
+    const hours = [
+        { title: "0 ч.", minutes: ["0 мин.", "30 мин."] },
+        { title: "1 ч.", minutes: ["0 мин.", "30 мин."] },
+        { title: "2 ч.", minutes: ["0 мин.", "15 мин.", "30 мин.", "45 мин."] }
+    ];
 
-    const saveSettings = () => {
-        console.log("Selected Time:", `${hour} ${minute}`);
-        router.push("/category");
-    };
-
-    const renderItem = ({ item, onPress, isActive }) => (
+    const renderItem = ({ item, onPress, isActive }: any) => (
         <TouchableOpacity onPress={onPress} style={[styles.modalItem, isActive && styles.activeItem]}>
             <Text style={[styles.modalItemText, isActive && styles.activeItemText]}>{item}</Text>
         </TouchableOpacity>
     );
+
+    const handleHourPress = (selectedHour: any) => {
+        setHour(selectedHour);
+        setMinute(hours && hours.find(h => h.title === selectedHour).minutes[0]);
+    };
+
+    const postTile = () => {
+        let obg = {
+            "hour": hour.split(" ")[0],
+            "minute": minute.slice(0, 2)
+        }
+        let obgser = {
+            "serviceId": servicesId,
+            "hour": hour.split(" ")[0],
+            "minute": minute.slice(0, 2)
+        }
+        if (servicesId) {
+            OnlineBookingUserviceTimeService(obgser)
+        } else {
+            OnlineBookingUserviceTimeAll(obg)
+        }
+        navigation.goBack()
+    }
+
+    useEffect(() => {
+        fetchServices()
+    }, []);
+
+    const fetchServices = () => {
+        axios.get(master_service_list, config)
+            .then((res) => setServices(res.data.body))
+            .catch((err) => console.error(err));
+    }
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -57,7 +98,10 @@ const BreakBetweenSession = () => {
                                     styles.button,
                                     activeButton === "everyService" && styles.activeButton,
                                 ]}
-                                onPress={() => setActiveButton("everyService")}
+                                onPress={() => {
+                                    setServicesId('')
+                                    setActiveButton("everyService")
+                                }}
                             >
                                 <Text
                                     style={[
@@ -74,7 +118,10 @@ const BreakBetweenSession = () => {
                                     styles.button,
                                     activeButton === "eachProcedure" && styles.activeButton,
                                 ]}
-                                onPress={() => setActiveButton("eachProcedure")}
+                                onPress={() => {
+                                    setServicesId('')
+                                    setActiveButton("eachProcedure")
+                                }}
                             >
                                 <Text
                                     style={[
@@ -94,34 +141,24 @@ const BreakBetweenSession = () => {
                         </View>
                         {activeButton === "eachProcedure" ? (
                             <View>
-                                <View style={styles.procedureContainer}>
-                                    <Text style={styles.procedureTitle}>Стрижка, укладка</Text>
-                                    <Text style={styles.procedurePrice}>350 000 сум</Text>
-                                    <TouchableOpacity
-                                        style={styles.selectButton}
-                                        onPress={() => setModalVisible(true)}
-                                    >
-                                        <View style={styles.timeContainer}>
-                                            <Text style={styles.selectButtonText}>{`${hour} ${minute}`}</Text>
-                                            <MaterialIcons name="access-time" size={24} color="white" />
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={styles.procedureContainer}>
-                                    <Text style={styles.procedureTitle}>
-                                        Стрижка, укладка, покраска
-                                    </Text>
-                                    <Text style={styles.procedurePrice}>500 000 сум</Text>
-                                    <TouchableOpacity
-                                        style={styles.selectButton}
-                                        onPress={() => setModalVisible(true)}
-                                    >
-                                        <View style={styles.timeContainer}>
-                                            <Text style={styles.selectButtonText}>{`${hour} ${minute}`}</Text>
-                                            <MaterialIcons name="access-time" size={24} color="white" />
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
+                                {services && services.map((service: any, index: number) => (
+                                    <View style={styles.procedureContainer}>
+                                        <Text style={styles.procedureTitle}>{service.category.name}</Text>
+                                        <Text style={styles.procedurePrice}>{service.price}</Text>
+                                        <TouchableOpacity
+                                            style={styles.selectButton}
+                                            onPress={() => {
+                                                setModalVisible(true)
+                                                setServicesId(service.id)
+                                            }}
+                                        >
+                                            <View style={styles.timeContainer}>
+                                                <Text style={styles.selectButtonText}> {`${servicesId !== service.id ? Math.floor(service.serviceTime / 60) : hour} час .  ${servicesId !== service.id ? service.serviceTime % 60 : minute} мин`}</Text>
+                                                <MaterialIcons name="access-time" size={24} color="white" />
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                ))}
                             </View>
                         ) : (
                             <TouchableOpacity
@@ -135,11 +172,9 @@ const BreakBetweenSession = () => {
                             </TouchableOpacity>
                         )}
                     </View>
-                    <View style={styles.buttonContainer}>
-                        <Buttons isDisabled={false} title="Сохранить" onPress={saveSettings} />
-                    </View>
                 </ScrollView>
             </View>
+
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -150,11 +185,11 @@ const BreakBetweenSession = () => {
                     <View style={styles.modalContent}>
                         <View style={styles.modalColumn}>
                             <FlatList
-                                data={hours}
+                                data={hours.map(h => h.title)}
                                 renderItem={({ item }) =>
                                     renderItem({
                                         item,
-                                        onPress: () => setHour(item),
+                                        onPress: () => handleHourPress(item),
                                         isActive: item === hour,
                                     })
                                 }
@@ -165,7 +200,7 @@ const BreakBetweenSession = () => {
                         </View>
                         <View style={styles.modalColumn}>
                             <FlatList
-                                data={minutes}
+                                data={hours.find(h => h.title === hour)?.minutes || []}
                                 renderItem={({ item }) =>
                                     renderItem({
                                         item,
@@ -179,17 +214,22 @@ const BreakBetweenSession = () => {
                             />
                         </View>
                     </View>
-                    <TouchableOpacity
-                        style={styles.selectButtonModal}
-                        onPress={() => {
-                            setModalVisible(false);
-                            setSelectedTime(`${hour} ${minute}`);
-                        }}
-                    >
-                        <Text style={styles.selectButtonTextModal}>Выбрать</Text>
-                    </TouchableOpacity>
+                    <View style={styles.buttonCont}>
+                        <TouchableOpacity
+                            style={styles.selectButtonModal}
+                            onPress={() => {
+                                setModalVisible(false);
+                                setSelectedTime(`${hour} ${minute}`);
+                            }}
+                        >
+                            <Text style={styles.selectButtonTextModal}>Выбрать</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </Modal>
+            <View style={styles.addButton}>
+                <Buttons isDisebled={(hour !== "0 ч." || minute !== "0 мин.") || !!servicesId} title="Сохранить" onPress={postTile} />
+            </View>
         </SafeAreaView>
     );
 };
@@ -266,18 +306,17 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end",
     },
     procedureContainer: {
-        backgroundColor: "#4B4B64",
+        backgroundColor: "#B9B9C9",
         padding: 10,
         borderRadius: 8,
         marginBottom: 10,
     },
     procedureTitle: {
-        color: "white",
+        color: "#000",
         fontSize: 16,
     },
     procedurePrice: {
-        color: "#FF5733",
-        fontSize: 14,
+        color: "#9C0A35",
         marginBottom: 10,
     },
     modalView: {
@@ -297,41 +336,58 @@ const styles = StyleSheet.create({
     },
     modalColumn: {
         flex: 1,
-        alignItems: "center",
     },
     modalItem: {
-        color: "gray",
-        fontSize: 18,
+        margin: 5,
         paddingVertical: 10,
-        paddingHorizontal: 20,
-        textAlign: "center",
+        alignItems: "center",
+        justifyContent: "center",
     },
     activeItem: {
         backgroundColor: "#9C0A35",
-        borderRadius: 8,
     },
     modalItemText: {
         color: "white",
     },
     activeItemText: {
         color: "white",
-    },
-    flatList: {
-        maxHeight: 200,
-        width: '100%',
+        fontWeight: "bold",
+
     },
     selectButtonModal: {
         backgroundColor: "#9C0A35",
-        padding: 15,
+        padding: 10,
         borderRadius: 8,
-        alignItems: "center",
-        width: "90%",
         marginTop: 10,
-        marginBottom: 20,
+        width: "80%",
+        alignItems: "center",
+        marginBottom: 10,
+
     },
     selectButtonTextModal: {
         color: "white",
         fontSize: 18,
+    },
+    buttonCont: {
+        backgroundColor: "#21212E",
+        width: "100%",
+        alignItems: "center",
+        paddingBottom: 10,
+    },
+    flatList: {
+        maxHeight: 200,
+    },
+    addButton: {
+        backgroundColor: '#21212E',
+        position: 'absolute',
+        paddingBottom: 16,
+        paddingTop: 16,
+        bottom: 1,
+        left: 16,
+        right: 16,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 

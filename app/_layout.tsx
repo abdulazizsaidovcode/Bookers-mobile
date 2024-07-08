@@ -110,6 +110,9 @@ import ExpenseDetail from "./(profile)/(Expenses)/(component)/(detail)/expenseDe
 import CreateExpenseCategory from "./(profile)/(Expenses)/(component)/CreateExpenseCategoty/CreateExpenseCategory";
 import CreateExpense from "./(profile)/(Expenses)/(component)/CreateExpense/CreateExpense";
 import MyServicesEdit from "./(standart)/(servicesEdit)/(processEdit)/(uslugi)/uslugi";
+import ConfirmationRecord from "./(standart)/(onlineBooking)/(booking)/confirmationRecor";
+import WebPageStandart from "./(profile)/(WebPage-standart)/WebPage";
+import GalleryDetailStandart from "./(profile)/(WebPage-standart)/components/galleryDetail";
 
 
 const Stack = createNativeStackNavigator();
@@ -575,6 +578,11 @@ function RootLayoutNav() {
               component={BreakBetweenSession}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/(booking)/confirmationRecor"
+              component={ConfirmationRecord}
+              options={{ headerShown: false }}
+            />
             {/* Online booking end */}
             {/*  profile client start */}
             <Stack.Screen
@@ -604,7 +612,11 @@ function RootLayoutNav() {
               name="(profile)/(WebPage)/WebPage"
               component={WebPage}
               options={{ title: "CreatingClient", headerShown: false }}
-            />
+            /><Stack.Screen
+            name="(profile)/(WebPage-standart)/WebPage"
+            component={WebPageStandart}
+            options={{ title: "CreatingClient", headerShown: false }}
+          />
             {/* Web page tariff end */}
 
             {/* profile settings start */}
@@ -650,6 +662,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(WebPage)/components/galleryDetail"
               component={GalleryDetail}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(WebPage-standart)/components/galleryDetail"
+              component={GalleryDetailStandart}
               options={{ headerShown: false }}
             />
 

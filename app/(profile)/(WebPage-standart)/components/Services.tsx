@@ -12,7 +12,7 @@ import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
 import { getServiseWith } from "@/helpers/api-function/wepPage/wepPage";
 import { getFile } from "@/helpers/api";
 
-const Services: React.FC = () => {
+const ServicesStandart: React.FC = () => {
   const [activeTab, setActiveTab] = useState("");
 
   const { servise, category, setServise, getme } = webPageStore();
@@ -185,4 +185,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Services;
+export default ServicesStandart;

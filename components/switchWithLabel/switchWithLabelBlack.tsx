@@ -2,17 +2,16 @@ import React from 'react';
 import { View, Text, Switch } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 
-interface SwitchWithLabelProps {
+interface SwitchWithLabelPropsBlack {
     label: string;
     value: boolean;
     onToggle: () => void;
-    textColor?: string;
 }
 
-const SwitchWithLabel: React.FC<SwitchWithLabelProps> = ({ label, value, onToggle, textColor }) => {
+const SwitchWithLabelBlack: React.FC<SwitchWithLabelPropsBlack> = ({ label, value, onToggle }) => {
     return (
-        <View style={tw`flex flex-row items-center justify-between mt-4 `}>
-            <Text style={tw`text-lg text-white mr-4 `}>
+        <View style={tw`flex flex-row items-center justify-around my-4  `}>
+            <Text style={tw`text-[24px] font-semibold text-white mr-4 text-black`}>
                 {label}
             </Text>
             <View style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}>
@@ -29,4 +28,4 @@ const SwitchWithLabel: React.FC<SwitchWithLabelProps> = ({ label, value, onToggl
     );
 };
 
-export default SwitchWithLabel;
+export default SwitchWithLabelBlack;

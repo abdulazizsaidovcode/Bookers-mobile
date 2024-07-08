@@ -10,8 +10,8 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
-import { SwitchBtnGet, SwithBTN } from '@/helpers/api-function/BookingFC/bookingFC';
-import OnlineBookingStory from '@/helpers/state_managment/onlinBooking/onlineBooking';
+import { OnlineBookingStory } from '@/helpers/state_managment/onlinBooking/onlineBooking';
+import { getOnlineBookingAllowClient, onlineBookingAllowClient } from '@/helpers/api-function/onlineBooking/onlineBooking';
 
 const data = [
     {
@@ -33,7 +33,7 @@ const data = [
         title: 'Подтверждение записи',
         subtitle: 'Не настроено',
         IconComponent: <Feather name="check-circle" size={30} color="#9C0A35" />,
-        onPress: () => { router.push('/booking') }
+        onPress: () => { router.push('/confirmationRecor') }
     },
     {
         id: '4',
@@ -60,6 +60,8 @@ const OnlineBooking = () => {
         const newValue = !isEnabled;
         setIsEnabled(newValue);
         setAllowClient(newValue); // Update the global state
+        onlineBookingAllowClient(newValue)
+        console.log(newValue);
     };
 
     const renderItem = ({ item }: { item: any }) => (
@@ -71,7 +73,7 @@ const OnlineBooking = () => {
         />
     );
     useEffect(() => {
-        SwitchBtnGet(setAllowClient);
+        getOnlineBookingAllowClient(setAllowClient);
     }, []);
 
     useEffect(() => {
@@ -107,7 +109,6 @@ const OnlineBooking = () => {
                     <View style={[tw` content-end mb-5`, { backgroundColor: '#21212E' }]}>
                         <Buttons title="На главную" onPress={() => {
                             putNumbers(6);
-                            SwithBTN(isEnabled);
                             router.push("(onlineBooking)/test");
                         }} />
                     </View>
@@ -116,4 +117,5 @@ const OnlineBooking = () => {
         </SafeAreaView>
     );
 };
+
 export default OnlineBooking;

@@ -5,22 +5,26 @@ import {
   StatusBar,
   ScrollView,
   SafeAreaView,
-  FlatList,
   TouchableOpacity,
+  StyleSheet,
 } from "react-native";
-import { router } from "expo-router";
-import tw from "tailwind-react-native-classnames";
+import { router, useNavigation } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import { SelectList } from "react-native-dropdown-select-list";
 import axios from "axios";
 import { base_url } from "@/helpers/api";
 import { config } from "@/helpers/token";
+import SwitchWithLabel from "@/components/switchWithLabel/switchWithLabel";
+import { GetOnlineBookingSettingsUrgently, onlineBookingSettingsUrgently } from "@/helpers/api-function/onlineBooking/onlineBooking";
+import { OnlineBookingSettingsUrgentlyStory } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 
 const Booking = () => {
+  const { Urgently,setUrgentlyt } = OnlineBookingSettingsUrgentlyStory()
   const [salonId, setSalonId] = useState("");
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(Urgently);
   const [data, setData] = useState([]);
+  const navigation = useNavigation<any>();
 
   const getData = async () => {
     try {
@@ -38,7 +42,7 @@ const Booking = () => {
         { day: salonId },
         config
       );
-      router.push("/category");
+      navigation.goBack();
     } catch (error) {
       console.log(error);
     }
@@ -47,72 +51,67 @@ const Booking = () => {
   useEffect(() => {
     getData();
   }, []);
+  useEffect(() => {
+    console.log(isEnabled);
+    
+    GetOnlineBookingSettingsUrgently(setUrgentlyt)
+  }, [setUrgentlyt]);
 
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const toggleSwitch = () => {
+    let newUrgently = !isEnabled;
+    onlineBookingSettingsUrgently(newUrgently);
+    setIsEnabled((previousState) => !previousState)
+    console.log(Urgently);
+    
+    GetOnlineBookingSettingsUrgently(setUrgentlyt)
+  };
 
   return (
-    <SafeAreaView style={[tw`flex-1 mt-6`, { backgroundColor: "#21212E" }]}>
+    <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
       <NavigationMenu name={`Онлайн бронирование`} />
-      <View style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
+      <View style={styles.innerContainer}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingHorizontal: 16,
-            flexGrow: 1,
-            justifyContent: "space-between",
-            backgroundColor: "#21212E",
-          }}
+          contentContainerStyle={styles.scrollViewContent}
         >
           <View>
             <ScrollView
               horizontal
-              contentContainerStyle={{
-                gap: 16,
-                marginTop: 15,
-                marginBottom: 5,
-              }}
+              contentContainerStyle={styles.horizontalScrollContent}
               showsHorizontalScrollIndicator={false}
             >
               <TouchableOpacity activeOpacity={0.8}>
-                <Text
-                  style={[
-                    tw`rounded-lg p-3 text-white text-[#828282] mb-6`,
-                    { backgroundColor: "#9C0A35" },
-                  ]}
-                >
-                  По дням
-                </Text>
+                <Text style={styles.activeTab}>По дням</Text>
               </TouchableOpacity>
             </ScrollView>
-            <View style={tw`mb-3`}>
-              <Text style={tw`text-white text-lg`}>Длительность записи</Text>
+            <View style={styles.labelContainer}>
+              <Text style={styles.labelText}>Длительность записи</Text>
             </View>
-            <View style={tw`mb-10`}>
-              <Text style={tw`text-gray-400`}>
-                Настройте период в который запись к вам будет доступна заранее
+            <View style={styles.descriptionContainer}>
+              <Text style={styles.descriptionText}>
                 Настройте период в который запись к вам будет доступна заранее
               </Text>
             </View>
             <SelectList
-              boxStyles={[
-                tw`w-full text-white`,
-                { backgroundColor: "#4B4B64" },
-              ]}
-              inputStyles={tw`text-white text-lg`}
-              dropdownStyles={[tw``, { backgroundColor: "#4B4B64" }]}
-              dropdownTextStyles={tw`text-white text-lg`}
+              boxStyles={styles.selectListBox}
+              inputStyles={styles.selectListInput}
+              dropdownStyles={styles.selectListDropdown}
+              dropdownTextStyles={styles.selectListDropdownText}
               setSelected={(val: string) => setSalonId(val)}
               data={data.map((item, i) => ({ key: i, value: `${item} day` }))}
               save="key"
               search={false}
             />
+            <SwitchWithLabel
+              label="Без срочно"
+              value={isEnabled}
+              onToggle={toggleSwitch}
+            />
           </View>
-          <View
-            style={[tw`grid content-end mb-5`, { backgroundColor: "#21212E" }]}
-          >
+          <View style={styles.buttonContainer}>
             <Buttons
-              isDisebled={isEnabled}
+              isDisebled={!!salonId}
               title="Сохранить"
               onPress={addOnlineBook}
             />
@@ -122,5 +121,67 @@ const Booking = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 6,
+    backgroundColor: "#21212E",
+  },
+  innerContainer: {
+    flex: 1,
+    backgroundColor: "#21212E",
+  },
+  scrollViewContent: {
+    paddingHorizontal: 16,
+    flexGrow: 1,
+    justifyContent: "space-between",
+    backgroundColor: "#21212E",
+  },
+  horizontalScrollContent: {
+    gap: 16,
+    marginTop: 15,
+    marginBottom: 5,
+  },
+  activeTab: {
+    backgroundColor: "#9C0A35",
+    borderRadius: 8,
+    padding: 8,
+    color: "#fff",
+  },
+  labelContainer: {
+    marginBottom: 3,
+  },
+  labelText: {
+    color: "#fff",
+    fontSize: 18,
+  },
+  descriptionContainer: {
+    marginBottom: 10,
+  },
+  descriptionText: {
+    color: "#aaa",
+  },
+  selectListBox: {
+    width: "100%",
+    backgroundColor: "#4B4B64",
+  },
+  selectListInput: {
+    color: "#fff",
+    fontSize: 18,
+  },
+  selectListDropdown: {
+    backgroundColor: "#4B4B64",
+  },
+  selectListDropdownText: {
+    color: "#fff",
+    fontSize: 18,
+  },
+  buttonContainer: {
+    justifyContent: "flex-end",
+    marginBottom: 5,
+    backgroundColor: "#21212E",
+  },
+});
 
 export default Booking;

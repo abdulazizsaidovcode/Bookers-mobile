@@ -1,4 +1,5 @@
 import {
+  address_url,
   category_Father,
   getCategory_master,
   master_get_Service,
@@ -54,3 +55,14 @@ export const getspecialization = async (
     setData(null);
   }
 };
+
+export const getAddress = (setData: (val: any[] | null) => void) => {
+    axios.get(address_url, config) 
+    .then((res) => {
+      if ( res.data.success ) setData(res.data.body)
+      else setData(res.data.message)
+        })
+    .catch(() => {
+      setData(null)
+    })
+}

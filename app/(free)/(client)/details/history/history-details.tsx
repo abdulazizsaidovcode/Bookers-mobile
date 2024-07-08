@@ -7,11 +7,11 @@ import {NavigationProp, RouteProp, useNavigation, useRoute} from "@react-navigat
 import {RootStackParamList} from "@/type/root";
 import {AntDesign, Entypo, Feather, FontAwesome5, Fontisto} from "@expo/vector-icons";
 import HistoryCard from "@/components/(cards)/history-card";
-import {orderGetOne} from "@/helpers/api-function/oreder/oreder";
 import {getFile} from "@/helpers/api";
 import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import {addFeedbackMaster, sliceTextFullName} from "@/helpers/api-function/client/client";
+import {sliceTextFullName, updateOrderStatus} from "@/helpers/api-function/client/client";
+import clientStore from "@/helpers/state_managment/client/clientStore";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
@@ -20,7 +20,11 @@ const HistoryDetailsInformation = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<CreatingClientScreenRouteProp>();
     const {historyData} = route.params;
+    const {isLoading, setIsLoading} = clientStore()
     const [serviceName, setServiceName] = useState([]);
+    const [isConfirm, setIsConfirm] = useState(false);
+    const [confirmStatus, setConfirmStatus] = useState('');
+    const [isFeedback, setIsFeedback] = useState(false);
 
     useEffect(() => {
         let list;
@@ -29,6 +33,9 @@ const HistoryDetailsInformation = () => {
     }, [historyData]);
 
     // const handleRating = (value: any) => setRating(value)
+
+    const toggleConfirm = () => setIsConfirm(!isConfirm)
+    const toggleFeedback = () => setIsFeedback(!isFeedback)
 
     const statusName = (statusN: string) => {
         if (statusN === 'CLIENT_CONFIRMED' || statusN === 'MASTER_CONFIRMED') return 'Одобрено'
@@ -113,13 +120,26 @@ const HistoryDetailsInformation = () => {
                                 <View style={styles.statusCard}>
                                     <Text style={tw`font-bold text-lg`}>Статус:</Text>
                                     <View style={tw`flex-row items-center`}>
-                                        <TouchableOpacity style={[styles.btn, {borderColor: '#9C0A35', marginRight: 8}]}>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                toggleConfirm()
+                                                setConfirmStatus('no')
+                                            }}
+                                            activeOpacity={.7}
+                                            style={[styles.btn, {borderColor: '#9C0A35', marginRight: 8}]}
+                                        >
                                             <Text style={[{fontSize: 13, color: '#9C0A35'}]}>
                                                 Отклонить
                                             </Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity
-                                            style={[styles.btn, {backgroundColor: '#9C0A35', borderColor: '#9C0A35'}]}>
+                                            onPress={() => {
+                                                toggleConfirm()
+                                                setConfirmStatus('ok')
+                                            }}
+                                            activeOpacity={.7}
+                                            style={[styles.btn, {backgroundColor: '#9C0A35', borderColor: '#9C0A35'}]}
+                                        >
                                             <Text style={[{fontSize: 13, color: 'white'}]}>
                                                 Принять
                                             </Text>
@@ -206,6 +226,23 @@ const HistoryDetailsInformation = () => {
                         {/*        </View>*/}
                         {/*    </View>*/}
                         {/*</CenteredModal>*/}
+
+                        {/*confirm modal*/}
+                        <CenteredModal
+                            isFullBtn
+                            isModal={isConfirm}
+                            btnWhiteText={`Закрыть`}
+                            btnRedText={isLoading ? 'loading...' : `Отправить`}
+                            onConfirm={() => {
+                                if (confirmStatus === 'ok') updateOrderStatus(historyData.id, 'CONFIRMED', setIsLoading)
+                                else updateOrderStatus(historyData.id, 'REJECTED', setIsLoading)
+                            }}
+                            toggleModal={toggleConfirm}
+                        >
+                            <Text style={[styles.message, {marginTop: 5}]}>
+                                {confirmStatus === 'ok' ? 'Tastiqlamoqchimisiz?' : 'Rad etmoqchimisiz?'}
+                            </Text>
+                        </CenteredModal>
                     </View>
                 </ScrollView>
             </View>
