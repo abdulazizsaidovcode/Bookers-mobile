@@ -24,6 +24,7 @@ const HistoryDetailsInformation = () => {
     const [serviceName, setServiceName] = useState([]);
     const [isConfirm, setIsConfirm] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState('');
+    const [successStatus, setSuccessStatus] = useState('');
     const [isFeedback, setIsFeedback] = useState(false);
 
     useEffect(() => {
@@ -31,6 +32,14 @@ const HistoryDetailsInformation = () => {
         if (historyData) list = historyData.serviceName.split(', ')
         setServiceName(list ? list : null)
     }, [historyData]);
+
+    useEffect(() => {
+        if (successStatus === 'ACCEPTED') {
+            toggleConfirm()
+            setSuccessStatus('')
+            // navigation.navigate('')
+        }
+    }, [successStatus]);
 
     // const handleRating = (value: any) => setRating(value)
 
@@ -234,8 +243,8 @@ const HistoryDetailsInformation = () => {
                             btnWhiteText={`Закрыть`}
                             btnRedText={isLoading ? 'loading...' : `Отправить`}
                             onConfirm={() => {
-                                if (confirmStatus === 'ok') updateOrderStatus(historyData.id, 'CONFIRMED', setIsLoading)
-                                else updateOrderStatus(historyData.id, 'REJECTED', setIsLoading)
+                                if (confirmStatus === 'ok') updateOrderStatus(historyData.id, 'CONFIRMED', setIsLoading, setSuccessStatus)
+                                else updateOrderStatus(historyData.id, 'REJECTED', setIsLoading, setSuccessStatus)
                             }}
                             toggleModal={toggleConfirm}
                         >

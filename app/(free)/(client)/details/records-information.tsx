@@ -2,7 +2,7 @@ import {View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image} 
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import {NavigationProp, RouteProp, useNavigation, useRoute} from "@react-navigation/native";
+import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import HistoryCard from "@/components/(cards)/history-card";
 import {AntDesign, Entypo, Feather, FontAwesome5, Fontisto} from "@expo/vector-icons";
@@ -11,10 +11,9 @@ import {orderGetOne} from "@/helpers/api-function/oreder/oreder";
 import {getFile} from "@/helpers/api";
 import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import {addFeedbackMaster} from "@/helpers/api-function/client/client";
-import Toast from "react-native-simple-toast";
+import {addFeedbackMaster, sliceTextFullName, updateOrderStatus} from "@/helpers/api-function/client/client";
+import clientStore from "@/helpers/state_managment/client/clientStore";
 
-type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
 export interface OrderOne {
@@ -41,16 +40,27 @@ export interface OrderOne {
 
 const RecordsInformation = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const route = useRoute<CreatingClientScreenRouteProp>();
+    const route = useRoute<any>();
     const {orderID} = route.params;
+    const {isLoading, setIsLoading} = clientStore()
     const [orderOneData, setOrderOneData] = useState<OrderOne | null>(null)
     const [isModal, setIsModal] = useState<boolean>(true)
     const [toast, setToast] = useState<boolean>(false)
     const [rating, setRating] = useState(0);
+    const [isConfirm, setIsConfirm] = useState(false);
+    const [successStatus, setSuccessStatus] = useState('');
 
     useEffect(() => {
         if (orderID) orderGetOne(orderID, setOrderOneData)
     }, []);
+
+    useEffect(() => {
+        if (successStatus === 'ACCEPTED') {
+            orderGetOne(orderID, setOrderOneData)
+            toggleConfirm()
+            setSuccessStatus('')
+        }
+    }, [successStatus]);
 
     useEffect(() => {
         if (toast) setRating(0)
@@ -58,26 +68,19 @@ const RecordsInformation = () => {
 
     const toggleModal = () => setIsModal(!isModal)
     const handleRating = (value: any) => setRating(value)
-
-    const sliceText = (fullName: string) => {
-        if (fullName) {
-            let text: string = `${fullName}`
-            if (text.length > 22) {
-                return `${text.slice(0, 22)}...`
-            } else return text
-        } else return fullName
-    }
+    const toggleConfirm = () => setIsConfirm(!isConfirm)
 
     const statusName = (statusN: string) => {
-        if (statusN === 'CLIENT_CONFIRMED' || statusN === 'MASTER_CONFIRMED' || statusN === 'COMPLETED') return 'Одобрено'
-        else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Не подтверждено'
+        if (statusN === 'CLIENT_CONFIRMED' || statusN === 'MASTER_CONFIRMED') return 'Одобрено'
+        else if (statusN === 'COMPLETED') return ''
+        else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
-            <NavigationMenu name={``}/>
+            <NavigationMenu name={``} navigate={() => navigation.navigate('(free)/(client)/main')}/>
             <View style={tw`flex-1`}>
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
@@ -105,7 +108,7 @@ const RecordsInformation = () => {
                             />
                             <View style={tw`ml-4 flex-col`}>
                                 <Text style={[tw`text-black text-lg font-bold`, {lineHeight: 22}]}>
-                                    {sliceText(orderOneData ? orderOneData.fullName : '')}
+                                    {sliceTextFullName(orderOneData ? orderOneData.fullName : '')}
                                 </Text>
                                 <Text style={[tw`text-gray-500 text-base`, {lineHeight: 22}]}>
                                     {orderOneData && orderOneData.phone}
@@ -185,7 +188,11 @@ const RecordsInformation = () => {
                                 Передвинуть
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
+                        <TouchableOpacity
+                            onPress={toggleConfirm}
+                            activeOpacity={.9}
+                            style={[styles.button, tw`mb-4 items-center flex-row`]}
+                        >
                             <AntDesign name="closecircleo" size={30} color="#9C0A35"/>
                             <Text style={[tw`font-bold text-lg ml-4`]}>
                                 Отменить
@@ -217,6 +224,20 @@ const RecordsInformation = () => {
                                     ))}
                                 </View>
                             </View>
+                        </CenteredModal>
+
+                        {/*canceled order status*/}
+                        <CenteredModal
+                            isFullBtn
+                            isModal={isConfirm}
+                            btnWhiteText={`Закрыть`}
+                            btnRedText={isLoading ? 'loading...' : `Отправить`}
+                            onConfirm={() => updateOrderStatus(orderID, 'REJECTED', setIsLoading, setSuccessStatus)}
+                            toggleModal={toggleConfirm}
+                        >
+                            <Text style={[styles.message, {marginTop: 5}]}>
+                                Rad etmoqchimisiz?
+                            </Text>
                         </CenteredModal>
                     </View>
                 </ScrollView>

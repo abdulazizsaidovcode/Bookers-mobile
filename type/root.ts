@@ -35,7 +35,7 @@ export type RootStackParamList = {
   '(free)/(client)/updating-address-book': { client: ClientAddressBook };
   '(tabs)': undefined | string;
   '(free)/(client)/details/detail-main': { infoClient: AllClient };
-  '(free)/(client)/details/records': { record: AllClient };
+  '(free)/(client)/details/records': { record: AllClient | any };
   '(free)/(client)/details/history/history-details': { historyData: any };
   '(free)/(client)/details/records-information': {orderID: string};
   '(free)/(client)/details/history/upcoming-history': {clientID: string};
