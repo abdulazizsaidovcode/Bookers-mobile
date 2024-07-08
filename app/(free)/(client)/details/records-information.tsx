@@ -236,7 +236,7 @@ const RecordsInformation = () => {
                             toggleModal={toggleConfirm}
                         >
                             <Text style={[styles.message, {marginTop: 5}]}>
-                                Rad etmoqchimisiz?
+                                Reject the order?
                             </Text>
                         </CenteredModal>
                     </View>

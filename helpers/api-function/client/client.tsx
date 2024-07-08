@@ -446,16 +446,18 @@ export const getCanceledClient = async (setData: (val: any[] | null) => void, cl
     }
 }
 
-export const updateOrderStatus = async (orderID: string, status: string, setLoading: (val: boolean) => void, setSuccessStatus: (val: string) => void) => {
+export const updateOrderStatus = async (orderID: string, status: string, setLoading: (val: boolean) => void, setSuccessStatus: (val: string) => void, toggle?: () => void) => {
     setLoading(true)
     try {
         if (orderID && status) {
             const {data} = await axios.put(`${order_status_update}?orderId=${orderID}&status=${status}`, '', config)
             if (data.success) {
+                toggle && toggle()
                 setSuccessStatus(data.status)
                 Toast.show('Successfully update order status', Toast.LONG)
                 setLoading(false)
             } else {
+                toggle && toggle()
                 setLoading(false)
                 Toast.show('An error occurred on the server', Toast.LONG)
             }
@@ -463,6 +465,7 @@ export const updateOrderStatus = async (orderID: string, status: string, setLoad
     } catch (err) {
         setLoading(false)
         console.log(err)
+        toggle && toggle()
         Toast.show('An error occurred on the server', Toast.LONG)
     }
 }

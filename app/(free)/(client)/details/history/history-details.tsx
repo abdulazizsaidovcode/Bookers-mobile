@@ -60,7 +60,6 @@ const HistoryDetailsInformation = () => {
 
     useEffect(() => {
         if (successStatus === 'ACCEPTED') {
-            toggleConfirm()
             setSuccessStatus('')
             navigation.goBack()
             getUpcomingClient(setUpcomingData, userID)
@@ -238,13 +237,20 @@ const HistoryDetailsInformation = () => {
                         )}
                         {(historyData.orderStatus === 'CLIENT_CONFIRMED' || historyData.orderStatus === 'MASTER_CONFIRMED') && (
                             <>
-                                <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
+                                <TouchableOpacity
+                                    activeOpacity={.9}
+                                    style={[styles.button, tw`mb-4 items-center flex-row`]}
+                                >
                                     <Fontisto name="arrow-move" size={30} color="#9C0A35"/>
                                     <Text style={[tw`font-bold text-lg ml-4`]}>
                                         Передвинуть
                                     </Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
+                                <TouchableOpacity
+                                    onPress={toggleRejected}
+                                    activeOpacity={.9}
+                                    style={[styles.button, tw`mb-4 items-center flex-row`]}
+                                >
                                     <AntDesign name="closecircleo" size={30} color="#9C0A35"/>
                                     <Text style={[tw`font-bold text-lg ml-4`]}>
                                         Отменить
@@ -287,11 +293,11 @@ const HistoryDetailsInformation = () => {
                                         </TouchableOpacity>
                                     ))}
                                 </View>
-                                    <Textarea
-                                        placeholder={`Оставить отзыв`}
-                                        value={textVal}
-                                        onChangeText={e => setTextVal(e)}
-                                    />
+                                <Textarea
+                                    placeholder={`Оставить отзыв`}
+                                    value={textVal}
+                                    onChangeText={e => setTextVal(e)}
+                                />
                             </View>
                         </CenteredModal>
 
@@ -302,13 +308,27 @@ const HistoryDetailsInformation = () => {
                             btnWhiteText={`Закрыть`}
                             btnRedText={isLoading ? 'loading...' : `Отправить`}
                             onConfirm={() => {
-                                if (confirmStatus === 'ok') updateOrderStatus(historyData.id, 'CONFIRMED', setIsLoading, setSuccessStatus)
-                                else updateOrderStatus(historyData.id, 'REJECTED', setIsLoading, setSuccessStatus)
+                                if (confirmStatus === 'ok') updateOrderStatus(historyData.id, 'CONFIRMED', setIsLoading, setSuccessStatus, toggleConfirm)
+                                else updateOrderStatus(historyData.id, 'REJECTED', setIsLoading, setSuccessStatus, toggleConfirm)
                             }}
                             toggleModal={toggleConfirm}
                         >
                             <Text style={[styles.message, {marginTop: 5}]}>
-                                {confirmStatus === 'ok' ? 'Tastiqlamoqchimisiz?' : 'Rad etmoqchimisiz?'}
+                                {confirmStatus === 'ok' ? 'Confirm the order?' : 'Reject the order?'}
+                            </Text>
+                        </CenteredModal>
+
+                        {/*canceled order status*/}
+                        <CenteredModal
+                            isFullBtn
+                            isModal={isRejected}
+                            btnWhiteText={`Закрыть`}
+                            btnRedText={isLoading ? 'loading...' : `Отправить`}
+                            onConfirm={() => updateOrderStatus(historyData.id, 'REJECTED', setIsLoading, setSuccessStatus, toggleRejected)}
+                            toggleModal={toggleRejected}
+                        >
+                            <Text style={[styles.message, {marginTop: 5}]}>
+                                Reject the order?
                             </Text>
                         </CenteredModal>
                     </View>
