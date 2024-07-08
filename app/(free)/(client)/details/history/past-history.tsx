@@ -48,6 +48,7 @@ const PastHistory = () => {
                                     data={item}
                                     serviceName={serviceName ? serviceName : ['']}
                                     isBtn={item.orderStatus === 'WAIT'}
+                                    clicks={() => navigation.navigate('(free)/(client)/details/history/history-details', {historyData: item})}
                                 />
                             )}
                         />

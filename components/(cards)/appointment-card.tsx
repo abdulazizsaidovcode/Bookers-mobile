@@ -1,4 +1,4 @@
-import {StyleSheet, View, Text, ScrollView, TouchableOpacity, Alert} from 'react-native';
+import {StyleSheet, View, Text, ScrollView, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import tw from "tailwind-react-native-classnames";
 import IconsButtons from "@/components/(buttons)/icon-btn";
 import {HistorySessions} from "@/type/client/client";
@@ -28,23 +28,32 @@ const AppointmentCard = ({clicks, serviceName, isBtn, data}: {
     const toggleModal = () => setIsModal(!isModal)
     return (
         <>
-            <View
-                style={[styles.container]}
-            >
-                <Text style={styles.date}>
-                    {moment(data.orderDate).format('dddd, DD MMMM')} {isBtn && `- ${data.startTime.slice(0, 5)}`}
-                </Text>
+            <View style={[styles.container]}>
+                <TouchableOpacity activeOpacity={1} onPress={clicks}>
+                    <Text style={styles.date}>
+                        {moment(data.orderDate).format('dddd, DD MMMM')} {isBtn && `- ${data.startTime.slice(0, 5)}`}
+                    </Text>
+                </TouchableOpacity>
                 <View style={styles.options}>
                     <ScrollView
                         horizontal
                         showsHorizontalScrollIndicator={false}
                     >
-                        {serviceName.length > 0 && serviceName.map(item =>
-                            <Text style={[styles.option, {borderWidth: 1}]}>{item}</Text>
+                        {serviceName.length > 0 && serviceName.map((item, idx) =>
+                            <TouchableOpacity
+                                key={idx}
+                                activeOpacity={1}
+                                style={[styles.option, {borderWidth: 1}]}
+                                onPress={clicks}
+                            >
+                                <Text>{item}</Text>
+                            </TouchableOpacity>
                         )}
                     </ScrollView>
                 </View>
-                <Text style={styles.price}>{data.servicePrice} сум</Text>
+                <TouchableOpacity activeOpacity={1} onPress={clicks}>
+                    <Text style={styles.price}>{data.servicePrice} сум</Text>
+                </TouchableOpacity>
                 {isBtn && (
                     <View style={[tw`flex-row items-center justify-between`]}>
                         <IconsButtons

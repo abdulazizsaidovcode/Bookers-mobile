@@ -15,6 +15,8 @@ import {getFreeTime} from "@/helpers/api-function/freeTime/freeTime";
 import {fetchServices} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {postOrder} from "@/helpers/api-function/oreder/oreder";
+// import {getMee} from "@/helpers/token";
+// import useGetMeeStore from "@/helpers/state_managment/getMee";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/records'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records'>;
@@ -26,6 +28,7 @@ const Records = () => {
     const {services, setServices, isLoading, setIsLoading} = clientStore()
     const {FreeTime, setFreeTime} = useScheduleFreeTime();
     const {calendarDate} = graficWorkStore();
+    // const {userMee, setUserMee} = useGetMeeStore()
     const [activeTab, setActiveTab] = useState('');
     const [activeTime, setActiveTime] = useState('');
     const [categoryName, setCategoryName] = useState('');
@@ -35,6 +38,7 @@ const Records = () => {
 
     useEffect(() => {
         fetchServices(setServices);
+        // getMee(setUserMee)
     }, []);
 
     useEffect(() => {
@@ -66,8 +70,6 @@ const Records = () => {
         setActiveTime('')
         setCategoryName(name)
     };
-
-    console.log(FreeTime)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>

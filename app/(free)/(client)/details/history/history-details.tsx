@@ -1,64 +1,43 @@
+import React, {useEffect, useState} from "react";
 import {View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import {NavigationProp, RouteProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
-import HistoryCard from "@/components/(cards)/history-card";
 import {AntDesign, Entypo, Feather, FontAwesome5, Fontisto} from "@expo/vector-icons";
-import React, {useEffect, useState} from "react";
+import HistoryCard from "@/components/(cards)/history-card";
 import {orderGetOne} from "@/helpers/api-function/oreder/oreder";
 import {getFile} from "@/helpers/api";
 import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import {addFeedbackMaster} from "@/helpers/api-function/client/client";
+import {addFeedbackMaster, sliceTextFullName} from "@/helpers/api-function/client/client";
 
 type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
-
-export interface OrderOne {
-    id: string
-    fullName: string
-    clientStatus: string[]
-    phone: string
-    serviceName: string
-    servicePrice: number
-    serviceHour: number
-    serviceMinute: number
-    orderDate: string
-    prePayment: number
-    paid: number
-    toPay: number
-    startTime: string
-    finishTime: string
-    notifyForHour: number
-    notifyForMinute: number
-    orderStatus: string
-    hallStatus: string
-    attachmentId: null | string
-}
 
 const HistoryDetailsInformation = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<CreatingClientScreenRouteProp>();
     const {historyData} = route.params;
+    const [serviceName, setServiceName] = useState([]);
+
+    useEffect(() => {
+        let list;
+        if (historyData) list = historyData.serviceName.split(', ')
+        setServiceName(list ? list : null)
+    }, [historyData]);
 
     // const handleRating = (value: any) => setRating(value)
 
-    const sliceText = (fullName: string) => {
-        if (fullName) {
-            let text: string = `${fullName}`
-            if (text.length > 22) {
-                return `${text.slice(0, 22)}...`
-            } else return text
-        } else return fullName
+    const statusName = (statusN: string) => {
+        if (statusN === 'CLIENT_CONFIRMED' || statusN === 'MASTER_CONFIRMED') return 'Одобрено'
+        else if (statusN === 'COMPLETED') return 'Выполнен'
+        else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
+        else if (statusN === 'WAIT') return 'Ждать'
     }
 
-    // const statusName = (statusN: string) => {
-    //     if (statusN === 'CLIENT_CONFIRMED' || statusN === 'MASTER_CONFIRMED' || statusN === 'COMPLETED') return 'Одобрено'
-    //     else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Не подтверждено'
-    //     else if (statusN === 'WAIT') return 'Ждать'
-    // }
+    console.log('history data: ', historyData)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -82,56 +61,79 @@ const HistoryDetailsInformation = () => {
                             ]}
                             activeOpacity={0.8}
                         >
-                            {/*<Image*/}
-                            {/*    source={(orderOneData && orderOneData.attachmentId !== null)*/}
-                            {/*        ? {uri: `${getFile}${orderOneData.attachmentId}`}*/}
-                            {/*        : require('../../../../assets/avatar.png')*/}
-                            {/*    }*/}
-                            {/*    style={tw`w-12 h-12 rounded-full`}*/}
-                            {/*/>*/}
+                            <Image
+                                source={(historyData && historyData.attachmentId !== null)
+                                    ? {uri: `${getFile}${historyData.attachmentId}`}
+                                    : require('../../../../../assets/avatar.png')
+                                }
+                                style={tw`w-12 h-12 rounded-full`}
+                            />
                             <View style={tw`ml-4 flex-col`}>
                                 <Text style={[tw`text-black text-lg font-bold`, {lineHeight: 22}]}>
-                                    QS {/*{sliceText(orderOneData ? orderOneData.fullName : '')}*/}
+                                    {sliceTextFullName(historyData.fullName)}
                                 </Text>
                                 <Text style={[tw`text-gray-500 text-base`, {lineHeight: 22}]}>
-                                    ad {/*{orderOneData && orderOneData.phone}*/}
+                                    {historyData.phone}
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={.9} style={styles.button}>
-                            <Text style={styles.text}>
-                                as{/*{orderOneData && orderOneData.serviceName}*/}
-                            </Text>
-                        </TouchableOpacity>
-                        <View style={tw`mt-3`}>
-                            {/*<HistoryCard*/}
-                            {/*    name={orderOneData ? `${moment(orderOneData.orderDate).format('dddd, D MMMM')}` : ''}*/}
-                            {/*    btnOrText*/}
-                            {/*    statusName={orderOneData ? `${orderOneData.startTime.slice(0, 5)} - ${orderOneData.finishTime.slice(0, 5)}` : ''}*/}
-                            {/*    description={`Длительность - ${orderOneData ? `${orderOneData.serviceHour}.${orderOneData.serviceMinute}` : 0} час`}*/}
-                            {/*/>*/}
+                        <View style={styles.button}>
+                            {serviceName.length > 0 ? serviceName.map((item, idx) => (
+                                <Text style={styles.text} key={idx}>
+                                    {item}
+                                </Text>
+                            )) : ''}
                         </View>
                         <View style={tw`mt-3`}>
-                            {/*<HistoryCard*/}
-                            {/*    name={`Стоимость:`}*/}
-                            {/*    btnOrText*/}
-                            {/*    statusName={orderOneData ? `${orderOneData.servicePrice} сум` : ''}*/}
-                            {/*/>*/}
+                            <HistoryCard
+                                name={historyData ? `${moment(historyData.orderDate).format('dddd, D MMMM')}` : ''}
+                                btnOrText
+                                statusName={historyData ? `${historyData.startTime.slice(0, 5)} - ${historyData.finishTime.slice(0, 5)}` : ''}
+                                description={`Длительность - ${historyData ? `${historyData.serviceHour}.${historyData.serviceMinute}` : 0} час`}
+                            />
                         </View>
                         <View style={tw`mt-3`}>
-                            {/*<HistoryCard*/}
-                            {/*    name={`Уведомить за:`}*/}
-                            {/*    btnOrText={false}*/}
-                            {/*    statusName={orderOneData ? `${orderOneData.notifyForHour}.${orderOneData.notifyForMinute} часа` : ''}*/}
-                            {/*/>*/}
+                            <HistoryCard
+                                name={`Стоимость:`}
+                                btnOrText
+                                statusName={historyData ? `${historyData.servicePrice} сум` : ''}
+                            />
                         </View>
                         <View style={tw`mt-3`}>
-                            {/*<HistoryCard*/}
-                            {/*    name={`Статус:`}*/}
-                            {/*    btnOrText={false}*/}
-                            {/*    orderStatus={orderOneData ? orderOneData.orderStatus : ''}*/}
-                            {/*    statusName={orderOneData ? statusName(orderOneData.orderStatus) : ''}*/}
-                            {/*/>*/}
+                            {!(+historyData.notifyForHour === 0 && +historyData.notifyForMinute === 0) && (
+                                <HistoryCard
+                                    name={`Уведомить за:`}
+                                    btnOrText={false}
+                                    statusName={historyData ? `${historyData.notifyForHour}.${historyData.notifyForMinute} часа` : ''}
+                                />
+                            )}
+                        </View>
+                        <View style={tw`mt-3`}>
+                            {historyData.orderStatus === 'WAIT' ? (
+                                <View style={styles.statusCard}>
+                                    <Text style={tw`font-bold text-lg`}>Статус:</Text>
+                                    <View style={tw`flex-row items-center`}>
+                                        <TouchableOpacity style={[styles.btn, {borderColor: '#9C0A35', marginRight: 8}]}>
+                                            <Text style={[{fontSize: 13, color: '#9C0A35'}]}>
+                                                Отклонить
+                                            </Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={[styles.btn, {backgroundColor: '#9C0A35', borderColor: '#9C0A35'}]}>
+                                            <Text style={[{fontSize: 13, color: 'white'}]}>
+                                                Принять
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            ) : (
+                                <HistoryCard
+                                    name={`Статус:`}
+                                    btnOrText={false}
+                                    orderStatus={historyData ? historyData.orderStatus : ''}
+                                    statusName={historyData ? statusName(historyData.orderStatus) : ''}
+                                />
+                            )}
                         </View>
 
                         <Text style={styles.contactTitle}>Контактная информация</Text>
@@ -212,6 +214,29 @@ const HistoryDetailsInformation = () => {
 };
 
 const styles = StyleSheet.create({
+    statusCard: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: '#B9B9C9',
+        borderRadius: 20,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    btn: {
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 10,
+        borderWidth: 1,
+        alignItems: 'center',
+    },
     modalContainer: {
         borderRadius: 10,
         padding: 20,

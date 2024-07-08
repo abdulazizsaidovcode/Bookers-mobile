@@ -21,6 +21,25 @@ import {
 } from "@/type/client/client";
 import Toast from "react-native-simple-toast";
 
+// text kesish un
+export const sliceText = (firstName: string, lastName: string) => {
+    if (firstName && lastName) {
+        let text: string = `${firstName} ${lastName}`
+        if (text.length > 22) {
+            return `${text.slice(0, 22)}...`
+        } else return text
+    } else {
+        if (firstName) return firstName
+        else return lastName
+    }
+}
+
+export const sliceTextFullName = (fullName: string) => {
+    if(fullName.length > 25) {
+        return `${fullName.slice(0, 25)}...`
+    } else return fullName
+}
+
 // id buyicha get me qiladi client ni
 export const getMeClient = async (setData: (val: any | null) => void, clientID: string) => {
     try {
