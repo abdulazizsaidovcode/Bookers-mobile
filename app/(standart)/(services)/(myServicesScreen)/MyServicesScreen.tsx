@@ -228,7 +228,7 @@ const MyServicesScreen = () => {
                     
                     <View style={tw`mb-10`}>
                         <Buttons onPress={() => {
-                            putNumbers(1)
+                            putNumbers(2)
                             router.push('(welcome)/Welcome')
                         }} title='На главную' />
                     </View>
