@@ -34,6 +34,12 @@ export const sliceText = (firstName: string, lastName: string) => {
     }
 }
 
+export const sliceTextFullName = (fullName: string) => {
+    if(fullName.length > 25) {
+        return `${fullName.slice(0, 25)}...`
+    } else return fullName
+}
+
 // id buyicha get me qiladi client ni
 export const getMeClient = async (setData: (val: any | null) => void, clientID: string) => {
     try {

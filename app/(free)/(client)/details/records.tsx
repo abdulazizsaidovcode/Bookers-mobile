@@ -71,8 +71,6 @@ const Records = () => {
         setCategoryName(name)
     };
 
-    console.log(FreeTime)
-
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
