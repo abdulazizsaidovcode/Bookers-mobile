@@ -29,8 +29,7 @@ const UpcomingHistory = () => {
             list = item.serviceName.split(', ')
         })
         setServiceName(list ? list : null)
-    }, [upcomingData]);
-
+    }, [upcomingData])
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>

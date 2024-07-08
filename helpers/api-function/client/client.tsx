@@ -5,7 +5,7 @@ import {
     client_not_visit_search, client_permanent, client_permanent_search, client_statistics, client_stopped_visit_search,
     client_stopped_visit_sms, client_stopped_visiting, district_list, getMeID, history_count, master_client_all_list,
     master_client_all_list_search, master_client_create, master_message_for_client, master_service_list, new_client,
-    new_client_search, order_canceled, order_past, order_upcoming, region_list
+    new_client_search, order_canceled, order_past, order_status_update, order_upcoming, region_list
 } from "@/helpers/api";
 import {
     AgeData, AllClient,
@@ -35,7 +35,7 @@ export const sliceText = (firstName: string, lastName: string) => {
 }
 
 export const sliceTextFullName = (fullName: string) => {
-    if(fullName.length > 25) {
+    if (fullName.length > 25) {
         return `${fullName.slice(0, 25)}...`
     } else return fullName
 }
@@ -442,5 +442,25 @@ export const getCanceledClient = async (setData: (val: any[] | null) => void, cl
     } catch (err) {
         console.log(err)
         setData(null)
+    }
+}
+
+export const updateOrderStatus = async (orderID: string, status: string, setLoading: (val: boolean) => void) => {
+    setLoading(true)
+    try {
+        if (orderID && status) {
+            const {data} = await axios.put(`${order_status_update}?orderId=${orderID}&status=${status}`, '', config)
+            if (data.success) {
+                Toast.show('Successfully update order status', Toast.LONG)
+                setLoading(false)
+            } else {
+                setLoading(false)
+                Toast.show('An error occurred on the server', Toast.LONG)
+            }
+        } else Toast.show('Something went wrong', Toast.LONG)
+    } catch (err) {
+        setLoading(false)
+        console.log(err)
+        Toast.show('An error occurred on the server', Toast.LONG)
     }
 }
