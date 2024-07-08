@@ -100,9 +100,9 @@ const styles = StyleSheet.create({
     flexColumn: {
         flexDirection: "column",
     },
-    // buttonWrapper: {
-    //   flex: 1,
-    // },
+    buttonWrapper: {
+      flex: 1,
+    },
     fullWidthHalf: {
         width: "48%",
     },

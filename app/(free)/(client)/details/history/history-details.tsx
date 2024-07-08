@@ -3,29 +3,41 @@ import {View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image} 
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import {NavigationProp, RouteProp, useNavigation, useRoute} from "@react-navigation/native";
+import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import {AntDesign, Entypo, Feather, FontAwesome5, Fontisto} from "@expo/vector-icons";
 import HistoryCard from "@/components/(cards)/history-card";
 import {getFile} from "@/helpers/api";
 import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import {sliceTextFullName, updateOrderStatus} from "@/helpers/api-function/client/client";
+import {
+    getCanceledClient,
+    getClientAll, getHistoryCount,
+    getPastClient,
+    getUpcomingClient,
+    sliceTextFullName,
+    updateOrderStatus
+} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
 
 const HistoryDetailsInformation = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const route = useRoute<CreatingClientScreenRouteProp>();
+    const route = useRoute<any>();
     const {historyData} = route.params;
-    const {isLoading, setIsLoading} = clientStore()
+    const {isLoading, setIsLoading, setUpcomingData, setPastData, setCanceledData, setHistoryCountData} = clientStore()
     const [serviceName, setServiceName] = useState([]);
     const [isConfirm, setIsConfirm] = useState(false);
     const [confirmStatus, setConfirmStatus] = useState('');
     const [successStatus, setSuccessStatus] = useState('');
     const [isFeedback, setIsFeedback] = useState(false);
+    const [userID, setUserID] = useState<string>('');
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     useEffect(() => {
         let list;
@@ -37,7 +49,11 @@ const HistoryDetailsInformation = () => {
         if (successStatus === 'ACCEPTED') {
             toggleConfirm()
             setSuccessStatus('')
-            // navigation.navigate('')
+            navigation.goBack()
+            getUpcomingClient(setUpcomingData, userID)
+            getPastClient(setPastData, userID)
+            getCanceledClient(setCanceledData, userID)
+            getHistoryCount(setHistoryCountData, userID)
         }
     }, [successStatus]);
 
@@ -52,6 +68,15 @@ const HistoryDetailsInformation = () => {
         else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('clientID');
+            if (value !== null) setUserID(value)
+        } catch (e) {
+            console.error(e);
+        }
+    };
 
     console.log('history data: ', historyData)
 

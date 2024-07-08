@@ -1,6 +1,6 @@
 import AppointmentCard from "@/components/(cards)/appointment-card";
 import {RootStackParamList} from "@/type/root";
-import {NavigationProp, RouteProp, useNavigation, useRoute} from "@react-navigation/native";
+import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import tw from "tailwind-react-native-classnames";
 import {FlatList, ScrollView, StatusBar, Text, View} from "react-native";
@@ -8,13 +8,13 @@ import React, {useEffect, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {getUpcomingClient} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/details/history/upcoming-history'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/upcoming-history'>;
 
 const UpcomingHistory = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const route = useRoute<CreatingClientScreenRouteProp>();
+    const route = useRoute<any>();
     const {clientID} = route.params;
     const {upcomingData, setUpcomingData} = clientStore()
     const [serviceName, setServiceName] = useState(null);
@@ -30,6 +30,15 @@ const UpcomingHistory = () => {
         })
         setServiceName(list ? list : null)
     }, [upcomingData])
+
+    const storeData = async () => {
+        try {
+            await AsyncStorage.setItem('clientID', clientID);
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} showHideTransition={`fade`}/>
@@ -47,7 +56,10 @@ const UpcomingHistory = () => {
                                     data={item}
                                     serviceName={serviceName ? serviceName : ['']}
                                     isBtn={item.orderStatus === 'WAIT'}
-                                    clicks={() => navigation.navigate('(free)/(client)/details/history/history-details', {historyData: item})}
+                                    clicks={() => {
+                                        navigation.navigate('(free)/(client)/details/history/history-details', {historyData: item})
+                                        storeData()
+                                    }}
                                 />
                             )}
                         />

@@ -7,7 +7,7 @@ import {RootStackParamList} from "@/type/root";
 import Buttons from "@/components/(buttons)/button";
 import ClientDetailBasic from "@/components/clients/details/detail-basic";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
 import {addClientMessage, getAgeList, getHistoryCount, getMeClient, getRegionList} from "@/helpers/api-function/client/client";
@@ -16,7 +16,6 @@ import HistoryMain from "@/app/(free)/(client)/details/history/history-main";
 import ProfileUpdate from "@/app/(free)/(client)/details/history/profile-update";
 import {getMee} from "@/helpers/token";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
-import {useFocusEffect} from 'expo-router'
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
@@ -38,12 +37,6 @@ const DetailMain = () => {
         getRegionList(setRegionData)
         getMee(setGetMee)
     }, []);
-
-    useFocusEffect(
-        useCallback(() => {
-            getMeClient(setClientData, infoClient.id)
-        }, [])
-    )
 
     useEffect(() => {
         if (!isLoading && !bottomModalSMS) setMessageVal('')
