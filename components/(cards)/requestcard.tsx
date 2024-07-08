@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 3,
+    marginBottom:10
   },
   cardHeader: {
     flexDirection: 'row',

@@ -11,7 +11,8 @@ import { List } from 'react-native-paper';
 import axios from 'axios';
 import { config } from '@/helpers/token';
 import CenteredModal from '@/components/(modals)/modal-centered';
-const { width , height } = Dimensions.get('window');
+import { useSheduleData } from '@/helpers/state_managment/schedule/schedule';
+const { width, height } = Dimensions.get('window');
 
 
 const BookedAccordion: React.FC = () => {
@@ -24,6 +25,7 @@ const BookedAccordion: React.FC = () => {
     const navigation = useNavigation<any>();
     const [activeBtn, setActiveBtn] = useState<boolean>(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const { setTime ,setServiceId, setDate } = useSheduleData()
 
     useFocusEffect(
         useCallback(() => {
@@ -42,6 +44,7 @@ const BookedAccordion: React.FC = () => {
 
     useEffect(() => {
         if (calendarDate) {
+            setDate(calendarDate)
             getFreeTime(calendarDate, setFreeTime);
         }
     }, [calendarDate, setFreeTime]);
@@ -71,24 +74,14 @@ const BookedAccordion: React.FC = () => {
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
+        setServiceId(tab)
         setActiveTime(''); // Reset active time when tab changes
     };
 
     const handleTimeSelect = (time: string) => {
         setActiveTime(time);
-    };
+        setTime(time)
 
-    const setOrder = () => {
-        const order = {
-            serviceId: activeTab,
-            date: calendarDate,
-            timeHour: parseInt(activeTime.split(':')[0], 10),
-            timeMin: parseInt(activeTime.split(':')[1], 10),
-            comment: "" // This should be dynamically set
-        };
-
-        setOrderData(order);
-        navigation.navigate('(Schedule)/components/users');
     };
 
     const toggleModal = () => {
@@ -97,7 +90,7 @@ const BookedAccordion: React.FC = () => {
     };
 
     return (
-        <View>
+        <>
             <List.Accordion
                 title="Свободное время"
                 titleStyle={styles.title}
@@ -138,13 +131,7 @@ const BookedAccordion: React.FC = () => {
                     )}
                 </View>
             </List.Accordion>
-            <View style={styles.buttonContainer}>
-                <Buttons
-                    title='Записать клиента'
-                    isDisebled={activeBtn}
-                    onPress={setOrder}
-                />
-            </View>
+            
             {<CenteredModal
                 isModal={isModalVisible}
                 toggleModal={toggleModal}
@@ -155,7 +142,7 @@ const BookedAccordion: React.FC = () => {
             >
                 <Text>Order successfully booked!</Text>
             </CenteredModal>}
-        </View>
+        </>
     );
 };
 
@@ -202,7 +189,7 @@ const styles = StyleSheet.create({
         padding: 10,
         width: width / 4.7,
         borderRadius: 5,
-        alignItems:'center'
+        alignItems: 'center'
     },
     activeTimeButton: {
         backgroundColor: '#9C0A35',

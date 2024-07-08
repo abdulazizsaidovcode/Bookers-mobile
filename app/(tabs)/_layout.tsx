@@ -95,16 +95,6 @@ function TabLayout() {
           ),
         }}
       />
-      <Tab.Screen
-        name="(location)/Location"
-        component={Location}
-        options={{
-          title: "Location",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="calendar" color={color} />
-          ),
-        }}
-      />
       {tariff === "standart" && (
         <Tab.Screen
           name="finance"
