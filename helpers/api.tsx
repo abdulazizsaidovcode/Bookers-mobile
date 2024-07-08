@@ -1,6 +1,6 @@
 // swagger url
 // export const base_url: string = 'http://45.67.35.86:8080/' ;
-export const base_url: string = 'http://134.122.77.107:8080/'; 
+export const base_url: string = 'http://134.122.77.107:8080/';
 // export const base_url: string = 'http://192.168.0.126/'; 
 export const getMe = `${base_url}user/me`
 export const getMeID = `${base_url}user/get/me/`
@@ -59,6 +59,7 @@ export const onlineBookingAllowClient_url = `${base_url}online-booking-settings/
 export const onlineBookingUgly_url = `${base_url}online-booking-settings/urgent`
 export const onlineBookingUserviceTimeAll_url = `${base_url}online-booking-settings/service-time/all`
 export const onlineBookingUserviceTimeservice_url = `${base_url}online-booking-settings/service-time`
+export const onlineConfirmationServices_url = `${base_url}online-booking-settings/confirm-entry`
 
 // Grafic Work page
 export const workday_put = `${base_url}workday/time/edit/graphic`

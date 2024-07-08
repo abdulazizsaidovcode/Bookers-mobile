@@ -30,6 +30,8 @@ const ConfirmationRecord = () => {
         // onlineBookingAllowClient(newValue)
         console.log(newValue);
     };
+    console.log(isEnabled, isEnabled2, isEnabled3);
+
     return (
         <SafeAreaView style={styles.container}>
             <Text style={{ marginBottom: 10, }}></Text>
