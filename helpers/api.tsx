@@ -57,6 +57,8 @@ export const register_page = `${base_url}auth/`
 
 export const onlineBookingAllowClient_url = `${base_url}online-booking-settings/allow-client`
 export const onlineBookingUgly_url = `${base_url}online-booking-settings/urgent`
+export const onlineBookingUserviceTimeAll_url = `${base_url}online-booking-settings/service-time/all`
+export const onlineBookingUserviceTimeservice_url = `${base_url}online-booking-settings/service-time`
 
 // Grafic Work page
 export const workday_put = `${base_url}workday/time/edit/graphic`
