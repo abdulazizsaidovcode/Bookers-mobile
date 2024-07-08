@@ -52,9 +52,11 @@ export const master_get_specialization = `${base_url}master-service/specializati
 
 // Register page 
 export const register_page = `${base_url}auth/`
+
 // Booking API
 
-export const switchBtn = `${base_url}online-booking-settings/allow-client`
+export const onlineBookingAllowClient_url = `${base_url}online-booking-settings/allow-client`
+export const onlineBookingUgly_url = `${base_url}online-booking-settings/urgent`
 
 // Grafic Work page
 export const workday_put = `${base_url}workday/time/edit/graphic`
