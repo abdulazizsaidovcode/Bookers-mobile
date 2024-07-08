@@ -6,7 +6,7 @@ import OnlineBooking from './(standart)/(onlineBooking)/onlineBooking';
 
 const Index: React.FC = () => {
     return (
-        <OnlineBooking />
+        <TabLayout />
     )
 }
 export default Index;
