@@ -29,7 +29,7 @@ const Process: React.FC = () => {
 
     useEffect(() => {
         console.log("categoryFatherId:", categoryFatherId); // Log the categoryFatherId
-    }, [categoryFatherId]);
+    }, []);
 
     const Gender: GenderOption[] = [
         { title: "Мужская для взрослых", id: 1 },
@@ -47,7 +47,7 @@ const Process: React.FC = () => {
     const postService = async () => {
         try {
             const data = {
-                categoryId: categoryFatherId.key, // Send the key from categoryFatherId to the backend
+                categoryId: categoryFatherId, // Ensure this is the correct key
                 genderId: selectedGender ? [selectedGender.id] : [],  
                 name: service, 
                 price: parseFloat(price),
@@ -56,8 +56,9 @@ const Process: React.FC = () => {
                 active: true
             };
 
-            console.log(data.categoryId);
-            
+            console.log(data);
+
+            // Uncomment to enable API call
             // const response = await axios.post(masterAdd_service, data, config);
             // if (response.data.success) {
             //     router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
@@ -75,7 +76,7 @@ const Process: React.FC = () => {
         } else {
             setValidate(false);
         }
-    }, [service, price, time, description, selectedGender]);
+    },[service, price, time, description, selectedGender]);
 
     const handleGenderPress = (gender: GenderOption) => {
         setSelectedGender(selectedGender?.id === gender.id ? null : gender);
