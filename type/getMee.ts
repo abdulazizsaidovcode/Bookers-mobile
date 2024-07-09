@@ -16,4 +16,13 @@ export interface GetMee {
 export interface GetMeeStore {
     getMee: GetMee;
     setGetMee: (val: GetMee) => void
+    ageOption: []
+    setAgeOption: (vel: any) => void
+    
+    regionOption: []
+    setRegionOption: (vel: []) => void
+    
+    districtOption: []
+    setDistrictOption: (vel: []) => void
+    
 }

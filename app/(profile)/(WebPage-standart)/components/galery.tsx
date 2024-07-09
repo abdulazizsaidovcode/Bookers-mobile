@@ -18,11 +18,13 @@ const isSmallDevice = width < 375;
 const GalleryStandart: React.FC = () => {
   const { galeriya, setGaleriyaDetail } = webPageStore();
   const navigation = useNavigation<any>();
+  console.log(galeriya);
+  
 
   const renderRows = (attachments: any[]) => {
     
     let filteredAttachments = attachments.filter(
-      (attachment) => attachment.main
+      (attachment) => attachment.main === true || attachment.main === false
     );
 
     if (filteredAttachments.length === 0) {
@@ -55,11 +57,11 @@ const GalleryStandart: React.FC = () => {
       {galeriya && galeriya.length > 0 ? (
         galeriya.map(
           (item: any) =>
-            item.resStandartAttachments &&
+            item.resGalleryAttachments &&
             item.resGalleryAttachments.length > 0 && (
               <TouchableOpacity onPress={() => {
                 setGaleriyaDetail(item)
-                navigation.navigate("(profile)/(WebPage-standart)/components/galleryDetail")
+                navigation.navigate("(profile)/(WebPage)/components/galleryDetail")
               }} activeOpacity={0.7}>
                 <View style={styles.galleryContainer} key={item.id}>
                   {renderRows(item.resGalleryAttachments)}
