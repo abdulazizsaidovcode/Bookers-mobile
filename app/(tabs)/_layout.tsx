@@ -5,6 +5,8 @@ import {
   FontAwesome,
   Ionicons,
   MaterialCommunityIcons,
+  FontAwesome6,
+  FontAwesome5
 } from "@expo/vector-icons";
 import { useColorScheme } from "@/components/useColorScheme";
 import TabOneScreen from "./main";
@@ -40,7 +42,7 @@ function TabLayout() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarActiveTintColor: "#9c0935",
+        tabBarActiveTintColor: "#9C0A35",
         tabBarInactiveTintColor: "gray",
         tabBarStyle: {
           backgroundColor: "#21212E",
@@ -91,7 +93,7 @@ function TabLayout() {
         options={{
           title: "Расписание",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="calendar" color={color} />
+            <FontAwesome6 name="calendar" size={24} color={color} />
           ),
         }}
       />
@@ -123,7 +125,7 @@ function TabLayout() {
         options={{
           title: "Профиль",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="body-outline" size={24} color={color} />
+            <FontAwesome5 name="user" size={24} color={color} />
           ),
         }}
       />
