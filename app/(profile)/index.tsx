@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, Modal, StyleSheet, Button, ScrollView } from 'react-native';
+import {View, Text, Image, TouchableOpacity, Modal, StyleSheet, Button, ScrollView, StatusBar} from 'react-native';
 import { FontAwesome5, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -41,8 +41,9 @@ const ProfilePage: React.FC = () => {
     };
 
     return (
-        <ScrollView style={styles.container}>
-            <SafeAreaView >
+        <ScrollView style={[styles.container]}>
+            <SafeAreaView style={{paddingBottom: 24}}>
+                <StatusBar backgroundColor={`#21212E`} barStyle={`dark-content`}/>
                 <Text style={styles.title}>Профиль</Text>
                 <View style={styles.profileHeader}>
                     <Image source={getMee.attachmentId ? { uri: getFile + getMee.attachmentId }: require('@/assets/avatar.png')} style={styles.avatar} />
@@ -68,6 +69,7 @@ const ProfilePage: React.FC = () => {
                         key={index}
                         style={styles.menuItem}
                         onPress={() => navigateTo(item.screen)}
+                        activeOpacity={.7}
                     >
                         <View style={styles.menuItemContent}>
                             <FontAwesome5 name={item.icon} size={20} color="#9c0935" />

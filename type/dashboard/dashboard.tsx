@@ -55,8 +55,8 @@ export interface ScheduleSectionProps {
 
 export interface StatisticsProps {
     mainStatisticData: any;
-    chartNumerator: string;
-    chartDenominator: string;
+    chartNumerator: number;
+    chartDenominator: number;
     statisticNumerator: string;
     statisticDenominator: string;
 }

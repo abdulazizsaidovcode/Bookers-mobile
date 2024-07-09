@@ -13,7 +13,7 @@ const Bookedschedule = () => {
   
   return (
     <View style={styles.container}>
-      <CalendarGrafficEdit/>
+      {/* <CalendarGrafficEdit/> */}
       <AvailableAccordion />
       <BookedAccordion />
     </View>

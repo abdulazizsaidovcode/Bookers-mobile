@@ -5,11 +5,13 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { tariffStore } from '@/helpers/state_managment/tariff/tariff';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(profile)/(tariff)/tariff'>;
 
 const tariffs = [
   {
+    unicName: 'free',
     name: 'Тариф бесплатный',
     description: 'Стандартный набор функций',
     price: 'Срок до: 31.12.2024',
@@ -17,6 +19,7 @@ const tariffs = [
     navigate: '(welcome)/Welcome'
   },
   {
+    unicName: 'standard',
     name: 'Тариф STANDART',
     description: 'Продвинутый набор функций',
     price: '49 000 в месяц',
@@ -27,7 +30,8 @@ const tariffs = [
 ];
 
 const TariffsPage: React.FC = () => {
-  const navigation = useNavigation<SettingsScreenNavigationProp>();
+  const navigation = useNavigation<any>();
+  const { setTariff } = tariffStore()
 
   return (
     <SafeAreaView style={styles.container}>
@@ -42,7 +46,10 @@ const TariffsPage: React.FC = () => {
               {tariff.trial && <Text style={styles.trial}>{tariff.trial}</Text>}
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate(tariff.navigate)}
+                  onPress={() => {
+                    setTariff(tariff.unicName)
+                    navigation.navigate(tariff.navigate)
+                  }}
                   style={styles.activateButton}
                 >
                   <Text style={styles.buttonText}>Активировать</Text>
@@ -66,7 +73,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: '#B9B9C9',
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
@@ -105,7 +112,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   detailsButton: {
-    backgroundColor: '#fff',
+    backgroundColor: '#B9B9C9',
     borderRadius: 5,
     padding: 10,
     alignItems: 'center',

@@ -66,7 +66,7 @@ const TabOneScreen: React.FC = () => {
 			<ScrollView>
 				<Header />
 				<ScheduleSection dailyTimeData={dailyTimeData} regularVisitCount={regularVisitCount} notVisitCount={notVisitCount} vipCientsCount={vipCientsCount} newClientsCount={newClientsCount} />
-				<Statistics mainStatisticData={mainStatisticData} chartNumerator={chartNumerator} chartDenominator={chartDenominator} statisticNumerator={statisticNumerator} statisticDenominator={statisticDenominator} />
+				<Statistics mainStatisticData={mainStatisticData} chartNumerator={+chartNumerator} chartDenominator={+chartDenominator} statisticNumerator={statisticNumerator} statisticDenominator={statisticDenominator} />
 				<CardsSection mainStatisticData={mainStatisticData} />
 				<BookingRequests setWaitingData={setWaitingData} waitingData={waitingData} toggleConfirmModal={toggleConfirmModal} isModal={isModal} />
 				<BookingRequestsHall setHallData={setHallData} hallData={hallData} toggleConfirmModal={toggleConfirmModal} isModal={isModal} />
@@ -109,7 +109,7 @@ const Statistics: React.FC<StatisticsProps> = ({ mainStatisticData, chartNumerat
 			<Text style={styles.statsTitle}>Выполнено сеансов</Text>
 			<PieChart
 				widthAndHeight={100}
-				series={[4, 1]}
+				series={[chartNumerator, chartDenominator]}
 				sliceColor={[COLORS.mainRed, COLORS.background]}
 				coverRadius={0.6}
 				coverFill={COLORS.cardBackground}
