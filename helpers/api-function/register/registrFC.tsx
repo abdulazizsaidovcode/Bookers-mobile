@@ -10,6 +10,8 @@ export const registerFunction = (phoneNumber: string, setCode: (value: any) => v
     axios.post(`${register_page}sendCode?purpose=true`, sentData)
         .then(res => {
             setCode(res.data.body);
+            console.log(res.data.body);
+            
         })
         .catch(err => {
             console.log(err);
@@ -39,14 +41,17 @@ interface IRegister {
 }
 export const masterData = ({ role, firstName, lastName, nickname, phoneNumber, img }: IRegister) => {
     const formData = new FormData();
-    if (img) {
-        formData.append('image', img);
-    }
+    let image: any = null;
+    formData.append('image', image);
+    // if (img) {
+    //     formData.append('image', img);
+    // }
     
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
 
     const url = `${register_page}master?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${nickname ? `&nickname=${encodeURIComponent(nickname)}` : ''}&phoneNumber=${formattedPhoneNumber}&ROLE=${encodeURIComponent(role)}`;
-    axios.post(url, formData, config)
+    // const url = `http://134.122.77.107:8080/auth/master?firstName=Qorbek&lastName=asfa&nickname=adwq&phoneNumber=+998908714021&ROLE=ROLE_MASTER`;
+    axios.post(url, '', config)
         .then(res => {
             console.log(res);
             Alert.alert("Muvaffaqiyatli ro'yxatdan o'tdingiz😍🤣😂❤️");
@@ -56,5 +61,4 @@ export const masterData = ({ role, firstName, lastName, nickname, phoneNumber, i
             Alert.alert("Xatolik yuz berdi");
         });
     console.log(url);
-    
 }
