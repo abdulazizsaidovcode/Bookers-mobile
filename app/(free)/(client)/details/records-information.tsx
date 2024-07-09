@@ -181,23 +181,27 @@ const RecordsInformation = () => {
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                        <Text style={styles.contactTitle}>Дополнительно</Text>
-                        <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
-                            <Fontisto name="arrow-move" size={30} color="#9C0A35"/>
-                            <Text style={[tw`font-bold text-lg ml-4`]}>
-                                Передвинуть
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={toggleConfirm}
-                            activeOpacity={.9}
-                            style={[styles.button, tw`mb-4 items-center flex-row`]}
-                        >
-                            <AntDesign name="closecircleo" size={30} color="#9C0A35"/>
-                            <Text style={[tw`font-bold text-lg ml-4`]}>
-                                Отменить
-                            </Text>
-                        </TouchableOpacity>
+                        {(orderOneData && (orderOneData.orderStatus === 'CLIENT_CONFIRMED' || orderOneData.orderStatus === 'MASTER_CONFIRMED')) && (
+                            <>
+                                <Text style={styles.contactTitle}>Дополнительно</Text>
+                                <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
+                                    <Fontisto name="arrow-move" size={30} color="#9C0A35"/>
+                                    <Text style={[tw`font-bold text-lg ml-4`]}>
+                                        Передвинуть
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={toggleConfirm}
+                                    activeOpacity={.9}
+                                    style={[styles.button, tw`mb-4 items-center flex-row`]}
+                                >
+                                    <AntDesign name="closecircleo" size={30} color="#9C0A35"/>
+                                    <Text style={[tw`font-bold text-lg ml-4`]}>
+                                        Отменить
+                                    </Text>
+                                </TouchableOpacity>
+                            </>
+                        )}
 
                         {/*fade back modal*/}
                         <CenteredModal
