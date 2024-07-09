@@ -1,21 +1,21 @@
 {
   "build": {
-    "preview": {
+    "production": {
       "android": {
         "buildType": "apk"
+      },
+      "ios": {
+        "simulator": false
+      },
+      "env": {
+        "API_BASE_URL": "http://134.122.77.107:8080/"
       }
     },
-    "preview2": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease"
+    "development": {
+      "developmentClient": true,
+      "env": {
+        "API_BASE_URL": "http://134.122.77.107:8080/"
       }
-    },
-    "preview3": {
-      "developmentClient": true
-    },
-    "preview4": {
-      "distribution": "internal"
-    },
-    "production": {}
+    }
   }
 }
