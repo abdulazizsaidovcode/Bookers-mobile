@@ -85,7 +85,7 @@ const Schedule: React.FC = () => {
             <Tabs activeTab={activeTab} onTabChange={handleTabChange} />
           </View>
           {activeTab === 'booked' && <Bookedschedule />}
-          {activeTab === 'requests' && <RequestSchedule />}
+          {/* {activeTab === 'requests' && <RequestSchedule />} */}
         </View>
       </ScrollView >
       {activeTab == 'booked' && <View style={styles.button}>
