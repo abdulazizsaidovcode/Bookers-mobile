@@ -155,13 +155,12 @@ export const notifications_cancel_edit: string = `${base_url}notification/settin
 export const notifications_changing_edit: string = `${base_url}notification/settings/change-order`
 export const notifications_window_edit: string = `${base_url}notification/settings/waiting/hall`
 export const notifications_appointment_edit: string = `${base_url}notification/settings/appointment`
-export const notifications_appointment_edit_active: string = `${base_url}notification/appointment/is-active`
+export const notifications_appointment_edit_active: string = `${base_url}notification/is-active/on-off`
 export const notifications_feedback_edit: string = `${base_url}notification/settings/feedback`
 export const notifications_appointment: string = `${base_url}notification/appointment/is-active`
 
 
 // expene url 
-
 export const expene_category_list: string = `${base_url}expense-category/master/expense-categories`
 export const expene_category_post: string = `${base_url}expense-category`
 export const expene_list: string = `${base_url}expense`

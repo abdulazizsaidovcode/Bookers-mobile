@@ -100,7 +100,7 @@ const NotificationOption: React.FC<NotificationOptionProps> = ({
   subLabel,
   onPress,
 }) => (
-  <TouchableOpacity onPress={onPress} style={styles.optionContainer}>
+  <TouchableOpacity activeOpacity={.7} onPress={onPress} style={[styles.optionContainer, {}]}>
     <View style={styles.optionContent}>
       <View style={styles.iconContainer}>{icon}</View>
       <View>
