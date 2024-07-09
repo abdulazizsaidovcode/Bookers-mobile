@@ -56,7 +56,7 @@ export const masterData = ({role, firstName, lastName, nickname, phoneNumber, im
         .then(res => {
             if (res.data.success) {
                 setData(res.data.body)
-                Alert.alert("Muvaffaqiyatli ro'yxatdan o'tdingiz😍🤣😂❤️");
+                Alert.alert("Muvaffaqiyatli ro'yxatdan o'tdingiz");
             } else {
                 Alert.alert("Xatolik yuz berdi");
                 setData(null)
