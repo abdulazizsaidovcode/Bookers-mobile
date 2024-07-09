@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "bookers-app",
-    "slug": "bookers-app",
+    "name": "Bookers",
+    "slug": "Bookers",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "bookersapp",
     "userInterfaceSqtyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -29,7 +29,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/icon.png"
     },
     "plugins": [
       [
@@ -44,7 +44,8 @@
     },
     "extra": {
       "eas": {
-        "projectId": "098d99c4-c6cc-4fd1-85aa-9edd7b778f33"
+        "projectId": "098d99c4-c6cc-4fd1-85aa-9edd7b778f33",
+        "apiBaseUrl": "http://134.122.77.107:8080/"
       }
     }
   }
