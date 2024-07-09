@@ -22,6 +22,7 @@ export const onlineBookingAllowClient = (isEnabled: boolean) => {
 
 export const getOnlineBookingAllowClient = (setData: (val: boolean) => void) => {
     axios.get(`${onlineBookingAllowClient_url}`, config)
+
         .then(res => {
             if (res.data.success) {
                 setData(res.data.body)
