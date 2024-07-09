@@ -10,6 +10,7 @@ const CheckPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const [storedOtp, setStoredOtp] = useState<string | null>(null);
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+    const [tokenData, setTokenData] = useState<string|null>('');
     const inputs = useRef<TextInput[]>([]);
     const { role, firstName, lastName, nickname, phoneNumber } = registerStory()
 
@@ -28,6 +29,20 @@ const CheckPin: React.FC = () => {
 
         getStoredOtp();
     }, []);
+
+    useEffect(() => {
+        if (tokenData) {
+            const storeData = async () => {
+                try {
+                    await AsyncStorage.setItem('registerToken', tokenData);
+                } catch (e) {
+                    console.error(e);
+                }
+            };
+            storeData()
+            handleContinue()
+        }
+    }, [tokenData]);
 
     const handleChangeText = (text: string, index: number) => {
         if (/^\d*$/.test(text)) {
@@ -91,13 +106,13 @@ const CheckPin: React.FC = () => {
                             { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
                         ]}
                         onPress={() => {
-                            handleContinue()
                             masterData({
                                 firstName: firstName,
                                 lastName: lastName,
                                 nickname: nickname,
                                 phoneNumber: phoneNumber,
                                 role: role,
+                                setData: setTokenData
                             })
 
                         }}
