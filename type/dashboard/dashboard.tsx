@@ -1,13 +1,17 @@
 export interface DashboardState {
     waitingData: DashboardWaitingOrder[],
+    todayGraficData: TodayWorkGrafic,
     hallData: DashboardHallingOrder[],
-    isModal: boolean;
+    isConfirmModal: boolean;
+    isRejectedModal: boolean;
     dailyTimeData: DashboardDailyTimeOrders[],
     mainStatisticData: DashboardMainStatistic,
     setDailyTimeData: (data: DashboardDailyTimeOrders[]) => void;
     setWaitingData: (data: DashboardWaitingOrder[]) => void;
+    setTodayGraficData: (data: TodayWorkGrafic) => void;
     setHallData: (data: DashboardHallingOrder[]) => void;
-    setIsModal: (isDel: boolean) => void;
+    setConfirmIsModal: (isDel: boolean) => void;
+    setRejectedIsModal: (isDel: boolean) => void;
     setMainStatisticData: (data: DashboardMainStatistic) => void;
 }
 
@@ -34,6 +38,11 @@ export interface DashboardWaitingOrder {
     request: string
 }
 
+export interface TodayWorkGrafic {
+    from: string;
+    end: string;
+}
+
 export interface DashboardHallingOrder {
     orderId: string,
     paid: number,
@@ -48,6 +57,7 @@ export interface DashboardHallingOrder {
 export interface ScheduleSectionProps {
     dailyTimeData: DashboardDailyTimeOrders[];
     regularVisitCount: number;
+    todayGraficData: TodayWorkGrafic;
     notVisitCount: number;
     vipCientsCount: number;
     newClientsCount: number;
@@ -61,30 +71,35 @@ export interface StatisticsProps {
     statisticDenominator: string;
 }
 export interface BookingRequestsProps {
-	waitingData: DashboardWaitingOrder[];
-	toggleConfirmModal: () => void;
-	isModal: boolean;
-	setWaitingData: (val: DashboardWaitingOrder[]) => void
+    waitingData: DashboardWaitingOrder[];
+    toggleConfirmModal: () => void;
+    toggleRejectedModal: () => void;
+    isConfirmModal: boolean;
+    isRejectedModal: boolean;
+    setWaitingData: (val: DashboardWaitingOrder[]) => void
 }
 
 export interface BookingRequestsHallProps {
-	hallData: DashboardHallingOrder[];
-	toggleConfirmModal: () => void;
-	isModal: boolean;
-	setHallData: (val: DashboardHallingOrder[]) => void
+    hallData: DashboardHallingOrder[];
+    toggleConfirmModal: () => void;
+    toggleRejectedModal: () => void;
+    isConfirmModal: boolean;
+    isRejectedModal: boolean;
+    setHallData: (val: DashboardHallingOrder[]) => void
 }
 
 export interface RenderBookingRequestProps {
-	item: DashboardWaitingOrder;
-	toggleConfirmModal: () => void;
-	setWaitingData: (val: DashboardWaitingOrder[]) => void
-	isModal: boolean;
-
+    item: DashboardWaitingOrder;
+    toggleConfirmModal: () => void;
+    toggleRejectedModal: () => void;
+    setWaitingData: (val: DashboardWaitingOrder[]) => void
+    isRejectedModal: boolean;
+    isConfirmModal: boolean;
 }
 
 export interface StatusContainerProps {
-	regularVisitCount: number;
-	notVisitCount: number;
-	vipCientsCount: number;
-	newClientsCount: number;
+    regularVisitCount: number;
+    notVisitCount: number;
+    vipCientsCount: number;
+    newClientsCount: number;
 }

@@ -130,6 +130,7 @@ export const dashboard_daily_time_orders: string = `${base_url}user/today/calend
 export const dashboard_main_statistic: string = `${base_url}order/master/order-statistic`
 export const dashboard_wait_order: string = `${base_url}order/master/clients-today/wait`
 export const dashboard_hall_order: string = `${base_url}order/master/clients-today/hall`
+export const dashboard_today_work_grafic: string = `${base_url}workday/time/time`
 export const dashboard_edit_order_status: string = `${base_url}order/confirm-order`
 
 export const master_order_confirmed: string = `${base_url}order/master/clients-today/confirmed`
@@ -157,7 +158,7 @@ export const notifications_window_edit: string = `${base_url}notification/settin
 export const notifications_appointment_edit: string = `${base_url}notification/settings/appointment`
 export const notifications_appointment_edit_active: string = `${base_url}notification/is-active/on-off`
 export const notifications_feedback_edit: string = `${base_url}notification/settings/feedback`
-export const notifications_appointment: string = `${base_url}notification/appointment/is-active`
+export const notifications_appointment: string = `${base_url}notification/settings/appointment/is-active`
 
 
 // expene url 

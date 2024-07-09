@@ -1,11 +1,13 @@
-import { DashboardDailyTimeOrders, DashboardHallingOrder, DashboardMainStatistic, DashboardState, DashboardWaitingOrder } from '@/type/dashboard/dashboard';
+import { DashboardDailyTimeOrders, DashboardHallingOrder, DashboardMainStatistic, DashboardState, DashboardWaitingOrder, TodayWorkGrafic } from '@/type/dashboard/dashboard';
 import { create } from 'zustand';
 
 const useDashboardStore = create<DashboardState>((set) => ({
     waitingData: [],
+    todayGraficData: {from: '', end: ''},
     hallData: [],
     dailyTimeData: [],
-    isModal: false,
+    isConfirmModal: false,
+    isRejectedModal: false,
     mainStatisticData: {
         completedSessions: '',
         incomeToday: '',
@@ -14,9 +16,11 @@ const useDashboardStore = create<DashboardState>((set) => ({
     },
     setDailyTimeData: (val: DashboardDailyTimeOrders[]) => set({ dailyTimeData: val }),
     setWaitingData: (val: DashboardWaitingOrder[]) => set({ waitingData: val }),
+    setTodayGraficData: (val: TodayWorkGrafic) => set({ todayGraficData: val }),
     setHallData: (val: DashboardHallingOrder[]) => set({ waitingData: val }),
     setMainStatisticData: (val: DashboardMainStatistic) => set({ mainStatisticData: val }),
-    setIsModal: (val: boolean) => set({ isModal: val }),
+    setConfirmIsModal: (val: boolean) => set({ isConfirmModal: val }),
+    setRejectedIsModal: (val: boolean) => set({ isRejectedModal: val }),
 }));
 
 export default useDashboardStore;
