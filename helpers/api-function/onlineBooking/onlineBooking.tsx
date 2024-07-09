@@ -39,7 +39,6 @@ export const getOnlineBookingAllowClient = (setData: (val: boolean) => void) => 
 export const onlineBookingSettingsUrgently = (isEnabled: boolean) => {
     if (isEnabled == true || isEnabled == false) {
         console.log(isEnabled, "a");
-
         axios.post(`${onlineBookingUgly_url}?isUrgent=${isEnabled}`, {}, config)
             .then(res => {
                 console.log(res.data);
@@ -56,7 +55,6 @@ export const onlineBookingSettingsUrgently = (isEnabled: boolean) => {
             })
     }
 }
-
 export const GetOnlineBookingSettingsUrgently = (setStatus: any) => {
     axios.get(onlineBookingUgly_url)
         .then(res => {
