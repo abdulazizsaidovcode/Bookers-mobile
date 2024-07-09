@@ -11,7 +11,8 @@ const Index: React.FC = () => {
     useEffect(() => {
         const checkFirstLaunch = async () => {
             try {
-                const value = await SecureStore.getItemAsync('hasLaunched');
+                const value = await SecureStore.getItemAsync('isLogin');
+                
                 if (value === null) {
                     // await SecureStore.setItemAsync('hasLaunched', 'true');
                     setIsFirstLaunch(true);

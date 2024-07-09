@@ -1,10 +1,13 @@
 import registerStory from '@/helpers/state_managment/auth/register';
+import clientStore from '@/helpers/state_managment/client/clientStore';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 const UserInfo2 = () => {
     const { nickname, setNickname } = registerStory();
+    const { setAttachmentID } = clientStore();
+
     // const [nickname, setNickname] = useState('');
     console.log(nickname);
 
@@ -19,6 +22,10 @@ const UserInfo2 = () => {
         // Navigate to the next page
         router.push('(auth)/userCameraInfo');
     };
+
+    useEffect(() => {
+        setAttachmentID(''); 
+    },[])
 
     return (
         <View style={styles.container}>

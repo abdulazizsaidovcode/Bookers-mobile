@@ -28,7 +28,7 @@ const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
     const pickImage = async () => {
         const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
-            alert('Kamera rulxati kerak!');
+            alert('Kamera ruyxati kerak!');
             return;
         }
 
@@ -68,6 +68,7 @@ const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
     // ======================= image delete un function =======================
     const deletePhoto = () => {
         setImage(null);
+        setAttachmentID('')
         openDeleteModal();
     }
 

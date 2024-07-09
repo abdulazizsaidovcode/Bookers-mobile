@@ -76,7 +76,7 @@ const PhoneNumberInput: React.FC = () => {
                 <Buttons
                     title={t("login")}
                     onPress={() => {
-                        router.push('(auth)/otp_input')
+                        router.push('(auth)/checkSendMessage')
                         registerFunction(phoneNumber, setCode)
                     }}
                     backgroundColor={'#9C0A35'}

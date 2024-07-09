@@ -16,7 +16,7 @@ export const registerFunction = (phoneNumber: string, setCode: (value: any) => v
         })
 }
 
-export const checkCode = (phoneNumber: string, otpValue: string,) => {
+export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any) => {
     const setData = {
         phoneNumber: phoneNumber
     }
@@ -25,7 +25,8 @@ export const checkCode = (phoneNumber: string, otpValue: string,) => {
             Alert.alert("Muvaffaqiyatli ro'yxatdan o'tdingiz")
             router.push("(auth)/authPage1")
         })
-        .catch(r => {
+        .catch(err => {
+            setRespone(true);
         })
 }
 interface IRegister {
@@ -41,10 +42,11 @@ export const masterData = ({ role, firstName, lastName, nickname, phoneNumber, i
     if (img) {
         formData.append('image', img);
     }
+    
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
 
     const url = `${register_page}master?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${nickname ? `&nickname=${encodeURIComponent(nickname)}` : ''}&phoneNumber=${formattedPhoneNumber}&ROLE=${encodeURIComponent(role)}`;
-    axios.post(url, null, config)
+    axios.post(url, formData, config)
         .then(res => {
             console.log(res);
             Alert.alert("Muvaffaqiyatli ro'yxatdan o'tdingiz😍🤣😂❤️");
@@ -53,4 +55,6 @@ export const masterData = ({ role, firstName, lastName, nickname, phoneNumber, i
             console.log(err);
             Alert.alert("Xatolik yuz berdi");
         });
+    console.log(url);
+    
 }

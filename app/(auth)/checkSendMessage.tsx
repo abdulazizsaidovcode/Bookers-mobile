@@ -7,6 +7,7 @@ const OtpInputExample: React.FC = () => {
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
     const inputs = useRef<TextInput[]>([]);
     const { code, phoneNumber, otpValue, setOtpValue } = registerStory()
+    const [response, setRespone] = useState(false);
 
 
 
@@ -53,7 +54,7 @@ const OtpInputExample: React.FC = () => {
                 {otpValue.map((digit, index) => (
                     <TextInput
                         key={index}
-                        style={styles.input}
+                        style={response ? styles.inputFocused : styles.input}
                         value={digit}
                         onChangeText={(text) => handleChangeText(text, index)}
                         onKeyPress={(e) => handleKeyPress(e, index)}
@@ -70,7 +71,7 @@ const OtpInputExample: React.FC = () => {
                     style={[styles.button, isDisabled && styles.disabledButton]}
                     disabled={isDisabled}
                     onPress={() => {
-                        checkCode(phoneNumber, `${otpValue.map((value) => value).join('')}`);
+                        checkCode(phoneNumber, `${otpValue.map((value) => value).join('')}`, setRespone);
                         // console.log('Final OTP Value:', `${otpValue.map((value) => value).join('')}`)
                     }}
                 >
@@ -115,6 +116,18 @@ const styles = StyleSheet.create({
     input: {
         borderWidth: 1,
         borderColor: '#4e4e50',
+        backgroundColor: '#2e2e3a',
+        borderRadius: 8,
+        width: 50,
+        height: 50,
+        margin: 10,
+        textAlign: 'center',
+        fontSize: 24,
+        color: '#fff',
+    },
+    inputFocused: {
+        borderWidth: 1,
+        borderColor: '#9C0A35',
         backgroundColor: '#2e2e3a',
         borderRadius: 8,
         width: 50,
