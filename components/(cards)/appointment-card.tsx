@@ -6,23 +6,43 @@ import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import {AntDesign} from "@expo/vector-icons";
 import React, {useEffect, useState} from "react";
-import {addFeedbackMaster} from "@/helpers/api-function/client/client";
+import {
+    addFeedbackMaster,
+    getCanceledClient, getHistoryCount,
+    getPastClient,
+    getUpcomingClient,
+    updateOrderStatus
+} from "@/helpers/api-function/client/client";
 import Toast from "react-native-simple-toast";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 
-const AppointmentCard = ({clicks, serviceName, isBtn, data}: {
+const AppointmentCard = ({clicks, serviceName, isBtn, data, userID}: {
     clicks?: () => void,
     serviceName: string[],
     isBtn?: boolean,
-    data: HistorySessions
+    data: HistorySessions,
+    userID?: string
 }) => {
-    const {isLoading, setIsLoading} = clientStore()
+    const {isLoading, setIsLoading, setUpcomingData, setPastData, setCanceledData, setHistoryCountData} = clientStore()
     const [rating, setRating] = useState(0);
     const [isModal, setIsModal] = useState(false);
+    const [successStatus, setSuccessStatus] = useState('');
 
     useEffect(() => {
         setRating(0)
     }, [isModal]);
+
+    useEffect(() => {
+        if (successStatus === 'ACCEPTED') {
+            setSuccessStatus('')
+            if (userID) {
+                getUpcomingClient(setUpcomingData, userID)
+                getPastClient(setPastData, userID)
+                getCanceledClient(setCanceledData, userID)
+                getHistoryCount(setHistoryCountData, userID)
+            }
+        }
+    }, [successStatus]);
 
     const handleRating = (value: any) => setRating(value)
     const toggleModal = () => setIsModal(!isModal)
@@ -59,6 +79,7 @@ const AppointmentCard = ({clicks, serviceName, isBtn, data}: {
                         <IconsButtons
                             name={`Принять`}
                             width={`47%`}
+                            clicks={clicks}
                         />
                         <IconsButtons
                             name={`Отклонить`}
@@ -78,6 +99,7 @@ const AppointmentCard = ({clicks, serviceName, isBtn, data}: {
                 btnWhiteText={isLoading ? 'loading...' : `Оценить`}
                 btnRedText={`Закрыть`}
                 onConfirm={() => {
+                    updateOrderStatus(data.id, 'REJECTED', () => console.log('loading...'), setSuccessStatus)
                     if (rating > 0) addFeedbackMaster(rating, setIsLoading, toggleModal)
                     else Toast.show('Вы еще не оставили отзыв!', Toast.LONG)
                 }}
