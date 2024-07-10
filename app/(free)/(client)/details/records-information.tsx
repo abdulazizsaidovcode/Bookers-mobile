@@ -72,7 +72,7 @@ const RecordsInformation = () => {
 
     const statusName = (statusN: string) => {
         if (statusN === 'CLIENT_CONFIRMED' || statusN === 'MASTER_CONFIRMED') return 'Одобрено'
-        else if (statusN === 'COMPLETED') return ''
+        else if (statusN === 'COMPLETED') return 'Выполнен'
         else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
@@ -222,8 +222,12 @@ const RecordsInformation = () => {
                                 <View style={styles.stars}>
                                     {Array(5).fill(0).map((_, index) => (
                                         <TouchableOpacity activeOpacity={.7} key={index} onPress={() => handleRating(index + 1)}>
-                                            <AntDesign name={index < rating ? "star" : "staro"} size={30} color="#B00000"
-                                                       style={styles.star}/>
+                                            <AntDesign
+                                                name={index < rating ? "star" : "staro"}
+                                                size={30}
+                                                color="#B00000"
+                                                style={styles.star}
+                                            />
                                         </TouchableOpacity>
                                     ))}
                                 </View>
