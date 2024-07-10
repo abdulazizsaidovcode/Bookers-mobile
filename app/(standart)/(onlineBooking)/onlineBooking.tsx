@@ -47,7 +47,7 @@ const data = [
         title: 'Время для VIP клиентов',
         subtitle: 'Не настроено',
         IconComponent: <FontAwesome name="diamond" size={24} color="#9C0A35" />,
-        onPress: () => { router.push('/booking') }
+        onPress: () => { router.push('/timeSelect') }
     },
 ]
 

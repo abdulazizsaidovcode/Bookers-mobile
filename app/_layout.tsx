@@ -115,6 +115,7 @@ import WebPageStandart from "./(profile)/(WebPage-standart)/WebPage";
 import GalleryDetailStandart from "./(profile)/(WebPage-standart)/components/galleryDetail";
 import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
 import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow";
+import TimeSelect from "./(standart)/(onlineBooking)/(booking)/timeSelect";
 
 
 const Stack = createNativeStackNavigator();
@@ -593,6 +594,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(standart)/(onlineBooking)/(booking)/requestWindow"
               component={requestWindow}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/(booking)/timeSelect"
+              component={TimeSelect}
               options={{ headerShown: false }}
             />
             {/* Online booking end */}
