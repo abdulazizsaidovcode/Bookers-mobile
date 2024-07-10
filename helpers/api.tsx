@@ -61,6 +61,8 @@ export const onlineBookingUgly_url = `${base_url}online-booking-settings/urgent`
 export const onlineBookingUserviceTimeAll_url = `${base_url}online-booking-settings/service-time/all`
 export const onlineBookingUserviceTimeservice_url = `${base_url}online-booking-settings/service-time`
 export const onlineConfirmationServices_url = `${base_url}online-booking-settings/confirm-entry`
+export const onlineBookingHallWaitin_url = `${base_url}online-booking-settings/hall-waiting`
+
 
 // Grafic Work page
 export const workday_put = `${base_url}workday/time/edit/graphic`

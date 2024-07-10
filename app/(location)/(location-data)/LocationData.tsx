@@ -215,9 +215,9 @@ const LocationData = () => {
               onChangeText={setSalonName}
             />
             <Textarea
-              containerStyle={tw`bg-gray-900 rounded-lg mt-3`}
-              style={[tw`bg-gray-500 flex-1 rounded-lg`]}
-              onChangeText={(e) => setMessage(e)}
+              containerStyle={tw`bg-gray-500 rounded-lg mt-3`}
+              style={[tw`bg-gray-500 rounded-lg`]}
+              onChangeText={(e: string) => setMessage(e)}
               defaultValue={message}
               maxLength={100}
               placeholder={"Сообщение"}
@@ -265,7 +265,6 @@ const LocationData = () => {
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   dropdawn: {
     zIndex: 1000,
@@ -275,5 +274,4 @@ const styles = StyleSheet.create({
     top: 55,
   },
 });
-
 export default LocationData;
