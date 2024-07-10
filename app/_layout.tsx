@@ -114,8 +114,10 @@ import ConfirmationRecord from "./(standart)/(onlineBooking)/(booking)/confirmat
 import WebPageStandart from "./(profile)/(WebPage-standart)/WebPage";
 import GalleryDetailStandart from "./(profile)/(WebPage-standart)/components/galleryDetail";
 import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
+import MyServicesScreenEdit from "./(standart)/(servicesEdit)/test";
 import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow";
 import TimeSelect from "./(standart)/(onlineBooking)/(booking)/timeSelect";
+
 
 
 const Stack = createNativeStackNavigator();
@@ -434,6 +436,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(standart)/(servicesEdit)/(processEdit)/(uslugi)/uslugi"
               component={MyServicesEdit}
+              options={{ headerShown: false }}
+            />
+             <Stack.Screen
+              name="(standart)/(servicesEdit)/test"
+              component={MyServicesScreenEdit}
               options={{ headerShown: false }}
             />
             {/* Service edit end */}
