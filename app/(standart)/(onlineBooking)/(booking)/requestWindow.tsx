@@ -4,11 +4,11 @@ import React from 'react'
 const RequestWindow = () => {
     return (
         <View>
-            <Text>requestWindow</Text>
+            <Text>RequestWindow</Text>
         </View>
     )
 }
 
-export default requestWindow
+export default RequestWindow
 
 const styles = StyleSheet.create({})
