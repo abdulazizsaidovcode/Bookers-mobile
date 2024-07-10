@@ -18,6 +18,10 @@ export interface IState2 {
     isEnabled2: boolean
     setIsEnabled2: (val: boolean) => void
 }
+export interface IState3 {
+    timeEnabled: boolean
+    setTimeEnabled: (val: boolean) => void
+}
 export interface Urgently {
     Urgently: boolean
     setUrgentlyt: (val: boolean) => void
@@ -28,12 +32,7 @@ export interface IsActive {
     newClient: boolean
     notConfirm: boolean
 }
-export const OnlineBookingStory2 = create<IState2>((set) => ({
-    isEnabled: false,
-    setIsEnabled: (val: boolean) => set({ isEnabled: val }),
-    isEnabled2: false,
-    setIsEnabled2: (val: boolean) => set({ isEnabled2: val }),
-}))
+
 export const OnlineBookingStory = create<IState>((set) => ({
     allowClient: false,
     setAllowClient: (val: boolean) => set({ allowClient: val }),
@@ -46,6 +45,16 @@ export const OnlineBookingStory = create<IState>((set) => ({
     data: null,
     setData: (val: IsActive | null) => set({ data: val }),
 }));
+export const OnlineBookingStory2 = create<IState2>((set) => ({
+    isEnabled: false,
+    setIsEnabled: (val: boolean) => set({ isEnabled: val }),
+    isEnabled2: false,
+    setIsEnabled2: (val: boolean) => set({ isEnabled2: val }),
+}))
+export const OnlineBookingStory3 = create<IState3>((set) => ({
+    timeEnabled: false,
+    setTimeEnabled: (val: boolean) => set({ timeEnabled: val }),
+}))
 
 export const OnlineBookingSettingsUrgentlyStory = create<Urgently>((set) => ({
     Urgently: false,
