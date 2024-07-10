@@ -1,16 +1,15 @@
 {
   "expo": {
-    "name": "bookers-app",
+    "name": "Bookers",
     "slug": "bookers-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/mainLogo.png",
     "scheme": "bookersapp",
-    "userInterfaceSqtyle": "automatic",
+    "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#21212E"
     },
     "ios": {
       "supportsTablet": true,
@@ -18,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/mainLogo.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -29,7 +28,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/logo.png"
     },
     "plugins": [
       [
@@ -37,14 +36,16 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
       "eas": {
-        "projectId": "098d99c4-c6cc-4fd1-85aa-9edd7b778f33"
+        "projectId": "098d99c4-c6cc-4fd1-85aa-9edd7b778f33",
+        "apiBaseUrl": "http://134.122.77.107:8080/"
       }
     }
   }

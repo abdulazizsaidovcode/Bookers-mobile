@@ -53,6 +53,7 @@ const UpcomingHistory = () => {
                             data={upcomingData}
                             renderItem={({item}) => (
                                 <AppointmentCard
+                                    userID={clientID}
                                     data={item}
                                     serviceName={serviceName ? serviceName : ['']}
                                     isBtn={item.orderStatus === 'WAIT'}

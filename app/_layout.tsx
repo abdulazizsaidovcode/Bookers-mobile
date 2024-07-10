@@ -35,7 +35,7 @@ import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
 import SettingsGalleryMain from "./(settings)/(settings-gallery)/settings-gallery-main";
 import PhoneNumberInput from "./(auth)/number-create";
 import MainClient from "@/app/(free)/(client)/main";
-import OtpInput from "./(auth)/otp_input";
+import OtpInput from "./(auth)/checkSendMessage";
 import CreatingClient from "./(free)/(client)/creating-client";
 import MainClientList from "./(free)/(client)/client-list";
 import AddressBook from "./(free)/(client)/address-book";
@@ -178,7 +178,7 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/otp_input"
+              name="(auth)/checkSendMessage"
               component={OtpInput}
               options={{ headerShown: false }}
             />

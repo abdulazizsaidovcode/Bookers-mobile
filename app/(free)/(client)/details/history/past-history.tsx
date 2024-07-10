@@ -53,6 +53,7 @@ const PastHistory = () => {
                             data={pastData}
                             renderItem={({item}) => (
                                 <AppointmentCard
+                                    userID={clientID}
                                     data={item}
                                     serviceName={serviceName ? serviceName : ['']}
                                     isBtn={item.orderStatus === 'WAIT'}

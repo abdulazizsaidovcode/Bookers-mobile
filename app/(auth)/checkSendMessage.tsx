@@ -1,5 +1,7 @@
 import { checkCode } from '@/helpers/api-function/register/registrFC';
 import registerStory from '@/helpers/state_managment/auth/register';
+import isRegister from '@/helpers/state_managment/isRegister/isRegister';
+import { router, useNavigation } from 'expo-router';
 import React, { useState, useRef, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Alert, TextInputKeyPressEventData, NativeSyntheticEvent, Text, TouchableOpacity } from 'react-native';
 
@@ -7,6 +9,10 @@ const OtpInputExample: React.FC = () => {
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
     const inputs = useRef<TextInput[]>([]);
     const { code, phoneNumber, otpValue, setOtpValue } = registerStory()
+    const [response, setRespone] = useState(false);
+    const [messageResponse, setMessageResponse] = useState(false);
+    const { isRegtered } = isRegister()
+    const navigation = useNavigation<any>();
 
 
 
@@ -53,7 +59,7 @@ const OtpInputExample: React.FC = () => {
                 {otpValue.map((digit, index) => (
                     <TextInput
                         key={index}
-                        style={styles.input}
+                        style={response ? styles.inputFocused : styles.input}
                         value={digit}
                         onChangeText={(text) => handleChangeText(text, index)}
                         onKeyPress={(e) => handleKeyPress(e, index)}
@@ -70,8 +76,14 @@ const OtpInputExample: React.FC = () => {
                     style={[styles.button, isDisabled && styles.disabledButton]}
                     disabled={isDisabled}
                     onPress={() => {
-                        checkCode(phoneNumber, `${otpValue.map((value) => value).join('')}`);
+                        checkCode(phoneNumber, `${otpValue.map((value) => value).join('')}`, setRespone, isRegtered);
                         // console.log('Final OTP Value:', `${otpValue.map((value) => value).join('')}`)
+                        if (isRegtered == true) {
+                            router.push("(auth)/authPage1")
+                        }
+                        else {
+                            navigation.navigate('(tabs)')
+                        }
                     }}
                 >
                     <Text style={styles.buttonText}>Tasdiqlash</Text>
@@ -115,6 +127,18 @@ const styles = StyleSheet.create({
     input: {
         borderWidth: 1,
         borderColor: '#4e4e50',
+        backgroundColor: '#2e2e3a',
+        borderRadius: 8,
+        width: 50,
+        height: 50,
+        margin: 10,
+        textAlign: 'center',
+        fontSize: 24,
+        color: '#fff',
+    },
+    inputFocused: {
+        borderWidth: 1,
+        borderColor: '#9C0A35',
         backgroundColor: '#2e2e3a',
         borderRadius: 8,
         width: 50,

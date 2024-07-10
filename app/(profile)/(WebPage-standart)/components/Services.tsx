@@ -7,10 +7,10 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import UserProfileCard from "./serviseCard";
 import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
 import { getServiseWith } from "@/helpers/api-function/wepPage/wepPage";
 import { getFile } from "@/helpers/api";
+import UserProfileCardStandart from "./serviseCard";
 
 const ServicesStandart: React.FC = () => {
   const [activeTab, setActiveTab] = useState("");
@@ -26,7 +26,7 @@ const ServicesStandart: React.FC = () => {
   return (
     <ScrollView style={styles.contentContainer}>
       <View style={styles.profileCard}>
-        <UserProfileCard />
+        <UserProfileCardStandart />
       </View>
 
       <Text style={styles.sectionTitle}>

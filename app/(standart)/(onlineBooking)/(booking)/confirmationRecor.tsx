@@ -15,6 +15,15 @@ const ConfirmationRecord = () => {
     useEffect(() => {
         getOnlineConfirmationServices(setData);
     }, [])
+
+    useEffect(() => {
+        if (data) {
+            setIsEnabled(data.allClient)
+            setIsEnabled2(data.newClient)
+            setIsEnabled3(data.notConfirm)
+        }
+    }, [data])
+
     const toggleSwitch = () => {
         const newValue = !isEnabled;
         setIsEnabled(newValue);
@@ -35,7 +44,8 @@ const ConfirmationRecord = () => {
         // onlineBookingAllowClient(newValue)
         console.log(newValue);
     };
-    console.log(isEnabled, isEnabled2, isEnabled3);
+
+    console.log('data: ', data);
 
     return (
         <SafeAreaView style={styles.container}>

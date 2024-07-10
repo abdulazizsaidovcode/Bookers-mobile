@@ -53,6 +53,7 @@ const CanceledHistory = () => {
                             data={canceledData}
                             renderItem={({item}) => (
                                 <AppointmentCard
+                                    userID={clientID}
                                     data={item}
                                     serviceName={serviceName ? serviceName : ['']}
                                     isBtn={item.orderStatus === 'WAIT'}

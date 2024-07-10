@@ -72,7 +72,7 @@ const RecordsInformation = () => {
 
     const statusName = (statusN: string) => {
         if (statusN === 'CLIENT_CONFIRMED' || statusN === 'MASTER_CONFIRMED') return 'Одобрено'
-        else if (statusN === 'COMPLETED') return ''
+        else if (statusN === 'COMPLETED') return 'Выполнен'
         else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
@@ -181,23 +181,27 @@ const RecordsInformation = () => {
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                        <Text style={styles.contactTitle}>Дополнительно</Text>
-                        <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
-                            <Fontisto name="arrow-move" size={30} color="#9C0A35"/>
-                            <Text style={[tw`font-bold text-lg ml-4`]}>
-                                Передвинуть
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={toggleConfirm}
-                            activeOpacity={.9}
-                            style={[styles.button, tw`mb-4 items-center flex-row`]}
-                        >
-                            <AntDesign name="closecircleo" size={30} color="#9C0A35"/>
-                            <Text style={[tw`font-bold text-lg ml-4`]}>
-                                Отменить
-                            </Text>
-                        </TouchableOpacity>
+                        {(orderOneData && (orderOneData.orderStatus === 'CLIENT_CONFIRMED' || orderOneData.orderStatus === 'MASTER_CONFIRMED')) && (
+                            <>
+                                <Text style={styles.contactTitle}>Дополнительно</Text>
+                                <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
+                                    <Fontisto name="arrow-move" size={30} color="#9C0A35"/>
+                                    <Text style={[tw`font-bold text-lg ml-4`]}>
+                                        Передвинуть
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={toggleConfirm}
+                                    activeOpacity={.9}
+                                    style={[styles.button, tw`mb-4 items-center flex-row`]}
+                                >
+                                    <AntDesign name="closecircleo" size={30} color="#9C0A35"/>
+                                    <Text style={[tw`font-bold text-lg ml-4`]}>
+                                        Отменить
+                                    </Text>
+                                </TouchableOpacity>
+                            </>
+                        )}
 
                         {/*fade back modal*/}
                         <CenteredModal
@@ -218,8 +222,12 @@ const RecordsInformation = () => {
                                 <View style={styles.stars}>
                                     {Array(5).fill(0).map((_, index) => (
                                         <TouchableOpacity activeOpacity={.7} key={index} onPress={() => handleRating(index + 1)}>
-                                            <AntDesign name={index < rating ? "star" : "staro"} size={30} color="#B00000"
-                                                       style={styles.star}/>
+                                            <AntDesign
+                                                name={index < rating ? "star" : "staro"}
+                                                size={30}
+                                                color="#B00000"
+                                                style={styles.star}
+                                            />
                                         </TouchableOpacity>
                                     ))}
                                 </View>

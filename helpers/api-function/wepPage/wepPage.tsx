@@ -1,6 +1,7 @@
 import {
   address_url,
   category_Father,
+  gallery_list,
   getCategory_master,
   master_get_Service,
   master_get_specialization,
@@ -65,4 +66,14 @@ export const getAddress = (setData: (val: any[] | null) => void) => {
     .catch(() => {
       setData(null)
     })
+}
+
+export const getGaleriya = (setData: (data: any) => void) => {
+    axios.get(gallery_list, config)
+    .then((res) => {
+      setData(res.data.body);
+    })
+   .catch ((error) => {
+    setData([])
+  })
 }

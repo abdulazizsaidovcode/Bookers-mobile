@@ -15,6 +15,13 @@ const useGetMeeStore = create<GetMeeStore>((set) => ({
         districtId: null,
         attachmentId: null
     },
-    setGetMee: (val: GetMee) => set({ getMee: val })
+    setGetMee: (val: GetMee) => set({ getMee: val }),
+    ageOption: [],
+    setAgeOption: (val: any) => set({ ageOption: val }), 
+    regionOption: [],
+    setRegionOption: (val: any) => set({ regionOption: val }), 
+    districtOption: [],
+    setDistrictOption: (val: any) => set({ districtOption: val }) 
+
 }));
 export default useGetMeeStore;

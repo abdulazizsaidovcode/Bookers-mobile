@@ -12,7 +12,7 @@ const Auth: React.FC = () => {
     };
     return (
         <SafeAreaView style={styles.container} >
-            <NavigationMenu name="" deleteIcon={false} key={1} />
+            {/* <NavigationMenu name="" deleteIcon={false} key={1} /> */}
             <View style={styles.logo}>
                 <Image source={require('../../assets/images/auth/logo.png')} />
             </View>

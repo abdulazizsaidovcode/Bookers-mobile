@@ -9,12 +9,18 @@ export interface IState {
     setIsEnabled2: (val: boolean) => void
     isEnabled3: boolean
     setIsEnabled3: (val: boolean) => void
-    data: boolean
-    setData: (val: boolean) => void
+    data: IsActive | null
+    setData: (val: IsActive | null) => void
 }
 export interface Urgently {
     Urgently: boolean
     setUrgentlyt: (val: boolean) => void
+}
+
+export interface IsActive {
+    allClient: boolean
+    newClient: boolean
+    notConfirm: boolean
 }
 
 export const OnlineBookingStory = create<IState>((set) => ({
@@ -26,13 +32,11 @@ export const OnlineBookingStory = create<IState>((set) => ({
     setIsEnabled2: (val: boolean) => set({ isEnabled2: val }),
     isEnabled3: false,
     setIsEnabled3: (val: boolean) => set({ isEnabled3: val }),
-    data: false,
-    setData: (val: boolean) => set({ data: val }),
+    data: null,
+    setData: (val: IsActive | null) => set({ data: val }),
 }));
 
 export const OnlineBookingSettingsUrgentlyStory = create<Urgently>((set) => ({
     Urgently: false,
     setUrgentlyt: (val: boolean) => set({ Urgently: val }),
 }));
-
-;

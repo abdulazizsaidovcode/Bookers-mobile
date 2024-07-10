@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Services from './components/Services';
-import Gallery from './components/galery';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { fetchData } from '@/helpers/api-function/gallery/settings-gallery';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
 import { getUser } from '@/helpers/api-function/getMe/getMee';
-import { getCategoryF, getspecialization } from '@/helpers/api-function/wepPage/wepPage';
+import { getCategoryF, getGaleriya, getspecialization } from '@/helpers/api-function/wepPage/wepPage';
+import GalleryStandart from './components/galery';
+import ServicesStandart from './components/Services';
 
 const WebPageStandart: React.FC = () => {
     const {setGaleriya, setGetMee, setCategory, setspecialization, getme} = webPageStore()
     const [activeTab, setActiveTab] = useState('services');
     useEffect(() => {
-        fetchData(setGaleriya)
+        getGaleriya(setGaleriya)
         getUser(setGetMee)
         getCategoryF(setCategory)
         getspecialization(setspecialization, getme && getme.id ? getme.id : null)
@@ -21,7 +21,7 @@ const WebPageStandart: React.FC = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <NavigationMenu name='https://bookers/link/natali...' />
+            <NavigationMenu name='https:/...' />
 
             <View style={styles.tabsContainer}>
                 <TouchableOpacity style={[styles.tabButton, activeTab === 'services' && styles.activeTab]} onPress={() => setActiveTab('services')}>
@@ -32,7 +32,7 @@ const WebPageStandart: React.FC = () => {
                 </TouchableOpacity>
             </View>
 
-            {activeTab === 'services' ? <Services /> : <Gallery />}
+            {activeTab === 'services' ? <ServicesStandart /> : <GalleryStandart />}
         </SafeAreaView>
     );
 };

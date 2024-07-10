@@ -4,16 +4,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Services from './components/Services';
 import Gallery from './components/galery';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { fetchData } from '@/helpers/api-function/gallery/settings-gallery';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
 import { getUser } from '@/helpers/api-function/getMe/getMee';
-import { getCategoryF, getspecialization } from '@/helpers/api-function/wepPage/wepPage';
+import { getCategoryF, getGaleriya, getspecialization } from '@/helpers/api-function/wepPage/wepPage';
 
 const WebPage: React.FC = () => {
     const {setGaleriya, setGetMee, setCategory, setspecialization, getme} = webPageStore()
     const [activeTab, setActiveTab] = useState('services');
     useEffect(() => {
-        fetchData(setGaleriya)
+        getGaleriya(setGaleriya)
         getUser(setGetMee)
         getCategoryF(setCategory)
         getspecialization(setspecialization, getme && getme.id ? getme.id : null)

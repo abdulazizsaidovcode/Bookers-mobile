@@ -6,7 +6,7 @@ import BottomModal from '@/components/(modals)/modal-bottom';
 import Buttons from '@/components/(buttons)/button';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { TextInput } from 'react-native-paper';
-import { fetchAllData, fetchAppoinmentActiveData } from '@/helpers/api-function/notifications/notifications';
+import { editAppoinmentOrder, fetchAllData, fetchAppoinmentActiveData } from '@/helpers/api-function/notifications/notifications';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -36,9 +36,9 @@ const RemindAboutAppointment: React.FC = () => {
         <TouchableOpacity
           key={item}
           onPress={() => onSelectItem(item)}
-          style={styles.pickerItem}
+          style={[styles.pickerItem, selectedItem === item && styles.selectedPickerItem]}
         >
-          <Text style={[styles.pickerItemText]}>
+          <Text style={[styles.pickerItemText, selectedItem === item && styles.selectedPickerItemText]}>
             {item} {items === hours ? 'ч.' : 'мин.'}
           </Text>
         </TouchableOpacity>
@@ -106,7 +106,7 @@ const RemindAboutAppointment: React.FC = () => {
           )}
         </View>
         <View style={{ padding: 15 }}>
-          <Buttons title="Сохранить" />
+          <Buttons title="Сохранить" onPress={() => editAppoinmentOrder(appoinmentData.content, appoinmentData.hour, appoinmentData.minute, appoinmentActiveData)}/>
         </View>
         <BottomModal isBottomModal={isAppoinmentModal} toggleBottomModal={toggleModal}>
           <View style={{ width: screenWidth / 1.3 }}>
@@ -114,13 +114,9 @@ const RemindAboutAppointment: React.FC = () => {
               <View style={styles.customPickerContainer}>
                 <View>
                   {renderPickerItems(hours, appoinmentData.hour, (hour: number) => setAppoinmentData({ ...appoinmentData, hour }))}
-                  <View style={styles.currentSelected}>
-                  </View>
                 </View>
                 <View>
                   {renderPickerItems(minutes, appoinmentData.minute, (minute: number) => setAppoinmentData({ ...appoinmentData, minute }))}
-                  <View style={styles.currentSelected}>
-                  </View>
                 </View>
               </View>
             </View>
@@ -178,7 +174,8 @@ const styles = StyleSheet.create({
   customPickerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 20
+    marginBottom: 20,
+    gap: 10
   },
   picker: {
     maxHeight: screenHeight / 3,
@@ -191,13 +188,13 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#828282'
   },
+  selectedPickerItem: {
+    backgroundColor: '#9C0B35',
+    paddingHorizontal: screenWidth / 11,
+    borderRadius: 15
+  },
   selectedPickerItemText: {
-    color: '#fff',
-    backgroundColor: '#9C0A35',
-    padding: 5,
-    width: screenWidth / 4,
-    textAlign: 'center',
-    borderRadius: 5
+    color: '#fff'
   },
   selectedTime: {
     fontSize: 18,
@@ -217,8 +214,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     backgroundColor: '#3a3a4e',
-    color: '#fff',
-    padding: 10,
+    color: '#000',
+    padding: 5,
     borderRadius: 8,
     height: 'auto',
     maxHeight: screenHeight / 3,

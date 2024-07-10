@@ -1,11 +1,16 @@
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { router } from 'expo-router';
 import ProfileImgUpload from '@/components/profile-img-upload';
 import registerStory from '@/helpers/state_managment/auth/register';
+import Buttons from '@/components/(buttons)/button';
+import clientStore from '@/helpers/state_managment/client/clientStore';
 
 const UserCameraInfo = () => {
     const { setImg } = registerStory()
+    const { setAttachmentID, attachmentID } = clientStore();
+    const [checkUpload, setCheckUpload] = useState<boolean>(false);
+
     const handleSkip = () => {
         setImg(null)
         router.push('(auth)/installPin');
@@ -14,6 +19,13 @@ const UserCameraInfo = () => {
     const handleContinue = () => {
         router.push('(auth)/installPin');
     };
+    useEffect(() => {
+        if (attachmentID) {
+            setCheckUpload(true)
+        } else {
+            setCheckUpload(false)
+        }
+    }, [attachmentID, setAttachmentID])
     return (
         <View style={styles.container}>
             <View style={styles.topSection}>
@@ -34,14 +46,8 @@ const UserCameraInfo = () => {
                     <Text style={styles.skipButtonText}>Пропустить</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                    style={[
-                        styles.continueButton,
-                    ]}
 
-                >
-                    <Text style={styles.continueButtonText}>Продолжить</Text>
-                </TouchableOpacity>
+                <Buttons isDisebled={checkUpload} title='Продолжить' onPress={handleContinue} />
             </View>
 
         </View>
@@ -130,6 +136,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         paddingVertical: 15,
         alignItems: 'center',
+        backgroundColor: '#9C0A35',
     },
     continueButtonText: {
         color: '#FFFFFF',

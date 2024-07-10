@@ -2,6 +2,7 @@ import { onlineBookingAllowClient_url, onlineBookingUgly_url, onlineBookingUserv
 import axios from "axios";
 import { config } from "@/helpers/token"
 import { Alert } from "react-native"
+import { IsActive } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 
 export const onlineBookingAllowClient = (isEnabled: boolean) => {
     if (isEnabled == true || isEnabled == false) {
@@ -39,7 +40,6 @@ export const getOnlineBookingAllowClient = (setData: (val: boolean) => void) => 
 export const onlineBookingSettingsUrgently = (isEnabled: boolean) => {
     if (isEnabled == true || isEnabled == false) {
         console.log(isEnabled, "a");
-
         axios.post(`${onlineBookingUgly_url}?isUrgent=${isEnabled}`, {}, config)
             .then(res => {
                 console.log(res.data);
@@ -56,7 +56,6 @@ export const onlineBookingSettingsUrgently = (isEnabled: boolean) => {
             })
     }
 }
-
 export const GetOnlineBookingSettingsUrgently = (setStatus: any) => {
     axios.get(onlineBookingUgly_url)
         .then(res => {
@@ -115,12 +114,11 @@ export const onlineConfirmationServices = (isEnabled: boolean, isEnabled2: boole
         })
 }
 
-export const getOnlineConfirmationServices = (setData: (val: boolean) => void) => {
+export const getOnlineConfirmationServices = (setData: (val: IsActive | null) => void) => {
     axios.get(`${onlineConfirmationServices_url}`, config)
         .then(res => {
-            setData(res.data.body)
+            if (res.data.success) setData(res.data.body)
+            else setData(null)
         })
-        .catch((err) => {
-            setData(false)
-        })
+        .catch((err) => setData(null))
 }
