@@ -25,7 +25,7 @@ const BookedAccordion: React.FC = () => {
     const navigation = useNavigation<any>();
     const [activeBtn, setActiveBtn] = useState<boolean>(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const { setTime ,setServiceId, setDate } = useSheduleData()
+    const { setTime, setServiceId, setDate } = useSheduleData()
 
     useFocusEffect(
         useCallback(() => {
@@ -36,10 +36,6 @@ const BookedAccordion: React.FC = () => {
             };
         }, [setFreeTime])
     );
-
-    useEffect(() => {
-        console.log(status);
-    }, [status])
 
     useEffect(() => {
         if (calendarDate) {
@@ -115,14 +111,14 @@ const BookedAccordion: React.FC = () => {
                 <View>
                     {activeTab && (
                         <View style={styles.timeContainer}>
-                            {FreeTime ? FreeTime.map((time, index) => (
+                            {FreeTime ? FreeTime.map((time: string, index) => (
                                 <TouchableOpacity
                                     key={index}
                                     style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
                                     onPress={() => handleTimeSelect(time)}
                                 >
                                     <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
-                                        {time}
+                                        {time.slice(0, 5)}
                                     </Text>
                                 </TouchableOpacity>
                             )) : <Text style={styles.placeholderText}>Нет свободного времени</Text>}
@@ -130,7 +126,7 @@ const BookedAccordion: React.FC = () => {
                     )}
                 </View>
             </List.Accordion>
-            
+
             {<CenteredModal
                 isModal={isModalVisible}
                 toggleModal={toggleModal}
