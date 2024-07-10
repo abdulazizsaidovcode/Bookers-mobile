@@ -82,7 +82,7 @@ const PhoneNumberInput: React.FC = () => {
                         <Text style={styles.socialButtonText}>{t("login_facebook")}</Text>
                     </TouchableOpacity>
                 </View>
-                {status ? (
+                {!status ? (
                     <Pressable
                         onPress={() => {
                             changeStatus(!status);

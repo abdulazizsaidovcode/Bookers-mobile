@@ -58,6 +58,7 @@ export const masterData = ({ role, firstName, lastName, nickname, phoneNumber, i
 
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
     const url = `${register_page}master?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${nickname ? `&nickname=${encodeURIComponent(nickname)}` : ''}&phoneNumber=${formattedPhoneNumber}&ROLE=${encodeURIComponent(role)}`;
+
     axios.post(url, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
