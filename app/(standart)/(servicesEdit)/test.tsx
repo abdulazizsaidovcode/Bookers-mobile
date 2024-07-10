@@ -7,7 +7,6 @@ import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import HomeCards from '@/components/(cards)/homeCard';
-import MyServicess from '@/components/services/myServices';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import {
     getCategory_master,
@@ -16,12 +15,12 @@ import {
     master_get_Service
 } from '@/helpers/api';
 import { config } from '@/helpers/token';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 
 const MyServicesScreenEdit = () => {
     const route = useRoute();
+    // const { categoryId } = route.params as { categoryId: string };
     const { childCategoryData, categoryFatherId, setChildCategoryData, setProdseduraUslug } = servicesStore();
-
     const [gender, setGender] = useState([]);
     const [specialization, setSpecialization] = useState([]);
     const [category, setCategory] = useState([]);
@@ -175,10 +174,10 @@ const MyServicesScreenEdit = () => {
                             </View>
                         ))}
                     </ScrollView>
-                         <View style={tw`flex flex-row justify-between mb-2 p-4`}>
+                    <View style={tw`flex flex-row justify-between mb-2 p-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Специализация услуг</Text>
                         <TouchableOpacity
-                            onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit?categoryId=${categoryId}`)}
+                            onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit?categoryId=${route.params.categoryId}`)}
                             activeOpacity={0.6}
                             style={{ padding: 10 }}
                         >
@@ -251,20 +250,6 @@ const MyServicesScreenEdit = () => {
                             <Text style={tw`text-white mb-2 text-lg`}>Нет доступных процедур для выбранной категории</Text>
                         </View>
                     )}
-                    {/* {specialization.length === 0 && categoryMaster.length === 0 && (
-                        services.map((service, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                onPress={service.onPress}
-                                activeOpacity={0.8}
-                            >
-                                <View style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
-                                    <Text style={tw`font-bold text-xl mb-3`}>{service.title}</Text>
-                                    <Text style={tw`text-gray-600 mb-2`}>{service.subTitle}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        ))
-                    )} */}
 
                 </ScrollView>
             </View>
