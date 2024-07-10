@@ -238,6 +238,7 @@ const HistoryDetailsInformation = () => {
                         {(historyData.orderStatus === 'CLIENT_CONFIRMED' || historyData.orderStatus === 'MASTER_CONFIRMED') && (
                             <>
                                 <TouchableOpacity
+                                    onPress={() => navigation.navigate('(free)/(client)/details/records', {record: {updateOrder: 'updateOrder', orderOneData: historyData}})}
                                     activeOpacity={.9}
                                     style={[styles.button, tw`mb-4 items-center flex-row`]}
                                 >

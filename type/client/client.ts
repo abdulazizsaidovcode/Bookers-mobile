@@ -40,6 +40,8 @@ export interface Client {
     setPastData: (val: HistorySessions[] | null) => void;
     canceledData: HistorySessions[] | null
     setCanceledData: (val: HistorySessions[] | null) => void;
+    refreshing: boolean;
+    setRefreshing: (val: boolean) => void;
 }
 
 export interface AllClient {

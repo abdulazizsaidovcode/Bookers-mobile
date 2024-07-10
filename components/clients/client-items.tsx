@@ -121,10 +121,9 @@ export const StandardNowAndConstClient = (
         client: any;
         clicks?: () => void;
     }) => {
-
     return (
         <TouchableOpacity
-            // onPress={clicks}
+            onPress={clicks}
             style={[
                 tw`flex-row items-start justify-start p-4 mb-3 rounded-2xl`,
                 { backgroundColor: "#B9B9C9" },

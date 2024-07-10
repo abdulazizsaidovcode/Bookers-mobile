@@ -1,4 +1,4 @@
-import {View, Text, ScrollView, StatusBar} from 'react-native';
+import {View, Text, ScrollView, StatusBar, RefreshControl} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -10,21 +10,26 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
-import {useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {getClientAll, getClientStatistics} from "@/helpers/api-function/client/client";
-import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
-import { router } from 'expo-router';
+import {putNumbers} from '@/helpers/api-function/numberSittings/numbersetting';
+import {router} from 'expo-router';
+import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/main'>;
 
 const MainClient = () => {
-    const {isClientModal, setIsClientModal, setStatusData, statusData, setAllClients} = clientStore()
+    const {isClientModal, setIsClientModal, setStatusData, statusData, setAllClients, refreshing, setRefreshing} = clientStore()
     const toggleClientModal = () => setIsClientModal(!isClientModal);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     useEffect(() => {
         getClientAll(setAllClients)
         getClientStatistics(setStatusData)
+    }, []);
+
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
     }, []);
 
     return (
@@ -35,6 +40,7 @@ const MainClient = () => {
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View>
                         <View style={[tw`mt-5 mb-10`, {alignSelf: 'flex-start'}]}>
@@ -99,7 +105,7 @@ const MainClient = () => {
                         <Buttons title={`Настроить позже и перейти на главную`} onPress={() => {
                             putNumbers(8)
                             router.push('(welcome)/Welcome')
-                        } }/>
+                        }}/>
                     </View>
                 </ScrollView>
             </View>
