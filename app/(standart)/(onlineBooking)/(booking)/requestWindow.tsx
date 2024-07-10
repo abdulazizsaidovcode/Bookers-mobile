@@ -1,30 +1,41 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import NavigationMenu from '@/components/navigation/navigation-menu'
 import Buttons from '@/components/(buttons)/button'
 import SwitchWithLabelBlack from '@/components/switchWithLabel/switchWithLabelBlack'
 import { OnlineBookingStory2 } from '@/helpers/state_managment/onlinBooking/onlineBooking'
+import { getOnlineBookingHallWaiting, onlineBookingHallWaiting } from '@/helpers/api-function/onlineBooking/onlineBooking'
 
 const RequestWindow = () => {
-    const { isEnabled, setIsEnabled, isEnabled2, setIsEnabled2 } = OnlineBookingStory2()
+    const { isEnabled, setIsEnabled, isEnabled2, setIsEnabled2, data, setData } = OnlineBookingStory2()
+
+    useEffect(() => {
+        // Ma'lumotlarni olish va setData funksiyasi orqali o'rnatish
+        getOnlineBookingHallWaiting(setData);
+    }, []);
+
+    useEffect(() => {
+        // Ma'lumotlar o'zgarganda switch tugmalarini yangilash
+        if (data) {
+            setIsEnabled(data.allClient);
+            setIsEnabled2(data.regularClient);
+        }
+    }, [data]);
+
     const requestSwitch = () => {
-        const newValue = !isEnabled;
-        setIsEnabled(newValue);
-        // onlineBookingAllowClient(newValue)
-        console.log(newValue);
+        setIsEnabled(true);
+        setIsEnabled2(false);
     };
+
     const requestSwitch2 = () => {
-        const newValue = !isEnabled2;
-        setIsEnabled2(newValue);
-        // onlineBookingAllowClient(newValue)
-        console.log(newValue);
+        setIsEnabled(false);
+        setIsEnabled2(true);
     };
-    console.log(isEnabled, isEnabled2);
 
     return (
         <SafeAreaView style={styles.container}>
             <View>
-                <Text style={{ marginBottom: 10, }}></Text>
+                <Text style={{ marginBottom: 10 }}></Text>
                 <NavigationMenu name={`Онлайн бронирование`} />
                 <Text style={{ marginTop: 10, marginBottom: 10, color: 'white', fontSize: 18 }}>Запрос окошка</Text>
                 <Text style={{ color: 'white', marginBottom: 10 }}>
@@ -42,13 +53,15 @@ const RequestWindow = () => {
                 </View>
                 <View style={{ paddingHorizontal: 16, marginBottom: 10, backgroundColor: '#B9B9C9', borderRadius: 15 }}>
                     <SwitchWithLabelBlack
-                        onToggle={requestSwitch2}
                         value={isEnabled2}
+                        onToggle={requestSwitch2}
                         label="Активировать запрос окошка только для постоянных клиентов"
                     />
                 </View>
             </View>
-            <Buttons title="Сохранить" backgroundColor="#9C0A35" onPress={() => { }} />
+            <Buttons title="Сохранить" backgroundColor="#9C0A35" onPress={() => {
+                onlineBookingHallWaiting(isEnabled, isEnabled2)
+            }} />
         </SafeAreaView>
     )
 }
