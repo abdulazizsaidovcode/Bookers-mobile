@@ -4,7 +4,6 @@ import TabLayout from './(tabs)/_layout';
 import MyServices from './(standart)/(services)/(myServices)/myServices';
 import * as SecureStore from 'expo-secure-store';
 import Auth from './(auth)/auth';
-import RemindAboutAppointment from './(notifications)/(pages)/remind-about-appointment';
 
 const Index: React.FC = () => {
     const [isFirstLaunch, setIsFirstLaunch] = useState<null | boolean>(null);
@@ -37,7 +36,7 @@ const Index: React.FC = () => {
         );
     }
 
-    return isFirstLaunch ? <RemindAboutAppointment /> : <TabLayout />
+    return isFirstLaunch ? <Auth /> : <TabLayout />;
 };
 
 export default Index;
