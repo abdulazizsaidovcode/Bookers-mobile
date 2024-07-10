@@ -24,21 +24,17 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
 };
 
 export const addData = async (formData: FormData, name: string) => {
-  console.log(formData);
-
   try {
     const { data } = await axios.post(`${gallery_add}?name=${name}`, formData, imageConfig);
     console.log(data);
-    Alert.alert("success");
+    Toast.show("Ваша галерея добавлена", Toast.LONG);
   } catch (error) {
-    Alert.alert(`${error}`);
+    Toast.show(`Пожалуйста, повторите попытку позже`, Toast.LONG);
     console.log(error);
   }
 };
 
 export const addPhoto = async (galleryId: number, formData: FormData, setFullData: (data: GalleryData) => void, setImages: (val: string[]) => void) => {
-  console.log(formData);
-
   try {
     const { data } = await axios.post(`${gallery_add_photo}/${galleryId}`, formData, imageConfig);
     if (data.success) {
@@ -47,6 +43,7 @@ export const addPhoto = async (galleryId: number, formData: FormData, setFullDat
       Toast.show('Пожалуйста, подождите, администратор должен одобрить вашу фотографию.', Toast.LONG)
     }
   } catch (error) {
+    Toast.show(`Пожалуйста, повторите попытку позже`, Toast.LONG);
     console.log(error);
   }
 };
@@ -104,6 +101,7 @@ export const delGallery = async (id: number | null, setData: (data: GalleryData[
       fetchData(setData);
       toggleModal()
       toggleCheckboxes()
+      Toast.show('Ваша галерея успешно удалена', Toast.LONG)
     }
   } catch (error) {
     ;

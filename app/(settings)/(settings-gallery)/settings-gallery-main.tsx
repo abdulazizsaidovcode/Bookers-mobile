@@ -11,6 +11,7 @@ import { delGallery, fetchData } from '@/helpers/api-function/gallery/settings-g
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import CenteredModal from '@/components/(modals)/modal-centered';
+import Toast from 'react-native-simple-toast'
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(settings)/(settings-gallery)/settings-gallery-main'>;
 const { width, height } = Dimensions.get('window');
@@ -26,21 +27,33 @@ const SettingsGalleryMain = () => {
         fetchData(setData);
     }, []);
 
+    console.log(selectedItemId);
+
+
     const handlePress = (id: number) => {
-        setSelectedItemId(id);
+        if (showCheckboxes) {
+            setSelectedItemId(id);
+        } else {
+            navigation.navigate('(settings)/(settings-gallery)/gallery-details', { id });
+        }
     }
 
     const toggleModal = () => {
-        setIsOpen(!isOpen)
+        if (selectedItemId !== null) {
+            setIsOpen(!isOpen)
+        } else {
+            Toast.show('Please select gellery', Toast.LONG)
+        }
     }
 
     const toggleCheckboxes = () => {
         setShowCheckboxes(!showCheckboxes);
-        setSelectedItemId(null); // Reset selected item when toggling checkboxes
+        setSelectedItemId(null);
     }
 
     const handleDelGallery = () => {
         delGallery(selectedItemId, setData, toggleModal, toggleCheckboxes)
+
     }
 
     return (
