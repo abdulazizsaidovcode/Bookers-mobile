@@ -14,7 +14,7 @@ import { config } from '@/helpers/token';
 import { router } from 'expo-router';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 
-const MyServicesScreen = () => {
+const MyServicesScreenEdit = () => {
     const route = useRoute();
     const { childCategoryData, categoryFatherId, setChildCategoryData, setProdseduraUslug } = servicesStore();
     const [gender, setGender] = useState([]);
@@ -22,7 +22,7 @@ const MyServicesScreen = () => {
     const [category, setCategory] = useState([]);
     const [categoryMaster, setCategoryMaster] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const { id } = route.params as { id: string };
+    // const { id } = route.params as { id: string };
     const [categories, setCategories] = useState([
         'Красота и здоровье волос',
         'Маникюр и педикюр',
@@ -232,16 +232,10 @@ const MyServicesScreen = () => {
                         </View>
                     )}
 
-                    <View style={tw`mb-10`}>
-                        <Buttons onPress={() => {
-                            putNumbers(2)
-                            router.push('(welcome)/Welcome')
-                        }} title='На главную' />
-                    </View>
                 </ScrollView>
             </View>
         </SafeAreaView>
     );
 };
 
-export default MyServicesScreen;
+export default MyServicesScreenEdit;
