@@ -12,6 +12,7 @@ import {StandardNowAndConstClient} from "@/components/clients/client-items";
 import {getClientAllSearch} from "@/helpers/api-function/client/client";
 import {useCallback} from "react";
 import {handleRefresh} from "@/constants/refresh";
+import {clientIdStore} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/all-client'>;
 
@@ -52,7 +53,10 @@ const AllClient = () => {
                                     renderItem={({item}) => (
                                         <StandardNowAndConstClient
                                             client={item}
-                                            clicks={() => navigation.navigate('(free)/(client)/details/detail-main', {infoClient: item})}
+                                            clicks={() => {
+                                                clientIdStore(item.id)
+                                                navigation.navigate('(free)/(client)/details/detail-main', {infoClient: item})
+                                            }}
                                         />
                                     )}
                                 />
