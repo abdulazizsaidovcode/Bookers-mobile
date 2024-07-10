@@ -79,7 +79,9 @@ const Schedule: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView >
+      <ScrollView 
+      
+      >
         <View style={{ flex: 1, marginBottom: 35 }}>
           <View>
             <Text style={[tw`text-white text-3xl my-7 font-bold`, { letterSpacing: 2 }]}>Расписание</Text>
