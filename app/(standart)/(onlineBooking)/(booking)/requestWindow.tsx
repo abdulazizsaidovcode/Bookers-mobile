@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const requestWindow = () => {
+const RequestWindow = () => {
     return (
         <View>
             <Text>requestWindow</Text>

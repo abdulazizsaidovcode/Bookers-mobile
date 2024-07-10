@@ -114,6 +114,7 @@ import ConfirmationRecord from "./(standart)/(onlineBooking)/(booking)/confirmat
 import WebPageStandart from "./(profile)/(WebPage-standart)/WebPage";
 import GalleryDetailStandart from "./(profile)/(WebPage-standart)/components/galleryDetail";
 import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
+import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow";
 
 
 const Stack = createNativeStackNavigator();
@@ -589,6 +590,11 @@ function RootLayoutNav() {
               component={ConfirmationRecord}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="(standart)/(onlineBooking)/(booking)/requestWindow"
+              component={requestWindow}
+              options={{ headerShown: false }}
+            />
             {/* Online booking end */}
             {/*  profile client start */}
             <Stack.Screen
@@ -619,10 +625,10 @@ function RootLayoutNav() {
               component={WebPage}
               options={{ title: "CreatingClient", headerShown: false }}
             /><Stack.Screen
-            name="(profile)/(WebPage-standart)/WebPage"
-            component={WebPageStandart}
-            options={{ title: "CreatingClient", headerShown: false }}
-          />
+              name="(profile)/(WebPage-standart)/WebPage"
+              component={WebPageStandart}
+              options={{ title: "CreatingClient", headerShown: false }}
+            />
             {/* Web page tariff end */}
 
             {/* profile settings start */}
