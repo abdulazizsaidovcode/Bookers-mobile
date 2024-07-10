@@ -48,6 +48,18 @@ const OtpInputExample: React.FC = () => {
             inputs.current[index - 1].focus();
         }
     };
+    const handlePress = async () => {
+        await checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
+
+        if (response) {
+            if (isRegtered) {
+                router.push("(auth)/authPage1");
+            } else {
+                navigation.navigate('(tabs)');
+            }
+            setRespone(false);
+        }
+    }
     return (
         <View style={styles.container}>
             <View style={styles.textContainer}>
@@ -59,7 +71,7 @@ const OtpInputExample: React.FC = () => {
                 {otpValue.map((digit, index) => (
                     <TextInput
                         key={index}
-                        style={response ? styles.inputFocused : styles.input}
+                        style={!response ? styles.inputFocused : styles.input}
                         value={digit}
                         onChangeText={(text) => handleChangeText(text, index)}
                         onKeyPress={(e) => handleKeyPress(e, index)}
@@ -75,16 +87,7 @@ const OtpInputExample: React.FC = () => {
                 <TouchableOpacity
                     style={[styles.button, isDisabled && styles.disabledButton]}
                     disabled={isDisabled}
-                    onPress={() => {
-                        checkCode(phoneNumber, `${otpValue.map((value) => value).join('')}`, setRespone, isRegtered);
-                        // console.log('Final OTP Value:', `${otpValue.map((value) => value).join('')}`)
-                        if (isRegtered == true) {
-                            router.push("(auth)/authPage1")
-                        }
-                        else {
-                            navigation.navigate('(tabs)')
-                        }
-                    }}
+                    onPress={handlePress}
                 >
                     <Text style={styles.buttonText}>Tasdiqlash</Text>
                 </TouchableOpacity>

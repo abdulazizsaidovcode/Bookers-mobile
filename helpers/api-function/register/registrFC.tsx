@@ -31,14 +31,16 @@ export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any
     const setData = {
         phoneNumber: phoneNumber
     }
-    console.log(isRegtered);
 
     axios.post(`${register_page}checkCode?code=${otpValue}`, setData)
         .then(() => {
             Toast.show("Вы успешно зарегистрировались", Toast.LONG)
+            setRespone(true)
         })
         .catch(err => {
-            setRespone(true);
+            Toast.show("Вы ввели неправильный пароль", Toast.LONG)
+
+            setRespone(false);
         })
 }
 
