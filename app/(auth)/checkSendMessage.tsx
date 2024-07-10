@@ -1,5 +1,7 @@
 import { checkCode } from '@/helpers/api-function/register/registrFC';
 import registerStory from '@/helpers/state_managment/auth/register';
+import isRegister from '@/helpers/state_managment/isRegister/isRegister';
+import { router, useNavigation } from 'expo-router';
 import React, { useState, useRef, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Alert, TextInputKeyPressEventData, NativeSyntheticEvent, Text, TouchableOpacity } from 'react-native';
 
@@ -8,6 +10,9 @@ const OtpInputExample: React.FC = () => {
     const inputs = useRef<TextInput[]>([]);
     const { code, phoneNumber, otpValue, setOtpValue } = registerStory()
     const [response, setRespone] = useState(false);
+    const [messageResponse, setMessageResponse] = useState(false);
+    const { isRegtered } = isRegister()
+    const navigation = useNavigation<any>();
 
 
 
@@ -71,8 +76,14 @@ const OtpInputExample: React.FC = () => {
                     style={[styles.button, isDisabled && styles.disabledButton]}
                     disabled={isDisabled}
                     onPress={() => {
-                        checkCode(phoneNumber, `${otpValue.map((value) => value).join('')}`, setRespone);
+                        checkCode(phoneNumber, `${otpValue.map((value) => value).join('')}`, setRespone, isRegtered);
                         // console.log('Final OTP Value:', `${otpValue.map((value) => value).join('')}`)
+                        if (isRegtered == true) {
+                            router.push("(auth)/authPage1")
+                        }
+                        else {
+                            navigation.navigate('(tabs)')
+                        }
                     }}
                 >
                     <Text style={styles.buttonText}>Tasdiqlash</Text>

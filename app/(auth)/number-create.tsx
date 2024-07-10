@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image, Alert, Pressable } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Buttons from '@/components/(buttons)/button';
@@ -11,24 +11,35 @@ import axios from 'axios';
 import { register_page } from '@/helpers/api';
 import registerStory from '@/helpers/state_managment/auth/register';
 import { registerFunction } from '@/helpers/api-function/register/registrFC';
+import isRegister from '@/helpers/state_managment/isRegister/isRegister'
 
 const PhoneNumberInput: React.FC = () => {
     const { phoneNumber, setPhoneNumber, setIsValid, isValid, setCode } = registerStory()
     const phoneInput = useRef<PhoneInput>(null);
+    const { setIsRegtered } = isRegister()
+    const [navTitle, setNavTitle] = useState('Login');
+    const [status, setStatus] = useState<boolean>(false);
+
     const handlePhoneNumberChange = (text: string) => {
         setPhoneNumber(text);
         setIsValid(phoneInput.current?.isValidNumber(text) ?? false);
     };
     const { t } = useTranslation();
 
-
+    const changeStatus = (val: boolean) => {
+        setStatus(val); // Yangi statusni o'zgartiramiz
+        setNavTitle(val ? 'Register' : 'Login');
+        setCode('');
+        setPhoneNumber('');
+        setIsRegtered(val);
+    };
     // API 
 
     return (
         <View style={styles.container}>
             <SafeAreaView style={{ marginBottom: 16 }}>
                 <StatusBar barStyle="dark-content" backgroundColor="#21212E" />
-                <NavigationMenu name="" deleteIcon={false} key={1} />
+                <NavigationMenu name={navTitle} deleteIcon={false} key={1} />
             </SafeAreaView>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center' }}>
                 <View style={styles.textContainer}>
@@ -71,13 +82,36 @@ const PhoneNumberInput: React.FC = () => {
                         <Text style={styles.socialButtonText}>{t("login_facebook")}</Text>
                     </TouchableOpacity>
                 </View>
+                {status ? (
+                    <Pressable
+                        onPress={() => {
+                            changeStatus(!status);
+                        }}
+                        style={{ marginVertical: 20, flexDirection: 'row' }}
+                    >
+                        <Text style={styles.phoneInputText}>еще </Text>
+                        <Text style={[styles.phoneInputText, { color: '#9C0A35' }]}>не</Text>
+                        <Text style={styles.phoneInputText}> зарегистрирован?</Text>
+                    </Pressable>
+                ) : (
+                    <Pressable
+                        onPress={() => {
+                            changeStatus(!status);
+                        }}
+                        style={{ marginVertical: 20, flexDirection: 'row' }}
+                    >
+                        <Text style={styles.phoneInputText}>я уже </Text>
+                        <Text style={[styles.phoneInputText, { color: '#9C0A35' }]}>зарегистрирован</Text>
+                    </Pressable>
+                )}
+
             </ScrollView>
             <View style={{ marginVertical: 20 }}>
                 <Buttons
                     title={t("login")}
                     onPress={() => {
-                        router.push('(auth)/checkSendMessage')
-                        registerFunction(phoneNumber, setCode)
+                        // router.push('(auth)/checkSendMessage')
+                        registerFunction(phoneNumber, setCode, status)
                     }}
                     backgroundColor={'#9C0A35'}
                 />
