@@ -15,6 +15,7 @@ import { getUser } from "@/helpers/api-function/getMe/getMee";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getFile } from "@/helpers/api";
 import {
+  formatPhoneNumber,
   getAge,
   getAgeId,
   getDistrict,
@@ -23,6 +24,7 @@ import {
   getRegionId,
   putPersonalData,
 } from "@/helpers/api-function/profile/personalData";
+import { useNavigation } from "expo-router";
 
 const EditProfile: React.FC = () => {
   const {
@@ -36,6 +38,8 @@ const EditProfile: React.FC = () => {
     districtOption,
   } = useGetMeeStore();
 
+  const navigation = useNavigation();
+
   const genderOptions = [
     { key: "FEMALE", value: "Женский" },
     { key: "MALE", value: "Мужской" },
@@ -44,7 +48,7 @@ const EditProfile: React.FC = () => {
   
   const [name, setName] = useState<any>(getMee?.firstName);
   const [surname, setSurname] = useState<any>(getMee?.lastName);
-  const [phone, setPhone] = useState<any>(getMee?.phoneNumber);
+  const [phone, setPhone] = useState<any>(formatPhoneNumber(getMee.phoneNumber));
   const [nickname, setNickname] = useState<any>(getMee.nickname);
   const [gender, setGender] = useState<any>(null);
   const [age, setAge] = useState<any | null>(null);
@@ -80,7 +84,7 @@ const EditProfile: React.FC = () => {
     setName(getMee?.firstName)
     setSurname(getMee?.lastName)
     setGender(getMee?.gender)
-    setPhone(getMee?.phoneNumber)
+    setPhone(formatPhoneNumber(getMee.phoneNumber))
     setNickname(getMee?.nickname)
     setTelegram(getMee?.telegram)
     setInstagram(getMee?.instagram)
@@ -123,6 +127,7 @@ const EditProfile: React.FC = () => {
       setNickname: sanitizeValue(nickname),
       setTelegram: sanitizeValue(telegram),
       birthdate: getMee.birthDate ? getMee.birthDate : null,
+      navigate: () => navigation.goBack()
     });
   };
 

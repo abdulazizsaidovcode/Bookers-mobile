@@ -15,6 +15,7 @@ interface data {
   setTelegram?: string | null;
   setInstagram?: string | null;
   birthdate?: string | null
+  navigate: ()=>void
 }
 
 // PUT URL
@@ -30,6 +31,8 @@ export const putPersonalData = ({
   setAge,
   birthdate,
   setRegion,
+  setCity,
+  navigate
 }: data) => {
   const Data = {
     firstName: setName,
@@ -41,32 +44,31 @@ export const putPersonalData = ({
     instagram: setInstagram,
     ageId: setAge,
     birthDate: birthdate,
-    districtId: setRegion,
+    districtId: setCity,
     starCount: null,
     clientCount: null,
     orderCount: null, 
     attachmentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   };
 
-  console.log(Data);
-
-  //   if (setName && setAge && setGender && setPhone && setSurname) {
+    if (setCity && setRegion) {
   axios
     .put(`${base_url}user`, Data, config)
     .then((res) => {
       if (res.data.success) {
-        Toast.show("ishladi", Toast.SHORT);
+        Toast.show("Sizning profilingiz yangilandi", Toast.SHORT);
+        navigate()
       } else {
-        Toast.show("error", Toast.SHORT);
+        Toast.show("Sizning profilingiz yangilanmadi", Toast.SHORT);
       }
     })
-    .catch((err) => {
-      Toast.show("server error", Toast.SHORT);
-      console.log(err);
+    .catch(() => {
+        Toast.show("Sizning profilingiz yangilanmadi", Toast.SHORT);
+      // Toast.show("Siz viloyatingiz va shahringizni kiritishingiz kerak", Toast.SHORT);
     });
-  //   } else {
-  //     Toast.show("value is not found", Toast.SHORT);
-  //   }
+    } else {
+      Toast.show("Siz viloyatingiz va shahringizni kiritishingiz kerak", Toast.SHORT);
+    }
 };
 
 // GET URL
@@ -161,4 +163,20 @@ export const getDistrictId = (
       .catch(() => setData([]));
   }
 };
-// POST URL
+// CHECK PHONE URL
+
+export const formatPhoneNumber = (phoneNumber: string): string => {
+  if (phoneNumber.startsWith("+998")) {
+    let numberPart = phoneNumber.slice(4);
+
+    if (numberPart.length < 9) {
+      numberPart = numberPart.padStart(9, '0');
+    } else if (numberPart.length > 9) {
+      numberPart = numberPart.slice(-9);
+    }
+
+    return numberPart;
+  } else {
+    return phoneNumber;
+  }
+};
