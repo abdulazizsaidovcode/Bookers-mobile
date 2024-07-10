@@ -11,7 +11,7 @@ export const StompProvider = ({ children }) => {
   const [adminId, setAdminId] = useState("defaultAdminId"); // Set a default adminId for testing
 
   useEffect(() => {
-    const socketUrl = "wss://45.67.35.86:8080/ws"; // Use secure WebSocket
+    const socketUrl =`${sockjs_url}`; // Use secure WebSocket
     console.log(`Connecting to WebSocket at ${socketUrl}`);
     const socket = new WebSocket(socketUrl); // Use the built-in WebSocket
 
