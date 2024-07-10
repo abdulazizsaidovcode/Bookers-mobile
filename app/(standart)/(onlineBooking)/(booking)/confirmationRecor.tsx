@@ -50,7 +50,6 @@ const ConfirmationRecord = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View>
-
                 <Text style={{ marginBottom: 10, }}></Text>
                 <NavigationMenu name={`Онлайн бронирование`} />
                 <StatusBar style="auto" />

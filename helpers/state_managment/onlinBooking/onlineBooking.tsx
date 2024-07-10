@@ -12,6 +12,12 @@ export interface IState {
     data: IsActive | null
     setData: (val: IsActive | null) => void
 }
+export interface IState2 {
+    isEnabled: boolean
+    setIsEnabled: (val: boolean) => void
+    isEnabled2: boolean
+    setIsEnabled2: (val: boolean) => void
+}
 export interface Urgently {
     Urgently: boolean
     setUrgentlyt: (val: boolean) => void
@@ -22,7 +28,12 @@ export interface IsActive {
     newClient: boolean
     notConfirm: boolean
 }
-
+export const OnlineBookingStory2 = create<IState2>((set) => ({
+    isEnabled: false,
+    setIsEnabled: (val: boolean) => set({ isEnabled: val }),
+    isEnabled2: false,
+    setIsEnabled2: (val: boolean) => set({ isEnabled2: val }),
+}))
 export const OnlineBookingStory = create<IState>((set) => ({
     allowClient: false,
     setAllowClient: (val: boolean) => set({ allowClient: val }),
