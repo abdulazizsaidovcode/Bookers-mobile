@@ -14,7 +14,6 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import {Picker} from "@react-native-picker/picker";
 import Select from "@/components/select/select";
 import {
-    createClient,
     getClientAll,
     getClientStatistics,
     getDistrictList,

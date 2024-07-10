@@ -77,7 +77,7 @@ const HistoryDetailsInformation = () => {
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);
-    }, []);
+    }, [setRefreshing]);
 
     const handleRating = (value: number) => setRating(value)
     const toggleConfirm = () => setIsConfirm(!isConfirm)

@@ -45,7 +45,7 @@ const DetailMain = () => {
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);
-    }, []);
+    }, [setRefreshing]);
 
     const toggleBottomModalSMS = () => setBottomModalSMS(!bottomModalSMS)
 

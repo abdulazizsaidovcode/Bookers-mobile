@@ -34,7 +34,7 @@ const UpcomingHistory = () => {
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);
-    }, []);
+    }, [setRefreshing]);
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>

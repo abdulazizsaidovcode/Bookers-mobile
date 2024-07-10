@@ -1,4 +1,4 @@
-import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import tw from "tailwind-react-native-classnames";
 import {ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
@@ -23,9 +23,7 @@ import {
     getRegionList,
     updateClientData
 } from "@/helpers/api-function/client/client";
-import {RouteProp, useRoute} from '@react-navigation/native';
 
-type CreatingClientScreenRouteProp = RouteProp<RootStackParamList, '(free)/(client)/updating-address-book'>;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/updating-address-book'>;
 
 interface FormData {
@@ -34,7 +32,7 @@ interface FormData {
 
 const UpdatingAddressBook = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const route = useRoute<CreatingClientScreenRouteProp>();
+    const route = useRoute<any>();
     const {client} = route.params;
     const {date} = financeStore()
     const {

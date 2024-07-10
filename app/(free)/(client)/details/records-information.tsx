@@ -74,7 +74,7 @@ const RecordsInformation = () => {
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);
-    }, []);
+    }, [setRefreshing]);
 
     const toggleModal = () => setIsModal(!isModal)
     const handleRating = (value: any) => setRating(value)

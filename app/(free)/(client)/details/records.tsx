@@ -82,7 +82,7 @@ const Records = () => {
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);
-    }, []);
+    }, [setRefreshing]);
 
     const handleTimeSelect = (time: string) => setActiveTime(time)
     const handleTabChange = (tab: string, name: string) => {

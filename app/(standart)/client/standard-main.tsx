@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import ClientCountCard from "@/components/(cards)/client-count-card";
@@ -17,10 +17,11 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {Ionicons, Entypo} from '@expo/vector-icons';
 import {RootStackParamList} from "@/type/root";
-import {View, Text, ScrollView, StatusBar, FlatList} from 'react-native';
+import {View, Text, ScrollView, StatusBar, FlatList, RefreshControl} from 'react-native';
 import LocationInput from "@/components/(location)/locationInput";
 import {StandardNowAndConstClient} from "@/components/clients/client-items";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
 
@@ -33,7 +34,9 @@ const StandardMain = () => {
         newClient,
         setNewClient,
         permanentClient,
-        setPermanentClient
+        setPermanentClient,
+        refreshing,
+        setRefreshing
     } = clientStore()
     const [isFilter, setIsFilter] = useState<string>('all')
     const toggleClientModal = () => setIsClientModal(!isClientModal);
@@ -45,6 +48,10 @@ const StandardMain = () => {
         getPermanentClient(setPermanentClient)
     }, []);
 
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, [setRefreshing]);
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -53,6 +60,7 @@ const StandardMain = () => {
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View>
                         <View style={[tw`mt-5 mb-10 flex-row justify-between`, {gap: 10}]}>
@@ -60,7 +68,7 @@ const StandardMain = () => {
                                 name={`Все`}
                                 countOrIcon
                                 role={`all`}
-                                isActive={isFilter === 'all' ? false : true}
+                                isActive={isFilter !== 'all'}
                                 clicks={() => {
                                     setIsFilter('all')
                                 }}
@@ -69,7 +77,7 @@ const StandardMain = () => {
                                 name={`Новые`}
                                 countOrIcon
                                 role={`new`}
-                                isActive={isFilter === 'new' ? false : true}
+                                isActive={isFilter !== 'new'}
                                 clicks={() => {
                                     setIsFilter('new')
                                 }}
@@ -78,7 +86,7 @@ const StandardMain = () => {
                                 name={`Постоянные`}
                                 countOrIcon
                                 role={`constant`}
-                                isActive={isFilter === 'constant' ? false : true}
+                                isActive={isFilter !== 'constant'}
                                 clicks={() => {
                                     setIsFilter('constant')
                                 }}
