@@ -7,22 +7,28 @@ import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import HomeCards from '@/components/(cards)/homeCard';
-import Buttons from '@/components/(buttons)/button';
+import MyServicess from '@/components/services/myServices';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
-import { getCategory_master, getGender_status, getSpecialization, master_get_Service } from '@/helpers/api';
+import {
+    getCategory_master,
+    getGender_status,
+    getSpecialization,
+    master_get_Service
+} from '@/helpers/api';
 import { config } from '@/helpers/token';
 import { router } from 'expo-router';
-import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 
 const MyServicesScreenEdit = () => {
     const route = useRoute();
     const { childCategoryData, categoryFatherId, setChildCategoryData, setProdseduraUslug } = servicesStore();
+
     const [gender, setGender] = useState([]);
     const [specialization, setSpecialization] = useState([]);
     const [category, setCategory] = useState([]);
     const [categoryMaster, setCategoryMaster] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    // const { id } = route.params as { id: string };
+    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+
     const [categories, setCategories] = useState([
         'Красота и здоровье волос',
         'Маникюр и педикюр',
@@ -31,45 +37,60 @@ const MyServicesScreenEdit = () => {
         'Фитнес и йога',
     ]);
 
+    const services = [
+        {
+            title: "Специализация",
+            subTitle: "Не выбрано",
+            onPress: () => { router.push('/expertise') }
+        },
+        {
+            title: "Процедура услуг",
+            subTitle: "Не выбрано",
+            onPress: () => { router.push('/process') }
+        },
+    ];
+
     const getGender = async () => {
         try {
             const response = await axios.get(getGender_status, config);
             setGender(response.data.body);
         } catch (error) {
-            console.error("Error fetching gender services:", error);
+            console.log("Error fetching gender services:", error);
         }
     };
 
     const getCategory = async () => {
         try {
             const response = await axios.get(getCategory_master, config);
-            console.log(response);
-            
             setCategory(response.data.body);
         } catch (error) {
             console.error("Error fetching categories:", error);
         }
     };
 
-    const getSpecializationData = async (categoryId: string) => {
+    const getSpecializationData = async (categoryId) => {
         try {
-            const response = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
-            setSpecialization(response.data.body);
+            const { data } = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
+            if (data.success) setSpecialization(data.body);
+            else setSpecialization([])
         } catch (error) {
+            if(error.data.response.status) setSpecialization([])
             console.error("Error fetching specializations:", error);
         }
     };
 
-    const getMasterData = async (categoryId: string) => {
+    const getMasterData = async (categoryId) => {
         try {
-            const response = await axios.get(`${master_get_Service}${categoryId}`, config);
-            setCategoryMaster(response.data.body);
+            const { data } = await axios.get(`${master_get_Service}${categoryId}`, config);
+            if (data.success) setCategoryMaster(data.body)
+            else setCategoryMaster([])
         } catch (error) {
+            if (error.response.status === 404) setCategoryMaster([])
             console.error("Error fetching master services:", error);
         }
     };
 
-    const translateGender = (genders: string[]) => {
+    const translateGender = (genders) => {
         return genders.map((item) => {
             if (item === "MALE") return "Мужская для взрослых";
             else if (item === "FEMALE") return "Женское для взрослых";
@@ -79,18 +100,18 @@ const MyServicesScreenEdit = () => {
         });
     };
 
+    const handleCategorySelect = (categoryId, index) => {
+        setSelectedCategory(index);
+        setSelectedCategoryId(categoryId);
+        getSpecializationData(categoryId);
+        getMasterData(categoryId);
+    };
+
     useEffect(() => {
         getGender();
         getCategory();
+
     }, []);
-
-    const handleCategorySelect = (categoryId: string, index: number) => {
-        setSelectedCategory(index);
-        getSpecializationData(categoryId);
-        getMasterData(categoryId);
-        console.log("Selected category ID:", categoryId); // Log the selected category ID
-    };
-
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
@@ -128,7 +149,7 @@ const MyServicesScreenEdit = () => {
                     <View style={tw`flex flex-row justify-between p-4 mb-2`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Категория услуг</Text>
                         <TouchableOpacity
-                            onPress={() => router.push('(standart)/(servicesEdit)/(categoryEdit)/category')}
+                            onPress={() => router.push('(categoryEdit)/category')}
                             activeOpacity={0.6}>
                             <MaterialIcons name="mode-edit" size={24} color="white" />
                         </TouchableOpacity>
@@ -158,7 +179,7 @@ const MyServicesScreenEdit = () => {
                     <View style={tw`flex flex-row justify-between mb-2 p-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Специализация услуг</Text>
                         <TouchableOpacity
-                            onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit?categoryId=${categoryId}`)}
+                            onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit?categoryId=${selectedCategoryId}`)}
                             activeOpacity={0.6}
                             style={{ padding: 10 }}
                         >
@@ -174,7 +195,7 @@ const MyServicesScreenEdit = () => {
                             {specialization.map((item) => (
                                 <View key={item.id}>
                                     <TouchableOpacity
-                                    onPress={getCategory}>
+                                        onPress={getCategory}>
                                         <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
                                     </TouchableOpacity>
                                 </View>
