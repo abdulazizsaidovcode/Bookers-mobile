@@ -122,3 +122,6 @@ export const getOnlineConfirmationServices = (setData: (val: IsActive | null) =>
         })
         .catch((err) => setData(null))
 }
+
+// hall waiting post API function 
+

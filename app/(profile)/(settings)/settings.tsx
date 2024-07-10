@@ -20,7 +20,7 @@ const SettingsPage: React.FC = () => {
                 <NavigationMenu name='Настройки'/>
                 {[
                     { icon: 'image', label: 'Галерея', screen: '(settings)/(settings-gallery)/settings-gallery' },
-                    { icon: 'check-square', label: 'Услуги', screen: 'Services' },
+                    { icon: 'check-square', label: 'Услуги', screen: '(standart)/(servicesEdit)/test' },
                     { icon: 'briefcase', label: 'Место работы', screen: 'WorkLocation' },
                     { icon: 'calendar', label: 'Расписание работы', screen: 'WorkSchedule' },
                     { icon: 'calendar-check', label: 'Онлайн бронирование', screen: 'OnlineBooking' },

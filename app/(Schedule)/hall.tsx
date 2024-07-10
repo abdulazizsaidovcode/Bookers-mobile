@@ -5,6 +5,7 @@ import { getMasterOrderHall, getMasterOrderWait } from '@/helpers/api-function/o
 import RequestsAccordion from './components/accordion/RequestsAccordion';
 import { List } from 'react-native-paper';
 import CenteredModal from '@/components/(modals)/modal-centered';
+import HallAccordion from './components/accordion/hallAccordion copy';
 
 type ClientStatus = "REGULAR_VISIT" | string;
 
@@ -13,6 +14,7 @@ export interface OrderItem {
     clientAttachmentId: string;
     clientName: string;
     clientStatus: ClientStatus[];
+    hallStatus: string;
     orderDate: string;
     orderId: string;
     paid: number;
@@ -65,7 +67,7 @@ const HallSchedule: React.FC = () => {
                     style={styles.accordionContainer}
                     theme={{ colors: { background: 'transparent' } }}
                 >
-                    <RequestsAccordion items={groupedData[date]} onActionSuccess={fetchData} onShowModal={toggleModal} />
+                    <HallAccordion items={groupedData[date]} onActionSuccess={fetchData} onShowModal={toggleModal} />
                 </List.Accordion>
             )) :
                 <View>

@@ -13,6 +13,7 @@ export interface OrderItem {
   clientAttachmentId: string;
   clientName: string;
   clientStatus: ClientStatus[];
+  hallStatus: string; // Assuming hallStatus is provided in the API response
   orderDate: string;
   orderId: string;
   paid: number;

@@ -1,4 +1,4 @@
-import {View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
+import {View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image, RefreshControl} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -6,13 +6,14 @@ import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native"
 import {RootStackParamList} from "@/type/root";
 import HistoryCard from "@/components/(cards)/history-card";
 import {AntDesign, Entypo, Feather, FontAwesome5, Fontisto} from "@expo/vector-icons";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {orderGetOne} from "@/helpers/api-function/oreder/oreder";
 import {getFile} from "@/helpers/api";
 import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import {addFeedbackMaster, sliceTextFullName, updateOrderStatus} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -42,7 +43,7 @@ const RecordsInformation = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<any>();
     const {orderID} = route.params;
-    const {isLoading, setIsLoading} = clientStore()
+    const {isLoading, setIsLoading, refreshing, setRefreshing} = clientStore()
     const [orderOneData, setOrderOneData] = useState<OrderOne | null>(null)
     const [isModal, setIsModal] = useState<boolean>(true)
     const [toast, setToast] = useState<boolean>(false)
@@ -66,6 +67,10 @@ const RecordsInformation = () => {
         if (toast) setRating(0)
     }, [toast]);
 
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, []);
+
     const toggleModal = () => setIsModal(!isModal)
     const handleRating = (value: any) => setRating(value)
     const toggleConfirm = () => setIsConfirm(!isConfirm)
@@ -76,6 +81,7 @@ const RecordsInformation = () => {
         else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
+    console.log('order data: ', orderOneData)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -90,6 +96,7 @@ const RecordsInformation = () => {
                         flexGrow: 1,
                         justifyContent: 'space-between'
                     }}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View style={tw`mt-3`}>
                         <TouchableOpacity
@@ -184,7 +191,11 @@ const RecordsInformation = () => {
                         {(orderOneData && (orderOneData.orderStatus === 'CLIENT_CONFIRMED' || orderOneData.orderStatus === 'MASTER_CONFIRMED')) && (
                             <>
                                 <Text style={styles.contactTitle}>Дополнительно</Text>
-                                <TouchableOpacity activeOpacity={.9} style={[styles.button, tw`mb-4 items-center flex-row`]}>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate('(free)/(client)/details/records', {record: {updateOrder: 'updateOrder', orderOneData}})}
+                                    activeOpacity={.9}
+                                    style={[styles.button, tw`mb-4 items-center flex-row`]}
+                                >
                                     <Fontisto name="arrow-move" size={30} color="#9C0A35"/>
                                     <Text style={[tw`font-bold text-lg ml-4`]}>
                                         Передвинуть

@@ -9,7 +9,7 @@ const OtpInputExample: React.FC = () => {
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
     const inputs = useRef<TextInput[]>([]);
     const { code, phoneNumber, otpValue, setOtpValue } = registerStory()
-    const [response, setRespone] = useState(false);
+    const [response, setRespone] = useState(true);
     const [messageResponse, setMessageResponse] = useState(false);
     const { isRegtered } = isRegister()
     const navigation = useNavigation<any>();
