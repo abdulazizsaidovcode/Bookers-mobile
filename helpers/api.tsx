@@ -127,6 +127,7 @@ export const order_upcoming: string = `${base_url}order/client/upcoming-sessions
 export const order_past: string = `${base_url}order/client/past-sessions`
 export const order_canceled: string = `${base_url}order/client/canceled-sessions`
 export const order_status_update: string = `${base_url}order/confirm-order`
+export const order_update: string = `${base_url}order/move-order`
 
 export const dashboard_daily_time_orders: string = `${base_url}user/today/calendar`
 export const dashboard_main_statistic: string = `${base_url}order/master/order-statistic`

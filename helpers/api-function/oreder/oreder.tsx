@@ -1,4 +1,12 @@
-import { master_order_confirm, master_order_confirmed, master_order_hall, master_order_wait, order_add, order_get_one } from "@/helpers/api";
+import {
+    master_order_confirm,
+    master_order_confirmed,
+    master_order_hall,
+    master_order_wait,
+    order_add,
+    order_get_one,
+    order_update
+} from "@/helpers/api";
 import { useOrderPosdData } from "@/helpers/state_managment/order/order";
 import { config } from "@/helpers/token";
 import axios from "axios";
@@ -32,6 +40,23 @@ export const postOrder = ({ data, status = "OTHER", messageSatus, setOrderId, se
             setStatus?.("error");
             console.log(error);
             setLoading && setLoading(false);
+        });
+};
+
+export const orderTimeEdit = ({ data, setOrderId, setLoading }: {data: any, setOrderId: (val: string) => void, setLoading: (val: boolean) => void}) => {
+    setLoading(true);
+    axios.put(`${order_update}`, data, config)
+        .then((res) => {
+            setLoading(false);
+            if (res.data.success) {
+                Toast.show('Successfully update order time', Toast.LONG)
+                setOrderId(data.orderId);
+            } else Toast.show('An error occurred on the server', Toast.LONG)
+        })
+        .catch(error => {
+            Toast.show(error.response.data.message, Toast.LONG)
+            console.log(error);
+            setLoading(false);
         });
 };
 

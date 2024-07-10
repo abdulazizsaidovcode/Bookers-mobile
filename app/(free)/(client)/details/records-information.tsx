@@ -81,7 +81,7 @@ const RecordsInformation = () => {
         else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
-    console.log('order data: ', orderOneData)
+    console.log('orderId: 84', orderID)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -192,7 +192,12 @@ const RecordsInformation = () => {
                             <>
                                 <Text style={styles.contactTitle}>Дополнительно</Text>
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate('(free)/(client)/details/records', {record: {updateOrder: 'updateOrder', orderOneData}})}
+                                    onPress={() => navigation.navigate('(free)/(client)/details/records', {
+                                        record: {
+                                            updateOrder: 'updateOrder',
+                                            orderOneData
+                                        }
+                                    })}
                                     activeOpacity={.9}
                                     style={[styles.button, tw`mb-4 items-center flex-row`]}
                                 >
