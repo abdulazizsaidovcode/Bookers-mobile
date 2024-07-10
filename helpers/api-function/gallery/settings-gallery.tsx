@@ -3,6 +3,7 @@ import { config, imageConfig } from "@/helpers/token";
 import { GalleryData } from "@/type/gallery/gallery";
 import { gallery_add, gallery_add_photo, gallery_full_data, gallery_list, } from "@/helpers/api";
 import axios from "axios";
+import Toast from "react-native-simple-toast";
 
 export const fetchData = async (setData: (data: GalleryData[]) => void) => {
   try {
@@ -13,7 +14,7 @@ export const fetchData = async (setData: (data: GalleryData[]) => void) => {
   }
 };
 
-export const fetchFullData = async (id: number, setFullData: (data: GalleryData) => void) => {  
+export const fetchFullData = async (id: number, setFullData: (data: GalleryData) => void) => {
   try {
     const { data } = await axios.get(`${gallery_full_data}/${id}`, config);
     setFullData(data.body);
@@ -35,13 +36,15 @@ export const addData = async (formData: FormData, name: string) => {
   }
 };
 
-export const addPhoto = async (galleryId: number, formData: any, setFullData: (data: GalleryData) => void) => {
+export const addPhoto = async (galleryId: number, formData: FormData, setFullData: (data: GalleryData) => void, setImages: (val: string[]) => void) => {
   console.log(formData);
 
   try {
-    const { data } = await axios.post(`${gallery_add_photo}/${galleryId}`, formData, config);
+    const { data } = await axios.post(`${gallery_add_photo}/${galleryId}`, formData, imageConfig);
     if (data.success) {
       fetchFullData(galleryId, setFullData);
+      setImages([]);
+      Toast.show('Пожалуйста, подождите, администратор должен одобрить вашу фотографию.', Toast.LONG)
     }
   } catch (error) {
     console.log(error);
@@ -55,6 +58,7 @@ export const editName = async (id: number, setFullData: (data: GalleryData) => v
       fetchFullData(id, setFullData);
       fetchData(setData)
       toggleModal();
+      Toast.show('Название галереи успешно обновлено.', Toast.LONG)
     }
   } catch (error) {
     console.log(error);
@@ -65,7 +69,8 @@ export const delPhoto = async (
   id: number,
   attachmentIds: string[],
   setFullData: (data: GalleryData) => void,
-  setData: (data: GalleryData[]) => void
+  setData: (data: GalleryData[]) => void,
+  toggleModal: () => void
 ) => {
   const url = `${gallery_add}/${id}/attachmentIds`;
   try {
@@ -82,6 +87,8 @@ export const delPhoto = async (
     if (data.success) {
       fetchFullData(id, setFullData);
       fetchData(setData);
+      toggleModal()
+      Toast.show('Фото успешно удалено из галереи.', Toast.LONG);
     }
   } catch (error) {
     console.log(error);

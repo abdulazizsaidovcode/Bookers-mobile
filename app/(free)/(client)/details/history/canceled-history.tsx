@@ -3,12 +3,14 @@ import {RootStackParamList} from "@/type/root";
 import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import tw from "tailwind-react-native-classnames";
-import {FlatList, ScrollView, StatusBar, Text, View} from "react-native";
-import React, {useEffect, useState} from "react";
+import {FlatList, RefreshControl, ScrollView, StatusBar, Text, View} from "react-native";
+import React, {useCallback, useEffect, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {getCanceledClient} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {handleRefresh} from "@/constants/refresh";
+import {clientIdStore} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/canceled-history'>;
 
@@ -16,7 +18,7 @@ const CanceledHistory = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<any>();
     const {clientID} = route.params;
-    const {canceledData, setCanceledData} = clientStore()
+    const {canceledData, setCanceledData, refreshing, setRefreshing} = clientStore()
     const [serviceName, setServiceName] = useState(null);
 
     useEffect(() => {
@@ -31,13 +33,9 @@ const CanceledHistory = () => {
         setServiceName(list ? list : null)
     }, [canceledData]);
 
-    const storeData = async () => {
-        try {
-            await AsyncStorage.setItem('clientID', clientID);
-        } catch (e) {
-            console.error(e);
-        }
-    };
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, []);
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -48,6 +46,7 @@ const CanceledHistory = () => {
                     <ScrollView
                         showsHorizontalScrollIndicator={false}
                         contentContainerStyle={{paddingHorizontal: 16, paddingVertical: 24, gap: 16}}
+                        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                     >
                         <FlatList
                             data={canceledData}
@@ -59,7 +58,7 @@ const CanceledHistory = () => {
                                     isBtn={item.orderStatus === 'WAIT'}
                                     clicks={() => {
                                         navigation.navigate('(free)/(client)/details/history/history-details', {historyData: item})
-                                        storeData()
+                                        clientIdStore(clientID)
                                     }}
                                 />
                             )}

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useRoute } from '@react-navigation/native';
-import { delPhoto, editName, fetchFullData } from '@/helpers/api-function/gallery/settings-gallery';
+import { addPhoto, delPhoto, editName, fetchFullData } from '@/helpers/api-function/gallery/settings-gallery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import { getFile } from '@/helpers/api';
 import CenteredModal from '@/components/(modals)/modal-centered';
@@ -20,9 +20,11 @@ const GalleryDetails: React.FC = () => {
   const route = useRoute();
   const { fullData, setFullData, setData } = useGalleryStore();
   const [isOpen, setIsOpen] = useState(false);
+  const [isAllOpen, setIsAllOpen] = useState(false);
   const [name, setName] = useState('');
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
   const [isBottomModalOpen, setIsBottomModalOpen] = useState(false);
   const { id } = route.params as { id: number };
@@ -44,8 +46,15 @@ const GalleryDetails: React.FC = () => {
     setIsOpen(!isOpen);
   };
 
+  const toggleAllModal = () => {
+    setIsAllOpen(!isAllOpen);
+  };
+
   const handleConfirm = () => {
     editName(id, setFullData, name, toggleModal, setData);
+  };
+
+  const handleAllSelected = () => {
   };
 
   const handleDeleteMode = () => {
@@ -64,9 +73,10 @@ const GalleryDetails: React.FC = () => {
 
   const handleDelete = () => {
     setIsDeleteMode(false);
-    delPhoto(id, selectedImages, setFullData, setData);
+    delPhoto(id, selectedImages, setFullData, setData, toggleAllModal);
     setSelectedImages([]);
     setSelectAll(false);
+
   };
 
   const requestPermissions = async (type: 'camera' | 'gallery') => {
@@ -98,8 +108,8 @@ const GalleryDetails: React.FC = () => {
       });
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
-      const newImages = result.assets.map(asset => ({ uri: asset.uri }));
-      // Handle adding new images here
+      const newImages = result.assets.map(asset => asset.uri);
+      setImages([...images, ...newImages])
     }
   };
 
@@ -116,6 +126,18 @@ const GalleryDetails: React.FC = () => {
     pickImage('gallery');
     toggleBottomModal();
   };
+
+  const handleSave = () => {
+    const formData = new FormData();
+    images.map((item, index) => {
+      formData.append('photos', {
+        uri: item,
+        type: 'image/jpeg',
+        name: `photos[${index}].image`
+      } as any)
+    })
+    addPhoto(id, formData, setFullData, setImages);
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -137,7 +159,7 @@ const GalleryDetails: React.FC = () => {
               <Text style={styles.deleteModeText}>выделить все</Text>
             </View>
             <View>
-              <TouchableOpacity onPress={handleDeleteMode}>
+              <TouchableOpacity onPress={toggleAllModal}>
                 <MaterialIcons name="delete" size={24} color="white" />
               </TouchableOpacity>
             </View>
@@ -150,33 +172,49 @@ const GalleryDetails: React.FC = () => {
         <View style={styles.content}>
           <Text style={styles.title}>{fullData.albumName}</Text>
           <View style={styles.imagesContainer}>
-            {fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
-              <View key={albumIndex} style={styles.imageWrapper}>
-                {isDeleteMode && (
-                  <View style={styles.checkIcon}>
-                    <TouchableOpacity onPress={() => handleImageSelect(albumItem.attachmentId)}>
-                      <MaterialIcons
-                        name={selectedImages.includes(albumItem.attachmentId) ? "check-box" : "check-box-outline-blank"}
-                        size={24} color={"#9C0A35"} />
-                    </TouchableOpacity>
+            {fullData.resGalleryAttachments.length <= 0 ? (
+              <Text style={{ color: 'white', fontSize: 15 }}>В этой галерее нет фотографий</Text>
+            ) : (
+              fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
+                <View key={albumIndex} style={styles.imageWrapper}>
+                  {isDeleteMode && (
+                    <View style={styles.checkIcon}>
+                      <TouchableOpacity onPress={() => handleImageSelect(albumItem.attachmentId)}>
+                        <MaterialIcons
+                          name={selectedImages.includes(albumItem.attachmentId) ? "check-box" : "check-box-outline-blank"}
+                          size={24}
+                          color={"#9C0A35"}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  <View style={styles.imageWrapper}>
+                    <Image
+                      style={styles.image}
+                      source={{ uri: `${getFile}${albumItem.attachmentId}` }}
+                    />
                   </View>
-                )}
-                <Image
-                  style={styles.image}
-                  source={{ uri: getFile + albumItem.attachmentId }}
-                />
-              </View>
+                </View>
+              ))
+            )}
+
+            {images.map((item, index) => (
+              <Image
+                style={styles.image}
+                key={index}
+                source={{ uri: item }}
+              />
             ))}
-            {isDeleteMode && (
-              <Buttons title='Delete Selected' onPress={handleDelete} />
+            {images.length !== 0 && (
+              <Buttons title='Сохранить' onPress={handleSave} />
             )}
           </View>
         </View>
         <CenteredModal
           toggleModal={toggleModal}
           isModal={isOpen}
-          btnWhiteText="Cancel"
-          btnRedText="Confirm"
+          btnWhiteText="Отмена"
+          btnRedText="Подтверждать"
           isFullBtn={true}
           onConfirm={handleConfirm}
         >
@@ -188,6 +226,18 @@ const GalleryDetails: React.FC = () => {
               placeholder='Enter edited name'
               style={styles.textInput}
             />
+          </View>
+        </CenteredModal>
+        <CenteredModal
+          toggleModal={toggleAllModal}
+          isModal={isAllOpen}
+          btnWhiteText="Отмена"
+          btnRedText="Подтверждать"
+          isFullBtn={true}
+          onConfirm={handleDelete}
+        >
+          <View>
+            <Text style={styles.modalTitle}>{selectedImages.length === fullData.resGalleryAttachments.length ? 'Вы уверены, что хотите удалить все фото альбома?' : 'Вы уверены, что хотите удалить фото?'}</Text>
           </View>
         </CenteredModal>
         <BottomModal isBottomModal={isBottomModalOpen} toggleBottomModal={toggleBottomModal}>

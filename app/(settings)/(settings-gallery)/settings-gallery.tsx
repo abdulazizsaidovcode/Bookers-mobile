@@ -48,10 +48,10 @@ const SettingsGallery: React.FC = () => {
 
   const pickImageFromGallery = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Sorry, we need gallery permissions to make this work!');
-      return;
-    }
+    // if (status !== 'granted') {
+    //   Alert.alert('Sorry, we need gallery permissions to make this work!');
+    //   return;
+    // }
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -104,7 +104,7 @@ const SettingsGallery: React.FC = () => {
           uri: image,
           name: `photo_${index}.jpg`,
           type: 'image/jpeg',
-        });
+        } as any);
       });
 
       mainPhotos.forEach((image, index) => {
@@ -112,7 +112,7 @@ const SettingsGallery: React.FC = () => {
           uri: image,
           name: `mainPhoto_${index}.jpg`,
           type: 'image/jpeg',
-        });
+        } as any);
       });
 
       addData(formData, albumName);
@@ -127,7 +127,8 @@ const SettingsGallery: React.FC = () => {
           <NavigationMenu name='Создать альбом' deleteIcon toggleModal={toggleModal} />
         </View>
         <View style={{ paddingHorizontal: 10, flex: 1 }}>
-          <View style={{ padding: 10 }}>
+   
+          <View style={{ padding: 10,  height: screenHeight / 1.20}}>
             <Text style={styles.title}>Фото галерея</Text>
             <View style={{ marginTop: 10 }}>
               <LocationInput placeholder='Название альбома' labalVisible={true} onChangeText={setAlbumName} />
@@ -210,7 +211,7 @@ const SettingsGallery: React.FC = () => {
           <Buttons
             title={`Сохранить`}
             onPress={saveAlbum}
-            isDisebled={images.length !== 0}
+            isDisebled={!(images.length === 0 && mainImageIndex === 0 && albumName.length === 0)}
           />
         </View>
       </ScrollView>
