@@ -72,9 +72,9 @@ const MyServicesScreenEdit = () => {
         try {
             const { data } = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
             if (data.success) setSpecialization(data.body);
-            else setSpecialization([])
+            else setSpecialization([]);
         } catch (error) {
-            if(error.data.response.status) setSpecialization([])
+            if (error.response?.status) setSpecialization([]);
             console.error("Error fetching specializations:", error);
         }
     };
@@ -82,10 +82,10 @@ const MyServicesScreenEdit = () => {
     const getMasterData = async (categoryId) => {
         try {
             const { data } = await axios.get(`${master_get_Service}${categoryId}`, config);
-            if (data.success) setCategoryMaster(data.body)
-            else setCategoryMaster([])
+            if (data.success) setCategoryMaster(data.body);
+            else setCategoryMaster([]);
         } catch (error) {
-            if (error.response.status === 404) setCategoryMaster([])
+            if (error.response?.status === 404) setCategoryMaster([]);
             console.error("Error fetching master services:", error);
         }
     };
@@ -95,7 +95,7 @@ const MyServicesScreenEdit = () => {
             if (item === "MALE") return "Мужская для взрослых";
             else if (item === "FEMALE") return "Женское для взрослых";
             else if (item === "MALE_CHILD") return "Мужская для детей";
-            else if (item === "FEMALE_CHILD") return "Женское для детей ";
+            else if (item === "FEMALE_CHILD") return "Женское для детей";
             else return item;
         });
     };
@@ -110,8 +110,8 @@ const MyServicesScreenEdit = () => {
     useEffect(() => {
         getGender();
         getCategory();
-
     }, []);
+
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
@@ -166,7 +166,7 @@ const MyServicesScreenEdit = () => {
                                     onPress={() => handleCategorySelect(categoryItem.id, index)}
                                 >
                                     <Text style={[
-                                        tw`rounded-lg border border-gray-600 px-4 py-3 text-gray-600`,
+                                        tw`rounded-xl border font-bold border-gray-600 px-7 py-3 text-gray-600 text-gray-600`,
                                         selectedCategory === index ? tw`bg-white text-black` : tw`bg-transparent text-gray-600`
                                     ]}>
                                         {categoryItem.name}
@@ -175,11 +175,10 @@ const MyServicesScreenEdit = () => {
                             </View>
                         ))}
                     </ScrollView>
-
-                    <View style={tw`flex flex-row justify-between mb-2 p-4`}>
+                         <View style={tw`flex flex-row justify-between mb-2 p-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Специализация услуг</Text>
                         <TouchableOpacity
-                            onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit?categoryId=${selectedCategoryId}`)}
+                            onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit?categoryId=${categoryId}`)}
                             activeOpacity={0.6}
                             style={{ padding: 10 }}
                         >
@@ -196,7 +195,7 @@ const MyServicesScreenEdit = () => {
                                 <View key={item.id}>
                                     <TouchableOpacity
                                         onPress={getCategory}>
-                                        <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
+                                        <Text style={tw`rounded-xl border border-gray-600 px-7 py-3 text-gray-600 text-gray-600`}>{item.name}</Text>
                                     </TouchableOpacity>
                                 </View>
                             ))}
@@ -252,6 +251,20 @@ const MyServicesScreenEdit = () => {
                             <Text style={tw`text-white mb-2 text-lg`}>Нет доступных процедур для выбранной категории</Text>
                         </View>
                     )}
+                    {/* {specialization.length === 0 && categoryMaster.length === 0 && (
+                        services.map((service, index) => (
+                            <TouchableOpacity
+                                key={index}
+                                onPress={service.onPress}
+                                activeOpacity={0.8}
+                            >
+                                <View style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
+                                    <Text style={tw`font-bold text-xl mb-3`}>{service.title}</Text>
+                                    <Text style={tw`text-gray-600 mb-2`}>{service.subTitle}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))
+                    )} */}
 
                 </ScrollView>
             </View>
