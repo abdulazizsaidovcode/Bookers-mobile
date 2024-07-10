@@ -51,24 +51,27 @@ const MyServicesScreen = () => {
         }
     };
 
-    const getSpecializationData = async (categoryId: string) => {
+    const getSpecializationData = async (categoryId) => {
         try {
-            const response = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
-            setSpecialization(response.data.body);
+            const { data } = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
+            if (data.success) setSpecialization(data.body);
+            else setSpecialization([]);
         } catch (error) {
+            if (error.response?.status) setSpecialization([]);
             console.error("Error fetching specializations:", error);
         }
     };
 
-    const getMasterData = async (categoryId: string) => {
+    const getMasterData = async (categoryId) => {
         try {
-            const response = await axios.get(`${master_get_Service}${categoryId}`, config);
-            setCategoryMaster(response.data.body);
+            const { data } = await axios.get(`${master_get_Service}${categoryId}`, config);
+            if (data.success) setCategoryMaster(data.body);
+            else setCategoryMaster([]);
         } catch (error) {
+            if (error.response?.status === 404) setCategoryMaster([]);
             console.error("Error fetching master services:", error);
         }
     };
-
     const translateGender = (genders: string[]) => {
         return genders.map((item) => {
             if (item === "MALE") return "Мужская для взрослых";

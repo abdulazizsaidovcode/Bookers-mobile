@@ -41,9 +41,6 @@ const Expertise: React.FC = () => {
     }, [value]);
 
     const getChildCategory = async (selectedCategory: string) => {
-        setLoading(true);
-        setNoData(false);
-
         try {
             const response = await axios.get(`${category_child}${selectedCategory}`, config);
             if (response.data.success) {
@@ -56,19 +53,11 @@ const Expertise: React.FC = () => {
                 if (child.length > 0) {
                     setChildCategoryData(child);
                 } else {
-                    setChildCategoryData([]);
-                    setNoData(true);
-                }
+                    setChildCategoryData([]); }
             } else {
-                setChildCategoryData([]);
-                setNoData(true);
-            }
+                setChildCategoryData([]); }
         } catch (error) {
-            console.error("Error fetching child categories:", error);
-            setNoData(true);
-        } finally {
-            setLoading(false);
-        }
+            console.error("Error fetching child categories:", error); } 
     };
 
     useEffect(() => {
@@ -78,20 +67,19 @@ const Expertise: React.FC = () => {
     }, [categoryFatherId]);
 
     const postCategory = async (categoryFatherId: string, name: string) => {
-        console.log("Posting category with ID:", categoryFatherId);
-        console.log("Category name:", name);
-
         try {
-            const response = await axios.post(`${masterAdd_category}/${categoryFatherId}?name=${name}`, {}, config);
+            const response = await axios.post(`${masterAdd_category}/${categoryFatherId}?name=${name}`, "",config);
             if (response.data.success) {
-                const newCategory = { id: response.data.body.id, name };
-                setChildCategoryData([...childCategoryData, newCategory]);
+                // const newCategory = { id: response.data.body.id, name };
+                // setChildCategoryData([...childCategoryData, newCategory]);
                 getChildCategory(categoryFatherId);
+                console.log(response.data);
+                
             } else {
                 setChildCategoryData([]);
             }
         } catch (error) {
-            console.error("Error posting category:", error);
+            console.error(error);
         }
     };
 
