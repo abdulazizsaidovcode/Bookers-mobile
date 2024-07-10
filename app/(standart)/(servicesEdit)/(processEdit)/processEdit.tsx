@@ -1,6 +1,5 @@
-// Process.tsx
 import React, { useEffect, useState } from 'react';
-import { Text, View, TextInput, ScrollView, StatusBar, FlatList } from 'react-native';
+import { Text, View, TextInput, ScrollView, StatusBar, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -30,7 +29,6 @@ const Process: React.FC = () => {
     const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);
     const { childCategoryData, categoryFatherId } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [value, setValue] = useState('');
 
     const Gender: GenderOption[] = [
         { title: "Мужская для взрослых", id: 1 },
@@ -44,10 +42,8 @@ const Process: React.FC = () => {
         { label: "Цена", value: price, onPress: setPrice },
         { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
-
     const postService = async () => {
         try {
-
             const data = {
                 categoryId: categoryFatherId.key,
                 genderId: selectedGender ? [selectedGender.id] : [],
@@ -90,14 +86,12 @@ const Process: React.FC = () => {
             </Text>
         );
     };
+
     const toggleModal = () => setModalVisible(!modalVisible);
+
     const handleAdd = () => {
-        {
-            toggleModal();
-            console.log(toggleModal);
-            
-        }
-    };    
+        toggleModal();
+    };
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -151,7 +145,11 @@ const Process: React.FC = () => {
                         </View>
                     </View>
                     <View style={[tw`mb-3 p-3`, { backgroundColor: '#21212E' }]}>
-                        <Buttons title='Сохранить' isDisebled={!validate} onPress={postService} />
+                        <Buttons 
+                            title='Сохранить' 
+                            isDisebled={!validate} 
+                            onPress={postService} 
+                        />
                     </View>
                     <CenteredModal
                         isModal={modalVisible}
@@ -163,7 +161,7 @@ const Process: React.FC = () => {
                     >
                         <>
                             <AntDesign name="delete" size={120} color="#9C0A35" style={tw`mb-3`} />
-                            <Text style={tw`text-white mb-4`}>Вы хотите удалить удалить процедуру?</Text>
+                            <Text style={tw`text-white mb-4`}>Вы хотите удалить процедуру?</Text>
                         </>
                     </CenteredModal>
                 </ScrollView>

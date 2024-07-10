@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, StatusBar, FlatList, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, StatusBar, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -17,18 +17,20 @@ import Textarea from '@/components/select/textarea';
 const Expertise: React.FC = () => {
     const route = useRoute();
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-    const { childCategoryData, categoryFatherId, setChildCategoryData } = servicesStore();
+    const { childCategoryData, categoryFatherId, setChildCategoryData, selectedCategory } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [value, setValue] = useState('');
     const [validate, setValidate] = useState(false);
     const [selectedServices, setSelectedServices] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [noData, setNoData] = useState<boolean>(false);
     const { id } = route.params as { id: string };
 
     useEffect(() => {
         if (categoryFatherId && categoryFatherId.key) {
             postCategory(categoryFatherId.key, '');
         }
-    }, []);
+    }, [categoryFatherId]);
 
     useEffect(() => {
         if (value.trim() === "") {
@@ -38,9 +40,12 @@ const Expertise: React.FC = () => {
         }
     }, [value]);
 
-    const getChildCategory = async (id: string) => {
+    const getChildCategory = async (selectedCategory: string) => {
+        setLoading(true);
+        setNoData(false);
+
         try {
-            const response = await axios.get(`${category_child}${id}`, config);
+            const response = await axios.get(`${category_child}${selectedCategory}`, config);
             if (response.data.success) {
                 const child =
                     response.data.body &&
@@ -48,36 +53,56 @@ const Expertise: React.FC = () => {
                         key: item.id,
                         name: item.name,
                     }));
-                setChildCategoryData(child);
+                if (child.length > 0) {
+                    setChildCategoryData(child);
+                } else {
+                    setChildCategoryData([]);
+                    setNoData(true);
+                }
             } else {
                 setChildCategoryData([]);
+                setNoData(true);
             }
         } catch (error) {
             console.error("Error fetching child categories:", error);
+            setNoData(true);
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        getChildCategory(id);
-    }, [id]);
-    const postCategory = async (id: string, name: string) => {
+        if (categoryFatherId && categoryFatherId.key) {
+            getChildCategory(categoryFatherId.key);
+        }
+    }, [categoryFatherId]);
+
+    const postCategory = async (categoryFatherId: string, name: string) => {
+        console.log("Posting category with ID:", categoryFatherId);
+        console.log("Category name:", name);
+
         try {
-            const response = await axios.post(`${masterAdd_category}/${id}?name=${name}`, {}, config);
+            const response = await axios.post(`${masterAdd_category}/${categoryFatherId}?name=${name}`, {}, config);
             if (response.data.success) {
-                setChildCategoryData([...childCategoryData, { id, name }]);
-                getChildCategory(id);
+                const newCategory = { id: response.data.body.id, name };
+                setChildCategoryData([...childCategoryData, newCategory]);
+                getChildCategory(categoryFatherId);
             } else {
                 setChildCategoryData([]);
             }
         } catch (error) {
-            console.error("Error fetching child categories:", error);
+            console.error("Error posting category:", error);
         }
     };
+
     const openModal = () => setModalVisible(true);
-    const closeModal = () => setModalVisible(false);
+    const closeModal = () => {
+        setModalVisible(false);
+        setValue('');
+    };
     const handleAdd = () => {
         if (value.trim() !== "") {
-            postCategory(id, value);
+            postCategory(categoryFatherId.key, value);
             closeModal();
             setValue("");
         }
@@ -96,7 +121,7 @@ const Expertise: React.FC = () => {
     const renderItem = ({ item }: { item: any }) => {
         const isSelected = selectedServices.find((service: any) => service.name === item.name);
         return (
-            <TouchableOpacity onPress={() =>handleCategorySelect(item.id)}>
+            <TouchableOpacity onPress={() => handleCategorySelect(item.id)}>
                 <ServicesCategory
                     title={item.name}
                     style={{ backgroundColor: isSelected ? 'gray' : 'transparent' }}
@@ -114,10 +139,16 @@ const Expertise: React.FC = () => {
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
                     <View style={tw`w-full`}>
-                        <FlatList
-                            data={childCategoryData}
-                            renderItem={renderItem}
-                            keyExtractor={(item, index) => index.toString()} />
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#9C0A35" />
+                        ) : noData ? (
+                            <Text style={tw`text-gray-600 text-3xl text-center mt-4`}>Маълумот мавжуд эмас</Text>
+                        ) : (
+                            <FlatList
+                                data={childCategoryData}
+                                renderItem={renderItem}
+                                keyExtractor={(item, index) => index.toString()} />
+                        )}
                     </View>
                     <View style={tw`content-end mb-3`}>
                         <Buttons title="Другое" backgroundColor="white" textColor="red" onPress={openModal} />

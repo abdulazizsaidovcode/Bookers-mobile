@@ -21,7 +21,9 @@ const servicesStore = create<Services>((set) => ({
     selectedServices: [],
     setSelectedServices: (data) => set({ selectedServices: data }),
     prodseduraUslug: null,
-    setProdseduraUslug: (data: any) => set({prodseduraUslug: data})
+    setProdseduraUslug: (data: any) => set({prodseduraUslug: data}),
+    selectedCategory:"",
+    setSelectedCategory:(val:string) => set({selectedCategory:val}),
 }))
 
 export default servicesStore

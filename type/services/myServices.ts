@@ -30,7 +30,8 @@ export interface Services {
     setSelectedServices: (data:[]) =>void
     prodseduraUslug: any,
     setProdseduraUslug: (data: any) => void
-
+    selectedCategory: string;
+    setSelectedCategory: (val:string)=>void
 }
 
 export interface Data {

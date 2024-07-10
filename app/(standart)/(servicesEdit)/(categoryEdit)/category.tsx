@@ -9,7 +9,7 @@ import { RootStackParamList } from '@/type/root';
 import { ActivityIndicator } from 'react-native-paper';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
-import { category_Father, getCategory_master, getCategory_masterAdd } from '@/helpers/api';
+import { getCategory_master, getCategory_masterAdd } from '@/helpers/api'; // Assuming getCategory is defined in your helpers/api
 import { config } from '@/helpers/token';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -20,10 +20,10 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category
 
 const CategoryEdit = () => {
     const { setData, data } = servicesStore();
-    const [modalVisible, setModalVisible] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+
+    // Function to fetch master categories from the backend
     const getCategoryMaster = async () => {
         try {
             const response = await axios.get(`${getCategory_master}`, config);
@@ -43,10 +43,11 @@ const CategoryEdit = () => {
         try {
             console.log("Sending data:", selectedCategories);
             const queryParams = selectedCategories.map(item => `categoryIds=${item}`).join('&');
-            const response = await axios.post(`${getCategory_masterAdd}?${queryParams}`, '', config);
+            const response = await axios.post(`${getCategory_masterAdd}${queryParams}`, '', config);
             if (response.data.success) {
                 Toast.show('✅ Вы изменили категории', Toast.LONG);
-                router.push("../../(services)/(myServicesScreen)/MyServicesScreen");
+               router.push('../../(services)/(myServicesScreen)/MyServicesScreen');
+                <MyServicesScreen/>
             } else {
                 Toast.show('⚠️ Вы не меняли категории', Toast.LONG);
             }
@@ -55,8 +56,9 @@ const CategoryEdit = () => {
         }
     };
 
+    // Function to handle category selection/deselection
     const handleCategorySelect = (category: string) => {
-        setSelectedCategories((prev) => {
+        setSelectedCategories(prev => {
             if (prev.includes(category)) {
                 return prev.filter(item => item !== category);
             } else {
@@ -64,6 +66,7 @@ const CategoryEdit = () => {
             }
         });
     };
+
 
     const initializeCategories = async () => {
         const [categories, masterCategories] = await Promise.all([getCategory(), getCategoryMaster()]);
@@ -73,7 +76,7 @@ const CategoryEdit = () => {
             .map((category: any) => category.key);
 
         setSelectedCategories(initialSelectedCategories);
-        setData(categories); // set the categories to be displayed
+        setData(categories);
     };
 
     useEffect(() => {

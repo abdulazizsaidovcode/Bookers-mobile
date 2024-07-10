@@ -22,7 +22,6 @@ const ExpertiseEdit: React.FC = () => {
     const [value, setValue] = useState('');
     const [validate, setValidate] = useState(false);
     const [specialization, setSpecialization] = useState([]);
-    const [selectedServices, setSelectedServices] = useState<any[]>([]);
     const { id } = route.params as { id: string };
 
     useEffect(() => {
