@@ -9,28 +9,40 @@ interface TabsProps {
 const Tabs: React.FC<TabsProps> = ({ activeTab, onTabChange }) => {
   return (
     <View style={styles.tabs}>
-      <TouchableOpacity 
+      <TouchableOpacity
         style={[
-          styles.tabButton, 
-          activeTab === 'booked' && styles.activeTab, 
+          styles.tabButton,
+          activeTab === 'booked' && styles.activeTab,
           activeTab !== 'booked' && styles.inactiveTab
-        ]} 
+        ]}
         onPress={() => onTabChange('booked')}
       >
         <Text style={[styles.tabText, activeTab !== 'booked' && styles.inactiveText]}>
           Забронировано
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity 
+      <TouchableOpacity
         style={[
-          styles.tabButton, 
-          activeTab === 'requests' && styles.activeTab, 
+          styles.tabButton,
+          activeTab === 'requests' && styles.activeTab,
           activeTab !== 'requests' && styles.inactiveTab
-        ]} 
+        ]}
         onPress={() => onTabChange('requests')}
       >
         <Text style={[styles.tabText, activeTab !== 'requests' && styles.inactiveText]}>
           Запросы
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[
+          styles.tabButton,
+          activeTab === 'hall' && styles.activeTab,
+          activeTab !== 'hall' && styles.inactiveTab
+        ]}
+        onPress={() => onTabChange('hall')}
+      >
+        <Text style={[styles.tabText, activeTab !== 'requests' && styles.inactiveText]}>
+          Запрос окошка
         </Text>
       </TouchableOpacity>
     </View>
