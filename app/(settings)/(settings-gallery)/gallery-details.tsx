@@ -109,7 +109,7 @@ const GalleryDetails: React.FC = () => {
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const newImages = result.assets.map(asset => asset.uri);
-      setImages([...images, ...newImages])
+      setImages([...images, ...newImages]);
     }
   };
 
@@ -237,7 +237,7 @@ const GalleryDetails: React.FC = () => {
           onConfirm={handleDelete}
         >
           <View>
-            <Text style={styles.modalTitle}>{selectedImages.length === fullData.resGalleryAttachments.length ? 'Вы уверены, что хотите удалить все фото альбома?' : 'Вы уверены, что хотите удалить фото?'}</Text>
+            <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}>{selectedImages.length === fullData.resGalleryAttachments.length ? 'Вы уверены, что хотите удалить все фото альбома?' : 'Вы уверены, что хотите удалить фото?'}</Text>
           </View>
         </CenteredModal>
         <BottomModal isBottomModal={isBottomModalOpen} toggleBottomModal={toggleBottomModal}>
