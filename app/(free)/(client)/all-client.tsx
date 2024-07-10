@@ -1,4 +1,4 @@
-import {View, ScrollView, StatusBar, FlatList, Text} from 'react-native';
+import {View, ScrollView, StatusBar, FlatList, Text, RefreshControl} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -10,12 +10,18 @@ import LocationInput from "@/components/(location)/locationInput";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {StandardNowAndConstClient} from "@/components/clients/client-items";
 import {getClientAllSearch} from "@/helpers/api-function/client/client";
+import {useCallback} from "react";
+import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/all-client'>;
 
 const AllClient = () => {
-    const {allClientsList, setAllClients} = clientStore()
+    const {allClientsList, setAllClients, refreshing, setRefreshing} = clientStore()
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, []);
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -24,6 +30,7 @@ const AllClient = () => {
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View>
                         <View style={[tw`mt-5`, {alignSelf: 'flex-start'}]}>

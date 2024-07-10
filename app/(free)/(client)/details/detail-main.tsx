@@ -1,4 +1,4 @@
-import {View, ScrollView, StatusBar, Text} from 'react-native';
+import {View, ScrollView, StatusBar, Text, RefreshControl} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -7,7 +7,7 @@ import {RootStackParamList} from "@/type/root";
 import Buttons from "@/components/(buttons)/button";
 import ClientDetailBasic from "@/components/clients/details/detail-basic";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
 import {addClientMessage, getAgeList, getHistoryCount, getMeClient, getRegionList} from "@/helpers/api-function/client/client";
@@ -16,6 +16,7 @@ import HistoryMain from "@/app/(free)/(client)/details/history/history-main";
 import ProfileUpdate from "@/app/(free)/(client)/details/history/profile-update";
 import {getMee} from "@/helpers/token";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
+import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
@@ -23,7 +24,7 @@ const DetailMain = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<any>();
     const {infoClient} = route.params;
-    const {isLoading, setIsLoading, historyCountData, setHistoryCountData, setAgeData, setRegionData} = clientStore()
+    const {isLoading, setIsLoading, historyCountData, setHistoryCountData, setAgeData, setRegionData, refreshing, setRefreshing} = clientStore()
     const {setGetMee} = useGetMeeStore()
     const [bottomModalSMS, setBottomModalSMS] = useState(false)
     const [messageVal, setMessageVal] = useState('')
@@ -41,6 +42,10 @@ const DetailMain = () => {
     useEffect(() => {
         if (!isLoading && !bottomModalSMS) setMessageVal('')
     }, [isLoading, bottomModalSMS]);
+
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, []);
 
     const toggleBottomModalSMS = () => setBottomModalSMS(!bottomModalSMS)
 
@@ -60,6 +65,7 @@ const DetailMain = () => {
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View>
                         <View style={[tw`mt-4 flex-row justify-start items-center mb-10`, {gap: 16}]}>

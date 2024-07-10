@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
+import React, {useCallback, useEffect, useState} from "react";
+import {View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image, RefreshControl} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -23,6 +23,7 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Buttons from "@/components/(buttons)/button";
 import Textarea from "@/components/select/textarea";
+import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
 
@@ -30,7 +31,7 @@ const HistoryDetailsInformation = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<any>();
     const {historyData} = route.params;
-    const {isLoading, setIsLoading, setUpcomingData, setPastData, setCanceledData, setHistoryCountData} = clientStore()
+    const {isLoading, setIsLoading, setUpcomingData, setPastData, setCanceledData, setHistoryCountData, refreshing, setRefreshing} = clientStore()
     const [serviceName, setServiceName] = useState([]);
     const [confirmStatus, setConfirmStatus] = useState('');
     const [successStatus, setSuccessStatus] = useState('');
@@ -69,6 +70,10 @@ const HistoryDetailsInformation = () => {
         }
     }, [successStatus]);
 
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, []);
+
     const handleRating = (value: number) => setRating(value)
     const toggleConfirm = () => setIsConfirm(!isConfirm)
     const toggleRejected = () => setIsRejected(!isRejected)
@@ -105,6 +110,7 @@ const HistoryDetailsInformation = () => {
                         flexGrow: 1,
                         justifyContent: 'space-between'
                     }}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View style={tw`mt-3`}>
                         <TouchableOpacity
