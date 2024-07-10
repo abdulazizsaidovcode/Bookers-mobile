@@ -2,16 +2,18 @@ import axios from "axios";
 import { getMe } from "./api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+let tokens: any;
+
 const getData = async () => {
   try {
     const value = await AsyncStorage.getItem('registerToken');
-    if (value !== null) return value
+    if (value !== null) tokens = value
   } catch (e) {
     console.error(e);
   }
 };
 
-const tokens: any = getData()
+getData()
 
 export const config = {
   headers: {

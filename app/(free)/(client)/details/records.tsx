@@ -16,6 +16,7 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import {postOrder} from "@/helpers/api-function/oreder/oreder";
 import {getFile} from "@/helpers/api";
 import {handleRefresh} from "@/constants/refresh";
+import {getClientIdStore} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records'>;
 
@@ -32,9 +33,11 @@ const Records = () => {
     const [regex, setRegex] = useState(false);
     const [data, setData] = useState<any>('');
     const [orderID, setOrderID] = useState<any>('');
+    const [userID, setUserID] = useState<any>('');
 
     useEffect(() => {
         fetchServices(setServices);
+        getClientIdStore(setUserID);
     }, []);
 
     useEffect(() => {
@@ -76,6 +79,7 @@ const Records = () => {
     };
 
     console.log('edit u/n: ', record)
+    console.log('edit u/n user id: ', userID)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>

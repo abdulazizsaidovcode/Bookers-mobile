@@ -10,6 +10,7 @@ import {getCanceledClient} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {handleRefresh} from "@/constants/refresh";
+import {clientIdStore} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/canceled-history'>;
 
@@ -36,14 +37,6 @@ const CanceledHistory = () => {
         handleRefresh(setRefreshing);
     }, []);
 
-    const storeData = async () => {
-        try {
-            await AsyncStorage.setItem('clientID', clientID);
-        } catch (e) {
-            console.error(e);
-        }
-    };
-
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -65,7 +58,7 @@ const CanceledHistory = () => {
                                     isBtn={item.orderStatus === 'WAIT'}
                                     clicks={() => {
                                         navigation.navigate('(free)/(client)/details/history/history-details', {historyData: item})
-                                        storeData()
+                                        clientIdStore(clientID)
                                     }}
                                 />
                             )}

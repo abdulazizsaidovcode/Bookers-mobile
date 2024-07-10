@@ -24,6 +24,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Buttons from "@/components/(buttons)/button";
 import Textarea from "@/components/select/textarea";
 import {handleRefresh} from "@/constants/refresh";
+import {getClientIdStore} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
 
@@ -50,7 +51,7 @@ const HistoryDetailsInformation = () => {
     }, [isFeedback]);
 
     useEffect(() => {
-        getData();
+        getClientIdStore(setUserID);
     }, []);
 
     useEffect(() => {
@@ -85,15 +86,6 @@ const HistoryDetailsInformation = () => {
         else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
-
-    const getData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('clientID');
-            if (value !== null) setUserID(value)
-        } catch (e) {
-            console.error(e);
-        }
-    };
 
     console.log('history data: ', historyData)
 

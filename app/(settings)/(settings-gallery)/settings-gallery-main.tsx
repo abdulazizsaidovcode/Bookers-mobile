@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import { router } from 'expo-router';
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'settings-gallery-main'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(settings)/(settings-gallery)/settings-gallery-main'>;
 const { width, height } = Dimensions.get('window');
 
 
@@ -36,10 +36,10 @@ const SettingsGalleryMain = () => {
                     <NavigationMenu name='Моя галерея' />
                 </View>
                 <View style={styles.content}>
-                    <View style={{ height: '83%', justifyContent: 'flex-start' }}>
+                    <View style={{ height: height, }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10 }}>
                             <Text style={styles.title}>Фото галерея</Text>
-                            {data.length === 0 ? '' : <Ionicons name="add-circle-outline" size={25} color="white" onPress={() => navigation.navigate('(settings)/(settings-gallery)/settings-gallery')}/>}
+                            {data.length === 0 ? '' : <Ionicons name="add-circle-outline" size={25} color="white" onPress={() => navigation.navigate('(settings)/(settings-gallery)/settings-gallery')} />}
                         </View>
                         {data.length === 0 ?
                             <Text style={styles.description}>Ваша галерея пустая, добавьте фотографии из проводника Вашего телефона</Text>
@@ -75,13 +75,13 @@ const SettingsGalleryMain = () => {
                             </View>
                         }
                     </View>
-                    <View style={{ height: '17%' }}>
+                    <View>
                         {data.length === 0 ?
                             <Buttons onPress={() => navigation.navigate('(settings)/(settings-gallery)/settings-gallery')} icon={<AntDesign name="pluscircleo" size={20} color="white" />} title='Создать альбом' />
                             :
                             <Buttons onPress={() => {
                                 putNumbers(5)
-                                router.push("(welcome)/Welcome");
+                                navigation.navigate("(welcome)/Welcome");
                             }} title='На главную' />}
                     </View>
                 </View>
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#21212e',
     },
     scrollContainer: {
-        flexGrow: 1,
         justifyContent: 'space-between',
     },
     content: {
