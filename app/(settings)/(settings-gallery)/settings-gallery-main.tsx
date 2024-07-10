@@ -1,32 +1,59 @@
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, Pressable, Dimensions } from 'react-native';
-import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import Buttons from '@/components/(buttons)/button';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import { getFile } from '@/helpers/api';
-import { fetchData } from '@/helpers/api-function/gallery/settings-gallery';
+import { delGallery, fetchData } from '@/helpers/api-function/gallery/settings-gallery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
-import { Ionicons } from '@expo/vector-icons';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
-import { router } from 'expo-router';
+import CenteredModal from '@/components/(modals)/modal-centered';
+import Toast from 'react-native-simple-toast'
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(settings)/(settings-gallery)/settings-gallery-main'>;
 const { width, height } = Dimensions.get('window');
 
-
 const SettingsGalleryMain = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const { data, setData } = useGalleryStore();
+    const [showCheckboxes, setShowCheckboxes] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
     useEffect(() => {
         fetchData(setData);
     }, []);
 
+    console.log(selectedItemId);
+
+
     const handlePress = (id: number) => {
-        navigation.navigate('(settings)/(settings-gallery)/gallery-details', { id })
+        if (showCheckboxes) {
+            setSelectedItemId(id);
+        } else {
+            navigation.navigate('(settings)/(settings-gallery)/gallery-details', { id });
+        }
+    }
+
+    const toggleModal = () => {
+        if (selectedItemId !== null) {
+            setIsOpen(!isOpen)
+        } else {
+            Toast.show('Please select gellery', Toast.LONG)
+        }
+    }
+
+    const toggleCheckboxes = () => {
+        setShowCheckboxes(!showCheckboxes);
+        setSelectedItemId(null);
+    }
+
+    const handleDelGallery = () => {
+        delGallery(selectedItemId, setData, toggleModal, toggleCheckboxes)
+
     }
 
     return (
@@ -36,10 +63,17 @@ const SettingsGalleryMain = () => {
                     <NavigationMenu name='Моя галерея' />
                 </View>
                 <View style={styles.content}>
-                    <View style={{ height: height, }}>
+                    <View style={{ height: height }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10 }}>
                             <Text style={styles.title}>Фото галерея</Text>
-                            {data.length === 0 ? '' : <Ionicons name="add-circle-outline" size={25} color="white" onPress={() => navigation.navigate('(settings)/(settings-gallery)/settings-gallery')} />}
+                            <View style={{ flexDirection: 'row', gap: 10 }}>
+                                {data.length === 0 ? '' : (
+                                    <Ionicons name="add-circle-outline" size={25} color="white" onPress={() => navigation.navigate('(settings)/(settings-gallery)/settings-gallery')} />
+                                )}
+                                {data.length === 0 ? '' : (
+                                    <MaterialIcons name="delete" size={25} color="white" onPress={toggleCheckboxes} />
+                                )}
+                            </View>
                         </View>
                         {data.length === 0 ?
                             <Text style={styles.description}>Ваша галерея пустая, добавьте фотографии из проводника Вашего телефона</Text>
@@ -48,6 +82,11 @@ const SettingsGalleryMain = () => {
                                 {data.map((item, index) => (
                                     <Pressable onPress={() => handlePress(item.id)} key={index} style={styles.albumContainer}>
                                         <View style={{ flexDirection: 'row', width: width / 2.2, flexWrap: 'wrap' }}>
+                                            {showCheckboxes && (
+                                                <View style={styles.checkboxContainer}>
+                                                    <MaterialIcons name={selectedItemId === item.id ? "check-box" : "check-box-outline-blank"} size={24} color="#9C0A35" />
+                                                </View>
+                                            )}
                                             {item.resGalleryAttachments.slice(0, 4).map((attachment, attIndex) => (
                                                 <View key={attIndex} style={styles.imageContainer}>
                                                     <Image
@@ -68,7 +107,7 @@ const SettingsGalleryMain = () => {
                                             }
                                         </View>
                                         <View>
-                                            <Text style={{ color: 'white', margin: 5, width: width / 2.5, }}>{item.albumName}</Text>
+                                            <Text style={{ color: 'white', margin: 5, width: width / 2.5 }}>{item.albumName}</Text>
                                         </View>
                                     </Pressable>
                                 ))}
@@ -78,12 +117,25 @@ const SettingsGalleryMain = () => {
                     <View>
                         {data.length === 0 ?
                             <Buttons onPress={() => navigation.navigate('(settings)/(settings-gallery)/settings-gallery')} icon={<AntDesign name="pluscircleo" size={20} color="white" />} title='Создать альбом' />
-                            :
-                            <Buttons onPress={() => {
-                                putNumbers(5)
-                                navigation.navigate("(welcome)/Welcome");
-                            }} title='На главную' />}
+                            : showCheckboxes ? <Buttons title='Удалить выбранную галерею' onPress={toggleModal} />
+                                :
+                                <Buttons onPress={() => {
+                                    putNumbers(5);
+                                    navigation.navigate("(welcome)/Welcome");
+                                }} title='На главную' />}
                     </View>
+                    <CenteredModal
+                        toggleModal={toggleModal}
+                        isModal={isOpen}
+                        btnWhiteText="Отмена"
+                        btnRedText="Подтверждать"
+                        isFullBtn={true}
+                        onConfirm={handleDelGallery}
+                    >
+                        <View>
+                            <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}>Вы уверены, что хотите открыть эту галерею?</Text>
+                        </View>
+                    </CenteredModal>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -133,5 +185,13 @@ const styles = StyleSheet.create({
         width: width / 5 - 3.7,
         height: height / 11,
         borderRadius: 10,
+    },
+    checkboxContainer: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        zIndex: 1,
+        backgroundColor: 'white',
+        borderRadius: 5
     },
 });
