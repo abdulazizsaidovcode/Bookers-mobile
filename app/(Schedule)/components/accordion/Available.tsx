@@ -35,8 +35,8 @@ const AvailableAccordion: React.FC = () => {
                             attachmentId={item.attachmentId}
                             service={item.serviceName}
                             price={item.price}
-                            startTime={item.startTime}
-                            endTime={item.finishTime}
+                            startTime={item.startTime.slice(0,5)}
+                            endTime={item.finishTime.slice(0,5)}
                         />
                     )) :
                         <Text style={styles.placeholderText}>заказанных нет</Text>
