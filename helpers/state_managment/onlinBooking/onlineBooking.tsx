@@ -17,6 +17,8 @@ export interface IState2 {
     setIsEnabled: (val: boolean) => void
     isEnabled2: boolean
     setIsEnabled2: (val: boolean) => void
+    data: any
+    setData: (val: any) => void
 }
 export interface IState3 {
     timeEnabled: boolean
@@ -50,6 +52,8 @@ export const OnlineBookingStory2 = create<IState2>((set) => ({
     setIsEnabled: (val: boolean) => set({ isEnabled: val }),
     isEnabled2: false,
     setIsEnabled2: (val: boolean) => set({ isEnabled2: val }),
+    data: null,
+    setData: (val: any) => set({ data: val }),
 }))
 export const OnlineBookingStory3 = create<IState3>((set) => ({
     timeEnabled: false,

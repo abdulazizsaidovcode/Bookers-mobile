@@ -1,4 +1,4 @@
-import { onlineBookingAllowClient_url, onlineBookingUgly_url, onlineBookingUserviceTimeAll_url, onlineBookingUserviceTimeservice_url, onlineConfirmationServices_url } from "@/helpers/api";
+import { onlineBookingAllowClient_url, onlineBookingHallWaitin_url, onlineBookingUgly_url, onlineBookingUserviceTimeAll_url, onlineBookingUserviceTimeservice_url, onlineConfirmationServices_url } from "@/helpers/api";
 import axios from "axios";
 import { config } from "@/helpers/token"
 import { Alert } from "react-native"
@@ -23,7 +23,6 @@ export const onlineBookingAllowClient = (isEnabled: boolean) => {
 
 export const getOnlineBookingAllowClient = (setData: (val: boolean) => void) => {
     axios.get(`${onlineBookingAllowClient_url}`, config)
-
         .then(res => {
             if (res.data.success) {
                 setData(res.data.body)
@@ -124,4 +123,27 @@ export const getOnlineConfirmationServices = (setData: (val: IsActive | null) =>
 }
 
 // hall waiting post API function 
+export const onlineBookingHallWaiting = (isEnabled: boolean, isEnabled2: boolean) => {
+    const data = {
+        allClient: isEnabled,
+        regularClient: isEnabled2
+    }
+    axios.post(`${onlineBookingHallWaitin_url}`, data, config)
+        .then(res => {
+            Alert.alert("Succes hall")
+        })
+        .catch((err) => {
+            Alert.alert("Not succes hall")
+        })
+}
 
+//hall waiting get API function
+export const getOnlineBookingHallWaiting = (setData: (val: any | null) => void) => {
+    axios.get(`${onlineBookingHallWaitin_url}`, config)
+        .then(res => {
+            setData(res.data.body)
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+}
