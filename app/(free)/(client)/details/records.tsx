@@ -13,7 +13,7 @@ import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStor
 import {getFreeTime} from "@/helpers/api-function/freeTime/freeTime";
 import {fetchServices, sliceTextFullName} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import {postOrder} from "@/helpers/api-function/oreder/oreder";
+import {orderTimeEdit, postOrder} from "@/helpers/api-function/oreder/oreder";
 import {getFile} from "@/helpers/api";
 import {handleRefresh} from "@/constants/refresh";
 import {getClientIdStore} from "@/constants/storage";
@@ -32,6 +32,7 @@ const Records = () => {
     const [categoryName, setCategoryName] = useState('');
     const [regex, setRegex] = useState(false);
     const [data, setData] = useState<any>('');
+    const [updateData, setUpdateData] = useState<any>('');
     const [orderID, setOrderID] = useState<any>('');
     const [userID, setUserID] = useState<any>('');
 
@@ -45,6 +46,7 @@ const Records = () => {
             navigation.navigate('(free)/(client)/details/records-information', {orderID})
             setActiveTab('')
             setActiveTime('')
+            setOrderID('')
         }
     }, [orderID]);
 
@@ -65,6 +67,17 @@ const Records = () => {
             comment: ""
         }
         setData(data)
+        if (record.updateOrder === 'updateOrder') {
+            getClientIdStore(setUserID)
+            const updateData = {
+                orderId: record.orderOneData.id,
+                orderTimeHour: activeTime && activeTime.slice(0, 2),
+                orderTimeMinute: activeTime && activeTime.slice(3, 5),
+                orderDate: calendarDate,
+                clientId: userID
+            }
+            setUpdateData(updateData)
+        }
     }, [calendarDate, activeTab, activeTime]);
 
     const onRefresh = useCallback(() => {
@@ -77,9 +90,6 @@ const Records = () => {
         setActiveTime('')
         setCategoryName(name)
     };
-
-    console.log('edit u/n: ', record)
-    console.log('edit u/n user id: ', userID)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -118,9 +128,11 @@ const Records = () => {
                             </TouchableOpacity>
                         ) : <StandardNowAndConstClient client={record}/>}
                         {record.updateOrder === 'updateOrder' ? <>
-                                <TouchableOpacity activeOpacity={.9} style={styles.button}>
-                                    <Text style={styles.text}>{record.orderOneData?.serviceName}</Text>
-                                </TouchableOpacity>
+                            <TouchableOpacity activeOpacity={.9} style={styles.button}>
+                                <Text style={styles.text}>
+                                    {categoryName ? categoryName : record.orderOneData?.serviceName}
+                                </Text>
+                            </TouchableOpacity>
                         </> : <>
                             {categoryName && (
                                 <TouchableOpacity activeOpacity={.9} style={styles.button}>
@@ -176,7 +188,14 @@ const Records = () => {
                         <Buttons
                             title={isLoading ? 'loading...' : 'Записать'}
                             isDisebled={isLoading ? false : regex}
-                            onPress={() => postOrder({data, setOrderId: setOrderID, setLoading: setIsLoading})}
+                            onPress={() => {
+                                if (record.updateOrder === 'updateOrder') orderTimeEdit({
+                                    data: updateData,
+                                    setOrderId: setOrderID,
+                                    setLoading: setIsLoading
+                                })
+                                else postOrder({data, setOrderId: setOrderID, setLoading: setIsLoading})
+                            }}
                         />
                     </View>
                 </ScrollView>

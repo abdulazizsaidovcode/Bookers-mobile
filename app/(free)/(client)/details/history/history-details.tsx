@@ -87,8 +87,6 @@ const HistoryDetailsInformation = () => {
         else if (statusN === 'WAIT') return 'Ждать'
     }
 
-    console.log('history data: ', historyData)
-
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
