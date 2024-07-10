@@ -33,7 +33,6 @@ const BookedAccordion: React.FC = () => {
             return () => {
                 setActiveTab('');
                 setActiveTime('');
-                // setFreeTime([]);
             };
         }, [setFreeTime])
     );

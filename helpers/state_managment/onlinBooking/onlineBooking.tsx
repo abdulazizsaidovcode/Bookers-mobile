@@ -12,6 +12,16 @@ export interface IState {
     data: IsActive | null
     setData: (val: IsActive | null) => void
 }
+export interface IState2 {
+    isEnabled: boolean
+    setIsEnabled: (val: boolean) => void
+    isEnabled2: boolean
+    setIsEnabled2: (val: boolean) => void
+}
+export interface IState3 {
+    timeEnabled: boolean
+    setTimeEnabled: (val: boolean) => void
+}
 export interface Urgently {
     Urgently: boolean
     setUrgentlyt: (val: boolean) => void
@@ -35,6 +45,16 @@ export const OnlineBookingStory = create<IState>((set) => ({
     data: null,
     setData: (val: IsActive | null) => set({ data: val }),
 }));
+export const OnlineBookingStory2 = create<IState2>((set) => ({
+    isEnabled: false,
+    setIsEnabled: (val: boolean) => set({ isEnabled: val }),
+    isEnabled2: false,
+    setIsEnabled2: (val: boolean) => set({ isEnabled2: val }),
+}))
+export const OnlineBookingStory3 = create<IState3>((set) => ({
+    timeEnabled: false,
+    setTimeEnabled: (val: boolean) => set({ timeEnabled: val }),
+}))
 
 export const OnlineBookingSettingsUrgentlyStory = create<Urgently>((set) => ({
     Urgently: false,

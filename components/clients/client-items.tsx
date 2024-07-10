@@ -121,7 +121,6 @@ export const StandardNowAndConstClient = (
         client: any;
         clicks?: () => void;
     }) => {
-
     return (
         <TouchableOpacity
             onPress={clicks}

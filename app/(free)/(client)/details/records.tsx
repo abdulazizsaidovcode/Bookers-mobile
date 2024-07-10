@@ -1,4 +1,4 @@
-import {View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -11,9 +11,10 @@ import React, {useEffect, useState} from "react";
 import {useScheduleFreeTime} from "@/helpers/state_managment/freeTime/freeTime";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import {getFreeTime} from "@/helpers/api-function/freeTime/freeTime";
-import {fetchServices} from "@/helpers/api-function/client/client";
+import {fetchServices, sliceTextFullName} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {postOrder} from "@/helpers/api-function/oreder/oreder";
+import {getFile} from "@/helpers/api";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records'>;
 
@@ -36,7 +37,11 @@ const Records = () => {
     }, []);
 
     useEffect(() => {
-        if (orderID) navigation.navigate('(free)/(client)/details/records-information', {orderID})
+        if (orderID) {
+            navigation.navigate('(free)/(client)/details/records-information', {orderID})
+            setActiveTab('')
+            setActiveTime('')
+        }
     }, [orderID]);
 
     useEffect(() => {
@@ -65,6 +70,8 @@ const Records = () => {
         setCategoryName(name)
     };
 
+    console.log('edit u/n: ', record)
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -75,12 +82,42 @@ const Records = () => {
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
                 >
                     <View>
-                        <StandardNowAndConstClient client={record}/>
-                        {categoryName && (
-                            <TouchableOpacity activeOpacity={.9} style={styles.button}>
-                                <Text style={styles.text}>{categoryName}</Text>
+                        {record.updateOrder === 'updateOrder' ? (
+                            <TouchableOpacity
+                                style={[
+                                    tw`flex-row items-start justify-start px-4 py-5 mb-3 rounded-2xl`,
+                                    {backgroundColor: "#B9B9C9"},
+                                ]}
+                                activeOpacity={0.8}
+                            >
+                                <Image
+                                    source={(record.orderOneData.attachmentId !== null)
+                                        ? {uri: `${getFile}${record.orderOneData?.attachmentId}`}
+                                        : require('../../../../assets/avatar.png')
+                                    }
+                                    style={tw`w-12 h-12 rounded-full`}
+                                />
+                                <View style={tw`ml-4 flex-col`}>
+                                    <Text style={[tw`text-black text-lg font-bold`, {lineHeight: 22}]}>
+                                        {sliceTextFullName(record.orderOneData?.fullName)}
+                                    </Text>
+                                    <Text style={[tw`text-gray-500 text-base`, {lineHeight: 22}]}>
+                                        {record.orderOneData?.phone}
+                                    </Text>
+                                </View>
                             </TouchableOpacity>
-                        )}
+                        ) : <StandardNowAndConstClient client={record}/>}
+                        {record.updateOrder === 'updateOrder' ? <>
+                                <TouchableOpacity activeOpacity={.9} style={styles.button}>
+                                    <Text style={styles.text}>{record.orderOneData?.serviceName}</Text>
+                                </TouchableOpacity>
+                        </> : <>
+                            {categoryName && (
+                                <TouchableOpacity activeOpacity={.9} style={styles.button}>
+                                    <Text style={styles.text}>{categoryName}</Text>
+                                </TouchableOpacity>
+                            )}
+                        </>}
                         <CalendarGraffic/>
                         <View style={styles.tabContainer}>
                             <ScrollView

@@ -33,6 +33,11 @@ const Auth: React.FC = () => {
                     changeLanguage('en');
                 }
                 } />
+                <Buttons title="Online booking" backgroundColor="#9C0A35" onPress={() => {
+                    router.push('(standart)/(onlineBooking)/onlineBooking');
+                    changeLanguage('en');
+                }
+                } />
             </View>
         </SafeAreaView>
     );

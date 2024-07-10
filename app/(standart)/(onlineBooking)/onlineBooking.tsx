@@ -40,14 +40,14 @@ const data = [
         title: 'Запрос окошка',
         subtitle: 'Не настроено',
         IconComponent: <Feather name="watch" size={30} color="#9C0A35" />,
-        onPress: () => { router.push('/booking') }
+        onPress: () => { router.push('/requestWindow') }
     },
     {
         id: '5',
         title: 'Время для VIP клиентов',
         subtitle: 'Не настроено',
         IconComponent: <FontAwesome name="diamond" size={24} color="#9C0A35" />,
-        onPress: () => { router.push('/booking') }
+        onPress: () => { router.push('/timeSelect') }
     },
 ]
 
