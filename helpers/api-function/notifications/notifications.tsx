@@ -78,9 +78,9 @@ export const editFeedbeckOrder = async (text: string | undefined) => {
     }
 }
 
-export const editAppoinmentOrder = async (text: string | undefined, hour: string, minute: string, isActive: boolean | undefined) => {
+export const editAppoinmentOrder = async (text: string | undefined, hour: number | undefined, minute: number | undefined, isActive: boolean | undefined) => {
     try {
-        await axios.put(`${notifications_appointment_edit}?hour=${hour}&minute=${minute}&text=${text}&isActive=${isActive}`, { text }, config);
+        await axios.put(`${notifications_appointment_edit}?hour=${hour}&minute=${minute}&text=${text}&active=${isActive}`, {}, config);
     } catch (error) {
         console.log(error)
     }
@@ -89,14 +89,6 @@ export const editAppoinmentOrder = async (text: string | undefined, hour: string
 export const editWindowOrder = async (text: string | undefined) => {
     try {
         await axios.put(notifications_window_edit, { text }, config);
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-export const editAppoinmentActive = async (isActive: boolean) => {
-    try {
-        await axios.post(`${notifications_appointment_edit_active}?status=APPOINTMENT&isActive=${isActive}`, {}, config);
     } catch (error) {
         console.log(error)
     }

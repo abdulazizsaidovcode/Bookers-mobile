@@ -8,7 +8,7 @@
     "scheme": "bookersapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "resizeMode": "cover",
+      "resizeMode": "contain",
       "backgroundColor": "#21212E"
     },
     "ios": {
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/logo.png",
+        "foregroundImage": "./assets/images/mainLogo.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
