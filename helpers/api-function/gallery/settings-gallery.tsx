@@ -97,11 +97,13 @@ export const delPhoto = async (
 
 
 
-export const delGallery = async (id: number, setData: (data: GalleryData[]) => void) => {
+export const delGallery = async (id: number | null, setData: (data: GalleryData[]) => void, toggleModal: () => void, toggleCheckboxes: () => void) => {
   try {
     const res = await axios.delete(`${gallery_add}/${id}`, config);
     if (res.data.success) {
       fetchData(setData);
+      toggleModal()
+      toggleCheckboxes()
     }
   } catch (error) {
     ;
