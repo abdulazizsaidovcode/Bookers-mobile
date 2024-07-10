@@ -4,6 +4,8 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import Toast from "react-native-simple-toast";
+
 
 
 const MasterorClient: React.FC = () => {
@@ -22,7 +24,7 @@ const MasterorClient: React.FC = () => {
                 }} />
                 <Buttons title="Client" backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_CLIENT")
-                    router.push('(auth)/switchPage');
+                    Toast.show("клиентская панель пока недоступна в этой версии", Toast.LONG)
                 }} />
             </View>
         </SafeAreaView>

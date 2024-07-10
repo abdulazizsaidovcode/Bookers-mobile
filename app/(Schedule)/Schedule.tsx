@@ -15,6 +15,7 @@ import Buttons from '@/components/(buttons)/button';
 import { useOrderPosdData } from '@/helpers/state_managment/order/order';
 import { useNavigation } from 'expo-router';
 import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStore';
+import HallSchedule from './hall';
 
 const Schedule: React.FC = () => {
   const [activeTab, setActiveTab] = useState('booked');
@@ -85,7 +86,8 @@ const Schedule: React.FC = () => {
             <Tabs activeTab={activeTab} onTabChange={handleTabChange} />
           </View>
           {activeTab === 'booked' && <Bookedschedule />}
-          {/* {activeTab === 'requests' && <RequestSchedule />} */}
+          {activeTab === 'requests' && <RequestSchedule />}
+          {activeTab === 'hall' && <HallSchedule />}
         </View>
       </ScrollView >
       {activeTab == 'booked' && <View style={styles.button}>
