@@ -7,6 +7,7 @@ import {
   Pressable,
   StyleSheet,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -26,9 +27,12 @@ import {
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 
-const screenWidht = Dimensions.get('window').width
-const screenHeight = Dimensions.get('window').height
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(welcome)/welcome'>;
+const screenWidht = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
+type SettingsScreenNavigationProp = NavigationProp<
+  RootStackParamList,
+  "(welcome)/welcome"
+>;
 
 const Welcome = () => {
   const { number, setNumber } = numberSettingStore();
@@ -40,7 +44,6 @@ const Welcome = () => {
     }
     getNumbers(setNumber);
   }, []);
-
 
   const data = [
     {
@@ -67,13 +70,16 @@ const Welcome = () => {
       description: "Создавайте фото и видео галереи своих работ",
       icon: <MaterialIcons name="photo" size={24} color="white" />,
       onPress: () =>
-        navigation.navigate("(settings)/(settings-gallery)/settings-gallery-main"),
+        navigation.navigate(
+          "(settings)/(settings-gallery)/settings-gallery-main"
+        ),
     },
     {
       title: "Онлайн бронирование",
       description: "Настройте записи на Ваши услуги",
       icon: <FontAwesome6 name="calendar-plus" size={24} color="white" />,
-      onPress: () => navigation.navigate("(standart)/(onlineBooking)/onlineBooking"),
+      onPress: () =>
+        navigation.navigate("(standart)/(onlineBooking)/onlineBooking"),
     },
     {
       title: "Уведомления",
@@ -121,9 +127,13 @@ const Welcome = () => {
               style={styles.profileImage}
               source={require("../../assets/images/866-536x354.jpg")}
             />
-            <View style={styles.editIconContainer}>
-              <MaterialIcons name="edit" size={24} color="white" />
-            </View>
+              <View style={styles.editIconContainer}>
+            <TouchableOpacity activeOpacity={0.7} onPress={() => {
+              navigation.navigate("(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData")
+            }}>
+                <MaterialIcons name="edit" size={24} color="white" />
+            </TouchableOpacity>
+              </View>
           </View>
           <Text style={styles.profileName}>Гузаль Шерматова</Text>
           <View style={styles.infoContainer}>
@@ -153,7 +163,9 @@ const Welcome = () => {
                     <View style={styles.iconBackground}>{item.icon}</View>
                   </View>
                   <Text style={styles.buttonTitle}>{item.title}</Text>
-                  <Text style={styles.buttonDescription}>{item.description}</Text>
+                  <Text style={styles.buttonDescription}>
+                    {item.description}
+                  </Text>
                 </View>
               </Pressable>
             );

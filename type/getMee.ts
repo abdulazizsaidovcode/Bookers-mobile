@@ -9,6 +9,7 @@ export interface GetMee {
     instagram: string | null,
     ageId: string | null,
     birthDate: string | null,
+    regionId: string | null
     districtId: string | null,
     attachmentId: string | null
 } 
@@ -17,12 +18,12 @@ export interface GetMeeStore {
     getMee: GetMee;
     setGetMee: (val: GetMee) => void
     ageOption: []
-    setAgeOption: (vel: any) => void
+    setAgeOption: (val: any) => void
     
     regionOption: []
-    setRegionOption: (vel: []) => void
+    setRegionOption: (val: []) => void
     
     districtOption: []
-    setDistrictOption: (vel: []) => void
+    setDistrictOption: (val: []) => void
     
 }

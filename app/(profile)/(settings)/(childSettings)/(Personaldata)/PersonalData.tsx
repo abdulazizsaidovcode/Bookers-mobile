@@ -7,10 +7,8 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Modal,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons, Feather } from "@expo/vector-icons";
 import { SelectList } from "react-native-dropdown-select-list";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
@@ -19,11 +17,12 @@ import { getFile } from "@/helpers/api";
 import {
   getAge,
   getAgeId,
+  getDistrict,
   getDistrictId,
   getRegion,
+  getRegionId,
   putPersonalData,
 } from "@/helpers/api-function/profile/personalData";
-import { AgeData } from "@/type/client/client";
 
 const EditProfile: React.FC = () => {
   const {
@@ -36,32 +35,56 @@ const EditProfile: React.FC = () => {
     setDistrictOption,
     districtOption,
   } = useGetMeeStore();
-  const [name, setName] = useState<string>(getMee.firstName);
-  const [surname, setSurname] = useState<string>(getMee.lastName);
-  const [phone, setPhone] = useState<string>(getMee.phoneNumber);
-  const [nickname, setNickname] = useState<string>(getMee.nickname);
-  const [gender, setGender] = useState<any>(null);
-  const [age, setAge] = useState<any | null>(null);
-  const [region, setRegion] = useState<any | null>(null);
-  const [city, setCity] = useState<any>(null);
-  const [telegram, setTelegram] = useState<string | null>(
-    getMee.telegram ? getMee.telegram : null
-  );
-  const [instagram, setInstagram] = useState<string | null>(
-    getMee.instagram ? getMee.instagram : null
-  );
-
-  useEffect(() => {
-    getUser(setGetMee);
-    getAgeId(getMee.ageId, setAge);
-    getAge(setAgeOption);
-    getRegion(setRegionOption);
-  }, []);
 
   const genderOptions = [
     { key: "FEMALE", value: "Женский" },
     { key: "MALE", value: "Мужской" },
   ];
+  
+  
+  const [name, setName] = useState<any>(getMee?.firstName);
+  const [surname, setSurname] = useState<any>(getMee?.lastName);
+  const [phone, setPhone] = useState<any>(getMee?.phoneNumber);
+  const [nickname, setNickname] = useState<any>(getMee.nickname);
+  const [gender, setGender] = useState<any>(null);
+  const [age, setAge] = useState<any | null>(null);
+  const [region, setRegion] = useState<any | null>(null);
+  const [city, setCity] = useState<any>(null);
+  const [telegram, setTelegram] = useState<any | null>(
+    getMee.telegram
+  );
+  const [instagram, setInstagram] = useState<any | null>(
+    getMee.instagram
+  );
+  
+  useEffect(() => {
+    getUser(setGetMee);
+    if (getMee.ageId) getAgeId(getMee.ageId, setAge);
+    getAge(setAgeOption);
+    getRegion(setRegionOption);
+  }, []);
+
+  useEffect(() => {
+    if (region) {
+      getDistrict(setDistrictOption, region ); // Call getDistrict when region changes
+    }
+  }, [region]);
+
+  useEffect(() => {
+    if (getMee.regionId) {
+      getRegionId(setRegion, getMee.regionId); // Set region based on getMee.regionId
+      if (getMee.districtId) {
+        getDistrictId(setCity, getMee.districtId); // Set city based on getMee.districtId
+      }
+    }
+    setName(getMee?.firstName)
+    setSurname(getMee?.lastName)
+    setGender(getMee?.gender)
+    setPhone(getMee?.phoneNumber)
+    setNickname(getMee?.nickname)
+    setTelegram(getMee?.telegram)
+    setInstagram(getMee?.instagram)
+  }, [getMee]);
 
   const ageOptions =
     ageOption &&
@@ -81,6 +104,28 @@ const EditProfile: React.FC = () => {
       return { key: item.id, value: item.name };
     });
 
+  const handleSave = () => {
+    const sanitizeValue = (value: any) => {
+      return value === 0 || value === "" || value === undefined || value === null
+        ? null
+        : value;
+    };
+
+    putPersonalData({
+      setAge: sanitizeValue(age?.key),
+      setCity: sanitizeValue(city),
+      setGender: sanitizeValue(gender),
+      setName: sanitizeValue(name),
+      setPhone: sanitizeValue(phone) !== null ? `+998${sanitizeValue(phone)}` : null,
+      setRegion: sanitizeValue(region),
+      setSurname: sanitizeValue(surname),
+      setInstagram: sanitizeValue(instagram),
+      setNickname: sanitizeValue(nickname),
+      setTelegram: sanitizeValue(telegram),
+      birthdate: getMee.birthDate ? getMee.birthDate : null,
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -97,8 +142,7 @@ const EditProfile: React.FC = () => {
           />
           <View>
             <Text style={styles.profileName}>
-              {getMee.firstName}
-              {getMee.lastName}
+              {getMee.firstName} {getMee.lastName}
             </Text>
             <Text style={styles.profilePhone}>{getMee.phoneNumber}</Text>
             <Text style={styles.profileUsername}>{getMee.nickname}</Text>
@@ -109,7 +153,7 @@ const EditProfile: React.FC = () => {
           <Text style={styles.label}>Имя</Text>
           <TextInput
             style={styles.input}
-            value={name ? name : ""}
+            value={name}
             onChangeText={setName}
           />
         </View>
@@ -117,7 +161,7 @@ const EditProfile: React.FC = () => {
           <Text style={styles.label}>Фамилия</Text>
           <TextInput
             style={styles.input}
-            value={surname ? surname : ""}
+            value={surname}
             onChangeText={setSurname}
           />
         </View>
@@ -129,7 +173,7 @@ const EditProfile: React.FC = () => {
             </View>
             <TextInput
               style={styles.phoneInput}
-              value={phone ? phone : ""}
+              value={phone}
               onChangeText={setPhone}
               keyboardType="numeric"
             />
@@ -139,7 +183,7 @@ const EditProfile: React.FC = () => {
           <Text style={styles.label}>Nickname</Text>
           <TextInput
             style={styles.input}
-            value={nickname ? nickname : ""}
+            value={nickname}
             onChangeText={setNickname}
           />
         </View>
@@ -149,11 +193,15 @@ const EditProfile: React.FC = () => {
             inputStyles={{ color: "#fff" }}
             setSelected={setGender}
             data={genderOptions}
-            defaultOption={{ key: `${gender.key}`, value: gender.value}}
+            defaultOption={
+              genderOptions.find((option) => option.key === getMee.gender) ||
+              null
+            }
             boxStyles={styles.selectListBox}
             dropdownStyles={styles.absoluteDropdown}
             dropdownTextStyles={styles.selectListDropdownText}
           />
+
         </View>
         <View style={styles.formGroup}>
           <Text style={styles.label}>Возраст</Text>
@@ -161,7 +209,9 @@ const EditProfile: React.FC = () => {
             inputStyles={{ color: "#fff" }}
             setSelected={setAge}
             data={ageOptions}
-            defaultOption={{ key: age.id, value: age.value }}
+            defaultOption={
+              ageOptions && ageOptions.find((option) => option.key === getMee.ageId)
+            }
             boxStyles={styles.selectListBox}
             dropdownStyles={styles.absoluteDropdown}
             dropdownTextStyles={styles.selectListDropdownText}
@@ -174,7 +224,10 @@ const EditProfile: React.FC = () => {
             inputStyles={{ color: "#fff" }}
             setSelected={setRegion}
             data={regionOptions}
-            defaultOption={{ key: region.id, value: region.name }}
+            defaultOption={
+              regionOptions &&
+              regionOptions.find((option) => option.key === getMee.regionId)
+            }
             boxStyles={styles.selectListBox}
             dropdownStyles={styles.absoluteDropdown}
             dropdownTextStyles={styles.selectListDropdownText}
@@ -186,7 +239,10 @@ const EditProfile: React.FC = () => {
             inputStyles={{ color: "#fff" }}
             setSelected={setCity}
             data={cityOptions}
-            defaultOption={{ key: city.id, value: city.name }}
+            defaultOption={
+              cityOptions &&
+              cityOptions.find((option) => option.key === getMee.cityId)
+            }
             boxStyles={styles.selectListBox}
             dropdownStyles={styles.absoluteDropdown}
             dropdownTextStyles={styles.selectListDropdownText}
@@ -198,7 +254,7 @@ const EditProfile: React.FC = () => {
           <TextInput
             style={styles.input}
             placeholder="Your telegram url"
-            value={telegram ? telegram : ""}
+            value={telegram || ""}
             onChangeText={setTelegram}
           />
         </View>
@@ -206,29 +262,13 @@ const EditProfile: React.FC = () => {
           <Text style={styles.label}>Instagram</Text>
           <TextInput
             style={styles.input}
-            placeholder="Your telegram url"
-            value={instagram ? instagram : ""}
+            placeholder="Your instagram url"
+            value={instagram || ""}
             onChangeText={setInstagram}
           />
         </View>
 
-        <TouchableOpacity
-          style={styles.saveButton}
-          onPress={() => {
-            putPersonalData({
-              setAge: age.key, // Assuming age.value is the actual value you want to pass
-              setCity: city.key, // Assuming city.value is the actual value you want to pass
-              setGender: gender,
-              setName: name,
-              setPhone: phone,
-              setRegion: region.key, // Assuming region.value is the actual value you want to pass
-              setSurname: surname,
-              setInstagram: instagram,
-              setNickname: nickname,
-              setTelegram: telegram,
-            });
-          }}
-        >
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveButtonText}>Сохранить</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -243,17 +283,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     padding: 16,
-  },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  headerTitle: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
   },
   profileContainer: {
     flexDirection: "row",
@@ -292,10 +321,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     borderRadius: 8,
     padding: 12,
-    justifyContent: "center",
-  },
-  inputText: {
-    color: "#fff",
   },
   phoneContainer: {
     flexDirection: "row",
