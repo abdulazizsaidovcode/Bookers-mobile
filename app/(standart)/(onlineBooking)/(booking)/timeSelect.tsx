@@ -22,6 +22,7 @@ import {
 } from "@/helpers/api-function/notifications/notifications";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import tw from "tailwind-react-native-classnames";
+import { router } from "expo-router";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
@@ -107,7 +108,7 @@ const TimeSelect = () => {
         data,
         config
       );
-      console.log(res);
+      router.back();
     } catch (error) {
       console.log(error);
     }
@@ -115,7 +116,7 @@ const TimeSelect = () => {
 
   const selectTime = () => {
     setVipCount(appoinmentData);
-    toggleModal(  );
+    toggleModal();
   };
 
   const timeSwitch = () => {
