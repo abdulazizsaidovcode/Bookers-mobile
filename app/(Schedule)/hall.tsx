@@ -1,8 +1,7 @@
 import { View, StyleSheet, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { masterOrderHallStore, masterOrderHWaitStore } from '@/helpers/state_managment/order/order';
-import { getMasterOrderHall, getMasterOrderWait } from '@/helpers/api-function/oreder/oreder';
-import RequestsAccordion from './components/accordion/RequestsAccordion';
+import { masterOrderHallStore } from '@/helpers/state_managment/order/order';
+import { getMasterOrderHall } from '@/helpers/api-function/oreder/oreder';
 import { List } from 'react-native-paper';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import HallAccordion from './components/accordion/hallAccordion copy';
@@ -13,12 +12,17 @@ export interface OrderItem {
     categoryName: string;
     clientAttachmentId: string;
     clientName: string;
-    clientStatus: ClientStatus[];
+    clientStatus: string[];
     hallStatus: string;
     orderDate: string;
-    orderId: string;
+    time: string;
+    id: string;
     paid: number;
     request: string;
+    fullName: string;
+    serviceName: string;
+    startTime: string;
+    finishTime: string;
 }
 
 interface GroupedOrders {
@@ -28,7 +32,7 @@ interface GroupedOrders {
 const groupByDate = (data: OrderItem[]): GroupedOrders => {
     if (!data) return {};
     return data.reduce((acc, item) => {
-        const datePart = item.orderDate.split(' ')[1]; // Assuming orderDate format is "16 JULY 19:30 - 20:40"
+        const datePart = item.orderDate; // No need to split, just use the orderDate as is
         (acc[datePart] = acc[datePart] || []).push(item);
         return acc;
     }, {} as GroupedOrders);
@@ -47,7 +51,7 @@ const HallSchedule: React.FC = () => {
             const data = await getMasterOrderHall(setHallData);
             setHallData(data);
         } catch (error) {
-            console.error('Error fetching wait data:', error);
+            console.error('Error fetching hall data:', error);
         }
     };
 
@@ -62,7 +66,7 @@ const HallSchedule: React.FC = () => {
             {hallData && hallData.length > 0 ? Object.keys(groupedData).map((date) => (
                 <List.Accordion
                     key={date}
-                    title={`${date}`}
+                    title={date}
                     titleStyle={styles.title}
                     style={styles.accordionContainer}
                     theme={{ colors: { background: 'transparent' } }}
@@ -88,6 +92,7 @@ const HallSchedule: React.FC = () => {
         </View>
     );
 };
+
 
 const styles = StyleSheet.create({
     accordionContainer: {

@@ -5,7 +5,7 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
-import {AntDesign, Entypo, Feather, FontAwesome5, Fontisto} from "@expo/vector-icons";
+import {AntDesign, Fontisto} from "@expo/vector-icons";
 import HistoryCard from "@/components/(cards)/history-card";
 import {getFile} from "@/helpers/api";
 import moment from "moment";
@@ -20,11 +20,13 @@ import {
     updateOrderStatus
 } from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Buttons from "@/components/(buttons)/button";
 import Textarea from "@/components/select/textarea";
 import {handleRefresh} from "@/constants/refresh";
 import {getClientIdStore} from "@/constants/storage";
+import ContactInformation from "@/components/contact-information/contact-information";
+import {getMee} from "@/helpers/token";
+import useGetMeeStore from "@/helpers/state_managment/getMee";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/history/history-details'>;
 
@@ -33,6 +35,7 @@ const HistoryDetailsInformation = () => {
     const route = useRoute<any>();
     const {historyData} = route.params;
     const {isLoading, setIsLoading, setUpcomingData, setPastData, setCanceledData, setHistoryCountData, refreshing, setRefreshing} = clientStore()
+    const {setGetMee} = useGetMeeStore()
     const [serviceName, setServiceName] = useState([]);
     const [confirmStatus, setConfirmStatus] = useState('');
     const [successStatus, setSuccessStatus] = useState('');
@@ -52,6 +55,7 @@ const HistoryDetailsInformation = () => {
 
     useEffect(() => {
         getClientIdStore(setUserID);
+        getMee(setGetMee)
     }, []);
 
     useEffect(() => {
@@ -73,7 +77,7 @@ const HistoryDetailsInformation = () => {
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);
-    }, []);
+    }, [setRefreshing]);
 
     const handleRating = (value: number) => setRating(value)
     const toggleConfirm = () => setIsConfirm(!isConfirm)
@@ -86,8 +90,6 @@ const HistoryDetailsInformation = () => {
         else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
-
-    console.log('history data: ', historyData)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -159,7 +161,7 @@ const HistoryDetailsInformation = () => {
                                 />
                             )}
                         </View>
-                        <View style={tw`mt-3`}>
+                        <View style={tw`mt-3 mb-7`}>
                             {historyData.orderStatus === 'WAIT' ? (
                                 <View style={styles.statusCard}>
                                     <Text style={tw`font-bold text-lg`}>Статус:</Text>
@@ -200,36 +202,7 @@ const HistoryDetailsInformation = () => {
                             )}
                         </View>
 
-                        <Text style={styles.contactTitle}>Контактная информация</Text>
-                        <View style={styles.contactInfo}>
-                            <TouchableOpacity
-                                activeOpacity={.6}
-                                style={[styles.contactItem]}
-                            >
-                                <Feather name="phone" size={24} color="#9C0A35"/>
-                                <Text style={styles.contactText}>
-                                    91 212 02 57
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                activeOpacity={.6}
-                                style={[styles.contactItem, {marginTop: 10}]}
-                            >
-                                <Entypo name="instagram" size={24} color="#9C0A35"/>
-                                <Text style={styles.contactText}>
-                                    @Al1sher_o9o3
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                activeOpacity={.6}
-                                style={[styles.contactItem, {marginTop: 10}]}
-                            >
-                                <FontAwesome5 name="telegram-plane" size={24} color="#9C0A35"/>
-                                <Text style={styles.contactText}>
-                                    @Alisher_Sodiqov
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
+                        <ContactInformation />
                         {historyData.orderStatus !== 'WAIT' && (
                             <Text style={styles.contactTitle}>Дополнительно</Text>
                         )}
@@ -395,27 +368,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 6
     },
-    contactInfo: {
-        backgroundColor: '#B9B9C9',
-        paddingVertical: 14,
-        paddingHorizontal: 16,
-        borderRadius: 16,
-    },
     contactTitle: {
         color: '#FFF',
         fontSize: 16,
         marginTop: 26,
         marginBottom: 16,
         fontWeight: '700'
-    },
-    contactItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    contactText: {
-        color: '#4F4F4F',
-        marginLeft: 12,
-        fontSize: 16
     },
 });
 

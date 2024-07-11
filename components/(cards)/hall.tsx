@@ -3,18 +3,21 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { masterOrderConfirm } from '@/helpers/api-function/oreder/oreder';
 interface HallCardProps {
-    name: string;
-    service: string;
-    date: string;
-    time: string;
+    fullName: string;
+    serviceName: string;
+    startTime: string;
+    finishTime: string;
     hallStatus: string;
+    time: string;
     orderId: string;
     clientAttachmentId: string;
+    clientStatus: ClientStatusItem[];
     onApprove: () => void;
     onReject: () => void;
 }
+type ClientStatusItem = string
 
-const HallCard: React.FC<HallCardProps> = ({ name,hallStatus, service, date, time, orderId, clientAttachmentId, onApprove, onReject }) => {
+const HallCard: React.FC<HallCardProps> = ({ fullName, hallStatus, serviceName,time, clientStatus, startTime, finishTime, orderId, clientAttachmentId, onApprove, onReject }) => {
     const [loading, setLoading] = useState(false);
     const handleApprove = async () => {
         setLoading(true);
@@ -31,27 +34,30 @@ const HallCard: React.FC<HallCardProps> = ({ name,hallStatus, service, date, tim
     };
     return (
         <View style={styles.card}>
-            <View style={styles.head}>
+            {hallStatus !== "WAIT" &&<View style={styles.head}>
                 <Text style={styles.title}>{hallStatus}</Text>
-            </View>
+            </View>}
             <View style={styles.cardHeader}>
-                <View style={{flexDirection: 'row', justifyContent: "center"}}>
+                <View style={{ flexDirection: 'row', alignItems: "center" }}>
                     <Image source={clientAttachmentId ? { uri: getFile + clientAttachmentId } : require('@/assets/avatar.png')} style={styles.avatar} />
-                    <Text style={styles.name}>{name}</Text>
+                    <View>
+                        <Text style={styles.name}>{fullName}</Text>
+                        <Text style={styles.clientStatus}>{clientStatus[0]}</Text>
+                    </View>
                 </View>
                 <View>
-                    <Text style={styles.service}>{service}</Text>
-                    <Text style={styles.dateTime}>{date} - {time}</Text>
+                    <Text style={styles.service}>{serviceName}</Text>
+                    <Text style={styles.dateTime}>{startTime} - {finishTime}</Text>
                 </View>
             </View>
-            <View style={styles.cardFooter}>
+            {hallStatus == "WAIT" && <View style={styles.cardFooter}>
                 <TouchableOpacity style={styles.approveButton} onPress={handleApprove} disabled={loading}>
                     {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Одобрить</Text>}
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.rejectButton} onPress={handleReject} disabled={loading}>
                     {loading ? <ActivityIndicator color="#9C0A35" /> : <Text style={styles.buttonTextR}>Отклонить</Text>}
                 </TouchableOpacity>
-            </View>
+            </View>}
         </View>
     );
 };
@@ -81,9 +87,19 @@ const styles = StyleSheet.create({
         color: 'green',
     },
     cardHeader: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         marginBottom: 10,
-        alignItems: 'center',
+        alignItems: 'flex-start',
+    },
+    clientStatus: {
+        backgroundColor: 'green',
+        paddingVertical: 2,
+        paddingHorizontal: 5,
+        borderRadius: 5,
+        marginVertical: 5,
+        alignSelf: 'flex-start',
+        color: '#fff',
+        fontSize: 12,
     },
     avatar: {
         width: 50,
@@ -92,9 +108,14 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     name: {
+        // borderWidth: 1,
+        // borderRadius: 5,
+        // paddingHorizontal: 5,
         fontWeight: 'bold',
         fontSize: 16,
         marginBottom: 2,
+        // color: '#4F4F4F',
+        // borderColor: '#4F4F4F',
     },
     service: {
         backgroundColor: '#b9b9c9',

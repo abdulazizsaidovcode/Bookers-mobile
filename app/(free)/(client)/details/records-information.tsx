@@ -5,7 +5,7 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import HistoryCard from "@/components/(cards)/history-card";
-import {AntDesign, Entypo, Feather, FontAwesome5, Fontisto} from "@expo/vector-icons";
+import {AntDesign, Feather, Fontisto} from "@expo/vector-icons";
 import React, {useCallback, useEffect, useState} from "react";
 import {orderGetOne} from "@/helpers/api-function/oreder/oreder";
 import {getFile} from "@/helpers/api";
@@ -14,6 +14,9 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import {addFeedbackMaster, sliceTextFullName, updateOrderStatus} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {handleRefresh} from "@/constants/refresh";
+import ContactInformation from "@/components/contact-information/contact-information";
+import {getMee} from "@/helpers/token";
+import useGetMeeStore from "@/helpers/state_managment/getMee";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -44,6 +47,7 @@ const RecordsInformation = () => {
     const route = useRoute<any>();
     const {orderID} = route.params;
     const {isLoading, setIsLoading, refreshing, setRefreshing} = clientStore()
+    const {setGetMee} = useGetMeeStore()
     const [orderOneData, setOrderOneData] = useState<OrderOne | null>(null)
     const [isModal, setIsModal] = useState<boolean>(true)
     const [toast, setToast] = useState<boolean>(false)
@@ -53,6 +57,7 @@ const RecordsInformation = () => {
 
     useEffect(() => {
         if (orderID) orderGetOne(orderID, setOrderOneData)
+        getMee(setGetMee)
     }, []);
 
     useEffect(() => {
@@ -69,7 +74,7 @@ const RecordsInformation = () => {
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);
-    }, []);
+    }, [setRefreshing]);
 
     const toggleModal = () => setIsModal(!isModal)
     const handleRating = (value: any) => setRating(value)
@@ -81,7 +86,7 @@ const RecordsInformation = () => {
         else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
-    console.log('order data: ', orderOneData)
+    console.log('orderId: 84', orderID)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -142,7 +147,7 @@ const RecordsInformation = () => {
                                 statusName={orderOneData ? `${orderOneData.servicePrice} сум` : ''}
                             />
                         </View>
-                        <View style={tw`mt-3`}>
+                        <View style={tw`mt-3 mb-7`}>
                             <HistoryCard
                                 name={`Уведомить за:`}
                                 btnOrText={false}
@@ -158,41 +163,17 @@ const RecordsInformation = () => {
                             />
                         </View>
 
-                        <Text style={styles.contactTitle}>Контактная информация</Text>
-                        <View style={styles.contactInfo}>
-                            <TouchableOpacity
-                                activeOpacity={.6}
-                                style={[styles.contactItem]}
-                            >
-                                <Feather name="phone" size={24} color="#9C0A35"/>
-                                <Text style={styles.contactText}>
-                                    91 212 02 57
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                activeOpacity={.6}
-                                style={[styles.contactItem, {marginTop: 10}]}
-                            >
-                                <Entypo name="instagram" size={24} color="#9C0A35"/>
-                                <Text style={styles.contactText}>
-                                    @Al1sher_o9o3
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                activeOpacity={.6}
-                                style={[styles.contactItem, {marginTop: 10}]}
-                            >
-                                <FontAwesome5 name="telegram-plane" size={24} color="#9C0A35"/>
-                                <Text style={styles.contactText}>
-                                    @Alisher_Sodiqov
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
+                        <ContactInformation/>
                         {(orderOneData && (orderOneData.orderStatus === 'CLIENT_CONFIRMED' || orderOneData.orderStatus === 'MASTER_CONFIRMED')) && (
                             <>
                                 <Text style={styles.contactTitle}>Дополнительно</Text>
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate('(free)/(client)/details/records', {record: {updateOrder: 'updateOrder', orderOneData}})}
+                                    onPress={() => navigation.navigate('(free)/(client)/details/records', {
+                                        record: {
+                                            updateOrder: 'updateOrder',
+                                            orderOneData
+                                        }
+                                    })}
                                     activeOpacity={.9}
                                     style={[styles.button, tw`mb-4 items-center flex-row`]}
                                 >
@@ -301,27 +282,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 6
     },
-    contactInfo: {
-        backgroundColor: '#B9B9C9',
-        paddingVertical: 14,
-        paddingHorizontal: 16,
-        borderRadius: 16,
-    },
     contactTitle: {
         color: '#FFF',
         fontSize: 16,
         marginTop: 26,
         marginBottom: 16,
         fontWeight: '700'
-    },
-    contactItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    contactText: {
-        color: '#4F4F4F',
-        marginLeft: 12,
-        fontSize: 16
     },
 });
 

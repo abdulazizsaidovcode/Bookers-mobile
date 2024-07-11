@@ -79,7 +79,9 @@ const Schedule: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView >
+      <ScrollView
+
+      >
         <View style={{ flex: 1, marginBottom: 35 }}>
           <View>
             <Text style={[tw`text-white text-3xl my-7 font-bold`, { letterSpacing: 2 }]}>Расписание</Text>
@@ -89,14 +91,19 @@ const Schedule: React.FC = () => {
           {activeTab === 'requests' && <RequestSchedule />}
           {activeTab === 'hall' && <HallSchedule />}
         </View>
+        {activeTab == 'booked' && <View style={styles.button}>
+          <Buttons
+            title='Записать клиента'
+            isDisebled={!active}
+            onPress={setOrder}
+          />
+          <Buttons
+            title='Остановить запись'
+            // onPress={setOrder}
+          />
+        </View>
+        }
       </ScrollView >
-      {activeTab == 'booked' && <View style={styles.button}>
-        <Buttons
-          title='Записать клиента'
-          isDisebled={!active}
-          onPress={setOrder}
-        />
-      </View>}
     </View>
   );
 };
@@ -108,16 +115,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#21212E',
   },
   button: {
-    position: 'absolute',
+    // position: 'absolute',
+    // bottom: 1,
+    // left: 16,
+    // right: 16,
     borderRadius: 8,
     paddingBottom: 16,
     paddingTop: 16,
-    bottom: 1,
-    left: 16,
-    right: 16,
-    flexDirection: 'row',
+    flexDirection: 'column',
+    gap: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#21212E',
   }
 });
 

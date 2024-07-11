@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
 interface TabsProps {
   activeTab: string;
@@ -8,7 +8,11 @@ interface TabsProps {
 
 const Tabs: React.FC<TabsProps> = ({ activeTab, onTabChange }) => {
   return (
-    <View style={styles.tabs}>
+    <ScrollView
+      contentContainerStyle={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 20, gap: 10, marginBottom: 10 }}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+    >
       <TouchableOpacity
         style={[
           styles.tabButton,
@@ -45,7 +49,7 @@ const Tabs: React.FC<TabsProps> = ({ activeTab, onTabChange }) => {
           Запрос окошка
         </Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 

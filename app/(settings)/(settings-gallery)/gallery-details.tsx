@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert, Dimensions, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -12,6 +12,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import BottomModal from '@/components/(modals)/modal-bottom';
 import * as ImagePicker from 'expo-image-picker';
+import Toast from 'react-native-simple-toast'
 
 const { width, height } = Dimensions.get('window');
 
@@ -93,6 +94,7 @@ const GalleryDetails: React.FC = () => {
   const pickImage = async (from: 'camera' | 'gallery') => {
     const hasPermission = await requestPermissions(from);
     if (!hasPermission) return;
+    
 
     const result = from === 'camera'
       ? await ImagePicker.launchCameraAsync({
@@ -144,7 +146,7 @@ const GalleryDetails: React.FC = () => {
       <SafeAreaView>
         {isDeleteMode ? (
           <View style={styles.deleteModeBar}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
               <View style={{ flexDirection: 'row', gap: 4 }}>
                 <AntDesign onPress={handleDeleteMode} name="close" size={24} color="white" />
                 <Text style={styles.deleteModeText}>{selectedImages.length}</Text>
@@ -156,7 +158,7 @@ const GalleryDetails: React.FC = () => {
                   color="#9C0A35"
                 />
               </TouchableOpacity>
-              <Text style={styles.deleteModeText}>выделить все</Text>
+              <Text style={styles.deleteModeText} >выделить все</Text>
             </View>
             <View>
               <TouchableOpacity onPress={toggleAllModal}>
@@ -188,16 +190,15 @@ const GalleryDetails: React.FC = () => {
                       </TouchableOpacity>
                     </View>
                   )}
-                  <View style={styles.imageWrapper}>
+                  <Pressable onLongPress={() => Toast.show(`AAAAAAAA${albumItem.attachmentId}`, Toast.LONG)}style={styles.imageWrapper}>
                     <Image
                       style={styles.image}
-                      source={{ uri: `${getFile}${albumItem.attachmentId}` }}
+                      source={{ uri: getFile + albumItem.attachmentId }}
                     />
-                  </View>
+                  </Pressable>
                 </View>
               ))
             )}
-
             {images.map((item, index) => (
               <Image
                 style={styles.image}

@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import tw from "tailwind-react-native-classnames";
-import {FlatList, ScrollView, StatusBar, StyleSheet, Text, TextInput, View} from "react-native";
+import {FlatList, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, TextInput, View} from "react-native";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import LocationInput from "@/components/(location)/locationInput";
 import {
@@ -18,12 +18,13 @@ import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import Textarea from "@/components/select/textarea";
+import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/stopped-visiting'>;
 
 const StoppedVisiting = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const {setClientStoppedVisit, clientStoppedVisiting, setStatusData, setIsLoading, isLoading} = clientStore()
+    const {setClientStoppedVisit, clientStoppedVisiting, setStatusData, setIsLoading, isLoading, refreshing, setRefreshing} = clientStore()
     const [clientID, setClientID] = useState('')
     const [clientVal, setClientVal] = useState('')
     const [isClientModal, setIsClientModal] = useState<boolean>(false)
@@ -42,6 +43,10 @@ const StoppedVisiting = () => {
         }
     }, [trues]);
 
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, [setRefreshing]);
+
     const toggleClientModal = () => setIsClientModal(!isClientModal);
 
     return (
@@ -52,6 +57,7 @@ const StoppedVisiting = () => {
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View>
                         <View style={tw`mb-5`}>

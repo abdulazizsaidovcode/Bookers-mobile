@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import tw from "tailwind-react-native-classnames";
-import {FlatList, ScrollView, StatusBar, Text, View} from "react-native";
+import {FlatList, RefreshControl, ScrollView, StatusBar, Text, View} from "react-native";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import LocationInput from "@/components/(location)/locationInput";
 import {getClientNotVisitSearch, getNotVisiting} from "@/helpers/api-function/client/client";
@@ -11,16 +11,21 @@ import {SafeAreaView} from "react-native-safe-area-context";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
+import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/not-visiting'>;
 
 const NotVisiting = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const {setClientNotVisit, clientNotVisit} = clientStore()
+    const {setClientNotVisit, clientNotVisit, refreshing, setRefreshing} = clientStore()
     useEffect(() => {
         getNotVisiting(setClientNotVisit)
     }, []);
-    console.log(clientNotVisit);
+
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, [setRefreshing]);
+
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -29,6 +34,7 @@ const NotVisiting = () => {
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View>
                         <View style={tw`mb-5`}>

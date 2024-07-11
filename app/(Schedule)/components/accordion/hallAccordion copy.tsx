@@ -10,16 +10,23 @@ interface HallAccordionProps {
   onShowModal: () => void;
 }
 
+type ClientStatusItem = string[]
+
  interface OrderItem {
   categoryName: string;
   clientAttachmentId: string;
   clientName: string;
-  clientStatus: ClientStatus[];
+  clientStatus: string[];
   hallStatus: string; // Assuming hallStatus is provided in the API response
   orderDate: string;
+  time: string;
   id: string;
   paid: number;
   request: string;
+  fullName: string;
+  serviceName: string;
+  startTime: string;
+  finishTime: string;
 }
 const HallAccordion: React.FC<HallAccordionProps> = ({ items, onActionSuccess, onShowModal }) => {
   const handleApprove = (index: number) => {
@@ -45,12 +52,14 @@ const HallAccordion: React.FC<HallAccordionProps> = ({ items, onActionSuccess, o
         items.map((request, index) => (
           <HallCard
             key={request.id}
-            name={request.clientName}
-            service={request.categoryName}
+            fullName={request.fullName}
+            serviceName={request.serviceName}
             hallStatus={request.hallStatus} // Assuming hallStatus is provided in the API response
             clientAttachmentId={request.clientAttachmentId}
-            date={request.orderDate.split(' ')[0]} // Extracting just the date part for simplicity
-            time={extractTimeRange(request.orderDate)} // Extracting the time range
+            clientStatus={request.clientStatus}
+            time={extractTimeRange(request.orderDate)}
+            startTime={request.startTime.slice(0,5)} // Extracting just the date part for simplicity
+            finishTime={request.finishTime.slice(0,5)} // Extracting the time range
             orderId={request.id} // Pass the orderId
             onApprove={() => handleApprove(index)}
             onReject={() => handleReject(index)}

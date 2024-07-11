@@ -1,5 +1,5 @@
-import {FlatList, ScrollView, StatusBar, Text, View} from 'react-native'
-import React, {useEffect, useState} from 'react'
+import {FlatList, RefreshControl, ScrollView, StatusBar, Text, View} from 'react-native'
+import React, {useCallback, useEffect, useState} from 'react'
 import tw from 'tailwind-react-native-classnames'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import FiltersButton from '@/components/(buttons)/filters-button'
@@ -12,6 +12,8 @@ import {getFinanceDay, getTopClients} from '@/helpers/api-function/finance/finan
 import {setConfig} from '@/helpers/token'
 import financeStore from '@/helpers/state_managment/finance/financeStore'
 import FinanceRevenuesMonth from "@/components/(cards)/finance-revenues-month";
+import {handleRefresh} from "@/constants/refresh";
+import clientStore from "@/helpers/state_managment/client/clientStore";
 
 const Finance = () => {
     const {
@@ -24,6 +26,7 @@ const Finance = () => {
         endDate,
         setMonthData
     } = financeStore()
+    const {refreshing, setRefreshing} = clientStore()
     const [isFilters, setIsFilters] = useState('day')
     const [monthShowHide, setMonthShowHide] = useState<boolean>(false)
 
@@ -42,11 +45,16 @@ const Finance = () => {
         if (isFilters !== 'month') setMonthData(null)
     }, [isFilters]);
 
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, [setRefreshing]);
+
     const toggleMonth = () => setMonthShowHide(!monthShowHide)
     return (
         <ScrollView
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{flexGrow: 1, padding: 16, backgroundColor: '#21212E', paddingTop: 0}}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
         >
             <SafeAreaView>
                 <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>

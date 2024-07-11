@@ -6,19 +6,19 @@ interface CardItemProps {
     name: string;
     phone: string;
     service: string;
-    attachmentId:string
+    attachmentId: string
     price: number;
     startTime: string;
     endTime: string;
 }
 
-const CardItem: React.FC<CardItemProps> = ({ name, phone,attachmentId, service, price, startTime, endTime }) => {
+const CardItem: React.FC<CardItemProps> = ({ name, phone, attachmentId, service, price, startTime, endTime }) => {
     return (
         <View style={styles.card}>
             <View style={styles.cardHeader}>
-                <Image source={attachmentId ? {uri: getFile + attachmentId} : require('@/assets/avatar.png')} style={styles.avatar} />
+                <Image source={attachmentId ? { uri: getFile + attachmentId } : require('@/assets/avatar.png')} style={styles.avatar} />
                 <View>
-                    <Text style={styles.name}>{name}</Text>
+                    <Text style={styles.name}>{name.length < 20 ? name : `${name.slice(0,25)}...`}</Text>
                     <Text style={styles.phone}>{phone}</Text>
                     <Text style={styles.service}>{service}</Text>
                     <Text style={styles.price}>{price} сум </Text>
