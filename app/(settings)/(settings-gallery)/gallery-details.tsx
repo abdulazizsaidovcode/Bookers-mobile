@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert, Dimensions, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert, Dimensions, Pressable, Switch, TouchableWithoutFeedback } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -28,6 +28,8 @@ const GalleryDetails: React.FC = () => {
   const [images, setImages] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
   const [isBottomModalOpen, setIsBottomModalOpen] = useState(false);
+  const [showCheckboxes, setShowCheckboxes] = useState<boolean>(false);
+  const [showMainSwitch, setShowMainSwitch] = useState<boolean>(false);
   const { id } = route.params as { id: number };
 
   useEffect(() => {
@@ -46,16 +48,22 @@ const GalleryDetails: React.FC = () => {
     setName(fullData.albumName);
     setIsOpen(!isOpen);
   };
+  console.log(selectedImages);
+
 
   const toggleAllModal = () => {
-    setIsAllOpen(!isAllOpen);
+    if (selectedImages.length === 0) {
+      Toast.show('Сначала, выберите фотографии', Toast.LONG)
+    } else {
+      setIsAllOpen(!isAllOpen);
+    };
   };
 
   const handleConfirm = () => {
     editName(id, setFullData, name, toggleModal, setData);
   };
 
-  const handleAllSelected = () => {
+  const handleOpenMainCheckBoxes = () => {
   };
 
   const handleDeleteMode = () => {
@@ -77,24 +85,19 @@ const GalleryDetails: React.FC = () => {
     delPhoto(id, selectedImages, setFullData, setData, toggleAllModal);
     setSelectedImages([]);
     setSelectAll(false);
-
   };
 
   const requestPermissions = async (type: 'camera' | 'gallery') => {
-    const { status } = type === 'camera'
+    const { } = type === 'camera'
       ? await ImagePicker.requestCameraPermissionsAsync()
       : await ImagePicker.requestMediaLibraryPermissionsAsync();
-    // if (status !== 'granted') {
-    //   Alert.alert(`Sorry, we need ${type} permissions to make this work!`);
-    //   return false;
-    // }
     return true;
   };
 
   const pickImage = async (from: 'camera' | 'gallery') => {
     const hasPermission = await requestPermissions(from);
     if (!hasPermission) return;
-    
+
 
     const result = from === 'camera'
       ? await ImagePicker.launchCameraAsync({
@@ -113,6 +116,11 @@ const GalleryDetails: React.FC = () => {
       const newImages = result.assets.map(asset => asset.uri);
       setImages([...images, ...newImages]);
     }
+  };
+
+  const toggleMainSwitch = () => {
+    setShowMainSwitch(!showMainSwitch);
+    setShowCheckboxes(false)
   };
 
   const toggleBottomModal = () => {
@@ -176,28 +184,31 @@ const GalleryDetails: React.FC = () => {
           <View style={styles.imagesContainer}>
             {fullData.resGalleryAttachments.length <= 0 ? (
               <Text style={{ color: 'white', fontSize: 15 }}>В этой галерее нет фотографий</Text>
-            ) : (
-              fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
-                <View key={albumIndex} style={styles.imageWrapper}>
-                  {isDeleteMode && (
-                    <View style={styles.checkIcon}>
-                      <TouchableOpacity onPress={() => handleImageSelect(albumItem.attachmentId)}>
-                        <MaterialIcons
-                          name={selectedImages.includes(albumItem.attachmentId) ? "check-box" : "check-box-outline-blank"}
-                          size={24}
-                          color={"#9C0A35"}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                  <Pressable onLongPress={() => Toast.show(`AAAAAAAA${albumItem.attachmentId}`, Toast.LONG)}style={styles.imageWrapper}>
-                    <Image
-                      style={styles.image}
-                      source={{ uri: getFile + albumItem.attachmentId }}
-                    />
-                  </Pressable>
-                </View>
-              ))
+            ) : (fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
+              <View key={albumIndex} style={styles.imageWrapper}>
+                {isDeleteMode && (
+                  <View style={styles.checkIcon}>
+                    <TouchableOpacity onPress={() => handleImageSelect(albumItem.attachmentId)}>
+                      <MaterialIcons
+                        name={selectedImages.includes(albumItem.attachmentId) ? "check-box" : "check-box-outline-blank"}
+                        size={24}
+                        color={"#9C0A35"}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
+
+                <Pressable onLongPress={toggleMainSwitch} style={styles.imageWrapper}>
+                  <Image
+                    style={styles.image}
+                    source={{ uri: getFile + albumItem.attachmentId }}
+                  />
+
+                </Pressable>
+
+              </View>
+            ))
+
             )}
             {images.map((item, index) => (
               <Image
@@ -206,10 +217,29 @@ const GalleryDetails: React.FC = () => {
                 source={{ uri: item }}
               />
             ))}
+
             {images.length !== 0 && (
               <Buttons title='Сохранить' onPress={handleSave} />
             )}
-          </View>
+
+            {showMainSwitch && (
+              <TouchableWithoutFeedback>
+                <View style={styles.mainCheckIcon}>
+                  <MaterialIcons
+                    name={"check-box"}
+                    size={26} color={"#9C0A35"} />
+                </View>
+              </TouchableWithoutFeedback>
+            )}
+          </View>{showMainSwitch && (
+            <View style={styles.mainSwitchContainer}>
+              <Text style={styles.mainSwitchLabel}>Сделать фото основным</Text>
+              <Switch
+                onValueChange={toggleMainSwitch}
+              />
+            </View>
+          )}
+
         </View>
         <CenteredModal
           toggleModal={toggleModal}
@@ -279,6 +309,17 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 15,
   },
+  mainCheckIcon: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+  },
+  mainSwitchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+    justifyContent: 'space-between',
+  },
   imageWrapper: {
     position: 'relative',
   },
@@ -325,6 +366,10 @@ const styles = StyleSheet.create({
   bottomModalContent: {
     padding: 20,
     alignItems: 'center',
+  },
+  mainSwitchLabel: {
+    color: 'white',
+    marginRight: 10,
   },
   bottomModalText: {
     fontSize: 18,
