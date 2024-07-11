@@ -53,14 +53,14 @@ const OtpInputExample: React.FC = () => {
     }
 
     useEffect(() => {
-        // if (response) {
+        if (response) {
             if (isRegtered) {
                 router.push("(auth)/authPage1");
             } else {
                 navigation.navigate('(tabs)');
             }
             setRespone(false);
-        // }
+        }
     }, [response])
     return (
         <View style={styles.container}>
