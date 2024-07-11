@@ -198,7 +198,7 @@ const GalleryDetails: React.FC = () => {
                   </View>
                 )}
 
-                <Pressable onLongPress={toggleMainSwitch} style={styles.imageWrapper}>
+                <Pressable style={styles.imageWrapper}>
                   <Image
                     style={styles.image}
                     source={{ uri: getFile + albumItem.attachmentId }}
@@ -208,7 +208,6 @@ const GalleryDetails: React.FC = () => {
 
               </View>
             ))
-
             )}
             {images.map((item, index) => (
               <Image

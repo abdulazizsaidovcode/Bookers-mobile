@@ -102,7 +102,10 @@ const SettingsGallery: React.FC = () => {
   const saveAlbum = async () => {
     if (albumName && images.length > 0) {
       const formData = new FormData();
-      images.forEach((image, index) => {
+      const remainingImages = images.filter((_, index) => !mainImageIndices.includes(index));
+      setImages(remainingImages);
+      setMainImageIndices([]);
+      remainingImages.forEach((image, index) => {
         formData.append('photos', {
           uri: image,
           name: `photos[${index}].jpg`,
@@ -119,8 +122,10 @@ const SettingsGallery: React.FC = () => {
       });
 
       addData(formData, albumName, setData, setImages, setAlbumName);
+
     }
   };
+
 
   return (
     <SafeAreaView style={styles.container}>

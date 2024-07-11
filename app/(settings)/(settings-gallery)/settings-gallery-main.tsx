@@ -22,6 +22,7 @@ const SettingsGalleryMain = () => {
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+    const [showAllAttachments, setShowAllAttachments] = useState(false); // New state for attachment condition
 
     useEffect(() => {
         fetchData(setData);
@@ -77,38 +78,50 @@ const SettingsGalleryMain = () => {
                             <Text style={styles.description}>Ваша галерея пустая, добавьте фотографии из проводника Вашего телефона</Text>
                             :
                             <View style={styles.imageGrid}>
-                                {data.map((item, index) => (
-                                    <Pressable onPress={() => handlePress(item.id)} key={index} style={styles.albumContainer}>
-                                        <View style={{ flexDirection: 'row', width: width / 2.2, flexWrap: 'wrap' }}>
-                                            {showCheckboxes && (
-                                                <View style={styles.checkboxContainer}>
-                                                    <MaterialIcons name={selectedItemId === item.id ? "check-box" : "check-box-outline-blank"} size={24} color="#9C0A35" />
-                                                </View>
-                                            )}
-                                            {item.resGalleryAttachments.slice(0, 4).map((attachment, attIndex) => (
-                                                <View key={attIndex} style={[styles.imageContainer, selectedItemId === item.id && styles.selectedAlbum]}>
-                                                    <Image
-                                                        source={{ uri: getFile + attachment.attachmentId }}
-                                                        style={styles.image}
-                                                    />
-                                                </View>
-                                            ))}
-                                            {item.resGalleryAttachments.length < 4 &&
-                                                Array.from({ length: 4 - item.resGalleryAttachments.length }).map((_, placeholderIndex) => (
-                                                    <Pressable key={placeholderIndex} style={[styles.imageContainer, selectedItemId === item.id && styles.selectedAlbum]}>
+                                {data.map((item, index) => {
+                                    const sortedAttachments = item.resGalleryAttachments.slice().sort((a, b) => {
+                                        if (a.main && !b.main) return -1;
+                                        if (!a.main && b.main) return 1;
+                                        return 0;
+                                    });
+                                    return (
+                                        <Pressable onPress={() => handlePress(item.id)} key={index} style={styles.albumContainer}>
+                                            <View style={{ flexDirection: 'row', width: width / 2.2, flexWrap: 'wrap' }}>
+                                                {showCheckboxes && (
+                                                    <View style={styles.checkboxContainer}>
+                                                        <MaterialIcons name={selectedItemId === item.id ? "check-box" : "check-box-outline-blank"} size={24} color="#9C0A35" />
+                                                    </View>
+                                                )}
+                                                {sortedAttachments.slice(0, showAllAttachments ? sortedAttachments.length : 4).map((attachment, attIndex) => (
+                                                    <View key={attIndex} style={[styles.imageContainer, selectedItemId === item.id && styles.selectedAlbum]}>
                                                         <Image
-                                                            source={require('@/assets/images/defaultImg.jpeg')}
+                                                            source={{ uri: getFile + attachment.attachmentId }}
                                                             style={styles.image}
                                                         />
+                                                    </View>
+                                                ))}
+                                                {!showAllAttachments && sortedAttachments.length > 4 &&
+                                                    <Pressable onPress={() => setShowAllAttachments(true)} style={[styles.imageContainer, selectedItemId === item.id && styles.selectedAlbum]}>
+                                                        <Text style={{ color: 'white' }}>+{sortedAttachments.length - 4}</Text>
                                                     </Pressable>
-                                                ))
-                                            }
-                                        </View>
-                                        <View>
-                                            <Text style={[{ color: 'white', margin: 5, width: width / 2.5 }, selectedItemId === item.id && styles.selectedAlbum]}>{item.albumName}</Text>
-                                        </View>
-                                    </Pressable>
-                                ))}
+                                                }
+                                                {sortedAttachments.length < 4 &&
+                                                    Array.from({ length: 4 - sortedAttachments.length }).map((_, placeholderIndex) => (
+                                                        <Pressable key={placeholderIndex} style={[styles.imageContainer, selectedItemId === item.id && styles.selectedAlbum]}>
+                                                            <Image
+                                                                source={require('@/assets/images/defaultImg.jpeg')}
+                                                                style={styles.image}
+                                                            />
+                                                        </Pressable>
+                                                    ))
+                                                }
+                                            </View>
+                                            <View>
+                                                <Text style={[{ color: 'white', margin: 5, width: width / 2.5 }, selectedItemId === item.id && styles.selectedAlbum]}>{item.albumName}</Text>
+                                            </View>
+                                        </Pressable>
+                                    );
+                                })}
                             </View>
                         }
                     </View>
