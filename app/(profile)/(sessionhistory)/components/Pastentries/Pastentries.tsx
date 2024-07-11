@@ -116,7 +116,7 @@ const PastEntries = () => {
             </TouchableOpacity>
           </View>
           <MaterialIcons
-            onPress={() => setToggle(!toggle)}
+            onPress={() => pastentries.length !== 0 && setToggle(!toggle)}
             name="delete"
             size={30}
             color="white"
@@ -134,7 +134,7 @@ const PastEntries = () => {
         data.map((item: any) => (
           <Pressable
             onPress={() => {
-              navigation.navigate("(detail)/censeled-session"),
+              !isChecked && navigation.navigate("(detail)/censeled-session"),
                 setProduct(item);
             }}
             key={item.id}
