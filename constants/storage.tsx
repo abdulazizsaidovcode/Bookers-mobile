@@ -16,3 +16,12 @@ export const getClientIdStore = async (setData: (val: string) => void) => {
         console.error(e);
     }
 };
+
+//auth
+export const authStorage = async (token: string) => {
+    try {
+        await AsyncStorage.setItem('registerToken', token);
+    } catch (e) {
+        console.error(e);
+    }
+};

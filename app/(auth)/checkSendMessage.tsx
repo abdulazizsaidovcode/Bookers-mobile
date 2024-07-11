@@ -1,19 +1,27 @@
-import { checkCode } from '@/helpers/api-function/register/registrFC';
+import {authLogin, checkCode} from '@/helpers/api-function/register/registrFC';
 import registerStory from '@/helpers/state_managment/auth/register';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister';
-import { router, useNavigation } from 'expo-router';
-import React, { useState, useRef, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Alert, TextInputKeyPressEventData, NativeSyntheticEvent, Text, TouchableOpacity } from 'react-native';
+import {router, useNavigation} from 'expo-router';
+import React, {useState, useRef, useEffect} from 'react';
+import {
+    View,
+    TextInput,
+    StyleSheet,
+    Alert,
+    TextInputKeyPressEventData,
+    NativeSyntheticEvent,
+    Text,
+    TouchableOpacity
+} from 'react-native';
 
 const OtpInputExample: React.FC = () => {
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
     const inputs = useRef<TextInput[]>([]);
-    const { code, phoneNumber, otpValue, setOtpValue } = registerStory()
+    const {code, phoneNumber, otpValue, setOtpValue} = registerStory()
     const [response, setRespone] = useState<null | boolean>(null);
     const [messageResponse, setMessageResponse] = useState(false);
-    const { isRegtered } = isRegister()
+    const {isRegtered} = isRegister()
     const navigation = useNavigation<any>();
-
 
 
     useEffect(() => {
@@ -89,7 +97,13 @@ const OtpInputExample: React.FC = () => {
                 <TouchableOpacity
                     style={[styles.button, isDisabled && styles.disabledButton]}
                     disabled={isDisabled}
-                    onPress={handlePress}
+                    onPress={() => {
+                        if (isRegtered) {
+                            handlePress()
+                        } else {
+                            authLogin(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered)
+                        }
+                    }}
                 >
                     <Text style={styles.buttonText}>Tasdiqlash</Text>
                 </TouchableOpacity>

@@ -19,13 +19,11 @@ export const putNumbers = (number: number) => {
   if (number) {
     axios
       .put(`${master_put_number}?number=${number}`, '', config)
-      .then((res) => {
-        console.log(res);
-        
+      .then(() => {
+
       })
       .catch((err) => {
         console.log(err);
-        
       });
   }
   

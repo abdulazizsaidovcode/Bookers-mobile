@@ -1,8 +1,9 @@
-import { register_page } from "@/helpers/api";
+import {base_url, register_page} from "@/helpers/api";
 import axios from "axios";
 import { router, useNavigation } from "expo-router";
 import { Alert } from "react-native";
 import Toast from "react-native-simple-toast";
+import {authStorage} from "@/constants/storage";
 
 
 
@@ -41,6 +42,24 @@ export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any
             Toast.show("Вы ввели неправильный пароль", Toast.LONG)
 
             setRespone(false);
+        })
+}
+
+export const authLogin = async (phoneNumber: string, otpValue: string, setRespone: any, isRegtered: boolean) => {
+    const authData = {
+        phone: phoneNumber,
+        code: otpValue
+    }
+    axios.post(`${base_url}auth/login`, authData)
+        .then(res => {
+            if (res.data.success) {
+                setRespone(true)
+                authStorage(res.data.body)
+            } else setRespone(false)
+        })
+        .catch(err => {
+            setRespone(false)
+            console.log(err)
         })
 }
 
