@@ -27,9 +27,6 @@ const SettingsGalleryMain = () => {
         fetchData(setData);
     }, []);
 
-    console.log(selectedItemId);
-
-
     const handlePress = (id: number) => {
         if (showCheckboxes) {
             setSelectedItemId(id);
@@ -42,7 +39,7 @@ const SettingsGalleryMain = () => {
         if (selectedItemId !== null) {
             setIsOpen(!isOpen)
         } else {
-            Toast.show('Please select gellery', Toast.LONG)
+            Toast.show('Please select a gallery', Toast.LONG)
         }
     }
 
@@ -52,8 +49,9 @@ const SettingsGalleryMain = () => {
     }
 
     const handleDelGallery = () => {
-        delGallery(selectedItemId, setData, toggleModal, toggleCheckboxes)
-
+        if (selectedItemId) {
+            delGallery(selectedItemId, setData, toggleModal, toggleCheckboxes);
+        }
     }
 
     return (
@@ -88,7 +86,7 @@ const SettingsGalleryMain = () => {
                                                 </View>
                                             )}
                                             {item.resGalleryAttachments.slice(0, 4).map((attachment, attIndex) => (
-                                                <View key={attIndex} style={styles.imageContainer}>
+                                                <View key={attIndex} style={[styles.imageContainer, selectedItemId === item.id && styles.selectedAlbum]}>
                                                     <Image
                                                         source={{ uri: getFile + attachment.attachmentId }}
                                                         style={styles.image}
@@ -97,7 +95,7 @@ const SettingsGalleryMain = () => {
                                             ))}
                                             {item.resGalleryAttachments.length < 4 &&
                                                 Array.from({ length: 4 - item.resGalleryAttachments.length }).map((_, placeholderIndex) => (
-                                                    <Pressable key={placeholderIndex} style={styles.imageContainer}>
+                                                    <Pressable key={placeholderIndex} style={[styles.imageContainer, selectedItemId === item.id && styles.selectedAlbum]}>
                                                         <Image
                                                             source={require('@/assets/images/defaultImg.jpeg')}
                                                             style={styles.image}
@@ -107,7 +105,7 @@ const SettingsGalleryMain = () => {
                                             }
                                         </View>
                                         <View>
-                                            <Text style={{ color: 'white', margin: 5, width: width / 2.5 }}>{item.albumName}</Text>
+                                            <Text style={[{ color: 'white', margin: 5, width: width / 2.5 }, selectedItemId === item.id && styles.selectedAlbum]}>{item.albumName}</Text>
                                         </View>
                                     </Pressable>
                                 ))}
@@ -177,6 +175,10 @@ const styles = StyleSheet.create({
     },
     albumContainer: {
         marginBottom: 10,
+        borderRadius: 10,
+    },
+    selectedAlbum: {
+        opacity: .5
     },
     imageContainer: {
         margin: 5,
@@ -188,7 +190,7 @@ const styles = StyleSheet.create({
     },
     checkboxContainer: {
         position: 'absolute',
-        top: 5,
+        bottom: -5,
         right: 5,
         zIndex: 1,
         backgroundColor: 'white',
