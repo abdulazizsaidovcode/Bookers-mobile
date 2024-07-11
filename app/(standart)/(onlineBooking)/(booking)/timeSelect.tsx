@@ -21,11 +21,13 @@ import {
   fetchAppoinmentActiveData,
 } from "@/helpers/api-function/notifications/notifications";
 import BottomModal from "@/components/(modals)/modal-bottom";
+import tw from "tailwind-react-native-classnames";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 const TimeSelect = () => {
   const { setTimeEnabled, timeEnabled } = OnlineBookingStory3();
+  const [vipCount, setVipCount] = useState({});
   const {
     isAppoinmentModal,
     appoinmentData,
@@ -80,6 +82,19 @@ const TimeSelect = () => {
     </ScrollView>
   );
 
+  const getVipCount = async () => {
+    try {
+      const { data } = await axios.get(
+        `${base_url}online-booking-settings/vip-client`,
+        config
+      );
+      setVipCount(data.body);
+      setTimeEnabled(data.body.vipClient);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleClick = async () => {
     const data = {
       hour: appoinmentData.hour,
@@ -98,10 +113,19 @@ const TimeSelect = () => {
     }
   };
 
+  const selectTime = () => {
+    setVipCount(appoinmentData);
+    toggleModal(  );
+  };
+
   const timeSwitch = () => {
     const newValue = !timeEnabled;
     setTimeEnabled(newValue);
   };
+
+  useEffect(() => {
+    getVipCount();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -116,10 +140,17 @@ const TimeSelect = () => {
         </View>
         {timeEnabled && (
           <TouchableOpacity
+            activeOpacity={0.8}
             onPress={toggleModal}
             style={styles.messageContainer}
           >
-            <Text style={styles.messageText}>Salom dunyo</Text>
+            <Text style={tw`text-lg font-bold`}>Время для ВИП клиентов </Text>
+            <View style={tw`flex-row bg-gray-800 rounded-lg p-2 mt-2`}>
+              <Text style={tw`text-lg text-white`}>{vipCount.hour} час.</Text>
+              <Text style={tw`text-lg text-white ml-2`}>
+                {vipCount.minute} мин
+              </Text>
+            </View>
           </TouchableOpacity>
         )}
       </View>
@@ -145,7 +176,7 @@ const TimeSelect = () => {
               </View>
             </View>
           </View>
-          <Buttons title="Выбрать" onPress={toggleModal} />
+          <Buttons title="Выбрать" onPress={selectTime} />
         </View>
       </BottomModal>
       <Buttons
