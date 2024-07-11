@@ -1,4 +1,11 @@
-import { View, Text, Image, Pressable, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Pressable,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { base_url } from "@/helpers/api";
 import { config } from "@/helpers/token";
@@ -115,7 +122,7 @@ const Canceledentries = () => {
             </TouchableOpacity>
           </View>
           <MaterialIcons
-            onPress={() => setToggle(!toggle)}
+            onPress={() => pastentries.length !== 0 && setToggle(!toggle)}
             name="delete"
             size={30}
             color="white"
@@ -129,65 +136,68 @@ const Canceledentries = () => {
         />
       )}
 
-      {data &&
-        data.map((item: any) => (
-          <Pressable
-            onPress={() => {
-              navigation.navigate("(detail)/censeled-session"),
-                setProduct(item);
-            }}
-            key={item.id}
-            style={tw`bg-gray-700 p-4 rounded-lg mb-4 flex-row items-center`}
-          >
-            {isChecked && (
-              <View>
-                {pastentries.length > 0 && pastentries.includes(item.id) ? (
-                  <Pressable
-                    onPress={() => deletePastentries(item.id)}
-                    key={`checked-${item.id}`}
-                    style={[
-                      tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                      { backgroundColor: "#9C0A35" },
-                    ]}
-                  >
-                    <Ionicons
-                      name="checkmark"
-                      size={18}
-                      color="white"
-                      style={tw`font-bold`}
-                    />
-                  </Pressable>
-                ) : (
-                  <Pressable
-                    onPress={() => setPastentries([...pastentries, item.id])}
-                    key={`unchecked-${item.id}`}
-                    style={[
-                      tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                      {
-                        backgroundColor: "#B9B9C9",
-                        borderWidth: 2,
-                        borderColor: "gray",
-                      },
-                    ]}
-                  ></Pressable>
-                )}
-              </View>
-            )}
-            <Image
-              source={{
-                uri: `http://45.67.35.86:8080/attachment/getFile/${item.attachmentId}`,
+      <ScrollView>
+        {data &&
+          data.map((item: any) => (
+            <Pressable
+              onPress={() => {
+                !isChecked && navigation.navigate("(detail)/censeled-session"),
+                  setProduct(item);
               }}
-              style={tw`w-12 h-12 rounded-full mr-4`}
-            />
-            <View style={tw`flex-1`}>
-              <Text style={tw`text-white font-bold`}>{item.fullName}</Text>
-              <Text style={tw`text-gray-400`}>{item.phone}</Text>
-              <Text style={tw`text-red-500 font-bold mt-2`}>
-                {item.servicePrice} сум
-              </Text>
-            </View>
-          </Pressable>
-        ))}
+              key={item.id}
+              style={tw`bg-gray-700 p-4 rounded-lg mb-4 flex-row items-center`}
+            >
+              {isChecked && (
+                <View>
+                  {pastentries.length > 0 && pastentries.includes(item.id) ? (
+                    <Pressable
+                      onPress={() => deletePastentries(item.id)}
+                      key={`checked-${item.id}`}
+                      style={[
+                        tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                        { backgroundColor: "#9C0A35" },
+                      ]}
+                    >
+                      <Ionicons
+                        name="checkmark"
+                        size={18}
+                        color="white"
+                        style={tw`font-bold`}
+                      />
+                    </Pressable>
+                  ) : (
+                    <Pressable
+                      onPress={() => setPastentries([...pastentries, item.id])}
+                      key={`unchecked-${item.id}`}
+                      style={[
+                        tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                        {
+                          backgroundColor: "#B9B9C9",
+                          borderWidth: 2,
+                          borderColor: "gray",
+                        },
+                      ]}
+                    ></Pressable>
+                  )}
+                </View>
+              )}
+              <Image
+                source={{
+                  uri: `http://45.67.35.86:8080/attachment/getFile/${item.attachmentId}`,
+                }}
+                style={tw`w-12 h-12 rounded-full mr-4`}
+              />
+              <View style={tw`flex-1`}>
+                <Text style={tw`text-white font-bold`}>{  item.fullName}</Text>
+                <Text style={tw`text-gray-400`}>{item.phone}</Text>
+                <Text style={tw`text-red-500 font-bold mt-2`}>
+                  {item.servicePrice} сум
+                </Text>
+              </View>
+            </Pressable>
+          ))}
+      </ScrollView>
+
       <CenteredModal
         isModal={toggle}
         onConfirm={deletePast}
