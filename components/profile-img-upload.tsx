@@ -86,7 +86,6 @@ const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
         try {
             const response = await axios.post(postFileId, formData, imageConfig);
             if (response.data.success) {
-                console.log(response.data.body)
                 Toast.show('Success', Toast.LONG)
                 setAttachmentID(response.data.body)
             } else Toast.show(response.data.message, Toast.LONG)

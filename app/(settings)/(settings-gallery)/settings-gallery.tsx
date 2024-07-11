@@ -10,10 +10,15 @@ import * as ImagePicker from 'expo-image-picker';
 import { addData, fetchData } from '@/helpers/api-function/gallery/settings-gallery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { RootStackParamList } from '@/type/root';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(settings)/(settings-gallery)/settings-gallery-main'>;
+
 
 const SettingsGallery: React.FC = () => {
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
   const [images, setImages] = useState<any[]>([]);
   const [mainImageIndex, setMainImageIndex] = useState<number | null>(null);
   const [selectedImageIndices, setSelectedImageIndices] = useState<number[]>([]);
@@ -28,12 +33,7 @@ const SettingsGallery: React.FC = () => {
   }, []);
 
   const pickImageFromCamera = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Sorry, we need camera permissions to make this work!');
-      return;
-    }
-
+    await ImagePicker.requestCameraPermissionsAsync();
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -47,12 +47,7 @@ const SettingsGallery: React.FC = () => {
   };
 
   const pickImageFromGallery = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    // if (status !== 'granted') {
-    //   Alert.alert('Sorry, we need gallery permissions to make this work!');
-    //   return;
-    // }
-
+    await ImagePicker.requestMediaLibraryPermissionsAsync();
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsMultipleSelection: true,
@@ -65,8 +60,16 @@ const SettingsGallery: React.FC = () => {
     }
   };
 
-  const toggleModal = () => {
+  const toggleCheckboxes = () => {
     setShowCheckboxes(!showCheckboxes);
+    setShowMainSwitch(false);
+    setSelectedImageIndices([]);
+  };
+
+  const toggleMainSwitch = () => {
+    setShowMainSwitch(!showMainSwitch);
+    setShowCheckboxes(false);
+    setSelectedImageIndices([]);
   };
 
   const handleImageSelect = (index: number) => {
@@ -83,7 +86,7 @@ const SettingsGallery: React.FC = () => {
     setMainImageIndex(index);
   };
 
-  const deleteSelectedImage = () => {
+  const deleteSelectedImages = () => {
     if (selectedImageIndices.length > 0) {
       const updatedImages = images.filter((_, index) => !selectedImageIndices.includes(index));
       setImages(updatedImages);
@@ -94,15 +97,16 @@ const SettingsGallery: React.FC = () => {
     }
   };
 
+  const mainPhotos = mainImageIndex !== null ? [images[mainImageIndex]] : [];
+
   const saveAlbum = async () => {
     if (albumName && images.length > 0) {
-      const mainPhotos = mainImageIndex !== null ? [images[mainImageIndex]] : [];
 
       const formData = new FormData();
       images.forEach((image, index) => {
         formData.append('photos', {
           uri: image,
-          name: `photo_${index}.jpg`,
+          name: `photos[${index}].jpg`,
           type: 'image/jpeg',
         } as any);
       });
@@ -110,28 +114,26 @@ const SettingsGallery: React.FC = () => {
       mainPhotos.forEach((image, index) => {
         formData.append('mainPhotos', {
           uri: image,
-          name: `mainPhoto_${index}.jpg`,
+          name: `mainPhotos[${index}].jpg`,
           type: 'image/jpeg',
         } as any);
       });
 
-      addData(formData, albumName);
+      addData(formData, albumName, setData, setImages, setAlbumName);
     }
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
-          <NavigationMenu name='Создать альбом' deleteIcon toggleModal={toggleModal} />
+          <NavigationMenu name='Создать альбом' deleteIcon toggleModal={toggleCheckboxes} />
         </View>
         <View style={{ paddingHorizontal: 10, flex: 1 }}>
-   
-          <View style={{ padding: 10,  height: screenHeight / 1.20}}>
+          <View style={{ padding: 10, height: screenHeight / 1.20 }}>
             <Text style={styles.title}>Фото галерея</Text>
             <View style={{ marginTop: 10 }}>
-              <LocationInput placeholder='Название альбома' labalVisible={true} onChangeText={setAlbumName} />
+              <LocationInput placeholder='Название альбома' value={albumName} labalVisible={true} onChangeText={setAlbumName} />
             </View>
             {images && (
               <>
@@ -139,19 +141,19 @@ const SettingsGallery: React.FC = () => {
                   {images.map((image, index) => (
                     <TouchableWithoutFeedback
                       key={index}
-                      onLongPress={() => setShowMainSwitch(true)}
+                      onLongPress={toggleMainSwitch}
                       onPress={() => showCheckboxes && handleImageSelect(index)}
                     >
                       <View style={styles.imageContainer}>
                         <Image source={{ uri: image }} style={styles.image} />
-                        {showCheckboxes && (
+                        {images.length === 0 ? '' : showCheckboxes && (
                           <View style={styles.checkIcon}>
                             <MaterialIcons
                               name={selectedImageIndices.includes(index) ? "check-box" : "check-box-outline-blank"}
                               size={26} color={selectedImageIndices.includes(index) ? "#9C0A35" : '#fff'} />
                           </View>
                         )}
-                        {showMainSwitch && (
+                        {images.length === 0 ? '' : showMainSwitch && (
                           <TouchableWithoutFeedback onPress={() => handleMainImageSelect(index)}>
                             <View style={styles.mainCheckIcon}>
                               <MaterialIcons
@@ -167,7 +169,7 @@ const SettingsGallery: React.FC = () => {
                 {images.length === 0 ? '' : showCheckboxes && (
                   <View style={styles.switchContainer}>
                     <View style={{ width: "50%" }}>
-                      <Buttons title="Удалить выбранные" textSize={15} onPress={deleteSelectedImage} />
+                      <Buttons title="Удалить выбранные" textSize={15} onPress={deleteSelectedImages} />
                     </View>
                     <View style={{ width: "50%" }}>
                       <Buttons title="Назад" backgroundColor='white' textColor='#9C0A35' textSize={15}
@@ -180,12 +182,12 @@ const SettingsGallery: React.FC = () => {
                     </View>
                   </View>
                 )}
-                {showMainSwitch && (
+                {images.length === 0 ? '' : showMainSwitch && (
                   <View style={styles.mainSwitchContainer}>
                     <Text style={styles.mainSwitchLabel}>Сделать фото основным</Text>
                     <Switch
                       value={mainImageIndex !== null}
-                      onValueChange={() => setShowMainSwitch(!showMainSwitch)}
+                      onValueChange={toggleMainSwitch}
                     />
                   </View>
                 )}
@@ -211,7 +213,7 @@ const SettingsGallery: React.FC = () => {
           <Buttons
             title={`Сохранить`}
             onPress={saveAlbum}
-            isDisebled={!(images.length === 0 && mainImageIndex === 0 && albumName.length === 0)}
+            isDisebled={(images.length >= 0 && albumName === '', mainPhotos.length >= 0)}
           />
         </View>
       </ScrollView>
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
   mainCheckIcon: {
     position: 'absolute',
     top: 5,
-    left: 5,
+    right: 5,
   },
   switchContainer: {
     flexDirection: 'row',
@@ -277,4 +279,4 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontSize: 16,
   },
-})
+});

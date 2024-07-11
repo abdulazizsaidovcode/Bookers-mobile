@@ -23,11 +23,15 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
   }
 };
 
-export const addData = async (formData: FormData, name: string) => {
+export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void) => {
   try {
     const { data } = await axios.post(`${gallery_add}?name=${name}`, formData, imageConfig);
-    console.log(data);
-    Toast.show("Ваша галерея добавлена", Toast.LONG);
+    if (data.success) {
+      fetchData(setData)
+      setImages([])
+      setAlbumName('')
+      Toast.show("Ваша галерея добавлена", Toast.LONG);
+    }
   } catch (error) {
     Toast.show(`Пожалуйста, повторите попытку позже`, Toast.LONG);
     console.log(error);
