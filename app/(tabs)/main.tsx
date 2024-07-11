@@ -63,9 +63,6 @@ const TabOneScreen: React.FC = () => {
 		checkFirstLaunch();
 	}, []);
 
-	console.log(todayGraficData);
-
-
 	const toggleConfirmModal = () => {
 		setConfirmIsModal(!isConfirmModal)
 	}
