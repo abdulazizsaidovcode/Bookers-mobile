@@ -1,7 +1,7 @@
 import { Alert } from "react-native";
 import { config, imageConfig } from "@/helpers/token";
 import { GalleryData } from "@/type/gallery/gallery";
-import { gallery_add, gallery_add_photo, gallery_full_data, gallery_list, } from "@/helpers/api";
+import { gallery_add, gallery_add_photo, gallery_edit_main_photo_status, gallery_full_data, gallery_list, } from "@/helpers/api";
 import axios from "axios";
 import Toast from "react-native-simple-toast";
 
@@ -66,6 +66,18 @@ export const editName = async (id: number, setFullData: (data: GalleryData) => v
   }
 };
 
+export const editStatusPhoto = async (setFullData: (data: GalleryData) => void, setData: (data: GalleryData[]) => void, galleryId: number) => {
+  try {
+    const { data } = await axios.put(`${gallery_edit_main_photo_status}/${galleryId}`, {}, config);
+    if (data.success) {
+      fetchFullData(galleryId, setFullData);
+      fetchData(setData);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const delPhoto = async (
   id: number,
   attachmentIds: string[],
@@ -96,8 +108,6 @@ export const delPhoto = async (
   }
 };
 
-
-
 export const delGallery = async (id: number | null, setData: (data: GalleryData[]) => void, toggleModal: () => void, toggleCheckboxes: () => void) => {
   try {
     const res = await axios.delete(`${gallery_add}/${id}`, config);
@@ -108,6 +118,6 @@ export const delGallery = async (id: number | null, setData: (data: GalleryData[
       Toast.show('Ваша галерея успешно удалена', Toast.LONG)
     }
   } catch (error) {
-    ;
+    console.log(error);
   }
 }

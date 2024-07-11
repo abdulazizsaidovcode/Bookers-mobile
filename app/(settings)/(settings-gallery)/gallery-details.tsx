@@ -28,7 +28,6 @@ const GalleryDetails: React.FC = () => {
   const [images, setImages] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
   const [isBottomModalOpen, setIsBottomModalOpen] = useState(false);
-  const [showCheckboxes, setShowCheckboxes] = useState<boolean>(false);
   const [showMainSwitch, setShowMainSwitch] = useState<boolean>(false);
   const { id } = route.params as { id: number };
 
@@ -61,9 +60,6 @@ const GalleryDetails: React.FC = () => {
 
   const handleConfirm = () => {
     editName(id, setFullData, name, toggleModal, setData);
-  };
-
-  const handleOpenMainCheckBoxes = () => {
   };
 
   const handleDeleteMode = () => {
@@ -120,7 +116,6 @@ const GalleryDetails: React.FC = () => {
 
   const toggleMainSwitch = () => {
     setShowMainSwitch(!showMainSwitch);
-    setShowCheckboxes(false)
   };
 
   const toggleBottomModal = () => {
@@ -197,15 +192,21 @@ const GalleryDetails: React.FC = () => {
                     </TouchableOpacity>
                   </View>
                 )}
-
-                <Pressable style={styles.imageWrapper}>
+                {showMainSwitch && (
+                  <View style={styles.checkIcon}>
+                    <TouchableOpacity style={styles.mainCheckIcon}>
+                      <MaterialIcons
+                        name={albumItem.main ? "check-box" : 'check-box-outline-blank'}
+                        size={26} color={"#9C0A35"} />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                <Pressable onLongPress={toggleMainSwitch} style={styles.imageWrapper}>
                   <Image
                     style={styles.image}
                     source={{ uri: getFile + albumItem.attachmentId }}
                   />
-
                 </Pressable>
-
               </View>
             ))
             )}
@@ -220,25 +221,7 @@ const GalleryDetails: React.FC = () => {
             {images.length !== 0 && (
               <Buttons title='Сохранить' onPress={handleSave} />
             )}
-
-            {showMainSwitch && (
-              <TouchableWithoutFeedback>
-                <View style={styles.mainCheckIcon}>
-                  <MaterialIcons
-                    name={"check-box"}
-                    size={26} color={"#9C0A35"} />
-                </View>
-              </TouchableWithoutFeedback>
-            )}
-          </View>{showMainSwitch && (
-            <View style={styles.mainSwitchContainer}>
-              <Text style={styles.mainSwitchLabel}>Сделать фото основным</Text>
-              <Switch
-                onValueChange={toggleMainSwitch}
-              />
-            </View>
-          )}
-
+          </View>
         </View>
         <CenteredModal
           toggleModal={toggleModal}

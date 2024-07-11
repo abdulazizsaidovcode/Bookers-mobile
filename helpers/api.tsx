@@ -32,6 +32,7 @@ export const gallery_list = `${base_url}gallery/master`;
 export const gallery_full_data = `${base_url}gallery/one`;
 export const gallery_add = `${base_url}gallery`;
 export const gallery_add_photo = `${base_url}gallery/attachment`;
+export const gallery_edit_main_photo_status = `${base_url}gallery/update/main/photo`;
 
 // My services
 export const category_Father = `${base_url}category`;// get all category
