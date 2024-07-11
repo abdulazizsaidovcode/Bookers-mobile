@@ -25,15 +25,8 @@ const MyServicesEdit = () => {
     ];
 
     return (
-        <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
-            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <NavigationMenu name={`Мои услуги`} />
-            <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
-                <ScrollView
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
-                >
-                    <View style = {[tw``, {backgroundColor:'#21212E'}]}>
+      
+                    <View style = {[tw`mt-5`, {backgroundColor:'#21212E'}]}>
                         <View style={[tw``,{backgroundColor:'#21212E'}]}>
                             {services.map((service, index) => (
                                 <MyServicess
@@ -45,9 +38,6 @@ const MyServicesEdit = () => {
                             ))}
                         </View>
                     </View>
-                </ScrollView>
-            </View>
-        </SafeAreaView>
     );
 };
 export default MyServicesEdit;

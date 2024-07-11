@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,6 +11,10 @@ import { getFile } from "@/helpers/api";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
+import Buttons from "@/components/(buttons)/button";
+import { useNavigation } from "expo-router";
+import * as SecureStore from 'expo-secure-store';
+
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -28,6 +32,8 @@ const COLORS = {
 
 const TabOneScreen: React.FC = () => {
 	const { getMee, setGetMee } = useGetMeeStore()
+	const navigation = useNavigation<any>();
+	const [isCreate, setIsCreate] = useState(false)
 	const { mainStatisticData, waitingData, dailyTimeData, isConfirmModal, hallData, isRejectedModal, todayGraficData, setTodayGraficData, setRejectedIsModal, setHallData, setConfirmIsModal, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
 
 	useEffect(() => {
@@ -38,9 +44,27 @@ const TabOneScreen: React.FC = () => {
 		getUser(setGetMee);
 		fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
 	}, []);
+	useEffect(() => {
+		const checkFirstLaunch = async () => {
+			try {
+				const value = await SecureStore.getItemAsync('isCreate');
+
+				if (value === null) {
+					await SecureStore.setItemAsync('hasLaunched', 'true');
+					setIsCreate(true);
+				} else {
+					setIsCreate(false);
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+		checkFirstLaunch();
+	}, []);
 
 	console.log(todayGraficData);
-	
+
 
 	const toggleConfirmModal = () => {
 		setConfirmIsModal(!isConfirmModal)
@@ -68,6 +92,14 @@ const TabOneScreen: React.FC = () => {
 				<CardsSection mainStatisticData={mainStatisticData} />
 				<BookingRequests setWaitingData={setWaitingData} waitingData={waitingData} toggleConfirmModal={toggleConfirmModal} toggleRejectedModal={toggleRejectModal} isRejectedModal={isRejectedModal} isConfirmModal={isConfirmModal} />
 				<BookingRequestsHall setHallData={setHallData} hallData={hallData} toggleConfirmModal={toggleConfirmModal} toggleRejectedModal={toggleRejectModal} isRejectedModal={isRejectedModal} isConfirmModal={isConfirmModal} />
+				{
+					!isCreate && <View style={{ margin: 10 }}>
+						<Buttons
+							title="настройку"
+							onPress={() => navigation.navigate('(welcome)/Welcome')}
+						/>
+					</View>
+				}
 			</ScrollView>
 		</SafeAreaView>
 	);
@@ -465,6 +497,7 @@ const styles = StyleSheet.create({
 		color: COLORS.white,
 		fontWeight: "bold",
 	},
+	
 });
 
 export default TabOneScreen;

@@ -14,6 +14,7 @@ import { config } from '@/helpers/token';
 import { useRoute } from '@react-navigation/native';
 import Textarea from '@/components/select/textarea';
 
+
 const ExpertiseEdit: React.FC = () => {
     const route = useRoute();
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
@@ -135,7 +136,7 @@ const ExpertiseEdit: React.FC = () => {
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
                                 title="Сохранить"
-                                onPress={() => router.push('../(process)/process')}
+                                onPress={() => router.push('../test')}
                                 isDisebled={selectedServices.length === 0}
                             />
                         </View>

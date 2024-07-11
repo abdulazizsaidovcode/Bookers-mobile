@@ -9,7 +9,7 @@ const OtpInputExample: React.FC = () => {
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
     const inputs = useRef<TextInput[]>([]);
     const { code, phoneNumber, otpValue, setOtpValue } = registerStory()
-    const [response, setRespone] = useState(true);
+    const [response, setRespone] = useState<null | boolean>(null);
     const [messageResponse, setMessageResponse] = useState(false);
     const { isRegtered } = isRegister()
     const navigation = useNavigation<any>();
@@ -50,16 +50,18 @@ const OtpInputExample: React.FC = () => {
     };
     const handlePress = async () => {
         await checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
+    }
 
-        if (response) {
+    useEffect(() => {
+        // if (response) {
             if (isRegtered) {
                 router.push("(auth)/authPage1");
             } else {
                 navigation.navigate('(tabs)');
             }
             setRespone(false);
-        }
-    }
+        // }
+    }, [response])
     return (
         <View style={styles.container}>
             <View style={styles.textContainer}>

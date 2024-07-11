@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, TextInput, ScrollView, StatusBar, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, TextInput, ScrollView, StatusBar, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -19,12 +19,19 @@ type GenderOption = {
     id: number;
 };
 
+const defaultState = {
+    service: '',
+    price: '',
+    time: '',
+    description: '',
+};
+
 const Process: React.FC = () => {
-    const { selectedServices } = useLocalSearchParams();
-    const [service, setService] = useState<string>('');
-    const [price, setPrice] = useState<string>('');
-    const [time, setTime] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
+    const { selectedServices, serviceId } = useLocalSearchParams();
+    const [service, setService] = useState<string>(defaultState.service);
+    const [price, setPrice] = useState<string>(defaultState.price);
+    const [time, setTime] = useState<string>(defaultState.time);
+    const [description, setDescription] = useState<string>(defaultState.description);
     const [validate, setValidate] = useState<boolean>(false);
     const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);
     const { childCategoryData, categoryFatherId } = servicesStore();
@@ -42,26 +49,32 @@ const Process: React.FC = () => {
         { label: "Цена", value: price, onPress: setPrice },
         { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
+
     const postService = async () => {
         try {
+            console.log('Category Father ID:', categoryFatherId.key);
             const data = {
-                categoryId: categoryFatherId.key,
-                genderId: selectedGender ? [selectedGender.id] : [],
+                id: serviceId, 
+                categoryId: categoryFatherId.key, 
+                genderId: selectedGender ? selectedGender.id : null, 
                 name: service,
                 price: parseFloat(price),
                 description: description,
                 attachmentId: null,
                 active: true
             };
-            console.log(data.categoryId);
-            const response = await axios.post(masterAdd_service, data, config);
+    
+            console.log('Editing service with ID:', serviceId); // Logging service ID
+    
+            const response = await axios.put(`${masterAdd_service}/${serviceId}`, data, config); // Assuming you use PUT for editing
             if (response.data.success) {
+                console.log('Successfully edited service:', response.data);
                 router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
             } else {
-                console.error('Failed to add service:', response.data.message);
+                console.error('Failed to edit service:', response.data.message);
             }
         } catch (error) {
-            console.error('Error adding service:', error);
+            console.error('Error editing service:', error);
         }
     };
 
@@ -91,6 +104,13 @@ const Process: React.FC = () => {
 
     const handleAdd = () => {
         toggleModal();
+    };
+
+    const resetDefaults = () => {
+        setService(defaultState.service);
+        setPrice(defaultState.price);
+        setTime(defaultState.time);
+        setDescription(defaultState.description);
     };
 
     return (
@@ -148,7 +168,10 @@ const Process: React.FC = () => {
                         <Buttons 
                             title='Сохранить' 
                             isDisebled={!validate} 
-                            onPress={postService} 
+                            onPress={() => {
+                                postService();
+                                resetDefaults(); // Reset defaults after saving
+                            }} 
                         />
                     </View>
                     <CenteredModal
