@@ -26,6 +26,8 @@ import {
 } from "@/helpers/api-function/numberSittings/numbersetting";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
+import Buttons from "@/components/(buttons)/button";
+import * as SecureStore from "expo-secure-store";
 
 const screenWidht = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -37,13 +39,28 @@ type SettingsScreenNavigationProp = NavigationProp<
 const Welcome = () => {
   const { number, setNumber } = numberSettingStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
-
   useEffect(() => {
     if (number.length === 0) {
       putNumbers(1);
     }
     getNumbers(setNumber);
   }, []);
+
+
+  const removeDuplicates = (array:any) => {
+    return [...new Set(array)];
+  };
+
+  const uniqueNumbers = removeDuplicates(number);
+
+  const containsAllNumbers = (array:any) => {
+    const requiredNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
+    return requiredNumbers.every(num => array.includes(num));
+  };
+
+  function  registered (){
+    SecureStore.setItemAsync('isCreate', 'true')
+  }
 
   const data = [
     {
@@ -170,6 +187,14 @@ const Welcome = () => {
               </Pressable>
             );
           })}
+        {containsAllNumbers(uniqueNumbers) && (
+            <View style={styles.buttonContainer2}>
+              <Buttons title="Вперёд" onPress={() => {
+                navigation.navigate('(tabs)')
+                registered()
+              }} />
+            </View>
+        )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -267,6 +292,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     marginTop: 24,
+    backgroundColor: "#21212e",
+  },
+  buttonContainer2: {
+    width: '100%',
+    paddingHorizontal: 12,
+    marginVertical: 20,
     backgroundColor: "#21212e",
   },
   pressable: {

@@ -6,7 +6,7 @@ import PieChart from 'react-native-pie-chart';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { editOrderStatus, fetchDaylyOrderTimes, fetchHallingOrders, fetchMainStatistic, fetchTodayWorkGrafic, fetchWaitingOrders } from "@/helpers/api-function/dashboard/dashboard";
 import useDashboardStore from "@/helpers/state_managment/dashboard/dashboard";
-import { BookingRequestsHallProps, BookingRequestsProps, DashboardDailyTimeOrders, DashboardWaitingOrder, RenderBookingRequestProps, ScheduleSectionProps, StatisticsProps, StatusContainerProps } from "@/type/dashboard/dashboard";
+import { BookingRequestsHallProps, BookingRequestsProps, DashboardDailyTimeOrders, RenderBookingRequestProps, ScheduleSectionProps, StatisticsProps, StatusContainerProps } from "@/type/dashboard/dashboard";
 import { getFile } from "@/helpers/api";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
@@ -14,7 +14,7 @@ import { getUser } from "@/helpers/api-function/getMe/getMee";
 import Buttons from "@/components/(buttons)/button";
 import { useNavigation } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
-
+import {getData} from "@/helpers/token";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -35,6 +35,12 @@ const TabOneScreen: React.FC = () => {
 	const navigation = useNavigation<any>();
 	const [isCreate, setIsCreate] = useState(false)
 	const { mainStatisticData, waitingData, dailyTimeData, isConfirmModal, hallData, isRejectedModal, todayGraficData, setTodayGraficData, setRejectedIsModal, setHallData, setConfirmIsModal, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
+	const config = {
+		headers: {
+			Authorization: `Bearer ${getData()}`,
+		},
+	};
+	console.log('main cofig:', config)
 
 	useEffect(() => {
 		fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
@@ -43,7 +49,9 @@ const TabOneScreen: React.FC = () => {
 		fetchHallingOrders(setHallData);
 		getUser(setGetMee);
 		fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
+		getData()
 	}, []);
+
 	useEffect(() => {
 		const checkFirstLaunch = async () => {
 			try {
@@ -59,7 +67,6 @@ const TabOneScreen: React.FC = () => {
 				console.log(error);
 			}
 		};
-
 		checkFirstLaunch();
 	}, []);
 

@@ -1,58 +1,55 @@
 import axios from "axios";
-import { getMe } from "./api";
+import {getMe} from "./api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-let tokens: any;
-
-const getData = async () => {
-  try {
-    const value = await AsyncStorage.getItem('registerToken');
-    if (value !== null) tokens = value
-  } catch (e) {
-    console.error(e);
-  }
+export const getData = async () => {
+    try {
+        const value = await AsyncStorage.getItem('registerToken');
+        if (value !== null) return value
+    } catch (e) {
+        console.error(e);
+    }
 };
 
-getData()
-
 export const config = {
-  headers: {
-    Authorization:
-      "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTk4OTAwMDQzMDUxIn0.K-7YCoydy9DsZOkdan4QTWcnrWnFhSWRhqSXqa_PrxfOx4K_VCffMjfdejuZKSuWF4055eHy1m3Y81qxYfg2og",
-  },
+    headers: {
+        Authorization: `Bearer ${getData()}`,
+    },
 };
 
 export const imageConfig = {
-  headers: {
-    'Content-Type': 'multipart/form-data',
-    Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTk4OTAwMDQzMDUxIn0.K-7YCoydy9DsZOkdan4QTWcnrWnFhSWRhqSXqa_PrxfOx4K_VCffMjfdejuZKSuWF4055eHy1m3Y81qxYfg2og`
-  }
+    headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${getData()}`
+    }
 }
 
-export const setConfig = (): string | null =>
-  (config.headers.Authorization =
-    "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTk4OTAwMDQzMDUxIn0.K-7YCoydy9DsZOkdan4QTWcnrWnFhSWRhqSXqa_PrxfOx4K_VCffMjfdejuZKSuWF4055eHy1m3Y81qxYfg2og");
+export const setConfig = (): string | null => config.headers.Authorization = `Bearer ${getData()}`
+
+export const getMee = (setData: (val: any) => void) => {
+    axios.get(getMe, config)
+        .then((res) => {
+            setData(res.data.body);
+        })
+        .catch()
+}
 
 // export const config = {
 //   headers: {
-//     Authorization: `Bearer ${tokens}`,
+//     Authorization:
+//       `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTk4OTAwMDQzMDUxIn0.K-7YCoydy9DsZOkdan4QTWcnrWnFhSWRhqSXqa_PrxfOx4K_VCffMjfdejuZKSuWF4055eHy1m3Y81qxYfg2og`,
 //   },
 // };
 //
 // export const imageConfig = {
 //   headers: {
 //     'Content-Type': 'multipart/form-data',
-//     Authorization: `Bearer ${tokens}`
+//     Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTk4OTAwMDQzMDUxIn0.K-7YCoydy9DsZOkdan4QTWcnrWnFhSWRhqSXqa_PrxfOx4K_VCffMjfdejuZKSuWF4055eHy1m3Y81qxYfg2og`
 //   }
 // }
 //
-// export const setConfig = (): string | null => config.headers.Authorization = `Bearer ${tokens}`
+// export const setConfig = (): string | null =>
+//   (config.headers.Authorization =
+//     "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTk4OTAwMDQzMDUxIn0.K-7YCoydy9DsZOkdan4QTWcnrWnFhSWRhqSXqa_PrxfOx4K_VCffMjfdejuZKSuWF4055eHy1m3Y81qxYfg2og");
 
-export const getMee = ( setData: (val: any) => void ) => {
-  axios.get(getMe, config)
-  .then((res) => {
-    setData(res.data.body);
-  })
-  .catch()
 
-}

@@ -6,6 +6,7 @@ import { masterData } from '@/helpers/api-function/register/registrFC';
 import registerStory from '@/helpers/state_managment/auth/register';
 import { RootStackParamList } from '@/type/root';
 import { useNavigation } from '@react-navigation/native';
+import {authStorage} from "@/constants/storage";
 const CheckPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const [storedOtp, setStoredOtp] = useState<string | null>(null);
@@ -32,14 +33,7 @@ const CheckPin: React.FC = () => {
 
     useEffect(() => {
         if (tokenData) {
-            const storeData = async () => {
-                try {
-                    await AsyncStorage.setItem('registerToken', tokenData);
-                } catch (e) {
-                    console.error(e);
-                }
-            };
-            storeData()
+            authStorage(tokenData)
             handleContinue()
         }
     }, [tokenData]);
