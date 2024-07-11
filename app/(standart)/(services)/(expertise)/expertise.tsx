@@ -70,8 +70,6 @@ const Expertise: React.FC = () => {
         try {
             const response = await axios.post(`${masterAdd_category}/${categoryFatherId}?name=${name}`, "",config);
             if (response.data.success) {
-                // const newCategory = { id: response.data.body.id, name };
-                // setChildCategoryData([...childCategoryData, newCategory]);
                 getChildCategory(categoryFatherId);
                 console.log(response.data);
                 

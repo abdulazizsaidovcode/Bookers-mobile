@@ -43,8 +43,6 @@ const MyServicesScreen = () => {
     const getCategory = async () => {
         try {
             const response = await axios.get(getCategory_master, config);
-            console.log(response);
-            
             setCategory(response.data.body);
         } catch (error) {
             console.error("Error fetching categories:", error);
@@ -91,7 +89,7 @@ const MyServicesScreen = () => {
         setSelectedCategory(index);
         getSpecializationData(categoryId);
         getMasterData(categoryId);
-        console.log("Selected category ID:", categoryId); // Log the selected category ID
+        console.log("Selected category ID:", categoryId);
     };
 
     return (
