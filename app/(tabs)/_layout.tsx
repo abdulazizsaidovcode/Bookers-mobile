@@ -138,7 +138,7 @@ function TabLayout() {
           }}
         />
       </Tab.Navigator>
-      {isCreate &&
+      {!isCreate &&
         <View style={styles.container}></View>
       }
     </>
