@@ -9,7 +9,7 @@ import { RootStackParamList } from '@/type/root';
 import { ActivityIndicator } from 'react-native-paper';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
-import { getCategory_master, getCategory_masterAdd } from '@/helpers/api'; // Assuming getCategory is defined in your helpers/api
+import { category_Father, getCategory_master, getCategory_masterAdd } from '@/helpers/api'; // Assuming getCategory is defined in your helpers/api
 import { config } from '@/helpers/token';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -23,21 +23,21 @@ const CategoryEdit = () => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
-    // Function to fetch master categories from the backend
-    const getCategoryMaster = async () => {
+    const getCategory = async () => {
         try {
-            const response = await axios.get(`${getCategory_master}`, config);
-            const listData =
-                response.data.body &&
-                response.data.body.map((item: any) => ({
-                    key: item.id,
-                    value: item.name,
-                }));
-            return listData;
+            const response = await axios.get(`${category_Father}`, config);
+            const listData = response.data.body.map((item: any) => ({
+                key: item.id,
+                value: item.name,
+            }));
+            setData(listData);
         } catch (error) {
-            console.error("Error fetching master services:", error);
+            console.error("Error fetching services:", error);
         }
     };
+   useEffect(() => {
+        getCategory();
+    }, []);
 
     const addCategory = async () => {
         try {
@@ -46,8 +46,7 @@ const CategoryEdit = () => {
             const response = await axios.post(`${getCategory_masterAdd}${queryParams}`, '', config);
             if (response.data.success) {
                 Toast.show('✅ Вы изменили категории', Toast.LONG);
-               router.push('../../(services)/(myServicesScreen)/MyServicesScreen');
-                <MyServicesScreen/>
+               router.push('../test');
             } else {
                 Toast.show('⚠️ Вы не меняли категории', Toast.LONG);
             }
@@ -56,7 +55,6 @@ const CategoryEdit = () => {
         }
     };
 
-    // Function to handle category selection/deselection
     const handleCategorySelect = (category: string) => {
         setSelectedCategories(prev => {
             if (prev.includes(category)) {

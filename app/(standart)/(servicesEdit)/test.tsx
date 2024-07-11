@@ -16,6 +16,8 @@ import {
 } from '@/helpers/api';
 import { config } from '@/helpers/token';
 import { router, useNavigation } from 'expo-router';
+import MyServicesEdit from './(processEdit)/(uslugi)/uslugi';
+import ServesGenderEdit from './(gender)/servesGender';
 
 const MyServicesScreenEdit = () => {
     const route = useRoute();
@@ -148,7 +150,7 @@ const MyServicesScreenEdit = () => {
                     <View style={tw`flex flex-row justify-between p-4 mb-2`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Категория услуг</Text>
                         <TouchableOpacity
-                            onPress={() => router.push('(categoryEdit)/category')}
+                            onPress={() => router.push('(standart)/(servicesEdit)/(categoryEdit)/category')}
                             activeOpacity={0.6}>
                             <MaterialIcons name="mode-edit" size={24} color="white" />
                         </TouchableOpacity>
@@ -174,83 +176,91 @@ const MyServicesScreenEdit = () => {
                             </View>
                         ))}
                     </ScrollView>
-                    <View style={tw`flex flex-row justify-between mb-2 p-4`}>
-                        <Text style={tw`text-white mb-2 text-xl`}>Специализация услуг</Text>
-                        <TouchableOpacity
-                            onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit?categoryId=${route.params.categoryId}`)}
-                            activeOpacity={0.6}
-                            style={{ padding: 10 }}
-                        >
-                            <MaterialIcons name="mode-edit" size={24} color="white" />
-                        </TouchableOpacity>
-                    </View>
-                    {specialization.length > 0 ? (
-                        <ScrollView
-                            horizontal
-                            contentContainerStyle={{ gap: 16, marginBottom: 5 }}
-                            showsHorizontalScrollIndicator={false}
-                        >
-                            {specialization.map((item) => (
-                                <View key={item.id}>
+                    {categoryMaster && categoryMaster.length > 0 ?
+                        <View>
+                            <View style={tw`flex flex-row justify-between mb-2 p-4`}>
+                                <Text style={tw`text-white mb-2 text-xl`}>Специализация услуг</Text>
+                                <TouchableOpacity
+                                    onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit?categoryId=${route.params.categoryId}`)}
+                                    activeOpacity={0.6}
+                                    style={{ padding: 10 }}
+                                >
+                                    <MaterialIcons name="mode-edit" size={24} color="white" />
+                                </TouchableOpacity>
+                            </View>
+                            {specialization.length > 0 ? (
+                                <ScrollView
+                                    horizontal
+                                    contentContainerStyle={{ gap: 16, marginBottom: 5 }}
+                                    showsHorizontalScrollIndicator={false}
+                                >
+                                    {specialization.map((item) => (
+                                        <View key={item.id}>
+                                            <TouchableOpacity
+                                                onPress={getCategory}>
+                                                <Text style={tw`rounded-xl border border-gray-600 px-7 py-3 text-gray-600 text-gray-600`}>{item.name}</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    ))}
+                                </ScrollView>
+                            )
+                                :
+                                <View style={tw`flex flex-row justify-center mb-2 p-4`}>
+                                    <Text style={tw`text-gray-600 mb-2 text-lg`}>Нет доступных специализаций для выбранной категории</Text>
+                                </View>
+                            }
+                            <View style={tw`flex flex-row justify-between p-4 mb-2`}>
+                                <Text style={tw`text-white mb-2 text-xl`}>Процедуры услуг</Text>
+                                <TouchableOpacity activeOpacity={0.6}>
+                                    <AntDesign name="pluscircleo" size={24} color="white" />
+                                </TouchableOpacity>
+                            </View>
+                            {categoryMaster.length > 0 ? (
+                                categoryMaster.map((item) => (
                                     <TouchableOpacity
-                                        onPress={getCategory}>
-                                        <Text style={tw`rounded-xl border border-gray-600 px-7 py-3 text-gray-600 text-gray-600`}>{item.name}</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            ))}
-                        </ScrollView>
-                    ) : (
-                        <View style={tw`flex flex-row justify-center mb-2 p-4`}>
-                            <Text style={tw`text-gray-600 mb-2 text-lg`}>Нет доступных специализаций для выбранной категории</Text>
-                        </View>
-                    )}
-
-                    <View style={tw`flex flex-row justify-between p-4 mb-2`}>
-                        <Text style={tw`text-white mb-2 text-xl`}>Процедуры услуг</Text>
-                        <TouchableOpacity activeOpacity={0.6}>
-                            <AntDesign name="pluscircleo" size={24} color="white" />
-                        </TouchableOpacity>
-                    </View>
-                    {categoryMaster.length > 0 ? (
-                        categoryMaster.map((item) => (
-                            <TouchableOpacity
-                                key={item.id}
-                                onPress={() => {
-                                    setProdseduraUslug(item);
-                                    router.push({
-                                        pathname: '(standart)/(servicesEdit)/(processEdit)/processEdit',
-                                        params: {
-                                            item: JSON.stringify(item)
-                                        }
-                                    });
-                                }}
-                                activeOpacity={0.8}
-                            >
-                                <View style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
-                                    <Text style={tw`font-bold text-xl mb-3`}>{translateGender(item.genderNames).join(", ")}</Text>
-                                    <ScrollView
-                                        horizontal
-                                        contentContainerStyle={{ gap: 16, marginBottom: 5 }}
-                                        showsHorizontalScrollIndicator={false}
+                                        key={item.id}
+                                        onPress={() => {
+                                            setProdseduraUslug(item);
+                                            router.push({
+                                                pathname: '(standart)/(servicesEdit)/(processEdit)/processEdit',
+                                                params: {
+                                                    item: JSON.stringify(item)
+                                                }
+                                            });
+                                        }}
+                                        activeOpacity={0.8}
                                     >
-                                        <TouchableOpacity>
-                                            <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
-                                        </TouchableOpacity>
-                                    </ScrollView>
-                                    <Text style={[tw`font-bold text-xl mb-3`, { color: '#9C0A35' }]}>
-                                        {item.price !== 0 ? `${item.price} сум` : '0'}
-                                    </Text>
+                                        <View style={tw`bg-white rounded-lg rounded-xl mb-4 p-4`}>
+                                            <Text style={tw`font-bold text-xl mb-3`}>{translateGender(item.genderNames).join(", ")}</Text>
+                                            <ScrollView
+                                                horizontal
+                                                contentContainerStyle={{ gap: 16, marginBottom: 5 }}
+                                                showsHorizontalScrollIndicator={false}
+                                            >
+                                                <TouchableOpacity>
+                                                    <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
+                                                </TouchableOpacity>
+                                            </ScrollView>
+                                            <Text style={[tw`font-bold text-xl mb-3`, { color: '#9C0A35' }]}>
+                                                {item.price !== 0 ? `${item.price} сум` : '0'}
+                                            </Text>
 
-                                    <Text style={tw`text-black mb-2`}>{item.description || 'Описание не предоставлено'}</Text>
+                                            <Text style={tw`text-black mb-2`}>{item.description || 'Описание не предоставлено'}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                ))
+                            ) : (
+                                <View style={tw`flex flex-row justify-center mb-2 p-4`}>
+                                    <Text style={tw`text-white text-lg`}>Нет доступных процедур для выбранной категории</Text>
                                 </View>
-                            </TouchableOpacity>
-                        ))
-                    ) : (
-                        <View style={tw`flex flex-row justify-center mb-2 p-4`}>
-                            <Text style={tw`text-white mb-2 text-lg`}>Нет доступных процедур для выбранной категории</Text>
+                            )}
                         </View>
-                    )}
-
+                        :
+                        (
+                            <View style={tw`mb-48`}>
+                                <MyServicesEdit />
+                            </View>
+                        )}
                 </ScrollView>
             </View>
         </SafeAreaView>

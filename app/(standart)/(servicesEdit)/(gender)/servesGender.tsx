@@ -69,7 +69,7 @@ const ServesGenderEdit: React.FC = () => {
         try {
             const queryParams = selectedCategories.map(item => `genders=${item}`).join('&');
             await axios.post(`${gender_status}?${queryParams}`, '', config);
-            router.push("/MyServicesScreen");
+            router.push("(standart)/(servicesEdit)/test");
             fetchGenders();
             console.log("Selected category IDs:",selectedCategories); 
         } catch (error) {
