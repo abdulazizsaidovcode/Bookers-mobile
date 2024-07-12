@@ -21,7 +21,7 @@ const OtpInputExample: React.FC = () => {
     const {code, phoneNumber, otpValue, setOtpValue} = registerStory()
     const [response, setRespone] = useState<null | boolean>(null);
     const [messageResponse, setMessageResponse] = useState(false);
-    const {isRegtered} = isRegister()
+    const {isRegtered,setIsRegtered} = isRegister()
     const navigation = useNavigation<any>();
     const {t} = useTranslation();
 
@@ -66,8 +66,11 @@ const OtpInputExample: React.FC = () => {
         if (response) {
             if (isRegtered) {
                 router.push("(auth)/authPage1");
+                // setIsRegtered('')
             } else {
                 navigation.navigate('(tabs)');
+                // setIsRegtered('')
+
             }
             setRespone(false);
         }
