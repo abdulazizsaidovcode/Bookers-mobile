@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
-import { router } from "expo-router";
+import { useNavigation } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
@@ -12,16 +12,21 @@ import {
 } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import { getMee } from "@/helpers/token";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic)/workTime'>;
+
 
 export const WorkMainCard: React.FC<{
   icon: any;
   title: string;
   subTitle: string;
-  to?: string;
+  route?: () => void;
   disabled?: boolean
-}> = ({ icon, title, subTitle, to, disabled=false  }) => {
+}> = ({ icon, title, subTitle, route, disabled=false  }) => {
+
   return (
-    <TouchableOpacity disabled={disabled} activeOpacity={0.7} onPress={() => router.push(to || "")}>
+    <TouchableOpacity disabled={disabled} activeOpacity={0.7} onPress={route}>
       <View style={styles.card}>
         <View>
           <View style={{ flexDirection: "row", gap: 5 }}>
@@ -41,6 +46,7 @@ export const WorkMainCard: React.FC<{
 };
 
 const WorkMain = () => {
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
   const {
     setWeekData,
     weekData,
@@ -74,7 +80,7 @@ const WorkMain = () => {
                   .join(", ") // elementlarni vergul bilan ajratamiz
               : "Рабочие дни недели не настроены!"
           }`}
-          to="(free)/(work-grafic)/workGraffic"
+          route={() => navigation.navigate("(free)/(work-grafic)/workGraffic")}
         />
         <TouchableOpacity activeOpacity={0.7} disabled>
           <WorkMainCard
@@ -87,7 +93,7 @@ const WorkMain = () => {
               timeData.end !== undefined ? timeData.end : "00:00"
             }` : "Рабочее время не настроено!"
             }
-            to="(free)/(work-grafic)/workTime"
+          route={() => navigation.navigate("(free)/(work-grafic)/workTime")}
           />
         </TouchableOpacity>
       </View>
@@ -107,7 +113,7 @@ const WorkMain = () => {
               putNumbers(3);
               
             }
-            router.push("(welcome)/Welcome");
+            navigation.navigate("(welcome)/Welcome");
           }}
         />
       </View>

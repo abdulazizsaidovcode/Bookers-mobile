@@ -50,10 +50,11 @@ export const getWorkTime = async (setData: (val: any) => void, masterID: string)
   }
 };
 
-export const postWorkDay = async (workDayWeeks: any, date: string) => {
+export const postWorkDay = async (workDayWeeks: any, date: string, router: () => void) => {
   try {
     if (!workDayWeeks || !date) {
-      return;
+      Toast.show('hdhdhdhd', Toast.SHORT);
+
     }
 
     const data = {
@@ -65,17 +66,18 @@ export const postWorkDay = async (workDayWeeks: any, date: string) => {
     const response = await axios.post(`${workday_save}`, data, config);
 
     if (response.data.success) {
-      Toast.show('Work day saved successfully', Toast.LONG);
+      Toast.show('Work day saved successfully', Toast.SHORT);
+      router();
     } else {
-      Toast.show(response.data.message, Toast.LONG);
+      Toast.show(response.data.message, Toast.SHORT);
     }
   } catch (error) {
     console.error('Error saving work day:', error);
-    Toast.show('Error saving work day', Toast.LONG);
+    Toast.show('Error saving work day', Toast.SHORT);
   }
 };
 
-export const postWorkTime = async (fromTimeHour: number, fromTimeMin: number, endTimeHour: number, endTimeMin: number) => {
+export const postWorkTime = async (fromTimeHour: number, fromTimeMin: number, endTimeHour: number, endTimeMin: number, router: () => void) => {
   try {
     if (!fromTimeHour || !fromTimeMin || !endTimeHour || !endTimeMin) {
       return;
@@ -89,19 +91,23 @@ export const postWorkTime = async (fromTimeHour: number, fromTimeMin: number, en
     };
 
     const config = await getConfig();
-    await axios.post(`${worktime_save}`, data, config);
-
-    Toast.show('Work time saved successfully', Toast.LONG);
+    const response = await axios.post(`${worktime_save}`, data, config);
+    if (response.data.success) {
+      Toast.show('Work time saved successfully', Toast.LONG);
+      router();
+    } else {
+      Toast.show(response.data.message, Toast.LONG);
+    }
   } catch (error) {
-    console.error('Error saving work time:', error);
     Toast.show('Error saving work time', Toast.LONG);
   }
 };
 
-export const putWorkDay = async (workDayWeeks: any, date: string, router: any) => {
+export const putWorkDay = async (workDayWeeks: any, date: string, router: () => void) => {
   try {
     if (!workDayWeeks || !date) {
-      return;
+      Toast.show('hdhdhdhd', Toast.LONG);
+      
     }
 
     const data = {
@@ -114,7 +120,7 @@ export const putWorkDay = async (workDayWeeks: any, date: string, router: any) =
 
     if (response.data.success) {
       Toast.show('Work day updated successfully', Toast.LONG);
-      router.push("(free)/(work-grafic-edit)/workMain");
+      router();
     } else {
       Toast.show(response.data.message, Toast.LONG);
     }
@@ -124,7 +130,7 @@ export const putWorkDay = async (workDayWeeks: any, date: string, router: any) =
   }
 };
 
-export const putWorkTime = async (fromTimeHour: number, fromTimeMin: number, endTimeHour: number, endTimeMin: number, router: any) => {
+export const putWorkTime = async (fromTimeHour: number, fromTimeMin: number, endTimeHour: number, endTimeMin: number, router: () => void) => {
   try {
     if (!fromTimeHour || !fromTimeMin || !endTimeHour || !endTimeMin) {
       return;
@@ -136,12 +142,14 @@ export const putWorkTime = async (fromTimeHour: number, fromTimeMin: number, end
       endTimeHour: endTimeHour,
       endTimeMin: endTimeMin,
     };
+    console.log(data);
+    
 
     const config = await getConfig();
     await axios.put(`${worktime_put}`, data, config);
 
     Toast.show('Work time updated successfully', Toast.LONG);
-    router.push("(free)/(work-grafic-edit)/workMain");
+    router()
   } catch (error) {
     console.error('Error updating work time:', error);
     Toast.show('Error updating work time', Toast.LONG);

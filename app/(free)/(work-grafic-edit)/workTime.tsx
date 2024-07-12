@@ -14,6 +14,11 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { postWorkTime, putWorkTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import Toast from "react-native-simple-toast";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+import { useNavigation } from "expo-router";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic-edit)/workTime'>;
+
 
 const timeList = [
   "08:00",
@@ -54,6 +59,8 @@ const TimeWorkEdit: React.FC = () => {
   const { weekData, timeData } = graficWorkStore();
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(true);
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
+
 
   useEffect(() => {
     if (timeData && timeData.from && timeData.end) {
@@ -176,7 +183,8 @@ const TimeWorkEdit: React.FC = () => {
                 : +selectedTimeSlots[1].substring(0, 2),
               +selectedTimeSlots[1].substring(3, 4) === 0
                 ? +selectedTimeSlots[1].substring(3, 5)
-                : +selectedTimeSlots[1].substring(3, 5)
+                : +selectedTimeSlots[1].substring(3, 5),
+                () => navigation.navigate('(free)/(work-grafic-edit)/workMain')
             )
           }
           isDisebled={!isDisabled}
