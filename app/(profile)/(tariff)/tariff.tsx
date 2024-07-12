@@ -40,7 +40,6 @@ const TariffsPage: React.FC = () => {
       try {
         const storedTariffStatus = await SecureStore.getItemAsync('tariff');
         setTariffStatus(storedTariffStatus);
-        console.log('starage dan olindi: ', storedTariffStatus);
       } catch (error) {
         console.error('Error fetching tariff status:', error);
       }
@@ -89,7 +88,7 @@ const TariffsPage: React.FC = () => {
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   onPress={() => {
-                    setTariff(tariff.unicName)
+                    setTariff(tariffStatus === 'all' ? 'all' : tariff.unicName)
                     navigation.navigate(tariff.navigate)
                   }}
                   activeOpacity={.7}
