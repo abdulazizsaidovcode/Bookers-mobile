@@ -241,7 +241,7 @@ const MyServicesScreen = () => {
                         <Buttons onPress={() => {
                             putNumbers(2)
                             router.push('(welcome)/Welcome')
-                        }} title='На главную' />
+                        }} title='На главную ' />
                     </View>
                 </ScrollView>
             </View>
