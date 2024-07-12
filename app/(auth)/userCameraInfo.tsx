@@ -38,7 +38,7 @@ const UserCameraInfo = () => {
                     <View style={styles.progressSegment2} />
                 </View>
                 <Text style={styles.label}>{t("add_your_photo")}</Text>
-                <Text style={styles.description}>Не желаете добавить своё фото? Оно будет доступно только мастерами к которым вы записались</Text>
+                <Text style={styles.description}>{t("do_not_wish_to_add_photo")}</Text>
                 <ProfileImgUpload />
             </View>
 
