@@ -93,7 +93,7 @@ const TariffsPage: React.FC = () => {
                     navigation.navigate(tariff.navigate)
                   }}
                   activeOpacity={.7}
-                  disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
+                  disabled={handleDisabled() !== tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
                   style={[styles.activateButton, { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }]}
                 >
                   <Text style={styles.buttonText}>Активировать</Text>

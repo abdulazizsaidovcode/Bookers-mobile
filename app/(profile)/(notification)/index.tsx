@@ -12,7 +12,6 @@ import { useNavigation } from "@react-navigation/native";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import NotificationCard from "./card/index";
 import axios from "axios";
-import { config } from "@/helpers/token";
 import { base_url } from "@/helpers/api";
 import tw from "tailwind-react-native-classnames";
 import BottomModal from "@/components/(modals)/modal-bottom";
@@ -22,6 +21,7 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { router } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
+import { getConfig } from "@/app/(tabs)/main";
 
 const Notification: React.FC = () => {
   const navigation = useNavigation();
@@ -34,6 +34,7 @@ const Notification: React.FC = () => {
   const getNotification = async () => {
     setisLoading(true);
     try {
+      const config = getConfig();
       const { data } = await axios.get(`${base_url}notification`, config);
       setNotifications(data.body);
     } catch (error) {
@@ -45,9 +46,8 @@ const Notification: React.FC = () => {
 
   const deleteNotification = async () => {
     const deleteData = notifications.map((item: any) => item.id);
-    console.log(deleteData);
-
     try {
+      const config = getConfig();
       const response = await fetch(`${base_url}notification`, {
         method: "DELETE",
         headers: {
@@ -74,18 +74,27 @@ const Notification: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.padding}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => {
-            putNumbers(7)
-            navigation.goBack()
-          }}>
-            <Feather name="chevron-left" size={30} color="white" onPress={() => navigation.goBack()} />
+          <TouchableOpacity
+            onPress={() => {
+              putNumbers(7);
+              navigation.goBack();
+            }}
+          >
+            <Feather
+              name="chevron-left"
+              size={30}
+              color="white"
+              onPress={() => navigation.goBack()}
+            />
           </TouchableOpacity>
           <Text style={styles.headerText}>Уведомления</Text>
-          {notifications && notifications.length > 0 ?
+          {notifications && notifications.length > 0 ? (
             <TouchableOpacity onPress={() => setToggle(!toggle)}>
               <FontAwesome name="trash" size={24} color="#fff" />
             </TouchableOpacity>
-            : <View></View>}
+          ) : (
+            <View></View>
+          )}
         </View>
         {isLoading && <ActivityIndicator size="large" color={"#888"} />}
         {!isLoading && notifications.length === 0 && (

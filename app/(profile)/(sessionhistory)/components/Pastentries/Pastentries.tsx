@@ -1,10 +1,9 @@
+import { getConfig } from "@/app/(tabs)/main";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import { ClientItem } from "@/components/clients/client-items";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { base_url } from "@/helpers/api";
 import History from "@/helpers/state_managment/history";
 import Pastentries from "@/helpers/state_managment/pastentries/Pastentries";
-import { config } from "@/helpers/token";
 import {
   AntDesign,
   FontAwesome,
@@ -26,6 +25,7 @@ const PastEntries = () => {
 
   const getsessionDetails = async () => {
     try {
+      const config = getConfig();
       const response = await axios.get(
         `${base_url}order/past-sessions?status=PAST_SESSIONS`,
         config
@@ -57,6 +57,7 @@ const PastEntries = () => {
     };
 
     try {
+      const config = getConfig();
       const response = await fetch(`${base_url}order/all`, {
         method: "DELETE",
         headers: {
