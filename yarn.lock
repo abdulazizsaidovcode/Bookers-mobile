@@ -9802,11 +9802,6 @@ react-native-select-dropdown@^4.0.1:
   resolved "https://registry.npmjs.org/react-native-select-dropdown/-/react-native-select-dropdown-4.0.1.tgz"
   integrity sha512-t4se17kALFcPb9wMbxig5dS1BE3pWRC6HPuFlM0J2Y6yhB1GsLqboy6an6R9rML8pRuGIJIxL29cbwEvPQwKxQ==
 
-react-native-share@^10.2.1:
-  version "10.2.1"
-  resolved "https://registry.npmjs.org/react-native-share/-/react-native-share-10.2.1.tgz"
-  integrity sha512-Z2LWGYWH7raM4H6Oauttv1tEhaB43XSWJAN8iS6oaSG9CnyrUBeYFF4QpU1AH5RgNeylXQdN8CtbizCHHt6coQ==
-
 react-native-simple-toast@^3.3.1:
   version "3.3.1"
   resolved "https://registry.npmjs.org/react-native-simple-toast/-/react-native-simple-toast-3.3.1.tgz"

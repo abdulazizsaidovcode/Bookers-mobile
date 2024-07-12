@@ -35,7 +35,6 @@ import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSe
 import { getNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { handleRefresh } from "@/constants/refresh";
-import Share from 'react-native-share';
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -234,25 +233,12 @@ const TabOneScreen: React.FC = () => {
 };
 
 const Header: React.FC = () => {
-	const sendApp = () => {
-		const options = {
-			message: 'Check out this app!',
-			url: 'https://example.com', // Link to your app or a relevant URL
-		};
-
-		Share.open(options)
-			.then((res) => console.log(res))
-			.catch((err) => {
-				err && console.log(err);
-			});
-	};
-
 	return (
 		<View style={styles.header}>
 			<Text style={styles.title}>Главная</Text>
 			<View style={styles.headerIcons}>
 				<Ionicons name="notifications" size={24} color={COLORS.white} style={{ marginRight: 16 }} />
-				<Ionicons name="share-social-outline" size={24} color={COLORS.white} onPress={sendApp} />
+				<Ionicons name="share-social-outline" size={24} color={COLORS.white} />
 			</View>
 		</View>
 	);
@@ -412,7 +398,7 @@ const renderTimeSlot: React.FC<{ item: DashboardDailyTimeOrders }> = ({ item }) 
 				item.type === 'VIP' ? styles.vipSlot :
 					styles.newSlot
 	]}>
-		<Text style={{ color: COLORS.white }}>{item.time === null ? '' : item.time.slice(0, 5)}</Text>
+		<Text style={{ color: COLORS.white }}>{item.time === null ? '' : item.time.slice(0, 5) ?? ''}</Text>
 	</View>
 );
 
