@@ -9,20 +9,20 @@ const OfferScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>Публичная оферта</Text>
+                <Text style={styles.headerTitle}>{t("public_offer")}</Text>
             </View>
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.offerContainer}>
                     <Text style={styles.offerTitle}>
-                        Онлайн сервис для самостоятельного бронирования услуг специалистов в сфере красоты и ухода за внешностью
+                       {t("online_service")}
                     </Text>
                     <Text style={styles.offerText}>
-                        На сервисе уже на протяжении 2x лет дарит пользователям ...... Равным образом сложившаяся структура организации влечет за собой процесс внедрения и модернизации систем массового участия. Равным образом сложившаяся структура организации представляет собой интересный эксперимент проверки дальнейших направлений развития. Разнообразный и богатый опыт постоянный количественный рост и сфера нашей активности требуют от нас анализа позиций, занимаемых участниками в отношении поставленных задач. Равным образом сложившаяся структура организации представляет собой интересный эксперимент проверки дальнейших направлений развития. Разнообразный и богатый опыт постоянный количественный рост и сфера нашей активности требуют от нас анализа позиций, занимаемых участниками в отношении поставленных задач.
+                        {t("service_duration")}
                     </Text>
                 </View>
             </ScrollView>
             <TouchableOpacity style={styles.button}>
-                <Buttons title="Kirish" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/userInfo')} />
+                <Buttons title={t("login ")} backgroundColor="#9C0A35" onPress={() => router.push('(auth)/userInfo')} />
             </TouchableOpacity>
         </SafeAreaView>
     );
