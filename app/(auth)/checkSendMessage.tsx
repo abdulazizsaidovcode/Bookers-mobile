@@ -22,6 +22,7 @@ const OtpInputExample: React.FC = () => {
     const [messageResponse, setMessageResponse] = useState(false);
     const {isRegtered} = isRegister()
     const navigation = useNavigation<any>();
+    const {t} = useTranslation();
 
 
     useEffect(() => {
@@ -73,9 +74,9 @@ const OtpInputExample: React.FC = () => {
     return (
         <View style={styles.container}>
             <View style={styles.textContainer}>
-                <Text style={styles.title}>Tasdiqlash raqami</Text>
+                <Text style={styles.title}>{t("Confirmation_Number")}</Text>
                 <Text style={styles.phoneNumber}>{phoneNumber}</Text>
-                <Text style={styles.instruction}>Biz SMS orqali sizga tasdiqlash kodini yubordik.</Text>
+                <Text style={styles.instruction}>{t("we_sent_you_sms_with_code")}</Text>
             </View>
             <View style={styles.otpContainer}>
                 {otpValue.map((digit, index) => (
@@ -105,7 +106,7 @@ const OtpInputExample: React.FC = () => {
                         }
                     }}
                 >
-                    <Text style={styles.buttonText}>Tasdiqlash</Text>
+                    <Text style={styles.buttonText}>{t("Confirm")}</Text>
                 </TouchableOpacity>
             </View>
         </View>
