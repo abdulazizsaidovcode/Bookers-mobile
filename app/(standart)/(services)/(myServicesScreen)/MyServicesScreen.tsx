@@ -16,7 +16,7 @@ import { getConfig } from '@/app/(tabs)/main';
 
 const MyServicesScreen = () => {
     const route = useRoute();
-    const { setProdseduraUslug ,serviceSelectId } = servicesStore();
+    const { setProdseduraUslug ,serviceSelectId} = servicesStore();
     const [gender, setGender] = useState([]);
     const [specialization, setSpecialization] = useState([]);
     const [category, setCategory] = useState([]);
