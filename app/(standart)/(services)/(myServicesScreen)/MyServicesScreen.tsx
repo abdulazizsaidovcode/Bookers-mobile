@@ -16,7 +16,7 @@ import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting'
 
 const MyServicesScreen = () => {
     const route = useRoute();
-    const { childCategoryData, categoryFatherId, setChildCategoryData, setProdseduraUslug } = servicesStore();
+    const { setProdseduraUslug ,serviceSelectId } = servicesStore();
     const [gender, setGender] = useState([]);
     const [specialization, setSpecialization] = useState([]);
     const [category, setCategory] = useState([]);
@@ -49,9 +49,9 @@ const MyServicesScreen = () => {
         }
     };
 
-    const getSpecializationData = async (categoryId) => {
+    const getSpecializationData = async (selectedCategoryId:any) => {
         try {
-            const { data } = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
+            const { data } = await axios.get(`${getSpecialization}?categoryId=${selectedCategoryId}`, config);
             if (data.success) setSpecialization(data.body);
             else setSpecialization([]);
         } catch (error) {
@@ -60,7 +60,7 @@ const MyServicesScreen = () => {
         }
     };
 
-    const getMasterData = async (categoryId) => {
+    const getMasterData = async (categoryId:any) => {
         try {
             const { data } = await axios.get(`${master_get_Service}${categoryId}`, config);
             if (data.success) setCategoryMaster(data.body);
@@ -159,7 +159,7 @@ const MyServicesScreen = () => {
                     <View style={tw`flex flex-row justify-between mb-2 p-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Специализация услуг</Text>
                         <TouchableOpacity
-                            onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit?categoryId=${categoryId}`)}
+                             onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit?categoryId=${route.params.categoryId}`)}
                             activeOpacity={0.6}
                             style={{ padding: 10 }}
                         >

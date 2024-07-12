@@ -61,14 +61,14 @@ const Expertise: React.FC = () => {
     };
 
     useEffect(() => {
-        if (categoryFatherId && categoryFatherId.key) {
-            getChildCategory(categoryFatherId.key);
+        if (selectedCategory && selectedCategory) {
+            getChildCategory(selectedCategory);
         }
-    }, [categoryFatherId]);
+    }, [selectedCategory]);
 
     const postCategory = async (categoryFatherId: string, name: string) => {
         try {
-            const response = await axios.post(`${masterAdd_category}/${categoryFatherId}?name=${name}`, "",config);
+            const response = await axios.post(`${masterAdd_category}/${selectedCategory}?name=${name}`, "",config);
             if (response.data.success) {
                 getChildCategory(categoryFatherId);
                 console.log(response.data);

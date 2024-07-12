@@ -48,6 +48,7 @@ export const masterEdit_service = `${base_url}service`// master edit service
 export const master_get_Service = `${base_url}service/master/` //service belonging to the category
 export const service_delete = `${base_url}service/isActive` //service delete 
 export const master_get_specialization = `${base_url}master-service/specialization`//servicga tegishli bo'lgan hizmat
+export const master_add_specialization = `${base_url}master-service/specialization`//servicga tegishli bo'lgan hizmat
 
 
 
