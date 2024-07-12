@@ -161,7 +161,7 @@ const ProcessEdit: React.FC = () => {
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
             <NavigationMenu name={`Процедура услуг`} deleteIcon toggleModal={toggleModal} />
-            <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
+            <View style={[tw`flex-1`, { backgroundColor: '#21212E ' }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
