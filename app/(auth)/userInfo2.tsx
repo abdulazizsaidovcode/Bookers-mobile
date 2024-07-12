@@ -46,7 +46,7 @@ const UserInfo2 = () => {
             <View style={styles.bottomSection}>
                 {nickname.length === 0 ? (
                     <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-                        <Text style={styles.skipButtonText}>Пропустить</Text>
+                        <Text style={styles.skipButtonText}>{t("skip")}</Text>
                     </TouchableOpacity>
                 ) : null}
                 <TouchableOpacity
@@ -57,7 +57,7 @@ const UserInfo2 = () => {
                     onPress={handleContinue}
                     disabled={nickname.length === 0}
                 >
-                    <Text style={styles.continueButtonText}>Продолжить</Text>
+                    <Text style={styles.continueButtonText}>{t("Continue")}</Text>
                 </TouchableOpacity>
             </View>
         </View>
