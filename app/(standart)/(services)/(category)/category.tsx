@@ -137,7 +137,7 @@ const Category = () => {
                                     title={item.value}
                                     items={item}
                                     onPress={() => handleCategoryPress(item.key)}
-                                    isSelected={selectedCategory === item.key}
+                                    // isSelected={selectedCategory === item.key}
                                 />
                             )}
                         />
@@ -156,7 +156,7 @@ const Category = () => {
                             oneBtn
                             btnRedText="Закрыть"
                             isFullBtn={false}
-                            toggleModal={closeModal}
+                            toggleModal={()=>{openModal}}
                             onConfirm={closeModal}
                         >
                             <View style={tw`p-4 text-center`}>

@@ -37,8 +37,8 @@ export interface Services {
     setSelectedCategoryId: (val: string | null) => void
     serviceSelectId: string | null
     setServiceSelectId: (val:string | null) => void
-    serviceId: string | null
-    setServiceId: (val:string | null) => void
+    serviceId: any | null
+    setServiceId: (val:Data) => void
 }
 
 export interface Data {
