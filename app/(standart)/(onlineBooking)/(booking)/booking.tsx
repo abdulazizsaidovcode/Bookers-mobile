@@ -16,15 +16,22 @@ import axios from "axios";
 import { base_url } from "@/helpers/api";
 import { config } from "@/helpers/token";
 import SwitchWithLabel from "@/components/switchWithLabel/switchWithLabel";
-import { GetOnlineBookingSettingsUrgently, onlineBookingSettingsUrgently } from "@/helpers/api-function/onlineBooking/onlineBooking";
-import { OnlineBookingSettingsUrgentlyStory } from "@/helpers/state_managment/onlinBooking/onlineBooking";
+import {
+  GetOnlineBookingSettingsUrgently,
+  onlineBookingSettingsUrgently,
+} from "@/helpers/api-function/onlineBooking/onlineBooking";
+import {
+  OnlineBookingCheck,
+  OnlineBookingSettingsUrgentlyStory,
+} from "@/helpers/state_managment/onlinBooking/onlineBooking";
 
 const Booking = () => {
-  const { Urgently,setUrgentlyt } = OnlineBookingSettingsUrgentlyStory()
+  const { Urgently, setUrgentlyt } = OnlineBookingSettingsUrgentlyStory();
   const [salonId, setSalonId] = useState("");
   const [isEnabled, setIsEnabled] = useState(Urgently);
   const [data, setData] = useState([]);
   const navigation = useNavigation<any>();
+  const { setBreack } = OnlineBookingCheck();
 
   const getData = async () => {
     try {
@@ -42,6 +49,8 @@ const Booking = () => {
         { day: salonId },
         config
       );
+
+      setBreack(false);
       navigation.goBack();
     } catch (error) {
       console.log(error);
@@ -53,17 +62,17 @@ const Booking = () => {
   }, []);
   useEffect(() => {
     console.log(isEnabled);
-    
-    GetOnlineBookingSettingsUrgently(setUrgentlyt)
+
+    GetOnlineBookingSettingsUrgently(setUrgentlyt);
   }, [setUrgentlyt]);
 
   const toggleSwitch = () => {
     let newUrgently = !isEnabled;
     onlineBookingSettingsUrgently(newUrgently);
-    setIsEnabled((previousState) => !previousState)
+    setIsEnabled((previousState) => !previousState);
     console.log(Urgently);
-    
-    GetOnlineBookingSettingsUrgently(setUrgentlyt)
+
+    GetOnlineBookingSettingsUrgently(setUrgentlyt);
   };
 
   return (

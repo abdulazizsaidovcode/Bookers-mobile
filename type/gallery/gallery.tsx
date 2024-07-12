@@ -12,3 +12,8 @@ export interface GalleryData {
         },
     ]
 }
+
+export interface EditMainPhoto {
+    main: boolean,
+    attachmentId: string
+}

@@ -6,7 +6,7 @@ import PieChart from 'react-native-pie-chart';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { editOrderStatus, fetchDaylyOrderTimes, fetchHallingOrders, fetchMainStatistic, fetchTodayWorkGrafic, fetchWaitingOrders } from "@/helpers/api-function/dashboard/dashboard";
 import useDashboardStore from "@/helpers/state_managment/dashboard/dashboard";
-import { BookingRequestsHallProps, BookingRequestsProps, DashboardDailyTimeOrders, DashboardWaitingOrder, RenderBookingRequestProps, ScheduleSectionProps, StatisticsProps, StatusContainerProps } from "@/type/dashboard/dashboard";
+import { BookingRequestsHallProps, BookingRequestsProps, DashboardDailyTimeOrders, RenderBookingRequestProps, ScheduleSectionProps, StatisticsProps, StatusContainerProps } from "@/type/dashboard/dashboard";
 import { getFile } from "@/helpers/api";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
@@ -14,7 +14,8 @@ import { getUser } from "@/helpers/api-function/getMe/getMee";
 import Buttons from "@/components/(buttons)/button";
 import { useNavigation } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
-
+import { getData } from "@/helpers/token";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -29,12 +30,35 @@ const COLORS = {
 	cardBackground: "#B9B9C9",
 	mainRed: "#9C0A35",
 };
+export const getConfig = async () => {
+	try {
+		const token = await AsyncStorage.getItem('registerToken');
+		if (token) {
+			return {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			};
+		} else {
+			console.log('Token not found');
+			return {};
+		}
+	} catch (error) {
+		console.log(error);
+		return {};
+	}
+};
 
 const TabOneScreen: React.FC = () => {
 	const { getMee, setGetMee } = useGetMeeStore()
 	const navigation = useNavigation<any>();
 	const [isCreate, setIsCreate] = useState(false)
 	const { mainStatisticData, waitingData, dailyTimeData, isConfirmModal, hallData, isRejectedModal, todayGraficData, setTodayGraficData, setRejectedIsModal, setHallData, setConfirmIsModal, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
+	const config = {
+		headers: {
+			Authorization: `Bearer ${getData()}`,
+		},
+	};
 
 	useEffect(() => {
 		fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
@@ -43,27 +67,9 @@ const TabOneScreen: React.FC = () => {
 		fetchHallingOrders(setHallData);
 		getUser(setGetMee);
 		fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
-	}, []);
-	useEffect(() => {
-		const checkFirstLaunch = async () => {
-			try {
-				const value = await SecureStore.getItemAsync('isCreate');
-
-				if (value === null) {
-					await SecureStore.setItemAsync('hasLaunched', 'true');
-					setIsCreate(true);
-				} else {
-					setIsCreate(false);
-				}
-			} catch (error) {
-				console.log(error);
-			}
-		};
-
-		checkFirstLaunch();
+		getData()
 	}, []);
 
-	console.log(todayGraficData);
 
 
 	const toggleConfirmModal = () => {
@@ -139,7 +145,7 @@ const Statistics: React.FC<StatisticsProps> = ({ mainStatisticData, chartNumerat
 			<Text style={styles.statsTitle}>Выполнено сеансов</Text>
 			<PieChart
 				widthAndHeight={100}
-				series={[chartNumerator, chartDenominator]}
+				series={[chartNumerator | 1, chartDenominator | 1]}
 				sliceColor={[COLORS.mainRed, COLORS.background]}
 				coverRadius={0.6}
 				coverFill={COLORS.cardBackground}
@@ -497,7 +503,7 @@ const styles = StyleSheet.create({
 		color: COLORS.white,
 		fontWeight: "bold",
 	},
-	
+
 });
 
 export default TabOneScreen;

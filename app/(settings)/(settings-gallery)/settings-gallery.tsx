@@ -1,36 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Alert, Image, TouchableWithoutFeedback, Switch, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableWithoutFeedback, Switch, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import LocationInput from '@/components/(location)/locationInput';
-import Buttons from '@/components/(buttons)/button';
+import * as ImagePicker from 'expo-image-picker';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import * as ImagePicker from 'expo-image-picker';
 import { addData, fetchData } from '@/helpers/api-function/gallery/settings-gallery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { RootStackParamList } from '@/type/root';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import LocationInput from '@/components/(location)/locationInput';
+import Buttons from '@/components/(buttons)/button';
+import { AntDesign } from '@expo/vector-icons';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(settings)/(settings-gallery)/settings-gallery-main'>;
-
 
 const SettingsGallery: React.FC = () => {
-  const navigation = useNavigation<SettingsScreenNavigationProp>();
   const [images, setImages] = useState<any[]>([]);
-  const [mainImageIndex, setMainImageIndex] = useState<number | null>(null);
+  const [mainImageIndices, setMainImageIndices] = useState<number[]>([]);
   const [selectedImageIndices, setSelectedImageIndices] = useState<number[]>([]);
   const [showCheckboxes, setShowCheckboxes] = useState<boolean>(false);
   const [showMainSwitch, setShowMainSwitch] = useState<boolean>(false);
   const [albumName, setAlbumName] = useState<string>('');
 
-  const { data, setData } = useGalleryStore();
+  const { setData } = useGalleryStore();
 
-  useEffect(() => {
-    fetchData(setData);
-  }, []);
+  const mainPhotos = mainImageIndices.length > 0 ? mainImageIndices.map(index => images[index]).slice(0, 4) : [];
 
   const pickImageFromCamera = async () => {
     await ImagePicker.requestCameraPermissionsAsync();
@@ -66,24 +60,32 @@ const SettingsGallery: React.FC = () => {
     setSelectedImageIndices([]);
   };
 
-  const toggleMainSwitch = () => {
+  const toggleMainShow = () => {
     setShowMainSwitch(!showMainSwitch);
-    setShowCheckboxes(false);
-    setSelectedImageIndices([]);
   };
 
   const handleImageSelect = (index: number) => {
-    setSelectedImageIndices((prevIndices) => {
+    setSelectedImageIndices(prevIndices => {
       if (prevIndices.includes(index)) {
         return prevIndices.filter(i => i !== index);
-      } else {
+      } else if (prevIndices.length < 4) {
         return [...prevIndices, index];
+      } else {
+        return prevIndices;
       }
     });
   };
 
   const handleMainImageSelect = (index: number) => {
-    setMainImageIndex(index);
+    setMainImageIndices(prevIndices => {
+      if (prevIndices.includes(index)) {
+        return prevIndices.filter(i => i !== index);
+      } else if (prevIndices.length < 4) {
+        return [...prevIndices, index];
+      } else {
+        return prevIndices;
+      }
+    });
   };
 
   const deleteSelectedImages = () => {
@@ -91,19 +93,19 @@ const SettingsGallery: React.FC = () => {
       const updatedImages = images.filter((_, index) => !selectedImageIndices.includes(index));
       setImages(updatedImages);
       setSelectedImageIndices([]);
-      setMainImageIndex(null);
+      setMainImageIndices([]);
       setShowCheckboxes(false);
       setShowMainSwitch(false);
     }
   };
 
-  const mainPhotos = mainImageIndex !== null ? [images[mainImageIndex]] : [];
-
   const saveAlbum = async () => {
     if (albumName && images.length > 0) {
-
       const formData = new FormData();
-      images.forEach((image, index) => {
+      const remainingImages = images.filter((_, index) => !mainImageIndices.includes(index));
+      setImages(remainingImages);
+      setMainImageIndices([]);
+      remainingImages.forEach((image, index) => {
         formData.append('photos', {
           uri: image,
           name: `photos[${index}].jpg`,
@@ -120,8 +122,10 @@ const SettingsGallery: React.FC = () => {
       });
 
       addData(formData, albumName, setData, setImages, setAlbumName);
+
     }
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -137,28 +141,40 @@ const SettingsGallery: React.FC = () => {
             </View>
             {images && (
               <>
+                {images.length !== 0 ? showMainSwitch && (
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Text style={{ color: 'white', fontSize: 18, padding: 5, width: 200 }}>Выберите основные фотографии</Text>
+                    <View style={{ flexDirection: 'row', gap: 10 }}>
+                      <AntDesign name="close" size={24} color="white" onPress={() => {
+                        toggleMainShow()
+                        setMainImageIndices([])
+                      }} />
+                      <Feather name="check" size={24} color="white" onPress={toggleMainShow} />
+                    </View>
+                  </View>
+                ) : ''}
                 <View style={styles.imageRow}>
                   {images.map((image, index) => (
                     <TouchableWithoutFeedback
                       key={index}
-                      onLongPress={toggleMainSwitch}
+                      onLongPress={toggleMainShow}
                       onPress={() => showCheckboxes && handleImageSelect(index)}
                     >
                       <View style={styles.imageContainer}>
                         <Image source={{ uri: image }} style={styles.image} />
-                        {images.length === 0 ? '' : showCheckboxes && (
+                        {showCheckboxes && (
                           <View style={styles.checkIcon}>
                             <MaterialIcons
                               name={selectedImageIndices.includes(index) ? "check-box" : "check-box-outline-blank"}
                               size={26} color={selectedImageIndices.includes(index) ? "#9C0A35" : '#fff'} />
                           </View>
                         )}
-                        {images.length === 0 ? '' : showMainSwitch && (
+                        {showMainSwitch && (
                           <TouchableWithoutFeedback onPress={() => handleMainImageSelect(index)}>
                             <View style={styles.mainCheckIcon}>
                               <MaterialIcons
-                                name={mainImageIndex === index ? "check-box" : "check-box-outline-blank"}
-                                size={26} color={mainImageIndex === index ? "#9C0A35" : '#fff'} />
+                                name={mainImageIndices.includes(index) ? "check-box" : "check-box-outline-blank"}
+                                size={26} color={mainImageIndices.includes(index) ? "#9C0A35" : '#fff'} />
                             </View>
                           </TouchableWithoutFeedback>
                         )}
@@ -166,7 +182,7 @@ const SettingsGallery: React.FC = () => {
                     </TouchableWithoutFeedback>
                   ))}
                 </View>
-                {images.length === 0 ? '' : showCheckboxes && (
+                {showCheckboxes && (
                   <View style={styles.switchContainer}>
                     <View style={{ width: "50%" }}>
                       <Buttons title="Удалить выбранные" textSize={15} onPress={deleteSelectedImages} />
@@ -180,15 +196,6 @@ const SettingsGallery: React.FC = () => {
                         }}
                       />
                     </View>
-                  </View>
-                )}
-                {images.length === 0 ? '' : showMainSwitch && (
-                  <View style={styles.mainSwitchContainer}>
-                    <Text style={styles.mainSwitchLabel}>Сделать фото основным</Text>
-                    <Switch
-                      value={mainImageIndex !== null}
-                      onValueChange={toggleMainSwitch}
-                    />
                   </View>
                 )}
               </>
@@ -213,7 +220,7 @@ const SettingsGallery: React.FC = () => {
           <Buttons
             title={`Сохранить`}
             onPress={saveAlbum}
-            isDisebled={(images.length >= 0 && albumName === '', mainPhotos.length >= 0)}
+            isDisebled={!(images.length === 0 || !albumName || mainPhotos.length === 0)}
           />
         </View>
       </ScrollView>

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert, Dimensions, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Alert, Dimensions, Pressable, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useRoute } from '@react-navigation/native';
@@ -12,10 +12,9 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import BottomModal from '@/components/(modals)/modal-bottom';
 import * as ImagePicker from 'expo-image-picker';
-import Toast from 'react-native-simple-toast'
+import Toast from 'react-native-simple-toast';
 
 const { width, height } = Dimensions.get('window');
-
 
 const GalleryDetails: React.FC = () => {
   const route = useRoute();
@@ -25,9 +24,11 @@ const GalleryDetails: React.FC = () => {
   const [name, setName] = useState('');
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedMainImages, setSelectedMainImages] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
   const [isBottomModalOpen, setIsBottomModalOpen] = useState(false);
+  const [showMainSwitch, setShowMainSwitch] = useState<boolean>(false);
   const { id } = route.params as { id: number };
 
   useEffect(() => {
@@ -48,14 +49,15 @@ const GalleryDetails: React.FC = () => {
   };
 
   const toggleAllModal = () => {
-    setIsAllOpen(!isAllOpen);
+    if (selectedImages.length === 0) {
+      Toast.show('Сначала, выберите фотографии', Toast.LONG);
+    } else {
+      setIsAllOpen(!isAllOpen);
+    }
   };
 
   const handleConfirm = () => {
     editName(id, setFullData, name, toggleModal, setData);
-  };
-
-  const handleAllSelected = () => {
   };
 
   const handleDeleteMode = () => {
@@ -65,54 +67,47 @@ const GalleryDetails: React.FC = () => {
   };
 
   const handleImageSelect = (imageId: string) => {
-    if (selectedImages.includes(imageId)) {
-      setSelectedImages(selectedImages.filter(id => id !== imageId));
-    } else {
-      setSelectedImages([...selectedImages, imageId]);
-    }
+    setSelectedImages(prev => prev.includes(imageId)
+      ? prev.filter(id => id !== imageId)
+      : [...prev, imageId]
+    );
   };
+
+  const handleSelectMainPhoto = (imageId: string) => {
+    // buu yerga hamma imagelarni arrni ichiga objectlar yani har bir rasmni shunday qlib ob kelish kerak {atachmentId: string boladi va bu yerga ayanan tanlanga rasmni attachmentId sini op kelish kerak,main: boolen keladi agar usha image select qilingan bolsa true aks holda false} bularni bajarish uchun alohida setSelectedMainImages, selectedMainImages ochil shundan tanlaganlarni olib kelinadi bullarni hammsini
+    // MAIN PHOTOLARNI YIG'ISH UCHUN  SHU FUNCSIYADAN FOYDALAN
+  }
 
   const handleDelete = () => {
     setIsDeleteMode(false);
     delPhoto(id, selectedImages, setFullData, setData, toggleAllModal);
     setSelectedImages([]);
     setSelectAll(false);
-
   };
 
   const requestPermissions = async (type: 'camera' | 'gallery') => {
     const { status } = type === 'camera'
       ? await ImagePicker.requestCameraPermissionsAsync()
       : await ImagePicker.requestMediaLibraryPermissionsAsync();
-    // if (status !== 'granted') {
-    //   Alert.alert(`Sorry, we need ${type} permissions to make this work!`);
-    //   return false;
-    // }
-    return true;
+    return status === 'granted';
   };
 
   const pickImage = async (from: 'camera' | 'gallery') => {
     const hasPermission = await requestPermissions(from);
     if (!hasPermission) return;
-    
 
     const result = from === 'camera'
-      ? await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      })
-      : await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: true,
-        quality: 1,
-      });
+      ? await ImagePicker.launchCameraAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, allowsEditing: true, aspect: [4, 3], quality: 1 })
+      : await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, allowsMultipleSelection: true, quality: 1 });
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const newImages = result.assets.map(asset => asset.uri);
-      setImages([...images, ...newImages]);
+      setImages(prev => [...prev, ...newImages]);
     }
+  };
+
+  const toggleMainSwitch = () => {
+    setShowMainSwitch(!showMainSwitch);
   };
 
   const toggleBottomModal = () => {
@@ -131,80 +126,60 @@ const GalleryDetails: React.FC = () => {
 
   const handleSave = () => {
     const formData = new FormData();
-    images.map((item, index) => {
+    images.forEach((item, index) => {
       formData.append('photos', {
         uri: item,
         type: 'image/jpeg',
-        name: `photos[${index}].image`
-      } as any)
-    })
+        name: `photos[${index}].image`,
+      } as any);
+    });
     addPhoto(id, formData, setFullData, setImages);
-  }
+  };
 
   return (
     <ScrollView style={styles.container}>
       <SafeAreaView>
         {isDeleteMode ? (
           <View style={styles.deleteModeBar}>
-            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              <View style={{ flexDirection: 'row', gap: 4 }}>
-                <AntDesign onPress={handleDeleteMode} name="close" size={24} color="white" />
-                <Text style={styles.deleteModeText}>{selectedImages.length}</Text>
-              </View>
-              <TouchableOpacity style={{ marginLeft: 20 }} onPress={() => setSelectAll(!selectAll)}>
-                <MaterialIcons
-                  name={selectAll ? "check-box" : "check-box-outline-blank"}
-                  size={24}
-                  color="#9C0A35"
-                />
+            <View style={styles.deleteModeLeft}>
+              <AntDesign onPress={handleDeleteMode} name="close" size={24} color="white" />
+              <Text style={styles.deleteModeText}>{selectedImages.length}</Text>
+              <TouchableOpacity style={styles.selectAllButton} onPress={() => setSelectAll(!selectAll)}>
+                <MaterialIcons name={selectAll ? "check-box" : "check-box-outline-blank"} size={24} color="#9C0A35" />
               </TouchableOpacity>
-              <Text style={styles.deleteModeText} >выделить все</Text>
+              <Text style={styles.deleteModeText}>выделить все</Text>
             </View>
-            <View>
-              <TouchableOpacity onPress={toggleAllModal}>
-                <MaterialIcons name="delete" size={24} color="white" />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={toggleAllModal}>
+              <MaterialIcons name="delete" size={24} color="white" />
+            </TouchableOpacity>
           </View>
         ) : (
-          <View>
-            <NavigationMenu all={true} name='' editOnPress={toggleModal} delOnPress={handleDeleteMode} addOnPress={toggleBottomModal} />
-          </View>
+          <NavigationMenu all={true} name='' editOnPress={toggleModal} delOnPress={handleDeleteMode} addOnPress={toggleBottomModal} />
         )}
         <View style={styles.content}>
           <Text style={styles.title}>{fullData.albumName}</Text>
           <View style={styles.imagesContainer}>
             {fullData.resGalleryAttachments.length <= 0 ? (
-              <Text style={{ color: 'white', fontSize: 15 }}>В этой галерее нет фотографий</Text>
-            ) : (
-              fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
-                <View key={albumIndex} style={styles.imageWrapper}>
-                  {isDeleteMode && (
-                    <View style={styles.checkIcon}>
-                      <TouchableOpacity onPress={() => handleImageSelect(albumItem.attachmentId)}>
-                        <MaterialIcons
-                          name={selectedImages.includes(albumItem.attachmentId) ? "check-box" : "check-box-outline-blank"}
-                          size={24}
-                          color={"#9C0A35"}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                  <Pressable onLongPress={() => Toast.show(`AAAAAAAA${albumItem.attachmentId}`, Toast.LONG)}style={styles.imageWrapper}>
-                    <Image
-                      style={styles.image}
-                      source={{ uri: getFile + albumItem.attachmentId }}
-                    />
-                  </Pressable>
-                </View>
-              ))
-            )}
+              <Text style={styles.noImagesText}>В этой галерее нет фотографий</Text>
+            ) : fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
+              <View key={albumIndex} style={styles.imageWrapper}>
+                {isDeleteMode && (
+                  <TouchableOpacity style={styles.checkIcon} onPress={() => handleImageSelect(albumItem.attachmentId)}>
+                    <MaterialIcons name={selectedImages.includes(albumItem.attachmentId) ? "check-box" : "check-box-outline-blank"} size={24} color="#9C0A35" />
+                  </TouchableOpacity>
+                )}
+                {showMainSwitch && (
+                  <TouchableOpacity style={styles.checkIcon}>
+                    <MaterialIcons name={albumItem.main ? "check-box" : 'check-box-outline-blank'} size={26} color="#9C0A35" />
+                  </TouchableOpacity>
+                )}
+                <Pressable onLongPress={toggleMainSwitch} style={styles.imageWrapper}>
+                  <Image style={styles.image} source={{ uri: getFile + albumItem.attachmentId }} />
+                </Pressable>
+              </View>
+            ))}
             {images.map((item, index) => (
-              <Image
-                style={styles.image}
-                key={index}
-                source={{ uri: item }}
-              />
+              <Image key={index} style={styles.image} source={{ uri: item }} />
             ))}
             {images.length !== 0 && (
               <Buttons title='Сохранить' onPress={handleSave} />
@@ -237,9 +212,11 @@ const GalleryDetails: React.FC = () => {
           isFullBtn={true}
           onConfirm={handleDelete}
         >
-          <View>
-            <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}>{selectedImages.length === fullData.resGalleryAttachments.length ? 'Вы уверены, что хотите удалить все фото альбома?' : 'Вы уверены, что хотите удалить фото?'}</Text>
-          </View>
+          <Text style={styles.modalContentText}>
+            {selectedImages.length === fullData.resGalleryAttachments.length
+              ? 'Вы уверены, что хотите удалить все фото альбома?'
+              : 'Вы уверены, что хотите удалить фото?'}
+          </Text>
         </CenteredModal>
         <BottomModal isBottomModal={isBottomModalOpen} toggleBottomModal={toggleBottomModal}>
           <View style={styles.bottomModalContent}>
@@ -279,6 +256,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 15,
   },
+  mainCheckIcon: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+  },
   imageWrapper: {
     position: 'relative',
   },
@@ -317,10 +299,22 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     backgroundColor: '#21212e',
   },
+  deleteModeLeft: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   deleteModeText: {
     color: 'white',
     fontSize: 18,
     marginLeft: 5,
+  },
+  selectAllButton: {
+    marginLeft: 20,
+  },
+  noImagesText: {
+    color: 'white',
+    fontSize: 15,
   },
   bottomModalContent: {
     padding: 20,
@@ -335,5 +329,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'red',
     marginVertical: 10,
+  },
+  modalContentText: {
+    color: 'white',
+    fontSize: 15,
+    textAlign: 'center',
   },
 });

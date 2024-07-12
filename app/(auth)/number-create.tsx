@@ -32,6 +32,8 @@ const PhoneNumberInput: React.FC = () => {
         setCode('');
         setPhoneNumber('');
         setIsRegtered(val);
+        console.log(val);
+        
     };
     // API 
 
