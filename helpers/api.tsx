@@ -10,7 +10,7 @@ export const getFile: string = `${base_url}attachment/getFile/`
 export const postFileId = `${base_url}attachment/upload`; // get chat list
 export const postFilelist = `${base_url}attachment/upload/list`; // get chat list
 
-// sock url
+// sock url 
 export const sockjs_url = `${base_url}ws`;
 export const chat_url = `${base_url}chat`;
 export const newChat_url = `${base_url}chat/web/nachat-chat/send`; // sent message
@@ -28,11 +28,11 @@ export const finance_month: string = `${base_url}finance/month`
 export const finance_day: string = `${base_url}finance/day`
 
 // gallery
-export const gallery_list = `${base_url}gallery/master`;
-export const gallery_full_data = `${base_url}gallery/one`;
-export const gallery_add = `${base_url}gallery`;
-export const gallery_add_photo = `${base_url}gallery/attachment`;
-export const gallery_edit_main_photo_status = `${base_url}gallery/update/main/photo`;
+export const gallery_list = `${base_url}gallery/master`; // get master galleries
+export const gallery_full_data = `${base_url}gallery/one`; // get master one gallery for detail page
+export const main_gallery = `${base_url}gallery`; // add gallery, delete gallery, delete photo in gallery, edit gallery name
+export const gallery_add_photo = `${base_url}gallery/attachment`; // add to gallery photo
+export const gallery_edit_main_photo = `${base_url}gallery/update/main/photo`; // edit gallery main photo
 
 // My services
 export const category_Father = `${base_url}category`;// get all category

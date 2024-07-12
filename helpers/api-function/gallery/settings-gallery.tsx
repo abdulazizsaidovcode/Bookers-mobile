@@ -1,7 +1,6 @@
-import { Alert } from "react-native";
 import { config, imageConfig } from "@/helpers/token";
-import { GalleryData } from "@/type/gallery/gallery";
-import { gallery_add, gallery_add_photo, gallery_edit_main_photo_status, gallery_full_data, gallery_list, } from "@/helpers/api";
+import { EditMainPhoto, GalleryData } from "@/type/gallery/gallery";
+import { main_gallery, gallery_add_photo, gallery_edit_main_photo, gallery_full_data, gallery_list, } from "@/helpers/api";
 import axios from "axios";
 import Toast from "react-native-simple-toast";
 
@@ -25,7 +24,7 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
 
 export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void) => {
   try {
-    const { data } = await axios.post(`${gallery_add}?name=${name}`, formData, imageConfig);
+    const { data } = await axios.post(`${main_gallery}?name=${name}`, formData, imageConfig);
     if (data.success) {
       fetchData(setData)
       setImages([])
@@ -54,7 +53,7 @@ export const addPhoto = async (galleryId: number, formData: FormData, setFullDat
 
 export const editName = async (id: number, setFullData: (data: GalleryData) => void, editedName: string, toggleModal: () => void, setData: (data: GalleryData[]) => void) => {
   try {
-    const { data } = await axios.put(`${gallery_add}/${id}?name=${editedName}`, {}, config);
+    const { data } = await axios.put(`${main_gallery}/${id}?name=${editedName}`, {}, config);
     if (data.success) {
       fetchFullData(id, setFullData);
       fetchData(setData)
@@ -66,12 +65,13 @@ export const editName = async (id: number, setFullData: (data: GalleryData) => v
   }
 };
 
-export const editStatusPhoto = async (setFullData: (data: GalleryData) => void, setData: (data: GalleryData[]) => void, galleryId: number) => {
+export const editMainPhoto = async (setFullData: (data: GalleryData) => void, setData: (data: GalleryData[]) => void, galleryId: number, payload: EditMainPhoto[]) => {
   try {
-    const { data } = await axios.put(`${gallery_edit_main_photo_status}/${galleryId}`, {}, config);
+    const { data } = await axios.put(`${gallery_edit_main_photo}/${galleryId}`, payload, config);
     if (data.success) {
       fetchFullData(galleryId, setFullData);
       fetchData(setData);
+      Toast.show('Ваша основная фотография успешно обновлена.', Toast.LONG)
     }
   } catch (error) {
     console.log(error);
@@ -85,7 +85,7 @@ export const delPhoto = async (
   setData: (data: GalleryData[]) => void,
   toggleModal: () => void
 ) => {
-  const url = `${gallery_add}/${id}/attachmentIds`;
+  const url = `${main_gallery}/${id}/attachmentIds`;
   try {
     const response = await fetch(url, {
       method: 'DELETE',
@@ -110,7 +110,7 @@ export const delPhoto = async (
 
 export const delGallery = async (id: number | null, setData: (data: GalleryData[]) => void, toggleModal: () => void, toggleCheckboxes: () => void) => {
   try {
-    const res = await axios.delete(`${gallery_add}/${id}`, config);
+    const res = await axios.delete(`${main_gallery}/${id}`, config);
     if (res.data.success) {
       fetchData(setData);
       toggleModal()

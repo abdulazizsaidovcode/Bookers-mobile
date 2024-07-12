@@ -47,8 +47,6 @@ const GalleryDetails: React.FC = () => {
     setName(fullData.albumName);
     setIsOpen(!isOpen);
   };
-  console.log(selectedImages);
-
 
   const toggleAllModal = () => {
     if (selectedImages.length === 0) {
