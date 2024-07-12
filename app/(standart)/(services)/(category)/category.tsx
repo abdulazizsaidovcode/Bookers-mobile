@@ -8,13 +8,13 @@ import Buttons from '@/components/(buttons)/button';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import axios from 'axios';
 import { category_Father, category_child, getCategory_masterAdd } from '@/helpers/api';
-import { config } from '@/helpers/token';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import { ActivityIndicator } from 'react-native-paper';
 import Toast from 'react-native-simple-toast'; // Make sure you have this installed
 import { router } from 'expo-router';
+import { getConfig } from '@/app/(tabs)/main';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category'>;
 
@@ -28,6 +28,7 @@ const Category = () => {
 
     const getCategory = async () => {
         try {
+            const config = await getConfig()
             const response = await axios.get(`${category_Father}`, config);
             const listData = response.data.body.map((item: any) => ({
                 key: item.id,
@@ -42,6 +43,7 @@ const Category = () => {
     const getChildCategory = async (id: string) => {
         setLoading(true);
         try {
+            const config = await getConfig()
             const response = await axios.get(`${category_child}${id}`, config);
             if (response.data.success) {
                 setChildCategoryData(response.data.body);
@@ -59,6 +61,7 @@ const Category = () => {
     const addCategory = async () => {
         try {
             // console.log("Sending data:", selectedCategory);
+            const config = await getConfig()
             const response = await axios.post(`${getCategory_masterAdd}categoryIds=${selectedCategory}`, {
                 categoryIds: selectedCategory
             }, config);

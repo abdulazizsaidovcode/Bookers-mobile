@@ -7,11 +7,11 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import axios from 'axios';
 import { router, useLocalSearchParams } from 'expo-router';
 import { masterAdd_service } from '@/helpers/api';
-import { config } from '@/helpers/token';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/app/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
+import { getConfig } from '@/app/(tabs)/main';
 
 type GenderOption = {
     title: string;
@@ -43,6 +43,7 @@ const Process: React.FC = () => {
 
     const postService = async () => {
         try {
+            const config = await getConfig()
             const data = {
                 categoryId: selectedCategoryId,
                 genderId: selectedGender ? [selectedGender.id] : [],
@@ -52,12 +53,12 @@ const Process: React.FC = () => {
                 attachmentId: null,
                 active: true
             }; 
-            // const response = await axios.post(masterAdd_service, data, config);
-            // if (response.data.success) {
-            //     router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
-            // } else {
-            //     console.error('Failed to add service:', response.data.message);
-            // }
+            const response = await axios.post(masterAdd_service, data, config);
+            if (response.data.success) {
+                router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
+            } else {
+                console.error('Failed to add service:', response.data.message);
+            }
         } catch (error) {
             console.error('Error adding service:', error);
         }

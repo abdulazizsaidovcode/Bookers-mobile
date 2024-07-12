@@ -10,9 +10,9 @@ import HomeCards from '@/components/(cards)/homeCard';
 import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import { getCategory_master, getGender_status, getSpecialization, master_get_Service } from '@/helpers/api';
-import { config } from '@/helpers/token';
 import { router } from 'expo-router';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
+import { getConfig } from '@/app/(tabs)/main';
 
 const MyServicesScreen = () => {
     const route = useRoute();
@@ -33,6 +33,7 @@ const MyServicesScreen = () => {
 
     const getGender = async () => {
         try {
+            const config = await getConfig()
             const response = await axios.get(getGender_status, config);
             setGender(response.data.body);
         } catch (error) {
@@ -42,6 +43,7 @@ const MyServicesScreen = () => {
 
     const getCategory = async () => {
         try {
+            const config = await getConfig()
             const response = await axios.get(getCategory_master, config);
             setCategory(response.data.body);
         } catch (error) {
@@ -51,6 +53,7 @@ const MyServicesScreen = () => {
 
     const getSpecializationData = async (selectedCategoryId:any) => {
         try {
+            const config = await getConfig()
             const { data } = await axios.get(`${getSpecialization}?categoryId=${selectedCategoryId}`, config);
             if (data.success) setSpecialization(data.body);
             else setSpecialization([]);
@@ -62,6 +65,7 @@ const MyServicesScreen = () => {
 
     const getMasterData = async (categoryId:any) => {
         try {
+            const config = await getConfig()
             const { data } = await axios.get(`${master_get_Service}${categoryId}`, config);
             if (data.success) setCategoryMaster(data.body);
             else setCategoryMaster([]);

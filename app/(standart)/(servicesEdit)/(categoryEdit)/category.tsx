@@ -10,11 +10,11 @@ import { ActivityIndicator } from 'react-native-paper';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
 import { category_Father, getCategory_master, getCategory_masterAdd } from '@/helpers/api'; // Assuming getCategory is defined in your helpers/api
-import { config } from '@/helpers/token';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import MyServicesScreen from '../../(services)/(myServicesScreen)/MyServicesScreen';
 import { router } from 'expo-router';
+import { getConfig } from '@/app/(tabs)/main';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category'>;
 
@@ -25,6 +25,7 @@ const CategoryEdit = () => {
 
     const getCategory = async () => {
         try {
+            const config = await getConfig()
             const response = await axios.get(`${category_Father}`, config);
             const listData = response.data.body.map((item: any) => ({
                 key: item.id,
@@ -41,7 +42,7 @@ const CategoryEdit = () => {
 
     const addCategory = async () => {
         try {
-            console.log("Sending data:", selectedCategories);
+            const config = await getConfig()
             const queryParams = selectedCategories.map(item => `categoryIds=${item}`).join('&');
             const response = await axios.post(`${getCategory_masterAdd}${queryParams}`, '', config);
             if (response.data.success) {
@@ -68,7 +69,6 @@ const CategoryEdit = () => {
 
     const initializeCategories = async () => {
         const [categories, masterCategories] = await Promise.all([getCategory(), getCategoryMaster()]);
-
         const initialSelectedCategories = masterCategories
             .filter((masterCategory: any) => categories.some((category: any) => category.key === masterCategory.key))
             .map((category: any) => category.key);

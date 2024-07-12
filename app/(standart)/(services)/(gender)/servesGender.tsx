@@ -9,8 +9,8 @@ import ServicesCategory from '@/components/services/servicesCatgegory';
 import { router } from 'expo-router';
 import axios from 'axios';
 import { gender_status } from '@/helpers/api';
-import { config } from '@/helpers/token';
 import { ActivityIndicator } from 'react-native-paper';
+import { getConfig } from '@/app/(tabs)/main';
 
 const ServesGender = () => {
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
@@ -28,6 +28,7 @@ const ServesGender = () => {
     const post = async () => {
         setIsLoading(true)
         try {
+            const config = await getConfig()
             const queryParams = selectedCategories.map(item => `genders=${item}`).join('&');
             const response = await axios.post(`${gender_status}${queryParams}`, '', config);
             router.push("/category")

@@ -10,9 +10,9 @@ import { router } from 'expo-router';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import axios from 'axios';
 import { category_child, masterAdd_category } from '@/helpers/api';
-import { config } from '@/helpers/token';
 import { useRoute } from '@react-navigation/native';
 import Textarea from '@/components/select/textarea';
+import { getConfig } from '@/app/(tabs)/main';
 
 const Expertise: React.FC = () => {
     const route = useRoute();
@@ -42,6 +42,7 @@ const Expertise: React.FC = () => {
 
     const getChildCategory = async (selectedCategory: string) => {
         try {
+            const config = await getConfig()
             const response = await axios.get(`${category_child}${selectedCategory}`, config);
             if (response.data.success) {
                 const child =
@@ -68,6 +69,7 @@ const Expertise: React.FC = () => {
 
     const postCategory = async (categoryFatherId: string, name: string) => {
         try {
+            const config = await getConfig()
             const response = await axios.post(`${masterAdd_category}/${selectedCategory}?name=${name}`, "",config);
             if (response.data.success) {
                 getChildCategory(categoryFatherId);

@@ -14,10 +14,9 @@ import {
     getSpecialization,
     master_get_Service
 } from '@/helpers/api';
-import { config } from '@/helpers/token';
 import { router, useNavigation } from 'expo-router';
 import MyServicesEdit from './(processEdit)/(uslugi)/uslugi';
-import ServesGenderEdit from './(gender)/servesGender';
+import { getConfig } from '@/app/(tabs)/main';
 
 const MyServicesScreenEdit = () => {
     const route = useRoute();
@@ -53,6 +52,7 @@ const MyServicesScreenEdit = () => {
 
     const getGender = async () => {
         try {
+            const config = await getConfig()
             const response = await axios.get(getGender_status, config);
             setGender(response.data.body);
         } catch (error) {
@@ -62,6 +62,7 @@ const MyServicesScreenEdit = () => {
 
     const getCategory = async () => {
         try {
+            const config = await getConfig()
             const response = await axios.get(getCategory_master, config);
             setCategory(response.data.body);
         } catch (error) {
@@ -71,6 +72,7 @@ const MyServicesScreenEdit = () => {
 
     const getSpecializationData = async (categoryId) => {
         try {
+            const config = await getConfig()
             const { data } = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
             if (data.success) setSpecialization(data.body);
             else setSpecialization([]);
@@ -82,6 +84,7 @@ const MyServicesScreenEdit = () => {
 
     const getMasterData = async (categoryId) => {
         try {
+            const config = await getConfig()
             const { data } = await axios.get(`${master_get_Service}${categoryId}`, config);
             if (data.success) setCategoryMaster(data.body);
             else setCategoryMaster([]);

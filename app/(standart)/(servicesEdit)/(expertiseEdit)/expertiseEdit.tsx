@@ -10,9 +10,9 @@ import { router } from 'expo-router';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import axios from 'axios';
 import { category_child, getSpecialization, master_add_specialization, masterAdd_category } from '@/helpers/api';
-import { config } from '@/helpers/token';
 import { useRoute } from '@react-navigation/native';
 import Textarea from '@/components/select/textarea';
+import { getConfig } from '@/app/(tabs)/main';
 
 
 const ExpertiseEdit: React.FC = () => {
@@ -41,6 +41,7 @@ const ExpertiseEdit: React.FC = () => {
 
     const getChildCategory = async (id: string) => {
         try {
+            const config = await getConfig()
             const response = await axios.get(`${category_child}${selectedCategoryId}`, config);
             if (response.data.success) {
                 const child =
@@ -74,6 +75,7 @@ const ExpertiseEdit: React.FC = () => {
     
     const postCategory = async (id: string, name: string) => {
         try {
+            const config = await getConfig()
             const response = await axios.post(`${masterAdd_category}/${selectedCategoryId}?name=${name}`, {}, config);
             if (response.data.success) {
                 setChildCategoryData([...childCategoryData, { id, name }]);
@@ -88,6 +90,7 @@ const ExpertiseEdit: React.FC = () => {
 
     const postService = async (id: string) =>{
         try{
+            const config = await getConfig()
             const response = await axios.post (`${master_add_specialization}/${id}`, config);
             console.log(response);    
         }
