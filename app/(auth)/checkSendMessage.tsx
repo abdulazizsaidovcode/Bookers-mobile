@@ -3,6 +3,7 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister';
 import {router, useNavigation} from 'expo-router';
 import React, {useState, useRef, useEffect} from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     View,
     TextInput,
