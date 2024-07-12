@@ -10,17 +10,13 @@ import {
 } from "@expo/vector-icons";
 import { useColorScheme } from "@/components/useColorScheme";
 import TabOneScreen from "./main";
-import TabTwoScreen from "./two";
 import ChatScreen from "./chat";
 import Finance from "./finance";
 import ProfileScreen from "./profile";
 import ScheduleScreen from "./schedule";
-import Colors from "@/constants/Colors";
 import { TabBarIcon } from "../../components/navigation/TabBarIcon";
-import Location from "../(location)/Location";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { getMee } from "@/helpers/token";
-import OnlineBooking from "../(standart)/(onlineBooking)/onlineBooking";
 import * as SecureStore from 'expo-secure-store';
 import { StyleSheet, View } from "react-native";
 
@@ -32,7 +28,6 @@ function TabLayout() {
   const { getme, setGetMee } = graficWorkStore();
   const [tariff, setTariff] = useState(null);
   const [isCreate, setIsCreate] = useState<boolean | null | any>(false)
-
 
     useEffect(() => {
       const fetchData = async () => {
@@ -56,6 +51,7 @@ function TabLayout() {
       setTariff(getme.tariff);
     }
   }, [getme]);
+    console.log('is create', Boolean(isCreate))
 
   return (
     <>
@@ -116,7 +112,7 @@ function TabLayout() {
             ),
           }}
         />
-        {tariff === "standart" && (
+        {tariff === "standard" && (
           <Tab.Screen
             name="finance"
             component={Finance}
@@ -149,7 +145,7 @@ function TabLayout() {
           }}
         />
       </Tab.Navigator>
-      {!isCreate &&
+      {(isCreate === 'false') &&
         <View style={styles.container}></View>
       }
     </>
