@@ -4,6 +4,7 @@ import TabLayout from './(tabs)/_layout';
 import MyServices from './(standart)/(services)/(myServices)/myServices';
 import * as SecureStore from 'expo-secure-store';
 import Auth from './(auth)/auth';
+import SettingsGalleryMain from './(settings)/(settings-gallery)/settings-gallery-main';
 
 const Index: React.FC = () => {
     const [isFirstLaunch, setIsFirstLaunch] = useState<null | boolean>(null);
@@ -12,7 +13,7 @@ const Index: React.FC = () => {
         const checkFirstLaunch = async () => {
             try {
                 const value = await SecureStore.getItemAsync('isLogin');
-                
+
                 if (value === null) {
                     // await SecureStore.setItemAsync('hasLaunched', 'true');
                     setIsFirstLaunch(true);
@@ -35,7 +36,7 @@ const Index: React.FC = () => {
         );
     }
 
-    return isFirstLaunch ? <Auth /> : <TabLayout />;
+    return isFirstLaunch ? <SettingsGalleryMain /> : <SettingsGalleryMain />;
 };
 
 export default Index;

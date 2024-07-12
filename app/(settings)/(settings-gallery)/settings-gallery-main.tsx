@@ -62,7 +62,7 @@ const SettingsGalleryMain = () => {
                     <NavigationMenu name='Моя галерея' />
                 </View>
                 <View style={styles.content}>
-                    <View style={{ height: height }}>
+                    <View>
                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 10 }}>
                             <Text style={styles.title}>Фото галерея</Text>
                             <View style={{ flexDirection: 'row', gap: 10 }}>

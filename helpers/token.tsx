@@ -11,11 +11,11 @@ export const getData = async () => {
     }
 };
 
-export const config = {
-    headers: {
-        Authorization: `Bearer ${getData()}`,
-    },
-};
+// export const config = {
+//     headers: {
+//         Authorization: `Bearer ${getData()}`,
+//     },
+// };
 
 export const imageConfig = {
     headers: {
@@ -34,12 +34,12 @@ export const getMee = (setData: (val: any) => void) => {
         .catch()
 }
 
-// export const config = {
-//   headers: {
-//     Authorization:
-//       `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTk4OTAwMDQzMDUxIn0.K-7YCoydy9DsZOkdan4QTWcnrWnFhSWRhqSXqa_PrxfOx4K_VCffMjfdejuZKSuWF4055eHy1m3Y81qxYfg2og`,
-//   },
-// };
+export const config = {
+  headers: {
+    Authorization:
+      `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIrOTk4OTAwMDQzMDUxIn0.K-7YCoydy9DsZOkdan4QTWcnrWnFhSWRhqSXqa_PrxfOx4K_VCffMjfdejuZKSuWF4055eHy1m3Y81qxYfg2og`,
+  },
+};
 //
 // export const imageConfig = {
 //   headers: {
