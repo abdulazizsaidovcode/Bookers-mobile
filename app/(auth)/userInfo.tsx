@@ -15,7 +15,7 @@ const UserInfo: React.FC = () => {
     const handleFirstNameChange = (name: string): void => {
         setFirstName(name);
         if (!validateName(name)) {
-            setFirstNameError('Имя должно содержать только буквы и быть длиной от 2 до 30 символов');
+            setFirstNameError(t("name_length_and_characters"));
         } else {
             setFirstNameError('');
         }
@@ -24,7 +24,7 @@ const UserInfo: React.FC = () => {
     const handleLastNameChange = (name: string): void => {
         setLastName(name);
         if (!validateName(name)) {
-            setLastNameError('Фамилия должна содержать только буквы и быть длиной от 2 до 30 символов');
+            setLastNameError(t("surname_length_and_characters"));
         } else {
             setLastNameError('');
         }
