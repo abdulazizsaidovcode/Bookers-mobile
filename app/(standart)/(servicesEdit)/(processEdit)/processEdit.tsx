@@ -14,6 +14,9 @@ import CenteredModal from '@/components/(modals)/modal-centered';
 import { AntDesign } from '@expo/vector-icons';
 import Toast from "react-native-simple-toast";
 import { getConfig } from '@/app/(tabs)/main';
+import MyServicesEdit from './(uslugi)/uslugi';
+import { Data } from '@/type/chat/chatSms';
+
 
 type GenderOption = {
     title: string;
@@ -71,7 +74,7 @@ const ProcessEdit: React.FC = () => {
                 throw new Error("Please enter the required information");
             }
     
-            axios.put(`${masterEdit_service}/${serviceId}`, data, config)
+            axios.put(`${masterEdit_service}/${serviceId?.id}`, data, config)
                 .then((res) => {
                     if (res.data.success) {
                         router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
@@ -83,25 +86,27 @@ const ProcessEdit: React.FC = () => {
                 .catch((error) => {
                     console.error('Error editing service:', error);
                 });
-        } catch (error) {
+        } catch (error:any) {
             Toast.show(error.message, Toast.LONG);
         }
     };
     
 
-    const deleteService = async (serviceId: string) => {
+    const deleteService = async () => {
         try {
-            const config = await getConfig()
-            if (serviceId) {
-                const response = await axios.delete(`${service_delete}${serviceId}`, config);
+            if (serviceId?.id) {
+                const config = await getConfig()
+                console.log(config);
+                const response = await axios.put(`${service_delete}/${serviceId.id}`,'', config);
                 if (response.data.success) {
                     Toast.show("Service successfully deleted", Toast.LONG);
-                    router.push('');
+                    router.push('(standart)/(servicesEdit)/test');
                 } else {
                     Toast.show("Failed to delete service", Toast.LONG);
                 }
             }
         } catch (error) {
+            Toast.show(`${error}`, Toast.LONG);
             console.log("Error deleting service:", error);
         }
     };
@@ -131,7 +136,8 @@ const ProcessEdit: React.FC = () => {
     const toggleModal = () => setModalVisible(!modalVisible);
 
     const handleAdd = () => {
-        deleteService(serviceId);
+        deleteService();
+        toggleModal();
     };
 
     const resetDefaults = () => {

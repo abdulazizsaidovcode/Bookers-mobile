@@ -70,32 +70,32 @@ const MyServicesScreenEdit = () => {
         }
     };
 
-    const getSpecializationData = async (categoryId) => {
+    const getSpecializationData = async (categoryId:number) => {
         try {
             const config = await getConfig()
             const { data } = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
             if (data.success) setSpecialization(data.body);
             else setSpecialization([]);
-        } catch (error) {
+        } catch (error:any) {
             if (error.response?.status) setSpecialization([]);
             console.error("Error fetching specializations:", error);
         }
     };
 
-    const getMasterData = async (categoryId) => {
+    const getMasterData = async (categoryId:number) => {
         try {
             const config = await getConfig()
             const { data } = await axios.get(`${master_get_Service}${categoryId}`, config);
             if (data.success) setCategoryMaster(data.body);
             else setCategoryMaster([]);
-        } catch (error) {
+        } catch (error:any) {
             if (error.response?.status === 404) setCategoryMaster([]);
             console.error("Error fetching master services:", error);
         }
     };
 
-    const translateGender = (genders) => {
-        return genders.map((item) => {
+    const translateGender = (genders:number) => {
+        return genders.map((item:any) => {
             if (item === "MALE") return "Мужская для взрослых";
             else if (item === "FEMALE") return "Женское для взрослых";
             else if (item === "MALE_CHILD") return "Мужская для детей";
@@ -104,7 +104,7 @@ const MyServicesScreenEdit = () => {
         });
     };
 
-    const handleCategorySelect = (categoryId, index) => {
+    const handleCategorySelect = (categoryId:any, index:any) => {
         setSelectedCategory(index);
         setSelectedCategoryId(categoryId);
         getSpecializationData(categoryId);
@@ -224,7 +224,7 @@ const MyServicesScreenEdit = () => {
                                         key={i}
                                         onPress={() => {
                                             setProdseduraUslug(item);
-                                            setServiceId(item.id);
+                                            setServiceId(item);
                                             router.push({
                                                 pathname: '(standart)/(servicesEdit)/(processEdit)/processEdit',
                                                 params: {
