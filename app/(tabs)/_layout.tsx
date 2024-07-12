@@ -119,7 +119,7 @@ function TabLayout() {
         )}
         <Tab.Screen
           name="chat"
-          component={OnlineBooking}
+          component={ChatScreen}
           options={{
             title: "Чат",
             tabBarIcon: ({ color }) => (

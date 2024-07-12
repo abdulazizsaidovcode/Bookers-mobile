@@ -5,51 +5,50 @@ import CustomButton from '@/components/(buttons)/custom';
 import ChatList from './(chat_base)';
 import { getChatList } from '@/helpers/api-function/chat/chat';
 import chatStore from '@/helpers/state_managment/chat/chatStore';
-import { useStomp } from '@/context/StompContext';
+// import { useStomp } from '@/context/StompContext';
 import fetchChatDataStore, { Data } from '@/helpers/state_managment/chat/chatfetchStore';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Buttons from '@/components/(buttons)/button';
 
 const ChatSupport = () => {
-    const { stompClient, adminId } = useStomp();
+    // const { stompClient, adminId } = useStomp();
     const { chatData, setChatData } = chatStore();
     const { setmessageData, messageData } = fetchChatDataStore();
 
     const [recipientId, setRecipientId] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (stompClient) {
-            stompClient.subscribe(`/user/${adminId}/queue/messages`, (response: any) => {
-                const receivedMessage = JSON.parse(response.body);
-                setmessageData((prevMessages) => [...prevMessages, receivedMessage]);
-                console.log(receivedMessage);
-            });
-        }
-        getChatList({ setData: setChatData });
-    }, []);
+    // useEffect(() => {
+    //     if (stompClient) {
+    //         stompClient.subscribe(`/user/${adminId}/queue/messages`, (response: any) => {
+    //             const receivedMessage = JSON.parse(response.body);
+    //             // setmessageData((prevMessages) => [...prevMessages, receivedMessage]);
+    //             console.log(receivedMessage);
+    //         });
+    //     }
+    //     getChatList({ setData: setChatData });
+    // }, []);
 
     const handlePress = () => {
-        console.log('Support button pressed');
+        alert('чат пока не работает');
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Чат</Text>
-            {chatData && chatData.length > 0 ? (
-                <View>
-                    <Text style={styles.headerText}>Чат</Text>
-                    <Ionicons name="chatbubble-ellipses-outline" size={80} color="gray" style={styles.icon} />
-                    <Text style={styles.supportText}>Поддержка Bookers</Text>
-                    <Text style={styles.descriptionText}>Свяжитесь с нами когда вам будет удобно 885305533</Text>
-                    <CustomButton
-                        title="Написать в поддержку"
-                        backgroundColor="#A42E2B"
-                        textColor="#FFFFFF"
-                        onPress={handlePress}
-                    />
-                </View>
-            ) :
+            {/* {chatData && chatData.length > 0 ? ( */}
+            <View style={styles.empty}>
+                <Ionicons name="chatbubble-ellipses-outline" size={80} color="gray" style={styles.icon} />
+                <Text style={styles.supportText}>Поддержка Bookers</Text>
+                <Text style={styles.descriptionText}>Свяжитесь с нами когда вам будет удобно</Text>
+                <Buttons
+                    title="Написать в поддержку"
+                    textColor="#FFFFFF"
+                    onPress={handlePress}
+                />
+            </View>
+            {/* ) :
                 <ChatList userData={chatData} />
-            }
+            } */}
         </SafeAreaView>
     );
 };
@@ -59,6 +58,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#21212E', // bg-gray-900
         padding: 16,
+    },
+    empty: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     title: {
         color: '#ffffff',
