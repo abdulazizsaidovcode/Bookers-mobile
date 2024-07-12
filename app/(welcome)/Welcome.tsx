@@ -40,10 +40,10 @@ const Welcome = () => {
   const { number, setNumber } = numberSettingStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
   useEffect(() => {
+    getNumbers(setNumber);
     if (number.length === 0) {
       putNumbers(1);
     }
-    getNumbers(setNumber);
   }, []);
 
 
@@ -60,7 +60,7 @@ const Welcome = () => {
 
   async function registered() {
     await SecureStore.setItemAsync('isCreate', 'true')
-    await SecureStore.setItemAsync("tariff", '');
+    await SecureStore.setItemAsync("tariff", 'all');
   }
 
   const data = [

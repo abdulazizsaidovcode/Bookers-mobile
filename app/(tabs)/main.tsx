@@ -1,12 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity, Dimensions } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity, Dimensions, RefreshControl } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PieChart from 'react-native-pie-chart';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { editOrderStatus, fetchDaylyOrderTimes, fetchHallingOrders, fetchMainStatistic, fetchTodayWorkGrafic, fetchWaitingOrders } from "@/helpers/api-function/dashboard/dashboard";
+import {
+	editOrderStatus,
+	fetchDaylyOrderTimes,
+	fetchHallingOrders,
+	fetchMainStatistic,
+	fetchTodayWorkGrafic,
+	fetchWaitingOrders
+} from "@/helpers/api-function/dashboard/dashboard";
 import useDashboardStore from "@/helpers/state_managment/dashboard/dashboard";
-import { BookingRequestsHallProps, BookingRequestsProps, DashboardDailyTimeOrders, RenderBookingRequestProps, ScheduleSectionProps, StatisticsProps, StatusContainerProps } from "@/type/dashboard/dashboard";
+import {
+	BookingRequestsHallProps,
+	BookingRequestsProps,
+	DashboardDailyTimeOrders,
+	RenderBookingRequestProps,
+	ScheduleSectionProps,
+	StatisticsProps,
+	StatusContainerProps
+} from "@/type/dashboard/dashboard";
 import { getFile } from "@/helpers/api";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
@@ -18,7 +33,9 @@ import { getData } from "@/helpers/token";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import { getNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
-import { set } from "react-hook-form";
+import clientStore from "@/helpers/state_managment/client/clientStore";
+import { handleRefresh } from "@/constants/refresh";
+import Share from 'react-native-share';
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -33,6 +50,7 @@ const COLORS = {
 	cardBackground: "#B9B9C9",
 	mainRed: "#9C0A35",
 };
+
 export const getConfig = async () => {
 	try {
 		const token = await AsyncStorage.getItem('registerToken');
@@ -51,7 +69,6 @@ export const getConfig = async () => {
 		return {};
 	}
 };
-
 export const getConfigImg = async () => {
 	try {
 		const token = await AsyncStorage.getItem('registerToken');
@@ -76,56 +93,47 @@ const TabOneScreen: React.FC = () => {
 	const { number, setNumber } = numberSettingStore();
 	const { getMee, setGetMee } = useGetMeeStore()
 	const navigation = useNavigation<any>();
-	const [isCreate, setIsCreate] = useState<any>(false)
-	const [numbers, setNumbers] = useState<any>(null)
 	const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
-	const { mainStatisticData, waitingData, dailyTimeData, isConfirmModal, hallData, isRejectedModal, todayGraficData, setTodayGraficData, setRejectedIsModal, setHallData, setConfirmIsModal, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
+	const {
+		mainStatisticData,
+		waitingData,
+		dailyTimeData,
+		isConfirmModal,
+		hallData,
+		isRejectedModal,
+		todayGraficData,
+		setTodayGraficData,
+		setRejectedIsModal,
+		setHallData,
+		setConfirmIsModal,
+		setDailyTimeData,
+		setMainStatisticData,
+		setWaitingData
+	} = useDashboardStore()
+	const { refreshing, setRefreshing } = clientStore()
 
 	useEffect(() => {
-		const fetchAndCheckNumbers = async () => {
-			await getNumbers(setNumber);
-			const uniqueNumbers = removeDuplicates(number);
-			setNumbers(uniqueNumbers);
-			const allNumbersPresent = containsAllNumbers(uniqueNumbers);
-			setHasAllNumbers(allNumbersPresent);
-		};
-
-		fetchAndCheckNumbers();
-		console.log(number);
+		getNumbers(setNumber)
 	}, []);
 
 	useEffect(() => {
-		console.log(numbers, 'ACCEPTED', setNumbers);
-		console.log(hasAllNumbers, 'ACCEPTED', setHasAllNumbers);
-	}, [hasAllNumbers]);
-
-
-	const removeDuplicates = (array: number[]): number[] => {
-		return [...new Set(array)];
-	};
-
-	const containsAllNumbers = (array: number[]): boolean => {
-		const requiredNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
-		return requiredNumbers.every(num => array.includes(num));
-	};
+		if (number.length > 1) {
+			const res = removeDuplicatesAndSort(number)
+			const result = containsAllNumbers(res)
+			setHasAllNumbers(result)
+		}
+	}, [number]);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const value = await SecureStore.getItemAsync('isCreate');
-				await SecureStore.setItemAsync('isCreate', 'false');
-				setIsCreate(value);
+				await SecureStore.setItemAsync('isCreate', `${hasAllNumbers}`);
 			} catch (error) {
 				console.error('Error fetching data:', error);
 			}
 		};
-
 		fetchData();
-		containsAllNumbers(number)
-	}, [isCreate]);
-
-
-
+	}, [hasAllNumbers]);
 
 	useEffect(() => {
 		fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
@@ -137,18 +145,32 @@ const TabOneScreen: React.FC = () => {
 		getData()
 	}, []);
 
+	const onRefresh = useCallback(() => {
+		handleRefresh(setRefreshing);
+	}, [setRefreshing]);
 
+	const removeDuplicatesAndSort = (array: number[]): number[] => {
+		const seen = new Map<number, boolean>();
+		const result: number[] = [];
 
+		for (const value of array) {
+			if (!seen.has(value)) {
+				seen.set(value, true);
+				result.push(value);
+			}
+		}
 
+		result.sort((a, b) => a - b);
+		return result;
+	};
 
+	const containsAllNumbers = (array: number[]): boolean => {
+		const requiredNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
+		return requiredNumbers.every(num => array.includes(num));
+	};
 
-	const toggleConfirmModal = () => {
-		setConfirmIsModal(!isConfirmModal)
-	}
-
-	const toggleRejectModal = () => {
-		setRejectedIsModal(!isRejectedModal)
-	}
+	const toggleConfirmModal = () => setConfirmIsModal(!isConfirmModal)
+	const toggleRejectModal = () => setRejectedIsModal(!isRejectedModal)
 
 	const chartFraction = mainStatisticData.completedSessions;
 	const [chartNumerator, chartDenominator] = chartFraction.split('/');
@@ -161,55 +183,123 @@ const TabOneScreen: React.FC = () => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<ScrollView>
+			<ScrollView
+				showsVerticalScrollIndicator={false}
+				refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+			>
 				<Header />
-				<ScheduleSection todayGraficData={todayGraficData} dailyTimeData={dailyTimeData} regularVisitCount={regularVisitCount} notVisitCount={notVisitCount} vipCientsCount={vipCientsCount} newClientsCount={newClientsCount} />
-				<Statistics mainStatisticData={mainStatisticData} chartNumerator={+chartNumerator} chartDenominator={+chartDenominator} statisticNumerator={statisticNumerator} statisticDenominator={statisticDenominator} />
+				<ScheduleSection
+					todayGraficData={todayGraficData}
+					dailyTimeData={dailyTimeData}
+					regularVisitCount={regularVisitCount}
+					notVisitCount={notVisitCount}
+					vipCientsCount={vipCientsCount}
+					newClientsCount={newClientsCount}
+				/>
+				<Statistics
+					mainStatisticData={mainStatisticData}
+					chartNumerator={+chartNumerator}
+					chartDenominator={+chartDenominator}
+					statisticNumerator={statisticNumerator}
+					statisticDenominator={statisticDenominator}
+				/>
 				<CardsSection mainStatisticData={mainStatisticData} />
-				<BookingRequests setWaitingData={setWaitingData} waitingData={waitingData} toggleConfirmModal={toggleConfirmModal} toggleRejectedModal={toggleRejectModal} isRejectedModal={isRejectedModal} isConfirmModal={isConfirmModal} />
-				<BookingRequestsHall setHallData={setHallData} hallData={hallData} toggleConfirmModal={toggleConfirmModal} toggleRejectedModal={toggleRejectModal} isRejectedModal={isRejectedModal} isConfirmModal={isConfirmModal} />
-				{
-					!isCreate && <View style={{ margin: 10 }}>
+				<BookingRequests
+					setWaitingData={setWaitingData}
+					waitingData={waitingData}
+					toggleConfirmModal={toggleConfirmModal}
+					toggleRejectedModal={toggleRejectModal}
+					isRejectedModal={isRejectedModal}
+					isConfirmModal={isConfirmModal}
+				/>
+				<BookingRequestsHall
+					setHallData={setHallData}
+					hallData={hallData}
+					toggleConfirmModal={toggleConfirmModal}
+					toggleRejectedModal={toggleRejectModal}
+					isRejectedModal={isRejectedModal}
+					isConfirmModal={isConfirmModal}
+				/>
+				{!hasAllNumbers && (
+					<View style={{ margin: 10 }}>
 						<Buttons
 							title="настройку"
 							onPress={() => navigation.navigate('(welcome)/Welcome')}
 						/>
 					</View>
-				}
+				)}
 			</ScrollView>
 		</SafeAreaView>
 	);
 };
 
-const Header: React.FC = () => (
-	<View style={styles.header}>
-		<Text style={styles.title}>Главная</Text>
-		<View style={styles.headerIcons}>
-			<Ionicons name="notifications" size={24} color={COLORS.white} style={{ marginRight: 16 }} />
-			<Ionicons name="share-social-outline" size={24} color={COLORS.white} />
+const Header: React.FC = () => {
+	const sendApp = () => {
+		const options = {
+			message: 'Check out this app!',
+			url: 'https://example.com', // Link to your app or a relevant URL
+		};
+
+		Share.open(options)
+			.then((res) => console.log(res))
+			.catch((err) => {
+				err && console.log(err);
+			});
+	};
+
+	return (
+		<View style={styles.header}>
+			<Text style={styles.title}>Главная</Text>
+			<View style={styles.headerIcons}>
+				<Ionicons name="notifications" size={24} color={COLORS.white} style={{ marginRight: 16 }} />
+				<Ionicons name="share-social-outline" size={24} color={COLORS.white} onPress={sendApp} />
+			</View>
 		</View>
-	</View>
-);
-const ScheduleSection: React.FC<ScheduleSectionProps> = ({ dailyTimeData, todayGraficData, regularVisitCount, notVisitCount, vipCientsCount, newClientsCount }) => (
+	);
+};
+
+const ScheduleSection: React.FC<ScheduleSectionProps> = ({
+	dailyTimeData,
+	todayGraficData,
+	regularVisitCount,
+	notVisitCount,
+	vipCientsCount,
+	newClientsCount
+}) => (
 	<>
 		<View style={styles.scheduleSection}>
 			<Text style={styles.sectionTitle}>Расписание на сегодня</Text>
-			<Text style={styles.sectionSubtitle}>Время работы: с {todayGraficData.from.slice(0, 5)} до {todayGraficData.end.slice(0, 5)}</Text>
+			<Text style={styles.sectionSubtitle}>
+				Время работы: с {todayGraficData.from === null ? '' : todayGraficData.from.slice(0, 5)} до {todayGraficData.end === null ? '' : todayGraficData.end.slice(0, 5)}
+			</Text>
 		</View>
-		<FlatList
-			data={dailyTimeData}
-			renderItem={renderTimeSlot}
-			keyExtractor={item => item.time}
-			horizontal
-			style={{ paddingVertical: 10 }}
-			showsHorizontalScrollIndicator={false}
-			contentContainerStyle={styles.scheduleContainer}
+		{dailyTimeData && (
+			<FlatList
+				data={dailyTimeData}
+				renderItem={renderTimeSlot}
+				keyExtractor={item => item.time}
+				horizontal
+				style={{ paddingVertical: 10 }}
+				showsHorizontalScrollIndicator={false}
+				contentContainerStyle={styles.scheduleContainer}
+			/>
+		)}
+		<StatusContainer
+			regularVisitCount={regularVisitCount}
+			notVisitCount={notVisitCount}
+			vipCientsCount={vipCientsCount}
+			newClientsCount={newClientsCount}
 		/>
-		<StatusContainer regularVisitCount={regularVisitCount} notVisitCount={notVisitCount} vipCientsCount={vipCientsCount} newClientsCount={newClientsCount} />
 	</>
 );
 
-const Statistics: React.FC<StatisticsProps> = ({ mainStatisticData, chartNumerator, chartDenominator, statisticNumerator, statisticDenominator }) => (
+const Statistics: React.FC<StatisticsProps> = ({
+	mainStatisticData,
+	chartNumerator,
+	chartDenominator,
+	statisticNumerator,
+	statisticDenominator
+}) => (
 	<View style={styles.statsSection}>
 		<View style={styles.statsContainer}>
 			<Text style={styles.statsTitle}>Выполнено сеансов</Text>
@@ -244,7 +334,14 @@ const CardsSection: React.FC<{ mainStatisticData: any; }> = ({ mainStatisticData
 	</View>
 );
 
-const BookingRequests: React.FC<BookingRequestsProps> = ({ waitingData, toggleConfirmModal, toggleRejectedModal, isConfirmModal, isRejectedModal, setWaitingData }) => (
+const BookingRequests: React.FC<BookingRequestsProps> = ({
+	waitingData,
+	toggleConfirmModal,
+	toggleRejectedModal,
+	isConfirmModal,
+	isRejectedModal,
+	setWaitingData
+}) => (
 	waitingData.length > 0 && (
 		<View>
 			<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
@@ -255,7 +352,14 @@ const BookingRequests: React.FC<BookingRequestsProps> = ({ waitingData, toggleCo
 			</View>
 			<FlatList
 				data={waitingData}
-				renderItem={(props: any) => renderBookingRequest({ ...props, toggleConfirmModal, toggleRejectedModal, isRejectedModal, isConfirmModal, setWaitingData })}
+				renderItem={(props: any) => renderBookingRequest({
+					...props,
+					toggleConfirmModal,
+					toggleRejectedModal,
+					isRejectedModal,
+					isConfirmModal,
+					setWaitingData
+				})}
 				keyExtractor={item => item.orderId}
 				horizontal
 				showsHorizontalScrollIndicator={false}
@@ -265,7 +369,14 @@ const BookingRequests: React.FC<BookingRequestsProps> = ({ waitingData, toggleCo
 	)
 );
 
-const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({ hallData, toggleConfirmModal, toggleRejectedModal, isConfirmModal, isRejectedModal, setHallData }) => (
+const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
+	hallData,
+	toggleConfirmModal,
+	toggleRejectedModal,
+	isConfirmModal,
+	isRejectedModal,
+	setHallData
+}) => (
 	hallData.length > 0 && (
 		<View>
 			<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
@@ -276,7 +387,14 @@ const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({ hallData, tog
 			</View>
 			<FlatList
 				data={hallData}
-				renderItem={(props: any) => renderBookingRequest({ ...props, toggleConfirmModal, toggleRejectedModal, isConfirmModal, isRejectedModal, setHallData })}
+				renderItem={(props: any) => renderBookingRequest({
+					...props,
+					toggleConfirmModal,
+					toggleRejectedModal,
+					isConfirmModal,
+					isRejectedModal,
+					setHallData
+				})}
 				keyExtractor={item => item.orderId}
 				horizontal
 				showsHorizontalScrollIndicator={false}
@@ -294,11 +412,18 @@ const renderTimeSlot: React.FC<{ item: DashboardDailyTimeOrders }> = ({ item }) 
 				item.type === 'VIP' ? styles.vipSlot :
 					styles.newSlot
 	]}>
-		<Text style={{ color: COLORS.white }}>{item.time.slice(0, 5)}</Text>
+		<Text style={{ color: COLORS.white }}>{item.time === null ? '' : item.time.slice(0, 5)}</Text>
 	</View>
 );
 
-const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({ item, toggleConfirmModal, toggleRejectedModal, isConfirmModal, isRejectedModal, setWaitingData }) => {
+const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
+	item,
+	toggleConfirmModal,
+	toggleRejectedModal,
+	isConfirmModal,
+	isRejectedModal,
+	setWaitingData
+}) => {
 	const handleConfirm = () => editOrderStatus(setWaitingData, item.orderId, 'CONFIRMED', toggleConfirmModal);
 	const handleReject = () => editOrderStatus(setWaitingData, item.orderId, 'REJECTED', toggleRejectedModal);
 	return (
@@ -308,14 +433,24 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({ item, toggl
 			</View>
 			<View style={{ flexDirection: 'row', gap: 10, paddingVertical: 10 }}>
 				<View>
-					<Image source={item.clientAttachmentId ? { uri: getFile + item.clientAttachmentId } : require('../../assets/avatar.png')} style={styles.profileImage} />
+					<Image
+						source={item.clientAttachmentId ? { uri: getFile + item.clientAttachmentId } : require('../../assets/avatar.png')}
+						style={styles.profileImage} />
 				</View>
 				<View>
 					<Text style={styles.userName}>{item.clientName}</Text>
 					<Text style={styles.serviceText}>{item.categoryName}</Text>
 				</View>
 			</View>
-			<View style={{ borderWidth: 1, borderColor: '#4F4F4F', width: 150, padding: 3, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
+			<View style={{
+				borderWidth: 1,
+				borderColor: '#4F4F4F',
+				width: 150,
+				padding: 3,
+				borderRadius: 5,
+				justifyContent: 'center',
+				alignItems: 'center'
+			}}>
 				<Text style={{ color: '#4F4F4F', fontSize: 12 }}>{item.categoryName}</Text>
 			</View>
 			<Text style={styles.timeText}>{item.orderDate}</Text>
@@ -327,14 +462,18 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({ item, toggl
 					<Text style={{ color: COLORS.mainRed, fontWeight: 'bold' }}>Отклонить</Text>
 				</TouchableOpacity>
 			</View>
-			<CenteredModal isModal={isConfirmModal} toggleModal={toggleConfirmModal} isFullBtn btnRedText={"Одобрить"} onConfirm={handleConfirm} btnWhiteText="Назад">
+			<CenteredModal isModal={isConfirmModal} toggleModal={toggleConfirmModal} isFullBtn btnRedText={"Одобрить"}
+				onConfirm={handleConfirm} btnWhiteText="Назад">
 				<View>
-					<Text style={{ fontSize: 17, color: COLORS.white, textAlign: 'center' }}>Вы уверены, что хотите Одобрить этот заказ?</Text>
+					<Text style={{ fontSize: 17, color: COLORS.white, textAlign: 'center' }}>Вы уверены, что хотите Одобрить этот
+						заказ?</Text>
 				</View>
 			</CenteredModal>
-			<CenteredModal isModal={isRejectedModal} toggleModal={toggleRejectedModal} isFullBtn btnRedText={"Отклонить"} onConfirm={handleReject} btnWhiteText="Назад">
+			<CenteredModal isModal={isRejectedModal} toggleModal={toggleRejectedModal} isFullBtn btnRedText={"Отклонить"}
+				onConfirm={handleReject} btnWhiteText="Назад">
 				<View>
-					<Text style={{ fontSize: 17, color: COLORS.white, textAlign: 'center' }}>Вы уверены, что хотите Отклонить этот заказ?</Text>
+					<Text style={{ fontSize: 17, color: COLORS.white, textAlign: 'center' }}>Вы уверены, что хотите Отклонить этот
+						заказ?</Text>
 				</View>
 			</CenteredModal>
 		</View>
