@@ -7,9 +7,9 @@ import BottomModal from "@/components/(modals)/modal-bottom";
 import {MaterialIcons} from '@expo/vector-icons';
 import axios from "axios";
 import {getFile, postFileId} from "@/helpers/api";
-import {imageConfig} from "@/helpers/token";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Toast from "react-native-simple-toast";
+import {getConfigImg} from "@/app/(tabs)/main";
 
 const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
     const {setAttachmentID} = clientStore();
@@ -84,7 +84,8 @@ const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
         formData.append('file', files);
 
         try {
-            const response = await axios.post(postFileId, formData, imageConfig);
+            const config = await getConfigImg()
+            const response = await axios.post(postFileId, formData, config);
             if (response.data.success) {
                 Toast.show('Success', Toast.LONG)
                 setAttachmentID(response.data.body)
