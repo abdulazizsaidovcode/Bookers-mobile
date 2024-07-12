@@ -36,9 +36,17 @@ const ProcessEdit: React.FC = () => {
     const [time, setTime] = useState<string>(defaultState.time);
     const [description, setDescription] = useState<string>(defaultState.description);
     const [validate, setValidate] = useState<boolean>(false);
+    const [gender, setGender] = useState([]);
     const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);
     const { childCategoryData, selectedCategoryId, serviceId } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    useEffect(() =>{
+     setService(serviceId.name)
+     setPrice(serviceId.price)
+     setDescription(serviceId.description)
+     setTime(serviceId.time)
+
+    },[serviceId])
 
     const Gender: GenderOption[] = [
         { title: "Мужская для взрослых", id: 1 },
@@ -52,7 +60,8 @@ const ProcessEdit: React.FC = () => {
         { label: "Цена", value: price, onPress: setPrice },
         { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
-
+    console.log(serviceId);
+    
     const editService = async() => {
         const data = {
             serviceDto: {
@@ -67,7 +76,7 @@ const ProcessEdit: React.FC = () => {
             },
             image: null
         };
-    
+     
         try {
             const config = await getConfig()
             if (!data.serviceDto.name || !data.serviceDto.price || data.serviceDto.genderId[0] === null) {
@@ -112,7 +121,7 @@ const ProcessEdit: React.FC = () => {
     };
 
     useEffect(() => {
-        if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0) {
+        if (service.length === 0 || price.length === 0 || description.length === 0) {
             setValidate(false);
         } else {
             setValidate(true);
@@ -120,6 +129,7 @@ const ProcessEdit: React.FC = () => {
     }, [service, price, time, description]);
 
     const handleGenderPress = (gender: GenderOption) => {
+        setGender
         setSelectedGender(selectedGender?.id === gender.id ? null : gender);
     };
 
