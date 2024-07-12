@@ -52,6 +52,26 @@ export const getConfig = async () => {
 	}
 };
 
+export const getConfigImg = async () => {
+	try {
+		const token = await AsyncStorage.getItem('registerToken');
+		if (token) {
+			return {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					Authorization: `Bearer ${token}`
+				}
+			};
+		} else {
+			console.log('Token not found');
+			return {};
+		}
+	} catch (error) {
+		console.log(error);
+		return {};
+	}
+};
+
 const TabOneScreen: React.FC = () => {
 	const { number, setNumber } = numberSettingStore();
 	const { getMee, setGetMee } = useGetMeeStore()
