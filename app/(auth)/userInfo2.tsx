@@ -37,7 +37,7 @@ const UserInfo2 = () => {
                 <Text style={styles.label}>{t("your_nickname")}</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Nick name"
+                    placeholder=" "
                     placeholderTextColor="#8A8A8A"
                     value={nickname}
                     onChangeText={setNickname}
