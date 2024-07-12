@@ -9,7 +9,7 @@ import CenteredModal from '@/components/(modals)/modal-centered';
 import { router } from 'expo-router';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import axios from 'axios';
-import { category_child, getSpecialization, masterAdd_category } from '@/helpers/api';
+import { category_child, getSpecialization, master_add_specialization, masterAdd_category } from '@/helpers/api';
 import { config } from '@/helpers/token';
 import { useRoute } from '@react-navigation/native';
 import Textarea from '@/components/select/textarea';
@@ -18,7 +18,7 @@ import Textarea from '@/components/select/textarea';
 const ExpertiseEdit: React.FC = () => {
     const route = useRoute();
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-    const { childCategoryData, categoryFatherId, setChildCategoryData } = servicesStore();
+    const { childCategoryData, categoryFatherId, setChildCategoryData , selectedCategoryId} = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [value, setValue] = useState('');
     const [validate, setValidate] = useState(false);
@@ -41,7 +41,7 @@ const ExpertiseEdit: React.FC = () => {
 
     const getChildCategory = async (id: string) => {
         try {
-            const response = await axios.get(`${category_child}${id}`, config);
+            const response = await axios.get(`${category_child}${selectedCategoryId}`, config);
             if (response.data.success) {
                 const child =
                     response.data.body &&
@@ -59,22 +59,22 @@ const ExpertiseEdit: React.FC = () => {
     };
 
     useEffect(() => {
-        getChildCategory(id);
-    }, [id]);
+        getChildCategory(selectedCategoryId);
+    }, [selectedCategoryId]);
 
-    const getSpecializationData = async (categoryId: string) => {
-        try {
-            const response = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
-            console.log("Fetched specialization data:", response.data.body); // Log the fetched data
-            setSpecialization(response.data.body);
-        } catch (error) {
-            console.error("Error fetching specializations:", error);
-        }
-    };
+    // const getSpecializationData = async (categoryId: string) => {
+    //     try {
+    //         const response = await axios.get(`${getSpecialization}?categoryId=${categoryId}`, config);
+    //         console.log("Fetched specialization data:", response.data.body);
+    //         setSpecialization(response.data.body);
+    //     } catch (error) {
+    //         console.error("Error fetching specializations:", error);
+    //     }
+    // };
     
     const postCategory = async (id: string, name: string) => {
         try {
-            const response = await axios.post(`${masterAdd_category}/${id}?name=${name}`, {}, config);
+            const response = await axios.post(`${masterAdd_category}/${selectedCategoryId}?name=${name}`, {}, config);
             if (response.data.success) {
                 setChildCategoryData([...childCategoryData, { id, name }]);
                 getChildCategory(id);
@@ -85,6 +85,15 @@ const ExpertiseEdit: React.FC = () => {
             console.error("Error fetching child categories:", error);
         }
     };
+
+    const postService = async (id: string) =>{
+        try{
+            const response = await axios.post (`${master_add_specialization}/${id}`, config);
+            console.log(response);    
+        }
+        catch(error){
+            console.log("Error", error);}
+        };
     const openModal = () => setModalVisible(true);
     const closeModal = () => setModalVisible(false);
     const handleAdd = () => {
@@ -106,12 +115,12 @@ const ExpertiseEdit: React.FC = () => {
     };
 
     const renderItem = ({ item }: { item: any }) => {
-        const isSelected = selectedServices.find((service: any) => service.name === item.name);
+        // const isSelected = selectedServices.find((service: any) => service.name === item.name);
         return (
             <TouchableOpacity onPress={() =>handleCategorySelect(item.id)}>
                 <ServicesCategory
                     title={item.name}
-                    style={{ backgroundColor: isSelected ? 'gray' : 'transparent' }}
+                    // style={{ backgroundColor: isSelected ? 'gray' : 'transparent' }}
                 />
             </TouchableOpacity>
         );
@@ -136,8 +145,8 @@ const ExpertiseEdit: React.FC = () => {
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
                                 title="Сохранить"
-                                onPress={() => router.push('../test')}
-                                isDisebled={selectedServices.length === 0}
+                                onPress={() =>router.push('../test')}
+                                // isDisebled={selectedServices.length !== 0}
                             />
                         </View>
                         <CenteredModal

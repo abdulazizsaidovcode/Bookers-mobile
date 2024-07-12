@@ -11,9 +11,8 @@ const ServicesCategory: React.FC<ServicesProps> = ({
     onPress,
     isRadioButton = false,
     isChecked = false,
-    items
 }) => {
-    const { setCategoryFatherId, setIsChecked, checkedIs } = servicesStore()
+    const { setIsChecked, checkedIs } = servicesStore()
     const [checked, setChecked] = useState(isChecked);
 
     useEffect(() => {
@@ -35,8 +34,7 @@ const ServicesCategory: React.FC<ServicesProps> = ({
         <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => {
-                handlePress()
-                setCategoryFatherId(items)
+                handlePress();   
             }}
         >
             <View style={[tw`rounded-2xl`, { backgroundColor: "#21212E" }]}>
