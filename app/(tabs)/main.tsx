@@ -16,6 +16,9 @@ import { useNavigation } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import { getData } from "@/helpers/token";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
+import { getNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { set } from "react-hook-form";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -50,10 +53,41 @@ export const getConfig = async () => {
 };
 
 const TabOneScreen: React.FC = () => {
+	const { number, setNumber } = numberSettingStore();
 	const { getMee, setGetMee } = useGetMeeStore()
 	const navigation = useNavigation<any>();
 	const [isCreate, setIsCreate] = useState<any>(false)
+	const [numbers, setNumbers] = useState<any>(null)
+	const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
 	const { mainStatisticData, waitingData, dailyTimeData, isConfirmModal, hallData, isRejectedModal, todayGraficData, setTodayGraficData, setRejectedIsModal, setHallData, setConfirmIsModal, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
+
+	useEffect(() => {
+		const fetchAndCheckNumbers = async () => {
+			await getNumbers(setNumber);
+			const uniqueNumbers = removeDuplicates(number);
+			setNumbers(uniqueNumbers);
+			const allNumbersPresent = containsAllNumbers(uniqueNumbers);
+			setHasAllNumbers(allNumbersPresent);
+		};
+
+		fetchAndCheckNumbers();
+		console.log(number);
+	}, []);
+
+	useEffect(() => {
+		console.log(numbers, 'ACCEPTED', setNumbers);
+		console.log(hasAllNumbers, 'ACCEPTED', setHasAllNumbers);
+	}, [hasAllNumbers]);
+
+
+	const removeDuplicates = (array: number[]): number[] => {
+		return [...new Set(array)];
+	};
+
+	const containsAllNumbers = (array: number[]): boolean => {
+		const requiredNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
+		return requiredNumbers.every(num => array.includes(num));
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -67,7 +101,11 @@ const TabOneScreen: React.FC = () => {
 		};
 
 		fetchData();
+		containsAllNumbers(number)
 	}, [isCreate]);
+
+
+
 
 	useEffect(() => {
 		fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
@@ -78,6 +116,9 @@ const TabOneScreen: React.FC = () => {
 		fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
 		getData()
 	}, []);
+
+
+
 
 
 

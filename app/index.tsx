@@ -14,7 +14,7 @@ const Index: React.FC = () => {
                 const value = await SecureStore.getItemAsync('isLogin');
                 
                 if (value === null) {
-                    // await SecureStore.setItemAsync('hasLaunched', 'true');
+                    // await SecureStore.setItemAsync('isLogin', 'true');
                     setIsFirstLaunch(true);
                 } else {
                     setIsFirstLaunch(false);
