@@ -49,4 +49,9 @@ export type RootStackParamList = {
   '(settings)/(settings-gallery)/gallery-details': any;
   '(standart)/(client)/standard-main': undefined | string;
   '(Schedule)/Schedule': string | undefined;
+  '(free)/(work-grafic-edit)/workMain': undefined
+  '(free)/(work-grafic-edit)/workGraffic': undefined
+ '(free)/(work-grafic-edit)/workTime': undefined
+ '(free)/(work-grafic)/workGraffic': undefined
+'(free)/(work-grafic)/workTime': undefined
 };

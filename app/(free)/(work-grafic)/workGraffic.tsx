@@ -9,9 +9,16 @@ import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStor
 import { postWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import CalendarGrafficEdit from "./calendar";
 import Toast from 'react-native-simple-toast';
+import { RootStackParamList } from "@/type/root";
+import { NavigationProp } from "@react-navigation/native";
+import { useNavigation } from "expo-router";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic)/workMain'>;
+
 
 const GrafficWorkEdit: React.FC = () => {
   const { calendarDate, setWeek, week, weekData } = graficWorkStore();
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
+
 
   const [items, setItems] = useState<Item[]>([
     { id: 1, dayValue: "monday", dayName: "Понедельник", active: false },
@@ -47,7 +54,7 @@ const GrafficWorkEdit: React.FC = () => {
       return;
     }
     
-    postWorkDay(week, calendarDate);
+    postWorkDay(week, calendarDate, () => navigation.navigate("(free)/(work-grafic)/workMain"));
   };
 
   return (
