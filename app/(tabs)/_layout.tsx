@@ -31,14 +31,25 @@ function TabLayout() {
   const colorScheme = useColorScheme();
   const { getme, setGetMee } = graficWorkStore();
   const [tariff, setTariff] = useState(null);
-  const [isCreate, setIsCreate] = useState(false)
+  const [isCreate, setIsCreate] = useState<boolean | null | any>(false)
 
 
-  useEffect(() => {
-    getMee(setGetMee);
-    const value = SecureStore.getItemAsync('isCreate');
-    setIsCreate(value)
-  }, []);
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const value = await SecureStore.getItemAsync('isCreate');
+          setIsCreate(value);
+
+          // Assuming getMee function returns data to setGetMeeData
+          const meeData = await getMee(setGetMee); // Adjust according to your getMee function
+          setGetMee(meeData);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchData();
+    }, [isCreate]);
 
   useEffect(() => {
     if (getme) {
@@ -144,6 +155,7 @@ function TabLayout() {
     </>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     height: 49.5,

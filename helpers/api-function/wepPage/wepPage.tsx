@@ -1,3 +1,4 @@
+import { getConfig } from "@/app/(tabs)/main";
 import {
   address_url,
   category_Father,
@@ -6,7 +7,6 @@ import {
   master_get_Service,
   master_get_specialization,
 } from "@/helpers/api";
-import { config } from "@/helpers/token";
 import axios from "axios";
 
 export const getServiseWith = async (
@@ -15,6 +15,7 @@ export const getServiseWith = async (
 ) => {
   try {
     if (categoryId) {
+      const config = await getConfig()
       const { data } = await axios.get(
         `${master_get_Service}${categoryId}`,
         config
@@ -30,50 +31,67 @@ export const getServiseWith = async (
 
 export const getCategoryF = async (setData: (val: any[] | null) => void) => {
   try {
-    const { data } = await axios.get(`${getCategory_master}`, config);
+    const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
+    const response = await axios.get(`${getCategory_master}`, config);
 
-    if (data.success) setData(data.body);
-    else setData(null);
-  } catch (err) {
+    if (response.data.success) {
+      setData(response.data.body);
+    } else {
+      setData(null);
+    }
+  } catch (error) {
+    console.error('Error fetching categories:', error);
     setData(null);
   }
 };
 
-export const getspecialization = async (
+export const getSpecialization = async (
   setData: (val: any[] | null) => void,
-  id: any
+  id: string
 ) => {
   try {
-    if (id) {
-      const { data } = await axios.get(`${master_get_specialization}/${id}`, config);
-      if (data.success) setData(data.body);
-      else setData(null);
+    if (!id) {
+      setData(null);
+      return;
     }
-    else { 
-        setData(null)
+
+    const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
+    const response = await axios.get(`${master_get_specialization}/${id}`, config);
+
+    if (response.data.success) {
+      setData(response.data.body);
+    } else {
+      setData(null);
     }
-  } catch (err) {
+  } catch (error) {
+    console.error('Error fetching specialization:', error);
     setData(null);
   }
 };
 
-export const getAddress = (setData: (val: any[] | null) => void) => {
-    axios.get(address_url, config) 
-    .then((res) => {
-      if ( res.data.success ) setData(res.data.body)
-      else setData(res.data.message)
-        })
-    .catch(() => {
-      setData(null)
-    })
-}
+export const getAddress = async (setData: (val: any[] | null) => void) => {
+  try {
+    const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
+    const response = await axios.get(address_url, config);
 
-export const getGaleriya = (setData: (data: any) => void) => {
-    axios.get(gallery_list, config)
-    .then((res) => {
-      setData(res.data.body);
-    })
-   .catch ((error) => {
-    setData([])
-  })
-}
+    if (response.data.success) {
+      setData(response.data.body);
+    } else {
+      setData(response.data.message);
+    }
+  } catch (error) {
+    console.error('Error fetching address:', error);
+    setData(null);
+  }
+};
+export const getGaleriya = async (setData: (data: any | null) => void) => {
+  try {
+    const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
+    const response = await axios.get(gallery_list, config);
+
+    setData(response.data.body);
+  } catch (error) {
+    console.error('Error fetching gallery:', error);
+    setData([]);
+  }
+};

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { postFileId, postFilelist } from "../../api"
-import {config} from "../../token"
+import { getConfig } from '@/app/(tabs)/main';
 
 interface UploadFileResponse {
   body: string;
@@ -23,6 +23,7 @@ export const uploadFile = async ({ file, setUploadResponse }: UploadFileParams) 
   formData.append('file', file);
 
   try {
+    const config = await getConfig();
     const response = await axios.post(postFileId, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -39,17 +40,16 @@ export const uploadFile = async ({ file, setUploadResponse }: UploadFileParams) 
   }
 };
 
-// file list ketadi
-
 export const uploadFiles = async ({ files, setUploadResponse }: UploadFilesParams) => {
   const formData = new FormData();
 
-  // Fayllarni FormData ga qo'shish
+  // Append each file to FormData
   Array.from(files).forEach(file => {
     formData.append('files', file);
   });
 
   try {
+    const config = await getConfig();
     const response = await axios.post(postFilelist, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
