@@ -1,11 +1,12 @@
 import registerStory from '@/helpers/state_managment/auth/register';
 import { router } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 const UserInfo: React.FC = () => {
     const { firstName, setFirstName, lastName, setLastName, firstNameError, setFirstNameError, lastNameError, setLastNameError } = registerStory();
-
+    const {t}=useTranslation()
     const validateName = (name: string): boolean => {
         const nameRegEx = /^[a-zA-Zа-яА-ЯёЁ]{2,30}$/;
         return nameRegEx.test(name);
@@ -14,7 +15,7 @@ const UserInfo: React.FC = () => {
     const handleFirstNameChange = (name: string): void => {
         setFirstName(name);
         if (!validateName(name)) {
-            setFirstNameError('Имя должно содержать только буквы и быть длиной от 2 до 30 символов');
+            setFirstNameError(t("name_length_and_characters"));
         } else {
             setFirstNameError('');
         }
@@ -23,7 +24,7 @@ const UserInfo: React.FC = () => {
     const handleLastNameChange = (name: string): void => {
         setLastName(name);
         if (!validateName(name)) {
-            setLastNameError('Фамилия должна содержать только буквы и быть длиной от 2 до 30 символов');
+            setLastNameError(t("surname_length_and_characters"));
         } else {
             setLastNameError('');
         }
@@ -40,10 +41,10 @@ const UserInfo: React.FC = () => {
                     <View style={styles.progressSegment} />
                     <View style={styles.progressSegment} />
                 </View>
-                <Text style={styles.label}>Ваше имя и фамилия</Text>
+                <Text style={styles.label}>{t("your_first_and_last_name")}</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Имя"
+                    placeholder={t("first_name")}
                     placeholderTextColor="#8A8A8A"
                     value={firstName}
                     onChangeText={handleFirstNameChange}
@@ -51,7 +52,7 @@ const UserInfo: React.FC = () => {
                 {firstNameError ? <Text style={styles.errorText}>{firstNameError}</Text> : null}
                 <TextInput
                     style={styles.input}
-                    placeholder="Фамилия"
+                    placeholder={t("last_name")}
                     placeholderTextColor="#8A8A8A"
                     value={lastName}
                     onChangeText={handleLastNameChange}
@@ -69,7 +70,7 @@ const UserInfo: React.FC = () => {
                         router.push('(auth)/userInfo2')
                     }}
                 >
-                    <Text style={styles.buttonText}>Продолжить</Text>
+                    <Text style={styles.buttonText}>{t("Continue")}</Text>
                 </TouchableOpacity>
             </View>
         </View>
