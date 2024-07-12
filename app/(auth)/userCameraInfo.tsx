@@ -45,7 +45,7 @@ const UserCameraInfo = () => {
             <View style={styles.bottomSection}>
 
                 <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-                    <Text style={styles.skipButtonText}>Пропустить</Text>
+                    <Text style={styles.skipButtonText}>{t("skip")}</Text>
                 </TouchableOpacity>
 
 
