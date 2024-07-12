@@ -6,6 +6,7 @@ import { router } from "expo-router"; // router ni import qiling
 import { ScrollView, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";
+import servicesStore from '@/helpers/state_managment/services/servicesStore';
 
 
 const MyServicesEdit = () => {
@@ -13,7 +14,7 @@ const MyServicesEdit = () => {
         {
             title: "Специализация",
             subTitle: "Не выбрано",
-            onPress: () => { router.push('/expertise') }
+            onPress: () => { router.push('(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit') }
         },
         {
             title: "Процедура услуг",

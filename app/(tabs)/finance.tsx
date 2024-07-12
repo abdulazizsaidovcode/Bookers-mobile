@@ -9,7 +9,6 @@ import ClientCard from '@/components/(cards)/top-client-card'
 import FinanceCardMonth from '@/components/(cards)/finance-card-month'
 import {MaterialIcons} from '@expo/vector-icons';
 import {getFinanceDay, getTopClients} from '@/helpers/api-function/finance/finance'
-import {setConfig} from '@/helpers/token'
 import financeStore from '@/helpers/state_managment/finance/financeStore'
 import FinanceRevenuesMonth from "@/components/(cards)/finance-revenues-month";
 import {handleRefresh} from "@/constants/refresh";
@@ -31,7 +30,6 @@ const Finance = () => {
     const [monthShowHide, setMonthShowHide] = useState<boolean>(false)
 
     useEffect(() => {
-        setConfig()
         getTopClients(setTopClients)
         getFinanceDay(setDayData, date)
     }, [])

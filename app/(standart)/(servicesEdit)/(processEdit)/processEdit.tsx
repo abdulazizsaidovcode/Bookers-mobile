@@ -5,7 +5,7 @@ import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import axios from 'axios';
 import { router, useLocalSearchParams } from 'expo-router';
-import { masterAdd_service } from '@/helpers/api';
+import { masterAdd_service, masterEdit_service, service_delete } from '@/helpers/api';
 import { config } from '@/helpers/token';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/app/locationInput';
@@ -13,6 +13,7 @@ import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { AntDesign } from '@expo/vector-icons';
+import Toast from "react-native-simple-toast"
 
 type GenderOption = {
     title: string;
@@ -27,14 +28,13 @@ const defaultState = {
 };
 
 const Process: React.FC = () => {
-    const { selectedServices, serviceId } = useLocalSearchParams();
     const [service, setService] = useState<string>(defaultState.service);
     const [price, setPrice] = useState<string>(defaultState.price);
     const [time, setTime] = useState<string>(defaultState.time);
     const [description, setDescription] = useState<string>(defaultState.description);
     const [validate, setValidate] = useState<boolean>(false);
     const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);
-    const { childCategoryData, categoryFatherId } = servicesStore();
+    const { childCategoryData, selectedCategoryId, serviceId } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
 
     const Gender: GenderOption[] = [
@@ -50,33 +50,56 @@ const Process: React.FC = () => {
         { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
 
-    const postService = async () => {
-        try {
-            console.log('Category Father ID:', categoryFatherId.key);
-            const data = {
-                id: serviceId, 
-                categoryId: categoryFatherId.key, 
-                genderId: selectedGender ? selectedGender.id : null, 
-                name: service,
-                price: parseFloat(price),
-                description: description,
-                attachmentId: null,
-                active: true
-            };
-    
-            console.log('Editing service with ID:', serviceId); // Logging service ID
-    
-            const response = await axios.put(`${masterAdd_service}/${serviceId}`, data, config); // Assuming you use PUT for editing
-            if (response.data.success) {
-                console.log('Successfully edited service:', response.data);
-                router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
-            } else {
-                console.error('Failed to edit service:', response.data.message);
-            }
-        } catch (error) {
-            console.error('Error editing service:', error);
+    const editSevice = () => {
+        const data = {
+            serviceDto:{
+            categoryId: selectedCategoryId,
+            genderId: [selectedGender ? selectedGender.id : null],
+            name: service,
+            price: parseFloat(price),
+            description: description,
+            attachmentId: null,
+            serviceTime:null,
+            active: true
+            },
+            image:null
+            
+        };
+        
+        
+        if (data) {
+            axios.put(`${masterEdit_service}/${serviceId}`, data, config)
+                .then((res) => {
+                    if (res.data.success) {
+                        router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
+                        Toast.show("Service muvofaqqiyatli tahrirlandi", Toast.LONG)
+                    } else {
+                        console.error('Failed to edit service:', res.data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error editing service:', error);
+                })
+        } else {
+            Toast.show("Iltimos malumotlarni kiriting", Toast.LONG)
         }
+        console.log("category",data.serviceDto.categoryId);
+        
     };
+    const deleteService = async (serviceId: string) => {
+    // try{
+    //     if(serviceId){
+    //     const response = await axios.put(`${service_delete}${serviceId}`, config);
+    //     Toast.show("Service muvofaqqiyatli o'chirildi ", Toast.LONG)
+    //     router.push('');
+    //     }
+    //     else{
+    //         Toast.show("Service o'chirilmadi ", Toast.LONG)  }
+    // }
+    // catch (error){
+    //      console.log("", error);
+         
+    // };
 
     useEffect(() => {
         if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0) {
@@ -103,7 +126,7 @@ const Process: React.FC = () => {
     const toggleModal = () => setModalVisible(!modalVisible);
 
     const handleAdd = () => {
-        toggleModal();
+        deleteService(serviceId)
     };
 
     const resetDefaults = () => {
@@ -116,7 +139,7 @@ const Process: React.FC = () => {
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <NavigationMenu name={`Процедура услуг`} deleteIcon toggleModal={toggleModal} />
+            <NavigationMenu name={`Процедура услуг`} deleteIcon toggleModal={()=>toggleModal} />
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -165,13 +188,10 @@ const Process: React.FC = () => {
                         </View>
                     </View>
                     <View style={[tw`mb-3 p-3`, { backgroundColor: '#21212E' }]}>
-                        <Buttons 
-                            title='Сохранить' 
-                            isDisebled={!validate} 
-                            onPress={() => {
-                                postService();
-                                resetDefaults(); // Reset defaults after saving
-                            }} 
+                        <Buttons
+                            title='Сохранить'
+                            isDisebled={!validate}
+                            onPress={editSevice}
                         />
                     </View>
                     <CenteredModal
@@ -192,5 +212,5 @@ const Process: React.FC = () => {
         </SafeAreaView>
     );
 };
-
-export default Process;
+}
+export default Process

@@ -13,6 +13,7 @@ export interface Services {
     data: Data[] | null
     setData: (val: Data[] | null) => void
     isModal: boolean
+    isChecked: boolean
     setIsModal: (val: boolean) => void
     childCategoryData: any | null
     setChildCategoryData: (val: any) => void
@@ -32,6 +33,12 @@ export interface Services {
     setProdseduraUslug: (data: any) => void
     selectedCategory: string;
     setSelectedCategory: (val:string)=>void
+    selectedCategoryId: string | null
+    setSelectedCategoryId: (val: string | null) => void
+    serviceSelectId: string | null
+    setServiceSelectId: (val:string | null) => void
+    serviceId: string | null
+    setServiceId: (val:string | null) => void
 }
 
 export interface Data {

@@ -26,7 +26,7 @@ const Process: React.FC = () => {
     const [description, setDescription] = useState<string>('');
     const [validate, setValidate] = useState<boolean>(false);
     const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);
-    const { childCategoryData, categoryFatherId } = servicesStore();
+    const { childCategoryData,selectedCategoryId } = servicesStore();
 
     const Gender: GenderOption[] = [
         { title: "Мужская для взрослых", id: 1 },
@@ -43,9 +43,8 @@ const Process: React.FC = () => {
 
     const postService = async () => {
         try {
-
             const data = {
-                categoryId: categoryFatherId.key,
+                categoryId: selectedCategoryId,
                 genderId: selectedGender ? [selectedGender.id] : [],
                 name: service,
                 price: parseFloat(price),
@@ -53,14 +52,12 @@ const Process: React.FC = () => {
                 attachmentId: null,
                 active: true
             }; 
-            console.log('Category Father ID:',data);
-
-            const response = await axios.post(masterAdd_service, data, config);
-            if (response.data.success) {
-                router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
-            } else {
-                console.error('Failed to add service:', response.data.message);
-            }
+            // const response = await axios.post(masterAdd_service, data, config);
+            // if (response.data.success) {
+            //     router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
+            // } else {
+            //     console.error('Failed to add service:', response.data.message);
+            // }
         } catch (error) {
             console.error('Error adding service:', error);
         }

@@ -22,13 +22,13 @@ import ServesGenderEdit from './(gender)/servesGender';
 const MyServicesScreenEdit = () => {
     const route = useRoute();
     // const { categoryId } = route.params as { categoryId: string };
-    const { childCategoryData, categoryFatherId, setChildCategoryData, setProdseduraUslug } = servicesStore();
+    const {setProdseduraUslug ,setSelectedCategoryId,setServiceId} = servicesStore();
     const [gender, setGender] = useState([]);
     const [specialization, setSpecialization] = useState([]);
     const [category, setCategory] = useState([]);
     const [categoryMaster, setCategoryMaster] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  
 
     const [categories, setCategories] = useState([
         'Красота и здоровье волос',
@@ -216,11 +216,12 @@ const MyServicesScreenEdit = () => {
                                 </TouchableOpacity>
                             </View>
                             {categoryMaster.length > 0 ? (
-                                categoryMaster.map((item) => (
+                                categoryMaster.map((item,i) => (
                                     <TouchableOpacity
-                                        key={item.id}
+                                        key={i}
                                         onPress={() => {
                                             setProdseduraUslug(item);
+                                            setServiceId(item.id);
                                             router.push({
                                                 pathname: '(standart)/(servicesEdit)/(processEdit)/processEdit',
                                                 params: {

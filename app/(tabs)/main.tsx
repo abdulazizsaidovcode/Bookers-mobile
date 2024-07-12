@@ -52,13 +52,22 @@ export const getConfig = async () => {
 const TabOneScreen: React.FC = () => {
 	const { getMee, setGetMee } = useGetMeeStore()
 	const navigation = useNavigation<any>();
-	const [isCreate, setIsCreate] = useState(false)
+	const [isCreate, setIsCreate] = useState<any>(false)
 	const { mainStatisticData, waitingData, dailyTimeData, isConfirmModal, hallData, isRejectedModal, todayGraficData, setTodayGraficData, setRejectedIsModal, setHallData, setConfirmIsModal, setDailyTimeData, setMainStatisticData, setWaitingData } = useDashboardStore()
-	const config = {
-		headers: {
-			Authorization: `Bearer ${getData()}`,
-		},
-	};
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const value = await SecureStore.getItemAsync('isCreate');
+				await SecureStore.setItemAsync('isCreate', 'false');
+				setIsCreate(value);
+			} catch (error) {
+				console.error('Error fetching data:', error);
+			}
+		};
+
+		fetchData();
+	}, [isCreate]);
 
 	useEffect(() => {
 		fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
