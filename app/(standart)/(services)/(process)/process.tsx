@@ -26,7 +26,7 @@ const Process: React.FC = () => {
     const [description, setDescription] = useState<string>('');
     const [validate, setValidate] = useState<boolean>(false);
     const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);
-    const { childCategoryData,selectedCategoryId } = servicesStore();
+    const { childCategoryData,selectedCategoryId,categoryFatherId ,selectedCategory } = servicesStore();
 
     const Gender: GenderOption[] = [
         { title: "Мужская для взрослых", id: 1 },
@@ -45,7 +45,7 @@ const Process: React.FC = () => {
         try {
             const config = await getConfig()
             const data = {
-                categoryId: selectedCategoryId,
+                categoryId: selectedCategory,
                 genderId: selectedGender ? [selectedGender.id] : [],
                 name: service,
                 price: parseFloat(price),
@@ -53,7 +53,7 @@ const Process: React.FC = () => {
                 attachmentId: null,
                 active: true
             }; 
-            const response = await axios.post(masterAdd_service, data, config);
+           const response = await axios.post(masterAdd_service, data, config);
             if (response.data.success) {
                 router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
             } else {

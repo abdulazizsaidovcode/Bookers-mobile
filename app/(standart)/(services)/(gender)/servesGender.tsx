@@ -20,15 +20,13 @@ const ServesGender = () => {
         { title: 'Мужское направление', id: 1 },
         { title: 'Женское направление', id: 2 },
     ];
-
-   console.log("nncdbdbvhc",selectedCategories);
-   
     const post = async () => {
         setIsLoading(true)
         try {
             const config = await getConfig()
             console.log(config);
-            const response = await axios.post(`${gender_status}genders=${selectedCategories}`,config);
+            
+            const response = await axios.post(`${gender_status}genders=${selectedCategories}`,{},config);
             if(response.data.success === true){
               router.push("/category")  
             }

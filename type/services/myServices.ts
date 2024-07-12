@@ -10,8 +10,8 @@ export interface Gender {
     gende:string;
 }
 export interface Services {
-    data: Data[] | null
-    setData: (val: Data[] | null) => void
+    data: {key: string, value: string}[] | null
+    setData: (val: {key: string, value: string}[] | null) => void
     isModal: boolean
     isChecked: boolean
     setIsModal: (val: boolean) => void
