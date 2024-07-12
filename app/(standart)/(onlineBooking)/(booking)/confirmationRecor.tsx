@@ -14,9 +14,13 @@ import {
   onlineConfirmationServices,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import { router } from "expo-router";
+import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 
 const ConfirmationRecord = () => {
+  const { isRegtered } = isRegister();
   const { setRequest } = OnlineBookingCheck();
+
+  setRequest(isRegister);
   const {
     isEnabled,
     setIsEnabled,

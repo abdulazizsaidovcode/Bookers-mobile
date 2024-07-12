@@ -14,36 +14,11 @@ import { FontAwesome, FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { base_url } from "@/helpers/api";
-import { config } from "@/helpers/token";
 import moment from "moment";
-import ContactInformation from "@/components/contact-information/contact-information";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
+import { getConfig } from "@/app/(tabs)/main";
 
-const sessionDetails = [
-  {
-    id: "1",
-    name: "Гузаль Шерматова",
-    phone: "+998 93 123-45-67",
-    services: "Стрижка, Укладка, Окантовка",
-    price: "350 000 сум",
-    date: "Пн, 05 февраля",
-    startTime: "08:00",
-    endTime: "08:30",
-    avatar: "https://via.placeholder.com/50",
-  },
-  {
-    id: "2",
-    name: "Наргиза Ахмедова",
-    phone: "+998 93 123-45-67",
-    services: "Стрижка, Укладка, Окрашивание",
-    price: "350 000 сум",
-    date: "Пн, 05 февраля",
-    startTime: "08:00",
-    endTime: "08:30",
-    avatar: "https://via.placeholder.com/50",
-  },
-];
 
 const Upcomingentries = () => {
   const navigation = useNavigation();
@@ -69,6 +44,7 @@ const Upcomingentries = () => {
 
   const getUpcoming = async () => {
     try {
+      const config = getConfig();
       const { data } = await axios.get(
         `${base_url}order/upcoming-sessions?status=UPCOMING_SESSIONS`,
         config

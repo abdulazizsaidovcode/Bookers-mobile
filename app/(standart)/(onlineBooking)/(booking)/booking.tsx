@@ -14,7 +14,6 @@ import Buttons from "@/components/(buttons)/button";
 import { SelectList } from "react-native-dropdown-select-list";
 import axios from "axios";
 import { base_url } from "@/helpers/api";
-import { config } from "@/helpers/token";
 import SwitchWithLabel from "@/components/switchWithLabel/switchWithLabel";
 import {
   GetOnlineBookingSettingsUrgently,
@@ -24,6 +23,8 @@ import {
   OnlineBookingCheck,
   OnlineBookingSettingsUrgentlyStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
+import { getConfig } from "@/app/(tabs)/main";
+import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 
 const Booking = () => {
   const { Urgently, setUrgentlyt } = OnlineBookingSettingsUrgentlyStory();
@@ -31,10 +32,13 @@ const Booking = () => {
   const [isEnabled, setIsEnabled] = useState(Urgently);
   const [data, setData] = useState([]);
   const navigation = useNavigation<any>();
+  const { isRegtered } = isRegister();
   const { setBreack } = OnlineBookingCheck();
+  setBreack(isRegister);
 
   const getData = async () => {
     try {
+      const config = await getConfig();
       const { data } = await axios.get(`${base_url}order-days/master`, config);
       setData(data.body);
     } catch (error) {

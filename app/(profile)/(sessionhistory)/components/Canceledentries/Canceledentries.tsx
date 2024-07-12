@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { base_url } from "@/helpers/api";
-import { config } from "@/helpers/token";
 import axios from "axios";
 import {
   AntDesign,
@@ -21,6 +20,7 @@ import tw from "tailwind-react-native-classnames";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { useNavigation } from "expo-router";
 import History from "@/helpers/state_managment/history";
+import { getConfig } from "@/app/(tabs)/main";
 
 const Canceledentries = () => {
   const [data, setData] = useState<any>([]);
@@ -32,6 +32,7 @@ const Canceledentries = () => {
 
   const getsessionDetails = async () => {
     try {
+      const config = getConfig();
       const response = await axios.get(
         `${base_url}order/canceled-sessions?status=CANCELED_SESSIONS`,
         config
@@ -63,6 +64,7 @@ const Canceledentries = () => {
     };
 
     try {
+      const config = getConfig();
       const response = await fetch(`${base_url}order/all`, {
         method: "DELETE",
         headers: {
@@ -188,7 +190,7 @@ const Canceledentries = () => {
                 style={tw`w-12 h-12 rounded-full mr-4`}
               />
               <View style={tw`flex-1`}>
-                <Text style={tw`text-white font-bold`}>{  item.fullName}</Text>
+                <Text style={tw`text-white font-bold`}>{item.fullName}</Text>
                 <Text style={tw`text-gray-400`}>{item.phone}</Text>
                 <Text style={tw`text-red-500 font-bold mt-2`}>
                   {item.servicePrice} сум

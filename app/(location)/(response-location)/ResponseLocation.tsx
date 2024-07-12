@@ -1,10 +1,10 @@
 import Index from "@/app";
+import { getConfig } from "@/app/(tabs)/main";
 import Buttons from "@/components/(buttons)/button";
 import { Text, View } from "@/components/Themed";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { base_url } from "@/helpers/api";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
-import { config } from "@/helpers/token";
 import { MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
 import { router } from "expo-router";
@@ -26,17 +26,22 @@ const ResponseLocation = () => {
   const [data, setData] = useState<Types>();
 
   const getLocationData = async () => {
-    const { data } = await axios.get(`${base_url}address`, config);
+    try {
+      const config = getConfig();
+      const { data } = await axios.get(`${base_url}address`, config);
 
-    setData(data.body);
-    console.log(data.body.salonId);
+      setData(data.body);
+      console.log(data.body.salonId);
 
-    const salonName = await axios.get(
-      `${base_url}salon/${data.body.salonId}`,
-      config
-    );
-    console.log(salonName.data.body);
-    setData({ ...data.body, salonId: salonName.data.body.name });
+      const salonName = await axios.get(
+        `${base_url}salon/${data.body.salonId}`,
+        config
+      );
+      console.log(salonName.data.body);
+      setData({ ...data.body, salonId: salonName.data.body.name });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -83,17 +88,16 @@ const ResponseLocation = () => {
           </View>
         </View>
         <View style={tw`bg-transparent absolute bottom-5 w-full`}>
-        <Buttons
-          title="На главную"
-          onPress={() => {
-            if (data) {
-              putNumbers(4);
-              console.log(" 3 ketti");
-              
-            }
-            router.push("(welcome)/Welcome");
-          }}
-        />
+          <Buttons
+            title="На главную"
+            onPress={() => {
+              if (data) {
+                putNumbers(4);
+                console.log(" 3 ketti");
+              }
+              router.push("(welcome)/Welcome");
+            }}
+          />
         </View>
       </View>
     </View>

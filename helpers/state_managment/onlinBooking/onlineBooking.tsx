@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import isRegister from "../isRegister/isRegister";
 
 export interface IState {
   allowClient: boolean;
@@ -68,13 +67,12 @@ export const OnlineBookingSettingsUrgentlyStory = create<Urgently>((set) => ({
 
 export const OnlineBookingCheck = create((set) => ({
   recording: false,
-  setRecording: (val: boolean) => set({ recording: val }),
-  breakSession: isRegister,
+  breakSession: false,
   setBreack: (val: boolean) => set({ breakSession: val }),
-  confirmation: isRegister,
+  confirmation: false,
   setConfirmation: (val: boolean) => set({ confirmation: val }),
-  request: isRegister,
+  request: false,
   setRequest: (val: boolean) => set({ request: val }),
-  time: isRegister,
+  time: false,
   setTime: (val: boolean) => set({ time: val }),
 }));
