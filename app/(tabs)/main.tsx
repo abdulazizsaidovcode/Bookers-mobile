@@ -14,7 +14,8 @@ import { getUser } from "@/helpers/api-function/getMe/getMee";
 import Buttons from "@/components/(buttons)/button";
 import { useNavigation } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
-import {getData} from "@/helpers/token";
+import { getData } from "@/helpers/token";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -29,6 +30,24 @@ const COLORS = {
 	cardBackground: "#B9B9C9",
 	mainRed: "#9C0A35",
 };
+export const getConfig = async () => {
+	try {
+		const token = await AsyncStorage.getItem('registerToken');
+		if (token) {
+			return {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			};
+		} else {
+			console.log('Token not found');
+			return {};
+		}
+	} catch (error) {
+		console.log(error);
+		return {};
+	}
+};
 
 const TabOneScreen: React.FC = () => {
 	const { getMee, setGetMee } = useGetMeeStore()
@@ -40,7 +59,6 @@ const TabOneScreen: React.FC = () => {
 			Authorization: `Bearer ${getData()}`,
 		},
 	};
-	console.log('main cofig:', config)
 
 	useEffect(() => {
 		fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
@@ -52,23 +70,7 @@ const TabOneScreen: React.FC = () => {
 		getData()
 	}, []);
 
-	useEffect(() => {
-		const checkFirstLaunch = async () => {
-			try {
-				const value = await SecureStore.getItemAsync('isCreate');
 
-				if (value === null) {
-					await SecureStore.setItemAsync('hasLaunched', 'true');
-					setIsCreate(true);
-				} else {
-					setIsCreate(false);
-				}
-			} catch (error) {
-				console.log(error);
-			}
-		};
-		checkFirstLaunch();
-	}, []);
 
 	const toggleConfirmModal = () => {
 		setConfirmIsModal(!isConfirmModal)
@@ -501,7 +503,7 @@ const styles = StyleSheet.create({
 		color: COLORS.white,
 		fontWeight: "bold",
 	},
-	
+
 });
 
 export default TabOneScreen;
