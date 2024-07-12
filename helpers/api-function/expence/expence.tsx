@@ -1,6 +1,6 @@
 import { getConfig } from "@/app/(tabs)/main";
 import { expene_category_list, expene_category_post, expene_list } from "@/helpers/api";
-import { config } from "@/helpers/token";
+// import { config } from "@/helpers/token";
 import axios from "axios"
 
 export const getExpenceCategory = async (setExpenceCategory: any) => {
