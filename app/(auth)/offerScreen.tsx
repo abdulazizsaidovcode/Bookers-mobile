@@ -1,9 +1,11 @@
 import Buttons from '@/components/(buttons)/button';
 import { router } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 
 const OfferScreen = () => {
+    const {t}=useTranslation()
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
