@@ -33,7 +33,7 @@ const ServesGender = () => {
               router.push("/category")  
             }
             } catch (error) {
-            console.error("Error fetching services: ", error);    
+            console.error("Error fetching services:", error);    
         }finally {
             setIsLoading(false)
         }
