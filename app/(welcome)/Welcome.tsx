@@ -47,19 +47,20 @@ const Welcome = () => {
   }, []);
 
 
-  const removeDuplicates = (array:any) => {
+  const removeDuplicates = (array: any) => {
     return [...new Set(array)];
   };
 
   const uniqueNumbers = removeDuplicates(number);
 
-  const containsAllNumbers = (array:any) => {
+  const containsAllNumbers = (array: any) => {
     const requiredNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
     return requiredNumbers.every(num => array.includes(num));
   };
 
-  function  registered (){
-    SecureStore.setItemAsync('isCreate', 'true')
+  async function registered() {
+    await SecureStore.setItemAsync('isCreate', 'true')
+    await SecureStore.setItemAsync("tariff", '');
   }
 
   const data = [
@@ -144,13 +145,13 @@ const Welcome = () => {
               style={styles.profileImage}
               source={require("../../assets/images/866-536x354.jpg")}
             />
-              <View style={styles.editIconContainer}>
-            <TouchableOpacity activeOpacity={0.7} onPress={() => {
-              navigation.navigate("(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData")
-            }}>
+            <View style={styles.editIconContainer}>
+              <TouchableOpacity activeOpacity={0.7} onPress={() => {
+                navigation.navigate("(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData")
+              }}>
                 <MaterialIcons name="edit" size={24} color="white" />
-            </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
+            </View>
           </View>
           <Text style={styles.profileName}>Гузаль Шерматова</Text>
           <View style={styles.infoContainer}>
@@ -187,14 +188,14 @@ const Welcome = () => {
               </Pressable>
             );
           })}
-        {containsAllNumbers(uniqueNumbers) && (
+          {containsAllNumbers(uniqueNumbers) && (
             <View style={styles.buttonContainer2}>
               <Buttons title="Вперёд" onPress={() => {
                 navigation.navigate('(tabs)')
                 registered()
               }} />
             </View>
-        )}
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
