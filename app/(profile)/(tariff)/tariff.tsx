@@ -1,11 +1,13 @@
 // TariffsPage.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { tariffStore } from '@/helpers/state_managment/tariff/tariff';
+import * as SecureStore from "expo-secure-store";
+
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(profile)/(tariff)/tariff'>;
 
@@ -31,7 +33,42 @@ const tariffs = [
 
 const TariffsPage: React.FC = () => {
   const navigation = useNavigation<any>();
-  const { setTariff } = tariffStore()
+  const [tariffStatus, setTariffStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTariffStatus = async () => {
+      try {
+        const storedTariffStatus = await SecureStore.getItemAsync('tariff');
+        setTariffStatus(storedTariffStatus);
+        console.log('starage dan olindi: ', storedTariffStatus);
+      } catch (error) {
+        console.error('Error fetching tariff status:', error);
+      }
+    };
+
+    fetchTariffStatus();
+
+    // test uchun clear function, yani storege remove qilib test qilib kurdim
+    // const clearSecureStore = async () => {
+    //   try {
+    //     await SecureStore.deleteItemAsync('tariff');
+    //   } catch (error) {
+    //     console.log('Error clearing secure store:', error);
+    //   }
+    // };
+    // clearSecureStore()
+  }, []);
+
+  const setTariff = async (type: string) => {
+    await SecureStore.setItemAsync("tariff", type);
+    // console.log('starage ga saqlandi: ', type);
+  };
+
+  const handleDisabled = () => {
+    if (tariffStatus === 'free') return 'free'
+    else if (tariffStatus === 'standard') return 'standard'
+    else return 'all'
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -39,7 +76,12 @@ const TariffsPage: React.FC = () => {
         <NavigationMenu name='Tarifi' />
         <View >
           {tariffs.map((tariff, index) => (
-            <View key={index} style={styles.card}>
+            <TouchableOpacity
+              activeOpacity={1}
+              key={index}
+              style={[styles.card, { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }]}
+              disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
+            >
               <Text style={styles.name}>{tariff.name}</Text>
               <Text style={styles.description}>{tariff.description}</Text>
               <Text style={styles.price}>{tariff.price}</Text>
@@ -50,15 +92,20 @@ const TariffsPage: React.FC = () => {
                     setTariff(tariff.unicName)
                     navigation.navigate(tariff.navigate)
                   }}
-                  style={styles.activateButton}
+                  activeOpacity={.7}
+                  disabled={handleDisabled() !== tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
+                  style={[styles.activateButton, { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }]}
                 >
                   <Text style={styles.buttonText}>Активировать</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.detailsButton}>
+                <TouchableOpacity
+                  activeOpacity={.4}
+                  style={styles.detailsButton}
+                >
                   <Text style={[styles.buttonText, styles.detailsButtonText]}>Подробнее</Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>

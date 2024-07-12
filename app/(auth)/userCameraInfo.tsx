@@ -5,11 +5,13 @@ import ProfileImgUpload from '@/components/profile-img-upload';
 import registerStory from '@/helpers/state_managment/auth/register';
 import Buttons from '@/components/(buttons)/button';
 import clientStore from '@/helpers/state_managment/client/clientStore';
+import { useTranslation } from 'react-i18next';
 
 const UserCameraInfo = () => {
     const { setImg } = registerStory()
     const { setAttachmentID, attachmentID } = clientStore();
     const [checkUpload, setCheckUpload] = useState<boolean>(false);
+    const { t } = useTranslation();
 
     const handleSkip = () => {
         setImg(null)
@@ -35,19 +37,19 @@ const UserCameraInfo = () => {
                     <View style={styles.progressSegment1} />
                     <View style={styles.progressSegment2} />
                 </View>
-                <Text style={styles.label}>Добавьте свою фотографию</Text>
-                <Text style={styles.description}>Не желаете добавить своё фото? Оно будет доступно только мастерами к которым вы записались</Text>
+                <Text style={styles.label}>{t("add_your_photo")}</Text>
+                <Text style={styles.description}>{t("do_not_wish_to_add_photo")}</Text>
                 <ProfileImgUpload />
             </View>
 
             <View style={styles.bottomSection}>
 
                 <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-                    <Text style={styles.skipButtonText}>Пропустить</Text>
+                    <Text style={styles.skipButtonText}>{t("skip")}</Text>
                 </TouchableOpacity>
 
 
-                <Buttons isDisebled={checkUpload} title='Продолжить' onPress={handleContinue} />
+                <Buttons isDisebled={checkUpload} title={t("Continue")} onPress={handleContinue} />
             </View>
 
         </View>

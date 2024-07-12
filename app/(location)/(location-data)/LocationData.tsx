@@ -4,8 +4,6 @@ import LocationSelect from "@/components/(location)/locationSelect";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { base_url } from "@/helpers/api";
-import { config } from "@/helpers/token";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -23,6 +21,7 @@ import Textarea from "react-native-textarea";
 import { router } from "expo-router";
 import Modal from "react-native-modal";
 import { Feather } from "@expo/vector-icons";
+import { getConfig } from "@/app/(tabs)/main";
 
 interface ListData {
   key: string;
@@ -59,14 +58,19 @@ const LocationData = () => {
   }, [salonId, districtId, street, homeNumber, target]);
 
   const getHairdresser = async () => {
-    const { data } = await axios.get(`${base_url}salon`, config);
-    const listData =
-      data.body &&
-      data.body.map((item: ListData) => ({
-        key: item.id,
-        value: item.name,
-      }));
-    setData(listData);
+    try {
+      const config = getConfig();
+      const { data } = await axios.get(`${base_url}salon`, config);
+      const listData =
+        data.body &&
+        data.body.map((item: ListData) => ({
+          key: item.id,
+          value: item.name,
+        }));
+      setData(listData);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const resetForm = () => {
@@ -87,6 +91,7 @@ const LocationData = () => {
       salonId,
     };
     try {
+      const config = await getConfig();
       const res = await axios.post(`${base_url}address`, data, config);
 
       if (res.data.success === true)
@@ -100,6 +105,7 @@ const LocationData = () => {
   };
   const onConfirm = async () => {
     try {
+      const config = getConfig();
       const { data } = await axios.post(
         `${base_url}message/send/admin`,
         { salonName, message },

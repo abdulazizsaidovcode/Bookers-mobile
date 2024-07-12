@@ -4,7 +4,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import tw from "tailwind-react-native-classnames";
 import NotificationSelect from "@/helpers/state_managment/notification";
 
-const NotificationCard: React.FC<{ item: any }> = ({ item, isLoading }) => {
+const NotificationCard: React.FC<{ item: any }> = ({ item }) => {
   const [date] = useState(new Date(item.createAt));
   const { onOpen, setNotification } = NotificationSelect();
 

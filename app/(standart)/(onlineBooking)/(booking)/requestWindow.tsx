@@ -11,11 +11,16 @@ import {
   getOnlineBookingHallWaiting,
   onlineBookingHallWaiting,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
+import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 
 const RequestWindow = () => {
   const { isEnabled, setIsEnabled, isEnabled2, setIsEnabled2, data, setData } =
     OnlineBookingStory2();
+  const { isRegtered } = isRegister();
   const { setTime } = OnlineBookingCheck();
+
+  setTime(isRegister);
+
   useEffect(() => {
     // Ma'lumotlarni olish va setData funksiyasi orqali o'rnatish
     getOnlineBookingHallWaiting(setData);

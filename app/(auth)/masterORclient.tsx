@@ -3,6 +3,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import registerStory from '@/helpers/state_managment/auth/register';
 import { router } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import Toast from "react-native-simple-toast";
 
@@ -10,19 +11,20 @@ import Toast from "react-native-simple-toast";
 
 const MasterorClient: React.FC = () => {
     const { setRole } = registerStory()
+    const {t}=useTranslation()
     return (
         <SafeAreaView style={styles.container} >
             <View style={styles.logo}>
                 <Image source={require('../../assets/images/auth/logo.png')} />
             </View>
             <Text style={styles.title}>Bookers Beauty</Text>
-            <Text style={styles.selectLanguage}>Кем ты хочешь стать?</Text>
+            <Text style={styles.selectLanguage}>{t("who_do_you_want_to_become")}</Text>
             <View style={styles.button}>
-                <Buttons title="Master" backgroundColor="#9C0A35" onPress={() => {
+                <Buttons title={t("master")} backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_MASTER")
                     router.push('(auth)/switchPage');
                 }} />
-                <Buttons title="Client" backgroundColor="#9C0A35" onPress={() => {
+                <Buttons title={t("client")} backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_CLIENT")
                     Toast.show("клиентская панель пока недоступна в этой версии", Toast.LONG)
                 }} />

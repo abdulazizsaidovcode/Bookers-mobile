@@ -2,15 +2,13 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import clientStore from '@/helpers/state_managment/client/clientStore';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 const UserInfo2 = () => {
     const { nickname, setNickname } = registerStory();
     const { setAttachmentID } = clientStore();
-
-    // const [nickname, setNickname] = useState('');
-    console.log(nickname);
-
+    const {t}=useTranslation()
     const handleSkip = () => {
         // Nickname ni bo'sh qilib belgilash
         setNickname('');
@@ -36,7 +34,7 @@ const UserInfo2 = () => {
                     <View style={styles.progressSegment1} />
                     <View style={styles.progressSegment2} />
                 </View>
-                <Text style={styles.label}>Ваш никнейм</Text>
+                <Text style={styles.label}>{t("your_nickname")}</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Nick name"
@@ -48,7 +46,7 @@ const UserInfo2 = () => {
             <View style={styles.bottomSection}>
                 {nickname.length === 0 ? (
                     <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-                        <Text style={styles.skipButtonText}>Пропустить</Text>
+                        <Text style={styles.skipButtonText}>{t("skip")}</Text>
                     </TouchableOpacity>
                 ) : null}
                 <TouchableOpacity
@@ -59,7 +57,7 @@ const UserInfo2 = () => {
                     onPress={handleContinue}
                     disabled={nickname.length === 0}
                 >
-                    <Text style={styles.continueButtonText}>Продолжить</Text>
+                    <Text style={styles.continueButtonText}>{t("Continue")}</Text>
                 </TouchableOpacity>
             </View>
         </View>

@@ -13,9 +13,9 @@ const AuthPage2: React.FC = () => {
             <View style={styles.content}>
                 <Text style={styles.title}>{t("Book_beauty_and_health_services")}</Text>
                 <Image source={require('../../assets/images/auth/averr.png')} style={styles.image} />
-                <Text style={styles.subtitle}>у любимых мастеров</Text>
+                <Text style={styles.subtitle}>{t("with_your_favorite_masters")}</Text>
                 <Text style={styles.description}>
-                    Бронирование свиданий без хлопот с волосами. Bookers позволяет выбрать день, время и стилиста, дает цену и сроки на все услуги в простом в использовании меню.
+                    {t("Hassle_free_date_booking_with_hair")}
                 </Text>
             </View>
             <Buttons title={t("Continue")} onPress={() => router.push('(auth)/authPage3')} />

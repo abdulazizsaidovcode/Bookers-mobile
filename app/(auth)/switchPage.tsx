@@ -1,10 +1,12 @@
 import Buttons from '@/components/(buttons)/button';
 import { router } from 'expo-router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View, Text, Image, SafeAreaView } from 'react-native';
 
 
 const SwitchPage: React.FC = () => {
+    const {t}=useTranslation()
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.logo}>
@@ -12,7 +14,7 @@ const SwitchPage: React.FC = () => {
             </View>
             <Text style={styles.title}>Bookers Beauty</Text>
             <View style={styles.button}>
-                <Buttons title="Kirish" backgroundColor="#9C0A35" onPress={() => router.push('(auth)/offerScreen')} />
+                <Buttons title={t("start")} backgroundColor="#9C0A35" onPress={() => router.push('(auth)/offerScreen')} />
             </View>
         </SafeAreaView>
     );
