@@ -270,7 +270,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
 		<View style={styles.scheduleSection}>
 			<Text style={styles.sectionTitle}>Расписание на сегодня</Text>
 			<Text style={styles.sectionSubtitle}>
-				Время работы: с {todayGraficData && todayGraficData.from.slice(0, 5)} до {todayGraficData && todayGraficData.end.slice(0, 5)}
+				Время работы: с {todayGraficData.from === null ? '' : todayGraficData.from.slice(0, 5)} до {todayGraficData.end === null ? '' : todayGraficData.end.slice(0, 5)}
 			</Text>
 		</View>
 		{dailyTimeData && (
@@ -412,7 +412,7 @@ const renderTimeSlot: React.FC<{ item: DashboardDailyTimeOrders }> = ({ item }) 
 				item.type === 'VIP' ? styles.vipSlot :
 					styles.newSlot
 	]}>
-		<Text style={{ color: COLORS.white }}>{item.time && item.time.slice(0, 5)}</Text>
+		<Text style={{ color: COLORS.white }}>{item.time === null ? '' : item.time.slice(0, 5)}</Text>
 	</View>
 );
 
