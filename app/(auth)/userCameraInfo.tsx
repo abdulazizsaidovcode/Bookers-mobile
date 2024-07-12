@@ -49,7 +49,7 @@ const UserCameraInfo = () => {
                 </TouchableOpacity>
 
 
-                <Buttons isDisebled={checkUpload} title='Продолжить' onPress={handleContinue} />
+                <Buttons isDisebled={checkUpload} title={t("Continue")} onPress={handleContinue} />
             </View>
 
         </View>
