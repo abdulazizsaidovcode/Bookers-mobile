@@ -5,11 +5,13 @@ import ProfileImgUpload from '@/components/profile-img-upload';
 import registerStory from '@/helpers/state_managment/auth/register';
 import Buttons from '@/components/(buttons)/button';
 import clientStore from '@/helpers/state_managment/client/clientStore';
+import { useTranslation } from 'react-i18next';
 
 const UserCameraInfo = () => {
     const { setImg } = registerStory()
     const { setAttachmentID, attachmentID } = clientStore();
     const [checkUpload, setCheckUpload] = useState<boolean>(false);
+    const { t } = useTranslation();
 
     const handleSkip = () => {
         setImg(null)
