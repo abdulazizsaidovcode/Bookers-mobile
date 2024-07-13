@@ -125,16 +125,7 @@ const SettingsGalleryMain = () => {
                             </View>
                         }
                     </View>
-                    <View>
-                        {data.length === 0 ?
-                            <Buttons onPress={() => navigation.navigate('(settings)/(settings-gallery)/settings-gallery')} icon={<AntDesign name="pluscircleo" size={20} color="white" />} title='Создать альбом' />
-                            : showCheckboxes ? <Buttons title='Удалить выбранную галерею' onPress={toggleModal} />
-                                :
-                                <Buttons onPress={() => {
-                                    putNumbers(5);
-                                    navigation.navigate("(welcome)/Welcome");
-                                }} title='На главную' />}
-                    </View>
+
                     <CenteredModal
                         toggleModal={toggleModal}
                         isModal={isOpen}
@@ -149,6 +140,16 @@ const SettingsGalleryMain = () => {
                     </CenteredModal>
                 </View>
             </ScrollView>
+            <View style={{ position: 'absolute', bottom: 0, padding: 10, width: '100%', justifyContent: 'center' }}>
+                {data.length === 0 ?
+                    <Buttons onPress={() => navigation.navigate('(settings)/(settings-gallery)/settings-gallery')} icon={<AntDesign name="pluscircleo" size={20} color="white" />} title='Создать альбом' />
+                    : showCheckboxes ? <Buttons title='Удалить выбранную галерею' onPress={toggleModal} />
+                        :
+                        <Buttons onPress={() => {
+                            putNumbers(5);
+                            navigation.navigate("(welcome)/Welcome");
+                        }} title='На главную' />}
+            </View>
         </SafeAreaView>
     )
 }
@@ -159,6 +160,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#21212e',
+        position: 'relative'
     },
     scrollContainer: {
         justifyContent: 'space-between',

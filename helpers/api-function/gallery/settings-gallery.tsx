@@ -28,6 +28,8 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
 export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void, setMainImageIndices: (val: number[]) => void, goBack: void) => {
   try {
     const config = await getConfigImg()
+    console.log(config);
+    
     const { data } = await axios.post(`${main_gallery}?name=${name}`, formData, config);
     if (data.success) {
       fetchData(setData)

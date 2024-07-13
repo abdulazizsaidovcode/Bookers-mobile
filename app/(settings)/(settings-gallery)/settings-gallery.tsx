@@ -139,6 +139,7 @@ const SettingsGallery: React.FC = () => {
             <View style={{ marginTop: 10 }}>
               <LocationInput placeholder='Название альбома' value={albumName} labalVisible={true} onChangeText={setAlbumName} />
             </View>
+            {images.length !== 0 ? !showMainSwitch ? <Text style={{ color: 'white', fontSize: 12, padding: 5 }}>Нажмите и удерживайте рамки, чтобы выбрать основное изображение.</Text> : '' : ''}
             {images && (
               <>
                 {images.length !== 0 ? showMainSwitch && (
