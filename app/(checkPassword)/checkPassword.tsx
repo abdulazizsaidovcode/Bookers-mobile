@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
@@ -7,12 +7,17 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import { RootStackParamList } from '@/type/root';
 import { useNavigation } from '@react-navigation/native';
 import { authStorage } from "@/constants/storage";
-const CheckPin: React.FC = () => {
+import { useFocusEffect } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
+
+
+const CheckPinOnCome: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
-    const [storedOtp, setStoredOtp] = useState<any>(null);
+    const [storedOtp, setStoredOtp] = useState<string | null>(null);
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
     const [tokenData, setTokenData] = useState<string | null>('');
     const inputs = useRef<TextInput[]>([]);
+    const [code, setCode] = useState<any>('');
     const { role, firstName, lastName, nickname, phoneNumber } = registerStory()
 
     const { t } = useTranslation();
@@ -30,6 +35,23 @@ const CheckPin: React.FC = () => {
 
         getStoredOtp();
     }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            // Reset state when the page is focused or unfocused
+            async function handleContinue() {
+                try {
+                    let parol = await SecureStore.getItemAsync('password')
+                    setCode(parol)
+
+                } catch (error) {
+                    console.log(error);
+
+                }
+            }
+            handleContinue()
+        }, [])
+    );
 
     useEffect(() => {
         if (tokenData) {
@@ -59,13 +81,13 @@ const CheckPin: React.FC = () => {
 
     const handleContinue = () => {
         const enteredOtp = otp.join('');
-        if (enteredOtp === storedOtp) {
+        if (enteredOtp === code) {
             setIsCorrect(true);
             navigation.navigate('(tabs)')
-
-            // Handle the success action (navigate to the next page or perform other actions)
+            alert('Вы успешно авторизованы');
         } else {
-            setIsCorrect(false);
+            // setIsCorrect(false);
+            alert('Неверный ПИН код');
         }
     };
 
@@ -100,15 +122,7 @@ const CheckPin: React.FC = () => {
                             { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
                         ]}
                         onPress={() => {
-                            masterData({
-                                firstName: firstName,
-                                lastName: lastName,
-                                nickname: nickname,
-                                phoneNumber: phoneNumber,
-                                role: role,
-                                setData: setTokenData,
-                                password: storedOtp && storedOtp,
-                            })
+                            handleContinue()
 
                         }}
                         disabled={!isButtonEnabled}
@@ -183,4 +197,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CheckPin;
+export default CheckPinOnCome;

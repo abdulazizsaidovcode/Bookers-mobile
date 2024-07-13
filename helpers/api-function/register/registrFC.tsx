@@ -1,9 +1,9 @@
-import {base_url, register_page} from "@/helpers/api";
+import { base_url, register_page } from "@/helpers/api";
 import axios from "axios";
 import { router } from "expo-router";
 import { Alert } from "react-native";
 import Toast from "react-native-simple-toast";
-import {authStorage} from "@/constants/storage";
+import { authStorage } from "@/constants/storage";
 import * as SecureStore from 'expo-secure-store';
 
 
@@ -74,9 +74,10 @@ interface IRegister {
     img?: any
     role: string;
     setData: (val: any) => void
+    password: string;
 }
 
-export const masterData = ({ role, firstName, lastName, nickname, phoneNumber, img, setData }: IRegister) => {
+export const masterData = ({ role, firstName, lastName, nickname, phoneNumber, img, setData, password }: IRegister) => {
     const formData = new FormData();
     formData.append('image', img ? img : null)
 
@@ -93,6 +94,7 @@ export const masterData = ({ role, firstName, lastName, nickname, phoneNumber, i
                 setData(res.data.body)
                 Alert.alert("Вы успешно зарегистрировались");
                 SecureStore.setItemAsync('number', phoneNumber)
+                SecureStore.setItemAsync('password', password)
             } else {
                 Alert.alert("Произошла ошибка при регистрации");
                 setData(null)

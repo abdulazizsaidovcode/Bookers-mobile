@@ -118,6 +118,7 @@ import MyServicesScreenEdit from "./(standart)/(servicesEdit)/test";
 import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow";
 import TimeSelect from "./(standart)/(onlineBooking)/(booking)/timeSelect";
 import ChatScreen from "./(tabs)/chat";
+import CheckPinOnCome from "./(checkPassword)/checkPassword";
 
 
 
@@ -708,6 +709,15 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             {/*  help end  */}
+
+            {/* check pin start */}
+
+            <Stack.Screen
+              name="(checkPassword)/checkPassword"
+              component={CheckPinOnCome}
+              options={{ headerShown: false }}
+            />
+            {/* check pin end */}
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>

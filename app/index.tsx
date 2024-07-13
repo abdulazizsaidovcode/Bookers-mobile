@@ -4,7 +4,7 @@ import TabLayout from './(tabs)/_layout';
 import MyServices from './(standart)/(services)/(myServices)/myServices';
 import * as SecureStore from 'expo-secure-store';
 import Auth from './(auth)/auth';
-import SettingsGalleryMain from './(settings)/(settings-gallery)/settings-gallery-main';
+import CheckPinOnCome from './(checkPassword)/checkPassword';
 
 const Index: React.FC = () => {
     const [isFirstLaunch, setIsFirstLaunch] = useState<null | boolean>(null);
@@ -35,7 +35,7 @@ const Index: React.FC = () => {
         );
     }
 
-    return isFirstLaunch ? <Auth /> : <SettingsGalleryMain />;
+    return isFirstLaunch ? <Auth /> : <CheckPinOnCome />;
 };
 
 export default Index;
