@@ -104,7 +104,6 @@ const SettingsGallery: React.FC = () => {
       const formData = new FormData();
       const remainingImages = images.filter((_, index) => !mainImageIndices.includes(index));
       setImages(remainingImages);
-      setMainImageIndices([]);
       remainingImages.forEach((image, index) => {
         formData.append('photos', {
           uri: image,
@@ -121,7 +120,7 @@ const SettingsGallery: React.FC = () => {
         } as any);
       });
 
-      addData(formData, albumName, setData, setImages, setAlbumName);
+      addData(formData, albumName, setData, setImages, setAlbumName, setMainImageIndices);
 
     }
   };
