@@ -29,6 +29,11 @@ const tariffs = [
     },
 ];
 
+export const postTariff = async (status:string) => {
+    let config = await getConfig()
+    await axios.post(`${base_url}tariff/test?tariffName=${status}`, '', config)
+}
+
 const TariffsPage: React.FC = () => {
     const navigation = useNavigation<any>();
     const [tariffStatus, setTariffStatus] = useState<string | null>(null);
@@ -67,15 +72,11 @@ const TariffsPage: React.FC = () => {
         let config = await getConfig()
         axios.get(`${base_url}tariff/test`, config)
             .then(res => {
+                console.log('get: ', res.data.body)
                 if (res.data.body === undefined) setTariffStatus('')
                 else setTariffStatus(res.data.body)
             })
             .catch(err => console.log(err))
-    }
-
-    const postTariff = async (status:string) => {
-        let config = await getConfig()
-        await axios.post(`${base_url}tariff/test?tariffName=${status}`, '', config)
     }
 
     const handleDisabled = () => {
@@ -83,8 +84,6 @@ const TariffsPage: React.FC = () => {
         else if (tariffStatus === 'standard') return 'standard'
         else return 'all'
     }
-
-    console.log('tariffStatus: ', tariffStatus)
 
     return (
         <SafeAreaView style={styles.container}>
@@ -105,7 +104,6 @@ const TariffsPage: React.FC = () => {
                             <View style={styles.buttonContainer}>
                                 <TouchableOpacity
                                     onPress={() => {
-                                        // bag
                                         postTariff(tariffStatus === 'all' ? 'all' : tariff.unicName)
                                         setTariff(tariffStatus === 'all' ? 'all' : tariff.unicName)
                                         navigation.navigate(tariff.navigate)
