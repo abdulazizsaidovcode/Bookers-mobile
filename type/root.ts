@@ -63,4 +63,6 @@ export type RootStackParamList = {
     '(auth)/checkSendMessage' : undefined
     '(auth)/installPin': undefined
     '(auth)/switchPage' : undefined
+    '(auth)/userInfo': undefined
+    '(auth)/offerScreen': undefined
 };
