@@ -2,6 +2,7 @@ import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editCancelOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Switch, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,6 +12,7 @@ const screenHeight = Dimensions.get('window').height;
 
 const CancelRecording = () => {
   const { cancelData, setCancelData } = useNotificationsStore();
+  const navigation = useNavigation();
   const [hasChanges, setHasChanges] = useState(false);
 
   const toggleSwitch = () => {
@@ -28,8 +30,7 @@ const CancelRecording = () => {
   }, []);
 
   const handleSave = () => {
-    editCancelOrder(cancelData.isActive, cancelData.text);
-    setHasChanges(false);
+    editCancelOrder(cancelData.isActive, cancelData.text, setHasChanges, navigation.goBack());
   };
 
   return (
@@ -47,6 +48,8 @@ const CancelRecording = () => {
               <Switch
                 onValueChange={toggleSwitch}
                 value={cancelData.isActive}
+                trackColor={{ false: "#767577", true: "#9C0A35" }}
+                thumbColor={'#fff'}
               />
             </View>
           </View>

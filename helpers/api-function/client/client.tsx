@@ -1,10 +1,34 @@
 import axios from "axios";
 import {
-    add_feedback, age_list, client_address_book, client_address_book_search, client_address_book_update, client_not_visit,
-    client_not_visit_search, client_permanent, client_permanent_search, client_statistics, client_stopped_visit_search,
-    client_stopped_visit_sms, client_stopped_visiting, district_list, getMeID, history_count, master_client_all_list,
-    master_client_all_list_search, master_client_create, master_message_for_client, master_service_list, new_client,
-    new_client_search, order_canceled, order_past, order_status_update, order_upcoming, region_list
+    add_feedback,
+    age_list,
+    client_address_book,
+    client_address_book_search,
+    client_address_book_update,
+    client_delete,
+    client_not_visit,
+    client_not_visit_search,
+    client_permanent,
+    client_permanent_search,
+    client_statistics,
+    client_stopped_visit_search,
+    client_stopped_visit_sms,
+    client_stopped_visiting,
+    district_list,
+    getMeID,
+    history_count,
+    master_client_all_list,
+    master_client_all_list_search,
+    master_client_create,
+    master_message_for_client,
+    master_service_list,
+    new_client,
+    new_client_search,
+    order_canceled,
+    order_past,
+    order_status_update,
+    order_upcoming,
+    region_list
 } from "@/helpers/api";
 import {
     AgeData, AllClient,
@@ -495,5 +519,24 @@ export const updateOrderStatus = async (orderID: string, status: string, setLoad
         console.log(err)
         toggle && toggle()
         Toast.show('An error occurred on the server', Toast.LONG)
+    }
+}
+
+export const clientDelete = async (clientID: string, setRes: (val: boolean) => void, setLoading: (val: boolean) => void) => {
+    setLoading(true)
+    try {
+        const config = await getConfig()
+        if (clientID) {
+            const {data} = await axios.delete(`${client_delete}${clientID}`, config)
+            if (data.success) {
+                setLoading(false)
+                setRes(data.success)
+                Toast.show(data.message, Toast.LONG)
+            }
+        } else Toast.show('An error occurred on the server', Toast.LONG)
+    } catch (err) {
+        setLoading(false)
+        Toast.show('An error occurred on the server', Toast.LONG)
+        console.log(err)
     }
 }

@@ -13,7 +13,8 @@ const useGetMeeStore = create<GetMeeStore>((set) => ({
         ageId: null,
         birthDate: null,
         districtId: null,
-        attachmentId: null
+        attachmentId: null,
+        regionId: null
     },
     setGetMee: (val: GetMee) => set({ getMee: val }),
     ageOption: [],

@@ -23,7 +23,7 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import axios from "axios";
 import { master_service_list } from "@/helpers/api";
 import { config } from "@/helpers/token";
-import { OnlineBookingCheck } from "@/helpers/state_managment/onlinBooking/onlineBooking";
+// import { OnlineBookingCheck } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 
 const BreakBetweenSession = () => {
@@ -35,10 +35,6 @@ const BreakBetweenSession = () => {
   const [servicesId, setServicesId] = useState("");
   const navigation = useNavigation<any>();
   const { services, setServices } = clientStore();
-  const { isRegtered } = isRegister();
-  const { setConfirmation } = OnlineBookingCheck();
-
-  setConfirmation(isRegister);
 
   const hours = [
     { title: "0 ч.", minutes: ["0 мин.", "30 мин."] },
@@ -77,7 +73,7 @@ const BreakBetweenSession = () => {
     } else {
       OnlineBookingUserviceTimeAll(obg);
     }
-    setConfirmation(false);
+    // setConfirmation(false);
     navigation.goBack();
   };
 

@@ -1,7 +1,9 @@
 import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editWindowOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
+import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,6 +13,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const RequestWindow = () => {
   const { windowData, setWindowData } = useNotificationsStore();
   const [hasChanges, setHasChanges] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchAllData(setWindowData, 'WAITING_HALL');
@@ -22,8 +25,8 @@ const RequestWindow = () => {
   };
 
   const handleSave = () => {
-    editWindowOrder(windowData.text);
-    setHasChanges(false);
+    editWindowOrder(windowData.text, setHasChanges, navigation.goBack());
+    putNumbers(7);
   };
 
   return (

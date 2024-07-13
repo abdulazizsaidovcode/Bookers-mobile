@@ -17,6 +17,8 @@ import {orderTimeEdit, postOrder} from "@/helpers/api-function/oreder/oreder";
 import {getFile} from "@/helpers/api";
 import {handleRefresh} from "@/constants/refresh";
 import {getClientIdStore} from "@/constants/storage";
+import {getUser} from "@/helpers/api-function/getMe/getMee";
+import useGetMeeStore from "@/helpers/state_managment/getMee";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records'>;
 
@@ -25,6 +27,7 @@ const Records = () => {
     const route = useRoute<any>();
     const {record} = route.params;
     const {services, setServices, isLoading, setIsLoading, refreshing, setRefreshing} = clientStore()
+    const {getMee, setGetMee} = useGetMeeStore()
     const {FreeTime, setFreeTime} = useScheduleFreeTime();
     const {calendarDate} = graficWorkStore();
     const [activeTab, setActiveTab] = useState('');
@@ -39,6 +42,7 @@ const Records = () => {
     useEffect(() => {
         fetchServices(setServices);
         getClientIdStore(setUserID);
+        getUser(setGetMee)
     }, []);
 
     useEffect(() => {
@@ -52,7 +56,7 @@ const Records = () => {
 
     useEffect(() => {
         fetchServices(setServices);
-        if (calendarDate) getFreeTime(calendarDate, setFreeTime)
+        if (calendarDate) getFreeTime(calendarDate, setFreeTime, getMee.id)
     }, [calendarDate]);
 
     useEffect(() => {

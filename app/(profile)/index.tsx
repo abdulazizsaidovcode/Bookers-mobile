@@ -60,8 +60,9 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    await SecureStore.setItemAsync("isLogin", "true");
+    await SecureStore.deleteItemAsync("number");
     navigation.navigate("(auth)/auth");
+    setToggle(false)
   };
 
   return (

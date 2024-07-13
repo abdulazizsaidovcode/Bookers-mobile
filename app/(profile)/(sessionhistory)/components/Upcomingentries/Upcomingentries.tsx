@@ -44,12 +44,11 @@ const Upcomingentries = () => {
 
   const getUpcoming = async () => {
     try {
-      const config = getConfig();
+      const config = await getConfig();
       const { data } = await axios.get(
         `${base_url}order/upcoming-sessions?status=UPCOMING_SESSIONS`,
         config
       );
-      console.log(data);
       setData(data.body);
     } catch (error) {
       console.log(error);

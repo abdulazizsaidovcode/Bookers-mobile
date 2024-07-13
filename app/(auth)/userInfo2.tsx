@@ -37,7 +37,7 @@ const UserInfo2 = () => {
                 <Text style={styles.label}>{t("your_nickname")}</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Nick name"
+                    placeholder={t("nickname")}
                     placeholderTextColor="#8A8A8A"
                     value={nickname}
                     onChangeText={setNickname}
@@ -63,7 +63,6 @@ const UserInfo2 = () => {
         </View>
     );
 };
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,

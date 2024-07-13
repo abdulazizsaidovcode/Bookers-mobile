@@ -16,17 +16,16 @@ const MessageOption: React.FC<MessageOptionProps> = ({
   subtitle,
   onPress,
   IconComponent,
-  disebled,
 }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
-      onPress={disebled ? disebled : onPress}
+      onPress={ onPress}
     >
       <View
         style={[
           tw`p-3 mb-2 rounded-xl`,
-          { backgroundColor: disebled ? "#6d6d7a" : "#B9B9C9" },
+          { backgroundColor: "#B9B9C9" },
         ]}
       >
         <View style={tw`flex flex-row justify-between items-center`}>

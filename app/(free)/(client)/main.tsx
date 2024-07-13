@@ -10,7 +10,7 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect} from "react";
 import {getClientAll, getClientStatistics} from "@/helpers/api-function/client/client";
 import {putNumbers} from '@/helpers/api-function/numberSittings/numbersetting';
 import {router} from 'expo-router';

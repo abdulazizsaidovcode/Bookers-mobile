@@ -2,7 +2,8 @@ import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editFeedbeckOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
-import React, { useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -11,12 +12,17 @@ const screenHeight = Dimensions.get('window').height;
 
 const RequestFeedback = () => {
   const { feedbackData, setFeedbackData } = useNotificationsStore();
+  const [hasChanges, setHasChanges] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    fetchAllData(setFeedbackData, 'FEEDBACK')
-  }, [])
+    fetchAllData(setFeedbackData, 'FEEDBACK');
+  }, []);
 
-  const onMessageChange = (text: string) => setFeedbackData({ ...feedbackData, text })
+  const onMessageChange = (text: string) => {
+    setFeedbackData({ ...feedbackData, text });
+    setHasChanges(true);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -24,7 +30,7 @@ const RequestFeedback = () => {
         <View style={styles.navigationMenu}>
           <NavigationMenu name='Напоминание о отзыве' />
         </View>
-         <View style={styles.content}>
+        <View style={styles.content}>
           <Text style={{ color: 'white', fontSize: 20 }}>Уведомление с просьбой оставить отзыв о мастере и об оказанных услугах</Text>
           <View style={styles.messageContainer}>
             <Text style={styles.messageLabel}>Шаблон сообщения</Text>
@@ -38,7 +44,11 @@ const RequestFeedback = () => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons title="Сохранить" onPress={() => editFeedbeckOrder(feedbackData.text)} />
+          <Buttons
+            title="Сохранить"
+            onPress={() => editFeedbeckOrder(feedbackData.text, setHasChanges, navigation.goBack())}
+            isDisebled={hasChanges}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -61,19 +71,19 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
-    height: screenHeight / 1.35
+    height: screenHeight / 1.35,
   },
   messageContainer: {
     backgroundColor: '#B9B9C9',
     padding: 15,
     borderRadius: 15,
-    marginTop: 10
+    marginTop: 10,
   },
   messageLabel: {
     color: '#000',
     marginBottom: 10,
     fontSize: 17,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   textInput: {
     backgroundColor: '#3a3a4e',
@@ -86,6 +96,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 20,
-    padding: 10
+    padding: 10,
   },
 });

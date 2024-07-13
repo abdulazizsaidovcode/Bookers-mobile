@@ -5,7 +5,7 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import SwitchWithLabel from "@/components/switchWithLabel/switchWithLabel";
 import SwitchWithLabelBlack from "@/components/switchWithLabel/switchWithLabelBlack";
 import {
-  OnlineBookingCheck,
+  // OnlineBookingCheck,
   OnlineBookingStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import Buttons from "@/components/(buttons)/button";
@@ -17,10 +17,10 @@ import { router } from "expo-router";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 
 const ConfirmationRecord = () => {
-  const { isRegtered } = isRegister();
-  const { setRequest } = OnlineBookingCheck();
+  // const { isRegtered } = isRegister();
+  // const { setRequest } = OnlineBookingCheck();
 
-  setRequest(isRegister);
+  // setRequest(isRegister);
   const {
     isEnabled,
     setIsEnabled,

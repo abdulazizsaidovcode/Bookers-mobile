@@ -1,11 +1,17 @@
 import Buttons from '@/components/(buttons)/button';
-import { router } from 'expo-router';
+import { RootStackParamList } from '@/type/root';
+import { NavigationProp } from '@react-navigation/native';
+import { router, useNavigation } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native'   ;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/address-book'>;
+
 
 const OfferScreen = () => {
     const {t}=useTranslation()
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -22,7 +28,7 @@ const OfferScreen = () => {
                 </View>
             </ScrollView>
             <TouchableOpacity style={styles.button}>
-                <Buttons title={t("login ")} backgroundColor="#9C0A35" onPress={() => router.push('(auth)/userInfo')} />
+                <Buttons title={t("login")} backgroundColor="#9C0A35" onPress={() => navigation.navigate('(auth)/userInfo')} />
             </TouchableOpacity>
         </SafeAreaView>
     );

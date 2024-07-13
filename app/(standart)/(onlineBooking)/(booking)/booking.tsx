@@ -32,9 +32,9 @@ const Booking = () => {
   const [isEnabled, setIsEnabled] = useState(Urgently);
   const [data, setData] = useState([]);
   const navigation = useNavigation<any>();
-  const { isRegtered } = isRegister();
-  const { setBreack } = OnlineBookingCheck();
-  setBreack(isRegister);
+  // const { isRegtered } = isRegister();
+  // const { setBreack } = OnlineBookingCheck();
+  // setBreack(isRegister);
 
   const getData = async () => {
     try {
@@ -48,13 +48,14 @@ const Booking = () => {
 
   const addOnlineBook = async () => {
     try {
-      const { data } = await axios.post(
+      const config = await getConfig();
+      await axios.post(
         `${base_url}online-booking-settings/record-duration/day`,
         { day: salonId },
         config
       );
 
-      setBreack(false);
+      // setBreack(false);
       navigation.goBack();
     } catch (error) {
       console.log(error);

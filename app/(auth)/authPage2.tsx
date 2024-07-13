@@ -1,24 +1,30 @@
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Buttons from '@/components/(buttons)/button';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useTranslation } from 'react-i18next';
+import { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/address-book'>;
+
 
 const AuthPage2: React.FC = () => {
     const { t } = useTranslation()
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
+
     return (
         <SafeAreaView style={styles.container}>
             <NavigationMenu name="" deleteIcon={false} key={1} />
             <View style={styles.content}>
                 <Text style={styles.title}>{t("Book_beauty_and_health_services")}</Text>
                 <Image source={require('../../assets/images/auth/averr.png')} style={styles.image} />
-                <Text style={styles.subtitle}>у любимых мастеров</Text>
+                <Text style={styles.subtitle}>{t("with_your_favorite_masters")}</Text>
                 <Text style={styles.description}>
-                    Бронирование свиданий без хлопот с волосами. Bookers позволяет выбрать день, время и стилиста, дает цену и сроки на все услуги в простом в использовании меню.
+                    {t("Hassle_free_date_booking_with_hair")}
                 </Text>
             </View>
-            <Buttons title={t("Continue")} onPress={() => router.push('(auth)/authPage3')} />
+            <Buttons title={t("Continue")} onPress={() => navigation.navigate('(auth)/authPage3')} />
         </SafeAreaView>
     );
 }

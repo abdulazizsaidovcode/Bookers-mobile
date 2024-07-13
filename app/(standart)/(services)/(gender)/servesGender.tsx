@@ -20,25 +20,22 @@ const ServesGender = () => {
         { title: 'Мужское направление', id: 1 },
         { title: 'Женское направление', id: 2 },
     ];
-
-    useEffect(() => {
-        console.log('Selected Categories:', selectedCategories);
-    }, [selectedCategories]);
-
     const post = async () => {
         setIsLoading(true)
         try {
             const config = await getConfig()
-            const queryParams = selectedCategories.map(item => `genders=${item}`).join('&');
-            const response = await axios.post(`${gender_status}${queryParams}`, '', config);
-            router.push("/category")
-        } catch (error) {
-            console.error("Error fetching services:", error);
+            console.log(config);
+            
+            const response = await axios.post(`${gender_status}genders=${selectedCategories}`,{},config);
+            if(response.data.success === true){
+              router.push("/category")  
+            }
+            } catch (error) {
+            console.error("Error fetching services: ", error);    
         }finally {
             setIsLoading(false)
         }
-    };
-
+    }; 
     const handleCategorySelect = (id: number) => {
         setSelectedCategories((prevSelected) => {
             if (prevSelected.includes(id)) {
@@ -60,7 +57,7 @@ const ServesGender = () => {
                 >
                     
                     <View style={[tw`flex w-full`, { backgroundColor: '#21212E' }]}>
-                        {categories.map((category) => (
+                        {categories.map((category:any) => (
                             <ServicesCategory
                                 key={category.id}
                                 title={category.title}

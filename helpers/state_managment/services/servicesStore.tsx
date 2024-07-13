@@ -4,7 +4,7 @@ import { ChildCategory, Data, Gender, Services } from '@/type/services/myService
 const servicesStore = create<Services>((set) => ({
     data: [],
     isChecked: false,
-    setData: (val: Data[] | null) => set({ data: val }),
+    setData: (val: {key: string, value: string}[] | null) => set({ data: val }),
     isModal: false,
     setIsModal: (val: boolean) => set({ isModal: val }),
     childCategoryData: [],
@@ -29,8 +29,8 @@ const servicesStore = create<Services>((set) => ({
     setSelectedCategoryId: (val: string | null) => set({selectedCategoryId : val}),
     serviceSelectId: null,
     setServiceSelectId: (val: string | null) => set({serviceSelectId:val}),
-    serviceId:null,
-    setServiceId: (val:string | null) => set({serviceId:val}),
+    serviceId:false,
+    setServiceId: (data) => set({serviceId:data}),
 
 }))
 
