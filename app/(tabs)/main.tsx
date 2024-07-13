@@ -219,7 +219,7 @@ const TabOneScreen: React.FC = () => {
 					isRejectedModal={isRejectedModal}
 					isConfirmModal={isConfirmModal}
 				/>
-				{hasAllNumbers && (
+				{!hasAllNumbers && (
 					<View style={{ margin: 10 }}>
 						<Buttons
 							title="настройку"
