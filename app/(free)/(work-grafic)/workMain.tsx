@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
-import { useNavigation } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
@@ -58,14 +58,22 @@ const WorkMain = () => {
     calendarDate
   } = graficWorkStore();
 
-  useEffect(() => {
-    getUser(setGetMee);
-    getWorkDay(setWeekData);
-  }, []);
+  useFocusEffect(
+
+    useCallback(() => {
+      getUser(setGetMee);
+      getWorkDay(setWeekData);
+      return () => {}
+    }, [])
+  )
   
-  useEffect(() => {
-    getWorkTime(setTimeData, getme ? getme.id : "");
-  }, [getme]);
+  useFocusEffect(
+
+    useCallback(() => {
+      getWorkTime(setTimeData, getme ? getme.id : "");
+      return () => {}
+    }, [getme])
+  )
 
 
   return (

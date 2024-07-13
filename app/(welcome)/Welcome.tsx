@@ -1,5 +1,5 @@
 import { Text, View } from "@/components/Themed";
-import React, { useEffect } from "react";
+import React, { useCallback } from "react";
 import {
   Image,
   ScrollView,
@@ -18,7 +18,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import {
   getNumbers,
@@ -43,14 +43,18 @@ const Welcome = () => {
   const { number, setNumber } = numberSettingStore();
   const {getMee, setGetMee} = useGetMeeStore()
   const navigation = useNavigation<SettingsScreenNavigationProp>();
-  useEffect(() => {
-    getNumbers(setNumber);
-    if (number.length === 0) {
-      putNumbers(1);
-    }
-    getUser(setGetMee)
-  }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      getNumbers(setNumber);
+      if (number.length === 0) {
+        putNumbers(1);
+      }
+      getUser(setGetMee)
+      return () => {}
+    }, [])
+  )
+  
 
   const removeDuplicates = (array: any) => {
     return [...new Set(array)];

@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
+import React, { useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
-import { router, useNavigation } from "expo-router";
+import {  useFocusEffect, useNavigation } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
@@ -10,9 +10,9 @@ import {
   getWorkDay,
   getWorkTime,
 } from "@/helpers/api-function/graficWork/graficWorkFunctions";
-import { getMee } from "@/helpers/token";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
+import { getUser } from "@/helpers/api-function/getMe/getMee";
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic-edit)/workMain'>;
 
 
@@ -53,15 +53,22 @@ const WorkMainEdit = () => {
     timeData,
   } = graficWorkStore();
 
-  useEffect(() => {
-    getMee(setGetMee);
-    getWorkDay(setWeekData);
-  }, []);
-  
+  useFocusEffect(
 
-  useEffect(() => {
-    getWorkTime(setTimeData, getme ? getme.id : "");
-  }, [getme]);
+    useCallback(() => {
+      getUser(setGetMee);
+      getWorkDay(setWeekData);
+      return () => {}
+    }, [])
+  )
+  
+  useFocusEffect(
+
+    useCallback(() => {
+      getWorkTime(setTimeData, getme ? getme.id : "");
+      return () => {}
+    }, [getme])
+  )
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
 
