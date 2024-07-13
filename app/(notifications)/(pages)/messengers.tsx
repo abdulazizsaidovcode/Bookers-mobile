@@ -43,6 +43,8 @@ const Messengers = () => {
             <Switch
               onValueChange={toggleSmsSwitch}
               value={smsData.isActive}
+              trackColor={{ false: "#767577", true: "#9C0A35" }}
+              thumbColor={'#fff'}
             />
           </View>
         </View>
