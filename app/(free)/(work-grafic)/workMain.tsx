@@ -61,10 +61,16 @@ const WorkMain = () => {
     getMee(setGetMee);
     getWorkDay(setWeekData);
   }, []);
-
+  
   useEffect(() => {
     getWorkTime(setTimeData, getme ? getme.id : "");
   }, [getme]);
+  
+  useEffect(() => {
+    getMee(setGetMee);
+    getWorkTime(setTimeData, getme ? getme.id : "");
+    getWorkDay(setWeekData);
+  }, [weekData, calendarDate]);
 
   return (
     <SafeAreaView style={styles.container}>

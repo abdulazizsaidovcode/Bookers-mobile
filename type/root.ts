@@ -15,6 +15,9 @@ export type RootStackParamList = {
   'settings-locations': undefined;
   '(free)/(help)/help': undefined;
   '(notifications)/notification': undefined;
+  '(auth)/authPage1': undefined;
+  '(auth)/authPage2': undefined;
+  '(auth)/authPage3': undefined;
   '(auth)/auth': undefined;
   '(standart)/(onlineBooking)/onlineBooking': undefined;
   '(notifications)/notifications': undefined;
@@ -54,4 +57,5 @@ export type RootStackParamList = {
  '(free)/(work-grafic-edit)/workTime': undefined
  '(free)/(work-grafic)/workGraffic': undefined
 '(free)/(work-grafic)/workTime': undefined
+"(auth)/number-create": undefined
 };

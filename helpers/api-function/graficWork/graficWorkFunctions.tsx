@@ -53,7 +53,7 @@ export const getWorkTime = async (setData: (val: any) => void, masterID: string)
 export const postWorkDay = async (workDayWeeks: any, date: string, router: () => void) => {
   try {
     if (!workDayWeeks || !date) {
-      Toast.show('hdhdhdhd', Toast.SHORT);
+      return null
 
     }
 
@@ -66,14 +66,14 @@ export const postWorkDay = async (workDayWeeks: any, date: string, router: () =>
     const response = await axios.post(`${workday_save}`, data, config);
 
     if (response.data.success) {
-      Toast.show('Work day saved successfully', Toast.SHORT);
+      Toast.show('Work day saved successfully', Toast.LONG);
       router();
     } else {
-      Toast.show(response.data.message, Toast.SHORT);
+      Toast.show(response.data.message, Toast.LONG);
     }
   } catch (error) {
     console.error('Error saving work day:', error);
-    Toast.show('Error saving work day', Toast.SHORT);
+    Toast.show('Error saving work day', Toast.LONG);
   }
 };
 
@@ -142,7 +142,6 @@ export const putWorkTime = async (fromTimeHour: number, fromTimeMin: number, end
       endTimeHour: endTimeHour,
       endTimeMin: endTimeMin,
     };
-    console.log(data);
     
 
     const config = await getConfig();
