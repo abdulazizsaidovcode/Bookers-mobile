@@ -7,11 +7,14 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import { RootStackParamList } from '@/type/root';
 import { useNavigation } from '@react-navigation/native';
 import { authStorage } from "@/constants/storage";
+import * as SecureStore from 'expo-secure-store';
+
 const CheckPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const [storedOtp, setStoredOtp] = useState<any>(null);
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
     const [tokenData, setTokenData] = useState<string | null>('');
+    const [isLogin, setIslogin] = useState<any>(false);
     const inputs = useRef<TextInput[]>([]);
     const { role, firstName, lastName, nickname, phoneNumber } = registerStory()
 
@@ -56,13 +59,18 @@ const CheckPin: React.FC = () => {
     };
 
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
+    useEffect(() => {
+        if (isLogin) {
+            navigation.navigate('(tabs)')
+        }
+    }, [isLogin])
 
-    const handleContinue = () => {
-        const enteredOtp = otp.join('');
+    const enteredOtp = otp.join('');
+    const handleContinue = async () => {
+
         if (enteredOtp === storedOtp) {
             setIsCorrect(true);
             navigation.navigate('(tabs)')
-
             // Handle the success action (navigate to the next page or perform other actions)
         } else {
             setIsCorrect(false);
@@ -107,7 +115,8 @@ const CheckPin: React.FC = () => {
                                 phoneNumber: phoneNumber,
                                 role: role,
                                 setData: setTokenData,
-                                password: storedOtp && storedOtp,
+                                islogin: setIslogin,
+                                password: enteredOtp,
                             })
 
                         }}

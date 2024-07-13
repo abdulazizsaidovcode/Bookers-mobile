@@ -63,6 +63,7 @@ const ProfilePage: React.FC = () => {
   const handleSubmit = async () => {
     await SecureStore.deleteItemAsync("number");
     await AsyncStorage.removeItem("registerToken")    
+    await SecureStore.deleteItemAsync('password')
     navigation.navigate("(auth)/auth");
     setToggle(false)
   };

@@ -73,36 +73,45 @@ interface IRegister {
     nickname?: string
     img?: any
     role: string;
+    islogin: (val: any) => void
     setData: (val: any) => void
     password: string;
 }
 
-export const masterData = ({ role, firstName, lastName, nickname, phoneNumber, img, setData, password }: IRegister) => {
+export const masterData = async ({ role, firstName, lastName, nickname, phoneNumber, img, islogin, setData, password }: IRegister) => {
     const formData = new FormData();
     formData.append('image', img ? img : null)
 
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
     const url = `${register_page}master?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${nickname ? `&nickname=${encodeURIComponent(nickname)}` : ''}&phoneNumber=${formattedPhoneNumber}&ROLE=${encodeURIComponent(role)}`;
 
-    axios.post(url, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        }
-    })
-        .then(res => {
-            if (res.data.success) {
-                setData(res.data.body)
-                Alert.alert("Вы успешно зарегистрировались");
-                SecureStore.setItemAsync('number', phoneNumber)
-                SecureStore.setItemAsync('password', password)
-            } else {
-                Alert.alert("Произошла ошибка при регистрации");
-                setData(null)
+    let parol = await SecureStore.getItemAsync('password')
+    console.log(parol, "wderf");
+    
+    if (parol !== null) {
+        axios.post(url, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
             }
         })
-        .catch(err => {
-            console.log(err);
-            setData(null)
-            Alert.alert("Произошла ошибка при регистрации");
-        });
+            .then(res => {
+                if (res.data.success) {
+                    setData(res.data.body)
+                    Alert.alert("Вы успешно зарегистрировались");
+                    SecureStore.setItemAsync('number', phoneNumber)
+                } else {
+                    Alert.alert("Произошла ошибка при регистрации");
+                    setData(null)
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                setData(null)
+                Alert.alert("Произошла ошибка при регистрации");
+            });
+    } else {
+        Alert.alert("parol o'rnatildi");
+        SecureStore.setItemAsync('password', password)
+        islogin(true)
+    }
 }
