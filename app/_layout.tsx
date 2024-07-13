@@ -330,7 +330,7 @@ function RootLayoutNav() {
               options={{ title: "Services", headerShown: false }}
             />
             <Stack.Screen
-              name="(profile)/(Expenses)/(component)/(detail)/expenseDetail:id"
+              name="(profile)/(Expenses)/(component)/(detail)/expenseDetail"
               component={ExpenseDetail}
               options={{ title: "Services", headerShown: false }}
             />

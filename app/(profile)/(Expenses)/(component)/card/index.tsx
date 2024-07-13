@@ -14,6 +14,8 @@ const ExpenseCard = ({ item }: any) => {
     function getExpense(id: string) {
         getExpence(id, setExpense)
     }
+
+    
     return (
         <TouchableOpacity
             onPress={() => {
