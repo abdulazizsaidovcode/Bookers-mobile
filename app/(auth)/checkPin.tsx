@@ -59,13 +59,20 @@ const CheckPin: React.FC = () => {
     };
 
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
+    const enteredOtp = otp.join('');
+    
     useEffect(() => {
-        if (isLogin) {
-            navigation.navigate('(tabs)')
+        if (enteredOtp === storedOtp) {
+            setIsCorrect(true);
+            if (isLogin) {
+                navigation.navigate('(tabs)')
+            }
+        } else {
+            setIsCorrect(false);
         }
+
     }, [isLogin])
 
-    const enteredOtp = otp.join('');
     const handleContinue = async () => {
 
         if (enteredOtp === storedOtp) {
