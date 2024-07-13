@@ -12,6 +12,7 @@ export interface GetMee {
     regionId: string | null
     districtId: string | null,
     attachmentId: string | null
+    cityId: any
 } 
 
 export interface GetMeeStore {

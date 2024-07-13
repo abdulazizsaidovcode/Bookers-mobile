@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {  Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ExpenseCard from './(component)/card/index';
@@ -7,15 +7,27 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { masterExpenseCategory, selectedExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
 import { getExpenceCategory } from '@/helpers/api-function/expence/expence';
+import { useFocusEffect } from 'expo-router';
 
 const Expenses: React.FC = () => {
   const navigation = useNavigation<any>();
   const { setExpenseCategory, expenseCategory } = masterExpenseCategory();
   const { setExpenseId } = selectedExpenseCategory();
 
-  useEffect(() => {
-    getExpenceCategory(setExpenseCategory);
-  }, [setExpenseCategory]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        try {
+          getExpenceCategory(setExpenseCategory);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+
+      fetchData();
+    }, [setExpenseCategory])
+  );
 
   const handleCreateCategory = () => {
     navigation.navigate('(profile)/(Expenses)/(component)/CreateExpenseCategoty/CreateExpenseCategory');

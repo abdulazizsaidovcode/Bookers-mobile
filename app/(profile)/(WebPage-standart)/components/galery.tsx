@@ -15,16 +15,14 @@ import {
 const { width } = Dimensions.get("window");
 const isSmallDevice = width < 375;
 
-const GalleryStandart: React.FC = () => {
+const GalleryEdit: React.FC = () => {
   const { galeriya, setGaleriyaDetail } = webPageStore();
   const navigation = useNavigation<any>();
-  console.log(galeriya);
-  
 
   const renderRows = (attachments: any[]) => {
     
     let filteredAttachments = attachments.filter(
-      (attachment) => attachment.main === true || attachment.main === false
+      (attachment) => attachment.main
     );
 
     if (filteredAttachments.length === 0) {
@@ -57,7 +55,7 @@ const GalleryStandart: React.FC = () => {
       {galeriya && galeriya.length > 0 ? (
         galeriya.map(
           (item: any) =>
-            item.resGalleryAttachments &&
+            item.resEditAttachments &&
             item.resGalleryAttachments.length > 0 && (
               <TouchableOpacity onPress={() => {
                 setGaleriyaDetail(item)
@@ -113,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GalleryStandart;
+export default GalleryEdit;
