@@ -25,7 +25,7 @@ const PastEntries = () => {
 
   const getsessionDetails = async () => {
     try {
-      const config = getConfig();
+      const config = await getConfig();
       const response = await axios.get(
         `${base_url}order/past-sessions?status=PAST_SESSIONS`,
         config
@@ -57,7 +57,7 @@ const PastEntries = () => {
     };
 
     try {
-      const config = getConfig();
+      const config = await getConfig();
       const response = await fetch(`${base_url}order/all`, {
         method: "DELETE",
         headers: {
