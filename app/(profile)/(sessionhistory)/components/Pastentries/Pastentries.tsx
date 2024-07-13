@@ -80,7 +80,7 @@ const PastEntries = () => {
   }, [pastentries]);
 
   return (
-    <View style={tw`flex-1 bg-gray-900 p-4`}>
+    <View style={[tw`flex-1 bg-gray-900 p-4`, {backgroundColor: "#21212E"}]}>
       {isChecked ? (
         <View
           style={[

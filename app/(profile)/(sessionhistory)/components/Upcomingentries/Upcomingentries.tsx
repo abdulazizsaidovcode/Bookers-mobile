@@ -60,7 +60,7 @@ const Upcomingentries = () => {
   }, []);
 
   const renderItem = ({ item }: any) => (
-    <View style={tw`bg-gray-700 p-4 rounded-lg mb-4`}>
+    <View style={[tw`flex-1 bg-gray-900 p-4`, {backgroundColor: "#21212E"}]}>
       <View style={tw`flex-row items-center mb-4`}>
         <Image
           source={{
