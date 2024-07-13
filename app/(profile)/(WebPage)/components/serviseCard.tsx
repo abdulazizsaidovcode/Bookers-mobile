@@ -86,8 +86,7 @@ const UserProfileCard: React.FC = () => {
             <Text style={styles.buttonText}>Malumot topilmadi</Text>
           </TouchableOpacity>
 
-          }
-          
+          } 
         </View>
         <Text style={styles.address}>{(address.homeNumber && address.street) ? `Street: ${address.street}, home: ${address.homeNumber} ` : "Address is not found"}</Text>
       </View>

@@ -5,11 +5,11 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
 import { getUser } from '@/helpers/api-function/getMe/getMee';
 import { getCategoryF, getGaleriya, getSpecialization } from '@/helpers/api-function/wepPage/wepPage';
-import GalleryStandart from './components/galery';
-import ServicesStandart from './components/Services';
 import { useFocusEffect } from 'expo-router';
+import ServicesEdit from './components/Services';
+import GalleryEdit from './components/galery';
 
-const WebPageStandart: React.FC = () => {
+const WebPageEdit: React.FC = () => {
     const {setGaleriya, setGetMee, setCategory, setspecialization, getme} = webPageStore()
     const [activeTab, setActiveTab] = useState('services');
     useFocusEffect(
@@ -22,10 +22,9 @@ const WebPageStandart: React.FC = () => {
         }, [])
       )
 
-
     return (
         <SafeAreaView style={styles.container}>
-            <NavigationMenu name='' />
+            <NavigationMenu name='https://bookers/link/natali...' />
 
             <View style={styles.tabsContainer}>
                 <TouchableOpacity style={[styles.tabButton, activeTab === 'services' && styles.activeTab]} onPress={() => setActiveTab('services')}>
@@ -36,7 +35,7 @@ const WebPageStandart: React.FC = () => {
                 </TouchableOpacity>
             </View>
 
-            {activeTab === 'services' ? <ServicesStandart /> : <GalleryStandart />}
+            {activeTab === 'services' ? <ServicesEdit /> : <GalleryEdit />}
         </SafeAreaView>
     );
 };
@@ -68,4 +67,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default WebPageStandart;
+export default WebPageEdit;
