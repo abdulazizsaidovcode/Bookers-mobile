@@ -84,9 +84,8 @@ const CheckPinOnCome: React.FC = () => {
         if (enteredOtp === code) {
             setIsCorrect(true);
             navigation.navigate('(tabs)')
-            alert('Вы успешно авторизованы');
         } else {
-            // setIsCorrect(false);
+            setIsCorrect(false);
             alert('Неверный ПИН код');
         }
     };
@@ -95,7 +94,7 @@ const CheckPinOnCome: React.FC = () => {
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <View style={styles.topSection}>
-                    <Text style={styles.label}>{t('Подтвердите ПИН код')}</Text>
+                    <Text style={styles.label}>{t('введите свой PIN-код')}</Text>
                     <View style={styles.inputContainer}>
                         {otp.map((digit, index) => (
                             <TextInput
