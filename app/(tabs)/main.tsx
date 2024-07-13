@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity, Dimensions, RefreshControl } from "react-native";
+import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity, Dimensions, RefreshControl, Share, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PieChart from 'react-native-pie-chart';
@@ -233,12 +233,32 @@ const TabOneScreen: React.FC = () => {
 };
 
 const Header: React.FC = () => {
+	const navigation = useNavigation<any>();
+	const onShare = async () => {
+		try {
+			const result = await Share.share({
+				message:
+					'React Native | A framework for building native apps using React',
+			});
+			if (result.action === Share.sharedAction) {
+				if (result.activityType) {
+					// shared with activity type of result.activityType
+				} else {
+					// shared
+				}
+			} else if (result.action === Share.dismissedAction) {
+				// dismissed
+			}
+		} catch (error: any) {
+			Alert.alert(error.message);
+		}
+	};
 	return (
 		<View style={styles.header}>
 			<Text style={styles.title}>Главная</Text>
 			<View style={styles.headerIcons}>
-				<Ionicons name="notifications" size={24} color={COLORS.white} style={{ marginRight: 16 }} />
-				<Ionicons name="share-social-outline" size={24} color={COLORS.white} />
+				<Ionicons name="notifications" size={24} color={COLORS.white} style={{ marginRight: 16 }} onPress={() => navigation.navigate('')}/>
+				<Ionicons name="share-social-outline" size={24} color={COLORS.white} onPress={onShare} />
 			</View>
 		</View>
 	);
