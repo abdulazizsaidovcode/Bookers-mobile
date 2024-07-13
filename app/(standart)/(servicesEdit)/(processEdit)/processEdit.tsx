@@ -46,7 +46,6 @@ const ProcessEdit: React.FC = () => {
      setDescription(serviceId.description)
      setTime(serviceId.serviceTime)
     },[serviceId])
-
     const Gender: GenderOption[] = [
         { title: "Мужская для взрослых", id: 1 },
         { title: "Женское для взрослых", id: 2 },
@@ -59,8 +58,6 @@ const ProcessEdit: React.FC = () => {
         { label: "Цена", value: price, onPress: setPrice },
         { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
-    console.log("service ",serviceId);
-    
     const editService = async() => {
         const data = {
             serviceDto: {
@@ -75,9 +72,6 @@ const ProcessEdit: React.FC = () => {
             },
             image: null
         };
-        console.log(data);
-        
-     
         try {
             const config = await getConfig()
             // if (!data.serviceDto.name || !data.serviceDto.price || data.serviceDto.genderId[0] === null) {
@@ -100,8 +94,6 @@ const ProcessEdit: React.FC = () => {
             Toast.show(error.message, Toast.LONG);
         }
     };
-    
-
     const deleteService = async () => {
         try {
             if (serviceId?.id) {
@@ -120,7 +112,6 @@ const ProcessEdit: React.FC = () => {
             console.log("Error deleting service:", error);
         }
     };
-
     useEffect(() => {
         // if (service.length === 0 || price.length === 0 || description.length === 0) {
         //     setValidate(false);
@@ -133,7 +124,6 @@ const ProcessEdit: React.FC = () => {
         setGender
         setSelectedGender(selectedGender?.id === gender.id ? null : gender);
     };
-
     const renderChildCategories = ({ item, index }: { item: any; index: number }) => {
         const isLast = index === childCategoryData.length - 1;
         return (
@@ -145,21 +135,16 @@ const ProcessEdit: React.FC = () => {
     };
 
     const toggleModal = () =>  setModalVisible(!modalVisible);
-      
-        
-
     const handleAdd = () => {
         deleteService();
         toggleModal();
     };
-
     const resetDefaults = () => {
         setService(defaultState.service);
         setPrice(defaultState.price);
         setTime(defaultState.time);
         setDescription(defaultState.description);
     };
-
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />

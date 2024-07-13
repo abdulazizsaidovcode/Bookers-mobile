@@ -78,21 +78,23 @@ export const getAge = async (setData: (data: any) => void) => {
     const response = await axios.get(`${base_url}age`, config);
 
     if (response.data.success) {
-      setData({ key: response.data.body.id, value: response.data.body.ageRange });
+      setData(response.data.boy.map((item: any) => {
+        return { key: item.id, value: item.ageRange }
+      }));
     } else {
-      setData(null);
+      setData([]);
     }
   } catch (error) {
     console.error('Error fetching age:', error);
-    setData(null);
+    setData([]);
   }
 };
 
 
 
-export const getAgeId = async (id: string | number, setData: (data: { key: number; value: string } | null) => void) => {
+export const getAgeId = async (id: string | number, setData: (data: any | null) => void) => {
   if (!id) {
-    setData(null);
+    setData([]);
     return;
   }
 
@@ -103,11 +105,11 @@ export const getAgeId = async (id: string | number, setData: (data: { key: numbe
     if (response.data.success) {
       setData({ key: response.data.body.id, value: response.data.body.ageRange });
     } else {
-      setData(null);
+      setData([]);
     }
   } catch (error) {
     console.error('Error fetching age by ID:', error);
-    setData(null);
+    setData([]);
   }
 };
 
@@ -119,17 +121,17 @@ export const getRegion = async (setData: (data: any | null) => void) => {
     if (response.data.success) {
       setData(response.data.body);
     } else {
-      setData(null);
+      setData([]);
     }
   } catch (error) {
     console.error('Error fetching regions:', error);
-    setData(null);
+    setData([]);
   }
 };
 
 export const getRegionId = async (id: string | number, setData: (data: any | null) => void) => {
   if (!id) {
-    setData(null);
+    setData([]);
     return;
   }
 
@@ -140,11 +142,11 @@ export const getRegionId = async (id: string | number, setData: (data: any | nul
     if (response.data.success) {
       setData(response.data.body);
     } else {
-      setData(null);
+      setData([]);
     }
   } catch (error) {
     console.error('Error fetching region by ID:', error);
-    setData(null);
+    setData([]);
   }
 };
 
@@ -157,11 +159,11 @@ export const getDistrict = async (regionId: string | number, setData: (data: any
     if (response.data.success) {
       setData(response.data.body);
     } else {
-      setData(null);
+      setData([]);
     }
   } catch (error) {
     console.error('Error fetching districts:', error);
-    setData(null);
+    setData([]);
   }
 };
 

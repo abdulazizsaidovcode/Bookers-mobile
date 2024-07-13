@@ -10,7 +10,7 @@ const sessionData = [
     { id: '2', title: 'Прошедшие записи', icon: 'history', count: 2, screen: '(profile)/(sessionhistory)/components/Pastentries/Pastentries' },
     { id: '3', title: 'Отменённые записи', icon: 'times-circle', count: 1, screen: '(profile)/(sessionhistory)/components/Canceledentries/Canceledentries' },
 ];
-
+ 
 const SessionHistory: React.FC = () => {
     const navigation = useNavigation<any>();
 
