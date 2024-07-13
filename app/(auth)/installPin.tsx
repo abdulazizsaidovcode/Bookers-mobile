@@ -63,7 +63,7 @@ const InstallPin: React.FC = () => {
         try {
             await AsyncStorage.setItem('otp', otp.join(''));
             // Handle the continue action (navigate to the next page)
-            router.push('(auth)/checkPin');
+            navigation.navigate('(auth)/checkPin');
         } catch (error) {
             console.log('Failed to save OTP to storage', error);
         }

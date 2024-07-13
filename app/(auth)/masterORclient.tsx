@@ -1,16 +1,23 @@
 import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import registerStory from '@/helpers/state_managment/auth/register';
-import { router } from 'expo-router';
+import { RootStackParamList } from '@/type/root';
+import { NavigationProp } from '@react-navigation/native';
+import { router, useNavigation } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import Toast from "react-native-simple-toast";
 
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/masterORclient'>;
+
+
 
 
 const MasterorClient: React.FC = () => {
     const { setRole } = registerStory()
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
+
     const {t}=useTranslation()
     return (
         <SafeAreaView style={styles.container} >
@@ -22,7 +29,7 @@ const MasterorClient: React.FC = () => {
             <View style={styles.button}>
                 <Buttons title={t("master")} backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_MASTER")
-                    router.push('(auth)/switchPage');
+                    navigation.navigate('(auth)/switchPage');
                 }} />
                 <Buttons title={t("client")} backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_CLIENT")

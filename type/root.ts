@@ -62,4 +62,7 @@ export type RootStackParamList = {
     '(auth)/masterORclient': undefined
     '(auth)/checkSendMessage' : undefined
     '(auth)/installPin': undefined
+    '(auth)/switchPage' : undefined
+    '(auth)/userInfo': undefined
+    '(auth)/offerScreen': undefined
 };
