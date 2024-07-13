@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getMe } from "../../api";
-import { config } from "../../token";
 import { GetMee } from "@/type/getMee";
 import { getConfig } from "@/app/(tabs)/main";
 

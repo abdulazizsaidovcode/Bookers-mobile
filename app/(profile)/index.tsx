@@ -118,7 +118,7 @@ const ProfilePage: React.FC = () => {
           {
             icon: "globe",
             label: "Веб страница",
-            screen: "(profile)/(WebPage-standart)/WebPage",
+            screen: "(profile)/(WebPage)/WebPage",
           },
           {
             icon: "cogs",

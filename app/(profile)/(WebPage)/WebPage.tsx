@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Services from './components/Services';
@@ -6,17 +6,21 @@ import Gallery from './components/galery';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
 import { getUser } from '@/helpers/api-function/getMe/getMee';
-import { getCategoryF, getGaleriya, getspecialization } from '@/helpers/api-function/wepPage/wepPage';
+import { getCategoryF, getGaleriya, getSpecialization } from '@/helpers/api-function/wepPage/wepPage';
+import { useFocusEffect } from 'expo-router';
 
 const WebPage: React.FC = () => {
     const {setGaleriya, setGetMee, setCategory, setspecialization, getme} = webPageStore()
     const [activeTab, setActiveTab] = useState('services');
-    useEffect(() => {
-        getGaleriya(setGaleriya)
-        getUser(setGetMee)
-        getCategoryF(setCategory)
-        getspecialization(setspecialization, getme && getme.id ? getme.id : null)
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            getGaleriya(setGaleriya)
+            getUser(setGetMee)
+            getCategoryF(setCategory)
+            getSpecialization(setspecialization, getme && getme.id ? getme.id : null)
+          return () => {}
+        }, [])
+      )
 
     return (
         <SafeAreaView style={styles.container}>
