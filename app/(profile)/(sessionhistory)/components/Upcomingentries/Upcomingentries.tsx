@@ -18,6 +18,7 @@ import moment from "moment";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getConfig } from "@/app/(tabs)/main";
+import NavigationMenu from "@/components/navigation/navigation-menu";
 
 
 const Upcomingentries = () => {
@@ -60,7 +61,7 @@ const Upcomingentries = () => {
   }, []);
 
   const renderItem = ({ item }: any) => (
-    <View style={[tw`flex-1 bg-gray-900 p-4`, {backgroundColor: "#21212E"}]}>
+    <View style={tw`bg-gray-700 p-4 rounded-lg mb-4`}>
       <View style={tw`flex-row items-center mb-4`}>
         <Image
           source={{
@@ -119,10 +120,8 @@ const Upcomingentries = () => {
   );
 
   return (
-    <View style={tw`flex-1 bg-gray-900 p-4`}>
-      <Text style={tw`text-white text-2xl mt-10 font-bold mb-4`}>
-        Предстоящие записи
-      </Text>
+    <View style={[tw`flex-1 bg-gray-900 p-4 mt-5`, {backgroundColor: "#21212E"}]}>
+      <NavigationMenu name="Предстоящие записи"/>
       <FlatList
         data={data}
         renderItem={renderItem}

@@ -32,7 +32,7 @@ const SessionHistory: React.FC = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={tw`mt-5`}>
+            <View style={tw`mt-8`}>
             <NavigationMenu name='История сеансов' />
             </View>
             <View style={styles.padding}>
