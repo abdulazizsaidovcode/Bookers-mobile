@@ -15,12 +15,12 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import { RootStackParamList } from '@/type/root';
-import { editMainDataStatus, fetchMainData } from '@/helpers/api-function/notifications/notifications';
+import { editMainDataStatus, fetchAllData, fetchAppoinmentActiveData, fetchMainData } from '@/helpers/api-function/notifications/notifications';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(notifications)/notification'>;
 
 const NotificationSettings: React.FC = () => {
-  const { isMainSwitch, setIsMainSwitch } = useNotificationsStore();
+  const { isMainSwitch, appoinmentData, appoinmentActiveData, changingData, setAppoinmentActiveData, setAppoinmentData, setIsMainSwitch, setChangingData } = useNotificationsStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const toggleSwitch = (isMainSwitch: boolean) => {
@@ -32,6 +32,18 @@ const NotificationSettings: React.FC = () => {
     fetchMainData(setIsMainSwitch)
   }, [])
 
+  useEffect(() => {
+    fetchAppoinmentActiveData(setAppoinmentActiveData);
+  }, [setAppoinmentActiveData]);
+
+  useEffect(() => {
+    fetchAllData(setAppoinmentData, "APPOINTMENT");
+  }, [setAppoinmentData]);
+
+  useEffect(() => {
+    fetchAllData(setChangingData, 'CHANGE_ORDER');
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -40,31 +52,31 @@ const NotificationSettings: React.FC = () => {
         </View>
         <View style={styles.switchContainer}>
           <Text style={styles.switchLabel}>Отключить все уведомления</Text>
-          <Switch value={isMainSwitch} onValueChange={() => toggleSwitch(isMainSwitch)} />
+          <Switch value={isMainSwitch} onValueChange={() => toggleSwitch(isMainSwitch)} trackColor={{ false: "#767577", true: "#9C0A35" }} thumbColor={'#fff'}/>
         </View>
         <Text style={styles.header}>Настройте уведомления приложения</Text>
         <NotificationOption
           icon={<FontAwesome5 name="sms" size={30} color="#9C0A35" />}
           label="Месенджеры"
-          subLabel="SMS"
+          subLabel={'SMS'}
           onPress={() => navigation.navigate('(notifications)/(pages)/messengers')}
         />
         <NotificationOption
           icon={<MaterialIcons name="notifications" size={30} color="#9C0A35" />}
           label="Напоминать о записи"
-          subLabel="Не настроено"
+          subLabel={appoinmentData.hour === 0 && appoinmentData.minute === 0 ? 'Не настроено' : `За ${appoinmentData.hour ? `${appoinmentData.hour}` : ''}${appoinmentData.minute ? `:${appoinmentData.minute}` : ''} час до записи`}
           onPress={() => navigation.navigate('(notifications)/(pages)/remind-about-appointment')}
         />
         <NotificationOption
           icon={<MaterialIcons name="cancel" size={30} color="#9C0A35" />}
           label="Отмена записи"
-          subLabel="Не настроено"
+          subLabel={appoinmentActiveData ? 'Включено' : "Не настроено"}
           onPress={() => navigation.navigate('(notifications)/(pages)/cancel-recording')}
         />
         <NotificationOption
           icon={<Feather name="edit" size={30} color="#9C0A35" />}
           label="Изменение записи"
-          subLabel="Не настроено"
+          subLabel={changingData.isActive ? 'Включено' : "Не настроено"}
           onPress={() => navigation.navigate('(notifications)/(pages)/changing-an-entry')}
         />
         <NotificationOption
