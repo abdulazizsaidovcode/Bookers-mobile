@@ -25,6 +25,7 @@ export const editMainDataStatus = async (isActive: boolean) => {
         }
     } catch (error) {
         console.log(error)
+        Toast.show('Произошла ошибка, попробуйте позже', Toast.LONG)
     }
 }
 

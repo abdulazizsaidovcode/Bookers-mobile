@@ -12,6 +12,8 @@ import axios from 'axios';
 import { config } from '@/helpers/token';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { useSheduleData } from '@/helpers/state_managment/schedule/schedule';
+import useGetMeeStore from '@/helpers/state_managment/getMee';
+import { getUser } from '@/helpers/api-function/getMe/getMee';
 const { width, height } = Dimensions.get('window');
 
 
@@ -26,6 +28,7 @@ const BookedAccordion: React.FC = () => {
     const [activeBtn, setActiveBtn] = useState<boolean>(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { setTime, setServiceId, setDate } = useSheduleData()
+    const { getMee, setGetMee } = useGetMeeStore()
 
     useFocusEffect(
         useCallback(() => {
@@ -38,10 +41,11 @@ const BookedAccordion: React.FC = () => {
     );
 
     useEffect(() => {
-        if (calendarDate) {
+        if (calendarDate && getMee.id) {
             setDate(calendarDate)
-            getFreeTime(calendarDate, setFreeTime);
+            getFreeTime(calendarDate, setFreeTime, getMee.id);
         }
+        getUser(setGetMee);
     }, [calendarDate, setFreeTime]);
 
     useEffect(() => {
