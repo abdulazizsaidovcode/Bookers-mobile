@@ -19,7 +19,10 @@ import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStor
 import { getMee } from "@/helpers/token";
 import * as SecureStore from 'expo-secure-store';
 import { StyleSheet, View } from "react-native";
-import { useFocusEffect } from "expo-router";
+import clientStore from "@/helpers/state_managment/client/clientStore";
+import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
+import { handleRefresh } from "@/constants/refresh";
+
 
 
 const Tab = createBottomTabNavigator();
@@ -29,26 +32,45 @@ function TabLayout() {
   const { getme, setGetMee } = graficWorkStore();
   const [tariff, setTariff] = useState(null);
   const [isCreate, setIsCreate] = useState<boolean | null | any>(false)
+  const { refreshing, setRefreshing } = clientStore()
+  const { number, setNumber } = numberSettingStore();
+  const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
 
 
-  useFocusEffect(
-    useCallback(() => {
-      const fetchData = async () => {
-        try {
-          const value = await SecureStore.getItemAsync('isCreate');
-          setIsCreate(value);
 
-          // Assuming getMee function returns data to setGetMeeData
-          const meeData = await getMee(setGetMee); // Adjust according to your getMee function
-          setGetMee(meeData);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
 
-      fetchData();
-    }, [isCreate])
-  );
+
+  useEffect(() => {
+    if (number.length > 1) {
+      const res = removeDuplicatesAndSort(number)
+      const result = containsAllNumbers(res)
+      setHasAllNumbers(result)
+    }
+  }, [number]);
+
+  const onRefresh = useCallback(() => {
+    handleRefresh(setRefreshing);
+  }, [setRefreshing]);
+
+  const removeDuplicatesAndSort = (array: number[]): number[] => {
+    const seen = new Map<number, boolean>();
+    const result: number[] = [];
+
+    for (const value of array) {
+      if (!seen.has(value)) {
+        seen.set(value, true);
+        result.push(value);
+      }
+    }
+
+    result.sort((a, b) => a - b);
+    return result;
+  };
+
+  const containsAllNumbers = (array: number[]): boolean => {
+    const requiredNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
+    return requiredNumbers.every(num => array.includes(num));
+  };
 
   useEffect(() => {
     if (getme) {
@@ -147,8 +169,8 @@ function TabLayout() {
             ),
           }}
         />
-      </Tab.Navigator>
-      {(isCreate === 'false') &&
+      </Tab.Navigator> 
+      {(!hasAllNumbers) &&
         <View style={styles.container}></View>
       }
     </>
