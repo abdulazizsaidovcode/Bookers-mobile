@@ -1,12 +1,18 @@
 import Buttons from '@/components/(buttons)/button';
-import { router } from 'expo-router';
+import { RootStackParamList } from '@/type/root';
+import { NavigationProp } from '@react-navigation/native';
+import { router, useNavigation } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View, Text, Image, SafeAreaView } from 'react-native';
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/address-book'>;
+
 
 
 const SwitchPage: React.FC = () => {
     const {t}=useTranslation()
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.logo}>
@@ -14,7 +20,7 @@ const SwitchPage: React.FC = () => {
             </View>
             <Text style={styles.title}>Bookers Beauty</Text>
             <View style={styles.button}>
-                <Buttons title={t("start")} backgroundColor="#9C0A35" onPress={() => router.push('(auth)/offerScreen')} />
+                <Buttons title={t("start")} backgroundColor="#9C0A35" onPress={() => navigation.navigate('(auth)/offerScreen')} />
             </View>
         </SafeAreaView>
     );

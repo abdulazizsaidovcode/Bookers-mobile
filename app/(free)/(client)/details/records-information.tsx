@@ -86,7 +86,6 @@ const RecordsInformation = () => {
         else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
-    console.log('orderId: 84', orderID)
 
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
@@ -147,14 +146,14 @@ const RecordsInformation = () => {
                                 statusName={orderOneData ? `${orderOneData.servicePrice} сум` : ''}
                             />
                         </View>
-                        <View style={tw`mt-3 mb-7`}>
+                        <View style={tw`mt-3`}>
                             <HistoryCard
                                 name={`Уведомить за:`}
                                 btnOrText={false}
                                 statusName={orderOneData ? `${orderOneData.notifyForHour}.${orderOneData.notifyForMinute} часа` : ''}
                             />
                         </View>
-                        <View style={tw`mt-3`}>
+                        <View style={tw`mt-3 mb-7`}>
                             <HistoryCard
                                 name={`Статус:`}
                                 btnOrText={false}

@@ -1,25 +1,31 @@
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import ProfileImgUpload from '@/components/profile-img-upload';
 import registerStory from '@/helpers/state_managment/auth/register';
 import Buttons from '@/components/(buttons)/button';
 import clientStore from '@/helpers/state_managment/client/clientStore';
 import { useTranslation } from 'react-i18next';
+import { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/address-book'>;
+
 
 const UserCameraInfo = () => {
     const { setImg } = registerStory()
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
+
     const { setAttachmentID, attachmentID } = clientStore();
     const [checkUpload, setCheckUpload] = useState<boolean>(false);
     const { t } = useTranslation();
 
     const handleSkip = () => {
         setImg(null)
-        router.push('(auth)/installPin');
+        navigation.navigate('(auth)/installPin');
     };
 
     const handleContinue = () => {
-        router.push('(auth)/installPin');
+        navigation.navigate('(auth)/installPin');
     };
     useEffect(() => {
         if (attachmentID) {

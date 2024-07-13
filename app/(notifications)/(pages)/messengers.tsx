@@ -6,10 +6,13 @@ import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editMessenger, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const Messengers = () => {
+  const navigation = useNavigation();
   const { smsData, setSmsData } = useNotificationsStore();
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -23,8 +26,7 @@ const Messengers = () => {
   };
 
   const handleSave = () => {
-    editMessenger(!smsData.isActive);
-    setHasChanges(false);
+    editMessenger(!smsData.isActive, navigation.goBack(), setHasChanges);
   };
 
   return (
@@ -41,6 +43,8 @@ const Messengers = () => {
             <Switch
               onValueChange={toggleSmsSwitch}
               value={smsData.isActive}
+              trackColor={{ false: "#767577", true: "#9C0A35" }}
+              thumbColor={'#fff'}
             />
           </View>
         </View>

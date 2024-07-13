@@ -3,15 +3,27 @@ import tw from "tailwind-react-native-classnames";
 import {MaterialIcons} from '@expo/vector-icons';
 import {getFile} from "@/helpers/api";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import {sliceText} from "@/helpers/api-function/client/client";
+import {clientDelete, getClientAll, getClientStatistics, sliceText} from "@/helpers/api-function/client/client";
 import ContactInformation from "@/components/contact-information/contact-information";
+import {useNavigation} from "@react-navigation/native";
 
 const ClientDetailBasic = ({client}: { client?: any }) => {
-    const {setIsLoading, isLoading} = clientStore()
+    const navigation = useNavigation<any>()
+    const {setIsLoading, isLoading, setAllClients, setStatusData} = clientStore()
     const [isClientModalDelete, setIsClientModalDelete] = useState(false)
+    const [deleteData, setDeleteData] = useState(false)
     const toggleModalDelete = () => setIsClientModalDelete(!isClientModalDelete)
+
+    useEffect(() => {
+        if (deleteData) {
+            getClientAll(setAllClients)
+            getClientStatistics(setStatusData)
+            navigation.navigate('(free)/(client)/main')
+            setDeleteData(false)
+        }
+    }, [deleteData]);
 
     return (
         <>
@@ -46,6 +58,7 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                 isFullBtn
                 isModal={isClientModalDelete}
                 toggleModal={() => toggleModalDelete()}
+                onConfirm={() => clientDelete(client.id, setDeleteData, setIsLoading)}
             >
                 <View style={tw`items-center justify-center mb-5`} key={`profile image upload center modal`}>
                     <MaterialIcons name="delete" size={100} color="#9C0A35"/>

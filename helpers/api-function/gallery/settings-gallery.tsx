@@ -25,7 +25,7 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
   }
 };
 
-export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void, setMainImageIndices: (val: number[]) => void) => {
+export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void, setMainImageIndices: (val: number[]) => void, goBack: void) => {
   try {
     const config = await getConfigImg()
     const { data } = await axios.post(`${main_gallery}?name=${name}`, formData, config);
@@ -34,6 +34,7 @@ export const addData = async (formData: FormData, name: string, setData: (data: 
       setImages([])
       setAlbumName('')
       setMainImageIndices([])
+      goBack
       Toast.show("Ваша галерея добавлена", Toast.LONG);
     }
   } catch (error) {

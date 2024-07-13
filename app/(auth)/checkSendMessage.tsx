@@ -1,6 +1,8 @@
 import {authLogin, checkCode} from '@/helpers/api-function/register/registrFC';
 import registerStory from '@/helpers/state_managment/auth/register';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister';
+import { RootStackParamList } from '@/type/root';
+import { NavigationProp } from '@react-navigation/native';
 import {router, useNavigation} from 'expo-router';
 import React, {useState, useRef, useEffect} from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +17,9 @@ import {
     TouchableOpacity
 } from 'react-native';
 
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/checkSendMessage'>;
+
+
 const OtpInputExample: React.FC = () => {
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
     const inputs = useRef<TextInput[]>([]);
@@ -22,7 +27,8 @@ const OtpInputExample: React.FC = () => {
     const [response, setRespone] = useState<null | boolean>(null);
     const [messageResponse, setMessageResponse] = useState(false);
     const {isRegtered,setIsRegtered} = isRegister()
-    const navigation = useNavigation<any>();
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
+
     const {t} = useTranslation();
 
 
@@ -65,7 +71,7 @@ const OtpInputExample: React.FC = () => {
     useEffect(() => {
         if (response) {
             if (isRegtered) {
-                router.push("(auth)/authPage1");
+                navigation.navigate("(auth)/authPage1");
                 // setIsRegtered('')
             } else {
                 navigation.navigate('(tabs)');

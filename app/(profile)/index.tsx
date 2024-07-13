@@ -24,6 +24,7 @@ import { getFile } from "@/helpers/api";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import tw from "tailwind-react-native-classnames";
 import * as SecureStore from "expo-secure-store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfilePage: React.FC = () => {
   const [isInviteModalVisible, setInviteModalVisible] = useState(false);
@@ -61,6 +62,7 @@ const ProfilePage: React.FC = () => {
 
   const handleSubmit = async () => {
     await SecureStore.deleteItemAsync("number");
+    await AsyncStorage.removeItem("registerToken")    
     navigation.navigate("(auth)/auth");
     setToggle(false)
   };
@@ -116,7 +118,7 @@ const ProfilePage: React.FC = () => {
           {
             icon: "globe",
             label: "Веб страница",
-            screen: "(profile)/(WebPage-standart)/WebPage",
+            screen: "(profile)/(WebPage)/WebPage",
           },
           {
             icon: "cogs",

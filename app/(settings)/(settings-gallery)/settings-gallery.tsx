@@ -11,6 +11,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import LocationInput from '@/components/(location)/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -21,6 +22,7 @@ const SettingsGallery: React.FC = () => {
   const [showCheckboxes, setShowCheckboxes] = useState<boolean>(false);
   const [showMainSwitch, setShowMainSwitch] = useState<boolean>(false);
   const [albumName, setAlbumName] = useState<string>('');
+  const navigation = useNavigation()
 
   const { setData } = useGalleryStore();
 
@@ -120,8 +122,7 @@ const SettingsGallery: React.FC = () => {
         } as any);
       });
 
-      addData(formData, albumName, setData, setImages, setAlbumName, setMainImageIndices);
-
+      addData(formData, albumName, setData, setImages, setAlbumName, setMainImageIndices, navigation.goBack());
     }
   };
 

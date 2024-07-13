@@ -20,7 +20,6 @@ import {
   onlineBookingSettingsUrgently,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import {
-  OnlineBookingCheck,
   OnlineBookingSettingsUrgentlyStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from "@/app/(tabs)/main";
@@ -32,9 +31,9 @@ const Booking = () => {
   const [isEnabled, setIsEnabled] = useState(Urgently);
   const [data, setData] = useState([]);
   const navigation = useNavigation<any>();
-  const { isRegtered } = isRegister();
-  const { setBreack } = OnlineBookingCheck();
-  setBreack(isRegister);
+  // const { isRegtered } = isRegister();
+  // const { setBreack } = OnlineBookingCheck();
+  // setBreack(isRegister);
 
   const getData = async () => {
     try {
@@ -55,7 +54,7 @@ const Booking = () => {
         config
       );
 
-      setBreack(false);
+      // setBreack(false);
       navigation.goBack();
     } catch (error) {
       console.log(error);

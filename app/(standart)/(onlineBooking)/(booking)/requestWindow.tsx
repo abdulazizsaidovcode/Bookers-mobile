@@ -4,7 +4,7 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import SwitchWithLabelBlack from "@/components/switchWithLabel/switchWithLabelBlack";
 import {
-  OnlineBookingCheck,
+  // OnlineBookingCheck,
   OnlineBookingStory2,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import {
@@ -12,14 +12,15 @@ import {
   onlineBookingHallWaiting,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
+import { router } from "expo-router";
 
 const RequestWindow = () => {
   const { isEnabled, setIsEnabled, isEnabled2, setIsEnabled2, data, setData } =
     OnlineBookingStory2();
-  const { isRegtered } = isRegister();
-  const { setTime } = OnlineBookingCheck();
+  // const { isRegtered } = isRegister();
+  // const { setTime } = OnlineBookingCheck();
 
-  setTime(isRegister);
+  // setTime(isRegister);
 
   useEffect(() => {
     // Ma'lumotlarni olish va setData funksiyasi orqali o'rnatish
@@ -101,7 +102,7 @@ const RequestWindow = () => {
         backgroundColor="#9C0A35"
         onPress={() => {
           onlineBookingHallWaiting(isEnabled, isEnabled2);
-          setTime(false);
+          router.push("(standart)/(onlineBooking)/onlineBooking");
         }}
       />
     </SafeAreaView>

@@ -117,6 +117,7 @@ import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
 import MyServicesScreenEdit from "./(standart)/(servicesEdit)/test";
 import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow";
 import TimeSelect from "./(standart)/(onlineBooking)/(booking)/timeSelect";
+import ChatScreen from "./(tabs)/chat";
 
 
 
@@ -259,6 +260,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(chat)/(communicatie)/chatDetails"
               component={ChatDetails}
+              options={{ title: "Chat Detail", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(tabs)/chat"
+              component={ChatScreen}
               options={{ title: "Chat Detail", headerShown: false }}
             />
             <Stack.Screen
@@ -438,7 +444,7 @@ function RootLayoutNav() {
               component={MyServicesEdit}
               options={{ headerShown: false }}
             />
-             <Stack.Screen
+            <Stack.Screen
               name="(standart)/(servicesEdit)/test"
               component={MyServicesScreenEdit}
               options={{ headerShown: false }}

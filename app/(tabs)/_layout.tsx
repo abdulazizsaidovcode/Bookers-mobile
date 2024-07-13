@@ -1,5 +1,5 @@
 // TabLayout.tsx
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   FontAwesome,
@@ -19,6 +19,7 @@ import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStor
 import { getMee } from "@/helpers/token";
 import * as SecureStore from 'expo-secure-store';
 import { StyleSheet, View } from "react-native";
+import { useFocusEffect } from "expo-router";
 
 
 const Tab = createBottomTabNavigator();
@@ -29,7 +30,25 @@ function TabLayout() {
   const [tariff, setTariff] = useState(null);
   const [isCreate, setIsCreate] = useState<boolean | null | any>(false)
 
-    useEffect(() => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const value = await SecureStore.getItemAsync('isCreate');
+        setIsCreate(value);
+
+        // Assuming getMee function returns data to setGetMeeData
+        const meeData = await getMee(setGetMee); // Adjust according to your getMee function
+        setGetMee(meeData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [isCreate]);
+
+  useFocusEffect(
+    useCallback(() => {
       const fetchData = async () => {
         try {
           const value = await SecureStore.getItemAsync('isCreate');
@@ -44,7 +63,8 @@ function TabLayout() {
       };
 
       fetchData();
-    }, [isCreate]);
+    }, [isCreate])
+  );
 
   useEffect(() => {
     if (getme) {
@@ -158,7 +178,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     left: 0,
-    backgroundColor: '#21212e75',
+    backgroundColor: '#21212e91',
   },
 })
 

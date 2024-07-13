@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -21,6 +21,7 @@ import {
   fetchAppoinmentActiveData,
 } from "@/helpers/api-function/notifications/notifications";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
@@ -33,6 +34,8 @@ const RemindAboutAppointment: React.FC = () => {
     setAppoinmentData,
     setIsAppoinmentModal,
   } = useNotificationsStore();
+  const navigation = useNavigation();
+  const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
     fetchAllData(setAppoinmentData, "APPOINTMENT");
@@ -42,14 +45,31 @@ const RemindAboutAppointment: React.FC = () => {
     fetchAppoinmentActiveData(setAppoinmentActiveData);
   }, [setAppoinmentActiveData]);
 
-  const toggleSwitch = () => setAppoinmentActiveData(!appoinmentActiveData);
+
+  const toggleSwitch = () => {
+    setAppoinmentActiveData(!appoinmentActiveData);
+    setHasChanges(true);
+  };
+
   const toggleModal = () => setIsAppoinmentModal(!isAppoinmentModal);
 
-  const onMessageChange = (text: string) =>
+  const onMessageChange = (text: string) => {
     setAppoinmentData({ ...appoinmentData, content: text });
+    setHasChanges(true);
+  };
 
-  const hours = Array.from({ length: 24 }, (_, i) => i);
-  const minutes = Array.from({ length: 60 }, (_, i) => i);
+  const onSelectHour = (hour: number) => {
+    setAppoinmentData({ ...appoinmentData, hour });
+    setHasChanges(true);
+  };
+
+  const onSelectMinute = (minute: number) => {
+    setAppoinmentData({ ...appoinmentData, minute });
+    setHasChanges(true);
+  };
+
+  const hours = [0, 1];
+  const minutes = [0, 15., 45];
 
   const renderPickerItems = (
     items: number[],
@@ -99,6 +119,8 @@ const RemindAboutAppointment: React.FC = () => {
               <Switch
                 onValueChange={toggleSwitch}
                 value={appoinmentActiveData}
+                trackColor={{ false: "#767577", true: "#9C0A35" }}
+                thumbColor={'#fff'}
               />
             </View>
           </View>
@@ -154,9 +176,12 @@ const RemindAboutAppointment: React.FC = () => {
                 appoinmentData.content,
                 appoinmentData.hour,
                 appoinmentData.minute,
-                appoinmentActiveData
+                appoinmentActiveData,
+                navigation.goBack(),
+                setHasChanges
               )
             }
+            isDisebled={hasChanges}
           />
         </View>
         <BottomModal
@@ -170,16 +195,14 @@ const RemindAboutAppointment: React.FC = () => {
                   {renderPickerItems(
                     hours,
                     appoinmentData.hour,
-                    (hour: number) =>
-                      setAppoinmentData({ ...appoinmentData, hour })
+                    onSelectHour
                   )}
                 </View>
                 <View>
                   {renderPickerItems(
                     minutes,
                     appoinmentData.minute,
-                    (minute: number) =>
-                      setAppoinmentData({ ...appoinmentData, minute })
+                    onSelectMinute
                   )}
                 </View>
               </View>

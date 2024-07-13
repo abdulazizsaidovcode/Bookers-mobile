@@ -18,72 +18,66 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import {
-  OnlineBookingCheck,
   OnlineBookingStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import {
   getOnlineBookingAllowClient,
   onlineBookingAllowClient,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
+import { useTranslation } from "react-i18next";
 
 const OnlineBooking = () => {
   const { allowClient, setAllowClient } = OnlineBookingStory();
-  const { recording, breakSession, confirmation, request, time } =
-    OnlineBookingCheck();
-  console.log(recording);
-
+  
+    const {t}=useTranslation()
   const data = [
     {
       id: "1",
-      title: "Длительность записи",
-      subtitle: "Не настроено",
+      title: t("record_duration"),
+      subtitle: t("not_set"),
       IconComponent: (
         <FontAwesome5 name="calendar-alt" size={30} color="#9C0A35" />
       ),
       onPress: () => {
         router.push("/booking");
       },
-      isDesebled: recording,
+      
     },
     {
       id: "2",
-      title: "Перерыв между сеансами",
-      subtitle: "Не настроено",
+      title: t("break_between_sessions"),
+      subtitle: t("not_set"),
       IconComponent: <Ionicons name="wine" size={30} color="#9C0A35" />,
       onPress: () => {
         router.push("/breakBetweenSessions");
       },
-      isDesebled: breakSession,
     },
     {
       id: "3",
-      title: "Подтверждение записи",
-      subtitle: "Не настроено",
+      title: t("record_confirmation"),
+      subtitle: t("not_set"),
       IconComponent: <Feather name="check-circle" size={30} color="#9C0A35" />,
       onPress: () => {
         router.push("/confirmationRecor");
       },
-      isDesebled: confirmation,
     },
     {
       id: "4",
-      title: "Запрос окошка",
-      subtitle: "Не настроено",
+      title: t("request_slot"),
+      subtitle: t("not_set"),
       IconComponent: <Feather name="watch" size={30} color="#9C0A35" />,
       onPress: () => {
         router.push("/requestWindow");
       },
-      isDesebled: request,
     },
     {
       id: "5",
-      title: "Время для VIP клиентов",
-      subtitle: "Не настроено",
+      title: t("time_for_vip_clients"),
+      subtitle: t("not_set"),
       IconComponent: <FontAwesome name="diamond" size={24} color="#9C0A35" />,
       onPress: () => {
         router.push("/timeSelect");
       },
-      isDesebled: time,
     },
   ];
 
@@ -102,7 +96,6 @@ const OnlineBooking = () => {
       subtitle={item.subtitle}
       onPress={item.onPress}
       IconComponent={item.IconComponent}
-      disebled={item.isDesebled}
     />
   );
   useEffect(() => {
@@ -116,7 +109,7 @@ const OnlineBooking = () => {
   return (
     <SafeAreaView style={[tw`flex-1 mt-6`, { backgroundColor: "#21212E" }]}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-      <NavigationMenu name={`Настройка уведомлений`} />
+      <NavigationMenu name={t("notification_settings")} />
       <View style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -130,14 +123,15 @@ const OnlineBooking = () => {
           <View>
             <View style={tw`mb-5`}>
               <SwitchWithLabel
-                label="Отключить все уведомления"
+                label={t("disable_all_notifications")}
                 value={isEnabled}
                 onToggle={toggleSwitch}
               />
+              
             </View>
             <View style={tw`text-white mb-3`}>
               <Text style={tw`text-white mb-3`}>
-                Настройте уведомления приложения
+                {t("configure_app_notifications")}
               </Text>
             </View>
             <FlatList
@@ -148,10 +142,10 @@ const OnlineBooking = () => {
           </View>
           <View style={[tw` content-end mb-5`, { backgroundColor: "#21212E" }]}>
             <Buttons
-              title="На главную"
+              title={t("to_home")}
               onPress={() => {
                 putNumbers(6);
-                router.push("(onlineBooking)/test");
+                router.push("(welcome)/Welcome");
               }}
             />
           </View>
@@ -160,5 +154,4 @@ const OnlineBooking = () => {
     </SafeAreaView>
   );
 };
-
 export default OnlineBooking;

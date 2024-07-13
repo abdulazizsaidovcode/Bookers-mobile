@@ -78,10 +78,6 @@ export const postWorkDay = async (workDayWeeks: any, date: string, router: () =>
 
 export const postWorkTime = async (fromTimeHour: number, fromTimeMin: number, endTimeHour: number, endTimeMin: number, router: () => void) => {
   try {
-    if (!fromTimeHour || !fromTimeMin || !endTimeHour || !endTimeMin) {
-      return;
-    }
-
     const data = {
       fromTimeHour: fromTimeHour,
       fromTimeMin: fromTimeMin,
@@ -95,6 +91,7 @@ export const postWorkTime = async (fromTimeHour: number, fromTimeMin: number, en
       Toast.show('Work time saved successfully', Toast.LONG);
       router();
     } else {
+      
       Toast.show(response.data.message, Toast.LONG);
     }
   } catch (error) {
@@ -131,9 +128,6 @@ export const putWorkDay = async (workDayWeeks: any, date: string, router: () => 
 
 export const putWorkTime = async (fromTimeHour: number, fromTimeMin: number, endTimeHour: number, endTimeMin: number, router: () => void) => {
   try {
-    if (!fromTimeHour || !fromTimeMin || !endTimeHour || !endTimeMin) {
-      return;
-    }
 
     const data = {
       fromTimeHour: fromTimeHour,
