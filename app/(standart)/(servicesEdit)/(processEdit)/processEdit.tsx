@@ -32,13 +32,20 @@ const defaultState = {
 
 const ProcessEdit: React.FC = () => {
     const [service, setService] = useState<string>(defaultState.service);
-    const [price, setPrice] = useState<string>(defaultState.price);
-    const [time, setTime] = useState<string>(defaultState.time);
+    const [price, setPrice] = useState<string | (()=> undefined)>(defaultState.price);
+    const [time, setTime] = useState<string | (()=>undefined)>(defaultState.time);
     const [description, setDescription] = useState<string>(defaultState.description);
     const [validate, setValidate] = useState<boolean>(false);
+    const [gender, setGender] = useState([]);
     const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);
     const { childCategoryData, selectedCategoryId, serviceId } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    useEffect(() =>{
+     setService(serviceId.name)
+     setPrice(serviceId.price)
+     setDescription(serviceId.description)
+     setTime(serviceId.serviceTime)
+    },[serviceId])
 
     const Gender: GenderOption[] = [
         { title: "Мужская для взрослых", id: 1 },
@@ -52,14 +59,15 @@ const ProcessEdit: React.FC = () => {
         { label: "Цена", value: price, onPress: setPrice },
         { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
-
+    console.log("service ",serviceId);
+    
     const editService = async() => {
         const data = {
             serviceDto: {
                 categoryId: selectedCategoryId,
                 genderId: [selectedGender ? selectedGender.id : null],
                 name: service,
-                price: parseFloat(price),
+                price: price,
                 description: description,
                 attachmentId: null,
                 serviceTime: null,
@@ -67,14 +75,14 @@ const ProcessEdit: React.FC = () => {
             },
             image: null
         };
-    
+     
         try {
             const config = await getConfig()
-            if (!data.serviceDto.name || !data.serviceDto.price || data.serviceDto.genderId[0] === null) {
-                throw new Error("Please enter the required information");
-            }
+            // if (!data.serviceDto.name || !data.serviceDto.price || data.serviceDto.genderId[0] === null) {
+            //     throw new Error("Please enter the required information");
+            // }
     
-            axios.put(`${masterEdit_service}/${serviceId?.id}`, data, config)
+            axios.put(`${masterEdit_service}/${serviceId.id}`, data, config)
                 .then((res) => {
                     if (res.data.success) {
                         router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
@@ -112,14 +120,15 @@ const ProcessEdit: React.FC = () => {
     };
 
     useEffect(() => {
-        if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0) {
-            setValidate(false);
-        } else {
-            setValidate(true);
-        }
+        // if (service.length === 0 || price.length === 0 || description.length === 0) {
+        //     setValidate(false);
+        // } else {
+        //     setValidate(true);
+        // }
     }, [service, price, time, description]);
 
     const handleGenderPress = (gender: GenderOption) => {
+        setGender
         setSelectedGender(selectedGender?.id === gender.id ? null : gender);
     };
 
@@ -133,7 +142,9 @@ const ProcessEdit: React.FC = () => {
         );
     };
 
-    const toggleModal = () => setModalVisible(!modalVisible);
+    const toggleModal = () =>  setModalVisible(!modalVisible);
+      
+        
 
     const handleAdd = () => {
         deleteService();
@@ -151,7 +162,7 @@ const ProcessEdit: React.FC = () => {
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
             <NavigationMenu name={`Процедура услуг`} deleteIcon toggleModal={toggleModal} />
-            <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
+            <View style={[tw`flex-1`, { backgroundColor: '#21212E ' }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
@@ -177,7 +188,7 @@ const ProcessEdit: React.FC = () => {
                             />
                         ))}
                         <View style={[tw`mt-5 p-2`, { backgroundColor: '#21212E' }]}>
-                            {uslugi.map((usluga, index) => (
+                            {uslugi.map((usluga:any, index) => (
                                 <LocationInput
                                     key={index}
                                     label={usluga.label}

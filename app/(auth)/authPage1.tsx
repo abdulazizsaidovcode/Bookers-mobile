@@ -1,11 +1,17 @@
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Buttons from '@/components/(buttons)/button';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useTranslation } from 'react-i18next';
+import { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/authPage1'>;
+
 
 const AuthPage1: React.FC = () => {
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
+
     const { t } = useTranslation()
     return (
         <SafeAreaView style={styles.container}>
@@ -18,7 +24,7 @@ const AuthPage1: React.FC = () => {
                     {t("Hassle_free_date_booking_with_hair")}
                 </Text>
             </View>
-            <Buttons title={t("Continue")} onPress={() => router.push('(auth)/authPage2')} />
+            <Buttons title={t("Continue")} onPress={() => navigation.navigate('(auth)/authPage2')} />
         </SafeAreaView>
     );
 }

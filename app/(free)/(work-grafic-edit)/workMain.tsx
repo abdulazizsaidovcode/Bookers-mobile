@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
@@ -11,15 +11,20 @@ import {
   getWorkTime,
 } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import { getMee } from "@/helpers/token";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic-edit)/workMain'>;
+
 
 export const WorkMainCardEdit: React.FC<{
   icon: any;
   title: string;
   subTitle: string;
-  to?: string;
-}> = ({ icon, title, subTitle, to }) => {
+  navigation?: () => void;
+}> = ({ icon, title, subTitle, navigation }) => {
+
   return (
-    <TouchableOpacity onPress={() => router.push(to || "")}>
+    <TouchableOpacity onPress={navigation}>
       <View style={styles.card}>
         <View>
           <View style={{ flexDirection: "row", gap: 5 }}>
@@ -57,6 +62,8 @@ const WorkMainEdit = () => {
   useEffect(() => {
     getWorkTime(setTimeData, getme ? getme.id : "");
   }, [getme]);
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -70,7 +77,7 @@ const WorkMainEdit = () => {
               .map((item: any) => item.dayName.substring(0, 3)) // har bir active elementning birinchi 3 harfini chiqaramiz
               .join(", ") // elementlarni vergul bilan ajratamiz
           }
-          to="(free)/(work-grafic-edit)/workGraffic"
+          navigation={() => navigation.navigate("(free)/(work-grafic-edit)/workGraffic")}
         />
 
         <WorkMainCardEdit
@@ -79,7 +86,7 @@ const WorkMainEdit = () => {
           subTitle={`From ${timeData ? timeData.from : "00:00"}  to ${
             timeData ? timeData.end : "00:00"
           }`}
-          to="(free)/(work-grafic-edit)/workTime"
+          navigation={() => navigation.navigate("(free)/(work-grafic-edit)/workTime")}
         />
       </View>
       <View
@@ -93,7 +100,7 @@ const WorkMainEdit = () => {
       >
         <Buttons
           title="На главную"
-          onPress={() => router.push("(welcome)/Welcome")}
+          onPress={() => navigation.navigate("(welcome)/Welcome")}
         />
       </View>
     </SafeAreaView>

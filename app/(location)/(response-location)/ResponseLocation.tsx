@@ -27,7 +27,7 @@ const ResponseLocation = () => {
 
   const getLocationData = async () => {
     try {
-      const config = getConfig();
+      const config = await getConfig();
       const { data } = await axios.get(`${base_url}address`, config);
 
       setData(data.body);

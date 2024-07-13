@@ -1,12 +1,19 @@
 import Buttons from '@/components/(buttons)/button';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import '../../i18next';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/auth'>;
+
 const Auth: React.FC = () => {
     const { t, i18n } = useTranslation();
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
+
     const changeLanguage = (lng: string) => {
         i18n.changeLanguage(lng);
     };
@@ -21,15 +28,15 @@ const Auth: React.FC = () => {
             <Text style={styles.selectLanguage}>Выберите язык</Text>
             <View style={styles.button}>
                 <Buttons title="Русский" backgroundColor="#9C0A35" onPress={() => {
-                    router.push('(auth)/number-create');
+                    navigation.navigate('(auth)/number-create');
                     changeLanguage('ru');
                 }} />
                 <Buttons title="O‘zbek" backgroundColor="#9C0A35" onPress={() => {
-                    router.push('(auth)/number-create');
+                    navigation.navigate('(auth)/number-create');
                     changeLanguage('uz');
                 }} />
                 <Buttons title="English" backgroundColor="#9C0A35" onPress={() => {
-                    router.push('(auth)/number-create');
+                    navigation.navigate('(auth)/number-create');
                     changeLanguage('en');
                 }
                 } />

@@ -3,7 +3,7 @@ import { EditMainPhoto, GalleryData } from "@/type/gallery/gallery";
 import { main_gallery, gallery_add_photo, gallery_edit_main_photo, gallery_full_data, gallery_list, } from "@/helpers/api";
 import axios from "axios";
 import Toast from "react-native-simple-toast";
-import { getConfig } from "@/app/(tabs)/main";
+import { getConfig, getConfigImg } from "@/app/(tabs)/main";
 
 export const fetchData = async (setData: (data: GalleryData[]) => void) => {
   try {
@@ -25,14 +25,15 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
   }
 };
 
-export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void) => {
+export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void, setMainImageIndices: (val: number[]) => void) => {
   try {
-    const config = await getConfig()
-    const { data } = await axios.post(`${main_gallery}?name=${name}`, formData, imageConfig);
+    const config = await getConfigImg()
+    const { data } = await axios.post(`${main_gallery}?name=${name}`, formData, config);
     if (data.success) {
       fetchData(setData)
       setImages([])
       setAlbumName('')
+      setMainImageIndices([])
       Toast.show("Ваша галерея добавлена", Toast.LONG);
     }
   } catch (error) {
@@ -43,8 +44,8 @@ export const addData = async (formData: FormData, name: string, setData: (data: 
 
 export const addPhoto = async (galleryId: number, formData: FormData, setFullData: (data: GalleryData) => void, setImages: (val: string[]) => void) => {
   try {
-    const config = await getConfig()
-    const { data } = await axios.post(`${gallery_add_photo}/${galleryId}`, formData, imageConfig);
+    const config = await getConfigImg()
+    const { data } = await axios.post(`${gallery_add_photo}/${galleryId}`, formData, config);
     if (data.success) {
       fetchFullData(galleryId, setFullData);
       setImages([]);

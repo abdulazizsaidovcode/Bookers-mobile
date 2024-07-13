@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, StatusBar, FlatList } from 'react-native';
+import { ScrollView, View, Text, StatusBar, FlatList } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -21,7 +21,6 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category
 const Category = () => {
     const { setData, data, setChildCategoryData, childCategoryData, selectedCategory, setSelectedCategory } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
-    // const [selectedCategory, setSelectedCategory] = useState<string>();
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -60,16 +59,12 @@ const Category = () => {
 
     const addCategory = async () => {
         try {
-            // console.log("Sending data:", selectedCategory);
             const config = await getConfig()
-            const response = await axios.post(`${getCategory_masterAdd}categoryIds=${selectedCategory}`, {
-                categoryIds: selectedCategory
-            }, config);
-            // console.log("data", response);  
-            if(response.data.success === true ){
+            const response = await axios.post(`${getCategory_masterAdd}categoryIds=${selectedCategory}`, {}, config);
+            if (response.data.success === true) {
                 router.push('(standart)/(services)/(expertise)/expertise')
             }
-            else{console.log();}
+            else { console.log(); }
         } catch (error) {
         }
     };
@@ -97,8 +92,10 @@ const Category = () => {
             setSelectedCategory(id);
             openModal(id);
         }
-     
+
     };
+
+
 
     const handleSavePress = () => {
         if (selectedCategory) {
@@ -137,7 +134,7 @@ const Category = () => {
                                     title={item.value}
                                     items={item}
                                     onPress={() => handleCategoryPress(item.key)}
-                                    // isSelected={selectedCategory === item.key}
+                                // isSelected={selectedCategory === item.key}
                                 />
                             )}
                         />
@@ -147,7 +144,7 @@ const Category = () => {
                             <Buttons
                                 title="Сохранить"
                                 onPress={addCategory}
-                                isDisebled={selectedCategory?.length !== 0}
+                                isDisebled={selectedCategory.length !== 0}
                             />
                         </View>
                         <CenteredModal
@@ -156,7 +153,7 @@ const Category = () => {
                             oneBtn
                             btnRedText="Закрыть"
                             isFullBtn={false}
-                            toggleModal={()=>{openModal}}
+                            toggleModal={() => { openModal }}
                             onConfirm={closeModal}
                         >
                             <View style={tw`p-4 text-center`}>

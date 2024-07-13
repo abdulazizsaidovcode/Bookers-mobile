@@ -16,7 +16,6 @@ import { getConfig } from '@/app/(tabs)/main';
 
 const Expertise: React.FC = () => {
     const route = useRoute();
-    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
     const { childCategoryData, categoryFatherId, setChildCategoryData, selectedCategory } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [value, setValue] = useState('');
@@ -27,10 +26,10 @@ const Expertise: React.FC = () => {
     const { id } = route.params as { id: string };
 
     useEffect(() => {
-        if (categoryFatherId && categoryFatherId.key) {
-            postCategory(categoryFatherId.key, '');
+        if (selectedCategory) {
+            postCategory(selectedCategory, '');
         }
-    }, [categoryFatherId]);
+    }, [selectedCategory]);
 
     useEffect(() => {
         if (value.trim() === "") {
@@ -42,7 +41,7 @@ const Expertise: React.FC = () => {
 
     const getChildCategory = async (selectedCategory: string) => {
         try {
-            const config = await getConfig()
+            const config = await getConfig();
             const response = await axios.get(`${category_child}${selectedCategory}`, config);
             if (response.data.success) {
                 const child =
@@ -54,27 +53,28 @@ const Expertise: React.FC = () => {
                 if (child.length > 0) {
                     setChildCategoryData(child);
                 } else {
-                    setChildCategoryData([]); }
+                    setChildCategoryData([]);
+                }
             } else {
-                setChildCategoryData([]); }
+                setChildCategoryData([]);
+            }
         } catch (error) {
-            console.error("Error fetching child categories:", error); } 
+            console.error("Error fetching child categories:", error);
+        }
     };
 
     useEffect(() => {
-        if (selectedCategory && selectedCategory) {
+        if (selectedCategory) {
             getChildCategory(selectedCategory);
         }
     }, [selectedCategory]);
 
-    const postCategory = async (categoryFatherId: string, name: string) => {
+    const postCategory = async (selectedCategoryId: string, name: string) => {
         try {
-            const config = await getConfig()
-            const response = await axios.post(`${masterAdd_category}/${selectedCategory}?name=${name}`, "",config);
+            const config = await getConfig();
+            const response = await axios.post(`${masterAdd_category}/${selectedCategory}?name=${name}`, "", config);
             if (response.data.success) {
-                getChildCategory(categoryFatherId);
-                console.log(response.data);
-                
+                getChildCategory(selectedCategory);
             } else {
                 setChildCategoryData([]);
             }
@@ -90,29 +90,30 @@ const Expertise: React.FC = () => {
     };
     const handleAdd = () => {
         if (value.trim() !== "") {
-            postCategory(categoryFatherId.key, value);
+            postCategory(selectedCategory, value);
             closeModal();
             setValue("");
         }
     };
 
-    const handleCategorySelect = (id: number) => {
-        setSelectedCategories((prevSelected) => {
-            if (prevSelected.includes(id)) {
-                return prevSelected.filter((categoryId) => categoryId !== id);
+    const handleCategorySelect = (item: any) => {
+        setSelectedServices((prevSelected) => {
+            const isSelected = prevSelected.find((service) => service.id === item.id);
+            if (isSelected) {
+                return prevSelected.filter((service) => service.id !== item.id);
             } else {
-                return [...prevSelected, id];
+                return [...prevSelected, item];
             }
         });
     };
 
     const renderItem = ({ item }: { item: any }) => {
-        const isSelected = selectedServices.find((service: any) => service.name === item.name);
+        const isSelected = selectedServices.find((service: any) => service.id === item.id);
         return (
-            <TouchableOpacity onPress={() => handleCategorySelect(item.id)}>
+            <TouchableOpacity onPress={() => handleCategorySelect(item)}>
                 <ServicesCategory
                     title={item.name}
-                    style={{ backgroundColor: isSelected ? 'gray' : 'transparent' }}
+                    // style={[backgroundColor: isSelected ? 'gray' : 'transparent']}
                 />
             </TouchableOpacity>
         );
@@ -154,7 +155,8 @@ const Expertise: React.FC = () => {
                             isFullBtn={false}
                             toggleModal={closeModal}
                             onConfirm={handleAdd}
-                            disabled={!validate}>
+                        // disabled={!validate}
+                        >
                             <View style={tw`p-4 text-center`}>
                                 <Text style={tw`text-white text-xl mb-2 w-full`}>Добавьте свою специализацию</Text>
                                 <Textarea

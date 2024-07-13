@@ -86,9 +86,7 @@ const ServesGenderEdit: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        // Check if selected categories' ids match genders' ids and print them
         const selectedGenderIds = genders.filter(gender => selectedCategories.includes(gender.id));
-        console.log("Selected Genders:", selectedGenderIds);
     }, [selectedCategories, genders]);
 
     return (

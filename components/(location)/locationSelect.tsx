@@ -5,7 +5,7 @@ import tw from "tailwind-react-native-classnames";
 import { Text, TouchableOpacity } from "react-native";
 import axios from "axios";
 import { base_url } from "@/helpers/api";
-import { config } from "@/helpers/token";
+import { getConfig } from "@/app/(tabs)/main";
 
 interface Types {
   setDistrictId: () => void;
@@ -18,6 +18,7 @@ const LocationSelect = ({ setDistrictId, city, setCity }: Types) => {
   const [toggle, setToggle] = useState(false);
 
   const getCity = async () => {
+    const config = await getConfig()
     const { data } = await axios.get(
       `${base_url}district/name/filter?name=${city}`,
       config
