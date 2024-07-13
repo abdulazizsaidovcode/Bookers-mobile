@@ -156,7 +156,7 @@ const Category = () => {
                             <View style={tw`p-4 text-center`}>
                                 {loading ? (
                                     <ActivityIndicator size="large" color="#9C0A35" />
-                                ) : (
+                                ):(
                                     <>
                                         <Text style={tw`text-white text-xl w-full text-2xl`}>Здоровье и красота волос</Text>
                                         <Text style={tw`text-center text-white text-xl`}>В эту категорию входят услуги таких специализаций как:</Text>
