@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getMe } from "./api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {getConfig} from "@/app/(tabs)/main";
 
 export const getData = async () => {
   try {
@@ -27,9 +28,9 @@ export const imageConfig = {
 export const setConfig = (): string | null =>
   (config.headers.Authorization = `Bearer ${getData()}`);
 
-export const getMee = (setData: (val: any) => void) => {
-  axios
-    .get(getMe, config)
+export const getMee = async (setData: (val: any) => void) => {
+  const configs = await getConfig()
+  axios.get(getMe, configs)
     .then((res) => {
       setData(res.data.body);
     })

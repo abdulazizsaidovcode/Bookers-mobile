@@ -28,6 +28,9 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import Buttons from "@/components/(buttons)/button";
 import * as SecureStore from "expo-secure-store";
+import {getUser} from "@/helpers/api-function/getMe/getMee";
+import useGetMeeStore from "@/helpers/state_managment/getMee";
+import {getFile} from "@/helpers/api";
 
 const screenWidht = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -38,12 +41,14 @@ type SettingsScreenNavigationProp = NavigationProp<
 
 const Welcome = () => {
   const { number, setNumber } = numberSettingStore();
+  const {getMee, setGetMee} = useGetMeeStore()
   const navigation = useNavigation<SettingsScreenNavigationProp>();
   useEffect(() => {
     getNumbers(setNumber);
     if (number.length === 0) {
       putNumbers(1);
     }
+    getUser(setGetMee)
   }, []);
 
 
@@ -143,17 +148,19 @@ const Welcome = () => {
           <View style={styles.imageContainer}>
             <Image
               style={styles.profileImage}
-              source={require("../../assets/images/866-536x354.jpg")}
+              source={getMee.attachmentId ? {uri: `${getFile}${getMee.attachmentId}`} : require("../../assets/images/866-536x354.jpg")}
             />
             <View style={styles.editIconContainer}>
               <TouchableOpacity activeOpacity={0.7} onPress={() => {
-                navigation.navigate("(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData")
+                // navigation.navigate("(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData")
               }}>
                 <MaterialIcons name="edit" size={24} color="white" />
               </TouchableOpacity>
             </View>
           </View>
-          <Text style={styles.profileName}>Гузаль Шерматова</Text>
+          <Text style={styles.profileName}>
+            {getMee.firstName} {getMee.lastName}
+          </Text>
           <View style={styles.infoContainer}>
             <Text style={styles.infoText}>
               А теперь мы поможем Вам настроить приложение что бы клиенты могли
@@ -262,7 +269,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
-    bottom: -12,
+    bottom: -8,
     right: -8,
     backgroundColor: "#9c0935",
     borderColor: "#21212E",
