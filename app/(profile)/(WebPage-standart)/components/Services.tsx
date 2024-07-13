@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, {  useState } from "react";
 import {
   View,
   Text,
@@ -7,12 +7,12 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+import UserProfileCardEdit from "./serviseCard";
 import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
 import { getServiseWith } from "@/helpers/api-function/wepPage/wepPage";
 import { getFile } from "@/helpers/api";
-import UserProfileCardStandart from "./serviseCard";
 
-const ServicesStandart: React.FC = () => {
+const ServicesEdit: React.FC = () => {
   const [activeTab, setActiveTab] = useState("");
 
   const { servise, category, setServise, getme } = webPageStore();
@@ -26,7 +26,7 @@ const ServicesStandart: React.FC = () => {
   return (
     <ScrollView style={styles.contentContainer}>
       <View style={styles.profileCard}>
-        <UserProfileCardStandart />
+        <UserProfileCardEdit />
       </View>
 
       <Text style={styles.sectionTitle}>
@@ -185,4 +185,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ServicesStandart;
+export default ServicesEdit;

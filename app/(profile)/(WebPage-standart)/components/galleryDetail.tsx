@@ -18,7 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const { width } = Dimensions.get("window");
 const isSmallDevice = width < 375;
 
-const GalleryDetailStandart: React.FC = () => {
+const GalleryDetailEdit: React.FC = () => {
   const { galeriyaDetail } = webPageStore();
   const [selectedImage, setSelectedImage] = useState<any>(null);
 
@@ -151,4 +151,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GalleryDetailStandart;
+export default GalleryDetailEdit;

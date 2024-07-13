@@ -156,7 +156,7 @@ const Welcome = () => {
             />
             <View style={styles.editIconContainer}>
               <TouchableOpacity activeOpacity={0.5} onPress={() => {
-                // navigation.navigate("(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData")
+                navigation.navigate("(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData")
               }}>
                 <MaterialIcons name="edit" size={24} color="white" />
               </TouchableOpacity>

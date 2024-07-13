@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -24,7 +24,7 @@ import {
   getRegionId,
   putPersonalData,
 } from "@/helpers/api-function/profile/personalData";
-import { useNavigation } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 
 const EditProfile: React.FC = () => {
   const {
@@ -60,35 +60,45 @@ const EditProfile: React.FC = () => {
   const [instagram, setInstagram] = useState<any | null>(
     getMee.instagram
   );
-  
-  useEffect(() => {
-    getUser(setGetMee);
-    if (getMee.ageId) getAgeId(getMee.ageId, setAge);
-    getAge(setAgeOption);
-    getRegion(setRegionOption);
-  }, []);
 
-  useEffect(() => {
-    if (region) {
-      getDistrict(setDistrictOption, region ); // Call getDistrict when region changes
-    }
-  }, [region]);
+  useFocusEffect(
+    useCallback(() => {
+      getUser(setGetMee);
+      if (getMee.ageId) getAgeId(getMee.ageId, setAge);
+      getAge(setAgeOption);
+      getRegion(setRegionOption);
+      return () => {}
+    }, [])
+  )
 
-  useEffect(() => {
-    if (getMee.regionId) {
-      getRegionId(setRegion, getMee.regionId); // Set region based on getMee.regionId
-      if (getMee.districtId) {
-        getDistrictId(setCity, getMee.districtId); // Set city based on getMee.districtId
+  useFocusEffect(
+    useCallback(() => {
+      if (region) {
+        getDistrict( region, setDistrictOption); // Call getDistrict when region changes
       }
-    }
-    setName(getMee?.firstName)
-    setSurname(getMee?.lastName)
-    setGender(getMee?.gender)
-    setPhone(formatPhoneNumber(getMee.phoneNumber))
-    setNickname(getMee?.nickname)
-    setTelegram(getMee?.telegram)
-    setInstagram(getMee?.instagram)
-  }, [getMee]);
+      return () => {}
+    }, [region])
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      if (getMee.regionId) {
+        getRegionId( getMee.regionId,setRegion); // Set region based on getMee.regionId
+        if (getMee.districtId) {
+          getDistrictId( getMee.districtId, setCity); // Set city based on getMee.districtId
+        }
+      }
+      setName(getMee?.firstName)
+      setSurname(getMee?.lastName)
+      setGender(getMee?.gender)
+      setPhone(formatPhoneNumber(getMee.phoneNumber))
+      setNickname(getMee?.nickname)
+      setTelegram(getMee?.telegram)
+      setInstagram(getMee?.instagram)
+      return () => {}
+    }, [getMee])
+  )
+
 
   const ageOptions =
     ageOption &&

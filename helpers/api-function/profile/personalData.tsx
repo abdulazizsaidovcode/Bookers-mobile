@@ -72,6 +72,22 @@ export const putPersonalData = async ({
 };
 
 // GET URL
+export const getAge = async (setData: (data: any) => void) => {
+  try {
+    const config = await getConfig();
+    const response = await axios.get(`${base_url}age`, config);
+
+    if (response.data.success) {
+      setData({ key: response.data.body.id, value: response.data.body.ageRange });
+    } else {
+      setData(null);
+    }
+  } catch (error) {
+    console.error('Error fetching age:', error);
+    setData(null);
+  }
+};
+
 
 
 export const getAgeId = async (id: string | number, setData: (data: { key: number; value: string } | null) => void) => {
