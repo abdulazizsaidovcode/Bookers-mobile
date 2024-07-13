@@ -45,6 +45,7 @@ const TariffsPage: React.FC = () => {
 
         fetchTariffStatus();
         getTariff()
+
         // test uchun clear function, yani storege remove qilib test qilib kurdim
         // const clearSecureStore = async () => {
         //   try {
@@ -56,20 +57,25 @@ const TariffsPage: React.FC = () => {
         // clearSecureStore()
     }, []);
 
-    const setTariff = async (type: string) => {
-        await SecureStore.setItemAsync("tariff", type);
-    };
+    useEffect(() => {
+        getTariff()
+    }, [navigation]);
+
+    const setTariff = async (type: string) => await SecureStore.setItemAsync("tariff", type)
 
     const getTariff = async () => {
         let config = await getConfig()
         axios.get(`${base_url}tariff/test`, config)
-            .then(res => console.log(res.data.body))
+            .then(res => {
+                if (res.data.body === undefined) setTariffStatus('')
+                else setTariffStatus(res.data.body)
+            })
             .catch(err => console.log(err))
     }
+
     const postTariff = async (status:string) => {
         let config = await getConfig()
-        let res = await axios.post(`${base_url}tariff/test?tariffName=${status}`, {} ,config)
-        console.log(res.data)
+        await axios.post(`${base_url}tariff/test?tariffName=${status}`, '', config)
     }
 
     const handleDisabled = () => {
@@ -77,6 +83,8 @@ const TariffsPage: React.FC = () => {
         else if (tariffStatus === 'standard') return 'standard'
         else return 'all'
     }
+
+    console.log('tariffStatus: ', tariffStatus)
 
     return (
         <SafeAreaView style={styles.container}>
@@ -97,11 +105,13 @@ const TariffsPage: React.FC = () => {
                             <View style={styles.buttonContainer}>
                                 <TouchableOpacity
                                     onPress={() => {
+                                        // bag
+                                        postTariff(tariffStatus === 'all' ? 'all' : tariff.unicName)
                                         setTariff(tariffStatus === 'all' ? 'all' : tariff.unicName)
                                         navigation.navigate(tariff.navigate)
                                     }}
                                     activeOpacity={.7}
-                                    disabled={handleDisabled() !== tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
+                                    disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
                                     style={[styles.activateButton, {opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75}]}
                                 >
                                     <Text style={styles.buttonText}>Активировать</Text>

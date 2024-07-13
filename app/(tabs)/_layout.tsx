@@ -51,7 +51,6 @@ function TabLayout() {
       setTariff(getme.tariff);
     }
   }, [getme]);
-    console.log('is create', Boolean(isCreate))
 
   return (
     <>
