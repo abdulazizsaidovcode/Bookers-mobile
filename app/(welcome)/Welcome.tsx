@@ -52,7 +52,7 @@ const Welcome = () => {
       }
       getUser(setGetMee)
       return () => {}
-    }, [])
+    }, [number])
   )
   
 

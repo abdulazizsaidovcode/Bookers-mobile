@@ -11,7 +11,7 @@ import axios from "axios";
 
 export const getServiseWith = async (
   setData: (val: any[] | null) => void,
-  categoryId: string
+  categoryId: any
 ) => {
   try {
     if (categoryId) {
@@ -22,10 +22,10 @@ export const getServiseWith = async (
       );
 
       if (data.success) setData(data.body);
-      else setData(null);
-    } else setData(null);
+      else setData([]);
+    } else setData([]);
   } catch (err) {
-    setData(null);
+    setData([]);
   }
 };
 
@@ -47,7 +47,7 @@ export const getCategoryF = async (setData: (val: any[] | null) => void) => {
 
 export const getSpecialization = async (
   setData: (val: any[] | null) => void,
-  id: string
+  id: any
 ) => {
   try {
     if (!id) {
@@ -69,15 +69,17 @@ export const getSpecialization = async (
   }
 };
 
-export const getAddress = async (setData: (val: any[] | null) => void) => {
+export const getAddress = async (setData: (val: any | null) => void) => {
   try {
     const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
     const response = await axios.get(address_url, config);
 
     if (response.data.success) {
       setData(response.data.body);
+      console.log(response.data.body);
     } else {
-      setData(response.data.message);
+      console.log(response.data.message);
+      setData(null)
     }
   } catch (error) {
     console.error('Error fetching address:', error);

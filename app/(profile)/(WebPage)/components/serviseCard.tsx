@@ -1,15 +1,20 @@
 import { getFile } from "@/helpers/api";
 import { getAddress } from "@/helpers/api-function/wepPage/wepPage";
 import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
-import React, { useEffect } from "react";
+import { useFocusEffect } from "expo-router";
+import React, { useCallback } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
 const UserProfileCard: React.FC = () => {
   const { getme, specialization, setAddress, address } = webPageStore();
 
-  useEffect(() => {
-    getAddress(setAddress)
-  }, [])
+  useFocusEffect(
+
+    useCallback(() => {
+      getAddress(setAddress)
+      return () => {}
+    }, [])
+  )
 
 
   // Function to generate star rating
@@ -84,7 +89,7 @@ const UserProfileCard: React.FC = () => {
           }
           
         </View>
-        <Text style={styles.address}>{address ? address : "Address is not found"}</Text>
+        <Text style={styles.address}>{(address.homeNumber && address.street) ? `Street: ${address.street}, home: ${address.homeNumber} ` : "Address is not found"}</Text>
       </View>
     </View>
   );

@@ -145,7 +145,7 @@ const OnlineBooking = () => {
               title={t("to_home")}
               onPress={() => {
                 putNumbers(6);
-                router.push("(onlineBooking)/test");
+                router.push("(welcome)/Welcome");
               }}
             />
           </View>

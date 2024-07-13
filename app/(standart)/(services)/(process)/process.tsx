@@ -1,6 +1,5 @@
-// Process.tsx
 import React, { useEffect, useState } from 'react';
-import { Text, View, TextInput, ScrollView, StatusBar, FlatList } from 'react-native';
+import { Text, View, TextInput, ScrollView, StatusBar, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -12,6 +11,8 @@ import LocationInput from '@/app/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import { getConfig } from '@/app/(tabs)/main';
+import Textarea from '@/components/select/textarea';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 type GenderOption = {
     title: string;
@@ -26,7 +27,8 @@ const Process: React.FC = () => {
     const [description, setDescription] = useState<string>('');
     const [validate, setValidate] = useState<boolean>(false);
     const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);
-    const { childCategoryData,selectedCategoryId,categoryFatherId ,selectedCategory } = servicesStore();
+    const { childCategoryData, selectedCategoryId, categoryFatherId, selectedCategory } = servicesStore();
+    const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
 
     const Gender: GenderOption[] = [
         { title: "Мужская для взрослых", id: 1 },
@@ -37,13 +39,11 @@ const Process: React.FC = () => {
 
     const uslugi = [
         { label: "Услуга", value: service, onPress: setService },
-        { label: "Цена", value: price, onPress: setPrice },
-        { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
 
     const postService = async () => {
         try {
-            const config = await getConfig()
+            const config = await getConfig();
             const data = {
                 categoryId: selectedCategory,
                 genderId: selectedGender ? [selectedGender.id] : [],
@@ -51,16 +51,31 @@ const Process: React.FC = () => {
                 price: parseFloat(price),
                 description: description,
                 attachmentId: null,
-                active: true
-            }; 
-           const response = await axios.post(masterAdd_service, data, config);
-            if (response.data.success) {
+                active: true,
+                serviceTime: convertTimeToMinutes(time),
+            };
+            console.log(data);
+            
+            const response = await axios.post(masterAdd_service, data, config);
+            console.log(response);
+            
+            if (response.data.success=true) {
                 router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
             } else {
                 console.error('Failed to add service:', response.data.message);
             }
         } catch (error) {
             console.error('Error adding service:', error);
+        }
+    };
+    const convertTimeToMinutes = (time: any) => {
+        if (typeof time === 'string' && time.includes(':')) {
+            const [hours, minutes] = time.split(':').map(Number);
+            return (hours * 60) + (minutes || 0);
+        } else if (!isNaN(time)) {
+            return Number(time) * 60;
+        } else {
+            throw new Error('Invalid time format');
         }
     };
 
@@ -86,10 +101,24 @@ const Process: React.FC = () => {
         );
     };
 
+    const showTimePicker = () => {
+        setTimePickerVisibility(true);
+    };
+
+    const hideTimePicker = () => {
+        setTimePickerVisibility(false);
+    };
+
+    const handleConfirm = (time: Date) => {
+        const selectedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        setTime(selectedTime);
+        hideTimePicker();
+    };
+
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <NavigationMenu name={`Процедура услуг`}/>
+            <NavigationMenu name={`Процедура услуг`} />
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -125,16 +154,42 @@ const Process: React.FC = () => {
                                 />
                             ))}
                         </View>
-                        <View style={[tw`p-3`, { backgroundColor: '#21212E' }]}>
-                            <Text style={tw`text-gray-500 mb-2`}>Описание</Text>
+                        <View style={tw`mb-2 p-2`}>
+                            <Text style={tw`text-gray-500 mb-3 text-lg`}>Price</Text>
                             <TextInput
-                                style={tw`bg-gray-500 p-2 rounded-xl text-lg text-white`}
+                                keyboardType='numeric'
+                                onChangeText={(text) => setPrice(`${text}`)}
+                                value={price}
+                                style={tw`bg-gray-500 p-3 mb-2 rounded-xl text-lg text-white`}
+                            />
+                        </View>
+                        <View style={tw`mb-2 p-2`}>
+                            <Text style={tw`text-gray-500 mb-3 text-lg`}>Time</Text>
+                            <TouchableOpacity onPress={showTimePicker}>
+                                <TextInput
+                                    value={time}
+                                    style={tw`bg-gray-500 p-3 mb-2 rounded-xl text-lg text-white`}
+                                    editable={false}
+                                />
+                            </TouchableOpacity>
+                            <DateTimePickerModal
+                                isVisible={isTimePickerVisible}
+                                mode="time"
+                                onConfirm={handleConfirm}
+                                onCancel={hideTimePicker}
+                            />
+                        </View>
+                        <View style={[tw`p-3`, { backgroundColor: '#21212E' }]}>
+                            <Text style={tw`text-gray-500 text-xl mb-2`}>Описание</Text>
+                            <TextInput
+                                style={[tw`bg-gray-500 p-2 rounded-xl text-lg text-white`, { height: 100 }]}
                                 multiline
-                                numberOfLines={4}
+                                numberOfLines={2}
                                 value={description}
                                 onChangeText={(text) => setDescription(text)}
                                 scrollEnabled={true}
                             />
+
                         </View>
                     </View>
                     <View style={[tw`mb-3 p-3`, { backgroundColor: '#21212E' }]}>
