@@ -58,4 +58,5 @@ export type RootStackParamList = {
     '(free)/(work-grafic)/workGraffic': undefined
     '(free)/(work-grafic)/workTime': undefined
     '(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData': undefined
+    '(auth)/number-create': undefined
 };
