@@ -181,7 +181,7 @@ const Welcome = () => {
                     <View style={styles.iconBackground}>{item.icon}</View>
                   </View>
                   <Text style={styles.buttonTitle}>{item.title}</Text>
-                  <Text style={styles.buttonDescription}>
+                  <Text style={isEnabled ? styles.buttonDescription : styles.buttonDescription2}>
                     {item.description}
                   </Text>
                 </View>
@@ -335,6 +335,11 @@ const styles = StyleSheet.create({
   buttonDescription: {
     fontSize: 14,
     color: "#6e6e6e",
+    textAlign: "center",
+  },
+  buttonDescription2: {
+    fontSize: 14,
+    color: "#0E0E0E",
     textAlign: "center",
   },
 });
