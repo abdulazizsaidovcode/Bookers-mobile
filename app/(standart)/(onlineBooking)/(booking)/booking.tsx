@@ -20,7 +20,6 @@ import {
   onlineBookingSettingsUrgently,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import {
-  OnlineBookingCheck,
   OnlineBookingSettingsUrgentlyStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from "@/app/(tabs)/main";

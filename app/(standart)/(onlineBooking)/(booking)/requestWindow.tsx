@@ -12,6 +12,7 @@ import {
   onlineBookingHallWaiting,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
+import { router } from "expo-router";
 
 const RequestWindow = () => {
   const { isEnabled, setIsEnabled, isEnabled2, setIsEnabled2, data, setData } =
@@ -101,6 +102,7 @@ const RequestWindow = () => {
         backgroundColor="#9C0A35"
         onPress={() => {
           onlineBookingHallWaiting(isEnabled, isEnabled2);
+          router.push("(standart)/(onlineBooking)/onlineBooking");
         }}
       />
     </SafeAreaView>
