@@ -2,6 +2,7 @@ import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editChangingOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Switch, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,6 +11,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const ChangingEnEntry = () => {
   const { changingData, setChangingData } = useNotificationsStore();
+  const navigation = useNavigation();
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
@@ -27,8 +29,7 @@ const ChangingEnEntry = () => {
   };
 
   const handleSave = () => {
-    editChangingOrder(changingData.isActive, changingData.text);
-    setHasChanges(false);
+    editChangingOrder(changingData.isActive, changingData.text, setHasChanges, navigation.goBack());
   };
 
   return (

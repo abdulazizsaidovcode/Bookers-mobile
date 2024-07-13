@@ -223,7 +223,7 @@ const TabOneScreen: React.FC = () => {
 					<View style={{ margin: 10 }}>
 						<Buttons
 							title="настройку"
-							onPress={() => navigation.navigate('(profile)/(tariff)/tariff')}
+							onPress={() => navigation.navigate('(welcome)/Welcome')}
 						/>
 					</View>
 				)}
@@ -257,7 +257,7 @@ const Header: React.FC = () => {
 		<View style={styles.header}>
 			<Text style={styles.title}>Главная</Text>
 			<View style={styles.headerIcons}>
-				<Ionicons name="notifications" size={24} color={COLORS.white} style={{ marginRight: 16 }} onPress={() => navigation.navigate('')}/>
+				<Ionicons name="notifications" size={24} color={COLORS.white} style={{ marginRight: 16 }} onPress={() => navigation.navigate('(tabs)/chat')}/>
 				<Ionicons name="share-social-outline" size={24} color={COLORS.white} onPress={onShare} />
 			</View>
 		</View>

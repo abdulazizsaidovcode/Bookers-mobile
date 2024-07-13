@@ -17,9 +17,6 @@ import useNotificationsStore from '@/helpers/state_managment/notifications/notif
 import { RootStackParamList } from '@/type/root';
 import { editMainDataStatus, fetchMainData } from '@/helpers/api-function/notifications/notifications';
 
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
-
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(notifications)/notification'>;
 
 const NotificationSettings: React.FC = () => {
