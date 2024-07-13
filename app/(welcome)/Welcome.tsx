@@ -129,7 +129,7 @@ const Welcome = () => {
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollView}
+        contentContainerStyle={[styles.scrollView, {paddingBottom: 16}]}
       >
         <View style={styles.progressBar}>
           {[...Array(8)].map((_, index) => (
@@ -151,7 +151,7 @@ const Welcome = () => {
               source={getMee.attachmentId ? {uri: `${getFile}${getMee.attachmentId}`} : require("../../assets/images/866-536x354.jpg")}
             />
             <View style={styles.editIconContainer}>
-              <TouchableOpacity activeOpacity={0.7} onPress={() => {
+              <TouchableOpacity activeOpacity={0.5} onPress={() => {
                 // navigation.navigate("(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData")
               }}>
                 <MaterialIcons name="edit" size={24} color="white" />
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#21212E",
   },
   scrollView: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
     flexGrow: 1,
     justifyContent: "flex-start",
     backgroundColor: "#21212E",
@@ -299,6 +299,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     flexWrap: "wrap",
+    alignItems: 'center',
     marginTop: 24,
     backgroundColor: "#21212e",
   },
