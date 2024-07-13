@@ -57,7 +57,7 @@ const MyServicesScreen = () => {
             const { data } = await axios.get(`${getSpecialization}?categoryId=${selectedCategoryId}`, config);
             if (data.success) setSpecialization(data.body);
             else setSpecialization([]);
-        } catch (error) {
+        } catch (error:any) {
             if (error.response?.status) setSpecialization([]);
             console.error("Error fetching specializations:", error);
         }
@@ -69,7 +69,7 @@ const MyServicesScreen = () => {
             const { data } = await axios.get(`${master_get_Service}${categoryId}`, config);
             if (data.success) setCategoryMaster(data.body);
             else setCategoryMaster([]);
-        } catch (error) {
+        } catch (error:any) {
             if (error.response?.status === 404) setCategoryMaster([]);
             console.error("Error fetching master services:", error);
         }
@@ -89,7 +89,7 @@ const MyServicesScreen = () => {
         getCategory();
     }, []);
 
-    const handleCategorySelect = (categoryId: string, index: number) => {
+    const handleCategorySelect = (categoryId: string, index: any) => {
         setSelectedCategory(index);
         getSpecializationData(categoryId);
         getMasterData(categoryId);
@@ -119,7 +119,7 @@ const MyServicesScreen = () => {
                             contentContainerStyle={{ gap: 10, marginBottom: 5 }}
                             showsHorizontalScrollIndicator={false}
                         >
-                            {gender.map((card) => (
+                            {gender.map((card:any) => (
                                 <HomeCards
                                     key={card.gender}
                                     title={card.gender === 'MALE' ? 'Мужское' : 'Женское'}
@@ -143,7 +143,7 @@ const MyServicesScreen = () => {
                         contentContainerStyle={{ gap: 16, marginBottom: 10 }}
                         showsHorizontalScrollIndicator={false}
                     >
-                        {category.map((categoryItem, index) => (
+                        {category.map((categoryItem:any, index) => (
                             <View key={categoryItem.id}>
                                 <TouchableOpacity
                                     activeOpacity={0.7}
@@ -163,7 +163,7 @@ const MyServicesScreen = () => {
                     <View style={tw`flex flex-row justify-between mb-2 p-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Специализация услуг</Text>
                         <TouchableOpacity
-                             onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit?categoryId=${route.params.categoryId}`)}
+                             onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit`)}
                             activeOpacity={0.6}
                             style={{ padding: 10 }}
                         >
@@ -176,7 +176,7 @@ const MyServicesScreen = () => {
                             contentContainerStyle={{ gap: 16, marginBottom: 5 }}
                             showsHorizontalScrollIndicator={false}
                         >
-                            {specialization.map((item) => (
+                            {specialization.map((item:any) => (
                                 <View key={item.id}>
                                     <TouchableOpacity
                                     onPress={getCategory}>
@@ -198,7 +198,7 @@ const MyServicesScreen = () => {
                         </TouchableOpacity>
                     </View>
                     {categoryMaster.length > 0 ? (
-                        categoryMaster.map((item) => (
+                        categoryMaster.map((item:any) => (
                             <TouchableOpacity
                                 key={item.id}
                                 onPress={() => {

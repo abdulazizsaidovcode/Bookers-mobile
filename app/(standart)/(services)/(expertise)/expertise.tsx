@@ -113,7 +113,7 @@ const Expertise: React.FC = () => {
             <TouchableOpacity onPress={() => handleCategorySelect(item)}>
                 <ServicesCategory
                     title={item.name}
-                    style={{ backgroundColor: isSelected ? 'gray' : 'transparent' }}
+                    // style={[backgroundColor: isSelected ? 'gray' : 'transparent']}
                 />
             </TouchableOpacity>
         );
