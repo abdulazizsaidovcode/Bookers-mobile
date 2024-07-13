@@ -32,7 +32,7 @@ const Canceledentries = () => {
 
   const getsessionDetails = async () => {
     try {
-      const config = getConfig();
+      const config = await getConfig();
       const response = await axios.get(
         `${base_url}order/canceled-sessions?status=CANCELED_SESSIONS`,
         config
@@ -64,7 +64,7 @@ const Canceledentries = () => {
     };
 
     try {
-      const config = getConfig();
+      const config = await getConfig();
       const response = await fetch(`${base_url}order/all`, {
         method: "DELETE",
         headers: {

@@ -28,6 +28,9 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import Buttons from "@/components/(buttons)/button";
 import * as SecureStore from "expo-secure-store";
+import {getUser} from "@/helpers/api-function/getMe/getMee";
+import useGetMeeStore from "@/helpers/state_managment/getMee";
+import {getFile} from "@/helpers/api";
 
 const screenWidht = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -38,12 +41,14 @@ type SettingsScreenNavigationProp = NavigationProp<
 
 const Welcome = () => {
   const { number, setNumber } = numberSettingStore();
+  const {getMee, setGetMee} = useGetMeeStore()
   const navigation = useNavigation<SettingsScreenNavigationProp>();
   useEffect(() => {
     getNumbers(setNumber);
     if (number.length === 0) {
       putNumbers(1);
     }
+    getUser(setGetMee)
   }, []);
 
 
@@ -124,7 +129,7 @@ const Welcome = () => {
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollView}
+        contentContainerStyle={[styles.scrollView, {paddingBottom: 16}]}
       >
         <View style={styles.progressBar}>
           {[...Array(8)].map((_, index) => (
@@ -143,17 +148,19 @@ const Welcome = () => {
           <View style={styles.imageContainer}>
             <Image
               style={styles.profileImage}
-              source={require("../../assets/images/866-536x354.jpg")}
+              source={getMee.attachmentId ? {uri: `${getFile}${getMee.attachmentId}`} : require("../../assets/images/866-536x354.jpg")}
             />
             <View style={styles.editIconContainer}>
-              <TouchableOpacity activeOpacity={0.7} onPress={() => {
-                navigation.navigate("(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData")
+              <TouchableOpacity activeOpacity={0.5} onPress={() => {
+                // navigation.navigate("(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData")
               }}>
                 <MaterialIcons name="edit" size={24} color="white" />
               </TouchableOpacity>
             </View>
           </View>
-          <Text style={styles.profileName}>Гузаль Шерматова</Text>
+          <Text style={styles.profileName}>
+            {getMee.firstName} {getMee.lastName}
+          </Text>
           <View style={styles.infoContainer}>
             <Text style={styles.infoText}>
               А теперь мы поможем Вам настроить приложение что бы клиенты могли
@@ -181,7 +188,7 @@ const Welcome = () => {
                     <View style={styles.iconBackground}>{item.icon}</View>
                   </View>
                   <Text style={styles.buttonTitle}>{item.title}</Text>
-                  <Text style={styles.buttonDescription}>
+                  <Text style={isEnabled ? styles.buttonDescription : styles.buttonDescription2}>
                     {item.description}
                   </Text>
                 </View>
@@ -210,7 +217,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#21212E",
   },
   scrollView: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
     flexGrow: 1,
     justifyContent: "flex-start",
     backgroundColor: "#21212E",
@@ -262,7 +269,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
-    bottom: -12,
+    bottom: -8,
     right: -8,
     backgroundColor: "#9c0935",
     borderColor: "#21212E",
@@ -292,6 +299,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     flexWrap: "wrap",
+    alignItems: 'center',
     marginTop: 24,
     backgroundColor: "#21212e",
   },
@@ -335,6 +343,11 @@ const styles = StyleSheet.create({
   buttonDescription: {
     fontSize: 14,
     color: "#6e6e6e",
+    textAlign: "center",
+  },
+  buttonDescription2: {
+    fontSize: 14,
+    color: "#0E0E0E",
     textAlign: "center",
   },
 });

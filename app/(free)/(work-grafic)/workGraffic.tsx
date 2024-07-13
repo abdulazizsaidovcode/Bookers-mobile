@@ -7,7 +7,7 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import { Item } from "@/type/graficWork/graficWork";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { postWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
-import CalendarGrafficEdit from "./calendar";
+import CalendarGrafficEdit from "../(work-grafic-edit)/calendar";
 import Toast from 'react-native-simple-toast';
 import { RootStackParamList } from "@/type/root";
 import { NavigationProp } from "@react-navigation/native";

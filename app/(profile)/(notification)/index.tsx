@@ -34,7 +34,7 @@ const Notification: React.FC = () => {
   const getNotification = async () => {
     setisLoading(true);
     try {
-      const config = getConfig();
+      const config = await getConfig();
       const { data } = await axios.get(`${base_url}notification`, config);
       setNotifications(data.body);
     } catch (error) {
@@ -47,7 +47,7 @@ const Notification: React.FC = () => {
   const deleteNotification = async () => {
     const deleteData = notifications.map((item: any) => item.id);
     try {
-      const config = getConfig();
+      const config = await getConfig();
       const response = await fetch(`${base_url}notification`, {
         method: "DELETE",
         headers: {

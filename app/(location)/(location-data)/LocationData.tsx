@@ -17,11 +17,13 @@ import {
 import { SelectList } from "react-native-dropdown-select-list";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";
-import Textarea from "react-native-textarea";
+// import Textarea from "react-native-textarea";
 import { router } from "expo-router";
 import Modal from "react-native-modal";
 import { Feather } from "@expo/vector-icons";
 import { getConfig } from "@/app/(tabs)/main";
+import axios from "axios";
+import Textarea from "@/components/select/textarea";
 
 interface ListData {
   key: string;
@@ -54,12 +56,11 @@ const LocationData = () => {
     } else {
       setValidate(true);
     }
-    console.log(validate);
   }, [salonId, districtId, street, homeNumber, target]);
 
   const getHairdresser = async () => {
     try {
-      const config = getConfig();
+      const config = await getConfig();
       const { data } = await axios.get(`${base_url}salon`, config);
       const listData =
         data.body &&
@@ -105,7 +106,7 @@ const LocationData = () => {
   };
   const onConfirm = async () => {
     try {
-      const config = getConfig();
+      const config = await getConfig();
       const { data } = await axios.post(
         `${base_url}message/send/admin`,
         { salonName, message },
@@ -114,12 +115,14 @@ const LocationData = () => {
       if (data.success === true) {
         setToggle(true);
         setIsmodal(false);
-        console.log(data);
+        setMessage("")
+        setSalonName("")
       }
     } catch (error) {
       console.log(error);
     }
   };
+  
 
   useEffect(() => {
     getHairdresser();
@@ -144,7 +147,7 @@ const LocationData = () => {
               Название салона
             </Text>
             <SelectList
-              boxStyles={tw`w-60 z-50 w-full text-white`}
+              boxStyles={tw`w-60 z-50 w-full bg-gray-500 text-white`}
               inputStyles={tw`text-white text-lg`}
               dropdownStyles={styles.dropdawn}
               dropdownTextStyles={tw`text-white text-lg`}
@@ -152,6 +155,7 @@ const LocationData = () => {
               data={data}
               save="key"
               search={false}
+              placeholder="Название салона"
             />
             <Text>{districtId}</Text>
             <Text style={tw`text-base text-white my-2`}>
@@ -209,7 +213,11 @@ const LocationData = () => {
           isFullBtn={true}
           isModal={isModal}
           onConfirm={onConfirm}
-          toggleModal={() => setIsmodal(false)}
+          toggleModal={() => {
+            setIsmodal(false)
+            setSalonName("")
+            setMessage("")
+          }}
         >
           <View style={tw`w-full`}>
             <Text style={tw`text-center text-white text-base p-0 m-0`}>
@@ -220,16 +228,22 @@ const LocationData = () => {
               value={salonName}
               onChangeText={setSalonName}
             />
-            <Textarea
-              containerStyle={tw`bg-gray-500 rounded-lg mt-3`}
-              style={[tw`bg-gray-500 rounded-lg`]}
-              onChangeText={(e: string) => setMessage(e)}
-              defaultValue={message}
-              maxLength={100}
-              placeholder={"Сообщение"}
-              placeholderTextColor={"#fff"}
-              underlineColorAndroid={"transparent"}
+          <View style={tw`mt-5`}>
+          <Textarea 
+            placeholder="Сообщение"
+            onChangeText={e => setMessage(e)}
+            value={message}
             />
+          </View>
+            {/* // <Textarea
+            //   containerStyle={tw`bg-gray-500 rounded-lg mt-3`}
+            //   style={[tw`bg-gray-500 rounded-lg`]}
+            //   onChangeText={(e: string) => setMessage(e)}
+            //   defaultValue={message}
+            //   placeholder={"Сообщение"}
+            //   placeholderTextColor={"#fff"}
+            //   underlineColorAndroid={"transparent"}
+            // /> */}
           </View>
         </CenteredModal>
         {/* Sucsess */}

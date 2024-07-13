@@ -223,7 +223,7 @@ const TabOneScreen: React.FC = () => {
 					<View style={{ margin: 10 }}>
 						<Buttons
 							title="настройку"
-							onPress={() => navigation.navigate('(welcome)/Welcome')}
+							onPress={() => navigation.navigate('(profile)/(tariff)/tariff')}
 						/>
 					</View>
 				)}

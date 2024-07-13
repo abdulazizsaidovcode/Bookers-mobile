@@ -57,7 +57,7 @@ const ServesGender = () => {
                 >
                     
                     <View style={[tw`flex w-full`, { backgroundColor: '#21212E' }]}>
-                        {categories.map((category) => (
+                        {categories.map((category:any) => (
                             <ServicesCategory
                                 key={category.id}
                                 title={category.title}

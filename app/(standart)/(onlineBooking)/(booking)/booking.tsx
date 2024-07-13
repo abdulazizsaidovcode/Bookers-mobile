@@ -48,7 +48,8 @@ const Booking = () => {
 
   const addOnlineBook = async () => {
     try {
-      const { data } = await axios.post(
+      const config = await getConfig();
+      await axios.post(
         `${base_url}online-booking-settings/record-duration/day`,
         { day: salonId },
         config

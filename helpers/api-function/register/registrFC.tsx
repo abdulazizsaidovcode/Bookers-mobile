@@ -1,9 +1,11 @@
 import {base_url, register_page} from "@/helpers/api";
 import axios from "axios";
-import { router, useNavigation } from "expo-router";
+import { router } from "expo-router";
 import { Alert } from "react-native";
 import Toast from "react-native-simple-toast";
 import {authStorage} from "@/constants/storage";
+import * as SecureStore from 'expo-secure-store';
+
 
 
 
@@ -55,6 +57,7 @@ export const authLogin = async (phoneNumber: string, otpValue: string, setRespon
             if (res.data.success) {
                 setRespone(true)
                 authStorage(res.data.body)
+                SecureStore.setItemAsync('number', phoneNumber)
             } else setRespone(false)
         })
         .catch(err => {
@@ -88,15 +91,16 @@ export const masterData = ({ role, firstName, lastName, nickname, phoneNumber, i
         .then(res => {
             if (res.data.success) {
                 setData(res.data.body)
-                Alert.alert("Muvaffaqiyatli ro'yxatdan o'tdingiz");
+                Alert.alert("Вы успешно зарегистрировались");
+                SecureStore.setItemAsync('number', phoneNumber)
             } else {
-                Alert.alert("Xatolik yuz berdi");
+                Alert.alert("Произошла ошибка при регистрации");
                 setData(null)
             }
         })
         .catch(err => {
             console.log(err);
             setData(null)
-            Alert.alert("Xatolik yuz berdi");
+            Alert.alert("Произошла ошибка при регистрации");
         });
 }

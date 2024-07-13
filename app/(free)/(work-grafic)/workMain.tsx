@@ -14,6 +14,7 @@ import { getMee } from "@/helpers/token";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
+import { getUser } from "@/helpers/api-function/getMe/getMee";
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic)/workTime'>;
 
 
@@ -58,13 +59,14 @@ const WorkMain = () => {
   } = graficWorkStore();
 
   useEffect(() => {
-    getMee(setGetMee);
+    getUser(setGetMee);
     getWorkDay(setWeekData);
   }, []);
-
+  
   useEffect(() => {
     getWorkTime(setTimeData, getme ? getme.id : "");
   }, [getme]);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -109,9 +111,8 @@ const WorkMain = () => {
         <Buttons
           title="На главную"
           onPress={() => {
-            if (calendarDate && timeData.from !== undefined && timeData.end !== undefined && weekData.some(item => !item.active)) {
+            if (calendarDate && timeData.from !== undefined && timeData.end !== undefined && weekData.some(item => item.active)) {
               putNumbers(3);
-              
             }
             navigation.navigate("(welcome)/Welcome");
           }}

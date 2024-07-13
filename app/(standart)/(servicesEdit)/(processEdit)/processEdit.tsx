@@ -32,8 +32,8 @@ const defaultState = {
 
 const ProcessEdit: React.FC = () => {
     const [service, setService] = useState<string>(defaultState.service);
-    const [price, setPrice] = useState<string>(defaultState.price);
-    const [time, setTime] = useState<string>(defaultState.time);
+    const [price, setPrice] = useState<string | (()=> undefined)>(defaultState.price);
+    const [time, setTime] = useState<string | (()=>undefined)>(defaultState.time);
     const [description, setDescription] = useState<string>(defaultState.description);
     const [validate, setValidate] = useState<boolean>(false);
     const [gender, setGender] = useState([]);
@@ -44,8 +44,7 @@ const ProcessEdit: React.FC = () => {
      setService(serviceId.name)
      setPrice(serviceId.price)
      setDescription(serviceId.description)
-     setTime(serviceId.time)
-
+     setTime(serviceId.serviceTime)
     },[serviceId])
 
     const Gender: GenderOption[] = [
@@ -60,7 +59,7 @@ const ProcessEdit: React.FC = () => {
         { label: "Цена", value: price, onPress: setPrice },
         { label: "Длительность (без учёта перерыва после процедуры)", value: time, onPress: setTime }
     ];
-    console.log(serviceId);
+    console.log("service ",serviceId);
     
     const editService = async() => {
         const data = {
@@ -68,7 +67,7 @@ const ProcessEdit: React.FC = () => {
                 categoryId: selectedCategoryId,
                 genderId: [selectedGender ? selectedGender.id : null],
                 name: service,
-                price: parseFloat(price),
+                price: price,
                 description: description,
                 attachmentId: null,
                 serviceTime: null,
@@ -79,11 +78,11 @@ const ProcessEdit: React.FC = () => {
      
         try {
             const config = await getConfig()
-            if (!data.serviceDto.name || !data.serviceDto.price || data.serviceDto.genderId[0] === null) {
-                throw new Error("Please enter the required information");
-            }
+            // if (!data.serviceDto.name || !data.serviceDto.price || data.serviceDto.genderId[0] === null) {
+            //     throw new Error("Please enter the required information");
+            // }
     
-            axios.put(`${masterEdit_service}/${serviceId?.id}`, data, config)
+            axios.put(`${masterEdit_service}/${serviceId.id}`, data, config)
                 .then((res) => {
                     if (res.data.success) {
                         router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
@@ -121,11 +120,11 @@ const ProcessEdit: React.FC = () => {
     };
 
     useEffect(() => {
-        if (service.length === 0 || price.length === 0 || description.length === 0) {
-            setValidate(false);
-        } else {
-            setValidate(true);
-        }
+        // if (service.length === 0 || price.length === 0 || description.length === 0) {
+        //     setValidate(false);
+        // } else {
+        //     setValidate(true);
+        // }
     }, [service, price, time, description]);
 
     const handleGenderPress = (gender: GenderOption) => {
@@ -143,7 +142,9 @@ const ProcessEdit: React.FC = () => {
         );
     };
 
-    const toggleModal = () => setModalVisible(!modalVisible);
+    const toggleModal = () =>  setModalVisible(!modalVisible);
+      
+        
 
     const handleAdd = () => {
         deleteService();
@@ -187,7 +188,7 @@ const ProcessEdit: React.FC = () => {
                             />
                         ))}
                         <View style={[tw`mt-5 p-2`, { backgroundColor: '#21212E' }]}>
-                            {uslugi.map((usluga, index) => (
+                            {uslugi.map((usluga:any, index) => (
                                 <LocationInput
                                     key={index}
                                     label={usluga.label}
