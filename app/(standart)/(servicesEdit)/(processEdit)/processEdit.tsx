@@ -70,11 +70,13 @@ const ProcessEdit: React.FC = () => {
                 price: price,
                 description: description,
                 attachmentId: null,
-                serviceTime: null,
+                serviceTime: time,
                 active: true
             },
             image: null
         };
+        console.log(data);
+        
      
         try {
             const config = await getConfig()

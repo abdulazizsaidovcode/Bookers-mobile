@@ -87,12 +87,9 @@ const Category = () => {
         if (selectedCategory === id) {
             setSelectedCategory(id);
             setModalVisible(false);
-
         } else {
             setSelectedCategory(id);
-            openModal(id);
-        }
-
+            openModal(id); }
     };
 
 
