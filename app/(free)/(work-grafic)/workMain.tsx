@@ -14,6 +14,7 @@ import { getMee } from "@/helpers/token";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
+import { getUser } from "@/helpers/api-function/getMe/getMee";
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic)/workTime'>;
 
 
@@ -58,19 +59,14 @@ const WorkMain = () => {
   } = graficWorkStore();
 
   useEffect(() => {
-    getMee(setGetMee);
+    getUser(setGetMee);
     getWorkDay(setWeekData);
   }, []);
   
   useEffect(() => {
     getWorkTime(setTimeData, getme ? getme.id : "");
   }, [getme]);
-  
-  useEffect(() => {
-    getMee(setGetMee);
-    getWorkTime(setTimeData, getme ? getme.id : "");
-    getWorkDay(setWeekData);
-  }, [weekData, calendarDate]);
+
 
   return (
     <SafeAreaView style={styles.container}>

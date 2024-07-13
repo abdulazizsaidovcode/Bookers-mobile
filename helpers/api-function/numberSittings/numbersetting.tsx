@@ -21,7 +21,7 @@ export const getNumbers = async (setData: (data: any) => void) => {
 export const putNumbers = async (number: number) => {
   try {
     if (!number) {
-      return; // Return early if number is falsy
+      return null // Return early if number is falsy
     }
 
     const config = await getConfig();

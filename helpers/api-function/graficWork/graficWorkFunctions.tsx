@@ -71,9 +71,8 @@ export const postWorkDay = async (workDayWeeks: any, date: string, router: () =>
     } else {
       Toast.show(response.data.message, Toast.LONG);
     }
-  } catch (error) {
-    console.error('Error saving work day:', error);
-    Toast.show('Error saving work day', Toast.LONG);
+  } catch (error: any) {
+    Toast.show(error.response.data.message, Toast.LONG);
   }
 };
 
