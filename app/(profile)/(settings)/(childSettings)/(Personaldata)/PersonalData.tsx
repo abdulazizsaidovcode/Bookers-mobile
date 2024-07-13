@@ -99,13 +99,6 @@ const EditProfile: React.FC = () => {
     }, [getMee])
   )
 
-
-  const ageOptions =
-    ageOption &&
-    ageOption.map((item: any) => {
-      return { key: item.id, value: item.ageRange };
-    });
-
   const regionOptions =
     regionOption &&
     regionOption.map((item: any) => {
@@ -209,8 +202,7 @@ const EditProfile: React.FC = () => {
             setSelected={setGender}
             data={genderOptions}
             defaultOption={
-              genderOptions.find((option) => option.key === getMee.gender) ||
-              null
+              genderOptions.find((option) => option.key === getMee.gender)
             }
             boxStyles={styles.selectListBox}
             dropdownStyles={styles.absoluteDropdown}
@@ -223,9 +215,13 @@ const EditProfile: React.FC = () => {
           <SelectList
             inputStyles={{ color: "#fff" }}
             setSelected={setAge}
-            data={ageOptions}
+            data={ageOption ? ageOption.map((item: any) => {
+              return { key: item.id, value: item.ageRange };
+            }) : []}
             defaultOption={
-              ageOptions && ageOptions.find((option) => option.key === getMee.ageId)
+              ageOption && ageOption.map((item: any) => {
+                return { key: item.id, value: item.ageRange };
+              }).find((option) => option.key === getMee.ageId)
             }
             boxStyles={styles.selectListBox}
             dropdownStyles={styles.absoluteDropdown}
