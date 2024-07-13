@@ -65,14 +65,14 @@ export const OnlineBookingSettingsUrgentlyStory = create<Urgently>((set) => ({
   setUrgentlyt: (val: boolean) => set({ Urgently: val }),
 }));
 
-export const OnlineBookingCheck = create((set) => ({
-  recording: false,
-  breakSession: false,
-  setBreack: (val: boolean) => set({ breakSession: val }),
-  confirmation: false,
-  setConfirmation: (val: boolean) => set({ confirmation: val }),
-  request: false,
-  setRequest: (val: boolean) => set({ request: val }),
-  time: false,
-  setTime: (val: boolean) => set({ time: val }),
-}));
+// export const OnlineBookingCheck = create((set) => ({
+//   recording: false,
+//   breakSession: false,
+//   setBreack: (val: boolean) => set({ breakSession: val }),
+//   confirmation: false,
+//   setConfirmation: (val: boolean) => set({ confirmation: val }),
+//   request: false,
+//   setRequest: (val: boolean) => set({ request: val }),
+//   time: false,
+//   setTime: (val: boolean) => set({ time: val }),
+// }));

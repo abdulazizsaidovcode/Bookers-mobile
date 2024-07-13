@@ -28,10 +28,8 @@ import {
 
 const OnlineBooking = () => {
   const { allowClient, setAllowClient } = OnlineBookingStory();
-  const { recording, breakSession, confirmation, request, time } =
-    OnlineBookingCheck();
-  console.log(recording);
-
+  
+    
   const data = [
     {
       id: "1",
@@ -43,7 +41,7 @@ const OnlineBooking = () => {
       onPress: () => {
         router.push("/booking");
       },
-      isDesebled: recording,
+      
     },
     {
       id: "2",
@@ -53,7 +51,6 @@ const OnlineBooking = () => {
       onPress: () => {
         router.push("/breakBetweenSessions");
       },
-      isDesebled: breakSession,
     },
     {
       id: "3",
@@ -63,7 +60,6 @@ const OnlineBooking = () => {
       onPress: () => {
         router.push("/confirmationRecor");
       },
-      isDesebled: confirmation,
     },
     {
       id: "4",
@@ -73,7 +69,6 @@ const OnlineBooking = () => {
       onPress: () => {
         router.push("/requestWindow");
       },
-      isDesebled: request,
     },
     {
       id: "5",
@@ -83,7 +78,6 @@ const OnlineBooking = () => {
       onPress: () => {
         router.push("/timeSelect");
       },
-      isDesebled: time,
     },
   ];
 
@@ -102,7 +96,6 @@ const OnlineBooking = () => {
       subtitle={item.subtitle}
       onPress={item.onPress}
       IconComponent={item.IconComponent}
-      disebled={item.isDesebled}
     />
   );
   useEffect(() => {
