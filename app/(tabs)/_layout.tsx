@@ -30,22 +30,6 @@ function TabLayout() {
   const [tariff, setTariff] = useState(null);
   const [isCreate, setIsCreate] = useState<boolean | null | any>(false)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const value = await SecureStore.getItemAsync('isCreate');
-        setIsCreate(value);
-
-        // Assuming getMee function returns data to setGetMeeData
-        const meeData = await getMee(setGetMee); // Adjust according to your getMee function
-        setGetMee(meeData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, [isCreate]);
 
   useFocusEffect(
     useCallback(() => {
