@@ -111,8 +111,11 @@ const WorkMain = () => {
         <Buttons
           title="На главную"
           onPress={() => {
-            if (calendarDate && timeData.from !== undefined && timeData.end !== undefined && weekData.some(item => !item.active)) {
+            if (calendarDate && timeData.from !== undefined && timeData.end !== undefined && weekData.some(item => item.active)) {
               putNumbers(3);
+              console.log(
+                'ishla suka'
+              );
               
             }
             navigation.navigate("(welcome)/Welcome");
