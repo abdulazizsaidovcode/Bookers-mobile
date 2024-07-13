@@ -19,7 +19,10 @@ export const fetchMainData = async (setMainData: (val: boolean) => void) => {
 export const editMainDataStatus = async (isActive: boolean) => {
     try {
         const config = await getConfig()
-        await axios.post(`${notifications_main_data_edit}?isActive=${isActive}`, {}, config);
+        const { data } = await axios.post(`${notifications_main_data_edit}?isActive=${isActive}`, {}, config);
+        if (data.success) {
+            Toast.show('Все ваши уведомления обновлены.', Toast.LONG)
+        }
     } catch (error) {
         console.log(error)
     }
@@ -34,6 +37,7 @@ export const fetchAllData = async (setOneData: (val: NotificationsAllData) => vo
         }
     } catch (error) {
         console.log(error)
+        Toast.show('Произошла ошибка, попробуйте позже', Toast.LONG)
     }
 }
 
