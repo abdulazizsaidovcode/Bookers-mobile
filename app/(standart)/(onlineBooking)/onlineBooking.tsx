@@ -18,7 +18,6 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import {
-  OnlineBookingCheck,
   OnlineBookingStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import {
