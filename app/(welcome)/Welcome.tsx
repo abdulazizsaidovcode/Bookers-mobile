@@ -31,6 +31,7 @@ import * as SecureStore from "expo-secure-store";
 import {getUser} from "@/helpers/api-function/getMe/getMee";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import {getFile} from "@/helpers/api";
+import {postTariff} from "@/app/(profile)/(tariff)/tariff";
 
 const screenWidht = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -204,6 +205,7 @@ const Welcome = () => {
               <Buttons title="Вперёд" onPress={() => {
                 navigation.navigate('(tabs)')
                 registered()
+                postTariff('all')
               }} />
             </View>
           )}
