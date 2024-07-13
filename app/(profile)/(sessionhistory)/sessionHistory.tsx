@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView } from
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import tw from 'tailwind-react-native-classnames';
 
 const sessionData = [
     { id: '1', title: 'Предстоящие записи', icon: 'calendar', count: 2, screen: '(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries' },
@@ -31,7 +32,9 @@ const SessionHistory: React.FC = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <View style={tw`mt-5`}>
             <NavigationMenu name='История сеансов' />
+            </View>
             <View style={styles.padding}>
                 <FlatList
                     data={sessionData}

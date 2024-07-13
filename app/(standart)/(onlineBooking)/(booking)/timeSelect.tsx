@@ -14,7 +14,6 @@ import Buttons from "@/components/(buttons)/button";
 import { OnlineBookingStory3 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import axios from "axios";
 import { base_url } from "@/helpers/api";
-import { config } from "@/helpers/token";
 import useNotificationsStore from "@/helpers/state_managment/notifications/notifications";
 import {
   fetchAllData,
@@ -23,6 +22,7 @@ import {
 import BottomModal from "@/components/(modals)/modal-bottom";
 import tw from "tailwind-react-native-classnames";
 import { router } from "expo-router";
+import { getConfig } from "@/app/(tabs)/main";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
@@ -85,11 +85,14 @@ const TimeSelect = () => {
 
   const getVipCount = async () => {
     try {
+      const config = await getConfig();
       const { data } = await axios.get(
-        `${base_url}online-booking-settings/vip-client`,
+        `http://134.122.77.107:8080/online-booking-settings/vip-client`,
         config
       );
-      setVipCount(data.body);
+      console.log(data);
+      
+      if(data.success) setVipCount(data.body);
       setTimeEnabled(data.body.vipClient);
     } catch (error) {
       console.log(error);
@@ -103,6 +106,7 @@ const TimeSelect = () => {
       vipClient: timeEnabled,
     };
     try {
+      const config = await getConfig()
       const res = await axios.put(
         `${base_url}online-booking-settings/vip-client`,
         data,
@@ -147,9 +151,9 @@ const TimeSelect = () => {
           >
             <Text style={tw`text-lg font-bold`}>Время для ВИП клиентов </Text>
             <View style={tw`flex-row bg-gray-800 rounded-lg p-2 mt-2`}>
-              <Text style={tw`text-lg text-white`}>{vipCount.hour} час.</Text>
+              <Text style={tw`text-lg text-white`}>{vipCount ? vipCount.hour : "0"} час.</Text>
               <Text style={tw`text-lg text-white ml-2`}>
-                {vipCount.minute} мин
+                {vipCount ? vipCount.minute : "0" } мин
               </Text>
             </View>
           </TouchableOpacity>

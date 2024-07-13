@@ -127,6 +127,7 @@ const OnlineBooking = () => {
                 value={isEnabled}
                 onToggle={toggleSwitch}
               />
+              
             </View>
             <View style={tw`text-white mb-3`}>
               <Text style={tw`text-white mb-3`}>
@@ -153,5 +154,4 @@ const OnlineBooking = () => {
     </SafeAreaView>
   );
 };
-
 export default OnlineBooking;
