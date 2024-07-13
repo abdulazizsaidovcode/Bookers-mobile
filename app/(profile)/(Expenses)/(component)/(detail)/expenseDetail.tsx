@@ -1,20 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { useNavigation } from 'expo-router';
+import { useFocusEffect, useNavigation } from 'expo-router';
 import { masterExpense } from '@/helpers/state_managment/expence/ecpense';
 import ExpenseCard from '../card';
 import ExpenseArendaCard from '../card/ExpenseArenda';
 
 const ExpenseDetail: React.FC = () => {
     const [showCreateExpense, setShowCreateExpense] = useState(false);
+    const [expenses, setExpenses] = useState<any>([])
     const navigation = useNavigation<any>();
-    const { expense } = masterExpense()
+    const { expense, setExpense } = masterExpense()
 
     useEffect(() => {
         console.log(expense);
     }, [expense])
+
+    useFocusEffect(
+        useCallback(() => {
+            const fetchData = async () => {
+                try {
+                    setExpenses(expense)
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            };
+
+            fetchData();
+        }, [setExpense, expense])
+    );
 
     const handleAddExpense = () => {
         setShowCreateExpense(true);
@@ -25,8 +40,8 @@ const ExpenseDetail: React.FC = () => {
             <NavigationMenu name='Expense' />
             <View style={styles.container}>
                 {
-                    expense && expense.length > 0 ? <FlatList
-                        data={expense}
+                    expenses && expenses.length > 0 ? <FlatList
+                        data={expenses}
                         renderItem={({ item }) => <ExpenseArendaCard item={item} />}
                         keyExtractor={(item) => item.id}
                     /> : <Text style={styles.infoText}>Расходы по аренде</Text>

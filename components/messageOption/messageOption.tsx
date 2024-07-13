@@ -8,7 +8,7 @@ interface MessageOptionProps {
   subtitle?: string;
   onPress?: () => void;
   IconComponent?: JSX.Element;
-  disebled: boolean;
+  disebled?: boolean;
 }
 
 const MessageOption: React.FC<MessageOptionProps> = ({
