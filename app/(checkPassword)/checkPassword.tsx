@@ -94,7 +94,7 @@ const CheckPinOnCome: React.FC = () => {
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <View style={styles.topSection}>
-                    <Text style={styles.label}>{t('введите свой PIN-код')}</Text>
+                    <Text style={styles.label}>{'введите свой PIN-код'}</Text>
                     <View style={styles.inputContainer}>
                         {otp.map((digit, index) => (
                             <TextInput
