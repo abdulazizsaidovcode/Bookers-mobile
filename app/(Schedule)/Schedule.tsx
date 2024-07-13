@@ -131,7 +131,7 @@ const Schedule: React.FC = () => {
             />
             {tarif === "STANDART" && (
               <Buttons title="Остановить запись" onPress={toggle} />
-            )}
+            )} 
           </View>
         )}
       </ScrollView>
