@@ -55,7 +55,8 @@ export const onlineBookingSettingsUrgently = async (isEnabled: boolean) => {
 
 export const GetOnlineBookingSettingsUrgently = async (setStatus: any) => {
     try {
-        const res = await axios.get(onlineBookingUgly_url);
+        const config= await getConfig()
+        const res = await axios.get(onlineBookingUgly_url,config);
         setStatus(res.data.body);
     } catch (error) {
         console.log(error);

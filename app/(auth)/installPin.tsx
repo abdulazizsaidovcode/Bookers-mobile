@@ -1,11 +1,17 @@
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/installPin'>;
+
 
 const InstallPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
+
     const inputs = useRef<TextInput[]>([]);
 
     useEffect(() => {
@@ -57,7 +63,7 @@ const InstallPin: React.FC = () => {
         try {
             await AsyncStorage.setItem('otp', otp.join(''));
             // Handle the continue action (navigate to the next page)
-            router.push('(auth)/checkPin');
+            navigation.navigate('(auth)/checkPin');
         } catch (error) {
             console.log('Failed to save OTP to storage', error);
         }

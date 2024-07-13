@@ -58,4 +58,11 @@ export type RootStackParamList = {
     '(free)/(work-grafic)/workGraffic': undefined
     '(free)/(work-grafic)/workTime': undefined
     '(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData': undefined
+    '(auth)/number-create': undefined
+    '(auth)/masterORclient': undefined
+    '(auth)/checkSendMessage' : undefined
+    '(auth)/installPin': undefined
+    '(auth)/switchPage' : undefined
+    '(auth)/userInfo': undefined
+    '(auth)/offerScreen': undefined
 };
