@@ -1,6 +1,5 @@
-import { useNavigation } from "expo-router";
 import React from "react";
-import { Text, View, TextInput, SafeAreaView, StyleSheet } from "react-native";
+import { Text, View, TextInput, SafeAreaView } from "react-native";
 import tw from "tailwind-react-native-classnames";
 
 const LocationInput: React.FC<LocationInputProps> = ({

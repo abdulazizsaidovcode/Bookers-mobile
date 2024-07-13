@@ -130,7 +130,6 @@ const ConfirmationRecord = () => {
         backgroundColor="#9C0A35"
         onPress={() => {
           onlineConfirmationServices(isEnabled, isEnabled2, isEnabled3);
-          setRequest(false);
           router.push("(standart)/(onlineBooking)/onlineBooking");
         }}
       />
