@@ -9,7 +9,7 @@ import {
 } from "@/helpers/api";
 import axios from "axios";
 import Toast from "react-native-simple-toast";
-import {getConfig} from "@/app/(master)/main";
+import {getConfig} from "@/app/(tabs)/(master)/main";
 
 interface OrderPost {
     data: any;

@@ -1,4 +1,4 @@
-import { getConfig } from "@/app/(master)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 import { expene_category_list, expene_category_post, expene_list } from "@/helpers/api";
 // import { config } from "@/helpers/token";
 import axios from "axios"

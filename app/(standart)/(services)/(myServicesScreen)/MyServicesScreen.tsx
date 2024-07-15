@@ -12,7 +12,7 @@ import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import { getCategory_master, getGender_status, getSpecialization, master_get_Service } from '@/helpers/api';
 import { router } from 'expo-router';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
-import { getConfig } from '@/app/(master)/main';
+import { getConfig } from '@/app/(tabs)/(master)/main';
 
 const MyServicesScreen = () => {
     const route = useRoute();

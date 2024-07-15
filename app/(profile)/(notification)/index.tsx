@@ -21,7 +21,7 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { router } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import { getConfig } from "@/app/(master)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 
 const Notification: React.FC = () => {
   const navigation = useNavigation();

@@ -12,7 +12,7 @@ import axios from 'axios';
 import { category_child, masterAdd_category } from '@/helpers/api';
 import { useRoute } from '@react-navigation/native';
 import Textarea from '@/components/select/textarea';
-import { getConfig } from '@/app/(master)/main';
+import { getConfig } from '@/app/(tabs)/(master)/main';
 
 const Expertise: React.FC = () => {
     const route = useRoute();
