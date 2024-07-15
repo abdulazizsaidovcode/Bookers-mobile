@@ -17,7 +17,7 @@ import { base_url } from "@/helpers/api";
 import moment from "moment";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
-import { getConfig } from "@/app/(master)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 
 

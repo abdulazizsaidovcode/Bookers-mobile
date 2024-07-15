@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getMe } from "../../api";
 import { GetMee } from "@/type/getMee";
-import { getConfig } from "@/app/(master)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 
 export const getUser = async (setGetMee: (val: GetMee) => void) => {
     try {

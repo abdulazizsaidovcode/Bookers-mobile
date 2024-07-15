@@ -1,4 +1,4 @@
-import { getConfig } from "@/app/(master)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 import {
   workday_get,
   workday_put,

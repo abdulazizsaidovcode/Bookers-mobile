@@ -3,7 +3,7 @@ import { EditMainPhoto, GalleryData } from "@/type/gallery/gallery";
 import { main_gallery, gallery_add_photo, gallery_edit_main_photo, gallery_full_data, gallery_list, } from "@/helpers/api";
 import axios from "axios";
 import Toast from "react-native-simple-toast";
-import { getConfig, getConfigImg } from "@/app/(master)/main";
+import { getConfig, getConfigImg } from "@/app/(tabs)/(master)/main";
 
 export const fetchData = async (setData: (data: GalleryData[]) => void) => {
   try {

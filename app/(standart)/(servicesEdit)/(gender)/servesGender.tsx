@@ -9,7 +9,7 @@ import ServicesCategory from '@/components/services/servicesCatgegory';
 import axios from 'axios';
 import { gender_status, getGender_status } from '@/helpers/api';
 import { router } from 'expo-router';
-import { getConfig } from '@/app/(master)/main';
+import { getConfig } from '@/app/(tabs)/(master)/main';
 
 interface Category {
     title: string;

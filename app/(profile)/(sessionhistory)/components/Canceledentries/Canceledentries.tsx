@@ -20,7 +20,7 @@ import tw from "tailwind-react-native-classnames";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { useNavigation } from "expo-router";
 import History from "@/helpers/state_managment/history";
-import { getConfig } from "@/app/(master)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 
 const Canceledentries = () => {
   const [data, setData] = useState<any>([]);

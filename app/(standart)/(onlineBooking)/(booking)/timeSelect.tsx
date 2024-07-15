@@ -22,7 +22,7 @@ import {
 import BottomModal from "@/components/(modals)/modal-bottom";
 import tw from "tailwind-react-native-classnames";
 import { router } from "expo-router";
-import { getConfig } from "@/app/(master)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
