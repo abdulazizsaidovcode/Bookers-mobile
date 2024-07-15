@@ -124,6 +124,7 @@ import Hair from "./(client)/(uslugi)/(hairHealth)/hair";
 import MasterLocations from "./(client)/(map)/(master-locations)/master-locations";
 import RecentMasters from "./(client)/(map)/(recent-masters)/recent-masters";
 import Specialist from "./(client)/(uslugi)/(specialist)/specialist";
+import Dashboard from "./(client)/(dashboard)/dashboard";
 
 
 
@@ -753,6 +754,11 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             {/* check pin end */}
+            <Stack.Screen
+              name="(client)/(dashboard)/dashboard"
+              component={Dashboard}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>
