@@ -18,6 +18,7 @@ import { StyleSheet, View } from "react-native";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import { handleRefresh } from "@/constants/refresh";
+import Uslugi from "@/app/(client)/(uslugi)/uslugi";
 
 
 
@@ -124,6 +125,16 @@ function ClientTabLayout() {
           }}
         />
         <Tab.Screen
+          name="uslugi"
+          component={Uslugi}
+          options={{
+            title: "Услуги",
+            tabBarIcon: ({ color }) => (
+              <FontAwesome5 name="user" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
           name="chat"
           component={ChatScreen}
           options={{
@@ -143,6 +154,7 @@ function ClientTabLayout() {
             ),
           }}
         />
+        
       </Tab.Navigator> 
       {/* {(!hasAllNumbers) &&
         <View style={styles.container}></View>
