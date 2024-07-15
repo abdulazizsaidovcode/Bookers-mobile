@@ -144,9 +144,9 @@ function ClientTabLayout() {
           }}
         />
       </Tab.Navigator> 
-      {(!hasAllNumbers) &&
+      {/* {(!hasAllNumbers) &&
         <View style={styles.container}></View>
-      }
+      } */}
     </>
   );
 }

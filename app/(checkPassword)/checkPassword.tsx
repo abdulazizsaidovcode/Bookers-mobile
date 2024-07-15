@@ -81,7 +81,7 @@ const CheckPinOnCome: React.FC = () => {
         
         if (enteredOtp !== code) {
             setIsCorrect(true);
-            navigation.navigate('(tabs)/(master)')
+            navigation.navigate('(tabs)/(client)')
         } else {
             setIsCorrect(false);
             alert('Неверный ПИН код');
