@@ -43,7 +43,7 @@ import {
     UpdateClient
 } from "@/type/client/client";
 import Toast from "react-native-simple-toast";
-import {getConfig} from "@/app/(tabs)/main";
+import {getConfig} from "@/app/(master)/main";
 
 // text kesish un
 export const sliceText = (firstName: string, lastName: string) => {

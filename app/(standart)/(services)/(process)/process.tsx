@@ -10,7 +10,7 @@ import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/app/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
-import { getConfig } from '@/app/(tabs)/main';
+import { getConfig } from '@/app/(master)/main';
 import Textarea from '@/components/select/textarea';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 

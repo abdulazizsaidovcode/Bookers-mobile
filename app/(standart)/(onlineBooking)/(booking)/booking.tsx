@@ -22,7 +22,7 @@ import {
 import {
   OnlineBookingSettingsUrgentlyStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
-import { getConfig } from "@/app/(tabs)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 
 const Booking = () => {

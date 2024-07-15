@@ -14,7 +14,7 @@ import ChatScreen from "./chat";
 import Finance from "./finance";
 import ProfileScreen from "./profile";
 import ScheduleScreen from "./schedule";
-import { TabBarIcon } from "../../components/navigation/TabBarIcon";
+import { TabBarIcon } from "../../../components/navigation/TabBarIcon";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { getMee } from "@/helpers/token";
 import * as SecureStore from 'expo-secure-store';

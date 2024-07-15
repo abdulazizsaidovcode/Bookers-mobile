@@ -9,7 +9,7 @@ import axios from "axios";
 import {getFile, postFileId} from "@/helpers/api";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Toast from "react-native-simple-toast";
-import {getConfigImg} from "@/app/(tabs)/main";
+import {getConfigImg} from "@/app/(master)/main";
 
 const ProfileImgUpload = ({attachmentID}: { attachmentID?: string | null }) => {
     const {setAttachmentID} = clientStore();

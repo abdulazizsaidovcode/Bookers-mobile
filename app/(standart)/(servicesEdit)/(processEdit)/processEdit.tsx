@@ -13,7 +13,7 @@ import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { AntDesign } from '@expo/vector-icons';
 import Toast from "react-native-simple-toast";
-import { getConfig } from '@/app/(tabs)/main';
+import { getConfig } from '@/app/(master)/main';
 import MyServicesEdit from './(uslugi)/uslugi';
 import { Data } from '@/type/chat/chatSms';
 

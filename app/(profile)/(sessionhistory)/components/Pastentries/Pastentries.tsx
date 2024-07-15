@@ -1,4 +1,4 @@
-import { getConfig } from "@/app/(tabs)/main";
+import { getConfig } from "@/app/(master)/main";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { base_url } from "@/helpers/api";

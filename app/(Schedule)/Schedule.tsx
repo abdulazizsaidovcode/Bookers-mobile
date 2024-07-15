@@ -25,7 +25,7 @@ import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStor
 import HallSchedule from "./hall";
 import axios from "axios";
 import { base_url } from "@/helpers/api";
-import { getConfig } from "../(tabs)/main";
+import { getConfig } from "../(tabs)/(master)/main";
 import CenteredModal from "@/components/(modals)/modal-centered";
 
 const Schedule: React.FC = () => {

@@ -1,5 +1,5 @@
 import Index from "@/app";
-import { getConfig } from "@/app/(tabs)/main";
+import { getConfig } from "@/app/(master)/main";
 import Buttons from "@/components/(buttons)/button";
 import { Text, View } from "@/components/Themed";
 import NavigationMenu from "@/components/navigation/navigation-menu";

@@ -16,7 +16,7 @@ import {
 } from '@/helpers/api';
 import { router, useNavigation } from 'expo-router';
 import MyServicesEdit from './(processEdit)/(uslugi)/uslugi';
-import { getConfig } from '@/app/(tabs)/main';
+import { getConfig } from '@/app/(master)/main';
 
 const MyServicesScreenEdit = () => {
     const route = useRoute();

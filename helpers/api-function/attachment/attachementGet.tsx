@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { postFileId, postFilelist } from "../../api"
-import { getConfig } from '@/app/(tabs)/main';
+import { getConfig } from '@/app/(master)/main';
 
 interface UploadFileResponse {
   body: string;
