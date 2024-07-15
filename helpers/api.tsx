@@ -1,11 +1,11 @@
 // swagger url
 // export const base_url: string = 'http://45.67.35.86:8080/' ;
-export const base_url: string = 'http://134.122.77.107:8080/';
+export const base_url: string = `${process.env.API_BASE_URL}`;
 // export const base_url: string = 'http://192.168.0.126/'; 
 export const getMe = `${base_url}user/me`
 export const getMeID = `${base_url}user/get/me/`
 
-// get file
+// get file 0
 export const getFile: string = `${base_url}attachment/getFile/`
 export const postFileId = `${base_url}attachment/upload`; // get chat list
 export const postFilelist = `${base_url}attachment/upload/list`; // get chat list
