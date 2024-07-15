@@ -36,7 +36,6 @@ const CheckPinOnCome: React.FC = () => {
 
     useFocusEffect(
         useCallback(() => {
-            // Reset state when the page is focused or unfocused
             async function handleContinue() {
                 try {
                     let parol = await SecureStore.getItemAsync('password')
