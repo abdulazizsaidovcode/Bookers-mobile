@@ -7,6 +7,14 @@ import React from 'react';
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 
+interface Service {
+    id: any;
+    title: string;
+    distance: string;
+    icon: any;
+    onPress: () => void;
+  }
+
 
 const services = [
   { id: 1, title: "Здоровье и красота волос", distance: "450", icon: "rightcircleo",  onPress: () => router.push("./(hairHealth)/hair" ) },
@@ -19,7 +27,7 @@ const services = [
   { id: 8, title: "Массаж", distance: "300", icon: "rightcircleo", onPress: () => router.push("../(location)/Location" ) }
 ];
 
-const ServiceCard = ({ title, distance, icon, onPress }) => {
+const ServiceCard: React.FC<Service> = ({ title, distance, icon, onPress }) => {
   const router = useRouter(); // Initialize the useRouter hook
 
   return (
@@ -46,7 +54,7 @@ const Uslugi = () => {
           <Text style={[tw`font-bold text-2xl text-white mb-6`]}>Услуги</Text>
           <View style={tw`w-full flex flex-row flex-wrap mb-4`}>
             {services.map(service => (
-              <ServiceCard key={service.id} title={service.title} distance={service.distance} icon={service.icon} onPress={service.onPress} />
+               <ServiceCard key={service.id} title={service.title} distance={service.distance} icon={service.icon} onPress={service.onPress} />
             ))}
           </View>
         </ScrollView>
