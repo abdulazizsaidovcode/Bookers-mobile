@@ -39,17 +39,17 @@ const SettingsPage: React.FC = () => {
           {
             icon: "calendar",
             label: "Расписание работы",
-            screen: "WorkSchedule",
+            screen: "(free)/(work-grafic-edit)/workMain",
           },
           {
             icon: "calendar-check",
             label: "Онлайн бронирование",
-            screen: "OnlineBooking",
+            screen: "(standart)/(onlineBooking)/onlineBooking",
           },
           {
             icon: "bell",
             label: "Настройки уведомлений",
-            screen: "NotificationSettings",
+            screen: "(notifications)/notifications",
           },
           {
             icon: "cogs",
