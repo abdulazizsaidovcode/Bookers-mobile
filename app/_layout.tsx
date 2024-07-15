@@ -119,6 +119,8 @@ import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow"
 import TimeSelect from "./(standart)/(onlineBooking)/(booking)/timeSelect";
 import ChatScreen from "./(tabs)/chat";
 import CheckPinOnCome from "./(checkPassword)/checkPassword";
+import Uslugi from "./(client)/(uslugi)/uslugi";
+import Hair from "./(client)/(uslugi)/(hairHealth)/hair";
 
 
 
