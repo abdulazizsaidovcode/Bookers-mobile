@@ -440,7 +440,7 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
 			<View style={{ flexDirection: 'row', gap: 10, paddingVertical: 10 }}>
 				<View>
 					<Image
-						source={item.clientAttachmentId ? { uri: getFile + item.clientAttachmentId } : require('../../assets/avatar.png')}
+						source={item.clientAttachmentId ? { uri: getFile + item.clientAttachmentId } : require('../../../assets/avatar.png')}
 						style={styles.profileImage} />
 				</View>
 				<View>
