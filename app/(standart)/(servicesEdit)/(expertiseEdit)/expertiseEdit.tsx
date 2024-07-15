@@ -12,7 +12,7 @@ import axios from 'axios';
 import { category_child, getSpecialization, master_add_specialization, masterAdd_category } from '@/helpers/api';
 import { useRoute } from '@react-navigation/native';
 import Textarea from '@/components/select/textarea';
-import { getConfig } from '@/app/(tabs)/main';
+import { getConfig } from '@/app/(master)/main';
 
 
 const ExpertiseEdit: React.FC = () => {

@@ -5,7 +5,7 @@ import tw from "tailwind-react-native-classnames";
 import { Text, TouchableOpacity } from "react-native";
 import axios from "axios";
 import { base_url } from "@/helpers/api";
-import { getConfig } from "@/app/(tabs)/main";
+import { getConfig } from "@/app/(master)/main";
 
 interface Types {
   setDistrictId: () => void;

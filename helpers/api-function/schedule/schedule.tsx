@@ -1,4 +1,4 @@
-import { getConfig } from "@/app/(tabs)/main";
+import { getConfig } from "@/app/(master)/main";
 import { master_service_list, schedule_list } from "@/helpers/api";
 import { weekList } from "@/type/graficWork/graficWork";
 import axios from "axios";

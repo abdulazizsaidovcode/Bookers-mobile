@@ -10,7 +10,7 @@ import { router } from 'expo-router';
 import axios from 'axios';
 import { gender_status } from '@/helpers/api';
 import { ActivityIndicator } from 'react-native-paper';
-import { getConfig } from '@/app/(tabs)/main';
+import { getConfig } from '@/app/(master)/main';
 
 const ServesGender = () => {
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);

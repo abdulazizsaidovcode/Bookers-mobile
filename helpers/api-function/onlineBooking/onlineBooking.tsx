@@ -2,7 +2,7 @@ import { onlineBookingAllowClient_url, onlineBookingHallWaitin_url, onlineBookin
 import axios from "axios";
 import { Alert } from "react-native"
 import { IsActive } from "@/helpers/state_managment/onlinBooking/onlineBooking";
-import { getConfig } from '@/app/(tabs)/main'
+import { getConfig } from '@/app/(master)/main'
 
 
 export const onlineBookingAllowClient = async (isEnabled: boolean) => {

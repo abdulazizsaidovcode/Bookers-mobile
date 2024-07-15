@@ -7,7 +7,7 @@ import {SafeAreaView} from 'react-native-safe-area-context'
 import * as SecureStore from "expo-secure-store";
 import {base_url} from "@/helpers/api";
 import axios from "axios";
-import {getConfig} from "@/app/(tabs)/main";
+import {getConfig} from "@/app/(master)/main";
 
 const tariffs = [
     {

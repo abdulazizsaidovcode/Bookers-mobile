@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
-import TabLayout from './(tabs)/_layout';
+import TabLayout from './(tabs)/(master)/_layout';
 import MyServices from './(standart)/(services)/(myServices)/myServices';
 import * as SecureStore from 'expo-secure-store';
 import Auth from './(auth)/auth';

@@ -1,4 +1,4 @@
-import { getConfig } from "@/app/(tabs)/main";
+import { getConfig } from "@/app/(master)/main";
 import { help_url } from "@/helpers/api";
 import { Help } from "@/helpers/state_managment/help/helpStore";
 import axios from "axios";

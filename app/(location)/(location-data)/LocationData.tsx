@@ -21,7 +21,7 @@ import tw from "tailwind-react-native-classnames";
 import { router } from "expo-router";
 import Modal from "react-native-modal";
 import { Feather } from "@expo/vector-icons";
-import { getConfig } from "@/app/(tabs)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 import axios from "axios";
 import Textarea from "@/components/select/textarea";
 

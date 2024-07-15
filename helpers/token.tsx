@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getMe } from "./api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {getConfig} from "@/app/(tabs)/main";
+import {getConfig} from "@/app/(master)/main";
 
 export const getData = async () => {
   try {

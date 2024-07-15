@@ -14,7 +14,7 @@ import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import MyServicesScreen from '../../(services)/(myServicesScreen)/MyServicesScreen';
 import { router } from 'expo-router';
-import { getConfig } from '@/app/(tabs)/main';
+import { getConfig } from '@/app/(master)/main';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category'>;
 
