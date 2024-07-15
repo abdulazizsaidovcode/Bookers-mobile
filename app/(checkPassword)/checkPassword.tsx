@@ -119,7 +119,6 @@ const CheckPinOnCome: React.FC = () => {
                         ]}
                         onPress={() => {
                             handleContinue()
-
                         }}
                         disabled={!isButtonEnabled}
                     >
