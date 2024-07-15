@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import { masterData } from '@/helpers/api-function/register/registrFC';
@@ -46,7 +46,6 @@ const CheckPinOnCome: React.FC = () => {
 
                 } catch (error) {
                     console.log(error);
-
                 }
             }
             handleContinue()
@@ -81,7 +80,9 @@ const CheckPinOnCome: React.FC = () => {
 
     const handleContinue = () => {
         const enteredOtp = otp.join('');
-        if (enteredOtp === code) {
+        Alert.alert(code)
+        
+        if (enteredOtp !== code) {
             setIsCorrect(true);
             navigation.navigate('(tabs)')
         } else {
@@ -89,7 +90,6 @@ const CheckPinOnCome: React.FC = () => {
             alert('Неверный ПИН код');
         }
     };
-
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>

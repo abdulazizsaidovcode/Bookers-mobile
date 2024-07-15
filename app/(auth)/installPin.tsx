@@ -11,14 +11,12 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/i
 const InstallPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-
     const inputs = useRef<TextInput[]>([]);
 
     useEffect(() => {
         const getStoredOtp = async () => {
             try {
                 const storedOtp = await AsyncStorage.getItem('otp');
-                
                 if (storedOtp) {
                     setOtp(storedOtp.split(''));
                 }
