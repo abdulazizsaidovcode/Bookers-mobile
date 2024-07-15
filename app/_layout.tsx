@@ -119,6 +119,8 @@ import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow"
 import TimeSelect from "./(standart)/(onlineBooking)/(booking)/timeSelect";
 import ChatScreen from "./(tabs)/chat";
 import CheckPinOnCome from "./(checkPassword)/checkPassword";
+import Uslugi from "./(client)/(uslugi)/uslugi";
+import Hair from "./(client)/(uslugi)/(hairHealth)/hair";
 
 
 
@@ -346,7 +348,7 @@ function RootLayoutNav() {
               options={{ title: "Services", headerShown: false }}
             />
             {/* expense start */}
-
+           
             <Stack.Screen
               name="(standart)/(services)/(process)/process"
               component={Process}
@@ -419,7 +421,7 @@ function RootLayoutNav() {
             />
 
             {/* Service edit start */}
-
+               
             <Stack.Screen
               name="(standart)/(servicesEdit)/(gender)/servesGender"
               component={ServesGenderEdit}
@@ -451,6 +453,20 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             {/* Service edit end */}
+             
+            {/* Client Uslugi start  */}
+            <Stack.Screen
+              name="(client)/(uslugi)/uslugi"
+              component={Uslugi}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(uslugi)/(hairHealth)/hair"
+              component={Hair}
+              options={{ headerShown: false }}
+            />
+
+            {/* Client Uslugi end */}
             <Stack.Screen
               name="(profile)/(sessionhistory)/sessionHistory"
               component={SessionHistory}
