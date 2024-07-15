@@ -18,6 +18,7 @@ const InstallPin: React.FC = () => {
         const getStoredOtp = async () => {
             try {
                 const storedOtp = await AsyncStorage.getItem('otp');
+                
                 if (storedOtp) {
                     setOtp(storedOtp.split(''));
                 }
