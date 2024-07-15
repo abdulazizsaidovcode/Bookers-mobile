@@ -119,8 +119,6 @@ import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow"
 import TimeSelect from "./(standart)/(onlineBooking)/(booking)/timeSelect";
 import ChatScreen from "./(tabs)/chat";
 import CheckPinOnCome from "./(checkPassword)/checkPassword";
-import Uslugi from "./(client)/(uslugi)/uslugi";
-import Hair from "./(client)/(uslugi)/(hairHealth)/hair";
 
 
 
@@ -308,6 +306,16 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(settings)/settings"
               component={Settings}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(map)/(master-locations)/master-locations"
+              component={MasterLocations}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(map)/(recent-masters)/recent-masters"
+              component={RecentMasters}
               options={{ headerShown: false }}
             />
             <Stack.Screen
