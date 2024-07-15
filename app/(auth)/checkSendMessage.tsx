@@ -29,7 +29,8 @@ const OtpInputExample: React.FC = () => {
     const [response, setRespone] = useState<null | boolean>(null);
     const [messageResponse, setMessageResponse] = useState(false);
     const { isRegtered, setIsRegtered } = isRegister()
-    const navigation = useNavigation<SettingsScreenNavigationProp>();
+    const navigation = useNavigation<any>();
+    const [role, setRole] = useState<string | null>(null);
 
     const { t } = useTranslation();
 
@@ -78,15 +79,16 @@ const OtpInputExample: React.FC = () => {
 
                 if (isRegtered) {
                     navigation.navigate("(auth)/authPage1");
-                    // setIsRegtered('')
                 } else {
                     if (parol !== null) {
-                        navigation.navigate('(tabs)');
+                        if (role == 'ROLE_MASTER') {
+                            navigation.navigate('(tabs)/(master)');
+                        } else if (role == 'ROLE_CLIENT') {
+                            navigation.navigate('(tabs)/(client)');
+                        }
                     } else {
                         navigation.navigate("(auth)/installPin");
                     }
-                    // setIsRegtered('')
-
                 }
                 setRespone(false);
             }
@@ -94,6 +96,7 @@ const OtpInputExample: React.FC = () => {
 
         finishwork()
     }, [response])
+
     return (
         <View style={styles.container}>
             <View style={styles.textContainer}>
@@ -125,7 +128,7 @@ const OtpInputExample: React.FC = () => {
                         if (isRegtered) {
                             handlePress()
                         } else {
-                            authLogin(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered)
+                            authLogin(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setRole)
                         }
                     }}
                 >

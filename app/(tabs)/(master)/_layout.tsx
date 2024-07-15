@@ -27,7 +27,7 @@ import { handleRefresh } from "@/constants/refresh";
 
 const Tab = createBottomTabNavigator();
 
-function TabLayout() {
+function MasterTabLayout() {
   const colorScheme = useColorScheme();
   const { getme, setGetMee } = graficWorkStore();
   const [tariff, setTariff] = useState(null);
@@ -188,4 +188,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default TabLayout
+export default MasterTabLayout

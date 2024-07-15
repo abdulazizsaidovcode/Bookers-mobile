@@ -125,6 +125,8 @@ import MasterLocations from "./(client)/(map)/(master-locations)/master-location
 import RecentMasters from "./(client)/(map)/(recent-masters)/recent-masters";
 import Specialist from "./(client)/(uslugi)/(specialist)/specialist";
 import Dashboard from "./(client)/(dashboard)/dashboard";
+import MasterTabLayout from "./(tabs)/(master)/_layout";
+import ClientTabLayout from "./(tabs)/(client)/_layout";
 
 
 
@@ -175,8 +177,13 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(tabs)"
-              component={TabLayout}
+              name="(tabs)/(master)"
+              component={MasterTabLayout}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(tabs)/(client)"
+              component={ClientTabLayout}
               options={{ headerShown: false }}
             />
             <Stack.Screen

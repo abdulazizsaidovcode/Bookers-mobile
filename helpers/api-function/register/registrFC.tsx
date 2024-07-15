@@ -14,7 +14,7 @@ export const registerFunction = (phoneNumber: string, setCode: (value: any) => v
         phoneNumber: phoneNumber
     }
 
-    axios.post(`${register_page}sendCode?purpose=${status}`, sentData)
+    axios.post(`${register_page}sendCode?purpose=${status}&lang=uz`, sentData)
         .then(res => {
             setCode(res.data.body);
             router.push('(auth)/checkSendMessage')
@@ -47,16 +47,18 @@ export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any
         })
 }
 
-export const authLogin = async (phoneNumber: string, otpValue: string, setRespone: any, isRegtered: boolean) => {
+export const authLogin = async (phoneNumber: string, otpValue: string, setRespone: any, isRegtered: boolean, setRole: any) => {
     const authData = {
         phone: phoneNumber,
         code: otpValue
     }
-    axios.post(`${base_url}auth/login`, authData)
+
+    axios.post(`${base_url}auth/login?lang=uz`, authData)
         .then(res => {
             if (res.data.success) {
                 setRespone(true)
                 authStorage(res.data.body)
+                setRole(res.data.message)
                 SecureStore.setItemAsync('number', phoneNumber)
             } else setRespone(false)
         })
@@ -87,7 +89,7 @@ export const masterData = async ({ role, firstName, lastName, nickname, phoneNum
 
     let parol = await SecureStore.getItemAsync('password')
     console.log(parol, "wderf");
-    
+
     if (parol !== null) {
         axios.post(url, formData, {
             headers: {

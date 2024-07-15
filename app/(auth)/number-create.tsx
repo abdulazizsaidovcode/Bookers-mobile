@@ -32,8 +32,6 @@ const PhoneNumberInput: React.FC = () => {
         setCode('');
         setPhoneNumber('');
         setIsRegtered(val);
-        console.log(val);
-        
     };
     // API 
 
@@ -110,9 +108,8 @@ const PhoneNumberInput: React.FC = () => {
             </ScrollView>
             <View style={{ marginVertical: 20 }}>
                 <Buttons
-                    title={t("login")}
+                    title={"jnk"}
                     onPress={() => {
-                        // router.push('(auth)/checkSendMessage')
                         registerFunction(phoneNumber, setCode, status)
                     }}
                     backgroundColor={'#9C0A35'}
