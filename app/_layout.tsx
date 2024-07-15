@@ -121,6 +121,9 @@ import ChatScreen from "./(tabs)/chat";
 import CheckPinOnCome from "./(checkPassword)/checkPassword";
 import Uslugi from "./(client)/(uslugi)/uslugi";
 import Hair from "./(client)/(uslugi)/(hairHealth)/hair";
+import MasterLocations from "./(client)/(map)/(master-locations)/master-locations";
+import RecentMasters from "./(client)/(map)/(recent-masters)/recent-masters";
+import Specialist from "./(client)/(uslugi)/(specialist)/specialist";
 
 
 
@@ -475,6 +478,12 @@ function RootLayoutNav() {
               component={Hair}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="(client)/(uslugi)/(specialist)/specialist"
+              component={Specialist}
+              options={{ headerShown: false }}
+            />
+
 
             {/* Client Uslugi end */}
             <Stack.Screen
