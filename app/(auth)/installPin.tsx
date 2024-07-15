@@ -11,7 +11,6 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/i
 const InstallPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-
     const inputs = useRef<TextInput[]>([]);
 
     useEffect(() => {

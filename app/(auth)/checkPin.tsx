@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,7 @@ import { RootStackParamList } from '@/type/root';
 import { useNavigation } from '@react-navigation/native';
 import { authStorage } from "@/constants/storage";
 import * as SecureStore from 'expo-secure-store';
+import { useFocusEffect } from 'expo-router';
 
 const CheckPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
@@ -20,11 +21,14 @@ const CheckPin: React.FC = () => {
 
     const { t } = useTranslation();
     const navigation = useNavigation<any>();
-
-    useEffect(() => {
+    
+    useFocusEffect(
+        useCallback(() => {
         const getStoredOtp = async () => {
             try {
                 const otp = await AsyncStorage.getItem('otp');
+                console.log(otp);
+                
                 setStoredOtp(otp);
             } catch (error) {
                 console.log('Failed to load OTP from storage', error);
@@ -32,7 +36,9 @@ const CheckPin: React.FC = () => {
         };
 
         getStoredOtp();
-    }, []);
+    }, [])
+    )
+    
 
     useEffect(() => {
         if (tokenData) {
