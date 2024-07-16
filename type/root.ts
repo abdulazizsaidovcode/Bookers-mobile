@@ -68,4 +68,5 @@ export type RootStackParamList = {
   '(auth)/(setPinCode)/checkInstalledPin': undefined
    "(client)/(dashboard)/dashboard": undefined
    '(client)/(dashboard)/(health)/health': undefined
+   '(client)/(profile)/profile': undefined
 };
