@@ -72,7 +72,7 @@ const Dashboard = () => {
           <TouchableOpacity style={styles.touchableItem} onPress={handlePress}>
             <View style={styles.item}>
               <View style={styles.textContainer}>
-                <Text style={styles.titleText}>Пригласить своего мастера</Text>
+                <Text style={styles.titleText1}>Пригласить своего мастера</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -159,6 +159,11 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   titleText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#111',
+  },
+  titleText1: {
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
