@@ -84,16 +84,53 @@ interface IRegister {
     language: string;
 }
 
-export const masterData = async ({ role, firstName, lastName, nickname, phoneNumber, img, islogin, setData, password, language }: IRegister) => {
+export const registerMaster = async ({ role, firstName, lastName, nickname, phoneNumber, img, islogin, setData, password, language }: IRegister) => {
     const formData = new FormData();
     formData.append('image', img ? img : null)
 
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
-    const url = `${register_page}master?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${nickname ? `&nickname=${encodeURIComponent(nickname)}` : ''}&phoneNumber=${formattedPhoneNumber}&ROLE=${encodeURIComponent(role)}`;
+    const url = `${register_page}master?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${nickname ? `&nickname=${encodeURIComponent(nickname)}&lang=${language}` : ''}&phoneNumber=${formattedPhoneNumber}&ROLE=${encodeURIComponent(role)}`;
     console.log(url );
     
     let parol = await SecureStore.getItemAsync('password')
     console.log(parol, "wderf");
+
+    if (parol !== null) {
+        axios.post(url, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+            .then(res => {
+                if (res.data.success) {
+                    setData(res.data.body)
+                    Alert.alert("Вы успешно зарегистрировались");
+                    SecureStore.setItemAsync('number', phoneNumber)
+                } else {
+                    Alert.alert("Произошла ошибка при регистрации");
+                    setData(null)
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                setData(null)
+                Alert.alert("Произошла ошибка при регистрации");
+            });
+    } else {
+        Alert.alert("parol o'rnatildi");
+        SecureStore.setItemAsync('password', password)
+        islogin(true)
+    }
+}
+export const registerClient = async ({ firstName, lastName, phoneNumber, img, islogin, setData, password, language }: any) => {
+    const formData = new FormData();
+    formData.append('image', img ? img : null)
+
+    const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
+    const url = `${register_page}client?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${`&lang=${language}`}&phoneNumber=${formattedPhoneNumber}`;
+    console.log(url );
+    
+    let parol = await SecureStore.getItemAsync('password')
 
     if (parol !== null) {
         axios.post(url, formData, {

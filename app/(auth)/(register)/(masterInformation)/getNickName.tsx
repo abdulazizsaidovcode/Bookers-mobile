@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const UserInfo2 = () => {
+const getMasterNickName = () => {
     const { nickname, setNickname } = registerStory();
     const { setAttachmentID } = clientStore();
     const {t}=useTranslation()
@@ -13,12 +13,12 @@ const UserInfo2 = () => {
         // Nickname ni bo'sh qilib belgilash
         setNickname('');
         // Navigate to the next page
-        router.push('(auth)/(register)/(userInformation)/getPhoto');
+        router.push('(auth)/(register)/(masterInformation)/getPhoto');
     };
 
     const handleContinue = () => {
         // Navigate to the next page
-        router.push('(auth)/(register)/(userInformation)/getPhoto');
+        router.push('(auth)/(register)/(masterInformation)/getPhoto');
     };
 
     useEffect(() => {
@@ -143,4 +143,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UserInfo2;
+export default getMasterNickName;

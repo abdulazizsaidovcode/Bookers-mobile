@@ -11,7 +11,6 @@ import {
 import { useColorScheme } from "@/components/useColorScheme";
 import HomeScreen from "./main";
 import ChatScreen from "./chat";
-import ProfileScreen from "./profile";
 import { TabBarIcon } from "../../../components/navigation/TabBarIcon";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { StyleSheet, View } from "react-native";
@@ -19,6 +18,7 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import { handleRefresh } from "@/constants/refresh";
 import Uslugi from "@/app/(client)/(uslugi)/uslugi";
+import ProfilePage from "@/app/(client)/(profile)/profile";
 
 
 
@@ -146,7 +146,7 @@ function ClientTabLayout() {
         />
         <Tab.Screen
           name="profile"
-          component={ProfileScreen}
+          component={ProfilePage}
           options={{
             title: "Профиль",
             tabBarIcon: ({ color }) => (
