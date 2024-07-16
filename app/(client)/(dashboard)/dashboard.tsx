@@ -28,7 +28,7 @@ const Dashboard = () => {
       id: 4,
       image: require('@/assets/clientDashboard/aranow.png'),
       title: 'Уход за телом',
-      titleThen: 'Рядом с тобой 450',
+      titleThen: 'Рядом с тобой 456',
     },
     {
       id: 5,
