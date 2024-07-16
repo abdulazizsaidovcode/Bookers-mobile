@@ -22,7 +22,7 @@ const Dashboard = () => {
       id: 3,
       image: require('@/assets/clientDashboard/eyes.png'),
       title: 'Ресницы и брови',
-      titleThen: 'Рядом с тобой 450',
+      titleThen: 'Рядом с тобой 322',
     },
     {
       id: 4,
