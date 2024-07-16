@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     color: "#C2C2C2",
   },
   content: {
-    padding: 15,
+    // padding: 15,
     backgroundColor: '#21212E',
   },
 });

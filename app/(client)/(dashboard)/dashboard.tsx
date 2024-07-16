@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import AccordionItem from './accardion';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
@@ -21,19 +21,19 @@ const Dashboard = () => {
     {
       id: 3,
       image: require('@/assets/clientDashboard/Layer_1.png'),
-      title: 'Здоровье и красота волос',
+      title: 'Ресницы и брови',
       titleThen: 'Рядом с тобой 450',
     },
     {
       id: 4,
       image: require('@/assets/clientDashboard/Layer_1.png'),
-      title: 'Здоровье и красота волос',
+      title: 'Уход за телом',
       titleThen: 'Рядом с тобой 450',
     },
     {
       id: 5,
       image: require('@/assets/clientDashboard/Layer_1.png'),
-      title: 'Здоровье и красота волос',
+      title: 'Уход за лицом',
       titleThen: 'Рядом с тобой 450',
     },
   ];
@@ -52,7 +52,7 @@ const Dashboard = () => {
           <Feather name="bookmark" size={28} color="white" />
         </View>
       </View>
-      <ScrollView style={styles.scrollView}>
+      <View>
         <AccordionItem title="Мои записи" titleThen='У вас пока нет записей, выберите услугу.' backgroundColor='#21212E'>
           {dataDashboard.map((item) => (
             <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={handlePress}>
@@ -71,7 +71,7 @@ const Dashboard = () => {
         <AccordionItem title="Мои мастера" titleThen='У вас пока нет своих мастеров' backgroundColor='#21212E'>
           <Text>This is the content of the second item.</Text>
         </AccordionItem>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -104,11 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
   },
-  scrollView: {
-    width: '100%',
-  },
   touchableItem: {
-    width: '100%',
     alignItems: 'center', // Center content horizontally
   },
   item: {
@@ -119,6 +115,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 8,
     width: '100%',
+    maxWidth: 358, // Set a maximum width to prevent stretching too wide
   },
   imageContainer: {
     width: 50,
@@ -140,6 +137,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
+    borderRadius: 8, // Border radius for title text container
   },
   subtitleText: {
     fontSize: 14,
