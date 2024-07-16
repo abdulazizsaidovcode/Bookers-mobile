@@ -63,7 +63,7 @@ export type RootStackParamList = {
   '(auth)/checkSendMessage': undefined
   '(auth)/(setPinCode)/installPin': undefined
   '(auth)/(register)/(roleSelection)/switchPage': undefined
-  '(auth)/(register)/(userInformation)/getNameSurname': undefined
+  '(auth)/(register)/(masterInformation)/getNameSurname': undefined
   '(auth)/(register)/(agreements)/getAgrement': undefined
   '(auth)/(setPinCode)/checkInstalledPin': undefined
    "(client)/(dashboard)/dashboard": undefined
@@ -73,4 +73,5 @@ export type RootStackParamList = {
    '(client)/(profile)/(notification)/notification': undefined
    '(client)/(profile)/(profileEdit)/profileEdit': undefined
    '(client)/(profile)/(orderHistory)/orderHistory': undefined
+  '(auth)/(register)/(clientInformations)/getNameSurname': undefined
 };

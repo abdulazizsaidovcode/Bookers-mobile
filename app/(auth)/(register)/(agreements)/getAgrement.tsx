@@ -1,4 +1,5 @@
 import Buttons from '@/components/(buttons)/button';
+import registerStory from '@/helpers/state_managment/auth/register';
 import { RootStackParamList } from '@/type/root';
 import { NavigationProp } from '@react-navigation/native';
 import { useNavigation } from 'expo-router';
@@ -11,6 +12,15 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(
 const OfferScreen = () => {
     const { t } = useTranslation()
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+    const { role } = registerStory()
+
+    function toGetInfomationPage() {
+        if (role === 'ROLE_CLIENT') {
+            navigation.navigate('(auth)/(register)/(clientInformations)/getNameSurname');
+        } else {
+            navigation.navigate('(auth)/(register)/(masterInformation)/getNameSurname');
+        }
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -28,7 +38,7 @@ const OfferScreen = () => {
                 </View>
             </ScrollView>
             <TouchableOpacity style={styles.button}>
-                <Buttons title={t("login")} backgroundColor="#9C0A35" onPress={() => navigation.navigate('(auth)/(register)/(userInformation)/getNameSurname')} />
+                <Buttons title={t("login")} backgroundColor="#9C0A35" onPress={toGetInfomationPage} />
             </TouchableOpacity>
         </SafeAreaView>
     );

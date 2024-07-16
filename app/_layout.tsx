@@ -63,8 +63,7 @@ import WebPage from "./(profile)/(WebPage)/WebPage";
 import GrafficWorkEdit from "./(free)/(work-grafic-edit)/workGraffic";
 import TimeWorkEdit from "./(free)/(work-grafic-edit)/workTime";
 import WorkMainEdit from "./(free)/(work-grafic-edit)/workMain";
-import UserInfo from "./(auth)/(register)/(userInformation)/getNameSurname";
-import UserInfo2 from "./(auth)/(register)/(userInformation)/getNickName";
+import UserInfo from "./(auth)/(register)/(masterInformation)/getNameSurname";
 import AboutUsFree from "./(free)/(help)/(aboutUs)/aboutUs";
 import HelpFree from "./(free)/(help)/help";
 import UpdatingAddressBook from "./(free)/(client)/updating-address-book";
@@ -74,7 +73,7 @@ import InstallPin from "./(auth)/(setPinCode)/installPin";
 import CheckPin from "./(auth)/(setPinCode)/checkInstalledPin";
 import Help from "./(standart)/(help)/help";
 import AboutUs from "./(standart)/(help)/(aboutUs)/aboutUs";
-import UserCameraInfo from "./(auth)/(register)/(userInformation)/getPhoto";
+import UserCameraInfo from "./(auth)/(register)/(masterInformation)/getPhoto";
 import StoppedVisiting from "./(standart)/client/stopped-visiting";
 import NotVisiting from "./(standart)/client/not-visiting";
 import StandardMain from "./(standart)/client/standard-main";
@@ -130,6 +129,9 @@ import OrderHistory from "./(client)/(profile)/(orderHistory)/orderHistory";
 import ProfileEdit from "./(client)/(profile)/(profileEdit)/profileEdit";
 import SettingsClient from "./(client)/(profile)/(settings)/settings";
 import NotificationClient from "./(client)/(profile)/(notification)/notification";
+import ClientInfo from "./(auth)/(register)/(clientInformations)/getNameSurname";
+import getMasterNickName from "./(auth)/(register)/(masterInformation)/getNickName";
+import ClientCameraInfo from "./(auth)/(register)/(clientInformations)/getPhoto";
 
 
 
@@ -235,18 +237,28 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/(register)/(userInformation)/getNameSurname"
+              name="(auth)/(register)/(masterInformation)/getNameSurname"
               component={UserInfo}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/(register)/(userInformation)/getNickName"
-              component={UserInfo2}
+              name="(auth)/(register)/(clientInformations)/getNameSurname"
+              component={ClientInfo}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/(register)/(userInformation)/getPhoto"
+              name="(auth)/(register)/(masterInformation)/getNickName"
+              component={getMasterNickName}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/(register)/(masterInformation)/getPhoto"
               component={UserCameraInfo}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/(register)/(clientInformations)/getPhoto"
+              component={ClientCameraInfo}
               options={{ headerShown: false }}
             />
             <Stack.Screen

@@ -1,4 +1,5 @@
 import Buttons from '@/components/(buttons)/button';
+import registerStory from '@/helpers/state_managment/auth/register';
 import { RootStackParamList } from '@/type/root';
 import { NavigationProp } from '@react-navigation/native';
 import { router, useNavigation } from 'expo-router';
@@ -10,7 +11,7 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(
 
 
 const SwitchPage: React.FC = () => {
-    const {t}=useTranslation()
+    const { t } = useTranslation()
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     return (

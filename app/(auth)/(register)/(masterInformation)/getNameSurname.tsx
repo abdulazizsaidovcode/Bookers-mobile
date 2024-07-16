@@ -1,5 +1,5 @@
 import registerStory from '@/helpers/state_managment/auth/register';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
@@ -7,6 +7,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 const UserInfo: React.FC = () => {
     const { firstName, setFirstName, lastName, setLastName, firstNameError, setFirstNameError, lastNameError, setLastNameError } = registerStory();
     const {t}=useTranslation()
+    const navigate = useNavigation<any>();
     const validateName = (name: string): boolean => {
         const nameRegEx = /^[a-zA-Zа-яА-ЯёЁ]{2,30}$/;
         return nameRegEx.test(name);
@@ -67,7 +68,8 @@ const UserInfo: React.FC = () => {
                     ]}
                     disabled={!isButtonEnabled}
                     onPress={() => {
-                        router.push('(auth)/(register)/(userInformation)/getNickName')
+                        console.log('salomd');
+                        navigate.navigate('(auth)/(register)/(masterInformation)/getNickName')
                     }}
                 >
                     <Text style={styles.buttonText}>{t("Continue")}</Text>
