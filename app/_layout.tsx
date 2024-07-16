@@ -116,7 +116,7 @@ import MyServicesScreenEdit from "./(standart)/(servicesEdit)/test";
 import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow";
 import TimeSelect from "./(standart)/(onlineBooking)/(booking)/timeSelect";
 import ChatScreen from "./(tabs)/(master)/chat";
-import CheckPinOnCome from "./(auth)/(checkPassword)/checkPassword";
+import CheckPinOnCome from "./(auth)/(checkPinCode)/checkPinCode";
 import Uslugi from "./(client)/(uslugi)/uslugi";
 import Hair from "./(client)/(uslugi)/(hairHealth)/hair";
 import MasterLocations from "./(client)/(map)/(master-locations)/master-locations";
