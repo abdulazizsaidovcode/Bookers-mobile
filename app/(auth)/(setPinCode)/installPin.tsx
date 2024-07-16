@@ -5,7 +5,7 @@ import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity, NativeSynth
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/installPin'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/(setPinCode)/installPin'>;
 
 
 const InstallPin: React.FC = () => {
@@ -62,7 +62,7 @@ const InstallPin: React.FC = () => {
         try {
             await AsyncStorage.setItem('otp', otp.join(''));
             // Handle the continue action (navigate to the next page)
-            navigation.navigate('(auth)/checkPin');
+            navigation.navigate('(auth)/(setPinCode)/checkInstalledPin');
         } catch (error) {
             console.log('Failed to save OTP to storage', error);
         }

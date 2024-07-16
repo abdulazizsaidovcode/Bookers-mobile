@@ -14,13 +14,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import Index from "./index";
 import Auth from "./(auth)/auth";
-import TabLayout from "./(tabs)/(master)/_layout";
 import ChatDetails from "./(chat)/(communicatie)/chatDetails";
 import Notification from "./(profile)/(notification)";
 import WorkMain from "./(free)/(work-grafic)/workMain";
 import MyServices from "./(standart)/(services)/(myServices)/myServices";
 import Expenses from "./(profile)/(Expenses)";
-import ExpensesDetail from "./(profile)/(Expenses)/(component)/(detail)/expenseDetail";
 import SessionHistory from "./(profile)/(sessionhistory)/sessionHistory";
 import ServesGender from "./(standart)/(services)/(gender)/servesGender";
 import Category from "./(standart)/(services)/(category)/category";
@@ -33,17 +31,17 @@ import { StompProvider } from "@/context/StompContext";
 import Expertise from "./(standart)/(services)/(expertise)/expertise";
 import ServiceStyle from "./(standart)/(services)/serviceStyle/serviceStyle";
 import SettingsGalleryMain from "./(settings)/(settings-gallery)/settings-gallery-main";
-import PhoneNumberInput from "./(auth)/number-create";
+import PhoneNumberInput from "./(auth)/(login)/number-create";
 import MainClient from "@/app/(free)/(client)/main";
-import OtpInput from "./(auth)/checkSendMessage";
+import OtpInput from "./(auth)/(login)/checkSendMessage";
 import CreatingClient from "./(free)/(client)/creating-client";
 import MainClientList from "./(free)/(client)/client-list";
 import AddressBook from "./(free)/(client)/address-book";
 import Process from "./(standart)/(services)/(process)/process";
-import AuthPage1 from "./(auth)/authPage1";
-import AuthPage2 from "./(auth)/authPage2";
-import AuthPage3 from "./(auth)/authPage3";
-import MasterorClient from "./(auth)/masterORclient";
+import AuthPage1 from "./(auth)/(register)/(greetings)/greetingFirst";
+import AuthPage2 from "./(auth)/(register)/(greetings)/greetingSecond";
+import AuthPage3 from "./(auth)/(register)/(greetings)/greetingThird";
+import MasterorClient from "./(auth)/(register)/(roleSelection)/masterORclient";
 import TariffsPage from "./(profile)/(tariff)/tariff";
 import Location from "./(location)/Location";
 import LocationData from "./(location)/(location-data)/LocationData";
@@ -59,24 +57,24 @@ import SettingsPage from "./(profile)/(settings)/settings";
 import ApplicationSettings from "./(profile)/(settings)/(childSettings)/(Application Settings)";
 import LanguageSelection from "./(profile)/(settings)/(childSettings)/(Application Settings)/components/language";
 import GalleryDetails from "./(settings)/(settings-gallery)/gallery-details";
-import SwitchPage from "./(auth)/switchPage";
-import OfferScreen from "./(auth)/offerScreen";
+import SwitchPage from "./(auth)/(register)/(roleSelection)/switchPage";
+import OfferScreen from "./(auth)/(register)/(agreements)/getAgrement";
 import WebPage from "./(profile)/(WebPage)/WebPage";
 import GrafficWorkEdit from "./(free)/(work-grafic-edit)/workGraffic";
 import TimeWorkEdit from "./(free)/(work-grafic-edit)/workTime";
 import WorkMainEdit from "./(free)/(work-grafic-edit)/workMain";
-import UserInfo from "./(auth)/userInfo";
-import UserInfo2 from "./(auth)/userInfo2";
+import UserInfo from "./(auth)/(register)/(userInformation)/getNameSurname";
+import UserInfo2 from "./(auth)/(register)/(userInformation)/getNickName";
 import AboutUsFree from "./(free)/(help)/(aboutUs)/aboutUs";
 import HelpFree from "./(free)/(help)/help";
 import UpdatingAddressBook from "./(free)/(client)/updating-address-book";
 import OnlineBooking from "./(standart)/(onlineBooking)/onlineBooking";
 import Booking from "./(standart)/(onlineBooking)/(booking)/booking";
-import InstallPin from "./(auth)/installPin";
-import CheckPin from "./(auth)/checkPin";
+import InstallPin from "./(auth)/(setPinCode)/installPin";
+import CheckPin from "./(auth)/(setPinCode)/checkInstalledPin";
 import Help from "./(standart)/(help)/help";
 import AboutUs from "./(standart)/(help)/(aboutUs)/aboutUs";
-import UserCameraInfo from "./(auth)/userCameraInfo";
+import UserCameraInfo from "./(auth)/(register)/(userInformation)/getPhoto";
 import StoppedVisiting from "./(standart)/client/stopped-visiting";
 import NotVisiting from "./(standart)/client/not-visiting";
 import StandardMain from "./(standart)/client/standard-main";
@@ -118,7 +116,7 @@ import MyServicesScreenEdit from "./(standart)/(servicesEdit)/test";
 import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow";
 import TimeSelect from "./(standart)/(onlineBooking)/(booking)/timeSelect";
 import ChatScreen from "./(tabs)/(master)/chat";
-import CheckPinOnCome from "./(checkPassword)/checkPassword";
+import CheckPinOnCome from "./(auth)/(checkPinCode)/checkPinCode";
 import Uslugi from "./(client)/(uslugi)/uslugi";
 import Hair from "./(client)/(uslugi)/(hairHealth)/hair";
 import MasterLocations from "./(client)/(map)/(master-locations)/master-locations";
@@ -192,62 +190,67 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/number-create"
+              name="(auth)/(login)/number-create"
               component={PhoneNumberInput}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/checkSendMessage"
+              name="(auth)/(login)/checkSendMessage"
               component={OtpInput}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/authPage1"
+              name="(auth)/(register)/(greetings)/greetingFirst"
               component={AuthPage1}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/authPage2"
+              name="(auth)/(register)/(greetings)/greetingSecond"
               component={AuthPage2}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/authPage3"
+              name="(auth)/(register)/(greetings)/greetingThird"
               component={AuthPage3}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/masterORclient"
+              name="(auth)/(register)/(roleSelection)/masterORclient"
               component={MasterorClient}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/switchPage"
+              name="(auth)/(register)/(roleSelection)/switchPage"
               component={SwitchPage}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/offerScreen"
+              name="(auth)/(register)/(agreements)/getAgrement"
               component={OfferScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/userInfo"
+              name="(auth)/(register)/(userInformation)/getNameSurname"
               component={UserInfo}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/userInfo2"
+              name="(auth)/(register)/(userInformation)/getNickName"
               component={UserInfo2}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/installPin"
+              name="(auth)/(register)/(userInformation)/getPhoto"
+              component={UserCameraInfo}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(auth)/(setPinCode)/installPin"
               component={InstallPin}
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(auth)/checkPin"
+              name="(auth)/(setPinCode)/checkInstalledPin"
               component={CheckPin}
               options={{ headerShown: false }}
             />
@@ -266,11 +269,7 @@ function RootLayoutNav() {
               component={NotVisiting}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name="(auth)/userCameraInfo"
-              component={UserCameraInfo}
-              options={{ headerShown: false }}
-            />
+
             <Stack.Screen
               name="(chat)/(communicatie)/chatDetails"
               component={ChatDetails}
@@ -369,7 +368,7 @@ function RootLayoutNav() {
               options={{ title: "Services", headerShown: false }}
             />
             {/* expense start */}
-           
+
             <Stack.Screen
               name="(standart)/(services)/(process)/process"
               component={Process}
@@ -442,7 +441,7 @@ function RootLayoutNav() {
             />
 
             {/* Service edit start */}
-               
+
             <Stack.Screen
               name="(standart)/(servicesEdit)/(gender)/servesGender"
               component={ServesGenderEdit}
@@ -474,7 +473,7 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             {/* Service edit end */}
-             
+
             {/* Client Uslugi start  */}
             <Stack.Screen
               name="(client)/(uslugi)/uslugi"

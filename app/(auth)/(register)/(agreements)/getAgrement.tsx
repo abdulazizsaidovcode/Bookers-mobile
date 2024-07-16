@@ -1,15 +1,15 @@
 import Buttons from '@/components/(buttons)/button';
 import { RootStackParamList } from '@/type/root';
 import { NavigationProp } from '@react-navigation/native';
-import { router, useNavigation } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native'   ;
+import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/address-book'>;
 
 
 const OfferScreen = () => {
-    const {t}=useTranslation()
+    const { t } = useTranslation()
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     return (
@@ -20,7 +20,7 @@ const OfferScreen = () => {
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.offerContainer}>
                     <Text style={styles.offerTitle}>
-                       {t("online_service")}
+                        {t("online_service")}
                     </Text>
                     <Text style={styles.offerText}>
                         {t("service_duration")}
@@ -28,7 +28,7 @@ const OfferScreen = () => {
                 </View>
             </ScrollView>
             <TouchableOpacity style={styles.button}>
-                <Buttons title={t("login")} backgroundColor="#9C0A35" onPress={() => navigation.navigate('(auth)/userInfo')} />
+                <Buttons title={t("login")} backgroundColor="#9C0A35" onPress={() => navigation.navigate('(auth)/(register)/(userInformation)/getNameSurname')} />
             </TouchableOpacity>
         </SafeAreaView>
     );

@@ -16,11 +16,11 @@ const SwitchPage: React.FC = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.logo}>
-                <Image source={require('../../assets/images/auth/logo.png')} />
+                <Image source={require('../../../../assets/images/auth/logo.png')} />
             </View>
             <Text style={styles.title}>Bookers Beauty</Text>
             <View style={styles.button}>
-                <Buttons title={t("start")} backgroundColor="#9C0A35" onPress={() => navigation.navigate('(auth)/offerScreen')} />
+                <Buttons title={t("start")} backgroundColor="#9C0A35" onPress={() => navigation.navigate('(auth)/(register)/(agreements)/getAgrement')} />
             </View>
         </SafeAreaView>
     );
