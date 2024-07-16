@@ -65,4 +65,9 @@ export type RootStackParamList = {
     '(auth)/switchPage' : undefined
     '(auth)/userInfo': undefined
     '(auth)/offerScreen': undefined
+    '(client)/(profile)/profile': undefined
+    '(client)/(profile)/(notification)/notification': undefined
+    '(client)/(profile)/(profileEdit)/profileEdit': undefined
+    '(client)/(profile)/(settings)/settings': undefined
+    '(client)/(profile)/(orderHistory)/orderHistory': undefined
 };
