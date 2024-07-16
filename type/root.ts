@@ -69,4 +69,8 @@ export type RootStackParamList = {
    "(client)/(dashboard)/dashboard": undefined
    '(client)/(dashboard)/(health)/health': undefined
    '(client)/(profile)/profile': undefined
+   '(client)/(profile)/(settings)/settings': undefined
+   '(client)/(profile)/(notification)/notification': undefined
+   '(client)/(profile)/(profileEdit)/profileEdit': undefined
+   '(client)/(profile)/(orderHistory)/orderHistory': undefined
 };
