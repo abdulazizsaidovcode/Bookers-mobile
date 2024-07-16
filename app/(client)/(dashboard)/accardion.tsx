@@ -30,7 +30,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, children }) => {
         activeOpacity={0.8}
       >
         <Text style={styles.headerText}>{title}</Text>
-        <AntDesign name={expanded ? 'up' : 'down'} size={24} color="black" />
+        <AntDesign name={expanded ? 'down' : 'right'} size={24} color="black" />
       </TouchableOpacity>
 
       {/* Agar accordion ochilgan bo'lsa, kontentni ko'rsatish */}

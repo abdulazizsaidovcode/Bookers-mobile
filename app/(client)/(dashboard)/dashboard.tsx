@@ -9,15 +9,15 @@ const Dashboard = () => {
       <View style={styles.navbar}>
         <Text style={styles.title}>Главная</Text>
         <View style={styles.iconGroup}>
-          <FontAwesome5 name="bell" size={24} color="white" />
-          <Feather name="bookmark" size={24} color="white" />
+          <FontAwesome5 name="bell" size={28} color="white" />
+          <Feather  name="bookmark" size={28} color="white" />
         </View>
       </View>
       <View>
-        <AccordionItem title="Accordion Item 1">
+        <AccordionItem title="Мои записи">
           <Text>This is the content of the first item.</Text>
         </AccordionItem>
-        <AccordionItem title="Accordion Item 2">
+        <AccordionItem title="Мои мастера">
           <Text>This is the content of the second item.</Text>
         </AccordionItem>
       </View>
@@ -42,9 +42,10 @@ const styles = StyleSheet.create({
   },
   iconGroup:{
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     width: 50,
+    gap:8,
   },
   title:{
     color: '#fff',
