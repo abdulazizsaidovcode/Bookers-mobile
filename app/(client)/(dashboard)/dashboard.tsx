@@ -34,7 +34,7 @@ const Dashboard = () => {
       id: 5,
       image: require('@/assets/clientDashboard/dont.png'),
       title: 'Уход за лицом',
-      titleThen: 'Рядом с тобой 450',
+      titleThen: 'Рядом с тобой 210',
     },
   ];
 
