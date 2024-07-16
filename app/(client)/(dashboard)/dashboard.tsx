@@ -14,7 +14,7 @@ const Dashboard = () => {
     },
     {
       id: 2,
-      image: require('@/assets/clientDashboard/'),
+      image: require('@/assets/clientDashboard/pomada.png'),
       title: 'Ногтевой сервис',
       titleThen: 'Рядом с тобой 450',
     },
