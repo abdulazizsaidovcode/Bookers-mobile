@@ -1,9 +1,47 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, } from 'react-native';
 import AccordionItem from './accardion';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
+import { router } from 'expo-router';
 const Dashboard = () => {
+  const dataDashboar=[
+    {
+      id:1,
+      image:<Image source={require('@/assets/clientDashboard/Layer_1.png')} />,
+      title:'Здоровье и красота волос',
+      titleThen:'Рядом с тобой 450',
+      // click:router.push('../(client)/(uslugi)/uslugi')
+    },
+    {
+      id:1,
+      image:<Image source={require('@/assets/clientDashboard/Layer_1.png')} />,
+      title:'Здоровье и красота волос',
+      titleThen:'Рядом с тобой 450',
+      // click:router.push('../(client)/(uslugi)/uslugi')
+    },
+    {
+      id:1,
+      image:<Image source={require('@/assets/clientDashboard/Layer_1.png')} />,
+      title:'Здоровье и красота волос',
+      titleThen:'Рядом с тобой 450',
+      // click:router.push('../(client)/(uslugi)/uslugi')
+    },
+    {
+      id:1,
+      image:<Image source={require('@/assets/clientDashboard/Layer_1.png')} />,
+      title:'Здоровье и красота волос',
+      titleThen:'Рядом с тобой 450',
+      // click:router.push('../(client)/(uslugi)/uslugi')
+    },
+    {
+      id:1,
+      image:<Image source={require('@/assets/clientDashboard/Layer_1.png')} />,
+      title:'Здоровье и красота волос',
+      titleThen:'Рядом с тобой 450',
+      // click:router.push('../(client)/(uslugi)/uslugi')
+    },
+  ]
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.navbar}>
@@ -15,7 +53,9 @@ const Dashboard = () => {
       </View>
       <View>
         <AccordionItem title="Мои записи" titleThen='У вас пока нет записей, выберите услугу.' backgroundColor='#21212E'>
-          <Text>This is the content of the first item.</Text>
+          <TouchableOpacity style={styles.item}>
+            
+          </TouchableOpacity>
         </AccordionItem>
         <AccordionItem title="Мои мастера" titleThen='У вас пока нет своих мастеров' backgroundColor='#21212E'>
           <Text>This is the content of the second item.</Text>
@@ -29,7 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#21212E',
     alignItems: 'center',
-    padding: 10,
+    padding: 18,
     justifyContent: 'flex-start',
   },
   navbar:{
@@ -51,6 +91,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 20,
     fontWeight: "600",
+  },
+  item:{
+    width: '100%',
+    backgroundColor: '#B9B9C9',
   }
 })
 export default Dashboard;
