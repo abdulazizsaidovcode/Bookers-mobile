@@ -6,19 +6,20 @@ import { router, useRouter } from 'expo-router'; // Import the useRouter hook
 import React from 'react';
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
+import Hair from './(hairHealth)/hair';
 
 interface Service {
     id: any;
     title: string;
     distance: string;
     icon: any;
-    onPress: () => void;
+    onPress:any;
   }
 
 
 const services = [
   { id: 1, title: "Здоровье и красота волос", distance: "450", icon: "rightcircleo",  onPress: () => router.push("./(hairHealth)/hair" ) },
-  { id: 2, title: "Ногтевой сервис", distance: "75", icon: "rightcircleo", onPress: () => router.push("../(location)/Location" ) },
+  { id: 2, title: "Ногтевой сервис", distance: "75", icon: "rightcircleo", onPress: () => router.push("./(location)/Location" ) },
   { id: 3, title: "Ресницы и брови", distance: "322", icon: "eyeo", onPress: () => router.push("../(location)/Location" ) },
   { id: 4, title: "Уход за телом", distance: "456", icon: "rightcircleo", onPress: () => router.push("../(location)/Location" ) },
   { id: 5, title: "Уход за лицом", distance: "210", icon: "rightcircleo" , onPress: () => router.push("../(location)/Location" )},
@@ -54,7 +55,7 @@ const Uslugi = () => {
           <Text style={[tw`font-bold text-2xl text-white mb-6`]}>Услуги</Text>
           <View style={tw`w-full flex flex-row flex-wrap mb-4`}>
             {services.map(service => (
-               <ServiceCard key={service.id} title={service.title} distance={service.distance} icon={service.icon} onPress={service.onPress} />
+               <ServiceCard key={service.id} title={service.title} distance={service.distance} icon={service.icon} onPress={service.onPress}  />
             ))}
           </View>
         </ScrollView>
