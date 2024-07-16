@@ -78,7 +78,7 @@ const OtpInputExample: React.FC = () => {
                 let parol = await SecureStore.getItemAsync('password')
 
                 if (isRegtered) {
-                    navigation.navigate("(auth)/authPage1");
+                    navigation.navigate("(auth)/(register)/(greetings)/greetingFirst");
                 } else {
                     if (parol !== null) {
                         if (role == 'ROLE_MASTER') {
@@ -87,7 +87,7 @@ const OtpInputExample: React.FC = () => {
                             navigation.navigate('(tabs)/(client)');
                         }
                     } else {
-                        navigation.navigate("(auth)/installPin");
+                        navigation.navigate("(auth)/(setPinCode)/installPin");
                     }
                 }
                 setRespone(false);

@@ -74,11 +74,11 @@ const PhoneNumberInput: React.FC = () => {
                 </View>
                 <View style={{ marginVertical: 20, width: '100%' }}>
                     <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} >
-                        <Image source={require('../../assets/images/auth/google.png')} />
+                        <Image source={require('../../../assets/images/auth/google.png')} />
                         <Text style={styles.socialButtonText}>{t('login_google')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} >
-                        <Image source={require('../../assets/images/auth/facebook.png')} />
+                        <Image source={require('../../../assets/images/auth/facebook.png')} />
                         <Text style={styles.socialButtonText}>{t("login_facebook")}</Text>
                     </TouchableOpacity>
                 </View>
@@ -108,7 +108,7 @@ const PhoneNumberInput: React.FC = () => {
             </ScrollView>
             <View style={{ marginVertical: 20 }}>
                 <Buttons
-                    title={"jnk"}
+                    title={"Войти"}
                     onPress={() => {
                         registerFunction(phoneNumber, setCode, status)
                     }}

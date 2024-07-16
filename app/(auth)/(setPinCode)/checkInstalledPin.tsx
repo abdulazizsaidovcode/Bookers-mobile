@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { authStorage } from "@/constants/storage";
 import * as SecureStore from 'expo-secure-store';
 import { useFocusEffect } from 'expo-router';
+import { langstore } from '@/helpers/state_managment/lang/lang';
 
 const CheckPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
@@ -18,27 +19,28 @@ const CheckPin: React.FC = () => {
     const [isLogin, setIslogin] = useState<any>(false);
     const inputs = useRef<TextInput[]>([]);
     const { role, firstName, lastName, nickname, phoneNumber } = registerStory()
+    const { language} = langstore()
 
     const { t } = useTranslation();
     const navigation = useNavigation<any>();
-    
+
     useFocusEffect(
         useCallback(() => {
-        const getStoredOtp = async () => {
-            try {
-                const otp = await AsyncStorage.getItem('otp');
-                console.log(otp);
-                
-                setStoredOtp(otp);
-            } catch (error) {
-                console.log('Failed to load OTP from storage', error);
-            }
-        };
+            const getStoredOtp = async () => {
+                try {
+                    const otp = await AsyncStorage.getItem('otp');
+                    console.log(otp);
 
-        getStoredOtp();
-    }, [])
+                    setStoredOtp(otp);
+                } catch (error) {
+                    console.log('Failed to load OTP from storage', error);
+                }
+            };
+
+            getStoredOtp();
+        }, [])
     )
-    
+
 
     useEffect(() => {
         if (tokenData) {
@@ -66,12 +68,12 @@ const CheckPin: React.FC = () => {
 
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
     const enteredOtp = otp.join('');
-    
+
     useEffect(() => {
         if (enteredOtp === storedOtp) {
             setIsCorrect(true);
             if (isLogin) {
-                navigation.navigate('(tabs)')
+                navigation.navigate('(tabs)/(master)')
             }
         } else {
             setIsCorrect(false);
@@ -83,7 +85,7 @@ const CheckPin: React.FC = () => {
 
         if (enteredOtp === storedOtp) {
             setIsCorrect(true);
-            navigation.navigate('(tabs)')
+            navigation.navigate('(tabs)/(master)')
             // Handle the success action (navigate to the next page or perform other actions)
         } else {
             setIsCorrect(false);
@@ -130,6 +132,7 @@ const CheckPin: React.FC = () => {
                                 setData: setTokenData,
                                 islogin: setIslogin,
                                 password: enteredOtp,
+                                language: language,
                             })
 
                         }}

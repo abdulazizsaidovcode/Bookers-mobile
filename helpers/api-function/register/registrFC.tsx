@@ -13,18 +13,21 @@ export const registerFunction = (phoneNumber: string, setCode: (value: any) => v
     const sentData = {
         phoneNumber: phoneNumber
     }
-
-    axios.post(`${register_page}sendCode?purpose=${status}&lang=uz`, sentData)
+    axios.post(`${register_page}sendCode?purpose=${status}`, sentData)
         .then(res => {
             setCode(res.data.body);
-            router.push('(auth)/checkSendMessage')
+            router.push('(auth)/(login)/checkSendMessage')
         })
         .catch(err => {
+            console.log(err);
+
             if (err.response.data.success === false) {
                 if (err.response.data.message === "Phone number already exists") {
                     Toast.show("этот номер уже зарегистрирован", Toast.LONG)
-                } else {
+                } else if (err.response.data.message === "этот номер еще не зарегистрирован") {
                     Toast.show("этот номер еще не зарегистрирован", Toast.LONG)
+                } else {
+                    Toast.show(err.response.data.message, Toast.LONG)
                 }
             }
         })
@@ -78,15 +81,17 @@ interface IRegister {
     islogin: (val: any) => void
     setData: (val: any) => void
     password: string;
+    language: string;
 }
 
-export const masterData = async ({ role, firstName, lastName, nickname, phoneNumber, img, islogin, setData, password }: IRegister) => {
+export const masterData = async ({ role, firstName, lastName, nickname, phoneNumber, img, islogin, setData, password, language }: IRegister) => {
     const formData = new FormData();
     formData.append('image', img ? img : null)
 
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
     const url = `${register_page}master?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${nickname ? `&nickname=${encodeURIComponent(nickname)}` : ''}&phoneNumber=${formattedPhoneNumber}&ROLE=${encodeURIComponent(role)}`;
-
+    console.log(url );
+    
     let parol = await SecureStore.getItemAsync('password')
     console.log(parol, "wderf");
 
