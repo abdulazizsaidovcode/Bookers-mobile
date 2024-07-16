@@ -7,8 +7,8 @@ const Dashboard = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.navbar}>
-        <Text>Главная</Text>
-        <View>
+        <Text style={styles.title}>Главная</Text>
+        <View style={styles.iconGroup}>
           <FontAwesome5 name="bell" size={24} color="white" />
           <Feather name="bookmark" size={24} color="white" />
         </View>
@@ -33,9 +33,23 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   navbar:{
-    display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
+    marginTop: 40,
+    marginBottom: 20,
+  },
+  iconGroup:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: 50,
+  },
+  title:{
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: "600",
   }
 })
 export default Dashboard;
