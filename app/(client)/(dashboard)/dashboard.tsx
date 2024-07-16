@@ -20,7 +20,7 @@ const Dashboard = () => {
     },
     {
       id: 3,
-      image: require('@/assets/clientDashboard/Layer_1.png'),
+      image: require('@/assets/clientDashboard/eyes.png'),
       title: 'Ресницы и брови',
       titleThen: 'Рядом с тобой 450',
     },
