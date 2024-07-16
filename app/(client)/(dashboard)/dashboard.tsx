@@ -14,10 +14,10 @@ const Dashboard = () => {
         </View>
       </View>
       <View>
-        <AccordionItem title="Мои записи">
+        <AccordionItem title="Мои записи" titleThen='У вас пока нет записей, выберите услугу.' backgroundColor='#21212E'>
           <Text>This is the content of the first item.</Text>
         </AccordionItem>
-        <AccordionItem title="Мои мастера">
+        <AccordionItem title="Мои мастера" titleThen='У вас пока нет своих мастеров' backgroundColor='#21212E'>
           <Text>This is the content of the second item.</Text>
         </AccordionItem>
       </View>

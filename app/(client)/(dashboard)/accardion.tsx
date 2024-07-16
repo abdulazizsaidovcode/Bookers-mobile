@@ -4,7 +4,9 @@ import { AntDesign } from '@expo/vector-icons'; // Expo dan AntDesign ikonlari
 
 interface AccordionItemProps {
   title: string;
+  titleThen?: string;
   children: React.ReactNode;
+  backgroundColor: string; // backgroundColor nomli majburiy prop
 }
 
 // Platform uchun LayoutAnimation to'g'ri ishlashi uchun
@@ -12,7 +14,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const AccordionItem: React.FC<AccordionItemProps> = ({ title, children }) => {
+const AccordionItem: React.FC<AccordionItemProps> = ({ title, children, titleThen, backgroundColor }) => {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -22,15 +24,18 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, children }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: backgroundColor }]}>
       {/* Sarlavha va belgi */}
       <TouchableOpacity
         style={styles.header}
         onPress={toggleExpand}
         activeOpacity={0.8}
       >
-        <Text style={styles.headerText}>{title}</Text>
-        <AntDesign name={expanded ? 'down' : 'right'} size={24} color="black" />
+        <View style={styles.mainText}>
+          <Text style={styles.headerText}>{title}</Text>
+          {titleThen && <Text style={styles.headerTitle}>{titleThen}</Text>}
+        </View>
+        <AntDesign name={expanded ? 'down' : 'right'} size={24} color="#4F4F4F" />
       </TouchableOpacity>
 
       {/* Agar accordion ochilgan bo'lsa, kontentni ko'rsatish */}
@@ -45,11 +50,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, children }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
     marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
     overflow: 'hidden',
   },
   header: {
@@ -58,15 +59,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 15,
-    backgroundColor: '#f9f9f9',
+  },
+  mainText: {
+    flexDirection: 'column',
   },
   headerText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "600",
+    color: '#fff',
+  },
+  headerTitle: {
+    fontSize: 12,
+    color: "#C2C2C2",
   },
   content: {
     padding: 15,
-    backgroundColor: '#fff',
+    backgroundColor: '#21212E',
   },
 });
 
