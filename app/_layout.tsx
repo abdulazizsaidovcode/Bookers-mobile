@@ -126,6 +126,10 @@ import Dashboard from "./(client)/(dashboard)/dashboard";
 import MasterTabLayout from "./(tabs)/(master)/_layout";
 import ClientTabLayout from "./(tabs)/(client)/_layout";
 import Health from "./(client)/(dashboard)/(health)/health";
+import OrderHistory from "./(client)/(profile)/(orderHistory)/orderHistory";
+import ProfileEdit from "./(client)/(profile)/(profileEdit)/profileEdit";
+import SettingsClient from "./(client)/(profile)/(settings)/settings";
+import NotificationClient from "./(client)/(profile)/(notification)/notification";
 
 
 
@@ -769,6 +773,25 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(client)/(dashboard)/(health)/health"
               component={Health}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(profile)/(orderHistory)/orderHistory"
+              component={OrderHistory}
+              options={{ headerShown: false }}
+            /><Stack.Screen
+            name="(client)/(profile)/(profileEdit)/profileEdit"
+            component={ProfileEdit}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+              name="(client)/(profile)/(settings)/settings"
+              component={SettingsClient}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(profile)/(notification)/notification"
+              component={NotificationClient}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>
