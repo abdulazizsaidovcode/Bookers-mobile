@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 10,
     overflow: 'hidden',
+    width: '100%',
   },
   header: {
     flexDirection: 'row',

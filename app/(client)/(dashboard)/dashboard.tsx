@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
 import AccordionItem from './accardion';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
@@ -52,7 +52,7 @@ const Dashboard = () => {
           <Feather name="bookmark" size={28} color="white" />
         </View>
       </View>
-      <View>
+      <ScrollView>
         <AccordionItem title="Мои записи" titleThen='У вас пока нет записей, выберите услугу.' backgroundColor='#21212E'>
           {dataDashboard.map((item) => (
             <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={handlePress}>
@@ -69,9 +69,22 @@ const Dashboard = () => {
           ))}
         </AccordionItem>
         <AccordionItem title="Мои мастера" titleThen='У вас пока нет своих мастеров' backgroundColor='#21212E'>
-          
+          <TouchableOpacity style={styles.touchableItem} onPress={handlePress}>
+            <View style={styles.item}>
+              <View style={styles.textContainer}>
+                <Text style={styles.titleText}>Пригласить своего мастера</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.touchableItem} onPress={handlePress}>
+            <View style={styles.itemTwo}>
+              <View style={styles.textContainer}>
+                <Text style={styles.titleTextTwo}>Записаться к совему мастеру</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
         </AccordionItem>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -105,7 +118,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   touchableItem: {
-    alignItems: 'center', // Center content horizontally
+    alignItems: 'center',
   },
   item: {
     flexDirection: 'row',
@@ -115,15 +128,26 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 8,
     width: '100%',
-    maxWidth: 358, // Set a maximum width to prevent stretching too wide
+    maxWidth: 358,
+  },
+  itemTwo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#9C0a35',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 8,
+    width: '100%',
+    height: 50,
+    maxWidth: 358,
   },
   imageContainer: {
     width: 50,
     height: 50,
     borderRadius: 25,
     backgroundColor: '#9C0A35',
-    justifyContent: 'center', // Center content vertically
-    alignItems: 'center', // Center content horizontally
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
     width: 30,
@@ -137,7 +161,14 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
-    borderRadius: 8, // Border radius for title text container
+    textAlign: 'center',
+    color: '#9C0A35',
+  },
+  titleTextTwo: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#fff',
   },
   subtitleText: {
     fontSize: 14,
