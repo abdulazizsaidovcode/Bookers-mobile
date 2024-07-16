@@ -35,7 +35,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, children, titleThe
           <Text style={styles.headerText}>{title}</Text>
           {titleThen && <Text style={styles.headerTitle}>{titleThen}</Text>}
         </View>
-        <AntDesign name={expanded ? 'down' : 'right'} size={24} color="#4F4F4F" />
+        <AntDesign name={expanded ? 'down' : 'right'} size={20} color="#4F4F4F" />
       </TouchableOpacity>
 
       {/* Agar accordion ochilgan bo'lsa, kontentni ko'rsatish */}
