@@ -125,6 +125,7 @@ import Specialist from "./(client)/(uslugi)/(specialist)/specialist";
 import Dashboard from "./(client)/(dashboard)/dashboard";
 import MasterTabLayout from "./(tabs)/(master)/_layout";
 import ClientTabLayout from "./(tabs)/(client)/_layout";
+import Health from "./(client)/(dashboard)/(health)/health";
 
 
 
@@ -763,6 +764,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(client)/(dashboard)/dashboard"
               component={Dashboard}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(dashboard)/(health)/health"
+              component={Health}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

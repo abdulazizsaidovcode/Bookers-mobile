@@ -66,4 +66,6 @@ export type RootStackParamList = {
   '(auth)/(register)/(userInformation)/getNameSurname': undefined
   '(auth)/(register)/(agreements)/getAgrement': undefined
   '(auth)/(setPinCode)/checkInstalledPin': undefined
+   "(client)/(dashboard)/dashboard": undefined
+   '(client)/(dashboard)/(health)/health': undefined
 };

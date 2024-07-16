@@ -3,14 +3,25 @@ import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollVi
 import AccordionItem from '../../../components/accordions/accardion';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
+import { router, useNavigation } from 'expo-router';
+import { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+type SettingsScreenNavigationProp = NavigationProp<
+  RootStackParamList,
+  "(client)/(dashboard)/dashboard"
+>;
 
 const Dashboard = () => {
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
   const dataDashboard = [
     {
       id: 1,
       image: require('@/assets/clientDashboard/Layer_1.png'),
       title: 'Здоровье и красота волос',
       titleThen: 'Рядом с тобой 450',
+      onPress: () => {
+        navigation.navigate('(client)/(dashboard)/(health)/health');
+      },
     },
     {
       id: 2,
@@ -37,12 +48,6 @@ const Dashboard = () => {
       titleThen: 'Рядом с тобой 210',
     },
   ];
-
-  const handlePress = () => {
-    // Handle onPress logic here
-    console.log('TouchableOpacity pressed');
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.navbar}>
@@ -55,7 +60,7 @@ const Dashboard = () => {
       <ScrollView>
         <AccordionItem title="Мои записи" titleThen='У вас пока нет записей, выберите услугу.' backgroundColor='#21212E'>
           {dataDashboard.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={handlePress}>
+            <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={item.onPress}  >
               <View style={styles.item}>
                 <View style={styles.imageContainer}>
                   <Image source={item.image} style={styles.image} />
@@ -69,14 +74,14 @@ const Dashboard = () => {
           ))}
         </AccordionItem>
         <AccordionItem title="Мои мастера" titleThen='У вас пока нет своих мастеров' backgroundColor='#21212E'>
-          <TouchableOpacity style={styles.touchableItem} onPress={handlePress}>
+          <TouchableOpacity style={styles.touchableItem} >
             <View style={styles.item}>
               <View style={styles.textContainer}>
                 <Text style={styles.titleText1}>Пригласить своего мастера</Text>
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.touchableItem} onPress={handlePress}>
+          <TouchableOpacity style={styles.touchableItem} >
             <View style={styles.itemTwo}>
               <View style={styles.textContainer}>
                 <Text style={styles.titleTextTwo}>Записаться к совему мастеру</Text>
