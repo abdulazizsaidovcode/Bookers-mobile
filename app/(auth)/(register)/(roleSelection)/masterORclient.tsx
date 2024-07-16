@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import Toast from "react-native-simple-toast";
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/masterORclient'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/(register)/(roleSelection)/masterORclient'>;
 
 
 
@@ -22,14 +22,14 @@ const MasterorClient: React.FC = () => {
     return (
         <SafeAreaView style={styles.container} >
             <View style={styles.logo}>
-                <Image source={require('../../assets/images/auth/logo.png')} />
+                <Image source={require('../../../../assets/images/auth/logo.png')} />
             </View>
             <Text style={styles.title}>Bookers Beauty</Text>
             <Text style={styles.selectLanguage}>{t("who_do_you_want_to_become")}</Text>
             <View style={styles.button}>
                 <Buttons title={t("master")} backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_MASTER")
-                    navigation.navigate('(auth)/switchPage');
+                    navigation.navigate('(auth)/(register)/(roleSelection)/switchPage');
                 }} />
                 <Buttons title={t("client")} backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_CLIENT")

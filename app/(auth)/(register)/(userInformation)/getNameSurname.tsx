@@ -67,7 +67,7 @@ const UserInfo: React.FC = () => {
                     ]}
                     disabled={!isButtonEnabled}
                     onPress={() => {
-                        router.push('(auth)/userInfo2')
+                        router.push('(auth)/(register)/(userInformation)/getNickName')
                     }}
                 >
                     <Text style={styles.buttonText}>{t("Continue")}</Text>

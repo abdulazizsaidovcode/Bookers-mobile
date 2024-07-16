@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/authPage3'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/(register)/(greetings)/greetingThird'>;
 
 
 const AuthPage3: React.FC = () => {
@@ -19,13 +19,13 @@ const AuthPage3: React.FC = () => {
             <NavigationMenu name="" deleteIcon={false} key={1} />
             <View style={styles.content}>
                 <Text style={styles.title}>{t("Book_beauty_and_health_services")}</Text>
-                <Image source={require('../../assets/images/auth/Isolation_Mode.png')} style={styles.image} />
+                <Image source={require('../../../../assets/images/auth/Isolation_Mode.png')} style={styles.image} />
                 <Text style={styles.subtitle}>{t("at_a_convenient_time_for_you")}</Text>
                 <Text style={styles.description}>
                     {t("Hassle_free_date_booking_with_hair")}
                 </Text>
             </View>
-            <Buttons title={t("Continue")} onPress={() => navigation.navigate('(auth)/masterORclient')} />
+            <Buttons title={t("Continue")} onPress={() => navigation.navigate('(auth)/(register)/(roleSelection)/masterORclient')} />
         </SafeAreaView>
     );
 }

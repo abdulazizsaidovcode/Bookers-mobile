@@ -6,30 +6,30 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useTranslation } from 'react-i18next';
 import { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/authPage1'>;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/address-book'>;
 
 
-const AuthPage1: React.FC = () => {
+const AuthPage2: React.FC = () => {
+    const { t } = useTranslation()
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
-    const { t } = useTranslation()
     return (
         <SafeAreaView style={styles.container}>
             <NavigationMenu name="" deleteIcon={false} key={1} />
             <View style={styles.content}>
                 <Text style={styles.title}>{t("Book_beauty_and_health_services")}</Text>
-                <Image source={require('../../assets/images/auth/Frame.png')} style={styles.image} />
-                <Text style={styles.subtitle}>{t("in_your_favorite_beauty_salon")}</Text>
+                <Image source={require('../../../../assets/images/auth/averr.png')} style={styles.image} />
+                <Text style={styles.subtitle}>{t("with_your_favorite_masters")}</Text>
                 <Text style={styles.description}>
                     {t("Hassle_free_date_booking_with_hair")}
                 </Text>
             </View>
-            <Buttons title={t("Continue")} onPress={() => navigation.navigate('(auth)/authPage2')} />
+            <Buttons title={t("Continue")} onPress={() => navigation.navigate('(auth)/(register)/(greetings)/greetingThird')} />
         </SafeAreaView>
     );
 }
 
-export default AuthPage1;
+export default AuthPage2;
 
 const styles = StyleSheet.create({
     container: {
