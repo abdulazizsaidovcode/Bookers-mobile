@@ -7,7 +7,7 @@ import axios from "axios";
 export const getBookedSchedule = async (date: string, setData: (val: weekList[]) => void) => {
     try {
         const config = await getConfig();
-        const response = await axios.get(`${schedule_list}?localDate=${date}`, config);
+        const response = await axios.get(`${schedule_list}?localDate=${date}`, config ? config : {});
         if (response.data.success) {
             setData(response.data.body);
         } else {
@@ -24,7 +24,7 @@ export const getBookedSchedule = async (date: string, setData: (val: weekList[])
 export const getAvialable = async (setData: (val: weekList[]) => void) => {
     try {
         const config = await getConfig(); // Fetch the config asynchronously
-        const response = await axios.get(`${master_service_list}`, config);
+        const response = await axios.get(`${master_service_list}`, config ? config : {});
         if (response.data.success) {
             setData(response.data.body);
         } else {

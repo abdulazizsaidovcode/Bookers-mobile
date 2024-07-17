@@ -10,7 +10,7 @@ import {
   Modal,
   FlatList,
 } from "react-native";
-import { router, useNavigation } from "expo-router";
+import { useNavigation } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -20,11 +20,6 @@ import {
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import { fetchServices } from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import axios from "axios";
-import { master_service_list } from "@/helpers/api";
-import { config } from "@/helpers/token";
-// import { OnlineBookingCheck } from "@/helpers/state_managment/onlinBooking/onlineBooking";
-import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 
 const BreakBetweenSession = () => {
   const [selectedTime, setSelectedTime] = useState("");
@@ -55,7 +50,7 @@ const BreakBetweenSession = () => {
 
   const handleHourPress = (selectedHour: any) => {
     setHour(selectedHour);
-    setMinute(hours && hours.find((h) => h.title === selectedHour).minutes[0]);
+    setMinute(hours &&  hours.find((h) => h.title === selectedHour).minutes[0]);
   };
 
   const postTile = () => {
@@ -78,15 +73,15 @@ const BreakBetweenSession = () => {
   };
 
   useEffect(() => {
-    fetchServices();
+    fetchServices(setServices);
   }, []);
 
-  const fetchServices = () => {
-    axios
-      .get(master_service_list, config)
-      .then((res) => setServices(res.data.body))
-      .catch((err) => console.error(err));
-  };
+  // const fetchServices = () => {
+  //   axios
+  //     .get(master_service_list, config)
+  //     .then((res) => setServices(res.data.body))
+  //     .catch((err) => console.error(err));
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
