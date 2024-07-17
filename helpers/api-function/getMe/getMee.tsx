@@ -21,7 +21,6 @@ export const getUserLocation = async (setLocation: (val: any) => void) => {
         Alert.alert('Please grant location permissions');
         return
     }
-
     let currentLocation = await Location.getCurrentPositionAsync({})
     setLocation(currentLocation)
 }

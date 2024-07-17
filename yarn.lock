@@ -3001,7 +3001,7 @@
 
 "@types/react-native-simple-radio-button@^2.7.7":
   version "2.7.7"
-  resolved "https://registry.yarnpkg.com/@types/react-native-simple-radio-button/-/react-native-simple-radio-button-2.7.7.tgz#2ee31d633a9b6c26da509f69a9c0478b81ef4428"
+  resolved "https://registry.npmjs.org/@types/react-native-simple-radio-button/-/react-native-simple-radio-button-2.7.7.tgz"
   integrity sha512-cDDpMb+MyYDrZmQX/phRdpbW4SJynTv165MWkwjqa39jbuSkMAxuvBdiTCTBTiugikPRvQRFBG1wPRF/+0Lprw==
   dependencies:
     "@types/react" "*"
@@ -9504,10 +9504,17 @@ rc@~1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-async-hook@3.6.1:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/react-async-hook/-/react-async-hook-3.6.1.tgz#aed3e492d87319392865c83ed7cef3609e2a7fef"
-  integrity sha512-YWBB2feVQF79t5u2raMPHlZ8975Jds+guCvkWVC4kRLDlSCouLsYpQm4DGSqPeHvoHYVVcDfqNayLZAXQmnxnw==
+react-art@>=16.5.1, react-art@16.x.x:
+  version "16.13.1"
+  resolved "https://registry.npmjs.org/react-art/-/react-art-16.13.1.tgz"
+  integrity sha512-IDXRZCUlyl3AkQ6Xf3qg0C6MSDxKhOhf7amYzWNMaelH5K2W9KqUOUHL8mGwC0k/1BXFhhusSgsE1Bekz3aHEQ==
+  dependencies:
+    art "^0.10.1"
+    create-react-class "^15.6.2"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.19.1"
 
 react-async-hook@^2.0.0:
   version "2.3.0"
@@ -9719,9 +9726,9 @@ react-native-localize@^3.2.0:
   integrity sha512-Wi486WdDoBcDKUNxzr2/8f64ZwkWExlIvn0lcfFhsRNP2CVXGkjLyXhr3h6jf3Utkv5EmoFKiNqcmZn9kjYDxQ==
 
 react-native-maps@^1.14.0:
-  version "1.14.0"
-  resolved "https://registry.npmjs.org/react-native-maps/-/react-native-maps-1.14.0.tgz"
-  integrity sha512-ai7h4UdRLGPFCguz1fI8n4sKLEh35nZXHAH4nSWyAeHGrN8K9GjICu9Xd4Q5Ok4h+WwrM6Xz5pGbF3Qm1tO6iQ==
+  version "1.15.6"
+  resolved "https://registry.npmjs.org/react-native-maps/-/react-native-maps-1.15.6.tgz"
+  integrity sha512-RRyjMvpMoV3249kJ9PA1JjZE/8FmYYHrHuloI/Vzkg/DjxFtJAbFnCnhg5AyS/LI5/n2riulbVl4qpiKpuO22Q==
   dependencies:
     "@types/geojson" "^7946.0.13"
 

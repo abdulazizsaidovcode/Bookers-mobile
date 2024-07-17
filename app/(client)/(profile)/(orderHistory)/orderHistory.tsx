@@ -163,7 +163,7 @@ const OrderHistory = () => {
         <CustomButton title="Предстоящие" onPress={() => setActiveTab('upcoming')} active={activeTab === 'upcoming'} />
         <CustomButton title="Прошедшие" onPress={() => setActiveTab('past')} active={activeTab === 'past'} />
       </View>
-      {filteredAppointments.length === 0 ? (
+      {filteredAppointments && filteredAppointments.length === 0 ? (
         <View style={styles.noAppointments}>
           <Text>У вас пока нет записей!</Text>
         </View>
