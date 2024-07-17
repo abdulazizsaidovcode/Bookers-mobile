@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager ,CheckBox } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+import CustomCheckbox from '../checkbox/checkbox';
+import tw from 'tailwind-react-native-classnames';
 
 interface AccordionItemProps {
     title: string;
@@ -16,6 +18,7 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
     const [expanded, setExpanded] = useState(false);
     const [value, setValue] = useState(false);
     const [genderIndex, setGenderIndex] = useState<number>(-1);
+    const [isSelected, setSelection] = useState(false);
 
     const toggleExpand = () => {
         // Animatsiya
@@ -75,10 +78,12 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
                             </RadioButton>
                         ))}
                     </RadioForm>
-                    <Text style={styles.selectedGenderText}>
-
+                    <Text style={tw`p-3`}>
+                        <CustomCheckbox
+                            value={isSelected}
+                            onValueChange={setSelection}
+                        />
                     </Text>
-                    {/* Tanlangan jins: {genderIndex === 0 ? 'Erkak' : (genderIndex === 1 ? 'Ayol' : '-')} */}
 
                 </View>
             )}
@@ -127,6 +132,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#333',
         marginLeft: 10,
+    },
+    checkbox: {
+        alignSelf: 'center',
     },
 });
 
