@@ -78,10 +78,14 @@ const CheckPinOnCome: React.FC = () => {
     const handleContinue = () => {
         const enteredOtp = otp.join('');
         Alert.alert(code)
-        
+
         if (enteredOtp !== code) {
             setIsCorrect(true);
-            navigation.navigate('(tabs)/(client)')
+            if (role == 'ROLE_CLIENT') {
+                navigation.navigate('(tabs)/(client)')
+            } else if (role == 'ROLE_MASTER') {
+                navigation.navigate('(tabs)/(master)')
+            }
         } else {
             setIsCorrect(false);
             alert('Неверный ПИН код');
