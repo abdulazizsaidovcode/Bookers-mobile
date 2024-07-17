@@ -26,7 +26,7 @@ function MasterTabLayout() {
     const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
 
     useEffect(() => {
-        if (number.length > 1) {
+        if (number && number.length > 1) {
             const res = removeDuplicatesAndSort(number)
             const result = containsAllNumbers(res)
             setHasAllNumbers(result)
