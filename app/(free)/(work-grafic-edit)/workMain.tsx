@@ -107,7 +107,7 @@ const WorkMainEdit = () => {
       >
         <Buttons
           title="На главную"
-          onPress={() => navigation.navigate("(welcome)/Welcome")}
+          onPress={() => navigation.goBack()}
         />
       </View>
     </SafeAreaView>
