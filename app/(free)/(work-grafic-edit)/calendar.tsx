@@ -1,30 +1,34 @@
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { DateObject } from "@/type/graficWork/graficWork";
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { SafeAreaView, StyleSheet, Platform } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
 import tw from "tailwind-react-native-classnames";
 import moment from "moment";
 import Toast from 'react-native-simple-toast';
+import { useFocusEffect } from "expo-router";
 
 const CalendarGrafficEdit: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<MarkedDates>({});
   const { setCalendarDate } = graficWorkStore();
 
-  useEffect(() => {
-    const today = moment().format("YYYY-MM-DD");
-    const newSelectedDate: MarkedDates = {
-      [today]: {
-        selected: true,
-        marked: true,
-        dotColor: "red",
-        color: "red",
-      },
-    };
-    setSelectedDate(newSelectedDate);
-    setCalendarDate(today); // Default bugungi sanani saqlash
-  }, [setCalendarDate]);
+  useFocusEffect (
+    useCallback(() => {
+      const today = moment().format("YYYY-MM-DD");
+      const newSelectedDate: MarkedDates = {
+        [today]: {
+          selected: true,
+          marked: true,
+          dotColor: "red",
+          color: "red",
+        },
+      };
+      setSelectedDate(newSelectedDate);
+      setCalendarDate(today); // Default bugungi sanani saqlash
+      return () => {}
+    }, [setCalendarDate])
+  )
 
   const onDayPress = (day: DateObject) => {
     const today = moment().format("YYYY-MM-DD");
@@ -47,13 +51,17 @@ const CalendarGrafficEdit: React.FC = () => {
     setCalendarDate(day.dateString); // Tanlangan sanani saqlash
   };
 
-  useEffect(() => {
-    if (Platform.OS === 'ios') {
-      console.log('Running on iOS');
-    } else {
-      console.log('Running on Android');
-    }
-  }, []);
+  useFocusEffect(
+
+    useCallback(() => {
+      if (Platform.OS === 'ios') {
+        console.log('Running on iOS');
+      } else {
+        console.log('Running on Android');
+      }
+      return () => {}
+    }, [])
+  )
 
   return (
     <SafeAreaView style={styles.container}>

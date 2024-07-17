@@ -1,4 +1,4 @@
-import { GetMee, GetMeeStore } from '@/type/getMee';
+import { GetMee, GetMeeStore, UserLocation } from '@/type/getMee';
 import { create } from 'zustand';
 const useGetMeeStore = create<GetMeeStore>((set) => ({
     getMee: {
@@ -14,15 +14,17 @@ const useGetMeeStore = create<GetMeeStore>((set) => ({
         birthDate: null,
         districtId: null,
         attachmentId: null,
-        regionId: null
+        regionId: null,
     },
+    setUserLocation: (val: UserLocation) => set({ userLocation: val }),
+    userLocation: {},
     setGetMee: (val: GetMee) => set({ getMee: val }),
     ageOption: [],
-    setAgeOption: (val: any) => set({ ageOption: val }), 
+    setAgeOption: (val: any) => set({ ageOption: val }),
     regionOption: [],
-    setRegionOption: (val: any) => set({ regionOption: val }), 
+    setRegionOption: (val: any) => set({ regionOption: val }),
     districtOption: [],
-    setDistrictOption: (val: any) => set({ districtOption: val }) 
+    setDistrictOption: (val: any) => set({ districtOption: val })
 
 }));
 export default useGetMeeStore;

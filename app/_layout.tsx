@@ -132,6 +132,8 @@ import NotificationClient from "./(client)/(profile)/(notification)/notification
 import ClientInfo from "./(auth)/(register)/(clientInformations)/getNameSurname";
 import getMasterNickName from "./(auth)/(register)/(masterInformation)/getNickName";
 import ClientCameraInfo from "./(auth)/(register)/(clientInformations)/getPhoto";
+import CardClient from "./(client)/(profile)/(card)/card";
+import PaymentClient from "./(client)/(profile)/(payment)/payment";
 
 
 
@@ -804,6 +806,16 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(client)/(profile)/(notification)/notification"
               component={NotificationClient}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(profile)/(card)/card"
+              component={CardClient}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(profile)/(payment)/payment"
+              component={PaymentClient}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

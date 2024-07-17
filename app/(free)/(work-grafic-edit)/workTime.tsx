@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -16,7 +16,7 @@ import { postWorkTime, putWorkTime } from "@/helpers/api-function/graficWork/gra
 import Toast from "react-native-simple-toast";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
-import { useNavigation } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic-edit)/workTime'>;
 
 
@@ -61,20 +61,27 @@ const TimeWorkEdit: React.FC = () => {
   const [isDisabled, setIsDisabled] = useState(true);
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
+  useFocusEffect(
 
-  useEffect(() => {
-    if (timeData && timeData.from && timeData.end) {
-      const fromTime = timeData.from.substring(0, 5);
-      const endTime = timeData.end.substring(0, 5);
-      if (timeList.includes(fromTime) && timeList.includes(endTime)) {
-        setSelectedTimeSlots([fromTime, endTime]);
+    useCallback(() => {
+      if (timeData && timeData.from && timeData.end) {
+        const fromTime = timeData.from.substring(0, 5);
+        const endTime = timeData.end.substring(0, 5);
+        if (timeList.includes(fromTime) && timeList.includes(endTime)) {
+          setSelectedTimeSlots([fromTime, endTime]);
+        }
       }
-    }
-  }, [timeData]);
+      return () => {}
+    }, [timeData])
+  )
 
-  useEffect(() => {
-    setIsDisabled(selectedTimeSlots.length < 2);
-  }, [selectedTimeSlots]);
+  useFocusEffect(
+
+    useCallback(() => {
+      setIsDisabled(selectedTimeSlots.length < 2);
+      return () => {}
+    }, [selectedTimeSlots])
+  )
 
   const toggleTimeSlotSelection = (time: string) => {
     if (selectedTimeSlots.includes(time)) {
