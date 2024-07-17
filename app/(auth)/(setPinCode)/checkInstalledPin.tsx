@@ -25,7 +25,7 @@ const CheckPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const [storedOtp, setStoredOtp] = useState<any>(null);
     const [token, setToken] = useState<any | null>('');
-    const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+    const [isCorrect, setIsCorrect] = useState<boolean | null>(true);
     const [tokenData, setTokenData] = useState<string | null>('');
     const [isLogin, setIslogin] = useState<any>(false);
 
@@ -39,8 +39,6 @@ const CheckPin: React.FC = () => {
                 try {
                     const otp = await AsyncStorage.getItem('otp');
                     const token = await getConfig()
-                    console.log(token);
-
                     setToken(token)
                     setStoredOtp(otp);
                 } catch (error) {
@@ -160,9 +158,7 @@ const CheckPin: React.FC = () => {
                                 key={index}
                                 style={[
                                     styles.input,
-                                    isCorrect === null  && styles.input,
-                                    isCorrect === false && styles.inputError,
-                                    isCorrect === true && styles.inputSuccess,
+                                    isCorrect == true ? styles.inputSuccess : styles.inputError,
                                 ]}
                                 value={digit}
                                 onChangeText={(text) => handleChangeText(text, index)}
