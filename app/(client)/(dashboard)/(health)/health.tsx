@@ -4,6 +4,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import AccardionFree from '@/components/accordions/accardionFree'
 import AccardionSlider from '@/components/accordions/accardionSlider'
+import AccardionSliderTwo from '@/components/accordions/accardionSliderTwo'
 
 const Health = () => {
   return (
@@ -13,6 +14,7 @@ const Health = () => {
         <Text style={{ color: '#C2C2C2',marginBottom: 16 }}>Подберите критерии услуг</Text>
         <AccardionFree title='Пол мастера' />
         <AccardionSlider title='Рядом со мной' />
+        <AccardionSliderTwo title='Рейтинг'/>
       </ScrollView>
     </SafeAreaView>
   )

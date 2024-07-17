@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager  } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import CustomCheckbox from '../checkbox/checkbox';
 import tw from 'tailwind-react-native-classnames';
@@ -14,10 +14,8 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const AccardionSlider: React.FC<AccordionItemProps> = ({ title }) => {
+const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title }) => {
     const [expanded, setExpanded] = useState(false);
-    const [value, setValue] = useState(false);
-    const [genderIndex, setGenderIndex] = useState<number>(-1);
     const [isSelected, setSelection] = useState(false);
 
     const toggleExpand = () => {
@@ -42,15 +40,14 @@ const AccardionSlider: React.FC<AccordionItemProps> = ({ title }) => {
             {/* Agar accordion ochilgan bo'lsa, kontentni ko'rsatish */}
             {expanded && (
                 <View style={styles.content}>
-                    <View style={styles.communitySlider}>
-                        <CommunitySlider title="KM" textColor='#9C0A35' />
-                    </View>
+                    <CommunitySlider icon={<AntDesign name="star" size={18} color="#9C0A35" />} title="KM" textColor='#9C0A35' />
                     <Text style={tw`p-3`}>
                         <CustomCheckbox
                             value={isSelected}
                             onValueChange={setSelection}
                         />
                     </Text>
+
                 </View>
             )}
         </View>
@@ -86,7 +83,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 8,
         borderBottomRightRadius: 8,
         paddingVertical: 10,
-        paddingHorizontal: 10,
+        paddingHorizontal: 20,
         marginTop: -7,
     },
     selectedGenderText: {
@@ -102,11 +99,6 @@ const styles = StyleSheet.create({
     checkbox: {
         alignSelf: 'center',
     },
-    communitySlider: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
 });
 
-export default AccardionSlider;
+export default AccardionSliderTwo;
