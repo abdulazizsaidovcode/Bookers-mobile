@@ -16,7 +16,7 @@ const CommunitySlider: React.FC<DistanceSliderProps> = ({ icon, title, textColor
     return (
         <View style={styles.container}>
             <View style={styles.value}>
-                <Text style={{ fontSize: 14, color: textColor }} >{icon} {value.toFixed(1)} {title}</Text>
+                <Text style={{ fontSize: 16, color: textColor }} >{icon} {value.toFixed(1)} {title}</Text>
             </View>
             <Slider
                 style={styles.slider}
