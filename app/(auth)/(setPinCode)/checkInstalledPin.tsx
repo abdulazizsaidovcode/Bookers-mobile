@@ -8,7 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 import { authStorage } from "@/constants/storage";
 import { useFocusEffect } from 'expo-router';
 import { langstore } from '@/helpers/state_managment/lang/lang';
-import { Alert } from "react-native";
 import Toast from "react-native-simple-toast";
 import * as SecureStore from 'expo-secure-store';
 import { getConfig } from '@/app/(tabs)/(master)/main';
