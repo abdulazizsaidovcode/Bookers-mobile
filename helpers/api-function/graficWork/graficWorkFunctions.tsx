@@ -16,7 +16,7 @@ import Toast from 'react-native-simple-toast';
 export const getWorkDay = async (setData: (val: weekList[]) => void) => {
   try {
     const config = await getConfig();
-    const response = await axios.get(`${workday_get}`, config);
+    const response = await axios.get(`${workday_get}`, config ? config : {});
 
     if (response.data.success) {
       setData(response.data.body);
@@ -37,7 +37,7 @@ export const getWorkTime = async (setData: (val: any) => void, masterID: string)
     }
 
     const config = await getConfig();
-    const response = await axios.get(`${worktime_get}${masterID}`, config);
+    const response = await axios.get(`${worktime_get}${masterID}`, config ? config : {});
 
     if (response.data.success) {
       setData(response.data.body);
@@ -63,7 +63,7 @@ export const postWorkDay = async (workDayWeeks: any, date: string, router: () =>
     };
 
     const config = await getConfig();
-    const response = await axios.post(`${workday_save}`, data, config);
+    const response = await axios.post(`${workday_save}`, data, config ? config : {});
 
     if (response.data.success) {
       Toast.show('Work day saved successfully', Toast.LONG);
@@ -86,7 +86,7 @@ export const postWorkTime = async (fromTimeHour: number, fromTimeMin: number, en
     };
 
     const config = await getConfig();
-    const response = await axios.post(`${worktime_save}`, data, config);
+    const response = await axios.post(`${worktime_save}`, data, config ? config : {});
     if (response.data.success) {
       Toast.show('Work time saved successfully', Toast.LONG);
       router();
@@ -112,7 +112,7 @@ export const putWorkDay = async (workDayWeeks: any, date: string, router: () => 
     };
 
     const config = await getConfig();
-    const response = await axios.put(`${workday_put}`, data, config);
+    const response = await axios.put(`${workday_put}`, data, config ? config : {});
 
     if (response.data.success) {
       Toast.show('Work day updated successfully', Toast.LONG);
@@ -138,7 +138,7 @@ export const putWorkTime = async (fromTimeHour: number, fromTimeMin: number, end
     
 
     const config = await getConfig();
-    await axios.put(`${worktime_put}`, data, config);
+    await axios.put(`${worktime_put}`, data, config ? config : {});
 
     Toast.show('Work time updated successfully', Toast.LONG);
     router()

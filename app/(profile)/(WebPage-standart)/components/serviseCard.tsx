@@ -88,7 +88,7 @@ const UserProfileCardEdit: React.FC = () => {
 
           } 
         </View>
-        <Text style={styles.address}>{(address.homeNumber && address.street) ? `Street: ${address.street}, home: ${address.homeNumber} ` : "Address is not found"}</Text>
+        <Text style={styles.address}>{(address && address.homeNumber && address.street) ? `Street: ${address.street}, home: ${address.homeNumber} ` : "Address is not found"}</Text>
       </View>
     </View>
   );

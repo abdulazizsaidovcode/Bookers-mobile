@@ -5,7 +5,7 @@ import axios from "axios";
 export const getNumbers = async (setData: (data: any) => void) => {
   try {
     const config = await getConfig();
-    const response = await axios.get(master_get_number, config);
+    const response = await axios.get(master_get_number, config ? config : {});
 
     if (response.data.success) {
       setData(response.data.body);
@@ -25,7 +25,7 @@ export const putNumbers = async (number: number) => {
     }
 
     const config = await getConfig();
-    await axios.put(`${master_put_number}?number=${number}`, '', config);
+    await axios.put(`${master_put_number}?number=${number}`, '', config ? config : {});
 
     // Optionally handle success case if needed
   } catch (error) {
