@@ -8,10 +8,15 @@ import { useNavigation } from '@react-navigation/native';
 import { authStorage } from "@/constants/storage";
 import { useFocusEffect } from 'expo-router';
 import { langstore } from '@/helpers/state_managment/lang/lang';
+import { Alert } from "react-native";
+import Toast from "react-native-simple-toast";
+import * as SecureStore from 'expo-secure-store';
+import { getConfig } from '@/app/(tabs)/(master)/main';
 
 const CheckPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const [storedOtp, setStoredOtp] = useState<any>(null);
+    const [token, setToken] = useState<any | null>('');
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
     const [tokenData, setTokenData] = useState<string | null>('');
     const [isLogin, setIslogin] = useState<any>(false);
@@ -28,8 +33,10 @@ const CheckPin: React.FC = () => {
             const getStoredOtp = async () => {
                 try {
                     const otp = await AsyncStorage.getItem('otp');
-                    console.log(otp);
-
+                    const token = await getConfig()
+                    console.log(token);
+                    
+                    setToken(token)
                     setStoredOtp(otp);
                 } catch (error) {
                     console.log('Failed to load OTP from storage', error);
@@ -81,11 +88,9 @@ const CheckPin: React.FC = () => {
         } else {
             setIsCorrect(false);
         }
-
     }, [isLogin])
 
     const handleContinue = async () => {
-
         if (enteredOtp === storedOtp) {
             setIsCorrect(true);
             if (role === 'ROLE_MASTER') {
@@ -124,47 +129,66 @@ const CheckPin: React.FC = () => {
                     </View>
                 </View>
                 <View style={styles.bottomSection}>
-                    <TouchableOpacity
-                        style={[
-                            styles.button,
-                            { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
-                        ]}
-                        onPress={() => {
-                            if (role === 'ROLE_MASTER') {
-                                registerMaster({
-                                    firstName: firstName,
-                                    lastName: lastName,
-                                    nickname: nickname,
-                                    phoneNumber: phoneNumber,
-                                    role: role,
-                                    setData: setTokenData,
-                                    islogin: setIslogin,
-                                    password: enteredOtp,
-                                    language: language,
-                                })
-                            } else {
-                                registerClient({
-                                    firstName: firstName,
-                                    lastName: lastName,
-                                    phoneNumber: phoneNumber,
-                                    setData: setTokenData,
-                                    islogin: setIslogin,
-                                    password: enteredOtp,
-                                    language: language,
-                                })
-                            }
+                    {!token ?
+                        <TouchableOpacity
+                            style={[
+                                styles.button,
+                                { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
+                            ]}
+                            onPress={() => {
+                                if (role === 'ROLE_MASTER') {
+                                    registerMaster({
+                                        firstName: firstName,
+                                        lastName: lastName,
+                                        nickname: nickname,
+                                        phoneNumber: phoneNumber,
+                                        role: role,
+                                        setData: setTokenData,
+                                        islogin: setIslogin,
+                                        password: enteredOtp,
+                                        language: language,
+                                    })
+                                } else {
+                                    registerClient({
+                                        firstName: firstName,
+                                        lastName: lastName,
+                                        phoneNumber: phoneNumber,
+                                        setData: setTokenData,
+                                        islogin: setIslogin,
+                                        password: enteredOtp,
+                                        language: language,
+                                    })
+                                }
+                            }}
+                            disabled={!isButtonEnabled}
+                        >
+                            <Text style={[
+                                styles.buttonText,
+                                { color: isButtonEnabled ? '#FFF' : '#FFF' }
+                            ]}>
+                                {t("Continue")}
+                            </Text>
+                        </TouchableOpacity>
+                        :
+                        <TouchableOpacity
+                            style={[styles.button, { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' }]}
+                            onPress={() => {
+                                Toast.show("пин-код установлен", Toast.SHORT);
+                                SecureStore.setItemAsync('password', enteredOtp)
+                                setIslogin(true)
+                            }}
+                            disabled={!isButtonEnabled}
+                        >
+                            <Text style={[
+                                styles.buttonText,
+                                { color: isButtonEnabled ? '#FFF' : '#FFF' }
+                            ]}>
+                                {t("Continue")}
+                            </Text>
+                        </TouchableOpacity>
+                    }
 
 
-                        }}
-                        disabled={!isButtonEnabled}
-                    >
-                        <Text style={[
-                            styles.buttonText,
-                            { color: isButtonEnabled ? '#FFF' : '#FFF' }
-                        ]}>
-                            {t("Continue")}
-                        </Text>
-                    </TouchableOpacity>
                 </View>
             </View>
         </SafeAreaView>

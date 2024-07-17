@@ -18,6 +18,7 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native';
+import { langstore } from '@/helpers/state_managment/lang/lang';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/checkSendMessage'>;
 
@@ -28,9 +29,11 @@ const OtpInputExample: React.FC = () => {
     const { code, phoneNumber, otpValue, setOtpValue } = registerStory()
     const [response, setRespone] = useState<null | boolean>(null);
     const [messageResponse, setMessageResponse] = useState(false);
-    const { isRegtered, setIsRegtered } = isRegister()
+    const { isRegtered } = isRegister()
     const navigation = useNavigation<any>();
     const [role, setRole] = useState<string | null>(null);
+    const { language } = langstore();
+    const [number, setNumber] = useState('');
 
     const { t } = useTranslation();
 
@@ -70,6 +73,10 @@ const OtpInputExample: React.FC = () => {
     const handlePress = async () => {
         await checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
     }
+    useEffect(() => {
+        setNumber(number)
+        console.log(phoneNumber);
+    }, [phoneNumber])
 
     useEffect(() => {
         async function finishwork() {
@@ -101,7 +108,7 @@ const OtpInputExample: React.FC = () => {
         <View style={styles.container}>
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{t("Confirmation_Number")}</Text>
-                <Text style={styles.phoneNumber}>{phoneNumber}</Text>
+                <Text style={styles.phoneNumber}>{number}</Text>
                 <Text style={styles.instruction}>{t("we_sent_you_sms_with_code")}</Text>
             </View>
             <View style={styles.otpContainer}>
@@ -128,7 +135,7 @@ const OtpInputExample: React.FC = () => {
                         if (isRegtered) {
                             handlePress()
                         } else {
-                            authLogin(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setRole)
+                            authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setRole)
                         }
                     }}
                 >
