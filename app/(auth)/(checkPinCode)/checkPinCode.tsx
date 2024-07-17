@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView, Alert } from 'react-native';
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import registerStory from '@/helpers/state_managment/auth/register';
 import { useNavigation } from '@react-navigation/native';
-import { authStorage } from "@/constants/storage";
 import { useFocusEffect } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 
@@ -84,7 +83,7 @@ const CheckPinOnCome: React.FC = () => {
             alert('Неверный ПИН код');
         }
     };
-    
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>

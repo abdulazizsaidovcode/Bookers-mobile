@@ -161,6 +161,7 @@ const CheckPin: React.FC = () => {
                                 key={index}
                                 style={[
                                     styles.input,
+                                    isCorrect === null && styles.input,
                                     isCorrect === false && styles.inputError,
                                     isCorrect === true && styles.inputSuccess,
                                 ]}
