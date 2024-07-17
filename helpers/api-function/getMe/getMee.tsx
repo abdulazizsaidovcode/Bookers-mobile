@@ -24,6 +24,4 @@ export const getUserLocation = async (setLocation: (val: any) => void) => {
 
     let currentLocation = await Location.getCurrentPositionAsync({})
     setLocation(currentLocation)
-    console.log('Location', currentLocation);
-    
 }
