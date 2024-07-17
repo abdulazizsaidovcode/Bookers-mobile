@@ -19,7 +19,7 @@ const CheckPin: React.FC = () => {
     const { role } = registerStory()
 
     const inputs = useRef<TextInput[]>([]);
-    
+
     const { t } = useTranslation();
     const navigation = useNavigation<any>();
 
@@ -161,8 +161,7 @@ const CheckPin: React.FC = () => {
                                 key={index}
                                 style={[
                                     styles.input,
-                                    isCorrect === null && styles.input,
-                                    isCorrect === false && styles.inputError,
+                                    (isCorrect == null || isCorrect == false) && styles.input,
                                     isCorrect === true && styles.inputSuccess,
                                 ]}
                                 value={digit}
