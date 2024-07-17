@@ -9,6 +9,8 @@ import {
   Button,
   ScrollView,
   StatusBar,
+  Share,
+  Alert,
 } from "react-native";
 import {
   FontAwesome5,
@@ -41,7 +43,6 @@ const ProfilePage: React.FC = () => {
   const openInviteModal = () => {
     setInviteModalVisible(true);
   };
-  console.log(`role:  ${role}`);
 
   const closeInviteModal = () => {
     setInviteModalVisible(false);
@@ -58,9 +59,7 @@ const ProfilePage: React.FC = () => {
   const navigateTo = (screen: string) => {
     if (screen) {
       navigation.navigate(screen);
-    } else {
-      console.log(screen);
-    }
+    } else {}
   };
 
   const handleSubmit = async () => {
@@ -70,6 +69,26 @@ const ProfilePage: React.FC = () => {
     navigation.navigate("(auth)/auth");
     setToggle(false);
   };
+
+  const onShare = async () => {
+		try {
+			const result = await Share.share({
+				message:
+					'https://t.me/senior_BX',
+			});
+			if (result.action === Share.sharedAction) {
+				if (result.activityType) {
+					// shared with activity type of result.activityType
+				} else {
+					// shared
+				}
+			} else if (result.action === Share.dismissedAction) {
+				// dismissed
+			}
+		} catch (error: any) {
+			Alert.alert(error.message);
+		}
+	};
 
   const navigationList =
     role === "ROLE_MASTER"
@@ -127,6 +146,7 @@ const ProfilePage: React.FC = () => {
             icon: "share-alt",
             label: "Поделиться",
             screen: "",
+            openInviteModal: true
           },
           // {
           //   icon: "wallet",
@@ -175,6 +195,7 @@ const ProfilePage: React.FC = () => {
             icon: "share-alt",
             label: "Поделиться",
             screen: "",
+            // modal: true
           },
           // {
           //   icon: "wallet",
@@ -246,6 +267,7 @@ const ProfilePage: React.FC = () => {
             key={index}
             style={styles.menuItem}
             onPress={() =>
+              item.icon === "share-alt" ? onShare() :
               item.modal ? setToggle(true) : navigateTo(item.screen)
             }
             activeOpacity={0.7}

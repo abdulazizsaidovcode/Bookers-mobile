@@ -238,7 +238,7 @@ const Header: React.FC = () => {
 		try {
 			const result = await Share.share({
 				message:
-					'React Native | A framework for building native apps using React',
+					'https://t.me/senior_BX',
 			});
 			if (result.action === Share.sharedAction) {
 				if (result.activityType) {

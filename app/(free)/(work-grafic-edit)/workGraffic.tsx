@@ -1,5 +1,5 @@
 import { ScrollView, StatusBar, StyleSheet, Text, View, Alert } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ServicesCategory from "@/components/services/servicesCatgegory";
 import Buttons from "@/components/(buttons)/button";
@@ -11,7 +11,7 @@ import CalendarGrafficEdit from "./calendar";
 import Toast from 'react-native-simple-toast';
 import { RootStackParamList } from "@/type/root";
 import { NavigationProp } from "@react-navigation/native";
-import { useNavigation } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic-edit)/workGraffic'>;
 
 
@@ -30,8 +30,9 @@ const GrafficWorkEdit: React.FC = () => {
     { id: 6, dayValue: "saturday", dayName: "Суббота", active: false },
     { id: 7, dayValue: "sunday", dayName: "Воскресенье", active: false },
   ]);
+useFocusEffect(
 
-  useEffect(() => {
+  useCallback(() => {
     const updatedItems = items.map(item => {
       const isWeekDataActive = weekData.some(
         weekItem => weekItem.dayName.toLowerCase() === item.dayValue.toLowerCase() && weekItem.active
@@ -39,7 +40,9 @@ const GrafficWorkEdit: React.FC = () => {
       return { ...item, active: isWeekDataActive || item.active };
     });
     setItems(updatedItems);
-  }, [weekData]);
+    return () => {}
+  }, [weekData])
+)
 
   const handleCategoryPress = (id: number) => {
     const updatedItems = items.map((item) =>
