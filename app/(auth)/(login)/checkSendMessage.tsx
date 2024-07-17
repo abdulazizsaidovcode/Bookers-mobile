@@ -31,9 +31,10 @@ const OtpInputExample: React.FC = () => {
     const [messageResponse, setMessageResponse] = useState(false);
     const { isRegtered } = isRegister()
     const navigation = useNavigation<any>();
-    const [role, setRole] = useState<string | null>(null);
+    const [roles, setRoles] = useState<string | null>(null);
     const { language } = langstore();
     const [number, setNumber] = useState('');
+    const { setRole } = registerStory()
 
     const { t } = useTranslation();
 
@@ -80,7 +81,9 @@ const OtpInputExample: React.FC = () => {
 
     useEffect(() => {
         async function finishwork() {
-
+            if (roles) {
+                setRole(roles);
+            }
             if (response) {
                 let parol = await SecureStore.getItemAsync('password')
 
@@ -88,9 +91,9 @@ const OtpInputExample: React.FC = () => {
                     navigation.navigate("(auth)/(register)/(greetings)/greetingFirst");
                 } else {
                     if (parol !== null) {
-                        if (role == 'ROLE_MASTER') {
+                        if (roles == 'ROLE_MASTER') {
                             navigation.navigate('(tabs)/(master)');
-                        } else if (role == 'ROLE_CLIENT') {
+                        } else if (roles == 'ROLE_CLIENT') {
                             navigation.navigate('(tabs)/(client)');
                         }
                     } else {
@@ -135,7 +138,7 @@ const OtpInputExample: React.FC = () => {
                         if (isRegtered) {
                             handlePress()
                         } else {
-                            authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setRole)
+                            authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setRoles)
                         }
                     }}
                 >
