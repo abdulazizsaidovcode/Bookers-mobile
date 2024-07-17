@@ -8,11 +8,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import Toast from "react-native-simple-toast";
+import {setClientOrMaster} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/(register)/(roleSelection)/masterORclient'>;
-
-
-
 
 const MasterorClient: React.FC = () => {
     const { setRole } = registerStory()
@@ -29,10 +27,12 @@ const MasterorClient: React.FC = () => {
             <View style={styles.button}>
                 <Buttons title={t("master")} backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_MASTER")
+                    setClientOrMaster('ROLE_MASTER')
                     navigation.navigate('(auth)/(register)/(roleSelection)/switchPage');
                 }} />
                 <Buttons title={t("client")} backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_CLIENT")
+                    setClientOrMaster('ROLE_CLIENT')
                     navigation.navigate('(auth)/(register)/(roleSelection)/switchPage');
                 }} />
             </View>

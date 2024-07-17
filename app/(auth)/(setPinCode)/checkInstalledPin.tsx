@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { registerClient, registerMaster } from '@/helpers/api-function/register/registrFC';
 import registerStory from '@/helpers/state_managment/auth/register';
 import { useNavigation } from '@react-navigation/native';
-import { authStorage } from "@/constants/storage";
+import {authStorage, getClientOrMaster} from "@/constants/storage";
 import { useFocusEffect } from 'expo-router';
 import { langstore } from '@/helpers/state_managment/lang/lang';
 import Toast from "react-native-simple-toast";
@@ -15,7 +15,7 @@ import { getConfig } from '@/app/(tabs)/(master)/main';
 const CheckPin: React.FC = () => {
     const { firstName, lastName, nickname, phoneNumber } = registerStory()
     const { language } = langstore()
-    const { role } = registerStory()
+    const { role, setRole } = registerStory()
 
     const inputs = useRef<TextInput[]>([]);
     
@@ -47,6 +47,7 @@ const CheckPin: React.FC = () => {
             };
 
             getStoredOtp();
+            getClientOrMaster(setRole)
         }, [])
     )
 
@@ -109,7 +110,6 @@ const CheckPin: React.FC = () => {
             Toast.show("пин-код установлен", Toast.SHORT);
             SecureStore.setItemAsync('password', enteredOtp)
             setIslogin(true)
-            console.log(role);
 
             if (role === 'ROLE_MASTER') {
                 navigation.navigate('(tabs)/(master)')

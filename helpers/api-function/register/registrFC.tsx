@@ -3,11 +3,8 @@ import axios from "axios";
 import { router } from "expo-router";
 import { Alert } from "react-native";
 import Toast from "react-native-simple-toast";
-import { authStorage } from "@/constants/storage";
+import {authStorage, setClientOrMaster} from "@/constants/storage";
 import * as SecureStore from 'expo-secure-store';
-
-
-
 
 export const checkNumberFunction = (phoneNumber: string, setCode: (value: any) => void, status: boolean) => {
     const sentData = {
@@ -53,7 +50,6 @@ export const authLogin = async (phoneNumber: string, otpValue: string, setRespon
         phone: phoneNumber,
         code: otpValue
     }
-    console.log(authData);
 
     if (phoneNumber) {
         axios.post(`${base_url}auth/login`, authData)
@@ -61,6 +57,7 @@ export const authLogin = async (phoneNumber: string, otpValue: string, setRespon
                 if (res.data.success) {
                     setRespone(true)
                     authStorage(res.data.body)
+                    setClientOrMaster(res.data.message)
                     setRole(res.data.message)
                     SecureStore.setItemAsync('number', phoneNumber)
                 } else setRespone(false)
@@ -123,8 +120,6 @@ export const registerClient = async ({ firstName, lastName, phoneNumber, img, se
 
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
     const url = `${register_page}client?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${`&lang=${language}`}&phoneNumber=${formattedPhoneNumber}`;
-
-    console.log(url);
 
     axios.post(url, formData, {
         headers: {
