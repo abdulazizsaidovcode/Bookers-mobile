@@ -33,7 +33,7 @@ const MasterorClient: React.FC = () => {
                 }} />
                 <Buttons title={t("client")} backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_CLIENT")
-                    Toast.show("клиентская панель пока недоступна в этой версии", Toast.LONG)
+                    navigation.navigate('(auth)/(register)/(roleSelection)/switchPage');
                 }} />
             </View>
         </SafeAreaView>

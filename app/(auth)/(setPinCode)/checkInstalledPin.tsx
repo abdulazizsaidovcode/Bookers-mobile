@@ -2,12 +2,10 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
-import { masterData } from '@/helpers/api-function/register/registrFC';
+import { registerClient, registerMaster } from '@/helpers/api-function/register/registrFC';
 import registerStory from '@/helpers/state_managment/auth/register';
-import { RootStackParamList } from '@/type/root';
 import { useNavigation } from '@react-navigation/native';
 import { authStorage } from "@/constants/storage";
-import * as SecureStore from 'expo-secure-store';
 import { useFocusEffect } from 'expo-router';
 import { langstore } from '@/helpers/state_managment/lang/lang';
 
@@ -18,8 +16,9 @@ const CheckPin: React.FC = () => {
     const [tokenData, setTokenData] = useState<string | null>('');
     const [isLogin, setIslogin] = useState<any>(false);
     const inputs = useRef<TextInput[]>([]);
-    const { role, firstName, lastName, nickname, phoneNumber } = registerStory()
-    const { language} = langstore()
+    const { firstName, lastName, nickname, phoneNumber } = registerStory()
+    const { language } = langstore()
+    const { role } = registerStory()
 
     const { t } = useTranslation();
     const navigation = useNavigation<any>();
@@ -73,7 +72,11 @@ const CheckPin: React.FC = () => {
         if (enteredOtp === storedOtp) {
             setIsCorrect(true);
             if (isLogin) {
-                navigation.navigate('(tabs)/(master)')
+                if (role === 'ROLE_MASTER') {
+                    navigation.navigate('(tabs)/(master)')
+                } else if (role === 'ROLE_CLIENT') {
+                    navigation.navigate('(tabs)/(client)')
+                }
             }
         } else {
             setIsCorrect(false);
@@ -85,7 +88,11 @@ const CheckPin: React.FC = () => {
 
         if (enteredOtp === storedOtp) {
             setIsCorrect(true);
-            navigation.navigate('(tabs)/(master)')
+            if (role === 'ROLE_MASTER') {
+                navigation.navigate('(tabs)/(master)')
+            } else if (role === 'ROLE_CLIENT') {
+                navigation.navigate('(tabs)/(client)')
+            }
             // Handle the success action (navigate to the next page or perform other actions)
         } else {
             setIsCorrect(false);
@@ -123,17 +130,30 @@ const CheckPin: React.FC = () => {
                             { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
                         ]}
                         onPress={() => {
-                            masterData({
-                                firstName: firstName,
-                                lastName: lastName,
-                                nickname: nickname,
-                                phoneNumber: phoneNumber,
-                                role: role,
-                                setData: setTokenData,
-                                islogin: setIslogin,
-                                password: enteredOtp,
-                                language: language,
-                            })
+                            if (role === 'ROLE_MASTER') {
+                                registerMaster({
+                                    firstName: firstName,
+                                    lastName: lastName,
+                                    nickname: nickname,
+                                    phoneNumber: phoneNumber,
+                                    role: role,
+                                    setData: setTokenData,
+                                    islogin: setIslogin,
+                                    password: enteredOtp,
+                                    language: language,
+                                })
+                            } else {
+                                registerClient({
+                                    firstName: firstName,
+                                    lastName: lastName,
+                                    phoneNumber: phoneNumber,
+                                    setData: setTokenData,
+                                    islogin: setIslogin,
+                                    password: enteredOtp,
+                                    language: language,
+                                })
+                            }
+
 
                         }}
                         disabled={!isButtonEnabled}

@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 10,
     overflow: 'hidden',
+    width: '100%',
   },
   header: {
     flexDirection: 'row',
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     color: "#C2C2C2",
   },
   content: {
-    padding: 15,
+    // padding: 15,
     backgroundColor: '#21212E',
   },
 });

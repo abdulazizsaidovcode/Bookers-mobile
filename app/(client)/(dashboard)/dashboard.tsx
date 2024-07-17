@@ -1,48 +1,53 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
-import AccordionItem from './accardion';
+import AccordionItem from '../../../components/accordions/accardion';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
+import { router, useNavigation } from 'expo-router';
+import { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+type SettingsScreenNavigationProp = NavigationProp<
+  RootStackParamList,
+  "(client)/(dashboard)/dashboard"
+>;
 
 const Dashboard = () => {
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
   const dataDashboard = [
     {
       id: 1,
       image: require('@/assets/clientDashboard/Layer_1.png'),
       title: 'Здоровье и красота волос',
       titleThen: 'Рядом с тобой 450',
+      onPress: () => {
+        navigation.navigate('(client)/(dashboard)/(health)/health');
+      },
     },
     {
       id: 2,
-      image: require('@/assets/clientDashboard/Layer_1.png'),
+      image: require('@/assets/clientDashboard/pomada.png'),
       title: 'Ногтевой сервис',
-      titleThen: 'Рядом с тобой 450',
+      titleThen: 'Рядом с тобой 75',
     },
     {
       id: 3,
-      image: require('@/assets/clientDashboard/Layer_1.png'),
-      title: 'Здоровье и красота волос',
-      titleThen: 'Рядом с тобой 450',
+      image: require('@/assets/clientDashboard/eyes.png'),
+      title: 'Ресницы и брови',
+      titleThen: 'Рядом с тобой 322',
     },
     {
       id: 4,
-      image: require('@/assets/clientDashboard/Layer_1.png'),
-      title: 'Здоровье и красота волос',
-      titleThen: 'Рядом с тобой 450',
+      image: require('@/assets/clientDashboard/aranow.png'),
+      title: 'Уход за телом',
+      titleThen: 'Рядом с тобой 456',
     },
     {
       id: 5,
-      image: require('@/assets/clientDashboard/Layer_1.png'),
-      title: 'Здоровье и красота волос',
-      titleThen: 'Рядом с тобой 450',
+      image: require('@/assets/clientDashboard/dont.png'),
+      title: 'Уход за лицом',
+      titleThen: 'Рядом с тобой 210',
     },
   ];
-
-  const handlePress = () => {
-    // Handle onPress logic here
-    console.log('TouchableOpacity pressed');
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.navbar}>
@@ -52,10 +57,10 @@ const Dashboard = () => {
           <Feather name="bookmark" size={28} color="white" />
         </View>
       </View>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView>
         <AccordionItem title="Мои записи" titleThen='У вас пока нет записей, выберите услугу.' backgroundColor='#21212E'>
           {dataDashboard.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={handlePress}>
+            <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={item.onPress}  >
               <View style={styles.item}>
                 <View style={styles.imageContainer}>
                   <Image source={item.image} style={styles.image} />
@@ -69,7 +74,20 @@ const Dashboard = () => {
           ))}
         </AccordionItem>
         <AccordionItem title="Мои мастера" titleThen='У вас пока нет своих мастеров' backgroundColor='#21212E'>
-          <Text>This is the content of the second item.</Text>
+          <TouchableOpacity style={styles.touchableItem} >
+            <View style={styles.item}>
+              <View style={styles.textContainer}>
+                <Text style={styles.titleText1}>Пригласить своего мастера</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.touchableItem} >
+            <View style={styles.itemTwo}>
+              <View style={styles.textContainer}>
+                <Text style={styles.titleTextTwo}>Записаться к совему мастеру</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
         </AccordionItem>
       </ScrollView>
     </SafeAreaView>
@@ -104,12 +122,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
   },
-  scrollView: {
-    width: '100%',
-  },
   touchableItem: {
-    width: '100%',
-    alignItems: 'center', // Center content horizontally
+    alignItems: 'center',
   },
   item: {
     flexDirection: 'row',
@@ -119,18 +133,30 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 8,
     width: '100%',
+    maxWidth: 358,
+  },
+  itemTwo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#9C0a35',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 8,
+    width: '100%',
+    height: 50,
+    maxWidth: 358,
   },
   imageContainer: {
     width: 50,
     height: 50,
     borderRadius: 25,
     backgroundColor: '#9C0A35',
-    justifyContent: 'center', // Center content vertically
-    alignItems: 'center', // Center content horizontally
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
     borderRadius: 20,
   },
   textContainer: {
@@ -139,7 +165,20 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 16,
+    fontWeight: '500',
+    color: '#111',
+  },
+  titleText1: {
+    fontSize: 16,
     fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#9C0A35',
+  },
+  titleTextTwo: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#fff',
   },
   subtitleText: {
     fontSize: 14,
