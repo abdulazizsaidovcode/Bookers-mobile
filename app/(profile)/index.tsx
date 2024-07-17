@@ -166,7 +166,8 @@ const ProfilePage: React.FC = () => {
           {
             icon: "sign-out-alt",
             label: "Выйти",
-            screen: "",
+            screen: "Logout",
+            modal: true,
           },
         ]
       : [
@@ -213,7 +214,8 @@ const ProfilePage: React.FC = () => {
           {
             icon: "sign-out-alt",
             label: "Выйти",
-            screen: "",
+            screen: "Logout",
+            modal: true,
           },
         ];
 
