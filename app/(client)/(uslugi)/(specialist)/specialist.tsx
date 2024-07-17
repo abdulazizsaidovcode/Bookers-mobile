@@ -6,6 +6,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import { Fontisto } from '@expo/vector-icons';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import LocationInput from '@/app/locationInput';
+import { router } from 'expo-router';
 
 
 const Specialist = () => {
@@ -21,6 +22,10 @@ const Specialist = () => {
     // ... Add more client data here
   ];
 
+  const handEnd = () =>{
+    router.push('')
+  }
+
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
@@ -33,7 +38,7 @@ const Specialist = () => {
             <TouchableOpacity
               activeOpacity={.8}
               style={[tw`flex-row items-center border px-8 py-3 rounded-xl`, { backgroundColor: '#9C0A35' }]}
-              onPress={onPress}>
+              onPress={handEnd}>
               <Fontisto name="arrow-swap" size={24} color="white" />
               <Text style={[tw`text-white ml-2 text-xl`]}>Фильтр</Text>
             </TouchableOpacity>

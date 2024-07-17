@@ -45,8 +45,9 @@ const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title }) => {
                     <View style={styles.communitySlider}>
                         <CommunitySlider icon={<AntDesign name="star" size={18} color="#9C0A35" />} title="+" textColor='#9C0A35' />
                     </View>
-                    <Text style={tw`p-3`}>
+                    <Text style={tw`p-3 mt-4`}>
                         <CustomCheckbox
+                          title='не важно'
                             value={isSelected}
                             onValueChange={setSelection}
                         />
