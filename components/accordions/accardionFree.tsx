@@ -41,7 +41,7 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
             <TouchableOpacity
                 style={styles.header}
                 onPress={toggleExpand}
-                activeOpacity={0.8}
+                activeOpacity={1}
             >
                 <View style={styles.mainText}>
                     <Text style={styles.headerText}>{title}</Text>
