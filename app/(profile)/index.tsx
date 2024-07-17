@@ -25,6 +25,7 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import tw from "tailwind-react-native-classnames";
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import registerStory from "@/helpers/state_managment/auth/register";
 
 const ProfilePage: React.FC = () => {
   const [isInviteModalVisible, setInviteModalVisible] = useState(false);
@@ -32,6 +33,7 @@ const ProfilePage: React.FC = () => {
   const navigation = useNavigation<any>();
   const { getMee, setGetMee } = useGetMeeStore();
   const [toggle, setToggle] = useState(false);
+  const { role } = registerStory()
 
   useEffect(() => {
     getUser(setGetMee);
@@ -39,7 +41,8 @@ const ProfilePage: React.FC = () => {
   const openInviteModal = () => {
     setInviteModalVisible(true);
   };
-
+  console.log(`role:  ${role}`);
+  
   const closeInviteModal = () => {
     setInviteModalVisible(false);
   };
@@ -68,6 +71,124 @@ const ProfilePage: React.FC = () => {
     setToggle(false)
   };
 
+  const navigationList = role === "ROLE_MASTER" ? [
+    {
+      icon: "user",
+      label: "Подписка",
+      screen: "(profile)/(tariff)/tariff",
+    },
+    {
+      icon: "history",
+      label: "История сеансов",
+      screen: "(profile)/(sessionhistory)/sessionHistory",
+    },
+    {
+      icon: "info-circle",
+      label: "Справка",
+      screen: "(profile)/(help)/help",
+    },
+    {
+      icon: "bell",
+      label: "Уведомления",
+      screen: "(profile)/(notification)/index",
+    },
+    {
+      icon: "wallet",
+      label: "Расходы",
+      screen: "(profile)/(Expenses)/index",
+    },
+    {
+      icon: "globe",
+      label: "Веб страница",
+      screen: "(profile)/(WebPage)/WebPage",
+    },
+    {
+      icon: "cogs",
+      label: "Настройки",
+      screen: "(profile)/(settings)/settings",
+    },
+    {
+      icon: "users",
+      label: "Клиенты",
+      screen: "(free)/(client)/main",
+    },
+    {
+      icon: "sign-out",
+      label: "Выйти",
+      screen: "Logout",
+      modal: true,
+    },
+  ] : role === "ROLE_CLIENT" ? [
+    {
+      icon: "user",
+      label: "Подписка",
+      screen: "(profile)/(tariff)/tariff",
+    },
+    {
+      icon: "history",
+      label: "История сеансов",
+      screen: "(profile)/(sessionhistory)/sessionHistory",
+    },
+    {
+      icon: "info-circle",
+      label: "Справка",
+      screen: "(profile)/(help)/help",
+    },
+    {
+      icon: "bell",
+      label: "Уведомления",
+      screen: "(profile)/(notification)/index",
+    },
+    {
+      icon: "wallet",
+      label: "Расходы",
+      screen: "(profile)/(Expenses)/index",
+    },
+    {
+      icon: "globe",
+      label: "Веб страница",
+      screen: "(profile)/(WebPage)/WebPage",
+    }
+  ] : [
+    {
+      icon: "share-alt",
+      label: "Поделиться",
+      screen: "",
+    },{
+      icon: "wallet",
+      label: "Способы оплаты",
+      screen: "(pages)/(profile)/(payment)/(card_page)/card_page",
+    },{
+      icon: "clock",
+      label: "История записей",
+      screen: "(client)/(profile)/(orderHistory)/orderHistory",
+    },{
+      icon: "user",
+      label: "Профиль",
+      screen: "(client)/(profile)/(profileEdit)/profileEdit",
+    },{
+      icon: "exclamation-circle",
+      label: "О сервиса",
+      screen: "(free)/(help)/help",
+    },{
+      icon: "bell",
+      label: "Уведомления",
+      screen: "(client)/(profile)/(notification)/notification",
+    },{
+      icon: "credit-card",
+      label: "Карта лояльности",
+      screen: "",
+    },{
+      icon: "cogs",
+      label: "Настройки",
+      screen: "(client)/(profile)/(settings)/settings",
+    },{
+      icon: "sign-out-alt",
+      label: "Выйти",
+      screen: "",
+    },
+  ];
+
   return (
     <ScrollView style={[styles.container]}>
       <SafeAreaView style={{ paddingBottom: 24 }}>
@@ -90,50 +211,8 @@ const ProfilePage: React.FC = () => {
           </View>
         </View>
 
-        {[
-          {
-            icon: "user",
-            label: "Подписка",
-            screen: "(profile)/(tariff)/tariff",
-          },
-          {
-            icon: "history",
-            label: "История сеансов",
-            screen: "(profile)/(sessionhistory)/sessionHistory",
-          },
-          {
-            icon: "info-circle",
-            label: "Справка",
-            screen: "(profile)/(help)/help",
-          },
-          {
-            icon: "bell",
-            label: "Уведомления",
-            screen: "(profile)/(notification)/index",
-          },
-          {
-            icon: "wallet",
-            label: "Расходы",
-            screen: "(profile)/(Expenses)/index",
-          },
-          {
-            icon: "globe",
-            label: "Веб страница",
-            screen: "(profile)/(WebPage)/WebPage",
-          },
-          {
-            icon: "cogs",
-            label: "Настройки",
-            screen: "(profile)/(settings)/settings",
-          },
-          { icon: "users", label: "Клиенты", screen: "(free)/(client)/main" },
-          {
-            icon: "sign-out",
-            label: "Выйти",
-            screen: "Logout",
-            modal: true,
-          },
-        ].map((item, index) => (
+        {
+        navigationList.map((item, index) => (
           <TouchableOpacity
             key={index}
             style={styles.menuItem}
