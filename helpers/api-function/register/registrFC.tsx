@@ -81,13 +81,12 @@ interface IRegister {
     nickname?: string
     img?: any
     role: string;
-    islogin: (val: any) => void
     setData: (val: any) => void
     password: string;
     language: string;
 }
 
-export const registerMaster = async ({ role, firstName, lastName, nickname, phoneNumber, img, islogin, setData, password, language }: IRegister) => {
+export const registerMaster = async ({ role, firstName, lastName, nickname, phoneNumber, img, setData, password, language }: IRegister) => {
     const formData = new FormData();
     formData.append('image', img ? img : null)
 
@@ -111,14 +110,14 @@ export const registerMaster = async ({ role, firstName, lastName, nickname, phon
                 setData(null)
             }
         })
-        
+
         .catch(err => {
             console.log(err);
             setData(null)
             Alert.alert("Произошла ошибка при регистрации");
         });
 }
-export const registerClient = async ({ firstName, lastName, phoneNumber, img, islogin, setData, password, language }: any) => {
+export const registerClient = async ({ firstName, lastName, phoneNumber, img, setData, password, language }: any) => {
     const formData = new FormData();
     formData.append('image', img ? img : null)
 
