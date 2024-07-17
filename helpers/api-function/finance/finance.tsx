@@ -6,7 +6,7 @@ import {getConfig} from "@/app/(tabs)/(master)/main";
 export const getFinanceDay = async (setData: (val: FinanceDay | null) => void, date: string | null) => {
     if (date) {
         const config = await getConfig()
-        await axios.get(`${finance_day}?localDate=${date}`, config)
+        await axios.get(`${finance_day}?localDate=${date}`, config ? config : {})
             .then(res => {
                 if (res.data.success) setData(res.data.body)
                 else setData(null)
@@ -21,7 +21,7 @@ export const getFinanceDay = async (setData: (val: FinanceDay | null) => void, d
 export const getFinanceMonth = async (setData: (val: FinanceMonth[] | null) => void, startDate: string | null, endDate: string | null) => {
     if (startDate && endDate && (startDate !== endDate)) {
         const config = await getConfig()
-        await axios.get(`${finance_month}?startDate=${startDate}&finishDate=${endDate}`, config)
+        await axios.get(`${finance_month}?startDate=${startDate}&finishDate=${endDate}`, config ? config : {})
             .then(res => {
                 if (res.data.success) setData(res.data.body)
                 else setData(null)
@@ -35,7 +35,7 @@ export const getFinanceMonth = async (setData: (val: FinanceMonth[] | null) => v
 
 export const getTopClients = async (setData: (val: FinanceTopClients[] | null) => void) => {
     const config = await getConfig()
-    await axios.get(`${finance_top_client}`, config)
+    await axios.get(`${finance_top_client}`, config ? config : {})
         .then(res => {
             if (res.data.success) setData(res.data.body)
             else setData(null)
