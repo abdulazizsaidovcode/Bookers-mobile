@@ -80,11 +80,11 @@ export const getConfigImg = async () => {
 			};
 		} else {
 			console.log('Token not found');
-			return {};
+			return null;
 		}
 	} catch (error) {
 		console.log(error);
-		return {};
+		return null;
 	}
 };
 

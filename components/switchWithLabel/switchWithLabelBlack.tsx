@@ -11,7 +11,7 @@ interface SwitchWithLabelPropsBlack {
 const SwitchWithLabelBlack: React.FC<SwitchWithLabelPropsBlack> = ({ label, value, onToggle }) => {
     return (
         <View style={tw`flex flex-row items-center justify-around my-4  `}>
-            <Text style={tw`text-[24px] font-semibold text-white mr-4 text-black`}>
+            <Text style={tw`font-semibold text-white mr-4 text-black`}>
                 {label}
             </Text>
             <View style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}>

@@ -109,7 +109,7 @@ const OnlineBooking = () => {
   return (
     <SafeAreaView style={[tw`flex-1 mt-6`, { backgroundColor: "#21212E" }]}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-      <NavigationMenu name={t("notification_settings")} />
+      <NavigationMenu name={"Моё расписание"} />
       <View style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
         <ScrollView
           showsVerticalScrollIndicator={false}

@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import SwitchWithLabel from "@/components/switchWithLabel/switchWithLabel";
@@ -11,9 +11,10 @@ import {
 import Buttons from "@/components/(buttons)/button";
 import {
   getOnlineConfirmationServices,
+  onlineBookingAllowClient,
   onlineConfirmationServices,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 
 const ConfirmationRecord = () => {
@@ -31,40 +32,37 @@ const ConfirmationRecord = () => {
     setData,
     data,
   } = OnlineBookingStory();
+
   useEffect(() => {
     getOnlineConfirmationServices(setData);
   }, []);
 
-  useEffect(() => {
-    if (data) {
-      setIsEnabled(data.allClient);
-      setIsEnabled2(data.newClient);
-      setIsEnabled3(data.notConfirm);
-    }
-  }, [data]);
+  useFocusEffect(
+    useCallback(() => {
+      console.log(data);
+
+      if (data) {
+        setIsEnabled(data.allClient);
+        setIsEnabled2(data.newClient);
+        setIsEnabled3(data.notConfirm);
+      }
+      console.log(isEnabled, isEnabled2, isEnabled3);
+    }, [isEnabled, isEnabled2, isEnabled3]));
 
   const toggleSwitch = () => {
     const newValue = !isEnabled;
     setIsEnabled(newValue);
-    // onlineBookingAllowClient(newValue)
-    console.log(newValue);
   };
   const toggleSwitch2 = () => {
     const newValue = !isEnabled2;
     setIsEnabled2(newValue);
-    // setAllowClient(newValue); // Update the global state
-    // onlineBookingAllowClient(newValue)
-    console.log(newValue);
   };
   const toggleSwitch3 = () => {
     const newValue = !isEnabled3;
     setIsEnabled3(newValue);
-    // setAllowClient(newValue); // Update the global state
-    // onlineBookingAllowClient(newValue)
     console.log(newValue);
   };
 
-  console.log("data: ", data);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -126,7 +124,7 @@ const ConfirmationRecord = () => {
         </Text>
       </View>
       <Buttons
-        title="Save"
+        title="Сохранить"
         backgroundColor="#9C0A35"
         onPress={() => {
           onlineConfirmationServices(isEnabled, isEnabled2, isEnabled3);

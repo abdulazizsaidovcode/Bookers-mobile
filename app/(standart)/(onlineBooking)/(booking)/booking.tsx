@@ -24,6 +24,7 @@ import {
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
+import Toast from "react-native-simple-toast";
 
 const Booking = () => {
   const { Urgently, setUrgentlyt } = OnlineBookingSettingsUrgentlyStory();
@@ -38,7 +39,7 @@ const Booking = () => {
   const getData = async () => {
     try {
       const config = await getConfig();
-      const { data } = await axios.get(`${base_url}order-days/master`, config);
+      const { data } = await axios.get(`${base_url}order-days/master`, config ? config : {});
       setData(data.body);
     } catch (error) {
       console.log(error);
@@ -48,13 +49,13 @@ const Booking = () => {
   const addOnlineBook = async () => {
     try {
       const config = await getConfig();
-      await axios.post(
+      let res = await axios.post(
         `${base_url}online-booking-settings/record-duration/day`,
         { day: salonId },
-        config
+        config ? config : {}
       );
 
-      // setBreack(false);
+      Toast.show(res.data.message, Toast.SHORT);
       navigation.goBack();
     } catch (error) {
       console.log(error);

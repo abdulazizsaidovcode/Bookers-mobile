@@ -14,11 +14,12 @@ import CenteredModal from '@/components/(modals)/modal-centered';
 import { useSheduleData } from '@/helpers/state_managment/schedule/schedule';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import { getUser } from '@/helpers/api-function/getMe/getMee';
+import { fetchServices } from '@/helpers/api-function/client/client';
 const { width, height } = Dimensions.get('window');
 
 
 const BookedAccordion: React.FC = () => {
-    const [services, setServices] = useState([]);
+    const [services, setServices] = useState<any>([]);
     const [activeTab, setActiveTab] = useState('');
     const [activeTime, setActiveTime] = useState('');
     const { FreeTime, setFreeTime } = useScheduleFreeTime();
@@ -41,6 +42,8 @@ const BookedAccordion: React.FC = () => {
     );
 
     useEffect(() => {
+        console.log(getMee.id);
+        
         if (calendarDate && getMee.id) {
             setDate(calendarDate)
             getFreeTime(calendarDate, setFreeTime, getMee.id);
@@ -55,21 +58,10 @@ const BookedAccordion: React.FC = () => {
     }, [calendarDate, activeTime, activeTab]);
 
     useEffect(() => {
-        fetchServices();
-        // Clear selections when calendarDate changes
+        fetchServices(setServices);
         setActiveTab('');
         setActiveTime('');
     }, [calendarDate]);
-
-    const fetchServices = () => {
-        axios.get(`${master_service_list}`, config)
-            .then((res) => {
-                setServices(res.data.body);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    };
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
@@ -107,7 +99,7 @@ const BookedAccordion: React.FC = () => {
                             onPress={() => handleTabChange(service.id)}
                         >
                             <Text style={[styles.tabText, activeTab !== service.id && styles.inactiveText]}>
-                                {service.category.name.trim()}
+                                {service.name.trim()}
                             </Text>
                         </TouchableOpacity>
                     )) : <Text style={styles.placeholderText}>Нет услуг</Text>}
@@ -115,7 +107,7 @@ const BookedAccordion: React.FC = () => {
                 <View>
                     {activeTab && (
                         <View style={styles.timeContainer}>
-                            {FreeTime ? FreeTime.map((time: string, index) => (
+                            {FreeTime ? FreeTime.map((time: string, index) => 
                                 <TouchableOpacity
                                     key={index}
                                     style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
@@ -125,7 +117,7 @@ const BookedAccordion: React.FC = () => {
                                         {time.slice(0, 5)}
                                     </Text>
                                 </TouchableOpacity>
-                            )) : <Text style={styles.placeholderText}>Нет свободного времени</Text>}
+                            ) : <Text style={styles.placeholderText}>Нет свободного времени</Text>}
                         </View>
                     )}
                 </View>

@@ -9,7 +9,7 @@ interface CheckboxProps {
     title:string;
 }
 
-const CustomCheckbox: React.FC<CheckboxProps> = ({ value, onValueChange, title }) => {
+const CustomCheckbox: React.FC<CheckboxProps | any> = ({ value, onValueChange, title }) => {
     return (
         <View style = {tw`flex-1 flex-row`}>
             <TouchableOpacity
