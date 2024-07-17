@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getConfig } from "@/app/(tabs)/(master)/main";
-import { getCategory_Client } from "@/helpers/api";
+import { getCategory_Client, getClient_filter } from "@/helpers/api";
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 
@@ -15,3 +15,15 @@ export const getAllCategory = async () => {
     console.log('Error:', error);
   }
 };
+
+export const postClientFilter = async () => {
+  try{
+    const config = await getConfig();
+    const res = await axios.post(`${getClient_filter}`, config);
+    if(res.data.success === true){
+      console.log();
+    }
+  }catch(error){
+    console.log(error); 
+  }
+}

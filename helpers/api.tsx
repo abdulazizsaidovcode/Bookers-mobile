@@ -56,6 +56,7 @@ export const master_add_specialization = `${base_url}master-service/specializati
 
 // Client uslugi
 export const getCategory_Client = `${base_url}category/client` // get client all categoy
+export const getClient_filter = `${base_url}client/filter` // post client filter 
 
 // Register page 
 export const register_page = `${base_url}auth/`

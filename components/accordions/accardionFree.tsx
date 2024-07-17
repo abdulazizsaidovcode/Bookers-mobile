@@ -82,6 +82,7 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
                         <CustomCheckbox
                             value={isSelected}
                             onValueChange={setSelection}
+                            title='не важно'
                         />
                     </Text>
 

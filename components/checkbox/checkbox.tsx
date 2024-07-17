@@ -6,9 +6,10 @@ import tw from 'tailwind-react-native-classnames';
 interface CheckboxProps {
     value: boolean;
     onValueChange: (newValue: boolean) => void;
+    title:string;
 }
 
-const CustomCheckbox: React.FC<CheckboxProps> = ({ value, onValueChange }) => {
+const CustomCheckbox: React.FC<CheckboxProps> = ({ value, onValueChange, title }) => {
     return (
         <View style = {tw`flex-1 flex-row`}>
             <TouchableOpacity
@@ -17,7 +18,7 @@ const CustomCheckbox: React.FC<CheckboxProps> = ({ value, onValueChange }) => {
         >
             {value && <AntDesign name="check" size={20} color="white" />}
         </TouchableOpacity>
-        <Text style = {tw`ml-3`}>не важно</Text>
+        <Text style = {tw`ml-3`}>{title}</Text>
         </View>
         
     );
