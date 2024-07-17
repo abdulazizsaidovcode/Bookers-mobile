@@ -15,7 +15,7 @@ export const getUser = async (setGetMee: (val: GetMee) => void) => {
     } catch { }
 }
 
-export const getUserLocation = async (setLocation: (val: UserLocation) => void) => {
+export const getUserLocation = async (setLocation: (val: any) => void) => {
     let { status } = await Location.requestForegroundPermissionsAsync()
     if (status !== 'granted') {
         Alert.alert('Please grant location permissions');
