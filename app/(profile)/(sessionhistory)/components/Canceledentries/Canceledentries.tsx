@@ -27,16 +27,13 @@ const Canceledentries = () => {
   const [isChecked, setChecked] = useState(false);
   const [pastentries, setPastentries] = useState([]);
   const [toggle, setToggle] = useState(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const { setProduct } = History();
 
   const getsessionDetails = async () => {
     try {
       const config = await getConfig();
-      const response = await axios.get(
-        `${base_url}order/canceled-sessions?status=CANCELED_SESSIONS`,
-        config
-      );
+      const response = await axios.get(`${base_url}order/canceled-sessions?status=CANCELED_SESSIONS`, config ? config : {});
       const responseData = response.data;
       if (responseData.success === true) setData(responseData.body);
       console.log(responseData);
@@ -69,7 +66,7 @@ const Canceledentries = () => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          ...config.headers, // config içindeki headers'ı buraya ekliyoruz
+          'Authorization': config ? config.headers.Authorization : '',
         },
         body: JSON.stringify(pastData), // body'i JSON string formatında gönderiyoruz
       });
