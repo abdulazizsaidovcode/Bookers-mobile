@@ -74,4 +74,6 @@ export type RootStackParamList = {
    '(client)/(profile)/(profileEdit)/profileEdit': undefined
    '(client)/(profile)/(orderHistory)/orderHistory': undefined
   '(auth)/(register)/(clientInformations)/getNameSurname': undefined
+  '(client)/(profile)/(payment)/payment': undefined
+  '(client)/(profile)/(card)/card': undefined
 };

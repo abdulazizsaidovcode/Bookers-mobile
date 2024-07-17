@@ -25,6 +25,7 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import tw from "tailwind-react-native-classnames";
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import registerStory from "@/helpers/state_managment/auth/register";
 
 const ProfilePage: React.FC = () => {
   const [isInviteModalVisible, setInviteModalVisible] = useState(false);
@@ -32,6 +33,7 @@ const ProfilePage: React.FC = () => {
   const navigation = useNavigation<any>();
   const { getMee, setGetMee } = useGetMeeStore();
   const [toggle, setToggle] = useState(false);
+  const { role } = registerStory();
 
   useEffect(() => {
     getUser(setGetMee);
@@ -39,6 +41,7 @@ const ProfilePage: React.FC = () => {
   const openInviteModal = () => {
     setInviteModalVisible(true);
   };
+  console.log(`role:  ${role}`);
 
   const closeInviteModal = () => {
     setInviteModalVisible(false);
@@ -62,35 +65,15 @@ const ProfilePage: React.FC = () => {
 
   const handleSubmit = async () => {
     await SecureStore.deleteItemAsync("number");
-    await AsyncStorage.removeItem("registerToken")    
-    await SecureStore.deleteItemAsync('password')
+    await AsyncStorage.removeItem("registerToken");
+    await SecureStore.deleteItemAsync("password");
     navigation.navigate("(auth)/auth");
-    setToggle(false)
+    setToggle(false);
   };
 
-  return (
-    <ScrollView style={[styles.container]}>
-      <SafeAreaView style={{ paddingBottom: 24 }}>
-        <StatusBar backgroundColor={`#21212E`} barStyle={`dark-content`} />
-        <Text style={styles.title}>Профиль</Text>
-        <View style={styles.profileHeader}>
-          <Image
-            source={
-              getMee.attachmentId
-                ? { uri: getFile + getMee.attachmentId }
-                : require("@/assets/avatar.png")
-            }
-            style={styles.avatar}
-          />
-          <View>
-            <Text style={styles.profileName}>
-              {getMee.firstName} {getMee.lastName}
-            </Text>
-            <Text style={styles.profilePhone}>{getMee.phoneNumber}</Text>
-          </View>
-        </View>
-
-        {[
+  const navigationList =
+    role === "ROLE_MASTER"
+      ? [
           {
             icon: "user",
             label: "Подписка",
@@ -126,14 +109,139 @@ const ProfilePage: React.FC = () => {
             label: "Настройки",
             screen: "(profile)/(settings)/settings",
           },
-          { icon: "users", label: "Клиенты", screen: "(free)/(client)/main" },
+          {
+            icon: "users",
+            label: "Клиенты",
+            screen: "(free)/(client)/main",
+          },
           {
             icon: "sign-out",
             label: "Выйти",
             screen: "Logout",
             modal: true,
           },
-        ].map((item, index) => (
+        ]
+      : role === "ROLE_CLIENT"
+      ? [
+          {
+            icon: "share-alt",
+            label: "Поделиться",
+            screen: "",
+          },
+          // {
+          //   icon: "wallet",
+          //   label: "Способы оплаты",
+          //   screen: "(client)/(profile)/(payment)/payment",
+          // },
+          {
+            icon: "clock",
+            label: "История записей",
+            screen: "(client)/(profile)/(orderHistory)/orderHistory",
+          },
+          {
+            icon: "user",
+            label: "Профиль",
+            screen: "(client)/(profile)/(profileEdit)/profileEdit",
+          },
+          {
+            icon: "exclamation-circle",
+            label: "О сервиса",
+            screen: "(free)/(help)/help",
+          },
+          {
+            icon: "bell",
+            label: "Уведомления",
+            screen: "(client)/(profile)/(notification)/notification",
+          },
+          // {
+          //   icon: "credit-card",
+          //   label: "Карта лояльности",
+          //   screen: "(client)/(profile)/(card)/card",
+          // },
+          {
+            icon: "cogs",
+            label: "Настройки",
+            screen: "(client)/(profile)/(settings)/settings",
+          },
+          {
+            icon: "sign-out-alt",
+            label: "Выйти",
+            screen: "Logout",
+            modal: true,
+          },
+        ]
+      : [
+          {
+            icon: "share-alt",
+            label: "Поделиться",
+            screen: "",
+          },
+          // {
+          //   icon: "wallet",
+          //   label: "Способы оплаты",
+          //   screen: "(client)/(profile)/(payment)/payment",
+          // },
+          {
+            icon: "clock",
+            label: "История записей",
+            screen: "(client)/(profile)/(orderHistory)/orderHistory",
+          },
+          {
+            icon: "user",
+            label: "Профиль",
+            screen: "(client)/(profile)/(profileEdit)/profileEdit",
+          },
+          {
+            icon: "exclamation-circle",
+            label: "О сервиса",
+            screen: "(free)/(help)/help",
+          },
+          {
+            icon: "bell",
+            label: "Уведомления",
+            screen: "(client)/(profile)/(notification)/notification",
+          },
+          // {
+          //   icon: "credit-card",
+          //   label: "Карта лояльности",
+          //   screen: "(client)/(profile)/(card)/card",
+          // },
+          {
+            icon: "cogs",
+            label: "Настройки",
+            screen: "(client)/(profile)/(settings)/settings",
+          },
+          {
+            icon: "sign-out-alt",
+            label: "Выйти",
+            screen: "Logout",
+            modal: true,
+          },
+        ];
+
+  return (
+    <ScrollView style={[styles.container]}>
+      <SafeAreaView style={{ paddingBottom: 24 }}>
+        <StatusBar backgroundColor={`#21212E`} barStyle={`dark-content`} />
+        <Text style={styles.title}>Профиль</Text>
+        <View style={styles.profileHeader}>
+          <Image
+            source={
+              getMee.attachmentId
+                ? { uri: getFile + getMee.attachmentId }
+                : require("@/assets/avatar.png")
+            }
+            style={styles.avatar}
+          />
+          <View>
+            <Text style={styles.profileName}>
+              {getMee.firstName} {getMee.lastName}
+            </Text>
+            <Text style={styles.profilePhone}>{getMee.phoneNumber}</Text>
+          </View>
+        </View>
+
+        {navigationList.map((item, index) => (
           <TouchableOpacity
             key={index}
             style={styles.menuItem}
