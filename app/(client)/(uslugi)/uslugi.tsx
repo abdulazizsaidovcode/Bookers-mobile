@@ -29,7 +29,7 @@ const services = [
 ];
 
 const ServiceCard: React.FC<Service> = ({ title, distance, icon, onPress }) => {
-  const router = useRouter(); // Initialize the useRouter hook
+  const router = useRouter(); 
 
   return (
     <TouchableOpacity style={tw`w-1/2 px-2 py-2`} activeOpacity={0.8} onPress={onPress}>
@@ -55,7 +55,7 @@ const Uslugi = () => {
           <Text style={[tw`font-bold text-2xl text-white mb-6`]}>Услуги</Text>
           <View style={tw`w-full flex flex-row flex-wrap mb-4`}>
             {services.map(service => (
-               <ServiceCard key={service.id} title={service.title} distance={service.distance} icon={service.icon} onPress={service.onPress}  />
+               <ServiceCard id={service.id} title={service.title} distance={service.distance} icon={service.icon} onPress={service.onPress}  />
             ))}
           </View>
         </ScrollView>
