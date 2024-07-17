@@ -13,13 +13,14 @@ const CheckPinOnCome: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const [storedOtp, setStoredOtp] = useState<string | null>(null);
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-    const [tokenData, setTokenData] = useState<string | null>('');
     const inputs = useRef<TextInput[]>([]);
     const [code, setCode] = useState<any>('');
-    const { role, firstName, lastName, nickname, phoneNumber } = registerStory()
+    const { role } = registerStory()
 
     const { t } = useTranslation();
     const navigation = useNavigation<any>();
+    const isButtonEnabled = otp.every((digit) => digit.length > 0);
+
 
     useEffect(() => {
         const getStoredOtp = async () => {
@@ -49,13 +50,7 @@ const CheckPinOnCome: React.FC = () => {
         }, [])
     );
 
-    useEffect(() => {
-        if (tokenData) {
-            authStorage(tokenData)
-            handleContinue()
-        }
-    }, [tokenData]);
-
+    // ---------- check if otp is correct ----------
     const handleChangeText = (text: string, index: number) => {
         if (/^\d*$/.test(text)) {
             const newOtp = [...otp];
@@ -66,18 +61,16 @@ const CheckPinOnCome: React.FC = () => {
             }
         }
     };
-
+    // ---------- check if otp is correct ----------
     const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
         if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) {
             inputs.current[index - 1].focus();
         }
     };
 
-    const isButtonEnabled = otp.every((digit) => digit.length > 0);
 
     const handleContinue = () => {
         const enteredOtp = otp.join('');
-        Alert.alert(code)
 
         if (enteredOtp !== code) {
             setIsCorrect(true);
@@ -91,6 +84,7 @@ const CheckPinOnCome: React.FC = () => {
             alert('Неверный ПИН код');
         }
     };
+    
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
