@@ -18,7 +18,7 @@ interface Service {
 
 
 const services = [
-  { id: 1, title: "Здоровье и красота волос", distance: "450", icon: "rightcircleo",  onPress: () => router.push("./(hairHealth)/hair" ) },
+  { id: 1, title: "Здоровье и красота волос", distance: "450", icon: "rightcircleo",  onPress: () => router.push("(hairHealth)/hair" ) },
   { id: 2, title: "Ногтевой сервис", distance: "75", icon: "rightcircleo", onPress: () => router.push("./(location)/Location" ) },
   { id: 3, title: "Ресницы и брови", distance: "322", icon: "eyeo", onPress: () => router.push("../(location)/Location" ) },
   { id: 4, title: "Уход за телом", distance: "456", icon: "rightcircleo", onPress: () => router.push("../(location)/Location" ) },
