@@ -10,7 +10,7 @@ import FiltersButton from "@/components/(buttons)/filters-button";
 import {sliceText} from "@/helpers/api-function/client/client";
 
 // client check un
-export const ClientItem: React.FC<ClientItemProps> = ({
+export const ClientItem: React.FC<ClientItemProps | any> = ({
     client,
     isSelected,
     onSelect,
