@@ -177,6 +177,8 @@ const CheckPin: React.FC = () => {
                                     Toast.show("пин-код установлен", Toast.SHORT);
                                     SecureStore.setItemAsync('password', enteredOtp)
                                     setIslogin(true)
+                                    console.log(role);
+
                                     if (role === 'ROLE_MASTER') {
                                         navigation.navigate('(tabs)/(master)')
                                     } else if (role === 'ROLE_CLIENT') {
@@ -184,6 +186,7 @@ const CheckPin: React.FC = () => {
                                     }
                                 } else {
                                     setIsCorrect(false);
+                                    Toast.show("неверный пин-код", Toast.SHORT);
                                 }
                             }}
                             disabled={!isButtonEnabled}
