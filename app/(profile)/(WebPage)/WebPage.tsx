@@ -24,7 +24,7 @@ const WebPage: React.FC = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <NavigationMenu name='https://bookers/link/natali...' />
+            <NavigationMenu name='Веб страница' />
 
             <View style={styles.tabsContainer}>
                 <TouchableOpacity style={[styles.tabButton, activeTab === 'services' && styles.activeTab]} onPress={() => setActiveTab('services')}>

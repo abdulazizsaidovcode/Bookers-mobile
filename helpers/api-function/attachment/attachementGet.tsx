@@ -27,7 +27,6 @@ export const uploadFile = async ({ file, setUploadResponse }: UploadFileParams) 
     const response = await axios.post(postFileId, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        ...config.headers, // Assuming config contains the token and any other headers
       },
     });
 
@@ -53,7 +52,6 @@ export const uploadFiles = async ({ files, setUploadResponse }: UploadFilesParam
     const response = await axios.post(postFilelist, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        ...config.headers, // Assuming config contains the token and any other headers
       },
     });
 
