@@ -67,7 +67,9 @@ function MasterTabLayout() {
                     tabBarInactiveTintColor: "gray",
                     tabBarStyle: {
                         backgroundColor: "#21212E",
-                        paddingBottom: 10
+                        paddingBottom: 10,
+                        paddingTop: 5,
+                        height: 70
                     },
                     headerShown: false,
                     tabBarIcon: ({focused, color, size}) => {

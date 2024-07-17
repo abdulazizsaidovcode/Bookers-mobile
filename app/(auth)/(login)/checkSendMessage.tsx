@@ -38,7 +38,6 @@ const OtpInputExample: React.FC = () => {
 
     const { t } = useTranslation();
 
-
     useEffect(() => {
         setIsDisabled(otpValue.some(digit => digit === ''));
         console.log('Current OTP Value:', otpValue.join(''));
@@ -76,14 +75,11 @@ const OtpInputExample: React.FC = () => {
     }
     useEffect(() => {
         setNumber(number)
-        console.log(phoneNumber);
     }, [phoneNumber])
 
     useEffect(() => {
         async function finishwork() {
-            if (roles) {
-                setRole(roles);
-            }
+            if (roles) setRole(roles)
             if (response) {
                 let parol = await SecureStore.getItemAsync('password')
 

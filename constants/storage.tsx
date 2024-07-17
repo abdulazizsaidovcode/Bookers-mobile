@@ -17,6 +17,24 @@ export const getClientIdStore = async (setData: (val: string) => void) => {
     }
 };
 
+// role
+export const setClientOrMaster = async (data: string) => {
+    try {
+        await AsyncStorage.setItem('clientOrMasterRole', data);
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+export const getClientOrMaster = async (setData: (val: string) => void) => {
+    try {
+        const value = await AsyncStorage.getItem('clientOrMasterRole');
+        if (value !== null) setData(value)
+    } catch (e) {
+        console.error(e);
+    }
+};
+
 //auth
 export const authStorage = async (token: string) => {
     try {

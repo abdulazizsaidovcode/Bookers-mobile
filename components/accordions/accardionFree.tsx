@@ -78,7 +78,7 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
                     <Text style={styles.selectedGenderText}>
 
                     </Text>
-                        {/* Tanlangan jins: {genderIndex === 0 ? 'Erkak' : (genderIndex === 1 ? 'Ayol' : '-')} */}
+                    {/* Tanlangan jins: {genderIndex === 0 ? 'Erkak' : (genderIndex === 1 ? 'Ayol' : '-')} */}
 
                 </View>
             )}

@@ -6,7 +6,7 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import { useNavigation } from '@react-navigation/native';
 import { useFocusEffect } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
-
+import {getClientOrMaster} from "@/constants/storage";
 
 const CheckPinOnCome: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
@@ -14,7 +14,7 @@ const CheckPinOnCome: React.FC = () => {
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
     const inputs = useRef<TextInput[]>([]);
     const [code, setCode] = useState<any>('');
-    const { role } = registerStory()
+    const { role, setRole } = registerStory()
 
     const { t } = useTranslation();
     const navigation = useNavigation<any>();
@@ -32,6 +32,7 @@ const CheckPinOnCome: React.FC = () => {
         };
 
         getStoredOtp();
+        getClientOrMaster(setRole)
     }, []);
 
     useFocusEffect(
@@ -46,6 +47,7 @@ const CheckPinOnCome: React.FC = () => {
                 }
             }
             handleContinue()
+            getClientOrMaster(setRole)
         }, [])
     );
 
@@ -67,15 +69,17 @@ const CheckPinOnCome: React.FC = () => {
         }
     };
 
-
     const handleContinue = () => {
-        const enteredOtp = otp.join('');
+        // await SecureStore.deleteItemAsync("number");
+        // await AsyncStorage.removeItem("registerToken");
+        // await SecureStore.deleteItemAsync("password");
 
-        if (enteredOtp !== code) {
+        const enteredOtp = otp.join('');
+        if (enteredOtp === code) {
             setIsCorrect(true);
-            if (role == 'ROLE_CLIENT') {
+            if (role === 'ROLE_CLIENT') {
                 navigation.navigate('(tabs)/(client)')
-            } else if (role == 'ROLE_MASTER') {
+            } else if (role === 'ROLE_MASTER') {
                 navigation.navigate('(tabs)/(master)')
             }
         } else {

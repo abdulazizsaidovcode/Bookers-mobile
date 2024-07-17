@@ -63,12 +63,12 @@ const WorkMainEdit = () => {
   )
   
   useFocusEffect(
-
     useCallback(() => {
       getWorkTime(setTimeData, getme ? getme.id : "");
       return () => {}
     }, [getme])
   )
+  
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
 

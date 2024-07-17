@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
 import { useFocusEffect, useNavigation } from "expo-router";

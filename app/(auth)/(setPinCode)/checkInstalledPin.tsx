@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { registerClient, registerMaster } from '@/helpers/api-function/register/registrFC';
 import registerStory from '@/helpers/state_managment/auth/register';
 import { useNavigation } from '@react-navigation/native';
-import { authStorage } from "@/constants/storage";
+import { authStorage, getClientOrMaster } from "@/constants/storage";
 import { useFocusEffect } from 'expo-router';
 import { langstore } from '@/helpers/state_managment/lang/lang';
 import Toast from "react-native-simple-toast";
@@ -15,17 +15,17 @@ import { getConfig } from '@/app/(tabs)/(master)/main';
 const CheckPin: React.FC = () => {
     const { firstName, lastName, nickname, phoneNumber } = registerStory()
     const { language } = langstore()
-    const { role } = registerStory()
+    const { role, setRole } = registerStory()
 
     const inputs = useRef<TextInput[]>([]);
-    
+
     const { t } = useTranslation();
     const navigation = useNavigation<any>();
 
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const [storedOtp, setStoredOtp] = useState<any>(null);
-    const [token, setToken] = useState<any | null>('');
-    const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+    const [token, setToken] = useState<any | null>(null);
+    const [isCorrect, setIsCorrect] = useState<boolean | null>(true);
     const [tokenData, setTokenData] = useState<string | null>('');
     const [isLogin, setIslogin] = useState<any>(false);
 
@@ -39,8 +39,6 @@ const CheckPin: React.FC = () => {
                 try {
                     const otp = await AsyncStorage.getItem('otp');
                     const token = await getConfig()
-                    console.log(token);
-
                     setToken(token)
                     setStoredOtp(otp);
                 } catch (error) {
@@ -49,6 +47,9 @@ const CheckPin: React.FC = () => {
             };
 
             getStoredOtp();
+            getClientOrMaster(setRole)
+            console.log(phoneNumber, 'check');
+            
         }, [])
     )
 
@@ -111,7 +112,6 @@ const CheckPin: React.FC = () => {
             Toast.show("пин-код установлен", Toast.SHORT);
             SecureStore.setItemAsync('password', enteredOtp)
             setIslogin(true)
-            console.log(role);
 
             if (role === 'ROLE_MASTER') {
                 navigation.navigate('(tabs)/(master)')
@@ -160,9 +160,7 @@ const CheckPin: React.FC = () => {
                                 key={index}
                                 style={[
                                     styles.input,
-                                    isCorrect === null  && styles.input,
-                                    isCorrect === false && styles.inputError,
-                                    isCorrect === true && styles.inputSuccess,
+                                    isCorrect == true ? styles.inputSuccess : styles.inputError,
                                 ]}
                                 value={digit}
                                 onChangeText={(text) => handleChangeText(text, index)}
@@ -181,6 +179,8 @@ const CheckPin: React.FC = () => {
                             { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
                         ]}
                         onPress={() => {
+                            console.log(token, "dfe");
+
                             if (!token) {
                                 register()
                             } else {
