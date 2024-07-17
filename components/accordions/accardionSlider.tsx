@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager} from 'react-native';
+import {AntDesign} from '@expo/vector-icons';
 import CustomCheckbox from '../checkbox/checkbox';
 import tw from 'tailwind-react-native-classnames';
 import CommunitySlider from '../communiytSlider/communitySlider';
@@ -10,14 +10,10 @@ interface AccordionItemProps {
 }
 
 // Platform uchun LayoutAnimation to'g'ri ishlashi uchun
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-}
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) UIManager.setLayoutAnimationEnabledExperimental(true)
 
-const AccardionSlider: React.FC<AccordionItemProps> = ({ title }) => {
+const AccardionSlider: React.FC<AccordionItemProps> = ({title}) => {
     const [expanded, setExpanded] = useState(false);
-    const [value, setValue] = useState(false);
-    const [genderIndex, setGenderIndex] = useState<number>(-1);
     const [isSelected, setSelection] = useState(false);
 
     const toggleExpand = () => {
@@ -36,14 +32,14 @@ const AccardionSlider: React.FC<AccordionItemProps> = ({ title }) => {
                 <View style={styles.mainText}>
                     <Text style={styles.headerText}>{title}</Text>
                 </View>
-                <AntDesign name={expanded ? 'down' : 'right'} size={20} color="#4F4F4F" />
+                <AntDesign name={expanded ? 'down' : 'right'} size={20} color="#4F4F4F"/>
             </TouchableOpacity>
 
             {/* Agar accordion ochilgan bo'lsa, kontentni ko'rsatish */}
             {expanded && (
                 <View style={styles.content}>
                     <View style={styles.communitySlider}>
-                        <CommunitySlider title="KM" textColor='#9C0A35' />
+                        <CommunitySlider title="KM" textColor='#9C0A35'/>
                     </View>
                     <Text style={tw`p-3`}>
                         <CustomCheckbox
