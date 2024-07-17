@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
-import { AntDesign } from '@expo/vector-icons'; // Expo dan AntDesign ikonlari
-import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button'; // Radio tugmalar uchun kutubxona
+import { AntDesign } from '@expo/vector-icons';
+import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 
 interface AccordionItemProps {
     title: string;
@@ -57,7 +57,6 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
                                     index={i}
                                     isSelected={genderIndex === i}
                                     onPress={onPressRadioButton}
-                                    borderWidth={1}
                                     buttonInnerColor={'#9C035A'}
                                     buttonOuterColor={'#9C035A'}
                                     buttonSize={15}
