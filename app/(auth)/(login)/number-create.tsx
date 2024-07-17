@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { register_page } from '@/helpers/api';
 import registerStory from '@/helpers/state_managment/auth/register';
-import { registerFunction } from '@/helpers/api-function/register/registrFC';
+import { checkNumberFunction } from '@/helpers/api-function/register/registrFC';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister'
 
 const PhoneNumberInput: React.FC = () => {
@@ -19,21 +19,19 @@ const PhoneNumberInput: React.FC = () => {
     const { setIsRegtered } = isRegister()
     const [navTitle, setNavTitle] = useState('Login');
     const [status, setStatus] = useState<boolean>(false);
+    const { t } = useTranslation();
 
     const handlePhoneNumberChange = (text: string) => {
         setPhoneNumber(text);
         setIsValid(phoneInput.current?.isValidNumber(text) ?? false);
     };
-    const { t } = useTranslation();
 
     const changeStatus = (val: boolean) => {
         setStatus(val); // Yangi statusni o'zgartiramiz
         setNavTitle(val ? 'Register' : 'Login');
         setCode('');
-        setPhoneNumber('');
         setIsRegtered(val);
     };
-    // API 
 
     return (
         <View style={styles.container}>
@@ -110,7 +108,7 @@ const PhoneNumberInput: React.FC = () => {
                 <Buttons
                     title={"Войти"}
                     onPress={() => {
-                        registerFunction(phoneNumber, setCode, status)
+                        checkNumberFunction(phoneNumber, setCode, status)
                     }}
                     backgroundColor={'#9C0A35'}
                 />

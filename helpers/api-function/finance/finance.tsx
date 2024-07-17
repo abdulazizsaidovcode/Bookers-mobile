@@ -1,11 +1,12 @@
 import {finance_day, finance_month, finance_top_client} from "@/helpers/api"
-import {config} from "@/helpers/token"
 import {FinanceDay, FinanceMonth, FinanceTopClients} from "@/type/finance/finance";
 import axios from "axios"
+import {getConfig} from "@/app/(tabs)/(master)/main";
 
-export const getFinanceDay = (setData: (val: FinanceDay | null) => void, date: string | null) => {
+export const getFinanceDay = async (setData: (val: FinanceDay | null) => void, date: string | null) => {
     if (date) {
-        axios.get(`${finance_day}?localDate=${date}`, config)
+        const config = await getConfig()
+        await axios.get(`${finance_day}?localDate=${date}`, config)
             .then(res => {
                 if (res.data.success) setData(res.data.body)
                 else setData(null)
@@ -17,9 +18,10 @@ export const getFinanceDay = (setData: (val: FinanceDay | null) => void, date: s
     }
 }
 
-export const getFinanceMonth = (setData: (val: FinanceMonth[] | null) => void, startDate: string | null, endDate: string | null) => {
+export const getFinanceMonth = async (setData: (val: FinanceMonth[] | null) => void, startDate: string | null, endDate: string | null) => {
     if (startDate && endDate && (startDate !== endDate)) {
-        axios.get(`${finance_month}?startDate=${startDate}&finishDate=${endDate}`, config)
+        const config = await getConfig()
+        await axios.get(`${finance_month}?startDate=${startDate}&finishDate=${endDate}`, config)
             .then(res => {
                 if (res.data.success) setData(res.data.body)
                 else setData(null)
@@ -31,8 +33,9 @@ export const getFinanceMonth = (setData: (val: FinanceMonth[] | null) => void, s
     }
 }
 
-export const getTopClients = (setData: (val: FinanceTopClients[] | null) => void) => {
-    axios.get(`${finance_top_client}`, config)
+export const getTopClients = async (setData: (val: FinanceTopClients[] | null) => void) => {
+    const config = await getConfig()
+    await axios.get(`${finance_top_client}`, config)
         .then(res => {
             if (res.data.success) setData(res.data.body)
             else setData(null)

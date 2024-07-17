@@ -18,6 +18,7 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native';
+import { langstore } from '@/helpers/state_managment/lang/lang';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/checkSendMessage'>;
 
@@ -28,9 +29,12 @@ const OtpInputExample: React.FC = () => {
     const { code, phoneNumber, otpValue, setOtpValue } = registerStory()
     const [response, setRespone] = useState<null | boolean>(null);
     const [messageResponse, setMessageResponse] = useState(false);
-    const { isRegtered, setIsRegtered } = isRegister()
+    const { isRegtered } = isRegister()
     const navigation = useNavigation<any>();
-    const [role, setRole] = useState<string | null>(null);
+    const [roles, setRoles] = useState<string | null>(null);
+    const { language } = langstore();
+    const [number, setNumber] = useState('');
+    const { setRole } = registerStory()
 
     const { t } = useTranslation();
 
@@ -70,10 +74,16 @@ const OtpInputExample: React.FC = () => {
     const handlePress = async () => {
         await checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
     }
+    useEffect(() => {
+        setNumber(number)
+        console.log(phoneNumber);
+    }, [phoneNumber])
 
     useEffect(() => {
         async function finishwork() {
-
+            if (roles) {
+                setRole(roles);
+            }
             if (response) {
                 let parol = await SecureStore.getItemAsync('password')
 
@@ -81,9 +91,9 @@ const OtpInputExample: React.FC = () => {
                     navigation.navigate("(auth)/(register)/(greetings)/greetingFirst");
                 } else {
                     if (parol !== null) {
-                        if (role == 'ROLE_MASTER') {
+                        if (roles == 'ROLE_MASTER') {
                             navigation.navigate('(tabs)/(master)');
-                        } else if (role == 'ROLE_CLIENT') {
+                        } else if (roles == 'ROLE_CLIENT') {
                             navigation.navigate('(tabs)/(client)');
                         }
                     } else {
@@ -101,7 +111,7 @@ const OtpInputExample: React.FC = () => {
         <View style={styles.container}>
             <View style={styles.textContainer}>
                 <Text style={styles.title}>{t("Confirmation_Number")}</Text>
-                <Text style={styles.phoneNumber}>{phoneNumber}</Text>
+                <Text style={styles.phoneNumber}>{number}</Text>
                 <Text style={styles.instruction}>{t("we_sent_you_sms_with_code")}</Text>
             </View>
             <View style={styles.otpContainer}>
@@ -128,7 +138,7 @@ const OtpInputExample: React.FC = () => {
                         if (isRegtered) {
                             handlePress()
                         } else {
-                            authLogin(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setRole)
+                            authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setRoles)
                         }
                     }}
                 >
