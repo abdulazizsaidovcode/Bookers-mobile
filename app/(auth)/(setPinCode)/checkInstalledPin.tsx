@@ -35,7 +35,7 @@ const CheckPin: React.FC = () => {
                     const otp = await AsyncStorage.getItem('otp');
                     const token = await getConfig()
                     console.log(token);
-                    
+
                     setToken(token)
                     setStoredOtp(otp);
                 } catch (error) {
@@ -173,9 +173,18 @@ const CheckPin: React.FC = () => {
                         <TouchableOpacity
                             style={[styles.button, { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' }]}
                             onPress={() => {
-                                Toast.show("пин-код установлен", Toast.SHORT);
-                                SecureStore.setItemAsync('password', enteredOtp)
-                                setIslogin(true)
+                                if (enteredOtp === storedOtp) {
+                                    Toast.show("пин-код установлен", Toast.SHORT);
+                                    SecureStore.setItemAsync('password', enteredOtp)
+                                    setIslogin(true)
+                                    if (role === 'ROLE_MASTER') {
+                                        navigation.navigate('(tabs)/(master)')
+                                    } else if (role === 'ROLE_CLIENT') {
+                                        navigation.navigate('(tabs)/(client)')
+                                    }
+                                } else {
+                                    setIsCorrect(false);
+                                }
                             }}
                             disabled={!isButtonEnabled}
                         >
