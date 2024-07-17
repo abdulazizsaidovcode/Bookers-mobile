@@ -18,7 +18,8 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import { handleRefresh } from "@/constants/refresh";
 import Uslugi from "@/app/(client)/(uslugi)/uslugi";
-import ProfilePage from "@/app/(client)/(profile)/profile";
+// import ProfilePage from "@/app/(client)/(profile)/profile";
+import ProfileScreen from "./profile";
 
 
 
@@ -146,7 +147,7 @@ function ClientTabLayout() {
         />
         <Tab.Screen
           name="profile"
-          component={ProfilePage}
+          component={ProfileScreen}
           options={{
             title: "Профиль",
             tabBarIcon: ({ color }) => (
