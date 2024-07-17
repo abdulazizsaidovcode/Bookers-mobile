@@ -115,7 +115,10 @@ export const registerClient = async ({firstName, lastName, phoneNumber, img, set
 
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
     const url = `${register_page}client?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${`&lang=${language}`}&phoneNumber=${formattedPhoneNumber}`;
-
+    console.log(url);
+    console.log(phoneNumber);
+    
+    
     axios.post(url, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
