@@ -170,7 +170,7 @@ const OrderHistory = () => {
           />
         </View>
         <ScrollView style={styles.scroll}>
-          {filteredAppointments.length === 0 ? (
+          {filteredAppointments && filteredAppointments.length === 0 ? (
             <View style={styles.noAppointments}>
               <Text style={{color: "white"}}>У вас пока нет записей!</Text>
             </View>
