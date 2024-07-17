@@ -7,8 +7,6 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const appointments = [
-  // Your list of appointments goes here
-  // Example:
   {
     title: "Наращивание ресниц",
     date: "Пн, 10 февраля 12:30 - 13:30",
@@ -145,43 +143,44 @@ const appointments = [
 ];
 
 const OrderHistory = () => {
-  const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
+  const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
+  const [openAccordionIndex, setOpenAccordionIndex] = useState<number | null>(null);
 
-  const filteredAppointments =
-    activeTab === "upcoming"
-      ? appointments // filter for upcoming appointments
-      : []; // filter for past appointments (replace with actual data)
+  const filteredAppointments = activeTab === 'upcoming'
+    ? appointments // upcoming appointments uchun filter
+    : []; // past appointments uchun filter (haqiqiy malumotlar bilan almashtiring)
+
+  const handleAccordionToggle = (index: number) => {
+    setOpenAccordionIndex(openAccordionIndex === index ? null : index);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={`#21212E`} />
-      <NavigationMenu name={`Время работы`} />
-      <View style={styles.container2}>
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            title="Предстоящие"
-            onPress={() => setActiveTab("upcoming")}
-            active={activeTab === "upcoming"}
-          />
-          <CustomButton
-            title="Прошедшие"
-            onPress={() => setActiveTab("past")}
-            active={activeTab === "past"}
-          />
+      <StatusBar backgroundColor="#21212E" />
+      <NavigationMenu name="График работы" />
+      <View style={{padding: 16}}>
+      <View style={styles.buttonContainer}>
+        <CustomButton title="Предстоящие" onPress={() => setActiveTab('upcoming')} active={activeTab === 'upcoming'} />
+        <CustomButton title="Прошедшие" onPress={() => setActiveTab('past')} active={activeTab === 'past'} />
+      </View>
+      {filteredAppointments.length === 0 ? (
+        <View style={styles.noAppointments}>
+          <Text>У вас пока нет записей!</Text>
         </View>
-        <ScrollView style={styles.scroll}>
-          {filteredAppointments.length === 0 ? (
-            <View style={styles.noAppointments}>
-              <Text style={{color: "white"}}>У вас пока нет записей!</Text>
-            </View>
-          ) : (
-            <FlatList
-              data={filteredAppointments}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => <AccordionCard {...item} />}
+      ) : (
+        <FlatList
+          data={filteredAppointments}
+          keyExtractor={( index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <AccordionCard
+              {...item}
+              isOpen={openAccordionIndex === index}
+              onToggle={() => handleAccordionToggle(index)}
             />
           )}
-        </ScrollView>
+          contentContainerStyle={styles.contentContainer}
+        />
+      )}
       </View>
     </SafeAreaView>
   );
@@ -196,6 +195,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  contentContainer: {
+    paddingBottom: 130, // This will ensure there's enough space at the bottom
+  },
   scroll: {
     flex: 1,
   },
@@ -206,6 +208,7 @@ const styles = StyleSheet.create({
   },
   noAppointments: {
     flex: 1,
+    color: "white",
     justifyContent: "center",
     alignItems: "center",
   },

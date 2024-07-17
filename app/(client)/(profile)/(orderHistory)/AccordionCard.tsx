@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Linking } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; 
-import UserProfileCard from '@/app/(profile)/(WebPage)/components/serviseCard';
 import ClientProfileCard from './profileCard';
 
 type CardProps = {
@@ -14,9 +12,11 @@ type CardProps = {
   location: string;
   services: string[];
   phone: string;
+  isOpen: boolean;
+  onToggle: () => void;
 };
 
-const AccordionCard: React.FC<CardProps> = ({ title, date, details, master, rating, price, location, services, phone }) => {
+const AccordionCard: React.FC<CardProps> = ({ title, date, details, master, rating, price, location, services, phone, isOpen, onToggle  }) => {
   const [expanded, setExpanded] = useState(false);
 
 //   const renderStars = (rating: number) => {
@@ -33,10 +33,10 @@ const AccordionCard: React.FC<CardProps> = ({ title, date, details, master, rati
 
   return (
     <View style={styles.card}>
-      <TouchableOpacity onPress={() => setExpanded(!expanded)}>
+      <TouchableOpacity onPress={onToggle}>
         <Text style={styles.cardTitle}>{title}</Text>
         <Text style={styles.cardDate}>{date}</Text>
-        {expanded && (
+        {isOpen && (
           <View>
             <ClientProfileCard/>
             <TouchableOpacity style={styles.phoneButton} onPress={handlePhonePress}>
