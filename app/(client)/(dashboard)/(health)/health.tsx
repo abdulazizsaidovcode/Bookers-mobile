@@ -9,7 +9,7 @@ const Health = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#21212E' }}>
       <NavigationMenu name='Здоровье и красота волос' />
       <ScrollView style={styles.container}>
-        <Text style={{ color: '#C2C2C2' }}>Подберите критерии услуг</Text>
+        <Text style={{ color: '#C2C2C2',marginBottom: 16 }}>Подберите критерии услуг</Text>
         <AccardionFree title='Пол мастера' />
       </ScrollView>
     </SafeAreaView>
