@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
-import { AntDesign } from '@expo/vector-icons'; // Expo dan AntDesign ikonlari
+import { AntDesign } from '@expo/vector-icons';
 import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
 
 interface AccordionItemProps {
   title: string;
   titleThen?: string;
   children: React.ReactNode;
-  backgroundColor: string; // backgroundColor nomli majburiy prop
+  backgroundColor: string; 
 }
 
-// Platform uchun LayoutAnimation to'g'ri ishlashi uchun
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
@@ -26,7 +25,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, children, titleThe
 
   return (
     <View style={[styles.container, { backgroundColor: backgroundColor }]}>
-      {/* Sarlavha va belgi */}
       <TouchableOpacity
         style={styles.header}
         onPress={toggleExpand}
@@ -38,8 +36,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ title, children, titleThe
         </View>
         <AntDesign name={mainExpend ? 'down' : 'right'} size={20} color="#4F4F4F" />
       </TouchableOpacity>
-
-      {/* Agar accordion ochilgan bo'lsa, kontentni ko'rsatish */}
       {mainExpend && (
         <View style={styles.content}>
           <Text>{children}</Text>
@@ -75,7 +71,6 @@ const styles = StyleSheet.create({
     color: "#C2C2C2",
   },
   content: {
-    // padding: 15,
     backgroundColor: '#21212E',
   },
 });
