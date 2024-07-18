@@ -1,6 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Linking } from 'react-native';
-import ClientProfileCard from './profileCard';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Linking,
+} from "react-native";
+import ClientProfileCard from "./profileCard";
+import { AntDesign, FontAwesome5, Octicons } from "@expo/vector-icons";
+import Buttons from "@/components/(buttons)/button";
+import IconsButtons from "@/components/(buttons)/icon-btn";
 
 type CardProps = {
   title: string;
@@ -16,16 +25,28 @@ type CardProps = {
   onToggle: () => void;
 };
 
-const AccordionCard: React.FC<CardProps> = ({ title, date, details, master, rating, price, location, services, phone, isOpen, onToggle  }) => {
+const AccordionCard: React.FC<CardProps> = ({
+  title,
+  date,
+  details,
+  master,
+  rating,
+  price,
+  location,
+  services,
+  phone,
+  isOpen,
+  onToggle,
+}) => {
   const [expanded, setExpanded] = useState(false);
 
-//   const renderStars = (rating: number) => {
-//     const stars = [];
-//     for (let i = 1; i <= 5; i++) {
-//       stars.push(<FontAwesome key={i} name={i <= rating ? 'star' : 'star-o'} size={16} color="#cc0056" />);
-//     }
-//     return stars;
-//   };
+  //   const renderStars = (rating: number) => {
+  //     const stars = [];
+  //     for (let i = 1; i <= 5; i++) {
+  //       stars.push(<FontAwesome key={i} name={i <= rating ? 'star' : 'star-o'} size={16} color="#cc0056" />);
+  //     }
+  //     return stars;
+  //   };
 
   const handlePhonePress = () => {
     Linking.openURL(`tel:${phone}`);
@@ -33,15 +54,34 @@ const AccordionCard: React.FC<CardProps> = ({ title, date, details, master, rati
 
   return (
     <View style={styles.card}>
-      <TouchableOpacity onPress={onToggle}>
-        <Text style={styles.cardTitle}>{title}</Text>
-        <Text style={styles.cardDate}>{date}</Text>
+      <TouchableOpacity>
+        <TouchableOpacity onPress={onToggle}>
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.cardDate}>{date}</Text>
+              <Text style={styles.cardTitle}>{title}</Text>
+            </View>
+            <AntDesign
+              name={isOpen ? "down" : "right"}
+              size={20}
+              color="#4F4F4F"
+            />
+          </View>
+        </TouchableOpacity>
         {isOpen && (
           <View>
-            <ClientProfileCard/>
-            <TouchableOpacity style={styles.phoneButton} onPress={handlePhonePress}>
-              <Text style={styles.phoneButtonText}>Написать сообщение</Text>
-            </TouchableOpacity>
+            <ClientProfileCard />
+            <View style={styles.bottom}>
+              <IconsButtons textSize="text-sm mt-1"  name="Написать сообщение" clicks={handlePhonePress} />
+              <IconsButtons
+                icon={<Octicons name="location" size={26} color="white" />}
+                name=""
+              />
+              <IconsButtons
+                icon={<FontAwesome5 name="phone-alt" size={26} color="white" />}
+                name=""
+              />
+            </View>
           </View>
         )}
       </TouchableOpacity>
@@ -59,44 +99,58 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 1,
-    marginBottom: 10
+    marginBottom: 10,
   },
   cardTitle: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   cardDate: {
-    color: '#888',
+    color: "#888",
   },
   masterName: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginVertical: 5,
   },
+  header: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#B9B9C9",
+    marginBottom: 5,
+  },
   ratingContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginVertical: 5,
   },
   servicesContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     marginVertical: 5,
   },
   service: {
-    backgroundColor: '#ddd',
+    backgroundColor: "#ddd",
     padding: 5,
     borderRadius: 3,
     marginRight: 5,
     marginVertical: 2,
   },
   phoneButton: {
-    backgroundColor: '#cc0056',
+    backgroundColor: "#cc0056",
     padding: 10,
     borderRadius: 5,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
   },
   phoneButtonText: {
-    color: '#fff',
+    color: "#fff",
   },
+  bottom: {
+    flex: 1,
+    flexDirection: "row",
+    width: "100%",
+    gap: 5
+  }
 });
 
 export default AccordionCard;
