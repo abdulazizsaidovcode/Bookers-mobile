@@ -4,8 +4,10 @@ import { Entypo, FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import tw from 'tailwind-react-native-classnames';
 
 type ClientCardProps = {
+    salon:string;
     imageUrl: string;
     name: string;
+    zaps:string;
     masterType: string;
     orders: number;
     clients: number;
@@ -13,7 +15,7 @@ type ClientCardProps = {
     onPress?:(()=> void)
 };
 
-const ClientCard: React.FC<ClientCardProps> = ({ imageUrl, name, masterType, orders, clients, address, onPress }) => {
+const ClientCard: React.FC<ClientCardProps> = ({ salon,imageUrl, name, masterType, orders, clients, address, zaps, onPress }) => {
     const hasNumber = (number: number) => {
     };
     const starNumbers = [1, 2, 3, 4, 5];
@@ -27,7 +29,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ imageUrl, name, masterType, ord
                 />
                 <View style={tw`flex`}>
                     <Text style={tw`text-lg font-bold`}>{name}</Text>
-                    <Text style={tw`border border-gray-600 px-3 rounded-lg`}>Hello</Text>
+                    <Text style={tw`border border-gray-600 px-3 rounded-lg`}>{salon}</Text>
                     <Text style={tw`text-sm text-gray-600`}>{masterType}</Text>
                 </View>
                 <View style={tw`flex items-center ml-2`}>
@@ -47,7 +49,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ imageUrl, name, masterType, ord
             </View>
             <View>
                 <Text style={tw`text-gray-600 text-lg mb-2`}>{address}</Text>
-                <Text style={tw`text-black text-lg font-bold`}>{address}</Text>
+                <Text style={tw`text-black text-lg font-bold`}>Ближайшая запись:{zaps}</Text>
             </View>
             <View style={tw`mt-4 flex flex-row items-center justify-between`}>
                 <TouchableOpacity activeOpacity={0.8}>

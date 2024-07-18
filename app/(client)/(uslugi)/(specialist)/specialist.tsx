@@ -44,12 +44,14 @@ const Specialist = () => {
             clientData.map((client:any, index:any) => (
               <View key={index} style={tw`mb-3`}>
                 <ClientCard
+                  salon={client.salonName}
                   imageUrl={client.imageUrl}
-                  name={client.name}
-                  masterType={client.masterType}
-                  orders={client.orders}
-                  clients={client.clients}
-                  address={client.address}
+                  name={client.fullName}
+                  zaps={client.nextEntryDate}
+                  masterType={client.masterSpecialization}
+                  orders={client.orderCount}
+                  clients={client.clientCount}
+                  address={`${client.district},${client.house}`}
                 />
               </View>
             ))
