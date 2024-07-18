@@ -19,7 +19,15 @@ import {handleRefresh} from "@/constants/refresh";
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/main'>;
 
 const MainClient = () => {
-    const {isClientModal, setIsClientModal, setStatusData, statusData, setAllClients, refreshing, setRefreshing} = clientStore()
+    const {
+        isClientModal,
+        setIsClientModal,
+        setStatusData,
+        statusData,
+        setAllClients,
+        refreshing,
+        setRefreshing
+    } = clientStore()
     const toggleClientModal = () => setIsClientModal(!isClientModal);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
@@ -27,6 +35,13 @@ const MainClient = () => {
         getClientAll(setAllClients)
         getClientStatistics(setStatusData)
     }, []);
+
+    useEffect(() => {
+        if (refreshing) {
+            getClientAll(setAllClients)
+            getClientStatistics(setStatusData)
+        }
+    }, [refreshing]);
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);

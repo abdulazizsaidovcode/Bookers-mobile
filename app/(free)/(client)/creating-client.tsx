@@ -1,8 +1,8 @@
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import tw from "tailwind-react-native-classnames";
-import {ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
-import React, {useEffect, useState} from "react";
+import {RefreshControl, ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
+import React, {useCallback, useEffect, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -23,6 +23,7 @@ import {
 import {useForm, Controller} from 'react-hook-form';
 import PhoneInput from 'react-native-phone-input';
 import {SelectList} from "react-native-dropdown-select-list";
+import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/creating-client'>;
 
@@ -52,7 +53,9 @@ const CreatingClient = () => {
         setStatusData,
         setAllClients,
         isLoading,
-        setIsLoading
+        setIsLoading,
+        refreshing,
+        setRefreshing
     } = clientStore()
     const {control, formState: {errors}} = useForm<FormData>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -82,6 +85,13 @@ const CreatingClient = () => {
             setRegions(transformedRegion)
         }
     }, []);
+
+    useEffect(() => {
+        if (refreshing) {
+            getAgeList(setAgeData)
+            getRegionList(setRegionData)
+        }
+    }, [refreshing]);
 
     useEffect(() => {
         if (districtData) {
@@ -117,6 +127,10 @@ const CreatingClient = () => {
         isLoading ? setRegex(false) : setRegex(true)
     }, [isLoading]);
 
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, [setRefreshing]);
+
     const handleInputChange = (name: string, value: any) => {
         attachmentID ? updateClient.attachmentId = attachmentID : updateClient.attachmentId = null;
         updateClient.birthDate = date
@@ -148,6 +162,7 @@ const CreatingClient = () => {
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View>
                         <ProfileImgUpload/>
