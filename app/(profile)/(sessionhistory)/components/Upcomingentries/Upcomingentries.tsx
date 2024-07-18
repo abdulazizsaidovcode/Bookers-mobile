@@ -61,33 +61,35 @@ const Upcomingentries = () => {
   }, []);
 
   const renderItem = ({ item }: any) => (
-    <View style={tw`bg-gray-700 p-4 rounded-lg mb-4`}>
-      <View style={tw`flex-row items-center mb-4`}>
+    <View style={[tw`p-4 rounded-lg mb-4`, { backgroundColor: "#B9B9C9" }]}>
+      <View style={tw`flex-row items-start mb-4`}>
         <Image
-          source={{
+          source={item.attachmentId ? {
             uri: `${getFile}${item.attachmentId}`,
-          }}
+          } : require("../../../../../assets/avatar.png")}
           style={tw`w-12 h-12 rounded-full mr-4`}
         />
-        <View>
-          <Text style={tw`text-white font-bold`}>{item.fullName}</Text>
-          <Text style={tw`text-gray-400`}>{item.phone}</Text>
+        <View style={{ flexDirection: 'column' }}>
+          <View style={{ marginBottom: 10 }} >
+            <Text style={tw`text-black font-bold`}>{item.fullName}</Text>
+            <Text style={tw`text-gray-600`}>{item.phone}</Text>
+          </View>
+          <Text style={[tw`mb-2 px-4 py-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>{item.serviceName}</Text>
+          <Text style={[tw` font-bold mb-2`, { color: "#9C0A35" }]}>{item.toPay} сум</Text>
         </View>
       </View>
-      <Text style={tw`text-gray-400 mb-2`}>{item.serviceName}</Text>
-      <Text style={tw`text-red-500 font-bold mb-2`}>{item.toPay} сум</Text>
       <View style={tw`flex-row justify-between items-center mb-4`}>
-        <Text style={tw`text-gray-400 mb-4`}>
+        <Text style={tw`text-gray-600`}>
           {moment(item.orderDate).format("dddd D MMMM")}
         </Text>
         <View style={tw`flex-row items-center`}>
           <Text
-            style={tw`text-red-700 border rounded-lg py-1 px-2 border-red-700`}
+            style={[tw`border rounded-lg py-1 px-2 `, { color: "#9C0A35", borderColor: "#9C0A35" }]}
           >
             {item.startTime.slice(0, 5)}
           </Text>
           <Text
-            style={tw`text-red-700 border rounded-lg py-1 px-2 ml-2 border-red-700`}
+            style={[tw`border rounded-lg py-1 px-2 ml-2`, { color: "#9C0A35", borderColor: "#9C0A35" }]}
           >
             {item.finishTime.slice(0, 5)}
           </Text>
@@ -95,23 +97,22 @@ const Upcomingentries = () => {
       </View>
       <View style={tw`flex-row justify-between`}>
         <TouchableOpacity
-          style={tw`bg-red-700 p-2 rounded-lg flex-row items-center`}
+          style={[tw`rounded-lg flex-row items-center py-3 text-center`, { backgroundColor: "#9C0A35" }]}
         >
           <Pressable
-            onPress={() =>
-              navigation.navigate("(chat)/(communicatie)/chatDetails", {
-                id: item.id,
-              })
-            }
+            // onPress={() =>
+            //   navigation.navigate("(chat)/(communicatie)/chatDetails", {
+            //     id: item.id,
+            //   })
+            // }
             style={tw`text-white mr-2 w-60`}
           >
-            <Text style={tw`text-white`}>Написать сообщение</Text>
+            <Text style={tw`text-white text-center`}>Написать сообщение</Text>
           </Pressable>
-          <FontAwesome name="envelope" size={20} color="#fff" />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={toggleBottomModalNetwork}
-          style={tw`bg-red-700 w-9 h-9 rounded-full justify-center items-center`}
+          style={[tw`w-14 h-14 ml-5 rounded-full justify-center items-center`, { backgroundColor: "#9C0A35" }]}
         >
           <FontAwesome name="phone" size={20} color="#fff" />
         </TouchableOpacity>
