@@ -18,7 +18,7 @@ export const getServiseWith = async (
       const config = await getConfig()
       const { data } = await axios.get(
         `${master_get_Service}${categoryId}`,
-        config
+        config ? config : {}
       );
 
       if (data.success) setData(data.body);
@@ -32,7 +32,7 @@ export const getServiseWith = async (
 export const getCategoryF = async (setData: (val: any[] | null) => void) => {
   try {
     const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
-    const response = await axios.get(`${getCategory_master}`, config);
+    const response = await axios.get(`${getCategory_master}`, config ? config : {});
 
     if (response.data.success) {
       setData(response.data.body);
@@ -56,7 +56,7 @@ export const getSpecialization = async (
     }
 
     const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
-    const response = await axios.get(`${master_get_specialization}/${id}`, config);
+    const response = await axios.get(`${master_get_specialization}/${id}`, config ? config : {});
 
     if (response.data.success) {
       setData(response.data.body);
@@ -72,7 +72,7 @@ export const getSpecialization = async (
 export const getAddress = async (setData: (val: any | null) => void) => {
   try {
     const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
-    const response = await axios.get(address_url, config);
+    const response = await axios.get(address_url, config ? config : {});
 
     if (response.data.success) {
       setData(response.data.body);
@@ -89,7 +89,7 @@ export const getAddress = async (setData: (val: any | null) => void) => {
 export const getGaleriya = async (setData: (data: any | null) => void) => {
   try {
     const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
-    const response = await axios.get(gallery_list, config);
+    const response = await axios.get(gallery_list, config ? config : {});
 
     setData(response.data.body);
   } catch (error) {

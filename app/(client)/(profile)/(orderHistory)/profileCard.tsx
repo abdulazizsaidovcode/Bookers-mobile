@@ -37,7 +37,7 @@ const ClientProfileCard: React.FC = () => {
             uri: getme
               ? getme.attachmentId
                 ? getFile + getme.attachmentId
-                : "https://static.thenounproject.com/png/363639-200.png"
+                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
               : "noData"
           }} // Profil rasm manzili
           style={styles.avatar}

@@ -6,20 +6,11 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import { Fontisto } from '@expo/vector-icons';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import LocationInput from '@/app/locationInput';
-import BottomModal from '@/components/(modals)/modal-bottom';
+import { router, useFocusEffect } from 'expo-router';
+import { postClientFilter } from '@/helpers/api-function/uslugi/uslugi';
+
 
 const Specialist = () => {
-  const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
-
-  const onPress = () => {
-    console.log('Button pressed');
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
   const clientData = [
     {
       imageUrl: 'https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1200,h_630/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/tsah7c9evnal289z5fig/IMG%20Worlds%20of%20Adventure%20Admission%20Ticket%20in%20Dubai%20-%20Klook.jpg',
@@ -31,6 +22,17 @@ const Specialist = () => {
     },
     // ... Add more client data here
   ];
+
+  useFocusEffect(
+    React.useCallback(() => {
+      postClientFilter('',true, 3,2,38.8472092,65.796276);
+      return () => {};
+    },[])
+  );
+
+  const handEnd = () =>{
+    router.push('')
+  }
 
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -44,7 +46,7 @@ const Specialist = () => {
             <TouchableOpacity
               activeOpacity={.8}
               style={[tw`flex-row items-center border px-8 py-3 rounded-xl`, { backgroundColor: '#9C0A35' }]}
-              onPress={onPress}>
+              onPress={handEnd}>
               <Fontisto name="arrow-swap" size={24} color="white" />
               <Text style={[tw`text-white ml-2 text-xl`]}>Фильтр</Text>
             </TouchableOpacity>
@@ -66,17 +68,7 @@ const Specialist = () => {
             </View>
           ))}
         </View>
-      </ScrollView>
-       <BottomModal
-        children={
-        <View style={tw`p-4 bg-white rounded-xl`}>
-          <Text style={tw`text-lg font-bold mb-4`}>Фильтр Options</Text>
-          <Button title="Close" onPress={closeModal} />
-        </View>}
-        toggleBottomModal={onPress}
-        isBottomModal
-        />
-        
+      </ScrollView>  
     </SafeAreaView>
   );
 };

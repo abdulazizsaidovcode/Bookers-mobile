@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager  } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import CustomCheckbox from '../checkbox/checkbox';
 import tw from 'tailwind-react-native-classnames';
+import CommunitySlider from '../communiytSlider/communitySlider';
 
 interface AccordionItemProps {
     title: string;
@@ -14,7 +14,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
+const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title }) => {
     const [expanded, setExpanded] = useState(false);
     const [value, setValue] = useState(false);
     const [genderIndex, setGenderIndex] = useState<number>(-1);
@@ -25,16 +25,6 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setExpanded(!expanded);
     };
-
-    const radioProps = [
-        { label: 'Erkak', value: 0 },
-        { label: 'Ayol', value: 1 },
-    ];
-
-    const onPressRadioButton = (index: number) => {
-        setGenderIndex(index);
-    };
-
     return (
         <View style={[styles.container]}>
             {/* Sarlavha va belgi */}
@@ -52,40 +42,16 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
             {/* Agar accordion ochilgan bo'lsa, kontentni ko'rsatish */}
             {expanded && (
                 <View style={styles.content}>
-                    <RadioForm formHorizontal={true} animation={true}>
-                        {radioProps.map((obj, i) => (
-                            <RadioButton labelHorizontal={true} key={i}>
-                                <RadioButtonInput
-                                    obj={obj}
-                                    index={i}
-                                    isSelected={genderIndex === i}
-                                    onPress={onPressRadioButton}
-                                    buttonInnerColor={'#9C035A'}
-                                    buttonOuterColor={'#9C035A'}
-                                    buttonSize={15}
-                                    buttonOuterSize={25}
-                                    buttonStyle={{}}
-                                    buttonWrapStyle={{ marginLeft: 10 }}
-                                />
-                                <RadioButtonLabel
-                                    obj={obj}
-                                    index={i}
-                                    labelHorizontal={true}
-                                    onPress={onPressRadioButton}
-                                    labelStyle={styles.radioButtonLabel}
-                                    labelWrapStyle={{}}
-                                />
-                            </RadioButton>
-                        ))}
-                    </RadioForm>
-                    <Text style={tw`p-3`}>
+                    <View style={styles.communitySlider}>
+                        <CommunitySlider icon={<AntDesign name="star" size={18} color="#9C0A35" />} title="+" textColor='#9C0A35' />
+                    </View>
+                    <Text style={tw`p-3 mt-4`}>
                         <CustomCheckbox
+                          title='не важно'
                             value={isSelected}
                             onValueChange={setSelection}
-                            title='не важно'
                         />
                     </Text>
-
                 </View>
             )}
         </View>
@@ -137,6 +103,11 @@ const styles = StyleSheet.create({
     checkbox: {
         alignSelf: 'center',
     },
+    communitySlider: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 
-export default AccordionFree;
+export default AccardionSliderTwo;

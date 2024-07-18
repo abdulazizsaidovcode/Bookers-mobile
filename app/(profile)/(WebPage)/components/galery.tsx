@@ -56,7 +56,7 @@ const Gallery: React.FC = () => {
         galeriya.map(
           (item: any) =>
             item.resGalleryAttachments &&
-            item.resGalleryAttachments.length > 0 && (
+            item.resGalleryAttachments.length > 0 ? (
               <TouchableOpacity onPress={() => {
                 setGaleriyaDetail(item)
                 navigation.navigate("(profile)/(WebPage)/components/galleryDetail")
@@ -66,7 +66,7 @@ const Gallery: React.FC = () => {
                   <Text style={styles.caption}>{item.albumName}</Text>
                 </View>
               </TouchableOpacity>
-            )
+            ) : <Text style={styles.noDataText}>No gallery data available</Text>
         )
       ) : (
         <Text style={styles.noDataText}>No gallery data available</Text>

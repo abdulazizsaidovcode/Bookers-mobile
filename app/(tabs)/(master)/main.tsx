@@ -61,11 +61,11 @@ export const getConfig = async () => {
 			};
 		} else {
 			console.log('Token not found');
-			return {};
+			return null;
 		}
 	} catch (error) {
 		console.log(error);
-		return {};
+		return null;
 	}
 };
 export const getConfigImg = async () => {
@@ -80,11 +80,11 @@ export const getConfigImg = async () => {
 			};
 		} else {
 			console.log('Token not found');
-			return {};
+			return null;
 		}
 	} catch (error) {
 		console.log(error);
-		return {};
+		return null;
 	}
 };
 
@@ -116,7 +116,7 @@ const TabOneScreen: React.FC = () => {
 	}, []);
 
 	useEffect(() => {
-		if (number.length > 1) {
+		if (number && number.length > 1) {
 			const res = removeDuplicatesAndSort(number)
 			const result = containsAllNumbers(res)
 			setHasAllNumbers(result)
@@ -175,10 +175,10 @@ const TabOneScreen: React.FC = () => {
 	const [chartNumerator, chartDenominator] = chartFraction.split('/');
 	const statisticFraction = mainStatisticData.incomeToday;
 	const [statisticNumerator, statisticDenominator] = statisticFraction.split('/');
-	const regularVisitCount = dailyTimeData.filter(item => item.type === 'REGULAR_VISIT').length;
-	const notVisitCount = dailyTimeData.filter(item => item.type === 'NOT_VISIT').length;
-	const vipCientsCount = dailyTimeData.filter(item => item.type === 'VIP').length;
-	const newClientsCount = dailyTimeData.filter(item => item.type === 'NEW').length;
+	const regularVisitCount = dailyTimeData && dailyTimeData.filter(item => item.type === 'REGULAR_VISIT').length;
+	const notVisitCount = dailyTimeData && dailyTimeData.filter(item => item.type === 'NOT_VISIT').length;
+	const vipCientsCount = dailyTimeData && dailyTimeData.filter(item => item.type === 'VIP').length;
+	const newClientsCount = dailyTimeData && dailyTimeData.filter(item => item.type === 'NEW').length;
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -222,8 +222,8 @@ const TabOneScreen: React.FC = () => {
 				{!hasAllNumbers && (
 					<View style={{ margin: 10 }}>
 						<Buttons
-							title="Client dashboard"
-							onPress={() => navigation.navigate('(client)/(dashboard)/dashboard')}
+							title="настройку"
+							onPress={() => navigation.navigate('(profile)/(tariff)/tariff')}
 						/>
 					</View>
 				)}
@@ -348,12 +348,12 @@ const BookingRequests: React.FC<BookingRequestsProps> = ({
 	isRejectedModal,
 	setWaitingData
 }) => (
-	waitingData.length > 0 && (
+	waitingData && waitingData.length > 0 ? (
 		<View>
 			<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
 				<Text style={{ color: COLORS.white, fontSize: 20 }}>Запросы на бронь</Text>
 				<View style={styles.headerRight}>
-					<Text style={styles.requestsCount}>{waitingData.length} заявки</Text>
+					<Text style={styles.requestsCount}>{waitingData && waitingData.length} заявки</Text>
 				</View>
 			</View>
 			<FlatList
@@ -372,7 +372,7 @@ const BookingRequests: React.FC<BookingRequestsProps> = ({
 				contentContainerStyle={styles.bookingList}
 			/>
 		</View>
-	)
+	) : ''
 );
 
 const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
@@ -383,12 +383,12 @@ const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
 	isRejectedModal,
 	setHallData
 }) => (
-	hallData.length > 0 && (
+	hallData && hallData.length > 0 ? (
 		<View>
 			<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
 				<Text style={{ color: COLORS.white, fontSize: 20 }}>Запросы окошка</Text>
 				<View style={styles.headerRight}>
-					<Text style={styles.requestsCount}>{hallData.length} заявки</Text>
+					<Text style={styles.requestsCount}>{hallData && hallData.length} заявки</Text>
 				</View>
 			</View>
 			<FlatList
@@ -407,7 +407,7 @@ const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
 				contentContainerStyle={styles.bookingList}
 			/>
 		</View>
-	)
+	) : ''
 );
 
 const renderTimeSlot: React.FC<{ item: DashboardDailyTimeOrders }> = ({ item }) => (

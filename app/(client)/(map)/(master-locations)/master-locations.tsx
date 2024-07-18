@@ -1,9 +1,8 @@
-import { Dimensions, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { handleRefresh } from '@/constants/refresh';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -99,25 +98,23 @@ const mapCustomStyle = [
         "featureType": "administrative.country",
         "elementType": "geometry.stroke",
         "stylers": [{ "color": "#FFFFFF" }]
+    },
+    {
+        "featureType": "landscape.man_made",
+        "elementType": "geometry.fill",
+        "stylers": [{ "color": "#394562" }]
     }
 ];
 
 
+// 
+
 const MasterLocations = () => {
     const [refreshing, setRefreshing] = useState(false);
 
-    const onRefresh = useCallback(() => {
-        handleRefresh(setRefreshing);
-    }, [setRefreshing]);
-
-
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView
-            // refreshControl={
-            //     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            // }
-            >
+            <ScrollView>
                 <View>
                     <NavigationMenu name='Beauty Wave' />
                 </View>
@@ -125,7 +122,30 @@ const MasterLocations = () => {
                     <MapView
                         customMapStyle={mapCustomStyle}
                         style={styles.map}
-                    />
+                        initialRegion={{
+                            latitude: 37.78825,
+                            longitude: -122.4324,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421,
+                        }}
+                    >
+                        <Marker
+                            coordinate={{
+                                latitude: 37.78825,
+                                longitude: -122.4324,
+                            }}
+                            title={"Marker Title"}
+                            description={"Marker Description"}
+                        />
+                        <Marker
+                            coordinate={{
+                                latitude: 34.78825,
+                                longitude: -121.4324,
+                            }}
+                            title={"Marker Title"}
+                            description={"Marker Description"}
+                        />
+                    </MapView>
                 </View>
             </ScrollView>
         </SafeAreaView>

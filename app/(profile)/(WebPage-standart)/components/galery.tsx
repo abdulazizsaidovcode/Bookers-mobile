@@ -56,17 +56,17 @@ const GalleryEdit: React.FC = () => {
         galeriya.map(
           (item: any) =>
             item.resEditAttachments &&
-            item.resGalleryAttachments.length > 0 && (
-              <TouchableOpacity onPress={() => {
-                setGaleriyaDetail(item)
-                navigation.navigate("(profile)/(WebPage)/components/galleryDetail")
-              }} activeOpacity={0.7}>
-                <View style={styles.galleryContainer} key={item.id}>
-                  {renderRows(item.resGalleryAttachments)}
-                  <Text style={styles.caption}>{item.albumName}</Text>
-                </View>
-              </TouchableOpacity>
-            )
+          item.resGalleryAttachments.length > 0 ? (
+            <TouchableOpacity onPress={() => {
+              setGaleriyaDetail(item)
+              navigation.navigate("(profile)/(WebPage)/components/galleryDetail")
+            }} activeOpacity={0.7}>
+              <View style={styles.galleryContainer} key={item.id}>
+                {renderRows(item.resGalleryAttachments)}
+                <Text style={styles.caption}>{item.albumName}</Text>
+              </View>
+            </TouchableOpacity>
+          ) : <Text style={styles.noDataText}>No gallery data available</Text>
         )
       ) : (
         <Text style={styles.noDataText}>No gallery data available</Text>

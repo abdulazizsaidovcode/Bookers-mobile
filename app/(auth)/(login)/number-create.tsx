@@ -21,9 +21,9 @@ const PhoneNumberInput: React.FC = () => {
     const [status, setStatus] = useState<boolean>(false);
     const {t} = useTranslation();
 
-    useEffect(() => {
-        if (code) setPhoneNumber('')
-    }, [code]);
+    // useEffect(() => {
+    //     if (code) setPhoneNumber('')
+    // }, [code]);
 
     const handlePhoneNumberChange = (text: string) => {
         setPhoneNumber(text);

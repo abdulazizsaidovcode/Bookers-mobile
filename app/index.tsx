@@ -3,7 +3,6 @@ import { View, ActivityIndicator } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import Auth from "./(auth)/auth";
 import CheckPinOnCome from "./(auth)/(checkPinCode)/checkPinCode";
-import Masters from "./(client)/(masters)/masters";
 
 const Index: React.FC = () => {
   const [isFirstLaunch, setIsFirstLaunch] = useState<null | boolean>(null);
@@ -19,6 +18,7 @@ const Index: React.FC = () => {
           setIsFirstLaunch(false);
         }
       } catch (error) {
+        await SecureStore.deleteItemAsync("number");
         console.log(error);
       }
     };
@@ -34,7 +34,7 @@ const Index: React.FC = () => {
     );
   }
 
-  return <Masters />;
+  return isFirstLaunch ? <Auth /> : <CheckPinOnCome />;
 };
 
 export default Index;

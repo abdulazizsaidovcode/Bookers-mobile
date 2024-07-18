@@ -3,28 +3,28 @@ import axios from "axios";
 import { Alert } from "react-native"
 import { IsActive } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from '@/app/(tabs)/(master)/main'
+import Toast from "react-native-simple-toast"
 
 
 export const onlineBookingAllowClient = async (isEnabled: boolean) => {
     try {
         if (isEnabled === true || isEnabled === false) {
             const config = await getConfig();
-            const res = await axios.put(`${onlineBookingAllowClient_url}?allowClient=${isEnabled}`, {}, config);
+            const res = await axios.put(`${onlineBookingAllowClient_url}?allowClient=${isEnabled}`, {}, config ? config : {});
             if (res.data.success) {
-                Alert.alert("Изменены разрешения для клиентов");
-            } else {
-                Alert.alert("Во время конвертации произошла ошибка");
+                Toast.show(res.data.message, Toast.SHORT);
             }
         }
-    } catch (error) {
-        Alert.alert("Во время конвертации произошла ошибка");
+    } catch (error: any) {
+        Toast.show(error.response.data.message, Toast.SHORT);
+
     }
 };
 
 export const getOnlineBookingAllowClient = async (setData: (val: boolean) => void) => {
     try {
         const config = await getConfig();
-        const res = await axios.get(`${onlineBookingAllowClient_url}`, config);
+        const res = await axios.get(`${onlineBookingAllowClient_url}`, config ? config : {});
         if (res.data.success) {
             setData(res.data.body);
         } else {
@@ -39,7 +39,7 @@ export const onlineBookingSettingsUrgently = async (isEnabled: boolean) => {
     try {
         if (isEnabled === true || isEnabled === false) {
             const config = await getConfig();
-            const res = await axios.post(`${onlineBookingUgly_url}?isUrgent=${isEnabled}`, {}, config);
+            const res = await axios.post(`${onlineBookingUgly_url}?isUrgent=${isEnabled}`, {}, config ? config : {});
             console.log(res.data);
 
             if (res.data.success) {
@@ -55,12 +55,11 @@ export const onlineBookingSettingsUrgently = async (isEnabled: boolean) => {
 
 export const GetOnlineBookingSettingsUrgently = async (setStatus: any) => {
     try {
-        const config= await getConfig()
-        const res = await axios.get(onlineBookingUgly_url,config);
+        const config = await getConfig()
+        const res = await axios.get(onlineBookingUgly_url, config ? config : {});
         setStatus(res.data.body);
     } catch (error) {
         console.log(error);
-        // Handle errors as needed
     }
 };
 
@@ -68,16 +67,15 @@ export const OnlineBookingUserviceTimeAll = async (val: object) => {
     try {
         if (val) {
             const config = await getConfig();
-            const res = await axios.post(`${onlineBookingUserviceTimeAll_url}`, val, config);
+            const res: any = await axios.post(`${onlineBookingUserviceTimeAll_url}`, val, config ? {} : {});
 
             if (res.data.success) {
-                Alert.alert("Изменения сохранены");
-            } else {
-                Alert.alert("Произошла ошибка при конвертации");
+                Toast.show(res.data.message, Toast.SHORT);
             }
         }
-    } catch (error) {
-        Alert.alert("Произошла ошибка при конвертации");
+    } catch (error: any) {
+        console.log(error);
+        Toast.show(error.response.data.message, Toast.SHORT);
     }
 };
 
@@ -88,17 +86,14 @@ export const OnlineBookingUserviceTimeService = async (val: object) => {
             let data = [
                 { ...val }
             ];
-            const res = await axios.post(`${onlineBookingUserviceTimeservice_url}`, data, config);
+            const res: any = await axios.post(`${onlineBookingUserviceTimeservice_url}`, data, config ? config : {});
 
             if (res.data.success) {
-                Alert.alert("Изменения сохранены");
-            } else {
-                Alert.alert("Произошла ошибка при конвертации");
+                Toast.show(res.message, Toast.SHORT);
             }
         }
-    } catch (error) {
-        console.log(error);
-        Alert.alert("Произошла ошибка при конвертации");
+    } catch (error: any) {
+        Toast.show(error.response.data.message, Toast.SHORT);
     }
 };
 
@@ -109,20 +104,21 @@ export const onlineConfirmationServices = async (isEnabled: boolean, isEnabled2:
             "newClient": isEnabled2,
             "notConfirm": isEnabled3
         };
+        console.log(data);
+        
         const config = await getConfig();
-        const res = await axios.post(`${onlineConfirmationServices_url}`, data, config);
+        const res = await axios.post(`${onlineConfirmationServices_url}`, data, config ? config : {});
+        Toast.show(res.data.message, Toast.SHORT);
+    } catch (error: any) {
+        Toast.show(error.response.data.message, Toast.SHORT);
 
-        Alert.alert("Настройки онлайн-бронирования подтвердили разрешение");
-    } catch (error) {
-        console.log(error);
-        Alert.alert("Произошла ошибка при проверке настроек онлайн-бронирования.");
     }
 };
 
 export const getOnlineConfirmationServices = async (setData: (val: IsActive | null) => void) => {
     try {
         const config = await getConfig();
-        const res = await axios.get(`${onlineConfirmationServices_url}`, config);
+        const res = await axios.get(`${onlineConfirmationServices_url}`, config ? config : {});
 
         if (res.data.success) {
             setData(res.data.body);
@@ -144,7 +140,7 @@ export const onlineBookingHallWaiting = async (isEnabled: boolean, isEnabled2: b
             regularClient: isEnabled2
         };
         const config = await getConfig();
-        const res = await axios.post(`${onlineBookingHallWaitin_url}`, data, config);
+        const res = await axios.post(`${onlineBookingHallWaitin_url}`, data, config ? config : {});
 
         Alert.alert("Success hall");
     } catch (error) {
@@ -158,7 +154,7 @@ export const onlineBookingHallWaiting = async (isEnabled: boolean, isEnabled2: b
 export const getOnlineBookingHallWaiting = async (setData: (val: any | null) => void) => {
     try {
         const config = await getConfig();
-        const res = await axios.get(`${onlineBookingHallWaitin_url}`, config);
+        const res = await axios.get(`${onlineBookingHallWaitin_url}`, config ? config : {});
 
         setData(res.data.body);
     } catch (error) {

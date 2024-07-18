@@ -9,7 +9,7 @@ import {
 } from "@/helpers/api";
 import axios from "axios";
 import Toast from "react-native-simple-toast";
-import {getConfig} from "@/app/(tabs)/(master)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 
 interface OrderPost {
     data: any;
@@ -34,7 +34,7 @@ export const postOrder = async (
     try {
         if (setLoading) setLoading(true);
         const config = await getConfig()
-        const response = await axios.post(`${order_add}?status=${status}`, data, config);
+        const response = await axios.post(`${order_add}?status=${status}`, data, config ? config : {});
         if (setLoading) setLoading(false);
         if (response.data.success) {
             Toast.show('Successfully saved order', Toast.LONG);
@@ -54,7 +54,7 @@ export const postOrder = async (
     }
 };
 
-export const orderTimeEdit = async ({data, setOrderId, setLoading}: {
+export const orderTimeEdit = async ({ data, setOrderId, setLoading }: {
     data: any,
     setOrderId: (val: string) => void,
     setLoading: (val: boolean) => void
@@ -62,7 +62,7 @@ export const orderTimeEdit = async ({data, setOrderId, setLoading}: {
     try {
         setLoading(true);
         const config = await getConfig()
-        const res = await axios.put(`${order_update}`, data, config);
+        const res = await axios.put(`${order_update}`, data, config ? config : {});
         setLoading(false);
         if (res.data.success) {
             Toast.show('Successfully update order time', Toast.LONG);
@@ -80,7 +80,7 @@ export const orderGetOne = async (orderID: string, setData: (val: any | null) =>
     try {
         if (orderID) {
             const config = await getConfig()
-            const response = await axios.get(`${order_get_one}${orderID}`, config);
+            const response = await axios.get(`${order_get_one}${orderID}`, config ? config : {});
 
             if (response.data.success) setData(response.data.body)
             else setData(null)
@@ -95,7 +95,7 @@ export const orderGetOne = async (orderID: string, setData: (val: any | null) =>
 export const getMasterOrderConfirmed = async (setConfirmedData: any) => {
     try {
         const config = await getConfig()
-        const response = await axios.get(`${master_order_confirmed}`, config);
+        const response = await axios.get(`${master_order_confirmed}`, config ? config : {});
 
         if (response.data.success) setConfirmedData(response.data.body)
         else setConfirmedData([])
@@ -109,7 +109,7 @@ export const getMasterOrderConfirmed = async (setConfirmedData: any) => {
 export const getMasterOrderWait = async (setWaitData: any) => {
     try {
         const config = await getConfig()
-        const response = await axios.get(`${master_order_wait}`, config);
+        const response = await axios.get(`${master_order_wait}`, config ? config : {});
 
         if (response.data.success) setWaitData(response.data.body)
         else setWaitData([])
@@ -123,7 +123,7 @@ export const getMasterOrderWait = async (setWaitData: any) => {
 export const getMasterOrderHall = async (setHallData: any) => {
     try {
         const config = await getConfig()
-        const response = await axios.get(`${master_order_hall}`, config);
+        const response = await axios.get(`${master_order_hall}`, config ? config : {});
 
         if (response.data.success) setHallData(response.data.body)
         else setHallData([])
@@ -139,7 +139,7 @@ export const masterOrderConfirm = async (orderID: string, setLoading: any, statu
     try {
         setLoading(true);
         const config = await getConfig()
-        const response = await axios.put(`${master_order_confirm}?orderId=${orderID}&status=${status}`, {}, config);
+        const response = await axios.put(`${master_order_confirm}?orderId=${orderID}&status=${status}`, {}, config ? config : {});
         setLoading(false);
         if (response.data.success) console.log("Order set successfully", response.data)
     } catch (error) {
