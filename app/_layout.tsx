@@ -134,6 +134,7 @@ import getMasterNickName from "./(auth)/(register)/(masterInformation)/getNickNa
 import ClientCameraInfo from "./(auth)/(register)/(clientInformations)/getPhoto";
 import CardClient from "./(client)/(profile)/(card)/card";
 import PaymentClient from "./(client)/(profile)/(payment)/payment";
+import SalonLocation from "./(client)/(map)/(salon-location)/salon-location";
 
 
 
@@ -342,6 +343,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(client)/(map)/(master-locations)/master-locations"
               component={MasterLocations}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(map)/(salon-location)/salon-location"
+              component={SalonLocation}
               options={{ headerShown: false }}
             />
             <Stack.Screen
