@@ -1,5 +1,10 @@
 import create from "zustand";
 
+export interface RouteData {
+    id: number,
+    value: string | null
+}
+
 interface ProfileState {
   nickName: string | null;
   firstName: string | null;
@@ -14,8 +19,8 @@ interface ProfileState {
   attachmentId: string | null;
   setProfile: (profile: Partial<ProfileState>) => void;
   updateProfileField: (key: keyof ProfileState, value: any) => void;
-  routeName: string | null
-  setRoute: (data: string) => void
+  routeName: RouteData
+  setRoute: (data: RouteData) => void
   setAttachmentId: (data: string | null) => void
 }
 
@@ -33,8 +38,11 @@ const useProfileStore = create<ProfileState>((set) => ({
   attachmentId: "",
   setProfile: (profile) => set((state) => ({ ...state, ...profile })),
   updateProfileField: (key, value) => set((state) => ({ ...state, [key]: value })),
-  routeName: "",
-  setRoute: (data: string) => set({routeName: data}),
+  routeName: {
+    id: 0,
+    value: null
+  },
+  setRoute: (data: RouteData) => set({routeName: data}),
   setAttachmentId: (data: string | null) => set({attachmentId: data})
 }));
 

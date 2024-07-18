@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import {
   View,
@@ -17,6 +18,15 @@ import RadioForm, {
 import CustomCheckbox from "../checkbox/checkbox";
 import tw from "tailwind-react-native-classnames";
 import { useAccardionStore } from "@/helpers/state_managment/accardion/accardionStore";
+=======
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+import CustomCheckbox from '../checkbox/checkbox';
+import tw from 'tailwind-react-native-classnames';
+import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
+>>>>>>> 7bafb4fe3d36b03a71df8b9c3b061b191f98a1f1
 
 interface AccordionItemProps {
   title: string;

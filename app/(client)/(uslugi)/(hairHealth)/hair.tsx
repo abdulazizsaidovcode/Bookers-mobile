@@ -16,35 +16,28 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 
 const Hair = () => {
-    const router = useRouter(); // Initialize the useRouter hook
-    // const [isSelected, setSelection] = useState(false);
+    const router = useRouter();
     const { isSelected } = useAccardionStore();
     const { allCategory, setSelectedServiceId ,selectedServiceId } = ClientStory();
     const { genderIndex } = useAccardionStore();
     const {  rating , value} = useCommunitySlider();
     const { userLocation } = useGetMeeStore();
-
-    console.log("category", allCategory);
-
     useFocusEffect(
         React.useCallback(() => {
             const selected=selectedServiceId
             const latitude = userLocation?.coords?.latitude || null;
             const longitude = userLocation?.coords?.longitude || null;
-            postClientFilter(setSelectedServiceId,value, genderIndex, rating, latitude, longitude);
+           
+            
+            postClientFilter(setSelectedServiceId, genderIndex,value,rating, latitude, longitude);
             return () => { };
         }, [setSelectedServiceId, rating, userLocation])
     );
 
     const handleButtonPress = () => {
-        console.log("reting",rating);
-        console.log("lat",userLocation.coords.latitude);
-        console.log("set", selectedServiceId);
-        console.log("index",genderIndex); 
-        console.log("value", value);
         const latitude = userLocation?.coords?.latitude || null;
-        const longitude = userLocation?.coords?.longitude || null;
-        postClientFilter(selectedServiceId, value, genderIndex, rating, latitude, longitude);
+        const longitude = userLocation?.coords?.longitude || null; 
+        postClientFilter(selectedServiceId, genderIndex ,value*1000,rating, latitude, longitude);
         router.push('(client)/(uslugi)/(specialist)/specialist');
     };
 

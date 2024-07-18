@@ -26,7 +26,7 @@ const CategoryEdit = () => {
     const getCategory = async () => {
         try {
             const config = await getConfig()
-            const response = await axios.get(`${category_Father}`, config);
+            const response = await axios.get(`${category_Father}`, config ? config : {});
             const listData = response.data.body.map((item: any) => ({
                 key: item.id,
                 value: item.name,
@@ -44,7 +44,7 @@ const CategoryEdit = () => {
         try {
             const config = await getConfig()
             const queryParams = selectedCategories.map(item => `categoryIds=${item}`).join('&');
-            const response = await axios.post(`${getCategory_masterAdd}${queryParams}`, '', config);
+            const response = await axios.post(`${getCategory_masterAdd}${queryParams}`, '', config ? config : {});
             if (response.data.success) {
                 Toast.show('✅ Вы изменили категории', Toast.LONG);
                router.push('../test');
@@ -98,7 +98,7 @@ const CategoryEdit = () => {
                                     title={item.value}
                                     items={item}
                                     onPress={() => handleCategorySelect(item.key)}
-                                    isSelected={selectedCategories.includes(item.key)}
+                                    isChecked={selectedCategories.includes(item.key)}
                                 />
                             )}
                         />

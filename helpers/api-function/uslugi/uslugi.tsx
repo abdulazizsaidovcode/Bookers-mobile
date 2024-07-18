@@ -24,6 +24,7 @@ export const postClientFilter = async (categoryId: any, gender?: boolean | null,
     const { data } = await axios.post(`${getClient_filter}`, postData, config);
     console.log('Response data:', data);
     if (data.success) {
+      ClientStory.getState().setClientData(data.body);
       console.log('Success response data:', data);
     }
   } catch (error) {

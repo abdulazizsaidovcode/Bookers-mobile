@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -18,8 +18,8 @@ import {
   MaterialIcons,
   AntDesign,
 } from "@expo/vector-icons";
-import { useNavigation } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFocusEffect, useNavigation } from "expo-router";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
 import { getFile } from "@/helpers/api";
@@ -29,6 +29,15 @@ import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import registerStory from "@/helpers/state_managment/auth/register";
 
+const data: { name: any, color: string, label: string }[] = [
+  { name: "facebook", color: "#3b5998", label: "Facebook" },
+  { name: "telegram", color: "#0088cc", label: "Telegram" },
+  { name: "instagram", color: "#C13584", label: "Instagram" },
+  { name: "linkedin", color: "#0e76a8", label: "LinkedIn" },
+  { name: "skype", color: "#00aff0", label: "Skype" },
+  { name: "copy", color: "#E74C3C", label: "Копировать ссылку", },
+]
+
 const ProfilePage: React.FC = () => {
   const [isInviteModalVisible, setInviteModalVisible] = useState(false);
   const [isShareModalVisible, setShareModalVisible] = useState(false);
@@ -37,9 +46,11 @@ const ProfilePage: React.FC = () => {
   const [toggle, setToggle] = useState(false);
   const { role } = registerStory();
 
-  useEffect(() => {
+
+  useFocusEffect(useCallback(() => {
     getUser(setGetMee);
-  }, []);
+  }, []))
+
   const openInviteModal = () => {
     setInviteModalVisible(true);
   };
@@ -59,7 +70,8 @@ const ProfilePage: React.FC = () => {
   const navigateTo = (screen: string) => {
     if (screen) {
       navigation.navigate(screen);
-    } else {}
+    } else {
+    }
   };
 
   const handleSubmit = async () => {
@@ -71,77 +83,77 @@ const ProfilePage: React.FC = () => {
   };
 
   const onShare = async () => {
-		try {
-			const result = await Share.share({
-				message:
-					'https://t.me/senior_BX',
-			});
-			if (result.action === Share.sharedAction) {
-				if (result.activityType) {
-					// shared with activity type of result.activityType
-				} else {
-					// shared
-				}
-			} else if (result.action === Share.dismissedAction) {
-				// dismissed
-			}
-		} catch (error: any) {
-			Alert.alert(error.message);
-		}
-	};
+    try {
+      const result = await Share.share({
+        message:
+          'https://t.me/senior_BX',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
 
   const navigationList =
     role === "ROLE_MASTER"
       ? [
-          {
-            icon: "user",
-            label: "Подписка",
-            screen: "(profile)/(tariff)/tariff",
-          },
-          {
-            icon: "history",
-            label: "История сеансов",
-            screen: "(profile)/(sessionhistory)/sessionHistory",
-          },
-          {
-            icon: "info-circle",
-            label: "Справка",
-            screen: "(profile)/(help)/help",
-          },
-          {
-            icon: "bell",
-            label: "Уведомления",
-            screen: "(profile)/(notification)/index",
-          },
-          {
-            icon: "wallet",
-            label: "Расходы",
-            screen: "(profile)/(Expenses)/index",
-          },
-          {
-            icon: "globe",
-            label: "Веб страница",
-            screen: "(profile)/(WebPage)/WebPage",
-          },
-          {
-            icon: "cogs",
-            label: "Настройки",
-            screen: "(profile)/(settings)/settings",
-          },
-          {
-            icon: "users",
-            label: "Клиенты",
-            screen: "(free)/(client)/main",
-          },
-          {
-            icon: "sign-out",
-            label: "Выйти",
-            screen: "Logout",
-            modal: true,
-          },
-        ]
+        {
+          icon: "user",
+          label: "Подписка",
+          screen: "(profile)/(tariff)/tariff",
+        },
+        {
+          icon: "history",
+          label: "История сеансов",
+          screen: "(profile)/(sessionhistory)/sessionHistory",
+        },
+        {
+          icon: "info-circle",
+          label: "Справка",
+          screen: "(profile)/(help)/help",
+        },
+        {
+          icon: "bell",
+          label: "Уведомления",
+          screen: "(profile)/(notification)/index",
+        },
+        {
+          icon: "wallet",
+          label: "Расходы",
+          screen: "(profile)/(Expenses)/index",
+        },
+        {
+          icon: "globe",
+          label: "Веб страница",
+          screen: "(profile)/(WebPage)/WebPage",
+        },
+        {
+          icon: "cogs",
+          label: "Настройки",
+          screen: "(profile)/(settings)/settings",
+        },
+        {
+          icon: "users",
+          label: "Клиенты",
+          screen: "(free)/(client)/main",
+        },
+        {
+          icon: "sign-out",
+          label: "Выйти",
+          screen: "Logout",
+          modal: true,
+        },
+      ]
       : role === "ROLE_CLIENT"
-      ? [
+        ? [
           {
             icon: "share-alt",
             label: "Поделиться",
@@ -190,7 +202,7 @@ const ProfilePage: React.FC = () => {
             modal: true,
           },
         ]
-      : [
+        : [
           {
             icon: "share-alt",
             label: "Поделиться",
@@ -268,7 +280,7 @@ const ProfilePage: React.FC = () => {
             style={styles.menuItem}
             onPress={() =>
               item.icon === "share-alt" ? onShare() :
-              item.modal ? setToggle(true) : navigateTo(item.screen)
+                item.modal ? setToggle(true) : navigateTo(item.screen)
             }
             activeOpacity={0.7}
           >
@@ -326,18 +338,7 @@ const ProfilePage: React.FC = () => {
             <View style={styles.modalContainer}>
               <Text style={styles.modalTitle}>Поделиться</Text>
               <View style={styles.iconContainer}>
-                {[
-                  { name: "facebook", color: "#3b5998", label: "Facebook" },
-                  { name: "telegram", color: "#0088cc", label: "Telegram" },
-                  { name: "instagram", color: "#C13584", label: "Instagram" },
-                  { name: "linkedin", color: "#0e76a8", label: "LinkedIn" },
-                  { name: "skype", color: "#00aff0", label: "Skype" },
-                  {
-                    name: "copy",
-                    color: "#E74C3C",
-                    label: "Копировать ссылку",
-                  },
-                ].map((item, index): any => (
+                {data.map((item, index): any => (
                   <TouchableOpacity key={index} style={styles.iconButton}>
                     <FontAwesome
                       name={item.name}
