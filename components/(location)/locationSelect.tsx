@@ -34,7 +34,7 @@ const LocationSelect = ({ setDistrictId, city, setCity }: Types) => {
 
   useEffect(() => {
     getCity();
-    if (city.length === 0) {
+    if (city.length && city.length === 0) {
       setToggle(false);
     } else {
       setToggle(true);
