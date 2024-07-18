@@ -1,18 +1,19 @@
+import { ProductType } from "@/type/history";
 import React from "react";
 import { create } from "zustand";
 
 interface Type {
-  pastentries: [];
+  pastentries: ProductType[];
   isChecked: boolean;
   setChecked: (value: any) => void;
-  setPastentries: (pastentries: any) => void;
+  setPastentries: (pastentries: ProductType[]) => void;
 }
 
 const Pastentries = create<Type>((set) => ({
   pastentries: [],
   isChecked: false,
   setChecked: (value) => set({ isChecked: value }),
-  setPastentries: (pastentries) => set({ pastentries }),
+  setPastentries: (pastentries: ProductType[]) => set({ pastentries }),
 }));
 
 export default Pastentries;

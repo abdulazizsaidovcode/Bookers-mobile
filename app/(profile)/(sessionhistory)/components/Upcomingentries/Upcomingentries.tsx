@@ -19,10 +19,11 @@ import BottomModal from "@/components/(modals)/modal-bottom";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import NavigationMenu from "@/components/navigation/navigation-menu";
+import { ProductType } from "@/type/history";
 
 const Upcomingentries = () => {
-  const navigation = useNavigation();
-  const [data, setData] = useState([]);
+  const navigation = useNavigation<any>();
+  const [data, setData] = useState<ProductType[]>([]);
   const { getMee } = useGetMeeStore();
   const [bottomModalNetwork, setBottomModalNetwork] = useState(false);
   const [useDefault, setUseDefault] = useState(false);
@@ -49,7 +50,7 @@ const Upcomingentries = () => {
         `${base_url}order/upcoming-sessions?status=UPCOMING_SESSIONS`,
         config ? config : {}
       );
-      setData(data.body);
+      if (data.success) setData(data.body);
     } catch (error) {
       console.log(error);
     }
@@ -126,7 +127,7 @@ const Upcomingentries = () => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item?.id}
+        keyExtractor={(item) => item.id}
       />
       <BottomModal
         isBottomModal={bottomModalNetwork}
