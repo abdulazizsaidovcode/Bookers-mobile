@@ -222,8 +222,8 @@ const TabOneScreen: React.FC = () => {
 				{!hasAllNumbers && (
 					<View style={{ margin: 10 }}>
 						<Buttons
-							title="Client dashboard"
-							onPress={() => navigation.navigate('(client)/(dashboard)/dashboard')}
+							title="настройку"
+							onPress={() => navigation.navigate('(profile)/(tariff)/tariff')}
 						/>
 					</View>
 				)}
