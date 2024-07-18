@@ -15,11 +15,11 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
-  const {expanded,setExpanded,genderIndex,setGenderIndex,isSelected,setSelection}=useAccardionStore();
+  const {genderIndex,setGenderIndex,isSelected,setSelection,expanded2,setExpended2}=useAccardionStore();
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setExpanded(!expanded);
+    setExpended2(!expanded2);
   };
 
   const radioProps = [
@@ -37,10 +37,10 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
         <View style={styles.mainText}>
           <Text style={styles.headerText}>{title}</Text>
         </View>
-        <AntDesign name={expanded ? 'down' : 'right'} size={20} color="#4F4F4F" />
+        <AntDesign name={expanded2 ? 'down' : 'right'} size={20} color="#4F4F4F" />
       </TouchableOpacity>
 
-      {expanded && (
+      {expanded2 && (
         <View style={styles.content}>
           <RadioForm formHorizontal={true} animation={true}>
             {radioProps.map((obj, i) => (
