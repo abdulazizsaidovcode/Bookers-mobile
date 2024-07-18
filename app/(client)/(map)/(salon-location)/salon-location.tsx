@@ -141,8 +141,6 @@ const styles = StyleSheet.create({
   map: {
     width: screenWidth,
     height: screenHeight / 1.17,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
   },
   loading: {
     flex: 1,
