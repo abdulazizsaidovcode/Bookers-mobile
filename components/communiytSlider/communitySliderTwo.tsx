@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Slider from '@react-native-community/slider';
+import { AntDesign } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
@@ -9,13 +10,15 @@ interface DistanceSliderProps {
     textColor: string; // yangi props qo'shildi
 }
 
-const CommunitySlider: React.FC<DistanceSliderProps> = ({ title, textColor }) => { // default rang berildi
+const CommunitySliderTwo: React.FC<DistanceSliderProps> = ({ title, textColor }) => { // default rang berildi
     const [value, setValue] = useState(1.5);
 
     return (
         <View style={styles.container}>
             <View style={styles.value}>
-                <Text style={{ fontSize: 16, color: textColor }} > {value.toFixed(1)} {title}</Text>
+                <Text style={{ fontSize: 16, color: textColor }} >
+                    <AntDesign name="star" size={18} color="#9C0A35" />
+                    {value.toFixed(1)} {title}</Text>
             </View>
             <Slider
                 style={styles.slider}
@@ -55,4 +58,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CommunitySlider;
+export default CommunitySliderTwo;
