@@ -1,21 +1,43 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
-import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
-import CustomCheckbox from '../checkbox/checkbox';
-import tw from 'tailwind-react-native-classnames';
-import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+} from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from "react-native-simple-radio-button";
+import CustomCheckbox from "../checkbox/checkbox";
+import tw from "tailwind-react-native-classnames";
+import { useAccardionStore } from "@/helpers/state_managment/accardion/accardionStore";
 
 interface AccordionItemProps {
   title: string;
 }
 
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
 const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
-  const {genderIndex,setGenderIndex,isSelected,setSelection,expanded2,setExpended2}=useAccardionStore();
+  const {
+    genderIndex,
+    setGenderIndex,
+    isSelected,
+    setSelection,
+    expanded2,
+    setExpended2,
+  } = useAccardionStore();
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -23,21 +45,30 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
   };
 
   const radioProps = [
-    { label: 'Erkak', value: true },
-    { label: 'Ayol', value: false },
+    { label: "Erkak", value: true },
+    { label: "Ayol", value: false },
   ];
 
-  const onPressRadioButton = (value: boolean) => { // Boolean qabul qilinadi
+  const onPressRadioButton = (value: boolean) => {
+    // Boolean qabul qilinadi
     setGenderIndex(value);
   };
-  
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.header} onPress={toggleExpand} activeOpacity={1}>
+      <TouchableOpacity
+        style={styles.header}
+        onPress={toggleExpand}
+        activeOpacity={1}
+      >
         <View style={styles.mainText}>
           <Text style={styles.headerText}>{title}</Text>
         </View>
-        <AntDesign name={expanded2 ? 'down' : 'right'} size={20} color="#4F4F4F" />
+        <AntDesign
+          name={expanded2 ? "down" : "right"}
+          size={20}
+          color="#4F4F4F"
+        />
       </TouchableOpacity>
 
       {expanded2 && (
@@ -83,28 +114,28 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 10,
-    overflow: 'hidden',
-    width: '100%',
+    overflow: "hidden",
+    width: "100%",
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 15,
     paddingHorizontal: 15,
-    backgroundColor: '#B9B9C9',
+    backgroundColor: "#B9B9C9",
     borderRadius: 8,
   },
   mainText: {
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   headerText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#111',
+    fontWeight: "600",
+    color: "#111",
   },
   content: {
-    backgroundColor: '#B9B9C9',
+    backgroundColor: "#B9B9C9",
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     paddingVertical: 10,
@@ -113,7 +144,7 @@ const styles = StyleSheet.create({
   },
   radioButtonLabel: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
     marginLeft: 10,
   },
   radioButtonWrap: {
@@ -122,7 +153,7 @@ const styles = StyleSheet.create({
   selectedGenderText: {
     marginTop: 10,
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
 });
 
