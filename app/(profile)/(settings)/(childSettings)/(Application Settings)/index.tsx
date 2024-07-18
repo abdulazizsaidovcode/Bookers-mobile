@@ -6,22 +6,21 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 
-const ApplicationSettings: React.FC = () => {
-    const navigation = useNavigation();
+const data: {icon: string | any, label: string, screen: string}[] = [
+    { icon: 'globe', label: 'Сменить язык', screen: '(profile)/(settings)/(childSettings)/(Application Settings)/components/language' },
+    { icon: 'check-square', label: 'Услуги', screen: 'Services' },
+    { icon: 'briefcase', label: 'Место работы', screen: 'WorkLocation' },
+]
 
-    const navigateTo = (screen: string) => {
-        navigation.navigate(screen);
-    };
+const ApplicationSettings: React.FC = () => {
+    const navigation = useNavigation<any>();
+    const navigateTo = (screen: string) => navigation.navigate(screen)
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <NavigationMenu name='Настройки'/>
-                {[
-                    { icon: 'globe', label: 'Сменить язык', screen: '(profile)/(settings)/(childSettings)/(Application Settings)/components/language' },
-                    { icon: 'check-square', label: 'Услуги', screen: 'Services' },
-                    { icon: 'briefcase', label: 'Место работы', screen: 'WorkLocation' },
-                ].map((item, index) => (
+                {data.map((item, index) => (
                     <TouchableOpacity
                         key={index}
                         style={styles.menuItem}
