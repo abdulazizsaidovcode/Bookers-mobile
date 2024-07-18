@@ -30,38 +30,38 @@ const ConfirmationRecord = () => {
     data,
   } = OnlineBookingStory();
 
-  useEffect(() => {
-    getOnlineConfirmationServices(setData);
-    console.log(data,'df');
-    
-  }, []);
 
   useFocusEffect(
     useCallback(() => {
-      console.log(data);
+      getOnlineConfirmationServices(setData);
 
       if (data) {
         setIsEnabled(data.allClient);
         setIsEnabled2(data.newClient);
         setIsEnabled3(data.notConfirm);
       }
-      console.log(isEnabled, isEnabled2, isEnabled3);
-    }, [isEnabled, isEnabled2, isEnabled3]));
+    }, []));
 
   const toggleSwitch = () => {
     const newValue = !isEnabled;
     setIsEnabled(newValue);
+    setIsEnabled2(false);
+    setIsEnabled3(false);
+
   };
 
   const toggleSwitch2 = () => {
     const newValue = !isEnabled2;
+    setIsEnabled(false);
     setIsEnabled2(newValue);
+    setIsEnabled3(false);
   };
 
   const toggleSwitch3 = () => {
     const newValue = !isEnabled3;
+    setIsEnabled(false);
+    setIsEnabled2(false);
     setIsEnabled3(newValue);
-    console.log(newValue);
   };
 
 
@@ -129,7 +129,9 @@ const ConfirmationRecord = () => {
         backgroundColor="#9C0A35"
         onPress={() => {
           onlineConfirmationServices(isEnabled, isEnabled2, isEnabled3);
-          router.push("(standart)/(onlineBooking)/onlineBooking");
+          console.log(isEnabled, isEnabled2, isEnabled3);
+
+          // router.push("(standart)/(onlineBooking)/onlineBooking");
         }}
       />
     </SafeAreaView>
