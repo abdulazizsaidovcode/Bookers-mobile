@@ -4,6 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import CustomCheckbox from '../checkbox/checkbox';
 import tw from 'tailwind-react-native-classnames';
+import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
 
 interface AccordionItemProps {
   title: string;
@@ -14,9 +15,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
-  const [expanded, setExpanded] = useState(false);
-  const [genderIndex, setGenderIndex] = useState<boolean>(false); // Boolean qilindi
-  const [isSelected, setSelection] = useState(false);
+  const {expanded,setExpanded,genderIndex,setGenderIndex,isSelected,setSelection}=useAccardionStore();
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
