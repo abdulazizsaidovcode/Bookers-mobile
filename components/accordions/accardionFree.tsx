@@ -4,9 +4,10 @@ import { AntDesign } from '@expo/vector-icons';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import CustomCheckbox from '../checkbox/checkbox';
 import tw from 'tailwind-react-native-classnames';
+import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
 
 interface AccordionItemProps {
-    title: string;
+  title: string;
 }
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -14,20 +15,17 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
-    const [expanded, setExpanded] = useState(false);
-    const [value, setValue] = useState(false);
-    const [genderIndex, setGenderIndex] = useState<number>(-1);
-    const [isSelected, setSelection] = useState(false);
+  const {expanded,setExpanded,genderIndex,setGenderIndex,isSelected,setSelection}=useAccardionStore();
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpanded(!expanded);
   };
 
-    const radioProps = [
-        { label: 'Erkak', value: 0 },
-        { label: 'Ayol', value: 1 },
-    ];
+  const radioProps = [
+    { label: 'Erkak', value: true },
+    { label: 'Ayol', value: false },
+  ];
 
   const onPressRadioButton = (value: boolean) => { // Boolean qabul qilinadi
     setGenderIndex(value);
@@ -42,47 +40,44 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
         <AntDesign name={expanded ? 'down' : 'right'} size={20} color="#4F4F4F" />
       </TouchableOpacity>
 
-            {/* Agar accordion ochilgan bo'lsa, kontentni ko'rsatish */}
-            {expanded && (
-                <View style={styles.content}>
-                    <RadioForm formHorizontal={true} animation={true}>
-                        {radioProps.map((obj, i) => (
-                            <RadioButton labelHorizontal={true} key={i}>
-                                <RadioButtonInput
-                                    obj={obj}
-                                    index={i}
-                                    isSelected={genderIndex === i}
-                                    onPress={onPressRadioButton}
-                                    buttonInnerColor={'#9C035A'}
-                                    buttonOuterColor={'#9C035A'}
-                                    buttonSize={15}
-                                    buttonOuterSize={25}
-                                    buttonStyle={{}}
-                                    buttonWrapStyle={{ marginLeft: 10 }}
-                                />
-                                <RadioButtonLabel
-                                    obj={obj}
-                                    index={i}
-                                    labelHorizontal={true}
-                                    onPress={onPressRadioButton}
-                                    labelStyle={styles.radioButtonLabel}
-                                    labelWrapStyle={{}}
-                                />
-                            </RadioButton>
-                        ))}
-                    </RadioForm>
-                    <Text style={tw`p-3`}>
-                        <CustomCheckbox
-                            value={isSelected}
-                            onValueChange={setSelection}
-                            title='не важно'
-                        />
-                    </Text>
-
-                </View>
-            )}
+      {expanded && (
+        <View style={styles.content}>
+          <RadioForm formHorizontal={true} animation={true}>
+            {radioProps.map((obj, i) => (
+              <RadioButton labelHorizontal={true} key={i}>
+                <RadioButtonInput
+                  obj={obj}
+                  index={i}
+                  isSelected={genderIndex === obj.value} // Boolean hisobida tekshiriladi
+                  onPress={() => onPressRadioButton(obj.value)} // Boolean qiymatini o'zgartiradi
+                  buttonInnerColor="#9C035A"
+                  buttonOuterColor="#9C035A"
+                  buttonSize={15}
+                  buttonOuterSize={25}
+                  buttonWrapStyle={styles.radioButtonWrap}
+                />
+                <RadioButtonLabel
+                  obj={obj}
+                  index={i}
+                  labelHorizontal={true}
+                  onPress={() => onPressRadioButton(obj.value)} // Boolean qiymatini o'zgartiradi
+                  labelStyle={styles.radioButtonLabel}
+                  labelWrapStyle={{}}
+                />
+              </RadioButton>
+            ))}
+          </RadioForm>
+          <Text style={tw`p-3`}>
+            <CustomCheckbox
+              value={isSelected}
+              onValueChange={setSelection}
+              title="не важно"
+            />
+          </Text>
         </View>
-    );
+      )}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
