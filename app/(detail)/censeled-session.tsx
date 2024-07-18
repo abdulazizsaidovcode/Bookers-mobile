@@ -15,13 +15,14 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import History from "@/helpers/state_managment/history";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import axios from "axios";
-import {base_url} from "@/helpers/api";
+import {base_url, getFile} from "@/helpers/api";
 import moment from "moment";
 import {addFeedbackMaster} from "@/helpers/api-function/client/client";
 import Textarea from "@/components/select/textarea";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {getConfig} from "@/app/(tabs)/(master)/main";
+import ContactInformation from "@/components/contact-information/contact-information";
 
 const CenseledSession = () => {
     const {product} = History();
@@ -267,9 +268,7 @@ const CenseledSession = () => {
                 style={[styles.profileContainer, tw`mt-2 bg-gray-300 p-3 rounded-lg`]}
             >
                 <Image
-                    source={{
-                        uri: `http://45.67.35.86:8080/attachment/getFile/${product.attachmentId}`,
-                    }} // Replace with the actual image URL or local image path
+                    source={{uri: `${getFile}${product.attachmentId}`}}
                     style={styles.profileImage}
                 />
                 <View style={styles.profileInfo}>
@@ -318,21 +317,8 @@ const CenseledSession = () => {
                 <Text style={styles.detailCost}>Статус:</Text>
                 {checkStatus()}
             </View>
-            <Text style={styles.contactTitle}>Контактная информация</Text>
-            <View
-                style={[styles.contactContainer, tw`bg-gray-300 rounded-lg p-3 mt-2`]}
-            >
-                <Text style={styles.contactInfo}>
-                    <Feather name="phone" size={20} color="#9c0935"/> {me.phoneNumber}
-                </Text>
-                <Text style={[styles.contactInfo, tw`my-5`]}>
-                    <AntDesign name="instagram" size={20} color="#9c0935"/>
-                    {me.instagram === null ? "No instagram" : me.instagram}
-                </Text>
-                <Text style={styles.contactInfo}>
-                    <FontAwesome5 name="telegram-plane" size={20} color="#9c0935"/>
-                    {me.telegram === null ? "No telegram" : me.telegram}
-                </Text>
+            <View style={{marginTop: 16, marginBottom: 8}}>
+                <ContactInformation/>
             </View>
             <View style={tw`flex-1`}>
                 {product.orderStatus !== "WAIT" && (

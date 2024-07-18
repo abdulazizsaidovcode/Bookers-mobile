@@ -8,7 +8,7 @@ import { Alert } from "react-native";
 export const getUser = async (setGetMee: (val: GetMee) => void) => {
     try {
         const config = await getConfig()
-        const { data } = await axios.get(getMe, config);
+        const { data } = await axios.get(getMe, config ? config : {});
         if (data.success) {
             setGetMee(data.body);
         }
