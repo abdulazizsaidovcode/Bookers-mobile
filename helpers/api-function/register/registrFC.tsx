@@ -1,13 +1,13 @@
-import {base_url, register_page} from "@/helpers/api";
+import { base_url, register_page } from "@/helpers/api";
 import axios from "axios";
-import {router} from "expo-router";
-import {Alert} from "react-native";
+import { router } from "expo-router";
+import { Alert } from "react-native";
 import Toast from "react-native-simple-toast";
-import {authStorage, setClientOrMaster} from "@/constants/storage";
+import { authStorage, setClientOrMaster } from "@/constants/storage";
 import * as SecureStore from 'expo-secure-store';
 
 export const checkNumberFunction = (phoneNumber: string, setCode: (value: any) => void, status: boolean) => {
-    const sentData = {phoneNumber: phoneNumber}
+    const sentData = { phoneNumber: phoneNumber }
 
     axios.post(`${register_page}sendCode?purpose=${status}`, sentData)
         .then(res => {
@@ -21,7 +21,7 @@ export const checkNumberFunction = (phoneNumber: string, setCode: (value: any) =
 }
 
 export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any, isRegtered: boolean) => {
-    const setData = {phoneNumber: phoneNumber}
+    const setData = { phoneNumber: phoneNumber }
 
     axios.post(`${register_page}checkCode?code=${otpValue}`, setData)
         .then(() => {
@@ -82,16 +82,19 @@ export const registerMaster = async (
         password,
         language
     }: IRegister) => {
+    let files: any
     const formData = new FormData();
-    let files: any = {
-        uri: img.uri,
-        name: img.fileName,
-        type: img.mimeType,
-    };
+    if (img) {
+        files = {
+            uri: img.uri,
+            name: img.fileName,
+            type: img.mimeType,
+        };
+    }
     formData.append("image", img ? files : null);
 
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
-    const url = `${register_page}master?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${nickname ? `&nickname=${encodeURIComponent(nickname)}&lang=${language}` : ''}&phoneNumber=${formattedPhoneNumber}&ROLE=${encodeURIComponent(role)}`;
+    const url = `${register_page}master?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${nickname ? `&nickname=${encodeURIComponent(nickname)}` : ''}&phoneNumber=${formattedPhoneNumber}&ROLE=${encodeURIComponent(role)}&lang=${language}`;
 
     await axios.post(url, formData, {
         headers: {
@@ -114,13 +117,16 @@ export const registerMaster = async (
     });
 }
 
-export const registerClient = async ({firstName, lastName, phoneNumber, img, setData, password, language}: any) => {
+export const registerClient = async ({ firstName, lastName, phoneNumber, img, setData, password, language }: any) => {
+    let files: any
     const formData = new FormData();
-    let files: any = {
-        uri: img.uri,
-        name: img.fileName,
-        type: img.mimeType,
-    };
+    if (img) {
+        files = {
+            uri: img.uri,
+            name: img.fileName,
+            type: img.mimeType,
+        };
+    }
     formData.append("image", img ? files : null);
 
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;

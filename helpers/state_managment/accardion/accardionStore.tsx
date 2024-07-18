@@ -1,10 +1,12 @@
 import { create } from "zustand";
 interface AccardionStoreState{
+    mainExpend:boolean
     expanded:boolean,
     expanded2:boolean,
     expanded3:boolean,
     genderIndex:boolean,
     isSelected:boolean,
+    setMainExpend:(val:boolean)=>void,
     setExpanded:(val:boolean)=>void,
     setGenderIndex:(val:boolean)=>void,
     setSelection:(val:boolean)=>void,

@@ -4,7 +4,7 @@ import {
   getRegion,
   getRegionId,
 } from "@/helpers/api-function/profile/personalData";
-import useProfileStore from "@/helpers/state_managment/client/clientEditStore";
+import useProfileStore, { RouteData } from "@/helpers/state_managment/client/clientEditStore";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { RootStackParamList } from "@/type/root";
@@ -42,7 +42,7 @@ const ProfileScreen = () => {
     }, [])
   );
 
-  const handlePress = (key: string) => {
+  const handlePress = (key: RouteData) => {
     setRoute(key);
     navigation.navigate(
       "(client)/(profile)/(profileEdit)/(editPages)/editPage"
@@ -53,7 +53,7 @@ const ProfileScreen = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("Никнейм")}
+        onPress={() => handlePress({id: 1, value: "Никнейм"})}
       >
         <Text style={styles.label}>Никнейм</Text>
         <View style={styles.itemMenu}>
@@ -67,7 +67,7 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("Имя Фамилия")}
+        onPress={() => handlePress({id: 2, value: "Имя Фамилия"})}
       >
         <Text style={styles.label}>Имя Фамилия</Text>
         <View style={styles.itemMenu}>
@@ -96,7 +96,7 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("Профессия")}
+        onPress={() => handlePress({id: 3, value: "Профессия"})}
       >
         <Text style={styles.label}>Профессия</Text>
         <View style={styles.itemMenu}>
@@ -110,7 +110,7 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("Номер телефона")}
+        onPress={() => handlePress({id: 4, value: "Номер телефона"})}
       >
         <Text style={styles.label}>Номер телефона</Text>
         <View style={styles.itemMenu}>
@@ -124,7 +124,7 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("Регион и Город")}
+        onPress={() => handlePress({id: 5, value: "Регион и Город"})}
       >
         <Text style={styles.label}>Регион</Text>
         <View style={styles.itemMenu}>
@@ -138,7 +138,7 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("Регион и Город")}
+        onPress={() => handlePress({id: 6, value: "Регион и Город"})}
       >
         <Text style={styles.label}>Город</Text>
         <View style={styles.itemMenu}>
@@ -152,7 +152,7 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("Телеграм")}
+        onPress={() => handlePress({id: 6, value: "Телеграм"})}
       >
         <Text style={styles.label}>Телеграм</Text>
         <View style={styles.itemMenu}>
