@@ -2,8 +2,8 @@ import Constants from 'expo-constants';
 // const base_url = Constants.manifest.extra.eas.API_BASE_URL;
 
 // swagger url
-// export const base_url: string = 'http://45.67.35.86:8080/' ;
-export const base_url: string = 'http://134.122.77.107:8080/';
+export const base_url: string = 'https://app.bookers.one/';
+// export const base_url: string = 'http://134.122.77.107:8080/';
 // export const base_url: string = 'http://192.168.0.126/'; 
 export const getMe = `${base_url}user/me`
 export const getMeID = `${base_url}user/get/me/`

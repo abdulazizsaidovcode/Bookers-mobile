@@ -6,7 +6,7 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import { useNavigation } from '@react-navigation/native';
 import { useFocusEffect } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
-import {getClientOrMaster} from "@/constants/storage";
+import { getClientOrMaster } from "@/constants/storage";
 
 const CheckPinOnCome: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
@@ -69,7 +69,7 @@ const CheckPinOnCome: React.FC = () => {
         }
     };
 
-    const handleContinue = () => {
+    const handleContinue = async () => {
         // await SecureStore.deleteItemAsync("number");
         // await AsyncStorage.removeItem("registerToken");
         // await SecureStore.deleteItemAsync("password");
