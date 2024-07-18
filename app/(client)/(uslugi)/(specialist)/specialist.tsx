@@ -9,10 +9,14 @@ import LocationInput from '@/app/locationInput';
 import { router, useFocusEffect } from 'expo-router';
 import { postClientFilter } from '@/helpers/api-function/uslugi/uslugi';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
+import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
+import useGetMeeStore from '@/helpers/state_managment/getMee';
 
 
 const Specialist = () => {
   const { allCategory, setSelectedServiceId } = ClientStory();
+  const { setExpanded,setGenderIndex,setSelection} = useAccardionStore();
+  const { userLocation, setUserLocation } = useGetMeeStore();
   const clientData = [
     {
       imageUrl: 'https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1200,h_630/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/tsah7c9evnal289z5fig/IMG%20Worlds%20of%20Adventure%20Admission%20Ticket%20in%20Dubai%20-%20Klook.jpg',
@@ -29,7 +33,7 @@ const Specialist = () => {
   
   useFocusEffect(
     React.useCallback(() => {
-      postClientFilter('',true, 3,2,38.8472092,65.796276);
+      postClientFilter(`${setSelectedServiceId}`,setGenderIndex, setExpanded,userLocation.coords.latitude,userLocation.coords.longitude);
       return () => {};
     },[])
   );

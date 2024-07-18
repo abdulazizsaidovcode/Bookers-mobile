@@ -3,6 +3,8 @@ import AccordionFree from '@/components/accordions/accardionFree';
 import AccardionSlider from '@/components/accordions/accardionSlider';
 import AccardionSliderTwo from '@/components/accordions/accardionSliderTwo';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
@@ -11,7 +13,12 @@ import tw from 'tailwind-react-native-classnames';
 
 const Hair = () => {
     const router = useRouter(); // Initialize the useRouter hook
-    const [isSelected, setSelection] = useState(false);
+    // const [isSelected, setSelection] = useState(false);
+    const {isSelected} = useAccardionStore()
+    const { allCategory, setSelectedServiceId } = ClientStory();
+
+    console.log(allCategory);
+    
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -32,6 +39,7 @@ const Hair = () => {
                             title="Подобрать мастера"
                             onPress={() => router.push('(client)/(uslugi)/(specialist)/specialist')}
                             isDisebled={!isSelected} // Disable button if !isSelected
+                            
                         />
                     </View>
                 </View>

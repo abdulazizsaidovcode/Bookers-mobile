@@ -59,7 +59,6 @@ const Uslugi = () => {
       name={item.name}
       distanceMasterCount={item.distanceMasterCount}
       onPress={() => {
-        console.log('Selected Service ID:', item.id); // Log the selected service ID
         setSelectedServiceId(item.id);
         router.push(`/(hairHealth)/hair`);
       }}
