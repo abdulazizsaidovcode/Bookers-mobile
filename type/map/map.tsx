@@ -1,5 +1,4 @@
 export interface MasterStoreTypes {
     masterLocation: string,
-    setMasterLocation: 
-    
+    setMasterLocation: any
 }
