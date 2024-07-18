@@ -7,7 +7,7 @@ import CommunitySlider from '../communiytSlider/communitySlider';
 
 interface AccordionItemProps {
     title: string;
-    onValueChange: (value: boolean) => void;
+    onValueChange?: (value: boolean) => void;
 }
 
 // Platform uchun LayoutAnimation to'g'ri ishlashi uchun
@@ -27,7 +27,7 @@ const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title, onValueChange
 
     const handleCheckboxChange = (newValue: boolean) => {
         setSelection(newValue);
-        onValueChange(newValue);
+        onValueChange:(newValue);
     };
 
     return (
