@@ -16,7 +16,7 @@ interface Service {
   onPress: () => void;
 }
 
-const ServiceCard: React.FC<Service> = ({ name, distanceMasterCount, onPress }) => {
+const ServiceCard: React.FC<Service> = ({ id, name, distanceMasterCount, onPress }) => {
   const staticIcon: any = "eye";
   return (
     <TouchableOpacity style={tw`w-1/2 px-2 py-2`} activeOpacity={0.8} onPress={onPress}>
@@ -43,14 +43,14 @@ const Uslugi = () => {
     }, [])
   );
 
+  console.log(allCategory);
+
   useFocusEffect(
     React.useCallback(() => {
       getAllCategory();
       return () => {};
     }, [userLocation])
   );
-
-  
 
   const renderItem = ({ item }: { item: Service }) => (
     <ServiceCard
@@ -59,7 +59,7 @@ const Uslugi = () => {
       name={item.name}
       distanceMasterCount={item.distanceMasterCount}
       onPress={() => {
-        setSelectedServiceId(item.id); // Store the selected service ID
+        setSelectedServiceId(item.id);
         router.push(`/(hairHealth)/hair`);
       }}
     />

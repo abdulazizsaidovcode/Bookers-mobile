@@ -54,7 +54,7 @@ export const putPersonalData = async ({
   if (setCity && setRegion) {
     try {
       const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
-      const response = await axios.put(`${base_url}user`, Data, config);
+      const response = await axios.put(`${base_url}user`, Data, config ? config : {});
 
       if (response.data.success) {
         Toast.show("Sizning profilingiz yangilandi", Toast.SHORT);
@@ -75,7 +75,7 @@ export const putPersonalData = async ({
 export const getAge = async (setData: (data: any) => void) => {
   try {
     const config = await getConfig();
-    const response = await axios.get(`${base_url}age`, config);
+    const response = await axios.get(`${base_url}age`, config ? config : {});
 
     if (response.data.success) {
       setData(response.data.boy.map((item: any) => {
@@ -100,7 +100,7 @@ export const getAgeId = async (id: string | number, setData: (data: any | null) 
 
   try {
     const config = await getConfig();
-    const response = await axios.get(`${base_url}age/${id}`, config);
+    const response = await axios.get(`${base_url}age/${id}`, config ? config : {});
 
     if (response.data.success) {
       setData({ key: response.data.body.id, value: response.data.body.ageRange });
@@ -116,7 +116,7 @@ export const getAgeId = async (id: string | number, setData: (data: any | null) 
 export const getRegion = async (setData: (data: any | null) => void) => {
   try {
     const config = await getConfig();
-    const response = await axios.get(`${base_url}region`, config);
+    const response = await axios.get(`${base_url}region`, config ? config : {});
 
     if (response.data.success) {
       setData(response.data.body);
@@ -137,7 +137,7 @@ export const getRegionId = async (id: string | number, setData: (data: any | nul
 
   try {
     const config = await getConfig();
-    const response = await axios.get(`${base_url}region/${id}`, config);
+    const response = await axios.get(`${base_url}region/${id}`, config ? config : {});
 
     if (response.data.success) {
       setData(response.data.body);
@@ -154,7 +154,7 @@ export const getDistrict = async (regionId: string | number, setData: (data: any
   console.log("Request sent for districts");
   try {
     const config = await getConfig();
-    const response = await axios.get(`${base_url}district?regionId=${regionId}`, config);
+    const response = await axios.get(`${base_url}district?regionId=${regionId}`, config ? config : {});
 
     if (response.data.success) {
       setData(response.data.body);
@@ -175,7 +175,7 @@ export const getDistrictId = async (id: string | number, setData: (data: any | n
 
   try {
     const config = await getConfig();
-    const response = await axios.get(`${base_url}district/${id}`, config);
+    const response = await axios.get(`${base_url}district/${id}`, config ? config : {});
 
     if (response.data.success) {
       setData(response.data.body);

@@ -54,7 +54,7 @@ const clientStore = create<Client>((set) => ({
     districtData: null,
     setDistrictData: (val: DistrictData[] | null) => set({districtData: val}),
     attachmentID: null,
-    setAttachmentID: (val: null | string) => set({attachmentID: val}),
+    setAttachmentID: (val: null | string | any) => set({attachmentID: val}),
     allClientsList: null,
     setAllClients: (val: AllClient[] | null) => set({allClientsList: val}),
     clientNotVisit: null,

@@ -29,8 +29,8 @@ export const setConfig = (): string | null =>
   (config.headers.Authorization = `Bearer ${getData()}`);
 
 export const getMee = async (setData: (val: any) => void) => {
-  const configs = await getConfig()
-  axios.get(getMe, configs)
+  const config = await getConfig()
+  axios.get(getMe, config ? config : {})
     .then((res) => {
       setData(res.data.body);
     })

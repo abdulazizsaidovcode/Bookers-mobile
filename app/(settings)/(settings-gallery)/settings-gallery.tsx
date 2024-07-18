@@ -29,7 +29,11 @@ const SettingsGallery: React.FC = () => {
   const mainPhotos = mainImageIndices.length > 0 ? mainImageIndices.map(index => images[index]).slice(0, 4) : [];
 
   const pickImageFromCamera = async () => {
-    await ImagePicker.requestCameraPermissionsAsync();
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== "granted") {
+      alert("Kamera ruyxati kerak!");
+      return;
+    }
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -43,7 +47,11 @@ const SettingsGallery: React.FC = () => {
   };
 
   const pickImageFromGallery = async () => {
-    await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Kamera ruyxati kerak!");
+      return;
+    }
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsMultipleSelection: true,

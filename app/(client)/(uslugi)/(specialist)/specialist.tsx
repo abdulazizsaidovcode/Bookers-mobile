@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, StatusBar, StyleSheet, Modal, Button } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StatusBar, StyleSheet, Modal, Button } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import Buttons from '@/components/(buttons)/button'; // Importing the Buttons component
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -8,9 +8,15 @@ import ClientCard from '@/components/(cliendCard)/cliendCard';
 import LocationInput from '@/app/locationInput';
 import { router, useFocusEffect } from 'expo-router';
 import { postClientFilter } from '@/helpers/api-function/uslugi/uslugi';
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
+import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
+import useGetMeeStore from '@/helpers/state_managment/getMee';
+import { useCommunitySlider } from '@/helpers/state_managment/communitySlider/communitySliderStore';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const Specialist = () => {
+
   const clientData = [
     {
       imageUrl: 'https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1200,h_630/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/tsah7c9evnal289z5fig/IMG%20Worlds%20of%20Adventure%20Admission%20Ticket%20in%20Dubai%20-%20Klook.jpg',
@@ -22,13 +28,6 @@ const Specialist = () => {
     },
     // ... Add more client data here
   ];
-
-  useFocusEffect(
-    React.useCallback(() => {
-      postClientFilter('',true, 3,2,38.8472092,65.796276);
-      return () => {};
-    },[])
-  );
 
   const handEnd = () =>{
     router.push('')

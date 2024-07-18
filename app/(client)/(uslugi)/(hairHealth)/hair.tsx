@@ -3,15 +3,50 @@ import AccordionFree from '@/components/accordions/accardionFree';
 import AccardionSlider from '@/components/accordions/accardionSlider';
 import AccardionSliderTwo from '@/components/accordions/accardionSliderTwo';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { useRouter } from 'expo-router';
+import { postClientFilter } from '@/helpers/api-function/uslugi/uslugi';
+import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
+import { useCommunitySlider } from '@/helpers/state_managment/communitySlider/communitySliderStore';
+import useGetMeeStore from '@/helpers/state_managment/getMee';
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
+import { useFocusEffect, useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, View, Text, StatusBar } from 'react-native';
+import { ScrollView, View, Text, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 
 const Hair = () => {
     const router = useRouter(); // Initialize the useRouter hook
-    const [isSelected, setSelection] = useState(false);
+    // const [isSelected, setSelection] = useState(false);
+    const { isSelected } = useAccardionStore();
+    const { allCategory, setSelectedServiceId ,selectedServiceId } = ClientStory();
+    const { genderIndex } = useAccardionStore();
+    const {  rating , value} = useCommunitySlider();
+    const { userLocation } = useGetMeeStore();
+
+    console.log("category", allCategory);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            const selected=selectedServiceId
+            const latitude = userLocation?.coords?.latitude || null;
+            const longitude = userLocation?.coords?.longitude || null;
+            postClientFilter(setSelectedServiceId,value, genderIndex, rating, latitude, longitude);
+            return () => { };
+        }, [setSelectedServiceId, rating, userLocation])
+    );
+
+    const handleButtonPress = () => {
+        console.log("reting",rating);
+        console.log("lat",userLocation.coords.latitude);
+        console.log("set", selectedServiceId);
+        console.log("index",genderIndex); 
+        console.log("value", value);
+        const latitude = userLocation?.coords?.latitude || null;
+        const longitude = userLocation?.coords?.longitude || null;
+        postClientFilter(selectedServiceId, value, genderIndex, rating, latitude, longitude);
+        router.push('(client)/(uslugi)/(specialist)/specialist');
+    };
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -30,7 +65,7 @@ const Hair = () => {
                     <View style={tw`mt-2 content-end`}>
                         <Buttons
                             title="Подобрать мастера"
-                            onPress={() => router.push('(client)/(uslugi)/(specialist)/specialist')}
+                            onPress={handleButtonPress}
                             isDisebled={!isSelected} // Disable button if !isSelected
                         />
                     </View>

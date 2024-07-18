@@ -1,53 +1,42 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager} from 'react-native';
-import {AntDesign} from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import CustomCheckbox from '../checkbox/checkbox';
 import tw from 'tailwind-react-native-classnames';
 import CommunitySlider from '../communiytSlider/communitySlider';
+import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
 
 interface AccordionItemProps {
     title: string;
 }
 
 // Platform uchun LayoutAnimation to'g'ri ishlashi uchun
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) UIManager.setLayoutAnimationEnabledExperimental(true)
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
-const AccardionSlider: React.FC<AccordionItemProps> = ({title}) => {
-    const [expanded, setExpanded] = useState(false);
-    const [isSelected, setSelection] = useState(false);
+const AccordionSlider: React.FC<AccordionItemProps> = ({ title }) => {
+    const {expanded,setExpanded,setSelection,isSelected}=useAccardionStore()
 
     const toggleExpand = () => {
-        // Animatsiya
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setExpanded(!expanded);
     };
-    return (
-        <View style={[styles.container]}>
-            {/* Sarlavha va belgi */}
-            <TouchableOpacity
-                style={styles.header}
-                onPress={toggleExpand}
-                activeOpacity={1}
-            >
-                <View style={styles.mainText}>
-                    <Text style={styles.headerText}>{title}</Text>
-                </View>
-                <AntDesign name={expanded ? 'down' : 'right'} size={20} color="#4F4F4F"/>
-            </TouchableOpacity>
 
-            {/* Agar accordion ochilgan bo'lsa, kontentni ko'rsatish */}
+    return (
+        <View style={styles.container}>
+            <TouchableOpacity style={styles.header} onPress={toggleExpand} activeOpacity={1}>
+                <Text style={styles.headerText}>{title}</Text>
+                <AntDesign name={expanded ? 'down' : 'right'} size={20} color="#4F4F4F" />
+            </TouchableOpacity>
             {expanded && (
                 <View style={styles.content}>
                     <View style={styles.communitySlider}>
-                        <CommunitySlider title="KM" textColor='#9C0A35'/>
+                        <CommunitySlider title="KM" textColor="#9C0A35" />
                     </View>
-                    <Text style={tw`p-3 mt-3`}>
-                        <CustomCheckbox
-                           title='не важно'
-                            value={isSelected}
-                            onValueChange={setSelection}
-                        />
-                    </Text>
+                    <View style={tw`p-3 mt-3`}>
+                        <CustomCheckbox title="не важно" value={isSelected} onValueChange={setSelection} />
+                    </View>
                 </View>
             )}
         </View>
@@ -62,20 +51,16 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: 'row',
-        width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 15,
         paddingHorizontal: 15,
-        backgroundColor: "#B9B9C9",
+        backgroundColor: '#B9B9C9',
         borderRadius: 8,
-    },
-    mainText: {
-        flexDirection: 'column',
     },
     headerText: {
         fontSize: 16,
-        fontWeight: "600",
+        fontWeight: '600',
         color: '#111',
     },
     content: {
@@ -86,24 +71,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginTop: -7,
     },
-    selectedGenderText: {
-        marginTop: 10,
-        fontSize: 16,
-        color: '#333',
-    },
-    radioButtonLabel: {
-        fontSize: 16,
-        color: '#333',
-        marginLeft: 10,
-    },
-    checkbox: {
-        alignSelf: 'center',
-    },
     communitySlider: {
-        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
 });
 
-export default AccardionSlider;
+export default AccordionSlider;

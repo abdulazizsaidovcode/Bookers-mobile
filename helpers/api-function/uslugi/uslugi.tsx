@@ -19,12 +19,14 @@ export const getAllCategory = async () => {
 export const postClientFilter = async (categoryId: any, gender?: boolean | null, nextToMe?: number | null, rating?: number | null, lat: number | null, lng: number | null) => {
   try {
     const config = await getConfig();
-    const { data } = await axios.post(`${getClient_filter}`, { categoryId, gender, nextToMe, rating, lat, lng }, config);
+    const postData = { categoryId, gender, nextToMe, rating, lat, lng };
+    console.log('Data being sent to backend:', postData);
+    const { data } = await axios.post(`${getClient_filter}`, postData, config);
+    console.log('Response data:', data);
     if (data.success) {
-      console.log(data);
-
+      console.log('Success response data:', data);
     }
   } catch (error) {
-    console.log(error);
+    console.log('Error:', error);
   }
-}
+};
