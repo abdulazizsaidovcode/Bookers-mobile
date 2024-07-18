@@ -83,7 +83,7 @@ export const worktime_get = `${base_url}workday/time/time/`
 export const client_statistics: string = `${base_url}user/master/client-count-by-status`
 export const client_address_book: string = `${base_url}user/master/client-addressBooks`
 export const client_address_book_search: string = `${base_url}client/search/for/from/contact?name=`
-export const client_address_book_update: string = `${base_url}client/`
+export const client_address_book_update: string = `${base_url}client/master/`
 export const client_address_book_create: string = `${base_url}user/add-client-from-address-book`
 export const master_client_create: string = `${base_url}user/create-client-by-master`
 export const master_client_all_list: string = `${base_url}user/master/all-client`
