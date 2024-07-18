@@ -51,9 +51,7 @@ const InstallPin: React.FC = () => {
     };
 
     const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
-        if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) {
-            inputs.current[index - 1].focus();
-        }
+        if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) inputs.current[index - 1].focus();
     };
 
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
@@ -61,8 +59,8 @@ const InstallPin: React.FC = () => {
     const handleContinue = async () => {
         try {
             await AsyncStorage.setItem('otp', otp.join(''));
-            // Handle the continue action (navigate to the next page)
             navigation.navigate('(auth)/(setPinCode)/checkInstalledPin');
+            setOtp(['', '', '', ''])
         } catch (error) {
             console.log('Failed to save OTP to storage', error);
         }
