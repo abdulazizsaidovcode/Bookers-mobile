@@ -88,8 +88,21 @@ const CreatingClient = () => {
 
     useEffect(() => {
         if (refreshing) {
-            getAgeList(setAgeData)
-            getRegionList(setRegionData)
+            if (regionData) {
+                const transformedRegion = regionData.map(item => ({
+                    key: item.id,
+                    value: item.name
+                }));
+                setRegions(transformedRegion)
+            }
+
+            if (districtData) {
+                const transformedDistrict = districtData.map(item => ({
+                    key: item.id,
+                    value: item.name
+                }));
+                setDistricts(transformedDistrict)
+            }
         }
     }, [refreshing]);
 
