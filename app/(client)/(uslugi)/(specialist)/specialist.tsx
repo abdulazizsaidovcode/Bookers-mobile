@@ -16,10 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const Specialist = () => {
-  const { allCategory, setSelectedServiceId } = ClientStory();
-  const {setGenderIndex,} = useAccardionStore();
-  const {setRating,setValue} = useCommunitySlider();
-  const { userLocation,} = useGetMeeStore();
+
   const clientData = [
     {
       imageUrl: 'https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1200,h_630/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/tsah7c9evnal289z5fig/IMG%20Worlds%20of%20Adventure%20Admission%20Ticket%20in%20Dubai%20-%20Klook.jpg',
@@ -31,16 +28,6 @@ const Specialist = () => {
     },
     // ... Add more client data here
   ];
-
-  console.log( "category" , allCategory);
-  
-  useFocusEffect(
-    React.useCallback(() => {
-      postClientFilter(`${setSelectedServiceId}`,setGenderIndex,setValue,setRating,userLocation.coords.latitude,userLocation.coords.longitude,);
-      (categoryId: any, gender?: boolean | null, nextToMe?: number | null, rating?: number | null, lat: number | null, lng: number | null)
-      return ()=>{};
-    },[])
-  );
 
   const handEnd = () =>{
     router.push('')
