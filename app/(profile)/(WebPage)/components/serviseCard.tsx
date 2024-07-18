@@ -12,7 +12,7 @@ const UserProfileCard: React.FC = () => {
 
     useCallback(() => {
       getAddress(setAddress)
-      return () => {}
+      return () => { }
     }, [])
   )
 
@@ -33,13 +33,9 @@ const UserProfileCard: React.FC = () => {
     <View style={styles.card}>
       <View style={styles.header}>
         <Image
-          source={{
-            uri: getme
-              ? getme.attachmentId
-                ? getFile + getme.attachmentId
-                : "https://static.thenounproject.com/png/363639-200.png"
-              : "noData"
-          }} // Profil rasm manzili
+          source={getme && getme.attachmentId ? {
+            uri: getme.attachmentId
+          } : require('../../../../assets/avatar.png')} // Profil rasm manzili
           style={styles.avatar}
         />
         <View style={styles.headerInfo}>
@@ -56,8 +52,8 @@ const UserProfileCard: React.FC = () => {
               ? getme.gender === "MALE"
                 ? "Erkak master"
                 : getme.gender === "FEMALE"
-                ? "Женский мастер"
-                : ""
+                  ? "Женский мастер"
+                  : ""
               : "No data"}
           </Text>
           <Text style={styles.phone}>
@@ -77,16 +73,16 @@ const UserProfileCard: React.FC = () => {
       <View style={styles.body}>
         <View style={styles.buttons}>
           {
-            specialization ? specialization.map((item: any) => 
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>{item.name}</Text>
-          </TouchableOpacity>
-            ) : 
-            <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Malumot topilmadi</Text>
-          </TouchableOpacity>
+            specialization ? specialization.map((item: any) =>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>{item.name}</Text>
+              </TouchableOpacity>
+            ) :
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Malumot topilmadi</Text>
+              </TouchableOpacity>
 
-          } 
+          }
         </View>
         <Text style={styles.address}>{(address && address.homeNumber && address.street) ? `Street: ${address.street}, home: ${address.homeNumber} ` : "Address is not found"}</Text>
       </View>
