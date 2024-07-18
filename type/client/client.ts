@@ -222,3 +222,17 @@ export const clientsData: ClientData[] = [
     {id: 5, name: 'Максуд Акбаров', phone: '+998 93 455-45-67', image: 'https://via.placeholder.com/150'},
     {id: 6, name: 'Нодир Расулов', phone: '+998 93 874-63-90', image: 'https://via.placeholder.com/150'},
 ];
+
+export interface ClientUpdateProfileData {
+        "id": string | null,
+        "nickName": string | null,
+        "firstName": string | null,
+        "lastName": string | null,
+        "phoneNumber": string | null,
+        "birthDate": string | null,
+        "gender": true,
+        "telegram": string | null,
+        "specialist": string | null,
+        "districtId": number | null,
+        "attachmentId": string | null
+}
