@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Alert } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { AntDesign } from '@expo/vector-icons';
+import { useCommunitySlider } from '@/helpers/state_managment/communitySlider/communitySliderStore';
 
 const { width } = Dimensions.get('window');
 
@@ -10,23 +11,22 @@ interface DistanceSliderProps {
     textColor: string; // yangi props qo'shildi
 }
 
-const CommunitySliderTwo: React.FC<DistanceSliderProps> = ({ title, textColor }) => { // default rang berildi
-    const [value, setValue] = useState(1.5);
-
+const CommunitySlider: React.FC<DistanceSliderProps> = ({ title, textColor }) => { 
+    const {rating,setRating}=useCommunitySlider()
     return (
         <View style={styles.container}>
             <View style={styles.value}>
                 <Text style={{ fontSize: 16, color: textColor }} >
                     <AntDesign name="star" size={18} color="#9C0A35" />
-                    {value.toFixed(1)} {title}</Text>
+                    {rating.toFixed(0)} {title}</Text>
             </View>
             <Slider
                 style={styles.slider}
                 minimumValue={0}
                 maximumValue={5}
-                step={0.1}
-                value={value}
-                onValueChange={setValue}
+                step={1}
+                value={rating}
+                onValueChange={setRating}
                 minimumTrackTintColor="#8B1A1A"
                 maximumTrackTintColor="#fff"
                 thumbTintColor="#8B1A1A"
@@ -58,4 +58,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CommunitySliderTwo;
+export default CommunitySlider;

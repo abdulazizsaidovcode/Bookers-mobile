@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Alert } from 'react-native';
 import Slider from '@react-native-community/slider';
+import { useCommunitySlider } from '@/helpers/state_managment/communitySlider/communitySliderStore';
 
 const { width } = Dimensions.get('window');
 
@@ -9,9 +10,8 @@ interface DistanceSliderProps {
     textColor: string; // yangi props qo'shildi
 }
 
-const CommunitySlider: React.FC<DistanceSliderProps> = ({ title, textColor }) => { // default rang berildi
-    const [value, setValue] = useState(1.5);
-
+const CommunitySlider: React.FC<DistanceSliderProps> = ({ title, textColor }) => { 
+    const {value,setValue}=useCommunitySlider()
     return (
         <View style={styles.container}>
             <View style={styles.value}>
@@ -20,8 +20,8 @@ const CommunitySlider: React.FC<DistanceSliderProps> = ({ title, textColor }) =>
             <Slider
                 style={styles.slider}
                 minimumValue={0}
-                maximumValue={5}
-                step={0.1}
+                maximumValue={50}
+                step={1}
                 value={value}
                 onValueChange={setValue}
                 minimumTrackTintColor="#8B1A1A"
