@@ -17,12 +17,12 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title, onValueChange }) => {
-    const {expanded,setExpanded,setSelection,isSelected}=useAccardionStore()
+    const {setSelection,isSelected,expanded3,setExpended3}=useAccardionStore()
 
     const toggleExpand = () => {
         // Animatsiya
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        setExpanded(!expanded);
+        setExpended3(!expanded3);
     };
 
     const handleCheckboxChange = (newValue: boolean) => {
@@ -40,9 +40,9 @@ const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title, onValueChange
                 <View style={styles.mainText}>
                     <Text style={styles.headerText}>{title}</Text>
                 </View>
-                <AntDesign name={expanded ? 'down' : 'right'} size={20} color="#4F4F4F" />
+                <AntDesign name={expanded3 ? 'down' : 'right'} size={20} color="#4F4F4F" />
             </TouchableOpacity>
-            {expanded && (
+            {expanded3 && (
                 <View style={styles.content}>
                     <View style={styles.communitySlider}>
                         <CommunitySliderTwo title='+' textColor='#9C0A35' />
