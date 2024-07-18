@@ -6,6 +6,7 @@ import RadioForm, {
   RadioButtonLabel,
 } from "react-native-simple-radio-button";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
+import useProfileStore from "@/helpers/state_managment/client/clientEditStore";
 
 const radioProps = [
   { label: "Erkak", value: "MALE", isTrue: true },
@@ -14,10 +15,12 @@ const radioProps = [
 
 const SelectGender = () => {
   const { getMee } = useGetMeeStore();
+  const {updateProfileField} = useProfileStore()
   const [genderIndex, setGenderIndex] = useState<string>(getMee && getMee.gender ? getMee.gender : "");
 
   const onPressRadioButton = (key: string) => {
     setGenderIndex(key);
+    updateProfileField("gender", key)
   };
 
   return (

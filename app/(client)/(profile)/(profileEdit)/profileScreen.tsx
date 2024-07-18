@@ -4,10 +4,13 @@ import {
   getRegion,
   getRegionId,
 } from "@/helpers/api-function/profile/personalData";
+import useProfileStore from "@/helpers/state_managment/client/clientEditStore";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
+import { RootStackParamList } from "@/type/root";
 import { AntDesign } from "@expo/vector-icons";
-import { useFocusEffect } from "expo-router";
+import { NavigationProp } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "expo-router";
 import React, { useCallback, useState } from "react";
 import {
   View,
@@ -16,16 +19,23 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+type SettingsScreenNavigationProp = NavigationProp<
+  RootStackParamList,
+  "(client)/(profile)/(profileEdit)/profileScreen"
+>;
 
 const ProfileScreen = () => {
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
   const { getMee } = useGetMeeStore();
+  const { setRoute, birthDate, districtId, firstName, job, lastName, nickName, phoneNumber, telegram, regionId } = useProfileStore();
   const [region, setRegion] = useState<any | null>(null);
   const [city, setCity] = useState<any>(null);
 
   useFocusEffect(
     useCallback(() => {
-      getRegionId(getMee && getMee.regionId ? getMee.regionId : "", setRegion);
+      getRegionId(regionId ? regionId : getMee && getMee.regionId ? getMee.regionId : "", setRegion);
       getDistrictId(
+        districtId ? districtId :
         getMee && getMee.districtId ? getMee.districtId : "",
         setCity
       );
@@ -33,19 +43,22 @@ const ProfileScreen = () => {
   );
 
   const handlePress = (key: string) => {
-    console.log(`${key} pressed`);
+    setRoute(key);
+    navigation.navigate(
+      "(client)/(profile)/(profileEdit)/(editPages)/editPage"
+    );
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("nickName")}
+        onPress={() => handlePress("Никнейм")}
       >
         <Text style={styles.label}>Никнейм</Text>
         <View style={styles.itemMenu}>
           <Text style={styles.value}>
-            {getMee && getMee.nickname ? getMee.nickname : "Нет данных"}
+            {nickName ? nickName : getMee && getMee.nickname ? getMee.nickname : "Нет данных"}
           </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>
@@ -54,13 +67,13 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("firstName")}
+        onPress={() => handlePress("Имя Фамилия")}
       >
         <Text style={styles.label}>Имя Фамилия</Text>
         <View style={styles.itemMenu}>
           <Text style={styles.value}>
-            {getMee && getMee.firstName ? getMee.firstName : "Нет данных"}{" "}
-            {getMee && getMee.lastName ? getMee.lastName : ""}
+            {firstName ? firstName : getMee && getMee.firstName ? getMee.firstName : "Нет данных"}{" "}
+            {lastName ? lastName : getMee && getMee.lastName ? getMee.lastName : ""}
           </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>
@@ -69,12 +82,12 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("birthdate")}
+        // onPress={() => handlePress("birthdate")}
       >
         <Text style={styles.label}>Дата рождения</Text>
         <View style={styles.itemMenu}>
           <Text style={styles.value}>
-            {getMee && getMee.birthDate ? getMee.birthDate : "Нет данных"}
+            {birthDate ? birthDate : getMee && getMee.birthDate ? getMee.birthDate : "Нет данных"}
           </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>
@@ -83,12 +96,12 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("specialist")}
+        onPress={() => handlePress("Профессия")}
       >
         <Text style={styles.label}>Профессия</Text>
         <View style={styles.itemMenu}>
           <Text style={styles.value}>
-            {getMee && getMee.job ? getMee.job : "Нет данных"}
+            {job ? job : getMee && getMee.job ? getMee.job : "Нет данных"}
           </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>
@@ -97,12 +110,12 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("phoneNumber")}
+        onPress={() => handlePress("Номер телефона")}
       >
         <Text style={styles.label}>Номер телефона</Text>
         <View style={styles.itemMenu}>
           <Text style={styles.value}>
-            {getMee && getMee.phoneNumber ? getMee.phoneNumber : "Нет данных"}
+            {phoneNumber ? phoneNumber : getMee && getMee.phoneNumber ? getMee.phoneNumber : "Нет данных"}
           </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>
@@ -111,11 +124,13 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("regionId")}
+        onPress={() => handlePress("Регион и Город")}
       >
         <Text style={styles.label}>Регион</Text>
         <View style={styles.itemMenu}>
-          <Text style={styles.value}>{region && region.name ? region.name : "Нет данных"}</Text>
+          <Text style={styles.value}>
+            {region && region.name ? region.name : "Нет данных"}
+          </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>
       </TouchableOpacity>
@@ -123,11 +138,13 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("districtId")}
+        onPress={() => handlePress("Регион и Город")}
       >
         <Text style={styles.label}>Город</Text>
         <View style={styles.itemMenu}>
-          <Text style={styles.value}>{city && city.name ? city.name : "Нет данных"}</Text>
+          <Text style={styles.value}>
+            {city && city.name ? city.name : "Нет данных"}
+          </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>
       </TouchableOpacity>
@@ -135,12 +152,12 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress("telegram")}
+        onPress={() => handlePress("Телеграм")}
       >
         <Text style={styles.label}>Телеграм</Text>
         <View style={styles.itemMenu}>
           <Text style={styles.value}>
-            {getMee && getMee.telegram ? getMee.telegram : "Нет данных"}
+            {telegram ? telegram : getMee && getMee.telegram ? getMee.telegram : "Нет данных"}
           </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>

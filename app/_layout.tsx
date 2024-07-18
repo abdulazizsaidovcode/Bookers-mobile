@@ -135,6 +135,7 @@ import ClientCameraInfo from "./(auth)/(register)/(clientInformations)/getPhoto"
 import CardClient from "./(client)/(profile)/(card)/card";
 import PaymentClient from "./(client)/(profile)/(payment)/payment";
 import SalonLocation from "./(client)/(map)/(salon-location)/salon-location";
+import EditProfilePage from "./(client)/(profile)/(profileEdit)/editPages/editPage";
 
 
 
@@ -802,6 +803,11 @@ function RootLayoutNav() {
             /><Stack.Screen
             name="(client)/(profile)/(profileEdit)/profileEdit"
             component={ProfileEdit}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="(client)/(profile)/(profileEdit)/(editPages)/editPage"
+            component={EditProfilePage}
             options={{ headerShown: false }}
           />
           <Stack.Screen
