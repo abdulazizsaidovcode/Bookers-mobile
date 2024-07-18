@@ -211,11 +211,16 @@ const Canceledentries = () => {
         toggleModal={() => setToggle(!toggle)}
         btnWhiteText="Отмена"
         btnRedText="Да"
+        children={
+          <>
+            <FontAwesome name="trash" size={80} color="#9c0935" />
+            <Text style={tw`text-white my-5`}>
+              Удалить все прошедшие сеансы?
+            </Text>
+          </>
+        }
         isFullBtn={true}
-      >
-        <FontAwesome name="trash" size={80} color="#9c0935" />
-        <Text style={tw`text-white my-5`}>Удалить все прошедшие сеансы?</Text>
-      </CenteredModal>
+      />
     </View>
   );
 };
