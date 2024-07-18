@@ -8,8 +8,6 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import React, { useEffect, useState, useCallback, Children } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { List } from 'react-native-paper';
-import axios from 'axios';
-import { config } from '@/helpers/token';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { useSheduleData } from '@/helpers/state_managment/schedule/schedule';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
