@@ -5,20 +5,19 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from "react-native-simple-radio-button";
-import clientStore from "@/helpers/state_managment/client/clientStore";
+import useGetMeeStore from "@/helpers/state_managment/getMee";
 
 const radioProps = [
-  { label: "Erkak", value: 0 },
-  { label: "Ayol", value: 1 },
+  { label: "Erkak", value: "MALE", isTrue: true },
+  { label: "Ayol", value: "FEMALE", isTrue: false },
 ];
 
 const SelectGender = () => {
+  const { getMee } = useGetMeeStore();
+  const [genderIndex, setGenderIndex] = useState<string>(getMee && getMee.gender ? getMee.gender : "");
 
-  const [genderIndex, setGenderIndex] = useState<number>(-1);
-  const { attachmentID } = clientStore();
-
-  const onPressRadioButton = (index: number) => {
-    setGenderIndex(index);
+  const onPressRadioButton = (key: string) => {
+    setGenderIndex(key);
   };
 
   return (
@@ -29,7 +28,7 @@ const SelectGender = () => {
             <RadioButtonInput
               obj={obj}
               index={i}
-              isSelected={genderIndex === i}
+              isSelected={genderIndex === obj.value}
               onPress={onPressRadioButton}
               buttonInnerColor={"#9C035A"}
               buttonOuterColor={"#9C035A"}
@@ -58,7 +57,7 @@ export default SelectGender;
 const styles = StyleSheet.create({
   content: {
     backgroundColor: "#B9B9C9",
-    borderRadius: 8,
+    borderRadius: 12,
     paddingVertical: 15,
     paddingHorizontal: 10,
   },

@@ -5,6 +5,7 @@ export interface GetMee {
     nickname: string,
     phoneNumber: string,
     gender: string,
+    job: string | null
     telegram: string | null,
     instagram: string | null,
     ageId: string | null,
