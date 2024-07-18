@@ -14,7 +14,7 @@ const Health: React.FC = () => {
         <Text style={styles.headerText}>Подберите критерии услуг</Text>
         <AccordionFree title="Пол мастера" />
         <AccordionSlider title="Рядом со мной" />
-        <AccordionSliderTwo title="Рейтинг" />
+        <AccordionSliderTwo title="Рейтинг"   />
       </ScrollView>
       <Buttons title="Подобрать мастера" />
     </SafeAreaView>
