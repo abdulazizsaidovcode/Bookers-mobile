@@ -13,13 +13,12 @@ import tw from "tailwind-react-native-classnames";
 import { FontAwesome, FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { base_url } from "@/helpers/api";
+import { base_url, getFile } from "@/helpers/api";
 import moment from "moment";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-
 
 const Upcomingentries = () => {
   const navigation = useNavigation();
@@ -48,7 +47,7 @@ const Upcomingentries = () => {
       const config = await getConfig();
       const { data } = await axios.get(
         `${base_url}order/upcoming-sessions?status=UPCOMING_SESSIONS`,
-        config
+        config ? config : {}
       );
       setData(data.body);
     } catch (error) {
@@ -65,7 +64,7 @@ const Upcomingentries = () => {
       <View style={tw`flex-row items-center mb-4`}>
         <Image
           source={{
-            uri: `http://45.67.35.86:8080/attachment/getFile/${item.attachmentId}`,
+            uri: `${getFile}${item.attachmentId}`,
           }}
           style={tw`w-12 h-12 rounded-full mr-4`}
         />
@@ -120,12 +119,14 @@ const Upcomingentries = () => {
   );
 
   return (
-    <View style={[tw`flex-1 bg-gray-900 p-4 mt-5`, {backgroundColor: "#21212E"}]}>
-      <NavigationMenu name="Предстоящие записи"/>
+    <View
+      style={[tw`flex-1 bg-gray-900 p-4 mt-5`, { backgroundColor: "#21212E" }]}
+    >
+      <NavigationMenu name="Предстоящие записи" />
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item?.id}
       />
       <BottomModal
         isBottomModal={bottomModalNetwork}
