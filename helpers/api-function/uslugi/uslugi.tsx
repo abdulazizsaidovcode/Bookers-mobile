@@ -16,18 +16,19 @@ export const getAllCategory = async () => {
   }
 };
 
+// Client post filter
 export const postClientFilter = async (categoryId: any, gender?: boolean | null, nextToMe?: number | null, rating?: number | null, lat: number | null, lng: number | null) => {
   try {
     const config = await getConfig();
     const postData = { categoryId, gender, nextToMe, rating, lat, lng };
-    console.log('Data being sent to backend:', postData);
     const { data } = await axios.post(`${getClient_filter}`, postData, config);
-    console.log('Response data:', data);
     if (data.success) {
       ClientStory.getState().setClientData(data.body);
-      console.log('Success response data:', data);
     }
   } catch (error) {
     console.log('Error:', error);
   }
 };
+
+// Master search client 
+

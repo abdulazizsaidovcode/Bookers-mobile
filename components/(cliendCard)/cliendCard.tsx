@@ -32,15 +32,15 @@ const ClientCard: React.FC<ClientCardProps> = ({ salon,imageUrl, name, masterTyp
                     <Text style={tw`border border-gray-600 px-3 rounded-lg`}>{salon}</Text>
                     <Text style={tw`text-sm text-gray-600`}>{masterType}</Text>
                 </View>
-                <View style={tw`flex items-center ml-2`}>
+                <View style={tw`flex items-center ml-11`}>
                     <View style={tw`flex flex-row`}>
                         {starNumbers.map((num) => (
                             <FontAwesome
                                 key={num}
                                 name="star"
-                                size={24}
+                                size={20}
                                 color= 'red'
-                                style={tw`mx-1`}
+                                style={tw`ml-2`}
                             />
                         ))}
                     </View>
