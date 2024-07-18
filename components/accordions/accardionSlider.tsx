@@ -7,7 +7,6 @@ import CommunitySlider from '../communiytSlider/communitySlider';
 
 interface AccordionItemProps {
     title: string;
-    onValueChange: (value: boolean) => void;
 }
 
 // Platform uchun LayoutAnimation to'g'ri ishlashi uchun
@@ -15,9 +14,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-
-const AccardionSlider: React.FC<AccordionItemProps> = ({ title, onValueChange }) => {
-
+const AccordionSlider: React.FC<AccordionItemProps> = ({ title }) => {
     const [expanded, setExpanded] = useState(false);
     const [isSelected, setSelection] = useState(false);
 
@@ -25,12 +22,6 @@ const AccardionSlider: React.FC<AccordionItemProps> = ({ title, onValueChange })
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setExpanded(!expanded);
     };
-
-    const handleCheckboxChange = (newValue: boolean) => {
-        setSelection(newValue);
-        onValueChange(newValue);
-    };
-
 
     return (
         <View style={styles.container}>
@@ -41,16 +32,6 @@ const AccardionSlider: React.FC<AccordionItemProps> = ({ title, onValueChange })
             {expanded && (
                 <View style={styles.content}>
                     <View style={styles.communitySlider}>
-                        <CommunitySlider title="KM" textColor='#9C0A35' />
-                    </View>
-                    <Text style={tw`p-3 mt-3`}>
-                        <CustomCheckbox
-                            title='не важно'
-                            value={isSelected}
-                            onValueChange={handleCheckboxChange}
-                        />
-                    </Text>
-
                         <CommunitySlider title="KM" textColor="#9C0A35" />
                     </View>
                     <View style={tw`p-3 mt-3`}>
