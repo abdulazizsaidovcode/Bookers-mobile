@@ -99,12 +99,12 @@ export const delPhoto = async (
 ) => {
   const url = `${main_gallery}/${id}/attachmentIds`;
   try {
-    const config = await getConfig()
+    const config = await getConfig();
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        ...config.headers,
+        ...(config ? config.headers : {}),
       },
       body: JSON.stringify(attachmentIds),
     });
@@ -113,13 +113,14 @@ export const delPhoto = async (
     if (data.success) {
       fetchFullData(id, setFullData);
       fetchData(setData);
-      toggleModal()
+      toggleModal();
       Toast.show('Фото успешно удалено из галереи.', Toast.LONG);
     }
   } catch (error) {
     console.log(error);
   }
 };
+
 
 export const delGallery = async (id: number | null, setData: (data: GalleryData[]) => void, toggleModal: () => void, toggleCheckboxes: () => void) => {
   try {
