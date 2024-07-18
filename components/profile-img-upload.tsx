@@ -24,11 +24,13 @@ const ProfileImgUpload = (
     {
         attachmentID,
         editPin = false,
-        registerProfileImg
+        registerProfileImg,
+        setAttachmentId,
     }: {
         attachmentID?: string | null;
         editPin?: boolean;
         registerProfileImg?: string
+        setAttachmentId?: (data: string | null) => void
     }) => {
     const {setAttachmentID} = clientStore();
     const [image, setImage] = useState<string | null>(null);
@@ -62,7 +64,13 @@ const ProfileImgUpload = (
 
         if (!result.canceled) {
             setImage(result.assets[0].uri);
-            if (registerProfileImg) setAttachmentID(result.assets[0])
+            if (registerProfileImg) {
+                setAttachmentId ? (
+                    setAttachmentId(''),
+                    setAttachmentID("")
+                 ) : setAttachmentID(result.assets[0])
+            }
+
             else uploadImage(result.assets[0]);
         }
     };
@@ -83,7 +91,12 @@ const ProfileImgUpload = (
 
         if (!result.canceled) {
             setImage(result.assets[0].uri);
-            if (registerProfileImg) setAttachmentID(result.assets[0])
+            if (registerProfileImg) {
+                setAttachmentId ? (
+                    setAttachmentId(''),
+                    setAttachmentID("")
+                 ) : setAttachmentID(result.assets[0])
+            }
             else uploadImage(result.assets[0]);
         }
     };
@@ -91,7 +104,10 @@ const ProfileImgUpload = (
     // ======================= image delete un function =======================
     const deletePhoto = () => {
         setImage(null);
-        setAttachmentID("");
+        setAttachmentId ? (
+            setAttachmentId(''),
+            setAttachmentID("")
+         ) : setAttachmentID("");
         openDeleteModal();
     };
 
@@ -115,7 +131,10 @@ const ProfileImgUpload = (
             );
             if (response.data.success) {
                 Toast.show("Success", Toast.LONG);
-                setAttachmentID(response.data.body);
+                setAttachmentId ? (
+                    setAttachmentId(response.data.body),
+                    setAttachmentID(response.data.body)
+                 ) : setAttachmentID(response.data.body);
             } else Toast.show(response.data.message, Toast.LONG);
         } catch (err: any) {
             Toast.show(err.response.data.message, Toast.LONG);

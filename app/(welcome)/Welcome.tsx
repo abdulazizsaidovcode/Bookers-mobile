@@ -43,7 +43,7 @@ type SettingsScreenNavigationProp = NavigationProp<
 const Welcome = () => {
   const { number, setNumber } = numberSettingStore();
   const {getMee, setGetMee} = useGetMeeStore()
-  const navigation = useNavigation<SettingsScreenNavigationProp>();
+  const navigation = useNavigation<SettingsScreenNavigationProp | any>();
 
   useFocusEffect(
     useCallback(() => {
@@ -203,7 +203,7 @@ const Welcome = () => {
           {containsAllNumbers(uniqueNumbers) && (
             <View style={styles.buttonContainer2}>
               <Buttons title="Вперёд" onPress={() => {
-                navigation.navigate('(tabs)')
+                navigation.navigate('(tabs)/(master)')
                 registered()
                 postTariff('all')
               }} />

@@ -22,7 +22,20 @@ import * as SecureStore from 'expo-secure-store';
 import {getConfig} from '@/app/(tabs)/(master)/main';
 
 const CheckPin: React.FC = () => {
-    const {firstName, lastName, nickname, phoneNumber, role, setRole, img} = registerStory()
+    const {
+        firstName,
+        setFirstName,
+        lastName,
+        setLastName,
+        nickname,
+        setNickname,
+        phoneNumber,
+        setPhoneNumber,
+        role,
+        setRole,
+        img,
+        setImg
+    } = registerStory()
     const {language} = langstore()
 
     const inputs = useRef<TextInput[]>([]);
@@ -38,7 +51,7 @@ const CheckPin: React.FC = () => {
     const [isLogin, setIslogin] = useState<any>(false);
 
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
-    const enteredOtp = otp.join('');
+    let enteredOtp = otp.join('');
 
     useFocusEffect(
         useCallback(() => {
@@ -62,6 +75,13 @@ const CheckPin: React.FC = () => {
         if (tokenData) {
             authStorage(tokenData)
             handleContinue()
+
+            // input values tozalash uchun
+            setImg(null)
+            setLastName('')
+            setFirstName('')
+            setPhoneNumber('')
+            setNickname('')
         }
     }, [tokenData]);
 
@@ -69,8 +89,14 @@ const CheckPin: React.FC = () => {
         if (enteredOtp === storedOtp) {
             setIsCorrect(true);
             if (isLogin) {
-                if (role === 'ROLE_MASTER') navigation.navigate('(tabs)/(master)')
-                else if (role === 'ROLE_CLIENT') navigation.navigate('(tabs)/(client)')
+                if (role === 'ROLE_MASTER') {
+                    navigation.navigate('(tabs)/(master)')
+                    enteredOtp = ''
+                }
+                else if (role === 'ROLE_CLIENT') {
+                    navigation.navigate('(tabs)/(client)')
+                    enteredOtp =''
+                }
             }
         } else setIsCorrect(false)
     }, [isLogin])
@@ -93,8 +119,14 @@ const CheckPin: React.FC = () => {
         if (enteredOtp === storedOtp) {
             setIsCorrect(true);
 
-            if (role === 'ROLE_MASTER') navigation.navigate('(tabs)/(master)')
-            else if (role === 'ROLE_CLIENT') navigation.navigate('(tabs)/(client)')
+            if (role === 'ROLE_MASTER') {
+                navigation.navigate('(tabs)/(master)')
+                enteredOtp=''
+            }
+            else if (role === 'ROLE_CLIENT') {
+                navigation.navigate('(tabs)/(client)')
+                enteredOtp=''
+            }
         } else setIsCorrect(false)
     };
 
@@ -105,8 +137,14 @@ const CheckPin: React.FC = () => {
             SecureStore.setItemAsync('password', enteredOtp)
             setIslogin(true)
 
-            if (role === 'ROLE_MASTER') navigation.navigate('(tabs)/(master)')
-            else if (role === 'ROLE_CLIENT') navigation.navigate('(tabs)/(client)')
+            if (role === 'ROLE_MASTER') {
+                navigation.navigate('(tabs)/(master)')
+                enteredOtp=''
+            }
+            else if (role === 'ROLE_CLIENT') {
+                navigation.navigate('(tabs)/(client)')
+                enteredOtp=''
+            }
         } else {
             setIsCorrect(false);
             Toast.show("неверный пин-код", Toast.SHORT);

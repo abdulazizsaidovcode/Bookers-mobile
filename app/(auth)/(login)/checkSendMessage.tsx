@@ -1,11 +1,11 @@
-import { authLogin, checkCode } from '@/helpers/api-function/register/registrFC';
+import {authLogin, checkCode} from '@/helpers/api-function/register/registrFC';
 import registerStory from '@/helpers/state_managment/auth/register';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister';
-import { RootStackParamList } from '@/type/root';
-import { NavigationProp } from '@react-navigation/native';
-import { router, useFocusEffect, useNavigation } from 'expo-router';
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
+import {RootStackParamList} from '@/type/root';
+import {NavigationProp} from '@react-navigation/native';
+import {router, useFocusEffect, useNavigation} from 'expo-router';
+import React, {useState, useRef, useEffect, useCallback} from 'react';
+import {useTranslation} from 'react-i18next';
 import * as SecureStore from 'expo-secure-store';
 import Toast from 'react-native-simple-toast';
 
@@ -19,7 +19,7 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native';
-import { langstore } from '@/helpers/state_managment/lang/lang';
+import {langstore} from '@/helpers/state_managment/lang/lang';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/checkSendMessage'>;
 
@@ -27,21 +27,20 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/c
 const OtpInputExample: React.FC = () => {
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
     const inputs = useRef<TextInput[]>([]);
-    const { code, phoneNumber, otpValue, setOtpValue } = registerStory()
+    const {code, phoneNumber, otpValue, setOtpValue} = registerStory()
     const [response, setRespone] = useState<null | boolean>(null);
     const [messageResponse, setMessageResponse] = useState(false);
-    const { isRegtered } = isRegister()
+    const {isRegtered} = isRegister()
     const navigation = useNavigation<any>();
     const [roles, setRoles] = useState<string | null>(null);
-    const { language } = langstore();
+    const {language} = langstore();
     const [number, setNumber] = useState('');
-    const { setRole } = registerStory()
+    const {setRole} = registerStory()
 
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
     useEffect(() => {
         setIsDisabled(otpValue.some(digit => digit === ''));
-        console.log('Current OTP Value:', otpValue.join(''));
     }, [otpValue]);
 
     const handlePaste = (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
@@ -86,15 +85,19 @@ const OtpInputExample: React.FC = () => {
 
                 if (isRegtered) {
                     navigation.navigate("(auth)/(register)/(greetings)/greetingFirst");
+                    setOtpValue(['', '', '', ''])
                 } else {
                     if (parol !== null) {
                         if (roles == 'ROLE_MASTER') {
                             navigation.navigate('(tabs)/(master)');
+                            setOtpValue(['', '', '', ''])
                         } else if (roles == 'ROLE_CLIENT') {
                             navigation.navigate('(tabs)/(client)');
+                            setOtpValue(['', '', '', ''])
                         }
                     } else {
                         navigation.navigate("(auth)/(setPinCode)/installPin");
+                        setOtpValue(['', '', '', ''])
                     }
                 }
                 setRespone(false);
@@ -138,11 +141,8 @@ const OtpInputExample: React.FC = () => {
                     style={[styles.button, isDisabled && styles.disabledButton]}
                     disabled={isDisabled}
                     onPress={() => {
-                        if (isRegtered) {
-                            handlePress()
-                        } else {
-                            authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setRoles)
-                        }
+                        if (isRegtered) handlePress()
+                        else authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setRoles)
                     }}
                 >
                     <Text style={styles.buttonText}>{t("Confirm")}</Text>
