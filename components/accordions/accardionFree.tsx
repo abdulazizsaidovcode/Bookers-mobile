@@ -15,7 +15,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 
 const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
   const [expanded, setExpanded] = useState(false);
-  const [genderIndex, setGenderIndex] = useState<number>(-1);
+  const [genderIndex, setGenderIndex] = useState<boolean>(false); // Boolean qilindi
   const [isSelected, setSelection] = useState(false);
 
   const toggleExpand = () => {
@@ -24,14 +24,14 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
   };
 
   const radioProps = [
-    { label: 'Erkak', value: 0 },
-    { label: 'Ayol', value: 1 },
+    { label: 'Erkak', value: true },
+    { label: 'Ayol', value: false },
   ];
 
-  const onPressRadioButton = (index: number) => {
-    setGenderIndex(index);
+  const onPressRadioButton = (value: boolean) => { // Boolean qabul qilinadi
+    setGenderIndex(value);
   };
-
+  
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.header} onPress={toggleExpand} activeOpacity={1}>
@@ -49,8 +49,8 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
                 <RadioButtonInput
                   obj={obj}
                   index={i}
-                  isSelected={genderIndex === i}
-                  onPress={() => onPressRadioButton(i)}
+                  isSelected={genderIndex === obj.value} // Boolean hisobida tekshiriladi
+                  onPress={() => onPressRadioButton(obj.value)} // Boolean qiymatini o'zgartiradi
                   buttonInnerColor="#9C035A"
                   buttonOuterColor="#9C035A"
                   buttonSize={15}
@@ -61,7 +61,7 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
                   obj={obj}
                   index={i}
                   labelHorizontal={true}
-                  onPress={() => onPressRadioButton(i)}
+                  onPress={() => onPressRadioButton(obj.value)} // Boolean qiymatini o'zgartiradi
                   labelStyle={styles.radioButtonLabel}
                   labelWrapStyle={{}}
                 />
@@ -75,6 +75,12 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
               title="не важно"
             />
           </Text>
+          {/* Tanlangan radio tugmasi bo'lsa, tanlangan genderni ko'rsatish */}
+          {genderIndex !== undefined && (
+            <Text style={styles.selectedGenderText}>
+              Tanlangan: {genderIndex ? 'Erkak' : 'Ayol'}
+            </Text>
+          )}
         </View>
       )}
     </View>
@@ -119,6 +125,11 @@ const styles = StyleSheet.create({
   },
   radioButtonWrap: {
     marginLeft: 10,
+  },
+  selectedGenderText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#333',
   },
 });
 
