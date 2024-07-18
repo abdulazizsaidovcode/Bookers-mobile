@@ -50,6 +50,8 @@ const Uslugi = () => {
     }, [userLocation])
   );
 
+  
+
   const renderItem = ({ item }: { item: Service }) => (
     <ServiceCard
       key={item.id}

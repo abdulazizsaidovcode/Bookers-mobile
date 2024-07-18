@@ -6,7 +6,8 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import { Fontisto } from '@expo/vector-icons';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import LocationInput from '@/app/locationInput';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
+import { postClientFilter } from '@/helpers/api-function/uslugi/uslugi';
 
 
 const Specialist = () => {
@@ -21,6 +22,13 @@ const Specialist = () => {
     },
     // ... Add more client data here
   ];
+
+  useFocusEffect(
+    React.useCallback(() => {
+      postClientFilter('',true, 3,2,38.8472092,65.796276);
+      return () => {};
+    },[])
+  );
 
   const handEnd = () =>{
     router.push('')
