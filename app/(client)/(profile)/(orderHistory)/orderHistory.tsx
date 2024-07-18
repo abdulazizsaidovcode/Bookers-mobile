@@ -157,7 +157,7 @@ const OrderHistory = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
-      <NavigationMenu name="График работы" />
+      <NavigationMenu name="История сеансов" />
       <View style={{padding: 16}}>
       <View style={styles.buttonContainer}>
         <CustomButton title="Предстоящие" onPress={() => setActiveTab('upcoming')} active={activeTab === 'upcoming'} />

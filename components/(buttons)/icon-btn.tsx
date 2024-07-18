@@ -8,7 +8,8 @@ const IconsButtons = (
         clicks,
         color,
         bg_color,
-        width
+        width,
+        textSize
     }: {
         name: string,
         clicks?: () => void,
@@ -16,6 +17,7 @@ const IconsButtons = (
         bg_color?: string,
         color?: string,
         width?: string
+        textSize?: string
     }) => {
     return (
         <TouchableOpacity
@@ -25,7 +27,7 @@ const IconsButtons = (
         >
             <View style={[tw`flex-row items-center justify-center`]}>
                 {icon}
-                <Text style={[tw`text-base font-semibold ${icon ? 'ml-2' : ''}`, {color: color ? color : 'white'}]}>
+                <Text style={[tw`${textSize ? textSize : "text-base"} font-semibold ${icon ? 'ml-2' : ''}`, {color: color ? color : 'white'}]}>
                     {name}
                 </Text>
             </View>
