@@ -18,7 +18,7 @@ const Health: React.FC = () => {
       </ScrollView>
       <Buttons title="Подобрать мастера" />
     </SafeAreaView>
-  );
+  );//Bu bo'limga ham teginma
 };
 export default Health;
 
