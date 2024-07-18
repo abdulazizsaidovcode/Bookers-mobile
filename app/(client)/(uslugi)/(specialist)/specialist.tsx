@@ -36,8 +36,7 @@ const Specialist = () => {
   
   useFocusEffect(
     React.useCallback(() => {
-      postClientFilter(`${setSelectedServiceId}`,setGenderIndex,setValue,setRating,userLocation.coords.latitude,userLocation.coords.longitude,);
-      (categoryId: any, gender?: boolean | null, nextToMe?: number | null, rating?: number | null, lat: number | null, lng: number | null)
+      postClientFilter(`${setSelectedServiceId}`,setValue,setRating,userLocation.coords.latitude,userLocation.coords.longitude,)
       return ()=>{};
     },[])
   );
