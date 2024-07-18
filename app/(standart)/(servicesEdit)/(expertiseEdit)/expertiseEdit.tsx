@@ -39,10 +39,10 @@ const ExpertiseEdit: React.FC = () => {
         }
     }, [value]);
 
-    const getChildCategory = async (id: string) => {
+    const getChildCategory = async (id: string | null) => {
         try {
             const config = await getConfig()
-            const response = await axios.get(`${category_child}${selectedCategoryId}`, config);
+            const response = await axios.get(`${category_child}${selectedCategoryId}`, config ? config : {});
             if (response.data.success) {
                 const child =
                     response.data.body &&
@@ -76,7 +76,7 @@ const ExpertiseEdit: React.FC = () => {
     const postCategory = async (id: string, name: string) => {
         try {
             const config = await getConfig()
-            const response = await axios.post(`${masterAdd_category}/${selectedCategoryId}?name=${name}`, {}, config);
+            const response = await axios.post(`${masterAdd_category}/${selectedCategoryId}?name=${name}`, {}, config ? config : {});
             if (response.data.success) {
                 setChildCategoryData([...childCategoryData, { id, name }]);
                 getChildCategory(id);
