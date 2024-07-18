@@ -10,7 +10,7 @@ const sessionData = [
     { id: '2', title: 'Прошедшие записи', icon: 'history', count: 2, screen: '(profile)/(sessionhistory)/components/Pastentries/Pastentries' },
     { id: '3', title: 'Отменённые записи', icon: 'times-circle', count: 1, screen: '(profile)/(sessionhistory)/components/Canceledentries/Canceledentries' },
 ];
- 
+
 const SessionHistory: React.FC = () => {
     const navigation = useNavigation<any>();
 
@@ -24,7 +24,10 @@ const SessionHistory: React.FC = () => {
                 <Text style={styles.itemText}>{item.title}</Text>
             </View>
             <View style={styles.itemContent}>
-                <Text style={styles.itemCount}>{item.count}</Text>
+                <View style={styles.itemCount}>
+                    <Text style={tw`text-white`}>{item.count}</Text>
+
+                </View>
                 <MaterialIcons name="navigate-next" size={36} color='gray' />
             </View>
         </TouchableOpacity>
@@ -33,7 +36,7 @@ const SessionHistory: React.FC = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={tw`mt-8`}>
-            <NavigationMenu name='История сеансов' />
+                <NavigationMenu name='История сеансов' />
             </View>
             <View style={styles.padding}>
                 <FlatList
@@ -84,13 +87,15 @@ const styles = StyleSheet.create({
     itemCount: {
         backgroundColor: '#9c0935',
         color: '#fff',
-        paddingHorizontal: 5,
-        paddingVertical: 1,
-        width: 20,
+        width: 25,
+        height: 25,
         fontSize: 16,
         fontWeight: 'bold',
         marginRight: 16,
-        
+        borderRadius: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
     },
 });
 

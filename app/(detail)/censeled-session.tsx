@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -15,22 +15,22 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import History from "@/helpers/state_managment/history";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import axios from "axios";
-import {base_url, getFile} from "@/helpers/api";
+import { base_url, getFile } from "@/helpers/api";
 import moment from "moment";
-import {addFeedbackMaster} from "@/helpers/api-function/client/client";
+import { addFeedbackMaster } from "@/helpers/api-function/client/client";
 import Textarea from "@/components/select/textarea";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import {getConfig} from "@/app/(tabs)/(master)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 import ContactInformation from "@/components/contact-information/contact-information";
 
 const CenseledSession = () => {
-    const {product} = History();
+    const { product } = History();
     const [me, setMe] = useState({});
     const [textVal, setTextVal] = useState<string>("");
     const [rating, setRating] = useState<number>(0);
     const [isFeedback, setIsFeedback] = useState(false);
-    const {isLoading, setIsLoading} = clientStore();
+    const { isLoading, setIsLoading } = clientStore();
 
     const toggleFeedback = () => setIsFeedback(!isFeedback);
 
@@ -63,10 +63,10 @@ const CenseledSession = () => {
                         activeOpacity={0.8}
                         style={[
                             tw`py-1 px-2 border rounded-lg`,
-                            {borderColor: "#9c0935"},
+                            { borderColor: "#9c0935" },
                         ]}
                     >
-                        <Text style={[{color: "#9c0935", borderColor: "#9c0935"}]}>
+                        <Text style={[{ color: "#9c0935", borderColor: "#9c0935" }]}>
                             Отменён
                         </Text>
                     </TouchableOpacity>
@@ -75,7 +75,7 @@ const CenseledSession = () => {
                         activeOpacity={0.8}
                         style={[
                             tw`py-1 px-2 rounded-lg ml-2`,
-                            {backgroundColor: "#9c0935"},
+                            { backgroundColor: "#9c0935" },
                         ]}
                     >
                         <Text style={tw`text-white`}>Принять</Text>
@@ -87,9 +87,9 @@ const CenseledSession = () => {
                 <TouchableOpacity
                     onPress={rejected}
                     activeOpacity={0.8}
-                    style={[tw`py-1 px-2 border rounded-lg`, {borderColor: "#9c0935"}]}
+                    style={[tw`py-1 px-2 border rounded-lg`, { borderColor: "#9c0935" }]}
                 >
-                    <Text style={[{color: "#9c0935", borderColor: "#9c0935"}]}>
+                    <Text style={[{ color: "#9c0935", borderColor: "#9c0935" }]}>
                         Отменён
                     </Text>
                 </TouchableOpacity>
@@ -99,9 +99,9 @@ const CenseledSession = () => {
                 <TouchableOpacity
                     onPress={rejected}
                     activeOpacity={0.8}
-                    style={[tw`py-1 px-2 border rounded-lg`, {borderColor: "#9c0935"}]}
+                    style={[tw`py-1 px-2 border rounded-lg`, { borderColor: "#9c0935" }]}
                 >
-                    <Text style={[{color: "#9c0935", borderColor: "#9c0935"}]}>
+                    <Text style={[{ color: "#9c0935", borderColor: "#9c0935" }]}>
                         Отменён
                     </Text>
                 </TouchableOpacity>
@@ -110,27 +110,27 @@ const CenseledSession = () => {
             return (
                 <TouchableOpacity
                     activeOpacity={0.8}
-                    style={[tw`py-1 px-2 border rounded-lg`, {borderColor: "#00A1D3"}]}
+                    style={[tw`py-1 px-2 border rounded-lg`, { borderColor: "#00A1D3" }]}
                 >
-                    <Text style={[{color: "#00A1D3"}]}>Выполнен</Text>
+                    <Text style={[{ color: "#00A1D3" }]}>Выполнен</Text>
                 </TouchableOpacity>
             );
         } else if (product.orderStatus === "MASTER_CONFIRMED") {
             return (
                 <TouchableOpacity
                     activeOpacity={0.8}
-                    style={[tw`py-1 px-2 border rounded-lg`, {borderColor: "#217355"}]}
+                    style={[tw`py-1 px-2 border rounded-lg`, { borderColor: "#217355" }]}
                 >
-                    <Text style={[{color: "#217355"}]}>Одобрено</Text>
+                    <Text style={[{ color: "#217355" }]}>Одобрено</Text>
                 </TouchableOpacity>
             );
         } else if (product.orderStatus === "CLIENT_CONFIRMED") {
             return (
                 <TouchableOpacity
                     activeOpacity={0.8}
-                    style={[tw`py-1 px-2 border rounded-lg`, {borderColor: "#217355"}]}
+                    style={[tw`py-1 px-2 border rounded-lg`, { borderColor: "#217355" }]}
                 >
-                    <Text style={[{color: "#217355"}]}>Одобрено</Text>
+                    <Text style={[{ color: "#217355" }]}>Одобрено</Text>
                 </TouchableOpacity>
             );
         }
@@ -144,12 +144,12 @@ const CenseledSession = () => {
                 <TouchableOpacity
                     onPress={toggleFeedback}
                     activeOpacity={0.8}
-                    style={[tw`py-2 rounded-lg bg-white`]}
+                    style={[tw`py-2 rounded-lg `,{backgroundColor: '#B9B9C9'}]}
                 >
                     <Text
                         style={[
                             tw`text-center text-lg`,
-                            {color: "#9c0935", borderColor: "#9c0935"},
+                            { color: "#9c0935", borderColor: "#9c0935" },
                         ]}
                     >
                         Оставить отзыв
@@ -163,7 +163,7 @@ const CenseledSession = () => {
                         activeOpacity={0.8}
                         style={[tw`py-2 rounded-lg flex-row items-center bg-gray-300 px-3`]}
                     >
-                        <FontAwesome name="arrows" size={24} color="#9C0A35"/>
+                        <FontAwesome name="arrows" size={24} color="#9C0A35" />
                         <Text style={[tw`font-bold text-lg ml-2`]}>Передвинуть</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -173,7 +173,7 @@ const CenseledSession = () => {
                             tw`py-2 rounded-lg mt-2 bg-gray-300 flex-row items-center px-3`,
                         ]}
                     >
-                        <AntDesign name="closecircleo" size={24} color="#9C0A35"/>
+                        <AntDesign name="closecircleo" size={24} color="#9C0A35" />
                         <Text style={[tw`font-bold text-lg ml-2`]}>Отменить</Text>
                     </TouchableOpacity>
                 </View>
@@ -185,7 +185,7 @@ const CenseledSession = () => {
                         activeOpacity={0.8}
                         style={[tw`py-2 rounded-lg flex-row items-center bg-gray-300 px-3`]}
                     >
-                        <FontAwesome name="arrows" size={24} color="#9C0A35"/>
+                        <FontAwesome name="arrows" size={24} color="#9C0A35" />
                         <Text style={[tw`font-bold text-lg ml-2`]}>Передвинуть</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -195,7 +195,7 @@ const CenseledSession = () => {
                             tw`py-2 rounded-lg mt-2 bg-gray-300 flex-row items-center px-3`,
                         ]}
                     >
-                        <AntDesign name="closecircleo" size={24} color="#9C0A35"/>
+                        <AntDesign name="closecircleo" size={24} color="#9C0A35" />
                         <Text style={[tw`font-bold text-lg ml-2`]}>Отменить</Text>
                     </TouchableOpacity>
                 </View>
@@ -210,7 +210,7 @@ const CenseledSession = () => {
                     <Text
                         style={[
                             tw`text-center text-lg`,
-                            {color: "#9c0935", borderColor: "#9c0935"},
+                            { color: "#9c0935", borderColor: "#9c0935" },
                         ]}
                     >
                         Оставить отзыв
@@ -227,7 +227,7 @@ const CenseledSession = () => {
                     <Text
                         style={[
                             tw`text-center text-lg`,
-                            {color: "#9c0935", borderColor: "#9c0935"},
+                            { color: "#9c0935", borderColor: "#9c0935" },
                         ]}
                     >
                         Оставить отзыв
@@ -240,7 +240,7 @@ const CenseledSession = () => {
     const getMe = async () => {
         try {
             const config = await getConfig();
-            const {data} = await axios.get(`${base_url}user/me`, config ? config : {});
+            const { data } = await axios.get(`${base_url}user/me`, config ? config : {});
             setMe(data.body);
         } catch (error) {
             console.log(error);
@@ -262,13 +262,13 @@ const CenseledSession = () => {
             }}
         >
             <View style={tw`mt-5`}>
-                <NavigationMenu name=""/>
+                <NavigationMenu name="" />
             </View>
             <View
                 style={[styles.profileContainer, tw`mt-2 bg-gray-300 p-3 rounded-lg`]}
             >
                 <Image
-                    source={{uri: `${getFile}${product.attachmentId}`}}
+                    source={product.attachmentId ? { uri: `${getFile}${product.attachmentId}` } : require("../../assets/avatar.png")}
                     style={styles.profileImage}
                 />
                 <View style={styles.profileInfo}>
@@ -295,7 +295,7 @@ const CenseledSession = () => {
                             `dd, ${product.orderDate.slice(5, 7)}, MMMM`
                         )}
                     </Text>
-                    <Text style={tw`text-gray-500`}>
+                    <Text style={[tw`text-gray-500`,]}>
                         Длительность - {product.serviceHour} час
                     </Text>
                 </View>
@@ -304,21 +304,21 @@ const CenseledSession = () => {
                 </Text>
             </View>
             <View
-                style={tw`bg-gray-300 rounded-lg p-3 flex-row items-center justify-between`}
+                style={[tw` rounded-lg p-3 flex-row items-center justify-between`, { backgroundColor: '#B9B9C9' }]}
             >
                 <Text style={styles.detailCost}>Стоимость:</Text>
-                <Text style={[tw`text-lg font-bold`, {color: "#9c0935"}]}>
+                <Text style={[tw`text-lg font-bold`, { color: "#9c0935" }]}>
                     {product.toPay} сум
                 </Text>
             </View>
             <View
-                style={tw`bg-gray-300 rounded-lg p-3 mt-5 flex-row items-center justify-between`}
+                style={[tw` rounded-lg p-3 mt-5 flex-row items-center justify-between`, { backgroundColor: '#B9B9C9' }]}
             >
                 <Text style={styles.detailCost}>Статус:</Text>
                 {checkStatus()}
             </View>
-            <View style={{marginTop: 16, marginBottom: 8}}>
-                <ContactInformation/>
+            <View style={{ marginTop: 16, marginBottom: 8 }}>
+                <ContactInformation />
             </View>
             <View style={tw`flex-1`}>
                 {product.orderStatus !== "WAIT" && (
@@ -402,17 +402,21 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         flexDirection: "row",
-        justifyContent: "space-around",
         marginBottom: 16,
+        backgroundColor: 'B9B9C9'
+
     },
     button: {
         padding: 10,
+        paddingVertical: 5,
         borderColor: "#828282",
         borderWidth: 1,
         borderRadius: 5,
     },
     detailsContainer: {
         marginBottom: 16,
+        backgroundColor: 'B9B9C9'
+
     },
     detailText: {
         color: "#000",

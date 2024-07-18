@@ -68,7 +68,6 @@ const PastEntries = () => {
       const responseData = await response.json();
       if (responseData.success) setToggle(false);
       setChecked(false);
-      console.log(responseData);
     } catch (error) {
       console.error("Error deleting past entries:", error);
     }
@@ -80,7 +79,7 @@ const PastEntries = () => {
 
   return (
     <View
-      style={[tw`flex-1 bg-gray-900 p-4 mt-5`, { backgroundColor: "#21212E" }]}
+      style={[tw`flex-1 p-4 mt-5`, { backgroundColor: "#21212E" }]}
     >
       {isChecked ? (
         <View
@@ -140,7 +139,7 @@ const PastEntries = () => {
                 setProduct(item);
             }}
             key={item.id}
-            style={tw`bg-gray-700 p-4 rounded-lg mb-4 flex-row items-center`}
+            style={[tw`bg-gray-700 p-4 rounded-lg mb-4 flex-row items-start`, { backgroundColor: "#B9B9C9" }]}
           >
             {isChecked && (
               <View>
@@ -177,15 +176,16 @@ const PastEntries = () => {
               </View>
             )}
             <Image
-              source={{
-                uri: `${getFile}${item.attachmentId}`,
-              }}
+              source={item.attachmentId ? {
+                uri: getFile + item.attachmentId,
+              } : require("../../../../../assets/avatar.png")}
               style={tw`w-12 h-12 rounded-full mr-4`}
             />
             <View style={tw`flex-1`}>
-              <Text style={tw`text-white font-bold`}>{item.fullName}</Text>
-              <Text style={tw`text-gray-400`}>{item.phone}</Text>
-              <Text style={tw`text-red-500 font-bold mt-2`}>
+              <Text style={tw` font-bold`}>{item.fullName}</Text>
+              <Text style={tw`text-gray-700`}>{item.phone}</Text>
+              <Text style={[tw`mt-2 px-4 py-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>{item.serviceName}</Text>
+              <Text style={[tw`text-red-500 font-bold mt-2`, { color: '#9C0A35' }]}>
                 {item.servicePrice} сум
               </Text>
             </View>
