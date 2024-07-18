@@ -25,7 +25,7 @@ import { getConfig } from "@/app/(tabs)/(master)/main";
 const Canceledentries = () => {
   const [data, setData] = useState<any>([]);
   const [isChecked, setChecked] = useState(false);
-  const [pastentries, setPastentries] = useState([]);
+  const [pastentries, setPastentries] = useState<any>([]);
   const [toggle, setToggle] = useState(false);
   const navigation = useNavigation<any>();
   const { setProduct } = History();
@@ -205,8 +205,10 @@ const Canceledentries = () => {
         btnRedText="Да"
         isFullBtn={true}
       >
-        <FontAwesome name="trash" size={80} color="#9c0935" />
-        <Text style={tw`text-white my-5`}>Удалить все прошедшие сеансы?</Text>
+        <>
+          <FontAwesome name="trash" size={80} color="#9c0935"/>
+          <Text style={tw`text-white my-5`}>Удалить все прошедшие сеансы?</Text>
+        </>
       </CenteredModal>
     </View>
   );
