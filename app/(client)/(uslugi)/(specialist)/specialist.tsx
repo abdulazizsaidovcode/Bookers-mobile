@@ -9,6 +9,7 @@ import LocationInput from '@/app/locationInput';
 import { router, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
+import CustomCheckbox from '@/components/checkbox/checkbox';
 
 const Specialist = () => {
   const { clientData } = ClientStory();
@@ -35,7 +36,14 @@ const Specialist = () => {
               <Fontisto name="arrow-swap" size={24} color="white" />
               <Text style={[tw`text-white ml-2 text-xl`]}>Фильтр</Text>
             </TouchableOpacity>
-            <Text style={tw`text-white`}>Запись на сегодня</Text>
+            <View style={tw`mt-3 `}>
+              <CustomCheckbox
+              // value={isSelected}
+              // onValueChange={setSelection}
+              title="Запись на сегодня"
+            />
+            </View>
+            
           </View>
           <View style={tw`mb-6`}>
             <LocationInput placeholder='🔍 Search' />
