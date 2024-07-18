@@ -34,7 +34,7 @@ const MyServicesScreen = () => {
     const getGender = async () => {
         try {
             const config = await getConfig()
-            const response = await axios.get(getGender_status, config);
+            const response = await axios.get(getGender_status, config ? config : {});
             setGender(response.data.body);
         } catch (error) {
             console.error("Error fetching gender services:", error);
@@ -44,7 +44,7 @@ const MyServicesScreen = () => {
     const getCategory = async () => {
         try {
             const config = await getConfig()
-            const response = await axios.get(getCategory_master, config);
+            const response = await axios.get(getCategory_master, config ? config : {});
             setCategory(response.data.body);
         } catch (error) {
             console.error("Error fetching categories:", error);
@@ -54,7 +54,7 @@ const MyServicesScreen = () => {
     const getSpecializationData = async (selectedCategoryId:any) => {
         try {
             const config = await getConfig()
-            const { data } = await axios.get(`${getSpecialization}?categoryId=${selectedCategoryId}`, config);
+            const { data } = await axios.get(`${getSpecialization}?categoryId=${selectedCategoryId}`, config ? config : {});
             if (data.success) setSpecialization(data.body);
             else setSpecialization([]);
         } catch (error:any) {
@@ -66,7 +66,7 @@ const MyServicesScreen = () => {
     const getMasterData = async (categoryId:any) => {
         try {
             const config = await getConfig()
-            const { data } = await axios.get(`${master_get_Service}${categoryId}`, config);
+            const { data } = await axios.get(`${master_get_Service}${categoryId}`, config ? config : {});
             if (data.success) setCategoryMaster(data.body);
             else setCategoryMaster([]);
         } catch (error:any) {
