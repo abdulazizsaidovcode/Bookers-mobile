@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 export interface Service {
   id: string;
@@ -8,7 +8,7 @@ export interface Service {
   onPress?: () => void;
 }
 
-export interface CilentAllCategory {
+export interface ClientAllCategory {
   id: string;
   setId: (val: string) => void;
   name: string;
@@ -19,9 +19,11 @@ export interface CilentAllCategory {
   setAllCategory: (val: Service[]) => void;
   selectedServiceId: string | null;
   setSelectedServiceId: (id: string | null) => void;
+  clientData: any | null;
+  setClientData: (data: any) => void;
 }
 
-const ClientStory = create<CilentAllCategory>((set) => ({
+const ClientStory = create<ClientAllCategory>((set) => ({
   id: '',
   setId: (val: string) => set({ id: val }),
   name: '',
@@ -32,6 +34,9 @@ const ClientStory = create<CilentAllCategory>((set) => ({
   setAllCategory: (val: Service[]) => set({ allCategory: val }),
   selectedServiceId: null,
   setSelectedServiceId: (id: string | null) => set({ selectedServiceId: id }),
+  clientData: null,
+  setClientData: (data: any) => set({ clientData: data }),
 }));
 
 export default ClientStory;
+

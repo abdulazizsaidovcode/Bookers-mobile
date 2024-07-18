@@ -20,7 +20,7 @@ const CommunitySlider: React.FC<DistanceSliderProps> = ({ title, textColor }) =>
             <Slider
                 style={styles.slider}
                 minimumValue={0}
-                maximumValue={50}
+                maximumValue={5}
                 step={0.1}
                 value={value}
                 onValueChange={setValue}
