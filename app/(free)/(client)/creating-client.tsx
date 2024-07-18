@@ -275,7 +275,7 @@ const CreatingClient = () => {
                                     handleInputChange('regionId', e)
                                     getDistrictList(setDistrictData, e)
                                 }}
-                                data={regions ? regions : [{key: 'Ma\'lumot yuq', value: ''}]}
+                                data={regions ? regions : [{key: '', value: 'Ma\'lumot yuq'}]}
                                 save='key'
                                 search={false}
                                 placeholder="Регион"
@@ -287,7 +287,7 @@ const CreatingClient = () => {
                                 dropdownStyles={styles.dropdown}
                                 dropdownTextStyles={tw`text-white text-lg`}
                                 setSelected={(e: string) => handleInputChange('districtId', e)}
-                                data={districts ? districts : [{key: 'Ma\'lumot yuq', value: ''}]}
+                                data={districts ? districts : [{key: '', value: 'Ma\'lumot yuq'}]}
                                 save='key'
                                 search={false}
                                 placeholder="Город"
