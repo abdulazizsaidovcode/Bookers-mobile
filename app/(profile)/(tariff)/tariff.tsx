@@ -31,7 +31,7 @@ const tariffs = [
 
 export const postTariff = async (status:string) => {
     let config = await getConfig()
-    await axios.post(`${base_url}tariff/test?tariffName=${status}`, '', config)
+    await axios.post(`${base_url}tariff/test?tariffName=${status}`, '', config ? config : {})
 }
 
 const TariffsPage: React.FC = () => {
@@ -70,7 +70,7 @@ const TariffsPage: React.FC = () => {
 
     const getTariff = async () => {
         let config = await getConfig()
-        axios.get(`${base_url}tariff/test`, config)
+        axios.get(`${base_url}tariff/test`, config ? config : {})
             .then(res => {
                 console.log('get: ', res.data.body)
                 if (res.data.body === undefined) setTariffStatus('')
