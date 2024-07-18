@@ -74,12 +74,6 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
               title="не важно"
             />
           </Text>
-          {/* Tanlangan radio tugmasi bo'lsa, tanlangan genderni ko'rsatish */}
-          {genderIndex !== undefined && (
-            <Text style={styles.selectedGenderText}>
-              Tanlangan: {genderIndex ? 'Erkak' : 'Ayol'}
-            </Text>
-          )}
         </View>
       )}
     </View>
