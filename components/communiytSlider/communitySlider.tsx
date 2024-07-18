@@ -21,7 +21,7 @@ const CommunitySlider: React.FC<DistanceSliderProps> = ({ title, textColor }) =>
                 style={styles.slider}
                 minimumValue={0}
                 maximumValue={50}
-                step={1}
+                step={0.1}
                 value={value}
                 onValueChange={setValue}
                 minimumTrackTintColor="#8B1A1A"
