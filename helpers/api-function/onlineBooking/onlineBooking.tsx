@@ -67,14 +67,13 @@ export const OnlineBookingUserviceTimeAll = async (val: object) => {
     try {
         if (val) {
             const config = await getConfig();
-            const res: any = await axios.post(`${onlineBookingUserviceTimeAll_url}`, val, config ? {} : {});
+            const res: any = await axios.post(`${onlineBookingUserviceTimeAll_url}`, val, config ? config : {});
 
             if (res.data.success) {
                 Toast.show(res.data.message, Toast.SHORT);
             }
         }
     } catch (error: any) {
-        console.log(error);
         Toast.show(error.response.data.message, Toast.SHORT);
     }
 };
@@ -105,7 +104,7 @@ export const onlineConfirmationServices = async (isEnabled: boolean, isEnabled2:
             "notConfirm": isEnabled3
         };
         console.log(data);
-        
+
         const config = await getConfig();
         const res = await axios.post(`${onlineConfirmationServices_url}`, data, config ? config : {});
         Toast.show(res.data.message, Toast.SHORT);
@@ -155,10 +154,12 @@ export const getOnlineBookingHallWaiting = async (setData: (val: any | null) => 
     try {
         const config = await getConfig();
         const res = await axios.get(`${onlineBookingHallWaitin_url}`, config ? config : {});
-
+        if(res.data.success){
+            Toast.show(res.data.message, Toast.SHORT);
+        }
         setData(res.data.body);
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
-        // Handle errors as needed
+        Toast.show(error.response.data.message, Toast.SHORT);
     }
 };

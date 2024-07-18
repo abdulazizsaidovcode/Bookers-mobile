@@ -60,12 +60,6 @@ const LocationSelect = ({ setDistrictId, city, setCity }: Types) => {
                 <Text style={tw`text-lg text-white`}>{item?.name}</Text>
               </TouchableOpacity>
             ))}
-          {data.length === 0 && (
-            <Text style={tw`text-lg text-white`}>
-              Not fount:
-              <Text style={tw`text-lg text-red-500 font-bold`}> {city}</Text>
-            </Text>
-          )}
         </View>
       )}
     </View>

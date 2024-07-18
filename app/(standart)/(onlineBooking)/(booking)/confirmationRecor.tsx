@@ -18,10 +18,7 @@ import { router, useFocusEffect } from "expo-router";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 
 const ConfirmationRecord = () => {
-  // const { isRegtered } = isRegister();
-  // const { setRequest } = OnlineBookingCheck();
 
-  // setRequest(isRegister);
   const {
     isEnabled,
     setIsEnabled,
@@ -35,6 +32,8 @@ const ConfirmationRecord = () => {
 
   useEffect(() => {
     getOnlineConfirmationServices(setData);
+    console.log(data,'df');
+    
   }, []);
 
   useFocusEffect(
@@ -53,10 +52,12 @@ const ConfirmationRecord = () => {
     const newValue = !isEnabled;
     setIsEnabled(newValue);
   };
+
   const toggleSwitch2 = () => {
     const newValue = !isEnabled2;
     setIsEnabled2(newValue);
   };
+
   const toggleSwitch3 = () => {
     const newValue = !isEnabled3;
     setIsEnabled3(newValue);

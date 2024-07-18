@@ -31,7 +31,7 @@ const BreakBetweenSession = () => {
   const navigation = useNavigation<any>();
   const { services, setServices } = clientStore();
 
-  const hours = [
+  const hours: any = [
     { title: "0 ч.", minutes: ["0 мин.", "30 мин."] },
     { title: "1 ч.", minutes: ["0 мин.", "30 мин."] },
     { title: "2 ч.", minutes: ["0 мин.", "15 мин.", "30 мин.", "45 мин."] },
@@ -50,7 +50,7 @@ const BreakBetweenSession = () => {
 
   const handleHourPress = (selectedHour: any) => {
     setHour(selectedHour);
-    setMinute(hours &&  hours.find((h) => h.title === selectedHour).minutes[0]);
+    setMinute(hours && hours.find((h: any) => h.title === selectedHour).minutes[0]);
   };
 
   const postTile = () => {
@@ -164,15 +164,13 @@ const BreakBetweenSession = () => {
                         <View style={styles.timeContainer}>
                           <Text style={styles.selectButtonText}>
                             {" "}
-                            {`${
-                              servicesId !== service.id
-                                ? Math.floor(service.serviceTime / 60)
-                                : hour
-                            } час .  ${
-                              servicesId !== service.id
+                            {`${servicesId !== service.id
+                              ? Math.floor(service.serviceTime / 60)
+                              : hour
+                              } час .  ${servicesId !== service.id
                                 ? service.serviceTime % 60
                                 : minute
-                            } мин`}
+                              } мин`}
                           </Text>
                           <MaterialIcons
                             name="access-time"
@@ -211,7 +209,7 @@ const BreakBetweenSession = () => {
           <View style={styles.modalContent}>
             <View style={styles.modalColumn}>
               <FlatList
-                data={hours.map((h) => h.title)}
+                data={hours.map((h: any) => h.title)}
                 renderItem={({ item }) =>
                   renderItem({
                     item,
@@ -226,7 +224,7 @@ const BreakBetweenSession = () => {
             </View>
             <View style={styles.modalColumn}>
               <FlatList
-                data={hours.find((h) => h.title === hour)?.minutes || []}
+                data={hours.find((h: any) => h.title === hour)?.minutes || []}
                 renderItem={({ item }) =>
                   renderItem({
                     item,
