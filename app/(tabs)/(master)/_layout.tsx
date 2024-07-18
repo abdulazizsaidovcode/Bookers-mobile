@@ -161,7 +161,7 @@ function MasterTabLayout() {
 
 const styles = StyleSheet.create({
     container: {
-        height: 49.5,
+        height: 70,
         width: '100%',
         position: 'absolute',
         bottom: 0,
