@@ -27,7 +27,7 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
 import Buttons from "@/components/(buttons)/button";
-import { useNavigation } from "expo-router";
+import {useFocusEffect, useNavigation} from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import { getData } from "@/helpers/token";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -134,15 +134,18 @@ const TabOneScreen: React.FC = () => {
 		fetchData();
 	}, [hasAllNumbers]);
 
-	useEffect(() => {
-		fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
-		fetchMainStatistic(setMainStatisticData);
-		fetchWaitingOrders(setWaitingData);
-		fetchHallingOrders(setHallData);
-		getUser(setGetMee);
-		fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
-		getData()
-	}, []);
+	useFocusEffect(
+		useCallback(() => {
+			fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
+			fetchMainStatistic(setMainStatisticData);
+			fetchWaitingOrders(setWaitingData);
+			fetchHallingOrders(setHallData);
+			getUser(setGetMee);
+			fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
+			getData()
+			return () => {}
+		}, [])
+	);
 
 	const onRefresh = useCallback(() => {
 		handleRefresh(setRefreshing);
@@ -366,7 +369,7 @@ const BookingRequests: React.FC<BookingRequestsProps> = ({
 					isConfirmModal,
 					setWaitingData
 				})}
-				keyExtractor={item => item.orderId}
+				keyExtractor={item => item.id}
 				horizontal
 				showsHorizontalScrollIndicator={false}
 				contentContainerStyle={styles.bookingList}
@@ -401,7 +404,7 @@ const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
 					isRejectedModal,
 					setHallData
 				})}
-				keyExtractor={item => item.orderId}
+				keyExtractor={item => item.id}
 				horizontal
 				showsHorizontalScrollIndicator={false}
 				contentContainerStyle={styles.bookingList}
@@ -430,8 +433,8 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
 	isRejectedModal,
 	setWaitingData
 }) => {
-	const handleConfirm = () => editOrderStatus(setWaitingData, item.orderId, 'CONFIRMED', toggleConfirmModal);
-	const handleReject = () => editOrderStatus(setWaitingData, item.orderId, 'REJECTED', toggleRejectedModal);
+	const handleConfirm = () => editOrderStatus(setWaitingData, item.id, 'CONFIRMED', toggleConfirmModal);
+	const handleReject = () => editOrderStatus(setWaitingData, item.id, 'REJECTED', toggleRejectedModal);
 	return (
 		<View style={styles.bookingCard}>
 			<View style={styles.cardHeader}>
@@ -444,8 +447,8 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
 						style={styles.profileImage} />
 				</View>
 				<View>
-					<Text style={styles.userName}>{item.clientName}</Text>
-					<Text style={styles.serviceText}>{item.categoryName}</Text>
+					<Text style={styles.userName}>{item.fullName}</Text>
+					<Text style={styles.serviceText}>{item.serviceName}</Text>
 				</View>
 			</View>
 			<View style={{
@@ -457,7 +460,7 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
 				justifyContent: 'center',
 				alignItems: 'center'
 			}}>
-				<Text style={{ color: '#4F4F4F', fontSize: 12 }}>{item.categoryName}</Text>
+				<Text style={{ color: '#4F4F4F', fontSize: 12 }}>{item.serviceName}</Text>
 			</View>
 			<Text style={styles.timeText}>{item.orderDate}</Text>
 			<View style={styles.actionButtons}>

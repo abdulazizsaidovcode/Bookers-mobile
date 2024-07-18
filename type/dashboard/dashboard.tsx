@@ -28,11 +28,11 @@ export interface DashboardMainStatistic {
 }
 
 export interface DashboardWaitingOrder {
-    orderId: string,
+    id: string,
     paid: number,
     clientStatus: string[],
-    clientName: string,
-    categoryName: string,
+    fullName: string,
+    serviceName: string,
     clientAttachmentId: string,
     orderDate: string,
     request: string
@@ -44,11 +44,11 @@ export interface TodayWorkGrafic {
 }
 
 export interface DashboardHallingOrder {
-    orderId: string,
+    id: string,
     paid: number,
     clientStatus: string[],
-    clientName: string,
-    categoryName: string,
+    fullName: string,
+    serviceName: string,
     clientAttachmentId: string,
     orderDate: string,
     request: string

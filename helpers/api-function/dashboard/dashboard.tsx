@@ -2,6 +2,7 @@ import { getConfig } from "@/app/(tabs)/(master)/main";
 import { dashboard_daily_time_orders, dashboard_edit_order_status, dashboard_hall_order, dashboard_main_statistic, dashboard_today_work_grafic, dashboard_wait_order } from "@/helpers/api"
 import { DashboardDailyTimeOrders, DashboardHallingOrder, DashboardMainStatistic, DashboardWaitingOrder, TodayWorkGrafic } from "@/type/dashboard/dashboard";
 import axios from "axios"
+import Toast from 'react-native-simple-toast'
 
 
 export const fetchDaylyOrderTimes = async (setDailyTimeData: (val: DashboardDailyTimeOrders[]) => void, masterId: string) => {
@@ -61,6 +62,10 @@ export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrde
         if (data.success) {
             fetchWaitingOrders(setWaitingData);
             toggleModal();
+            if (status === 'CONFIRMED') Toast.show(`${data.message}`, Toast.LONG)
+            else if (status === 'REJECTED') Toast.show(`${data.message}`, Toast.LONG)
         }
-    } catch { }
+    } catch (error) {
+        console.log(error)
+    }
 }
