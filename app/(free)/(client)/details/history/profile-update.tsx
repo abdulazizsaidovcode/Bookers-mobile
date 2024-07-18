@@ -1,8 +1,8 @@
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import tw from "tailwind-react-native-classnames";
-import {ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
-import React, {useEffect, useState} from "react";
+import {RefreshControl, ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
+import React, {useCallback, useEffect, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
 import LocationInput from "@/components/(location)/locationInput";
@@ -22,6 +22,7 @@ import {
 import {useForm, Controller} from 'react-hook-form';
 import PhoneInput from 'react-native-phone-input';
 import Toast from "react-native-simple-toast";
+import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
@@ -47,7 +48,9 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
         isLoading,
         setIsLoading,
         setStatusData,
-        setAllClients
+        setAllClients,
+        refreshing,
+        setRefreshing
     } = clientStore()
     const {control, formState: {errors}} = useForm<FormData>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -86,6 +89,10 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
         }
     }, [navigate]);
 
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, [setRefreshing]);
+
     const handleInputChange = (name: string, value: any) => {
         setNewUpdateClient({
             ...newUpdateClient,
@@ -120,6 +127,7 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View>
                         <ProfileImgUpload attachmentID={clientData.attachmentId}/>
@@ -195,7 +203,8 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
                                 label={`Возраст`}
                                 value={newUpdateClient.ageId}
                                 onValueChange={(e) => handleInputChange('ageId', e)}
-                                child={ageData && ageData.map(item => <Picker.Item label={item.ageRange} value={item.id}/>)}
+                                child={ageData && ageData.map(item => <Picker.Item label={item.ageRange}
+                                                                                   value={item.id}/>)}
                             />
                             <Select
                                 label={`Регион`}
@@ -204,13 +213,15 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
                                     handleInputChange('regionId', e)
                                     getDistrictList(setDistrictData, e)
                                 }}
-                                child={regionData && regionData.map(item => <Picker.Item label={item.name} value={item.id}/>)}
+                                child={regionData && regionData.map(item => <Picker.Item label={item.name}
+                                                                                         value={item.id}/>)}
                             />
                             <Select
                                 label={`Город`}
                                 value={newUpdateClient.districtId ? newUpdateClient.districtId : ''}
                                 onValueChange={(e) => handleInputChange('districtId', e)}
-                                child={districtData && districtData.map(item => <Picker.Item label={item.name} value={item.id}/>)}
+                                child={districtData && districtData.map(item => <Picker.Item label={item.name}
+                                                                                             value={item.id}/>)}
                             />
                         </View>
                     </View>

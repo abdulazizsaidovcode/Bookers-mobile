@@ -1,8 +1,8 @@
 import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import tw from "tailwind-react-native-classnames";
-import {ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
-import React, {useEffect, useState} from "react";
+import {RefreshControl, ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
+import React, {useCallback, useEffect, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -23,6 +23,7 @@ import {
     getRegionList,
     updateClientData
 } from "@/helpers/api-function/client/client";
+import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/updating-address-book'>;
 
@@ -49,7 +50,9 @@ const UpdatingAddressBook = () => {
         setStatusData,
         setAllClients,
         isLoading,
-        setIsLoading
+        setIsLoading,
+        refreshing,
+        setRefreshing
     } = clientStore()
     const {control, formState: {errors}} = useForm<FormData>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -66,6 +69,13 @@ const UpdatingAddressBook = () => {
             updateClient.lastName = client.lastName
         }
     }, []);
+
+    useEffect(() => {
+        if (refreshing) {
+            getAgeList(setAgeData)
+            getRegionList(setRegionData)
+        }
+    }, [refreshing]);
 
     useEffect(() => {
         if (client) {
@@ -98,6 +108,10 @@ const UpdatingAddressBook = () => {
             setRegex(false)
         }
     }, [navigate]);
+
+    const onRefresh = useCallback(() => {
+        handleRefresh(setRefreshing);
+    }, [setRefreshing]);
 
     const handleSubmitChange = (e: any) => {
         if (e.length === 13) setPhoneNumber(e)
@@ -135,6 +149,7 @@ const UpdatingAddressBook = () => {
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between'}}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View>
                         <ProfileImgUpload attachmentID={client ? client.attachmentId : ''}/>

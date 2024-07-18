@@ -6,7 +6,7 @@ import axios from "axios"
 export const getExpenceCategory = async (setExpenceCategory: any) => {
     try {
         const config = await getConfig();
-        const res = await axios.get(expene_category_list, config);
+        const res = await axios.get(expene_category_list, config ? config : {});
         if (res.data.success) {
             setExpenceCategory(res.data.body);
         } else {
@@ -22,7 +22,7 @@ export const getExpence = async (categoryid: string, setExpence: any) => {
     try {
         if (categoryid) {
             const config = await getConfig();
-            const response = await axios.get(`${expene_list}/${categoryid}`, config);
+            const response = await axios.get(`${expene_list}/${categoryid}`, config ? config : {});
             setExpence(response.data.body);
             console.log(response.data.body);
         }
@@ -36,7 +36,7 @@ export const postExpence = async (data: any, setResponse: any) => {
     try {
         if (data) {
             const config = await getConfig();
-            const res = await axios.post(expene_list, data, config);
+            const res = await axios.post(expene_list, data, config ? config : {});
             setResponse(res.data.success);
             console.log(res.data);
         }
@@ -49,7 +49,7 @@ export const postExpenceCategory = async (data: any, setResponse: any) => {
     try {
         if (data) {
             const config = await getConfig();
-            const res = await axios.post(expene_category_post, data, config);
+            const res = await axios.post(expene_category_post, data, config ? config : {});
             console.log(res.data.success);
             setResponse(res.data.success);
         }

@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 
 const ClientPage: React.FC = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
     const handlePress = (clientType: string) => {
         navigation.navigate(clientType);
     };

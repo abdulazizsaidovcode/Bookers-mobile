@@ -35,7 +35,7 @@ const ProfileImgUpload = ({
   useFocusEffect(
     useCallback(() => {
       if (attachmentID) setImage(`${getFile}${attachmentID}`);
-      return () => {};
+      return () => { };
     }, [])
   );
 
@@ -112,9 +112,8 @@ const ProfileImgUpload = ({
         Toast.show("Success", Toast.LONG);
         setAttachmentID(response.data.body);
       } else Toast.show(response.data.message, Toast.LONG);
-    } catch (err) {
-      console.error("error:", err);
-      Toast.show(`error`, Toast.LONG);
+    } catch (err: any) {
+      Toast.show(err.response.data.message, Toast.LONG);
     }
   };
 

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Bookers",
-    "slug": "bookers-app",
+    "slug": "testprojectname",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/mainLogo.png",
@@ -47,7 +47,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "098d99c4-c6cc-4fd1-85aa-9edd7b778f33",
+        "projectId": "4a39dfa7-984a-48f7-a8ec-16d0aaee030a",
         "apiBaseUrl": "https://app.bookers.one/"
       }
     }
