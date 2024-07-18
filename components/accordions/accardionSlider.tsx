@@ -4,6 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import CustomCheckbox from '../checkbox/checkbox';
 import tw from 'tailwind-react-native-classnames';
 import CommunitySlider from '../communiytSlider/communitySlider';
+import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
 
 interface AccordionItemProps {
     title: string;
@@ -15,8 +16,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const AccordionSlider: React.FC<AccordionItemProps> = ({ title }) => {
-    const [expanded, setExpanded] = useState(false);
-    const [isSelected, setSelection] = useState(false);
+    const {expanded,setExpanded,setSelection,isSelected}=useAccardionStore()
 
     const toggleExpand = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);

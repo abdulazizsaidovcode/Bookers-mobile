@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, Alert } from 'react-native';
 import Slider from '@react-native-community/slider';
+import { AntDesign } from '@expo/vector-icons';
 import { useCommunitySlider } from '@/helpers/state_managment/communitySlider/communitySliderStore';
 
 const { width } = Dimensions.get('window');
@@ -11,19 +12,21 @@ interface DistanceSliderProps {
 }
 
 const CommunitySlider: React.FC<DistanceSliderProps> = ({ title, textColor }) => { 
-    const {value,setValue}=useCommunitySlider()
+    const {rating,setRating}=useCommunitySlider()
     return (
         <View style={styles.container}>
             <View style={styles.value}>
-                <Text style={{ fontSize: 16, color: textColor }} > {value.toFixed(1)} {title}</Text>
+                <Text style={{ fontSize: 16, color: textColor }} >
+                    <AntDesign name="star" size={18} color="#9C0A35" />
+                    {rating.toFixed(0)} {title}</Text>
             </View>
             <Slider
                 style={styles.slider}
                 minimumValue={0}
-                maximumValue={50}
+                maximumValue={5}
                 step={1}
-                value={value}
-                onValueChange={setValue}
+                value={rating}
+                onValueChange={setRating}
                 minimumTrackTintColor="#8B1A1A"
                 maximumTrackTintColor="#fff"
                 thumbTintColor="#8B1A1A"

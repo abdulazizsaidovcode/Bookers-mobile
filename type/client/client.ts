@@ -18,8 +18,8 @@ export interface Client {
     setRegionData: (val: RegionData[] | null) => void;
     districtData: DistrictData[] | null
     setDistrictData: (val: DistrictData[] | null) => void;
-    attachmentID: null | string
-    setAttachmentID: (val: null | string) => void;
+    attachmentID: null | string | any
+    setAttachmentID: (val: null | string | any) => void;
     allClientsList: AllClient[] | null
     setAllClients: (val: AllClient[] | null) => void;
     clientNotVisit: ClientNotVisit[] | null

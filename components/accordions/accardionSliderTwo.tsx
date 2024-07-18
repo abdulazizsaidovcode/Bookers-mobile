@@ -3,7 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UI
 import { AntDesign } from '@expo/vector-icons';
 import CustomCheckbox from '../checkbox/checkbox';
 import tw from 'tailwind-react-native-classnames';
-import CommunitySlider from '../communiytSlider/communitySlider';
+import CommunitySliderTwo from '../communiytSlider/communitySliderTwo';
+import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
 
 interface AccordionItemProps {
     title: string;
@@ -16,8 +17,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title, onValueChange }) => {
-    const [expanded, setExpanded] = useState(false);
-    const [isSelected, setSelection] = useState(false);
+    const {expanded,setExpanded,setSelection,isSelected}=useAccardionStore()
 
     const toggleExpand = () => {
         // Animatsiya
@@ -45,7 +45,7 @@ const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title, onValueChange
             {expanded && (
                 <View style={styles.content}>
                     <View style={styles.communitySlider}>
-                        <CommunitySlider icon={<AntDesign name="star" size={18} color="#9C0A35" />} title="+" textColor='#9C0A35' />
+                        <CommunitySliderTwo title='+' textColor='#9C0A35' />
                     </View>
                     <Text style={tw`p-3 mt-4`}>
                         <CustomCheckbox
