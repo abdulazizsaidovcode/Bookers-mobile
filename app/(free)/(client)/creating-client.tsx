@@ -88,6 +88,14 @@ const CreatingClient = () => {
 
     useEffect(() => {
         if (refreshing) {
+            if (ageData) {
+                const transformedAge = ageData.map(item => ({
+                    key: item.id,
+                    value: item.ageRange
+                }));
+                setAges(transformedAge)
+            }
+
             if (regionData) {
                 const transformedRegion = regionData.map(item => ({
                     key: item.id,
