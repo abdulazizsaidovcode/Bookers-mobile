@@ -20,6 +20,8 @@ export const  useAccardionStore=create<AccardionStoreState>((set)=>({
     isSelected:false,
     expanded2:false,
     expanded3:false,
+    mainExpend:false,
+    setMainExpend:(val:boolean)=>set({mainExpend:val}),
     setExpended2:(val:boolean)=>set({expanded2:val}),
     setExpended3:(val:boolean)=>set({expanded3:val}),
     setExpanded:(val:boolean)=>set({expanded:val}),
