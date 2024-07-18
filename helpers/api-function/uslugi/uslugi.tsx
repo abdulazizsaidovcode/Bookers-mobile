@@ -16,14 +16,15 @@ export const getAllCategory = async () => {
   }
 };
 
-export const postClientFilter = async () => {
-  try{
+export const postClientFilter = async (categoryId: any, gender?: boolean | null, nextToMe?: number | null, rating?: number | null, lat: number | null, lng: number | null) => {
+  try {
     const config = await getConfig();
-    const res = await axios.post(`${getClient_filter}`, config);
-    if(res.data.success === true){
-      console.log();
+    const { data } = await axios.post(`${getClient_filter}`, { categoryId, gender, nextToMe, rating, lat, lng }, config);
+    if (data.success) {
+      console.log(data);
+
     }
-  }catch(error){
-    console.log(error); 
+  } catch (error) {
+    console.log(error);
   }
 }

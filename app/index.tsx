@@ -19,6 +19,7 @@ const Index: React.FC = () => {
                     setIsFirstLaunch(false);
                 }
             } catch (error) {
+                await SecureStore.deleteItemAsync('number');
                 console.log(error);
             }
         };
