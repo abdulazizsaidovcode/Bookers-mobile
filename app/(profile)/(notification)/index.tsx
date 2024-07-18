@@ -34,9 +34,15 @@ const Notification: React.FC = () => {
         try {
             const config = await getConfig();
             const { data } = await axios.get(`${base_url}notification`, config ? config : {});
-            setNotifications(data.body);
+            if (data.success) {
+                setNotifications(data.body);
+            }else {
+                setNotifications([]);
+            }
+
         } catch (error) {
-            console.log(error);
+            setNotifications([]);
+
         } finally {
             setisLoading(false);
         }
@@ -66,6 +72,8 @@ const Notification: React.FC = () => {
 
     useEffect(() => {
         getNotification();
+        console.log(notifications);
+
     }, [deleteNot]);
 
     return (
@@ -92,12 +100,12 @@ const Notification: React.FC = () => {
                                 <FontAwesome name="trash" size={24} color="#fff" />
                             </TouchableOpacity>
                         ) : (
-                            <Text>efrtg</Text>
+                            <Text></Text>
                         )}
                 </View>
                 {isLoading && <ActivityIndicator size="large" color={"#888"} />}
                 {!isLoading && notifications && notifications.length === 0 && (
-                    <Text style={tw`text-xl text-center text-white mt-10`}>
+                    <Text style={tw` text-center text-white mt-10`}>
                         Нет уведомлений
                     </Text>
                 )}
