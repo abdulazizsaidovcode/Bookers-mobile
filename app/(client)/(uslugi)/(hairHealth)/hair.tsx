@@ -13,6 +13,18 @@ const Hair = () => {
     const router = useRouter(); // Initialize the useRouter hook
     const [isSelected, setSelection] = useState(false);
 
+    const handleAccordionFreeChange = (value) => {
+        console.log('AccordionFree value:', value);
+    };
+
+    const handleAccardionSliderChange = (value) => {
+        console.log('AccardionSlider value:', value);
+    };
+
+    const handleAccardionSliderTwoChange = (value) => {
+        console.log('AccardionSliderTwo value:', value);
+    };
+
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor="#21212E" barStyle="light-content" />
@@ -22,9 +34,9 @@ const Hair = () => {
                 contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
                 <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                     <Text style={[tw`text-gray-400 text-lg`, { marginBottom: 16 }]}>Подберите критерии услуг</Text>
-                    <AccordionFree title='Пол мастера' />
-                    <AccardionSlider title='Рядом со мной' />
-                    <AccardionSliderTwo title='Рейтинг' />
+                    <AccordionFree title='Пол мастера' onValueChange={handleAccordionFreeChange} />
+                    <AccardionSlider title='Рядом со мной' onValueChange={handleAccardionSliderChange} />
+                    <AccardionSliderTwo title='Рейтинг' onValueChange={handleAccardionSliderTwoChange} />
                 </View>
                 <View style={tw`content-end mb-5`}>
                     <View style={tw`mt-2 content-end`}>

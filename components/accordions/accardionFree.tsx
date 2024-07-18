@@ -7,6 +7,7 @@ import tw from 'tailwind-react-native-classnames';
 
 interface AccordionItemProps {
     title: string;
+    onValueChange: (value: boolean) => void;
 }
 
 // Platform uchun LayoutAnimation to'g'ri ishlashi uchun
@@ -14,7 +15,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
+const AccordionFree: React.FC<AccordionItemProps> = ({ title , onValueChange}) => {
     const [expanded, setExpanded] = useState(false);
     const [value, setValue] = useState(false);
     const [genderIndex, setGenderIndex] = useState<number>(-1);
@@ -30,6 +31,10 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
         { label: 'Erkak', value: 0 },
         { label: 'Ayol', value: 1 },
     ];
+    const handleCheckboxChange = (newValue: boolean) => {
+        setSelection(newValue);
+        onValueChange(newValue);
+    };
 
     const onPressRadioButton = (index: number) => {
         setGenderIndex(index);
@@ -78,11 +83,11 @@ const AccordionFree: React.FC<AccordionItemProps> = ({ title }) => {
                             </RadioButton>
                         ))}
                     </RadioForm>
-                    <Text style={tw`p-3`}>
+                    <Text style={tw`p-3 mt-3`}>
                         <CustomCheckbox
-                            value={isSelected}
-                            onValueChange={setSelection}
                             title='не важно'
+                            value={isSelected}
+                            onValueChange={handleCheckboxChange}
                         />
                     </Text>
 

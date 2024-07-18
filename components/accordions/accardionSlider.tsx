@@ -1,18 +1,21 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager} from 'react-native';
-import {AntDesign} from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import CustomCheckbox from '../checkbox/checkbox';
 import tw from 'tailwind-react-native-classnames';
 import CommunitySlider from '../communiytSlider/communitySlider';
 
 interface AccordionItemProps {
     title: string;
+    onValueChange: (value: boolean) => void;
 }
 
 // Platform uchun LayoutAnimation to'g'ri ishlashi uchun
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) UIManager.setLayoutAnimationEnabledExperimental(true)
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
-const AccardionSlider: React.FC<AccordionItemProps> = ({title}) => {
+const AccardionSlider: React.FC<AccordionItemProps> = ({ title, onValueChange }) => {
     const [expanded, setExpanded] = useState(false);
     const [isSelected, setSelection] = useState(false);
 
@@ -21,6 +24,12 @@ const AccardionSlider: React.FC<AccordionItemProps> = ({title}) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setExpanded(!expanded);
     };
+
+    const handleCheckboxChange = (newValue: boolean) => {
+        setSelection(newValue);
+        onValueChange(newValue);
+    };
+
     return (
         <View style={[styles.container]}>
             {/* Sarlavha va belgi */}
@@ -32,20 +41,20 @@ const AccardionSlider: React.FC<AccordionItemProps> = ({title}) => {
                 <View style={styles.mainText}>
                     <Text style={styles.headerText}>{title}</Text>
                 </View>
-                <AntDesign name={expanded ? 'down' : 'right'} size={20} color="#4F4F4F"/>
+                <AntDesign name={expanded ? 'down' : 'right'} size={20} color="#4F4F4F" />
             </TouchableOpacity>
 
             {/* Agar accordion ochilgan bo'lsa, kontentni ko'rsatish */}
             {expanded && (
                 <View style={styles.content}>
                     <View style={styles.communitySlider}>
-                        <CommunitySlider title="KM" textColor='#9C0A35'/>
+                        <CommunitySlider title="KM" textColor='#9C0A35' />
                     </View>
                     <Text style={tw`p-3 mt-3`}>
                         <CustomCheckbox
-                           title='не важно'
+                            title='не важно'
                             value={isSelected}
-                            onValueChange={setSelection}
+                            onValueChange={handleCheckboxChange}
                         />
                     </Text>
                 </View>
