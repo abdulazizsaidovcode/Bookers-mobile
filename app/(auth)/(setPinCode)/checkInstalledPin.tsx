@@ -1,25 +1,33 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
+import React, {useState, useRef, useEffect, useCallback} from 'react';
+import {
+    View,
+    TextInput,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    NativeSyntheticEvent,
+    TextInputKeyPressEventData,
+    SafeAreaView
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTranslation } from 'react-i18next';
-import { registerClient, registerMaster } from '@/helpers/api-function/register/registrFC';
+import {useTranslation} from 'react-i18next';
+import {registerClient, registerMaster} from '@/helpers/api-function/register/registrFC';
 import registerStory from '@/helpers/state_managment/auth/register';
-import { useNavigation } from '@react-navigation/native';
-import { authStorage, getClientOrMaster } from "@/constants/storage";
-import { useFocusEffect } from 'expo-router';
-import { langstore } from '@/helpers/state_managment/lang/lang';
+import {useNavigation} from '@react-navigation/native';
+import {authStorage, getClientOrMaster} from "@/constants/storage";
+import {useFocusEffect} from 'expo-router';
+import {langstore} from '@/helpers/state_managment/lang/lang';
 import Toast from "react-native-simple-toast";
 import * as SecureStore from 'expo-secure-store';
-import { getConfig } from '@/app/(tabs)/(master)/main';
+import {getConfig} from '@/app/(tabs)/(master)/main';
 
 const CheckPin: React.FC = () => {
-    const { firstName, lastName, nickname, phoneNumber } = registerStory()
-    const { language } = langstore()
-    const { role, setRole } = registerStory()
+    const {firstName, lastName, nickname, phoneNumber, role, setRole, img} = registerStory()
+    const {language} = langstore()
 
     const inputs = useRef<TextInput[]>([]);
 
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const navigation = useNavigation<any>();
 
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
@@ -28,7 +36,6 @@ const CheckPin: React.FC = () => {
     const [isCorrect, setIsCorrect] = useState<boolean | null>(true);
     const [tokenData, setTokenData] = useState<string | null>('');
     const [isLogin, setIslogin] = useState<any>(false);
-
 
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
     const enteredOtp = otp.join('');
@@ -48,8 +55,6 @@ const CheckPin: React.FC = () => {
 
             getStoredOtp();
             getClientOrMaster(setRole)
-            console.log(phoneNumber, 'check');
-            
         }, [])
     )
 
@@ -64,15 +69,10 @@ const CheckPin: React.FC = () => {
         if (enteredOtp === storedOtp) {
             setIsCorrect(true);
             if (isLogin) {
-                if (role === 'ROLE_MASTER') {
-                    navigation.navigate('(tabs)/(master)')
-                } else if (role === 'ROLE_CLIENT') {
-                    navigation.navigate('(tabs)/(client)')
-                }
+                if (role === 'ROLE_MASTER') navigation.navigate('(tabs)/(master)')
+                else if (role === 'ROLE_CLIENT') navigation.navigate('(tabs)/(client)')
             }
-        } else {
-            setIsCorrect(false);
-        }
+        } else setIsCorrect(false)
     }, [isLogin])
 
     const handleChangeText = (text: string, index: number) => {
@@ -80,30 +80,22 @@ const CheckPin: React.FC = () => {
             const newOtp = [...otp];
             newOtp[index] = text;
             setOtp(newOtp);
-            if (text && index < 3) {
-                inputs.current[index + 1].focus();
-            }
+            if (text && index < 3) inputs.current[index + 1].focus()
         }
     };
 
     const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>, index: number) => {
-        if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) {
-            inputs.current[index - 1].focus();
-        }
+        if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) inputs.current[index - 1].focus()
     };
 
     // ----------- REGISTER ----------------- //
     const handleContinue = async () => {
         if (enteredOtp === storedOtp) {
             setIsCorrect(true);
-            if (role === 'ROLE_MASTER') {
-                navigation.navigate('(tabs)/(master)')
-            } else if (role === 'ROLE_CLIENT') {
-                navigation.navigate('(tabs)/(client)')
-            }
-        } else {
-            setIsCorrect(false);
-        }
+
+            if (role === 'ROLE_MASTER') navigation.navigate('(tabs)/(master)')
+            else if (role === 'ROLE_CLIENT') navigation.navigate('(tabs)/(client)')
+        } else setIsCorrect(false)
     };
 
     // ----------- PIN install ----------------- //
@@ -113,11 +105,8 @@ const CheckPin: React.FC = () => {
             SecureStore.setItemAsync('password', enteredOtp)
             setIslogin(true)
 
-            if (role === 'ROLE_MASTER') {
-                navigation.navigate('(tabs)/(master)')
-            } else if (role === 'ROLE_CLIENT') {
-                navigation.navigate('(tabs)/(client)')
-            }
+            if (role === 'ROLE_MASTER') navigation.navigate('(tabs)/(master)')
+            else if (role === 'ROLE_CLIENT') navigation.navigate('(tabs)/(client)')
         } else {
             setIsCorrect(false);
             Toast.show("неверный пин-код", Toast.SHORT);
@@ -136,6 +125,7 @@ const CheckPin: React.FC = () => {
                 setData: setTokenData,
                 password: enteredOtp,
                 language: language,
+                img
             })
         } else {
             registerClient({
@@ -145,6 +135,7 @@ const CheckPin: React.FC = () => {
                 setData: setTokenData,
                 password: enteredOtp,
                 language: language,
+                img
             })
         }
     }
@@ -176,22 +167,17 @@ const CheckPin: React.FC = () => {
                     <TouchableOpacity
                         style={[
                             styles.button,
-                            { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
+                            {backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282'},
                         ]}
                         onPress={() => {
-                            console.log(token, "dfe");
-
-                            if (!token) {
-                                register()
-                            } else {
-                                installPinCode()
-                            }
+                            if (!token) register()
+                            else installPinCode()
                         }}
                         disabled={!isButtonEnabled}
                     >
                         <Text style={[
                             styles.buttonText,
-                            { color: isButtonEnabled ? '#FFF' : '#FFF' }
+                            {color: isButtonEnabled ? '#FFF' : '#FFF'}
                         ]}>
                             {t("Continue")}
                         </Text>
