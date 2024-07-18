@@ -8,8 +8,6 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import React, { useEffect, useState, useCallback, Children } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { List } from 'react-native-paper';
-import axios from 'axios';
-import { config } from '@/helpers/token';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { useSheduleData } from '@/helpers/state_managment/schedule/schedule';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
@@ -41,15 +39,31 @@ const BookedAccordion: React.FC = () => {
         }, [setFreeTime])
     );
 
-    useEffect(() => {
-        console.log(getMee.id);
-        
-        if (calendarDate && getMee.id) {
+    useFocusEffect(
+        useCallback(() => {
+            if (calendarDate && getMee.id) {
+                setDate(calendarDate)
+                getFreeTime(calendarDate, setFreeTime, getMee.id);
+            }
+            getUser(setGetMee);
+        }, [calendarDate, setFreeTime])
+    );
+    useFocusEffect(
+        useCallback(() => {
+            if (calendarDate && getMee.id) {
+                setDate(calendarDate)
+                getFreeTime(calendarDate, setFreeTime, getMee.id);
+            }
+            getUser(setGetMee);
+        }, [])
+    );
+
+    useFocusEffect(
+        useCallback(() => {
             setDate(calendarDate)
-            getFreeTime(calendarDate, setFreeTime, getMee.id);
-        }
-        getUser(setGetMee);
-    }, [calendarDate, setFreeTime]);
+        }, [setDate])
+    );
+
 
     useEffect(() => {
         if (calendarDate && activeTime && activeTab) {
@@ -107,7 +121,7 @@ const BookedAccordion: React.FC = () => {
                 <View>
                     {activeTab && (
                         <View style={styles.timeContainer}>
-                            {FreeTime ? FreeTime.map((time: string, index) => 
+                            {FreeTime ? FreeTime.map((time: string, index) =>
                                 <TouchableOpacity
                                     key={index}
                                     style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}

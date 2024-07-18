@@ -21,6 +21,7 @@ import AccordionItem from "@/components/accordions/accardion";
 import AccardionSlider from "@/components/accordions/accardionSlider";
 import AccardionSliderTwo from "@/components/accordions/accardionSliderTwo";
 import AccordionFree from "@/components/accordions/accardionFree";
+import AccordionCustom from "@/components/accordions/accardionCustom";
 
 const Masters = () => {
   const { masters, isLoading } = useTopMastersStore();
@@ -46,7 +47,7 @@ const Masters = () => {
         <TouchableOpacity
           onPress={toggleBottomModal}
           style={[
-            tw`rounded-lg px-4 py-2 border justify-center items-center flex-row`,
+            tw`rounded-lg px-4 py-2 justify-center items-center flex-row`,
             { backgroundColor: "#9c0935" },
           ]}
         >
@@ -185,8 +186,18 @@ const Masters = () => {
           isBottomModal={bottmModal}
           toggleBottomModal={toggleBottomModal}
           children={
-            <View>
-              <Text style={tw`text-xl text-white font-bold`}>Фильтр</Text>
+            <View style={tw`w-full mt-3`}>
+              <Text style={tw`text-xl text-center text-white font-bold`}>
+                Фильтр
+              </Text>
+              <AccordionCustom
+                title="Направления услуг"
+                children={
+                  <View>
+                    <Text>Hello</Text>
+                  </View>
+                }
+              />
               <AccordionFree title="Пол мастера" />
               <AccardionSlider title="Рядом со мной" />
               <AccardionSliderTwo title="Рейтинг" />

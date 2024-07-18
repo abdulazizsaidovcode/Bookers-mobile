@@ -15,7 +15,7 @@ type ClientCardProps = {
     onPress?:(()=> void)
 };
 
-const ClientCard: React.FC<ClientCardProps> = ({ salon,imageUrl, name, masterType, orders, clients, address, zaps, onPress }) => {
+const ClientCard: React.FC<ClientCardProps | any> = ({ salon,imageUrl, name, masterType, orders, clients, address, zaps, onPress }) => {
     const hasNumber = (number: number) => {
     };
     const starNumbers = [1, 2, 3, 4, 5];

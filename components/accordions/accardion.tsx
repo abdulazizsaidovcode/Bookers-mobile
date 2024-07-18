@@ -15,8 +15,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const AccordionItem: React.FC<AccordionItemProps> = ({ title, children, titleThen, backgroundColor }) => {
-  const {mainExpend,setMainExpend}=useAccardionStore()
-
+  const[mainExpend,setMainExpend]=useState(false)
   const toggleExpand = () => {
     // Animatsiya
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);

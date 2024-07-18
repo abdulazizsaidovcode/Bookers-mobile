@@ -14,8 +14,6 @@ const AvailableAccordion: React.FC = () => {
 
     useEffect(() => {
         getBookedSchedule(calendarDate, setSchedule)
-        console.log(schedule);
-
     }, [calendarDate]);
 
     return (

@@ -21,43 +21,47 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import { useNavigation } from "expo-router";
 import History from "@/helpers/state_managment/history";
 import { getConfig } from "@/app/(tabs)/(master)/main";
+import { ProductType } from "@/type/history";
 
 const Canceledentries = () => {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<ProductType[]>([]);
   const [isChecked, setChecked] = useState(false);
-  const [pastentries, setPastentries] = useState([]);
+  const [pastEntries, setPastEntries] = useState<string[]>([]);
   const [toggle, setToggle] = useState(false);
   const navigation = useNavigation<any>();
   const { setProduct } = History();
 
-  const getsessionDetails = async () => {
+  const getSessionDetails = async () => {
     try {
       const config = await getConfig();
-      const response = await axios.get(`${base_url}order/canceled-sessions?status=CANCELED_SESSIONS`, config ? config : {});
+      const response = await axios.get(
+        `${base_url}order/canceled-sessions?status=CANCELED_SESSIONS`,
+        config ? config : {}
+      );
       const responseData = response.data;
-      if (responseData.success === true) setData(responseData.body);
+      if (responseData.success) setData(responseData.body);
       console.log(responseData);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const deletePastentries = (id: string) => {
-    const res = pastentries.filter((state) => state !== id);
-    setPastentries(res);
+  const deletePastEntries = (id: string) => {
+    const res = pastEntries.filter((state) => state !== id);
+    setPastEntries(res);
     console.log(res);
   };
 
   const selectAll = () => {
     const selected = data.map((item) => item.id);
     console.log(selected);
-    setPastentries(selected);
+    setPastEntries(selected);
   };
 
   const deletePast = async () => {
     const pastData = {
       status: "CANCELED_SESSIONS",
-      orderIdList: pastentries,
+      orderIdList: pastEntries,
     };
 
     try {
@@ -66,25 +70,29 @@ const Canceledentries = () => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': config ? config.headers.Authorization : '',
+          Authorization: config ? config.headers.Authorization : "",
         },
-        body: JSON.stringify(pastData), // body'i JSON string formatında gönderiyoruz
+        body: JSON.stringify(pastData),
       });
       const responseData = await response.json();
-      if (responseData.success) setToggle(false);
-      setChecked(false);
-      setPastentries(responseData);
+      if (responseData.success) {
+        setToggle(false);
+        setChecked(false);
+        setPastEntries([]);
+      }
     } catch (error) {
       console.error("Error deleting past entries:", error);
     }
   };
 
   useEffect(() => {
-    getsessionDetails();
-  }, [pastentries]);
+    getSessionDetails();
+  }, []);
 
   return (
-    <View style={[tw`flex-1 bg-gray-900 p-4 mt-5`, {backgroundColor: "#21212E"}]}>
+    <View
+      style={[tw`flex-1 bg-gray-900 p-4 mt-5`, { backgroundColor: "#21212E" }]}
+    >
       {isChecked ? (
         <View
           style={[
@@ -97,7 +105,7 @@ const Canceledentries = () => {
               <AntDesign
                 onPress={() => {
                   setChecked(!isChecked);
-                  setPastentries([]);
+                  setPastEntries([]);
                 }}
                 name="close"
                 size={20}
@@ -106,7 +114,7 @@ const Canceledentries = () => {
               <Text
                 style={[tw`text-lg font-bold mr-4 ml-1`, { color: "#828282" }]}
               >
-                {pastentries.length}
+                {pastEntries.length}
               </Text>
             </View>
             <TouchableOpacity
@@ -121,7 +129,7 @@ const Canceledentries = () => {
             </TouchableOpacity>
           </View>
           <MaterialIcons
-            onPress={() => pastentries.length !== 0 && setToggle(!toggle)}
+            onPress={() => pastEntries.length !== 0 && setToggle(!toggle)}
             name="delete"
             size={30}
             color="white"
@@ -137,7 +145,7 @@ const Canceledentries = () => {
 
       <ScrollView>
         {data &&
-          data.map((item: any) => (
+          data.map((item) => (
             <Pressable
               onPress={() => {
                 !isChecked && navigation.navigate("(detail)/censeled-session"),
@@ -148,9 +156,9 @@ const Canceledentries = () => {
             >
               {isChecked && (
                 <View>
-                  {pastentries.length > 0 && pastentries.includes(item.id) ? (
+                  {pastEntries.includes(item.id) ? (
                     <Pressable
-                      onPress={() => deletePastentries(item.id)}
+                      onPress={() => deletePastEntries(item.id)}
                       key={`checked-${item.id}`}
                       style={[
                         tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
@@ -166,7 +174,7 @@ const Canceledentries = () => {
                     </Pressable>
                   ) : (
                     <Pressable
-                      onPress={() => setPastentries([...pastentries, item.id])}
+                      onPress={() => setPastEntries([...pastEntries, item.id])}
                       key={`unchecked-${item.id}`}
                       style={[
                         tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
@@ -203,11 +211,16 @@ const Canceledentries = () => {
         toggleModal={() => setToggle(!toggle)}
         btnWhiteText="Отмена"
         btnRedText="Да"
+        children={
+          <>
+            <FontAwesome name="trash" size={80} color="#9c0935" />
+            <Text style={tw`text-white my-5`}>
+              Удалить все прошедшие сеансы?
+            </Text>
+          </>
+        }
         isFullBtn={true}
-      >
-        <FontAwesome name="trash" size={80} color="#9c0935" />
-        <Text style={tw`text-white my-5`}>Удалить все прошедшие сеансы?</Text>
-      </CenteredModal>
+      />
     </View>
   );
 };

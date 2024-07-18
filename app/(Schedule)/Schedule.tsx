@@ -80,7 +80,12 @@ const Schedule: React.FC = () => {
     try {
       const config = await getConfig();
       toggle();
-      await axios.post(`${base_url}order/stop-recording?isActive=true`, config);
+      if (schedule.length) {
+        await axios.post(
+          `${base_url}order/stop-recording?isActive=true`,
+          config
+        );
+      }
     } catch (error) {
       console.log(error);
     }
@@ -130,7 +135,7 @@ const Schedule: React.FC = () => {
             />
             {tarif === "STANDART" && (
               <Buttons title="Остановить запись" onPress={toggle} />
-            )} 
+            )}
           </View>
         )}
       </ScrollView>
@@ -144,7 +149,9 @@ const Schedule: React.FC = () => {
       >
         <View>
           <Text style={tw`text-white text-base text-center`}>
-            На выбранный день 3 забронированных сеанса
+            {schedule.length
+              ? "На выбранный день {schedule.length} забронированных сеанса"
+              : "У вас нет непогашенных ордеров"}
           </Text>
           <Text style={tw`text-white text-base text-center my-3 font-bold`}>
             Запретить бронирование на выбранный день?

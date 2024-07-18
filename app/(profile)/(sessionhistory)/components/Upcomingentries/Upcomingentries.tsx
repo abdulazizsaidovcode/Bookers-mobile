@@ -13,17 +13,17 @@ import tw from "tailwind-react-native-classnames";
 import { FontAwesome, FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { base_url } from "@/helpers/api";
+import { base_url, getFile } from "@/helpers/api";
 import moment from "moment";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-
+import { ProductType } from "@/type/history";
 
 const Upcomingentries = () => {
-  const navigation = useNavigation();
-  const [data, setData] = useState([]);
+  const navigation = useNavigation<any>();
+  const [data, setData] = useState<ProductType[]>([]);
   const { getMee } = useGetMeeStore();
   const [bottomModalNetwork, setBottomModalNetwork] = useState(false);
   const [useDefault, setUseDefault] = useState(false);
@@ -48,9 +48,9 @@ const Upcomingentries = () => {
       const config = await getConfig();
       const { data } = await axios.get(
         `${base_url}order/upcoming-sessions?status=UPCOMING_SESSIONS`,
-        config
+        config ? config : {}
       );
-      setData(data.body);
+      if (data.success) setData(data.body);
     } catch (error) {
       console.log(error);
     }
@@ -65,7 +65,7 @@ const Upcomingentries = () => {
       <View style={tw`flex-row items-center mb-4`}>
         <Image
           source={{
-            uri: `http://45.67.35.86:8080/attachment/getFile/${item.attachmentId}`,
+            uri: `${getFile}${item.attachmentId}`,
           }}
           style={tw`w-12 h-12 rounded-full mr-4`}
         />
@@ -120,8 +120,10 @@ const Upcomingentries = () => {
   );
 
   return (
-    <View style={[tw`flex-1 bg-gray-900 p-4 mt-5`, {backgroundColor: "#21212E"}]}>
-      <NavigationMenu name="Предстоящие записи"/>
+    <View
+      style={[tw`flex-1 bg-gray-900 p-4 mt-5`, { backgroundColor: "#21212E" }]}
+    >
+      <NavigationMenu name="Предстоящие записи" />
       <FlatList
         data={data}
         renderItem={renderItem}

@@ -17,10 +17,6 @@ import { router } from "expo-router";
 const RequestWindow = () => {
   const { isEnabled, setIsEnabled, isEnabled2, setIsEnabled2, data, setData } =
     OnlineBookingStory2();
-  // const { isRegtered } = isRegister();
-  // const { setTime } = OnlineBookingCheck();
-
-  // setTime(isRegister);
 
   useEffect(() => {
     // Ma'lumotlarni olish va setData funksiyasi orqali o'rnatish

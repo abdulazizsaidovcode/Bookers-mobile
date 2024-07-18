@@ -1,7 +1,7 @@
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import { base_url } from "@/helpers/api";
+import { base_url, getFile } from "@/helpers/api";
 import History from "@/helpers/state_managment/history";
 import Pastentries from "@/helpers/state_managment/pastentries/Pastentries";
 import {
@@ -17,18 +17,18 @@ import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
 import tw from "tailwind-react-native-classnames";
 
 const PastEntries = () => {
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<any[]>([]);
   const { isChecked, setChecked, pastentries, setPastentries } = Pastentries();
   const [toggle, setToggle] = useState(false);
   const { setProduct } = History();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   const getsessionDetails = async () => {
     try {
       const config = await getConfig();
       const response = await axios.get(
         `${base_url}order/past-sessions?status=PAST_SESSIONS`,
-        config
+        config ? config : {}
       );
       const responseData = response.data;
       if (responseData.success === true) setData(responseData.body);
@@ -46,7 +46,6 @@ const PastEntries = () => {
 
   const selectAll = () => {
     const selected = data.map((item) => item.id);
-    console.log(selected);
     setPastentries(selected);
   };
 
@@ -62,9 +61,9 @@ const PastEntries = () => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          ...config.headers, // config içindeki headers'ı buraya ekliyoruz
+          Authorization: config ? config.headers.Authorization : "",
         },
-        body: JSON.stringify(pastData), // body'i JSON string formatında gönderiyoruz
+        body: JSON.stringify(pastData),
       });
       const responseData = await response.json();
       if (responseData.success) setToggle(false);
@@ -80,7 +79,9 @@ const PastEntries = () => {
   }, [pastentries]);
 
   return (
-    <View style={[tw`flex-1 bg-gray-900 p-4 mt-5`, {backgroundColor: "#21212E"}]}>
+    <View
+      style={[tw`flex-1 bg-gray-900 p-4 mt-5`, { backgroundColor: "#21212E" }]}
+    >
       {isChecked ? (
         <View
           style={[
@@ -177,7 +178,7 @@ const PastEntries = () => {
             )}
             <Image
               source={{
-                uri: `http://45.67.35.86:8080/attachment/getFile/${item.attachmentId}`,
+                uri: `${getFile}${item.attachmentId}`,
               }}
               style={tw`w-12 h-12 rounded-full mr-4`}
             />
@@ -198,8 +199,10 @@ const PastEntries = () => {
         btnRedText="Да"
         isFullBtn={true}
       >
-        <FontAwesome name="trash" size={80} color="#9c0935" />
-        <Text style={tw`text-white my-5`}>Удалить все прошедшие сеансы?</Text>
+        <>
+          <FontAwesome name="trash" size={80} color="#9c0935" />
+          <Text style={tw`text-white my-5`}>Удалить все прошедшие сеансы?</Text>
+        </>
       </CenteredModal>
     </View>
   );

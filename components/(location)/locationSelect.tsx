@@ -8,9 +8,9 @@ import { base_url } from "@/helpers/api";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 
 interface Types {
-  setDistrictId: () => void;
+  setDistrictId: (val: string) => void;
   city: string;
-  setCity: () => void;
+  setCity: (val: string) => void;
 }
 
 const LocationSelect = ({ setDistrictId, city, setCity }: Types) => {
@@ -19,9 +19,7 @@ const LocationSelect = ({ setDistrictId, city, setCity }: Types) => {
 
   const getCity = async () => {
     const config = await getConfig()
-    const { data } = await axios.get(
-      `${base_url}district/name/filter?name=${city}`,
-      config
+    const { data } = await axios.get(`${base_url}district/name/filter?name=${city}`, config ? config : {}
     );
     setData(data.body);
   };
@@ -60,12 +58,6 @@ const LocationSelect = ({ setDistrictId, city, setCity }: Types) => {
                 <Text style={tw`text-lg text-white`}>{item?.name}</Text>
               </TouchableOpacity>
             ))}
-          {data.length === 0 && (
-            <Text style={tw`text-lg text-white`}>
-              Not fount:
-              <Text style={tw`text-lg text-red-500 font-bold`}> {city}</Text>
-            </Text>
-          )}
         </View>
       )}
     </View>

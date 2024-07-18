@@ -6,7 +6,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { useNavigation } from 'expo-router';
 import { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
-
+// Bu bo'limga teginma
 type DashboardItemType = {
   id: number;
   image: ImageSourcePropType;

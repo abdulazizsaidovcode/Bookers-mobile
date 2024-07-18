@@ -10,9 +10,9 @@ const CalendarComponent = () => {
                 markedDates={{
                     '2024-02-23': { selected: true, marked: true, selectedColor: '#9C0A35' }
                 }}
-                onDayPress={(day: string) => {
-                    console.log(day);
-                }}
+                // onDayPress={(day: string) => {
+                //     console.log(day);
+                // }}
                 style={{
                     width: 350,
                     borderRadius: 20,
