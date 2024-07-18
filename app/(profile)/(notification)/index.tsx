@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -8,18 +8,18 @@ import {
     SafeAreaView,
     ActivityIndicator,
 } from "react-native";
-import {useNavigation} from "@react-navigation/native";
-import {Feather, FontAwesome} from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import NotificationCard from "./card/index";
 import axios from "axios";
-import {base_url} from "@/helpers/api";
+import { base_url } from "@/helpers/api";
 import tw from "tailwind-react-native-classnames";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import NotificationSelect from "@/helpers/state_managment/notification";
 import Buttons from "@/components/(buttons)/button";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import {putNumbers} from "@/helpers/api-function/numberSittings/numbersetting";
-import {getConfig} from "@/app/(tabs)/(master)/main";
+import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 
 const Notification: React.FC = () => {
     const navigation = useNavigation<any>();
@@ -27,13 +27,13 @@ const Notification: React.FC = () => {
     const [isLoading, setisLoading] = useState(false);
     const [toggle, setToggle] = useState(false);
     const [deleteNot, setDeleteNot] = useState([]);
-    const {onClose, notification, isModal} = NotificationSelect();
+    const { onClose, notification, isModal } = NotificationSelect();
 
     const getNotification = async () => {
         setisLoading(true);
         try {
             const config = await getConfig();
-            const {data} = await axios.get(`${base_url}notification`, config ? config : {});
+            const { data } = await axios.get(`${base_url}notification`, config ? config : {});
             setNotifications(data.body);
         } catch (error) {
             console.log(error);
@@ -52,7 +52,7 @@ const Notification: React.FC = () => {
                     "Content-Type": "application/json",
                     'Authorization': config ? config.headers.Authorization : '',
                 },
-                body: JSON.stringify({notificationIds: deleteData}),
+                body: JSON.stringify({ notificationIds: deleteData }),
             });
             const responseData = await response.json();
             setDeleteNot(responseData);
@@ -86,23 +86,24 @@ const Notification: React.FC = () => {
                         />
                     </TouchableOpacity>
                     <Text style={styles.headerText}>Уведомления</Text>
-                    {notifications && notifications.length > 0 ? (
-                        <TouchableOpacity onPress={() => setToggle(!toggle)}>
-                            <FontAwesome name="trash" size={24} color="#fff"/>
-                        </TouchableOpacity>
-                    ) : (
-                        <View></View>
-                    )}
+                    {
+                        notifications && notifications.length > 0 ? (
+                            <TouchableOpacity onPress={() => setToggle(!toggle)}>
+                                <FontAwesome name="trash" size={24} color="#fff" />
+                            </TouchableOpacity>
+                        ) : (
+                            <Text>efrtg</Text>
+                        )}
                 </View>
-                {isLoading && <ActivityIndicator size="large" color={"#888"}/>}
-                {!isLoading && notifications.length === 0 && (
+                {isLoading && <ActivityIndicator size="large" color={"#888"} />}
+                {!isLoading && notifications && notifications.length === 0 && (
                     <Text style={tw`text-xl text-center text-white mt-10`}>
                         Нет уведомлений
                     </Text>
                 )}
                 <FlatList
                     data={notifications}
-                    renderItem={({item}) => <NotificationCard item={item}/>}
+                    renderItem={({ item }) => <NotificationCard item={item} />}
                     keyExtractor={(item: any) => item.id}
                 />
             </View>
@@ -117,7 +118,7 @@ const Notification: React.FC = () => {
                         </Text>
                     </View>
                     <View style={tw`mt-5`}>
-                        <Buttons title="Попробовать" onPress={onClose}/>
+                        <Buttons title="Попробовать" onPress={onClose} />
                     </View>
                 </View>
             </BottomModal>
@@ -130,7 +131,7 @@ const Notification: React.FC = () => {
                 isFullBtn={true}
             >
                 <>
-                    <FontAwesome name="trash" size={80} color="#9c0935"/>
+                    <FontAwesome name="trash" size={80} color="#9c0935" />
                     <Text style={tw`text-white my-5`}>
                         Вы хотите очистить все уведомлении?
                     </Text>

@@ -13,6 +13,8 @@ interface CardItemProps {
 }
 
 const CardItem: React.FC<CardItemProps> = ({ name, phone, attachmentId, service, price, startTime, endTime }) => {
+    console.log(attachmentId);
+    
     return (
         <View style={styles.card}>
             <View style={styles.cardHeader}>

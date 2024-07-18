@@ -39,15 +39,31 @@ const BookedAccordion: React.FC = () => {
         }, [setFreeTime])
     );
 
-    useEffect(() => {
-        console.log(getMee.id);
-        
-        if (calendarDate && getMee.id) {
+    useFocusEffect(
+        useCallback(() => {
+            if (calendarDate && getMee.id) {
+                setDate(calendarDate)
+                getFreeTime(calendarDate, setFreeTime, getMee.id);
+            }
+            getUser(setGetMee);
+        }, [calendarDate, setFreeTime])
+    );
+    useFocusEffect(
+        useCallback(() => {
+            if (calendarDate && getMee.id) {
+                setDate(calendarDate)
+                getFreeTime(calendarDate, setFreeTime, getMee.id);
+            }
+            getUser(setGetMee);
+        }, [])
+    );
+
+    useFocusEffect(
+        useCallback(() => {
             setDate(calendarDate)
-            getFreeTime(calendarDate, setFreeTime, getMee.id);
-        }
-        getUser(setGetMee);
-    }, [calendarDate, setFreeTime]);
+        }, [setDate])
+    );
+
 
     useEffect(() => {
         if (calendarDate && activeTime && activeTab) {
@@ -105,7 +121,7 @@ const BookedAccordion: React.FC = () => {
                 <View>
                     {activeTab && (
                         <View style={styles.timeContainer}>
-                            {FreeTime ? FreeTime.map((time: string, index) => 
+                            {FreeTime ? FreeTime.map((time: string, index) =>
                                 <TouchableOpacity
                                     key={index}
                                     style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
