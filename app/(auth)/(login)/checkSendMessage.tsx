@@ -3,10 +3,11 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister';
 import { RootStackParamList } from '@/type/root';
 import { NavigationProp } from '@react-navigation/native';
-import { router, useNavigation } from 'expo-router';
-import React, { useState, useRef, useEffect } from 'react';
+import { router, useFocusEffect, useNavigation } from 'expo-router';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as SecureStore from 'expo-secure-store';
+import Toast from 'react-native-simple-toast';
 
 import {
     View,
@@ -103,6 +104,13 @@ const OtpInputExample: React.FC = () => {
         finishwork()
     }, [response])
 
+    useFocusEffect(useCallback(() => {
+        if (code) {
+            Toast.show(`${code}`, Toast.LONG)
+        }
+    }, [code]))
+
+
     return (
         <View style={styles.container}>
             <View style={styles.textContainer}>
@@ -124,7 +132,6 @@ const OtpInputExample: React.FC = () => {
                         onPaste={handlePaste}
                     />
                 ))}
-                <Text style={styles.code}>{code}</Text>
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
