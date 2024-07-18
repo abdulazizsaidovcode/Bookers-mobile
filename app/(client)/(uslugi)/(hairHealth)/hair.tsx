@@ -8,7 +8,8 @@ import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { useRouter } from 'expo-router';
 
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, View, Text, StatusBar } from 'react-native';
+import { ScrollView, View, Text, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 
 const Hair = () => {
