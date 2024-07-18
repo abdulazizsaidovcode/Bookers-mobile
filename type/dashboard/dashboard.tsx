@@ -93,6 +93,7 @@ export interface RenderBookingRequestProps {
     toggleConfirmModal: () => void;
     toggleRejectedModal: () => void;
     setWaitingData: (val: DashboardWaitingOrder[]) => void
+    setHallData: (val: DashboardHallingOrder[]) => void
     isRejectedModal: boolean;
     isConfirmModal: boolean;
 }

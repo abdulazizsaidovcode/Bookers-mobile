@@ -27,7 +27,7 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
 import Buttons from "@/components/(buttons)/button";
-import {useFocusEffect, useNavigation} from "expo-router";
+import { useNavigation } from "expo-router";
 import * as SecureStore from 'expo-secure-store';
 import { getData } from "@/helpers/token";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -134,18 +134,15 @@ const TabOneScreen: React.FC = () => {
 		fetchData();
 	}, [hasAllNumbers]);
 
-	useFocusEffect(
-		useCallback(() => {
-			fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
-			fetchMainStatistic(setMainStatisticData);
-			fetchWaitingOrders(setWaitingData);
-			fetchHallingOrders(setHallData);
-			getUser(setGetMee);
-			fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
-			getData()
-			return () => {}
-		}, [])
-	);
+	useEffect(() => {
+		fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
+		fetchMainStatistic(setMainStatisticData);
+		fetchWaitingOrders(setWaitingData);
+		fetchHallingOrders(setHallData);
+		getUser(setGetMee);
+		fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
+		getData()
+	}, []);
 
 	const onRefresh = useCallback(() => {
 		handleRefresh(setRefreshing);
@@ -402,7 +399,7 @@ const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
 					toggleRejectedModal,
 					isConfirmModal,
 					isRejectedModal,
-					setHallData
+					setHallData,
 				})}
 				keyExtractor={item => item.id}
 				horizontal
@@ -431,10 +428,11 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
 	toggleRejectedModal,
 	isConfirmModal,
 	isRejectedModal,
-	setWaitingData
+	setWaitingData,
+	setHallData
 }) => {
-	const handleConfirm = () => editOrderStatus(setWaitingData, item.id, 'CONFIRMED', toggleConfirmModal);
-	const handleReject = () => editOrderStatus(setWaitingData, item.id, 'REJECTED', toggleRejectedModal);
+	const handleConfirm = () => editOrderStatus(setWaitingData, setHallData, item.id, 'CONFIRMED', toggleConfirmModal);
+	const handleReject = () => editOrderStatus(setWaitingData, setHallData, item.id, 'REJECTED', toggleRejectedModal);
 	return (
 		<View style={styles.bookingCard}>
 			<View style={styles.cardHeader}>
@@ -447,7 +445,7 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
 						style={styles.profileImage} />
 				</View>
 				<View>
-					<Text style={styles.userName}>{item.fullName}</Text>
+					<Text style={styles.userName}>{item.serviceName}</Text>
 					<Text style={styles.serviceText}>{item.serviceName}</Text>
 				</View>
 			</View>

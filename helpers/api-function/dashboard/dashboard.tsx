@@ -55,12 +55,13 @@ export const fetchTodayWorkGrafic = async (setTodayGrafic: (val: TodayWorkGrafic
     } catch { }
 }
 
-export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrder[]) => void, orderId: string, status: string, toggleModal: () => void) => {
+export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrder[]) => void, setHallData: (val: DashboardHallingOrder[]) => void, orderId: string, status: string, toggleModal: () => void) => {
     try {
         const config = await getConfig()
         const { data } = await axios.put(`${dashboard_edit_order_status}?orderId=${orderId}&status=${status}`, {}, config ? config : {});
         if (data.success) {
             fetchWaitingOrders(setWaitingData);
+            fetchHallingOrders(setWaitingData);
             toggleModal();
             if (status === 'CONFIRMED') Toast.show(`${data.message}`, Toast.LONG)
             else if (status === 'REJECTED') Toast.show(`${data.message}`, Toast.LONG)
