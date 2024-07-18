@@ -39,9 +39,7 @@ const ClientCameraInfo = () => {
             <View style={styles.topSection}>
                 <View style={styles.progressBar}>
                     <View style={styles.progressIndicator} />
-                    <View style={styles.progressSegment} />
                     <View style={styles.progressSegment1} />
-                    <View style={styles.progressSegment2} />
                 </View>
                 <Text style={styles.label}>{t("add_your_photo")}</Text>
                 <Text style={styles.description}>{t("do_not_wish_to_add_photo")}</Text>
