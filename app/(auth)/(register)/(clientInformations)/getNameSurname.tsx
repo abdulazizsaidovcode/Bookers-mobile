@@ -38,8 +38,6 @@ const ClientInfo: React.FC = () => {
                 <View style={styles.progressBar}>
                     <View style={styles.progressIndicator} />
                     <View style={styles.progressSegment} />
-                    <View style={styles.progressSegment} />
-                    <View style={styles.progressSegment} />
                 </View>
                 <Text style={styles.label}>{t("your_first_and_last_name")}</Text>
                 <TextInput

@@ -1,87 +1,86 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useCallback } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, ImageSourcePropType } from 'react-native';
 import AccordionItem from '../../../components/accordions/accardion';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
-import { router, useNavigation } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
-type SettingsScreenNavigationProp = NavigationProp<
-  RootStackParamList,
-  "(client)/(dashboard)/dashboard"
->;
 
-const Dashboard = () => {
-  const navigation = useNavigation<SettingsScreenNavigationProp>();
-  const dataDashboard = [
-    {
-      id: 1,
-      image: require('@/assets/clientDashboard/Layer_1.png'),
-      title: 'Здоровье и красота волос',
-      titleThen: 'Рядом с тобой 450',
-      onPress: () => {
-        navigation.navigate('(client)/(dashboard)/(health)/health');
-      },
-    },
-    {
-      id: 2,
-      image: require('@/assets/clientDashboard/pomada.png'),
-      title: 'Ногтевой сервис',
-      titleThen: 'Рядом с тобой 75',
-    },
-    {
-      id: 3,
-      image: require('@/assets/clientDashboard/eyes.png'),
-      title: 'Ресницы и брови',
-      titleThen: 'Рядом с тобой 322',
-    },
-    {
-      id: 4,
-      image: require('@/assets/clientDashboard/aranow.png'),
-      title: 'Уход за телом',
-      titleThen: 'Рядом с тобой 456',
-    },
-    {
-      id: 5,
-      image: require('@/assets/clientDashboard/dont.png'),
-      title: 'Уход за лицом',
-      titleThen: 'Рядом с тобой 210',
-    },
-  ];
+type DashboardItemType = {
+  id: number;
+  image: ImageSourcePropType;
+  title: string;
+  titleThen: string;
+  onPress?: () => void;
+};
+
+const IMAGES = {
+  health: require('@/assets/clientDashboard/Layer_1.png'),
+  nails: require('@/assets/clientDashboard/pomada.png'),
+  eyes: require('@/assets/clientDashboard/eyes.png'),
+  body: require('@/assets/clientDashboard/aranow.png'),
+  face: require('@/assets/clientDashboard/dont.png'),
+};
+
+const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
+  const handlePress = useCallback(() => {
+    if (item.onPress) item.onPress();
+  }, [item]);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.navbar}>
-        <Text style={styles.title}>Главная</Text>
-        <View style={styles.iconGroup}>
-          <FontAwesome5 name="bell" size={28} color="white" />
-          <Feather name="bookmark" size={28} color="white" />
+    <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={handlePress}>
+      <View style={styles.item}>
+        <View style={styles.imageContainer}>
+          <Image source={item.image} style={styles.image} />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.titleText}>{item.title}</Text>
+          <Text style={styles.subtitleText}>{item.titleThen}</Text>
         </View>
       </View>
+    </TouchableOpacity>
+  );
+};
+
+const Navbar: React.FC = () => (
+  <View style={styles.navbar}>
+    <Text style={styles.title}>Главная</Text>
+    <View style={styles.iconGroup}>
+      <FontAwesome5 name="bell" size={28} color="white" />
+      <Feather name="bookmark" size={28} color="white" />
+    </View>
+  </View>
+);
+
+const Dashboard: React.FC = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const dataDashboard: DashboardItemType[] = [
+    { id: 1, image: IMAGES.health, title: 'Здоровье и красота волос', titleThen: 'Рядом с тобой 450', onPress: () => navigation.navigate('(client)/(dashboard)/(health)/health') },
+    { id: 2, image: IMAGES.nails, title: 'Ногтевой сервис', titleThen: 'Рядом с тобой 75' },
+    { id: 3, image: IMAGES.eyes, title: 'Ресницы и брови', titleThen: 'Рядом с тобой 322' },
+    { id: 4, image: IMAGES.body, title: 'Уход за телом', titleThen: 'Рядом с тобой 456' },
+    { id: 5, image: IMAGES.face, title: 'Уход за лицом', titleThen: 'Рядом с тобой 210' },
+  ];
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Navbar />
       <ScrollView>
-        <AccordionItem title="Мои записи" titleThen='У вас пока нет записей, выберите услугу.' backgroundColor='#21212E'>
-          {dataDashboard.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={item.onPress}  >
-              <View style={styles.item}>
-                <View style={styles.imageContainer}>
-                  <Image source={item.image} style={styles.image} />
-                </View>
-                <View style={styles.textContainer}>
-                  <Text style={styles.titleText}>{item.title}</Text>
-                  <Text style={styles.subtitleText}>{item.titleThen}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+        <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
+          {dataDashboard.map(item => (
+            <DashboardItem key={item.id} item={item} />
           ))}
         </AccordionItem>
-        <AccordionItem title="Мои мастера" titleThen='У вас пока нет своих мастеров' backgroundColor='#21212E'>
-          <TouchableOpacity style={styles.touchableItem} >
+        <AccordionItem title="Мои мастера" titleThen="У вас пока нет своих мастеров" backgroundColor="#21212E">
+          <TouchableOpacity style={styles.touchableItem}>
             <View style={styles.item}>
               <View style={styles.textContainer}>
                 <Text style={styles.titleText1}>Пригласить своего мастера</Text>
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.touchableItem} >
+          <TouchableOpacity style={styles.touchableItem}>
             <View style={styles.itemTwo}>
               <View style={styles.textContainer}>
                 <Text style={styles.titleTextTwo}>Записаться к совему мастеру</Text>

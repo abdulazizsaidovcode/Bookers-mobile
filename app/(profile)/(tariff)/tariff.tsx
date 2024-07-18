@@ -1,13 +1,14 @@
 // TariffsPage.tsx
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import {SafeAreaView} from 'react-native-safe-area-context'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import * as SecureStore from "expo-secure-store";
-import {base_url} from "@/helpers/api";
+import { base_url } from "@/helpers/api";
 import axios from "axios";
-import {getConfig} from "@/app/(tabs)/(master)/main";
+import { getConfig } from "@/app/(tabs)/(master)/main";
+import { useFocusEffect } from 'expo-router';
 
 const tariffs = [
     {
@@ -29,7 +30,7 @@ const tariffs = [
     },
 ];
 
-export const postTariff = async (status:string) => {
+export const postTariff = async (status: string) => {
     let config = await getConfig()
     await axios.post(`${base_url}tariff/test?tariffName=${status}`, '', config ? config : {})
 }
@@ -38,7 +39,7 @@ const TariffsPage: React.FC = () => {
     const navigation = useNavigation<any>();
     const [tariffStatus, setTariffStatus] = useState<string | null>(null);
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         const fetchTariffStatus = async () => {
             try {
                 const storedTariffStatus = await SecureStore.getItemAsync('tariff');
@@ -60,11 +61,11 @@ const TariffsPage: React.FC = () => {
         //   }
         // };
         // clearSecureStore()
-    }, []);
+    }, []))
 
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         getTariff()
-    }, [navigation]);
+    }, [navigation]))
 
     const setTariff = async (type: string) => await SecureStore.setItemAsync("tariff", type)
 
@@ -88,13 +89,13 @@ const TariffsPage: React.FC = () => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <NavigationMenu name='Tarifi'/>
+                <NavigationMenu name='Tarifi' />
                 <View>
                     {tariffs.map((tariff, index) => (
                         <TouchableOpacity
                             activeOpacity={1}
                             key={index}
-                            style={[styles.card, {opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75}]}
+                            style={[styles.card, { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }]}
                             disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
                         >
                             <Text style={styles.name}>{tariff.name}</Text>
@@ -110,7 +111,7 @@ const TariffsPage: React.FC = () => {
                                     }}
                                     activeOpacity={.7}
                                     disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
-                                    style={[styles.activateButton, {opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75}]}
+                                    style={[styles.activateButton, { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }]}
                                 >
                                     <Text style={styles.buttonText}>Активировать</Text>
                                 </TouchableOpacity>
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         shadowColor: '#000',
         shadowOpacity: 0.1,
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowRadius: 5,
         elevation: 3,
     },

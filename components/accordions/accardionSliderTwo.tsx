@@ -7,6 +7,7 @@ import CommunitySlider from '../communiytSlider/communitySlider';
 
 interface AccordionItemProps {
     title: string;
+    onValueChange?: (value: boolean) => void;
 }
 
 // Platform uchun LayoutAnimation to'g'ri ishlashi uchun
@@ -14,10 +15,8 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title }) => {
+const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title, onValueChange }) => {
     const [expanded, setExpanded] = useState(false);
-    const [value, setValue] = useState(false);
-    const [genderIndex, setGenderIndex] = useState<number>(-1);
     const [isSelected, setSelection] = useState(false);
 
     const toggleExpand = () => {
@@ -25,9 +24,14 @@ const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title }) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setExpanded(!expanded);
     };
+
+    const handleCheckboxChange = (newValue: boolean) => {
+        setSelection(newValue);
+        onValueChange:(newValue);
+    };
+
     return (
         <View style={[styles.container]}>
-            {/* Sarlavha va belgi */}
             <TouchableOpacity
                 style={styles.header}
                 onPress={toggleExpand}
@@ -38,8 +42,6 @@ const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title }) => {
                 </View>
                 <AntDesign name={expanded ? 'down' : 'right'} size={20} color="#4F4F4F" />
             </TouchableOpacity>
-
-            {/* Agar accordion ochilgan bo'lsa, kontentni ko'rsatish */}
             {expanded && (
                 <View style={styles.content}>
                     <View style={styles.communitySlider}>
@@ -47,9 +49,9 @@ const AccardionSliderTwo: React.FC<AccordionItemProps> = ({ title }) => {
                     </View>
                     <Text style={tw`p-3 mt-4`}>
                         <CustomCheckbox
-                          title='не важно'
+                            title='не важно'
                             value={isSelected}
-                            onValueChange={setSelection}
+                            onValueChange={handleCheckboxChange}
                         />
                     </Text>
                 </View>

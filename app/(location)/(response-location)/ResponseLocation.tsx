@@ -5,7 +5,7 @@ import { Text, View } from "@/components/Themed";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { base_url } from "@/helpers/api";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -54,11 +54,21 @@ const ResponseLocation = () => {
         <NavigationMenu name="Мой адрес работы" />
       </View>
       <View style={tw`px-5 bg-transparent w-full flex-1 items-center`}>
-        <View style={tw`w-full bg-gray-500 p-2 rounded-lg w-full`}>
-          <View style={tw`bg-gray-500 flex-row justify-between w-full`}>
+        <View
+          style={[
+            tw`w-full p-2 rounded-lg w-full`,
+            { backgroundColor: "#b9b9c9" },
+          ]}
+        >
+          <View
+            style={[
+              tw`flex-row justify-between w-full`,
+              { backgroundColor: "#b9b9c9" },
+            ]}
+          >
             <View style={tw`bg-transparent flex-row`}>
-              <Image source={require("../../../assets/images/location.png")} />
-              <Text style={tw`text-lg font-medium ml-2`}>Адрес работы</Text>
+              <Entypo name="location" size={30} color="#9d0a36" />
+              <Text style={tw`text-lg font-medium ml-3`}>Адрес работы</Text>
             </View>
             <MaterialIcons
               name="keyboard-arrow-right"
@@ -66,20 +76,20 @@ const ResponseLocation = () => {
               color="#4f4f4f"
             />
           </View>
-          <View style={tw`bg-transparent`}>
-            <Text style={tw`text-lg text-gray-400`}>
+          <View style={tw`bg-transparent mt-3`}>
+            <Text style={tw`text-lg text-gray-500`}>
               <Text style={tw`text-lg text-gray-700 font-bold mr-2`}>
                 Салон:
               </Text>
               {data?.salonId}
             </Text>
-            <Text style={tw`text-lg text-gray-400`}>
+            <Text style={tw`text-lg text-gray-500`}>
               <Text style={tw`text-lg text-gray-700 font-bold mr-2`}>
                 Адрес:
               </Text>
               {data?.street},{data?.homeNumber}
             </Text>
-            <Text style={tw`text-lg text-gray-400`}>
+            <Text style={tw`text-lg text-gray-500`}>
               <Text style={tw`text-lg text-gray-700 font-bold mr-2`}>
                 Ориентир:
               </Text>

@@ -15,9 +15,23 @@ const useGetMeeStore = create<GetMeeStore>((set) => ({
         districtId: null,
         attachmentId: null,
         regionId: null,
+        cityId: "",
+        job: ""
     },
     setUserLocation: (val: UserLocation) => set({ userLocation: val }),
-    userLocation: {},
+    userLocation: {
+        coords: {
+            latitude: 0,
+            longitude:0,
+            speed:0,
+            heading: 0,
+            accuracy: 0,
+            altitude: 0,
+            altitudeAccuracy: 0
+        },
+        mocked: false,
+        timestamp: 0
+    },
     setGetMee: (val: GetMee) => set({ getMee: val }),
     ageOption: [],
     setAgeOption: (val: any) => set({ ageOption: val }),

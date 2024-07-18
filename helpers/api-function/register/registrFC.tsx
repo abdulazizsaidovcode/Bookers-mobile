@@ -55,7 +55,7 @@ export const authLogin = async (phoneNumber: string, otpValue: string, setRespon
                 setRespone(false)
                 console.log(err)
             })
-    } else Alert.alert('Номер телефона обязателен')
+    } else Toast.show('Номер телефона обязателен', Toast.SHORT)
 }
 
 interface IRegister {
@@ -83,8 +83,14 @@ export const registerMaster = async (
         language
     }: IRegister) => {
     const formData = new FormData();
-    formData.append('image', img ? img : null)
+    let files: any = {
+        uri: img.uri,
+        name: img.fileName,
+        type: img.mimeType,
+    };
+    formData.append("image", img ? files : null);
 
+    console.log(img)
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
     const url = `${register_page}master?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${nickname ? `&nickname=${encodeURIComponent(nickname)}&lang=${language}` : ''}&phoneNumber=${formattedPhoneNumber}&ROLE=${encodeURIComponent(role)}`;
 
@@ -95,30 +101,32 @@ export const registerMaster = async (
     }).then(res => {
         if (res.data.success) {
             setData(res.data.body)
-            Alert.alert("Вы успешно зарегистрировались");
+            Toast.show("Вы успешно зарегистрировались ):", Toast.SHORT);
             SecureStore.setItemAsync('number', phoneNumber)
             SecureStore.setItemAsync('password', password)
         } else {
-            Alert.alert("Произошла ошибка при регистрации");
+            Toast.show("Произошла ошибка при регистрации", Toast.SHORT);
             setData(null)
         }
     }).catch(err => {
         console.log(err);
         setData(null)
-        Alert.alert("Произошла ошибка при регистрации");
+        Toast.show("Произошла ошибка при регистрации", Toast.SHORT);
     });
 }
 
 export const registerClient = async ({firstName, lastName, phoneNumber, img, setData, password, language}: any) => {
     const formData = new FormData();
-    formData.append('image', img ? img : null)
+    let files: any = {
+        uri: img.uri,
+        name: img.fileName,
+        type: img.mimeType,
+    };
+    formData.append("image", img ? files : null);
 
     const formattedPhoneNumber = phoneNumber.startsWith('+') ? phoneNumber.replace('+', '%2B') : phoneNumber;
     const url = `${register_page}client?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}${`&lang=${language}`}&phoneNumber=${formattedPhoneNumber}`;
-    console.log(url);
-    console.log(phoneNumber);
-    
-    
+
     axios.post(url, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -126,16 +134,16 @@ export const registerClient = async ({firstName, lastName, phoneNumber, img, set
     }).then(res => {
         if (res.data.success) {
             setData(res.data.body)
-            Alert.alert("Вы успешно зарегистрировались");
+            Toast.show("Вы успешно зарегистрировались ):", Toast.SHORT);
             SecureStore.setItemAsync('password', password)
             SecureStore.setItemAsync('number', phoneNumber)
         } else {
-            Alert.alert("Произошла ошибка при регистрации");
+            Toast.show("Произошла ошибка при регистрации", Toast.SHORT);
             setData(null)
         }
     }).catch(err => {
         console.log(err);
         setData(null)
-        Alert.alert("Произошла ошибка при регистрации");
+        Toast.show("Произошла ошибка при регистрации", Toast.SHORT);
     });
 }

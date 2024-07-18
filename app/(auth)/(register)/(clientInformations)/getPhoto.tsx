@@ -1,63 +1,55 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { router, useNavigation } from 'expo-router';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import React, {useEffect, useState} from 'react'
+import {useNavigation} from 'expo-router';
 import ProfileImgUpload from '@/components/profile-img-upload';
 import registerStory from '@/helpers/state_managment/auth/register';
 import Buttons from '@/components/(buttons)/button';
 import clientStore from '@/helpers/state_managment/client/clientStore';
-import { useTranslation } from 'react-i18next';
-import { NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '@/type/root';
+import {useTranslation} from 'react-i18next';
+import {NavigationProp} from '@react-navigation/native';
+import {RootStackParamList} from '@/type/root';
+
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/address-book'>;
 
-
 const ClientCameraInfo = () => {
-    const { setImg } = registerStory()
+    const {setImg} = registerStory()
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
-    const { setAttachmentID, attachmentID } = clientStore();
+    const {setAttachmentID, attachmentID} = clientStore();
     const [checkUpload, setCheckUpload] = useState<boolean>(false);
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
     const handleSkip = () => {
         setImg(null)
         navigation.navigate('(auth)/(setPinCode)/installPin');
     };
 
-    const handleContinue = () => {
-        navigation.navigate('(auth)/(setPinCode)/installPin');
-    };
+    const handleContinue = () => navigation.navigate('(auth)/(setPinCode)/installPin')
+
     useEffect(() => {
         if (attachmentID) {
             setCheckUpload(true)
-        } else {
-            setCheckUpload(false)
-        }
+            setImg(attachmentID)
+        } else setCheckUpload(false)
     }, [attachmentID, setAttachmentID])
+
     return (
         <View style={styles.container}>
             <View style={styles.topSection}>
                 <View style={styles.progressBar}>
-                    <View style={styles.progressIndicator} />
-                    <View style={styles.progressSegment} />
-                    <View style={styles.progressSegment1} />
-                    <View style={styles.progressSegment2} />
+                    <View style={styles.progressIndicator}/>
+                    <View style={styles.progressSegment1}/>
                 </View>
                 <Text style={styles.label}>{t("add_your_photo")}</Text>
                 <Text style={styles.description}>{t("do_not_wish_to_add_photo")}</Text>
-                <ProfileImgUpload />
+                <ProfileImgUpload registerProfileImg={`registerProfileImg`}/>
             </View>
-
             <View style={styles.bottomSection}>
-
                 <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
                     <Text style={styles.skipButtonText}>{t("skip")}</Text>
                 </TouchableOpacity>
-
-
-                <Buttons isDisebled={checkUpload} title={t("Continue")} onPress={handleContinue} />
+                <Buttons isDisebled={checkUpload} title={t("Continue")} onPress={handleContinue}/>
             </View>
-
         </View>
     )
 }

@@ -1,5 +1,5 @@
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
 import { Image, Pressable, StatusBar, Text, View } from "react-native";
@@ -14,17 +14,17 @@ const Location = () => {
       </View>
       <Pressable
         onPress={() => router.push("/(location-data)/LocationData")}
-        style={tw`flex-row items-center justify-between p-3 bg-gray-400 rounded-xl mt-4`}
+        style={[
+          tw`flex-row items-center justify-between p-3 rounded-xl mt-4`,
+          { backgroundColor: "#b9b9c9" },
+        ]}
       >
         <View>
           <View style={tw`flex-row items-center`}>
-            <Image
-              style={tw`w-8 h-8`}
-              source={require("../../assets/images/location.png")}
-            />
-            <Text style={tw`text-xl font-bold ml-2`}>Адрес работы</Text>
+            <Entypo name="location" size={30} color="#9d0a36" />
+            <Text style={tw`text-xl font-bold ml-3`}>Адрес работы</Text>
           </View>
-          <Text style={tw`text-lg text-gray-600`}>
+          <Text style={tw`text-lg text-gray-600 mt-2`}>
             Адрес работы не настроен!
           </Text>
         </View>
