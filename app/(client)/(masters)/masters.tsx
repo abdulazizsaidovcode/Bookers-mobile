@@ -27,12 +27,13 @@ import { useCommunitySlider } from "@/helpers/state_managment/communitySlider/co
 import { useAccardionStore } from "@/helpers/state_managment/accardion/accardionStore";
 import { postClientFilter } from "@/helpers/api-function/uslugi/uslugi";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
-import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'app/(client)/(masters)/masters'>;
-
+type SettingsScreenNavigationProp = NavigationProp<
+  RootStackParamList,
+  "app/(client)/(masters)/masters"
+>;
 
 const Masters = () => {
   const { masters, isLoading, category } = useTopMastersStore();
@@ -43,7 +44,6 @@ const Masters = () => {
   const { genderIndex } = useAccardionStore();
   const { userLocation } = useGetMeeStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
-
 
   const toggleBottomModal = () => setBottomModal(!bottmModal);
 
@@ -95,6 +95,11 @@ const Masters = () => {
           <Text style={tw`text-white text-lg font-medium ml-2`}>Фильтр</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(
+              "(client)/(map)/(recent-masters)/recent-masters"
+            )
+          }
           style={[
             tw`rounded-lg px-4 py-2 border justify-center items-center border flex-row`,
             { borderColor: "#fff" },
@@ -114,7 +119,7 @@ const Masters = () => {
       </View>
       <View style={tw`flex-1`}>
         <Text style={tw`text-white text-lg font-medium mt-5`}>
-          Топ 100 специалисты
+          Топ {masters.length} специалисты
         </Text>
         {isLoading && <ActivityIndicator size="large" color={"#888"} />}
 
@@ -207,7 +212,6 @@ const Masters = () => {
                     <Buttons title="Записаться" />
                     <TouchableOpacity
                       activeOpacity={0.8}
-                      onPress={() => navigation.navigate('(client)/(map)/(recent-masters)/recent-masters')}
                       style={[
                         tw`w-12 h-12 items-center justify-center rounded-full bg-black ml-3`,
                         { backgroundColor: "#9c0935" },
