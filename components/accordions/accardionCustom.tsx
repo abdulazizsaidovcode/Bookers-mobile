@@ -1,4 +1,4 @@
-import React, { Children, useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -9,7 +9,6 @@ import {
   UIManager,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import tw from "tailwind-react-native-classnames";
 import { useAccardionStore } from "@/helpers/state_managment/accardion/accardionStore";
 
 interface AccordionItemProps {

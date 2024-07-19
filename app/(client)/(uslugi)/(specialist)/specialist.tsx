@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
-import Buttons from '@/components/(buttons)/button'; // Importing the Buttons component
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { Fontisto } from '@expo/vector-icons';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
@@ -10,10 +9,6 @@ import { router, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import CustomCheckbox1 from '@/components/checkbox/checkbox1';
-import AccardionSliderTwo from '@/components/accordions/accardionSliderTwo';
-import AccordionFree from '@/components/accordions/accardionFree';
-import AccardionSlider from '@/components/accordions/accardionSlider';
-import BottomModal from '@/components/(modals)/modal-bottom';
 import { postClientFilter } from '@/helpers/api-function/uslugi/uslugi';
 import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
 import { useCommunitySlider } from '@/helpers/state_managment/communitySlider/communitySliderStore';

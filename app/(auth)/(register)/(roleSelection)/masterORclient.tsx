@@ -1,13 +1,11 @@
 import Buttons from '@/components/(buttons)/button';
-import NavigationMenu from '@/components/navigation/navigation-menu';
 import registerStory from '@/helpers/state_managment/auth/register';
 import { RootStackParamList } from '@/type/root';
 import { NavigationProp } from '@react-navigation/native';
-import { router, useNavigation } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
-import Toast from "react-native-simple-toast";
+import { StyleSheet, View, Text, Image, SafeAreaView } from 'react-native';
 import {setClientOrMaster} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/(register)/(roleSelection)/masterORclient'>;

@@ -11,7 +11,6 @@ import {
   getOnlineBookingHallWaiting,
   onlineBookingHallWaiting,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
-import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 import { router } from "expo-router";
 
 const RequestWindow = () => {

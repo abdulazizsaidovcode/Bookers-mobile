@@ -4,7 +4,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useFocusEffect, useNavigation } from 'expo-router';
 import { masterExpense } from '@/helpers/state_managment/expence/ecpense';
-import ExpenseCard from '../card';
 import ExpenseArendaCard from '../card/ExpenseArenda';
 
 const ExpenseDetail: React.FC = () => {

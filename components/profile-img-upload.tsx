@@ -5,9 +5,8 @@ import {
     StyleSheet,
     View,
     TouchableWithoutFeedback,
-    Alert,
 } from "react-native";
-import React, {useState, useEffect, useCallback} from "react";
+import React, {useState, useCallback} from "react";
 import * as ImagePicker from "expo-image-picker";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import tw from "tailwind-react-native-classnames";

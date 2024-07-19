@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Image, StyleSheet, Text} from 'react-native';
-; // Assuming Image is imported from '@/components/Themed'
+import {View, Image, Text} from 'react-native';
+// Assuming Image is imported from '@/components/Themed'
 import { SafeAreaView, ScrollView } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 

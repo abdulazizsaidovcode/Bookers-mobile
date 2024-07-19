@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { useAccardionStore } from '@/helpers/state_managment/accardion/accardionStore';
 
 interface AccordionItemProps {
   title: string;

@@ -1,6 +1,6 @@
-import {SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 import React, {useEffect, useState} from 'react'
-import {router, useNavigation} from 'expo-router';
+import {useNavigation} from 'expo-router';
 import ProfileImgUpload from '@/components/profile-img-upload';
 import registerStory from '@/helpers/state_managment/auth/register';
 import Buttons from '@/components/(buttons)/button';

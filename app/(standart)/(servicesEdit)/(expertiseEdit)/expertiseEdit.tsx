@@ -9,7 +9,7 @@ import CenteredModal from '@/components/(modals)/modal-centered';
 import { router } from 'expo-router';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import axios from 'axios';
-import { category_child, getSpecialization, master_add_specialization, masterAdd_category } from '@/helpers/api';
+import { category_child, master_add_specialization, masterAdd_category } from '@/helpers/api';
 import { useRoute } from '@react-navigation/native';
 import Textarea from '@/components/select/textarea';
 import { getConfig } from '@/app/(tabs)/(master)/main';

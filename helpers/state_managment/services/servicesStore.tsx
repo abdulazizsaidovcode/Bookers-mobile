@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { ChildCategory, Data, Gender, Services } from '@/type/services/myServices'
+import { Data, Gender, Services } from '@/type/services/myServices'
 
 const servicesStore = create<Services>((set) => ({
     data: [],

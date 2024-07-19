@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import CustomButton from '@/components/(buttons)/custom';
-import ChatList from './(chat_base)';
-import { getChatList } from '@/helpers/api-function/chat/chat';
 import chatStore from '@/helpers/state_managment/chat/chatStore';
 // import { useStomp } from '@/context/StompContext';
-import fetchChatDataStore, { Data } from '@/helpers/state_managment/chat/chatfetchStore';
+import fetchChatDataStore from '@/helpers/state_managment/chat/chatfetchStore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Buttons from '@/components/(buttons)/button';
 

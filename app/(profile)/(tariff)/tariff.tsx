@@ -1,5 +1,5 @@
 // TariffsPage.tsx
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';

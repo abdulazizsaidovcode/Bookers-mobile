@@ -1,5 +1,5 @@
+import React, { useCallback } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
-import React, { useCallback, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';

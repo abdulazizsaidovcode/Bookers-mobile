@@ -5,7 +5,6 @@ import {useNavigation} from "@react-navigation/native";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {ScrollView} from "react-native";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import SettingsGallery from "@/app/(settings)/(settings-gallery)/settings-gallery";
 import Location from "@/app/(location)/Location";
 
 const data: { icon: any, label: string, screen: string }[] = [

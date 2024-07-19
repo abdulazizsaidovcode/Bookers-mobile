@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { Entypo, FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import tw from 'tailwind-react-native-classnames';
 
 type ClientCardProps = {

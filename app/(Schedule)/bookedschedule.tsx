@@ -1,5 +1,5 @@
 import { View, StyleSheet, } from 'react-native'
-import React, { useEffect } from 'react'
+import React from 'react'
 import BookedAccordion from './components/accordion/boooked'
 import AvailableAccordion from './components/accordion/Available'
 import CalendarGrafficEdit from '../(free)/(work-grafic-edit)/calendar'

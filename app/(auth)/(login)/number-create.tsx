@@ -1,14 +1,10 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image, Alert, Pressable} from 'react-native';
+import React, { useRef, useState} from 'react';
+import {View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image,  Pressable} from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
-import {FontAwesome5} from '@expo/vector-icons';
 import Buttons from '@/components/(buttons)/button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import {router} from 'expo-router';
 import {useTranslation} from 'react-i18next';
-import axios from 'axios';
-import {register_page} from '@/helpers/api';
 import registerStory from '@/helpers/state_managment/auth/register';
 import {checkNumberFunction} from '@/helpers/api-function/register/registrFC';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister'
