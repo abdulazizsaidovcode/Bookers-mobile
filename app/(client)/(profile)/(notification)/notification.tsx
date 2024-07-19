@@ -46,7 +46,7 @@ const NotificationClient = () => {
                         <AntDesign name="right" size={24} color="white" />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.card}>
+                <TouchableOpacity style={styles.card} activeOpacity={0.9}>
                     <View style={styles.header}>
                         <Image
                             source={require('@/assets/avatar.png')}
@@ -63,7 +63,7 @@ const NotificationClient = () => {
                         <AntDesign name="right" size={24} color="white" />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.card}>
+                <TouchableOpacity style={styles.card} activeOpacity={1}>
                     <View style={styles.header}>
                         <Image
                             source={require('@/assets/avatar.png')}
