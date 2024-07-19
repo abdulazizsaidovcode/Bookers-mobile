@@ -9,7 +9,7 @@ export const getAllCategory = async () => {
   try {
     const { userLocation } = useGetMeeStore.getState();
     const config = await getConfig();
-    const { data } = await axios.get(`${getCategory_Client}?lat=${userLocation.coords.latitude}&lng=${userLocation.coords.longitude}`, config);
+    const { data } = await axios.get(`${getCategory_Client}?lat=${userLocation.coords.latitude}&lng=${userLocation.coords.longitude}`, config ? config : {});
     ClientStory.getState().setAllCategory(data.body);
   } catch (error) {
     console.log('Error:', error);
@@ -21,10 +21,8 @@ export const postClientFilter = async (categoryId: any, gender?: boolean | null,
   try {
     const config = await getConfig();
     const postData = { categoryId, gender, nextToMe, rating, lat, lng };
-    const { data } = await axios.post(`${getClient_filter}`, postData, config);
-    if (data.success) {
-      ClientStory.getState().setClientData(data.body);
-    }
+    const { data } = await axios.post(`${getClient_filter}`, postData, config ? config : {});
+    if (data.success) ClientStory.getState().setClientData(data.body);
   } catch (error) {
     console.log('Error:', error);
   }

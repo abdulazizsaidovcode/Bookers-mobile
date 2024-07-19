@@ -19,7 +19,7 @@ const Expenses: React.FC = () => {
     useCallback(() => {
       const fetchData = async () => {
         try {
-          getExpenceCategory(setExpenseCategory);
+          await getExpenceCategory(setExpenseCategory);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
