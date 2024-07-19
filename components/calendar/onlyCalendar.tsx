@@ -1,72 +1,98 @@
-import { useEffect, useState } from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-import DateTimePicker, { Event as DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { MaterialIcons } from '@expo/vector-icons';
+import { useCallback, useState } from "react";
+import DateTimePicker, {
+  Event as DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 import moment from "moment";
-import financeStore from "@/helpers/state_managment/finance/financeStore";
-import tw from "tailwind-react-native-classnames";
-import useProfileStore from '@/helpers/state_managment/client/clientEditStore';
+import useProfileStore from "@/helpers/state_managment/client/clientEditStore";
+import { useFocusEffect } from "expo-router";
 
-const CalendarComponent = ({ setMonthDate, defDate, color }: { setMonthDate?: (val: string) => void, defDate?: any, color?: string }) => {
-const {showCalendar, setShowCalendar, updateProfileField} = useProfileStore()
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+const CalendarComponent = ({
+  setMonthDate,
+  defDate,
+  color,
+}: {
+  setMonthDate?: (val: string) => void;
+  defDate?: any;
+  color?: string;
+}) => {
+  const {
+    showCalendar,
+    setShowCalendar,
+    updateProfileField,
+    birthDate,
+  } = useProfileStore();
 
-    useEffect(() => {
-        const date: string = moment(selectedDate).format('YYYY-MM-DD')
-        updateProfileField("birthDate", date)
-    }, []);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    birthDate ? new Date(birthDate) : undefined
+  );
 
-    useEffect(() => {
-        const date: string = moment(selectedDate).format('YYYY-MM-DD')
-        updateProfileField("birthDate", date)
-        setMonthDate && setMonthDate(date)
-    }, [selectedDate]);
+  useFocusEffect(
+    useCallback(() => {
+      if (birthDate) {
+        setSelectedDate(new Date(birthDate));
+      } else {
+        setSelectedDate(undefined);
+      }
+      return () => null;
+    }, [birthDate])
+  );
 
-    useEffect(() => {
-        if (defDate) setSelectedDate(defDate)
-        else setSelectedDate(new Date())
-    }, [defDate]);
+  useFocusEffect(
+    useCallback(() => {
+      if (selectedDate) {
+        const date: string = moment(selectedDate).format("YYYY-MM-DD");
+        updateProfileField("birthDate", date);
+      }
+      return () => null;
+    }, [])
+  );
 
-    const onChange = (event: DateTimePickerEvent, selectedDate?: Date | undefined) => {
-        const currentDate = selectedDate || new Date();
-        setShowCalendar(false);
-        setSelectedDate(currentDate);
-    };
+  useFocusEffect(
+    useCallback(() => {
+      if (selectedDate) {
+        const date: string = moment(selectedDate).format("YYYY-MM-DD");
+        updateProfileField("birthDate", date);
+        setMonthDate && setMonthDate(date);
+      }
+      return () => null;
+    }, [selectedDate])
+  );
 
-    const formatDate = (date: Date) => {
-        if (!date) return '';
-        const options: any = moment(date).format('DD.MM.YYYY')
-        return options
-    };
+  useFocusEffect(
+    useCallback(() => {
+      if (defDate) {
+        setSelectedDate(new Date(defDate));
+      } else {
+        setSelectedDate(undefined);
+      }
+      return () => null;
+    }, [defDate])
+  );
 
-    return (
-        <>
-            {showCalendar && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={new Date()}
-                    mode="date"
-                    is24Hour={true}
-                    display="default"
-                    onChange={onChange}
-                />
-            )}
-        </>
-    );
+  const onChange = (event: DateTimePickerEvent, date?: Date) => {
+    const currentDate = date || undefined;
+    setShowCalendar(false);
+    setSelectedDate(currentDate);
+    if (currentDate) {
+      const formattedDate = moment(currentDate).format("YYYY-MM-DD");
+      updateProfileField("birthDate", formattedDate);
+    }
+  };
+
+  return (
+    <>
+      {showCalendar && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={selectedDate || new Date()} // new Date() default ni bitta sanani olish uchun kerak
+          mode="date"
+          is24Hour={true}
+          display="default"
+          onChange={onChange}
+        />
+      )}
+    </>
+  );
 };
-
-const styles = StyleSheet.create({
-    datePicker: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderRadius: 10,
-        paddingHorizontal: 10,
-    },
-    dateText: {
-        color: '#FFFFFF',
-        fontSize: 18,
-    },
-});
 
 export default CalendarComponent;
