@@ -24,7 +24,7 @@ const ServesGender = () => {
         try {
             const config = await getConfig()
             console.log(config);
-            const response = await axios.post(`${gender_status}genders=${selectedCategories}`,{},config);
+            const response = await axios.post(`${gender_status}genders=${selectedCategories}`,{},config ? config : {});
             if(response.data.success === true){
               router.push("/category")  
             }
