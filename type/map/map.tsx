@@ -1,7 +1,7 @@
-export interface MasterStoreTypes {
-    masterLocation: string,
-    setMasterLocation: any
-}
+export interface MapStoreTypes {
+    categoryId: string | null;
+    setCategoryId: (id: string | null | ((prev: string | null) => string | null)) => void;
+    }
 
 export const mapCustomStyle = [
     {
@@ -102,3 +102,4 @@ export const mapCustomStyle = [
         "stylers": [{ "color": "#394562" }]
     }
 ];
+

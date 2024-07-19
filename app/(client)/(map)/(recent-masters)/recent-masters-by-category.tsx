@@ -1,60 +1,66 @@
 import { Dimensions, ScrollView, StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import Buttons from '@/components/(buttons)/button';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
+import { useMapStore } from '@/helpers/state_managment/map/map';
+import { useFocusEffect } from '@react-navigation/native';
+import { getCategory } from '@/helpers/api-function/masters';
+import useTopMastersStore from '@/helpers/state_managment/masters';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)/(map)/(recent-masters)/recent-masters'>;
 
-const services = [
-    { id: '1', label: 'Здоровье и красота волос' },
-    { id: '2', label: 'Ногтевой сервис' },
-    { id: '3', label: 'Ресницы и брови' },
-    { id: '4', label: 'Уход за телом' },
-    { id: '5', label: 'Уход за лицом' },
-];
-
 const RecentMastersByCategory = () => {
-    const [categoryId, setCategoryId] = useState<string | null>(null);
+    const { categoryId, setCategoryId } = useMapStore();
+    const { category } = useTopMastersStore();
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     const handlePress = (id: string) => {
-        setCategoryId(prev => prev === id ? null : id); 
+        setCategoryId((prev) => (prev === id ? null : id));
     };
 
-    console.log(categoryId);
+    const handleReset = () => {
+        setCategoryId(null);
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            getCategory();
+            return () => { };
+        }, [])
+    );
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <View style={{ height: screenHeight / 7 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, alignItems: 'center' }}>
-                        <View style={{ flexDirection: 'row', gap: 15 }}>
+                <View style={styles.header}>
+                    <View style={styles.headerContent}>
+                        <View style={styles.headerLeft}>
                             <AntDesign name="close" size={24} color="white" onPress={() => navigation.goBack()} />
-                            <Text style={{ fontSize: 20, color: 'white' }}>По услуги</Text>
+                            <Text style={styles.headerText}>По услуги</Text>
                         </View>
-                        <View>
-                            <Buttons title='Сбросить' />
+                        <View style={{ width: screenWidth / 3 }}>
+                            <Buttons title='Сбросить' onPress={handleReset} isDisebled={categoryId !== null} />
                         </View>
                     </View>
                 </View>
                 <View style={styles.servicesContainer}>
-                    {services.map((service) => (
-                        <TouchableOpacity key={service.id} activeOpacity={0.7} style={styles.serviceItem}>
-                            <Text style={styles.serviceText}>{service.label}</Text>
+                    {category.map((item) => (
+                        <TouchableOpacity key={item.id} activeOpacity={0.7} style={styles.serviceItem}>
+                            <Text style={styles.serviceText}>{item.name}</Text>
                             <Pressable
-                                onPress={() => handlePress(service.id)}
+                                onPress={() => handlePress(item.id)}
                                 style={[
                                     styles.checkbox,
-                                    categoryId === service.id
+                                    categoryId === item.id
                                         ? { backgroundColor: "#9C0A35" }
                                         : { backgroundColor: "#B9B9C9", borderWidth: 2, borderColor: "gray" }
                                 ]}
                             >
-                                {categoryId === service.id && (
+                                {categoryId === item.id && (
                                     <Ionicons name="checkmark" size={18} color="white" style={styles.checkmark} />
                                 )}
                             </Pressable>
@@ -73,6 +79,24 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#21212E',
         position: 'relative',
+    },
+    header: {
+        height: screenHeight / 7,
+    },
+    headerContent: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        alignItems: 'center',
+        paddingVertical: 20
+    },
+    headerLeft: {
+        flexDirection: 'row',
+        gap: 15,
+    },
+    headerText: {
+        fontSize: 20,
+        color: 'white',
     },
     servicesContainer: {
         paddingHorizontal: 10,
@@ -102,4 +126,4 @@ const styles = StyleSheet.create({
     checkmark: {
         fontWeight: 'bold',
     },
-});
+})

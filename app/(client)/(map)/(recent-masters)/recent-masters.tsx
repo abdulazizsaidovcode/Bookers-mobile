@@ -13,6 +13,10 @@ import Buttons from '@/components/(buttons)/button';
 import { AntDesign } from '@expo/vector-icons';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
+import { getTopMasters } from '@/helpers/api-function/masters';
+import useTopMastersStore from '@/helpers/state_managment/masters';
+import { postClientFilter } from '@/helpers/api-function/uslugi/uslugi';
+import { useMapStore } from '@/helpers/state_managment/map/map';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)/(map)/(recent-masters)/recent-masters'>;
@@ -20,24 +24,36 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)
 
 const RecentMasters = () => {
     const { userLocation, setUserLocation } = useGetMeeStore();
+    const { categoryId } = useMapStore();
     const { value, setValue } = useCommunitySlider();
     const [showByDistance, setShowByDistance] = useState(false);
+    const { masters } = useTopMastersStore()
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-
 
     useFocusEffect(
         useCallback(() => {
             getUserLocation(setUserLocation);
             return () => { };
-        }, [setUserLocation])
+        }, [])
+    );
+
+    useFocusEffect(
+        useCallback(() => {
+            getTopMasters();
+            return () => { };
+        }, [])
     );
 
     const toggleShowByDistance = () => setShowByDistance(!showByDistance);
 
-    const data = [
-        { lat: 37.78825, lon: -122.4324 },
-        { lat: 36.78825, lon: -121.4324 },
-    ];
+    const hadleSumbit = () => {
+        try {
+            postClientFilter(categoryId,)
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 
     if (!userLocation || !userLocation.coords) {
         return (
@@ -93,15 +109,15 @@ const RecentMasters = () => {
                             longitudeDelta: 0.0421,
                         }}
                     >
-                        {data.map((item, index) => (
+                        {masters.map((item, index) => (
                             <Marker
                                 key={index}
                                 coordinate={{
-                                    latitude: item.lat,
-                                    longitude: item.lon,
+                                    latitude: item.lat ? item.lat : 0,
+                                    longitude: item.lng ? item.lng : 0,
                                 }}
-                                title="Marker Title"
-                                description="Marker Description"
+                                title={item.salonName ? item.salonName : ''}
+                                description={item.fullName ? item.fullName : ''}
                             />
                         ))}
                     </MapView>

@@ -25,8 +25,8 @@ export const postClientFilter = async (
   gender?: boolean | null,
   nextToMe?: number | null,
   rating?: number | null,
-  lat: number | null,
-  lng: number | null
+  lat?: number | null,
+  lng?: number | null
 ) => {
   try {
     const config = await getConfig();
