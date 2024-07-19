@@ -12,7 +12,6 @@ import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '@/type/root';
 import {ActivityIndicator} from 'react-native-paper';
-import Toast from 'react-native-simple-toast'; // Make sure you have this installed
 import {router} from 'expo-router';
 import {getConfig} from '@/app/(tabs)/(master)/main';
 

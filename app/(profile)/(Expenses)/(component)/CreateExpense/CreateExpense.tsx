@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ToastAndroid, ActivityIndicator } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { selectedExpenseCategory } from '@/helpers/state_managment/expence/ecpense';

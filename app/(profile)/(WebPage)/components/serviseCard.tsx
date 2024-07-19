@@ -1,4 +1,3 @@
-import { getFile } from "@/helpers/api";
 import { getAddress } from "@/helpers/api-function/wepPage/wepPage";
 import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
 import { useFocusEffect } from "expo-router";

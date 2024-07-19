@@ -1,7 +1,6 @@
 import { base_url, register_page } from "@/helpers/api";
 import axios from "axios";
 import { router } from "expo-router";
-import { Alert } from "react-native";
 import Toast from "react-native-simple-toast";
 import { authStorage, setClientOrMaster } from "@/constants/storage";
 import * as SecureStore from 'expo-secure-store';

@@ -5,8 +5,6 @@ import {
   Switch,
   StyleSheet,
   ScrollView,
-  Dimensions,
-  Pressable,
   TouchableOpacity,
 } from 'react-native';
 import { FontAwesome5, MaterialIcons, Feather } from '@expo/vector-icons';

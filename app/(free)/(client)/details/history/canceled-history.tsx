@@ -8,7 +8,6 @@ import React, {useCallback, useEffect, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {getCanceledClient} from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {handleRefresh} from "@/constants/refresh";
 import {clientIdStore} from "@/constants/storage";
 

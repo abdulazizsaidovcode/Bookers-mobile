@@ -1,8 +1,6 @@
 import React from 'react';
-import { Text, View } from "@/components/Themed";
+import { View } from "@/components/Themed";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import MyServicess from "@/components/services/myServices";
-import { router } from "expo-router"; // router ni import qiling
 import { ScrollView, StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "tailwind-react-native-classnames";

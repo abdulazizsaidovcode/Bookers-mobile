@@ -1,7 +1,7 @@
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Buttons from '@/components/(buttons)/button';
-import { router, useNavigation } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useTranslation } from 'react-i18next';
 import { NavigationProp } from '@react-navigation/native';

@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import ClientProfileCard from "./profileCard";
 import { AntDesign, FontAwesome5, Octicons } from "@expo/vector-icons";
-import Buttons from "@/components/(buttons)/button";
 import IconsButtons from "@/components/(buttons)/icon-btn";
 
 type CardProps = {

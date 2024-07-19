@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -13,7 +13,6 @@ import Buttons from "@/components/(buttons)/button";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { postWorkTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
-import Toast from "react-native-simple-toast";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import { useFocusEffect, useNavigation } from "expo-router";

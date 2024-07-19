@@ -1,4 +1,3 @@
-import { config, imageConfig } from "@/helpers/token";
 import { EditMainPhoto, GalleryData } from "@/type/gallery/gallery";
 import { main_gallery, gallery_add_photo, gallery_edit_main_photo, gallery_full_data, gallery_list, } from "@/helpers/api";
 import axios from "axios";

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, Alert } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { useCommunitySlider } from '@/helpers/state_managment/communitySlider/communitySliderStore';
 

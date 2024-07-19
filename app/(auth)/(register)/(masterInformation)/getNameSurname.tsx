@@ -1,5 +1,5 @@
 import registerStory from '@/helpers/state_managment/auth/register';
-import { router, useNavigation } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';

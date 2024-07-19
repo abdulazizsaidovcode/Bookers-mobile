@@ -135,7 +135,9 @@ import ClientCameraInfo from "./(auth)/(register)/(clientInformations)/getPhoto"
 import CardClient from "./(client)/(profile)/(card)/card";
 import PaymentClient from "./(client)/(profile)/(payment)/payment";
 import SalonLocation from "./(client)/(map)/(salon-location)/salon-location";
+import RecentMastersByCategory from "./(client)/(map)/(recent-masters)/recent-masters-by-category";
 import EditProfilePage from "./(client)/(profile)/(profileEdit)/(editPages)/editPage";
+import Masters from "./(client)/(masters)/masters";
 
 
 
@@ -271,6 +273,11 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="app/(client)/(masters)/masters"
+              component={Masters}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="(auth)/(setPinCode)/checkInstalledPin"
               component={CheckPin}
               options={{ headerShown: false }}
@@ -354,6 +361,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(client)/(map)/(recent-masters)/recent-masters"
               component={RecentMasters}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(map)/(recent-masters)/recent-masters-by-category"
+              component={RecentMastersByCategory}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -801,16 +813,16 @@ function RootLayoutNav() {
               component={OrderHistory}
               options={{ headerShown: false }}
             /><Stack.Screen
-            name="(client)/(profile)/(profileEdit)/profileEdit"
-            component={ProfileEdit}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(client)/(profile)/(profileEdit)/(editPages)/editPage"
-            component={EditProfilePage}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
+              name="(client)/(profile)/(profileEdit)/profileEdit"
+              component={ProfileEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(profile)/(profileEdit)/(editPages)/editPage"
+              component={EditProfilePage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="(client)/(profile)/(settings)/settings"
               component={SettingsClient}
               options={{ headerShown: false }}

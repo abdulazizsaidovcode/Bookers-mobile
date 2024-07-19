@@ -4,14 +4,13 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import axios from 'axios';
-import {router, useLocalSearchParams} from 'expo-router';
+import {router} from 'expo-router';
 import {masterAdd_service} from '@/helpers/api';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/app/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import {getConfig} from '@/app/(tabs)/(master)/main';
-import Textarea from '@/components/select/textarea';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Toast from "react-native-simple-toast";
 

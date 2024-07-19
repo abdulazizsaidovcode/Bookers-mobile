@@ -1,11 +1,10 @@
 import React from "react";
-import { ClientAddressBook, ClientItemProps } from "@/type/client/client";
+import { ClientItemProps } from "@/type/client/client";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { Ionicons } from "@expo/vector-icons";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { getFile } from "@/helpers/api";
-import Buttons from "@/components/(buttons)/button";
 import FiltersButton from "@/components/(buttons)/filters-button";
 import {sliceText} from "@/helpers/api-function/client/client";
 

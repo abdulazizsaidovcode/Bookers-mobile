@@ -1,4 +1,4 @@
-import {StyleSheet, View, Text, ScrollView, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
+import {StyleSheet, View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import tw from "tailwind-react-native-classnames";
 import IconsButtons from "@/components/(buttons)/icon-btn";
 import {HistorySessions} from "@/type/client/client";

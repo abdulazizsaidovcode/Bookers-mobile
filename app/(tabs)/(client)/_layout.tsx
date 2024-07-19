@@ -8,7 +8,7 @@ import {
 } from "@expo/vector-icons";
 import HomeScreen from "./main";
 import ChatScreen from "./chat";
-import { TabBarIcon } from "../../../components/navigation/TabBarIcon";
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import Uslugi from "@/app/(client)/(uslugi)/uslugi";
 import ProfileScreen from "./profile";

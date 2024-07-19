@@ -37,6 +37,9 @@ export type RootStackParamList = {
   '(free)/(client)/creating-client': undefined | string;
   '(free)/(client)/updating-address-book': { client: ClientAddressBook };
   '(tabs)': undefined | string;
+  'app/(client)/(masters)/masters': undefined | string;
+  '(client)/(map)/(recent-masters)/recent-masters-by-category': undefined;
+  '(client)/(map)/(recent-masters)/recent-masters': undefined;
   '(free)/(client)/details/detail-main': { infoClient: AllClient };
   '(free)/(client)/details/records': { record: AllClient | any };
   '(free)/(client)/details/history/history-details': { historyData: any };
