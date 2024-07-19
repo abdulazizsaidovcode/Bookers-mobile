@@ -63,6 +63,7 @@ const Masters = () => {
         userLocation?.coords.longitude
       );
       toggleBottomModal();
+      setPastEntries([]);
     } catch (error) {
       console.log(error);
     }
@@ -212,6 +213,7 @@ const Masters = () => {
                     <Buttons title="Записаться" />
                     <TouchableOpacity
                       activeOpacity={0.8}
+                         
                       style={[
                         tw`w-12 h-12 items-center justify-center rounded-full bg-black ml-3`,
                         { backgroundColor: "#9c0935" },
