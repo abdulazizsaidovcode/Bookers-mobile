@@ -76,7 +76,7 @@ const NotificationClient = () => {
                         Ваша заявка №12 на 23 февраля была отменена
                     </Text>
                     <View style={styles.footer}>
-                        <Text style={styles.date}>20.04.2024 20:57:26</Text>
+                        <Text style={styles.date}>20.04.2024 20:57:36</Text>
                         <AntDesign name="right" size={24} color="white" />
                     </View>
                 </TouchableOpacity>
