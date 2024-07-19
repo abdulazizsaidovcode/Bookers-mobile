@@ -134,14 +134,12 @@ import ClientCameraInfo from "./(auth)/(register)/(clientInformations)/getPhoto"
 import CardClient from "./(client)/(profile)/(card)/card";
 import PaymentClient from "./(client)/(profile)/(payment)/payment";
 import SalonLocation from "./(client)/(map)/(salon-location)/salon-location";
-import RecentMastersByCategory from "./(client)/(map)/(recent-masters)/recent-masters-by-category";
 import EditProfilePage from "./(client)/(profile)/(profileEdit)/(editPages)/editPage";
+import MasterInformation from "./(client)/(uslugi)/(masterInformation)/masterInformation";
+import RecentMastersByCategory from "./(client)/(map)/(recent-masters)/recent-masters-by-category";
 import Masters from "./(client)/(masters)/masters";
-
-
-
+import SettingPage from "./(client)/(profile)/(settings)/(settingPage)/settingPage";
 const Stack = createNativeStackNavigator();
-
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
@@ -527,7 +525,11 @@ function RootLayoutNav() {
               component={Specialist}
               options={{ headerShown: false }}
             />
-
+            <Stack.Screen
+              name="(client)/(uslugi)/(masterInformation)/masterInformation"
+              component={MasterInformation}
+              options={{ headerShown: false }}
+            />
 
             {/* Client Uslugi end */}
             <Stack.Screen
@@ -613,7 +615,10 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(free)/(client)/details/history/history-details"
               component={HistoryDetailsInformation}
-              options={{ title: "HistoryDetailsInformation", headerShown: false }}
+              options={{
+                title: "HistoryDetailsInformation",
+                headerShown: false,
+              }}
             />
             <Stack.Screen
               name="(location)/Location"
@@ -723,7 +728,8 @@ function RootLayoutNav() {
               name="(profile)/(WebPage)/WebPage"
               component={WebPage}
               options={{ title: "CreatingClient", headerShown: false }}
-            /><Stack.Screen
+            />
+            <Stack.Screen
               name="(profile)/(WebPage-standart)/WebPage"
               component={WebPageStandart}
               options={{ title: "CreatingClient", headerShown: false }}
@@ -806,7 +812,8 @@ function RootLayoutNav() {
               name="(client)/(profile)/(orderHistory)/orderHistory"
               component={OrderHistory}
               options={{ headerShown: false }}
-            /><Stack.Screen
+            />
+            <Stack.Screen
               name="(client)/(profile)/(profileEdit)/profileEdit"
               component={ProfileEdit}
               options={{ headerShown: false }}
@@ -819,6 +826,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(client)/(profile)/(settings)/settings"
               component={SettingsClient}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(profile)/(settings)/(settingPage)/settingPage"
+              component={SettingPage}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -840,6 +852,6 @@ function RootLayoutNav() {
         </MenuProvider>
       </StompProvider>
     </ThemeProvider>
-    // I'm a good developer 
+    // I'm a good developer
   );
 }

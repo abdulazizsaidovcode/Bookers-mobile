@@ -70,49 +70,7 @@ const CreatingClient = () => {
         getAgeList(setAgeData)
         getRegionList(setRegionData)
         setUpdateClient(updateClientDef)
-        if (ageData) {
-            const transformedAge = ageData.map(item => ({
-                key: item.id,
-                value: item.ageRange
-            }));
-            setAges(transformedAge)
-        }
-        if (regionData) {
-            const transformedRegion = regionData.map(item => ({
-                key: item.id,
-                value: item.name
-            }));
-            setRegions(transformedRegion)
-        }
     }, []);
-
-    useEffect(() => {
-        if (refreshing) {
-            if (ageData) {
-                const transformedAge = ageData.map(item => ({
-                    key: item.id,
-                    value: item.ageRange
-                }));
-                setAges(transformedAge)
-            }
-
-            if (regionData) {
-                const transformedRegion = regionData.map(item => ({
-                    key: item.id,
-                    value: item.name
-                }));
-                setRegions(transformedRegion)
-            }
-
-            if (districtData) {
-                const transformedDistrict = districtData.map(item => ({
-                    key: item.id,
-                    value: item.name
-                }));
-                setDistricts(transformedDistrict)
-            }
-        }
-    }, [refreshing]);
 
     useEffect(() => {
         if (districtData) {
@@ -126,6 +84,30 @@ const CreatingClient = () => {
 
     useEffect(() => {
         setRegex(validateObject(updateClient))
+
+        if (ageData) {
+            const transformedAge = ageData.map(item => ({
+                key: item.id,
+                value: item.ageRange
+            }));
+            setAges(transformedAge)
+        }
+
+        if (regionData) {
+            const transformedRegion = regionData.map(item => ({
+                key: item.id,
+                value: item.name
+            }));
+            setRegions(transformedRegion)
+        }
+
+        if (districtData) {
+            const transformedDistrict = districtData.map(item => ({
+                key: item.id,
+                value: item.name
+            }));
+            setDistricts(transformedDistrict)
+        }
     }, [updateClient]);
 
     useEffect(() => {

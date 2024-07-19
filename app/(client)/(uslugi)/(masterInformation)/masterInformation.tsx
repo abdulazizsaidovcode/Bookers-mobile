@@ -10,12 +10,12 @@ import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { useFocusEffect, useRouter } from 'expo-router';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, View, Text, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 
-const Hair = () => {
+const MasterInformation = () => {
     const router = useRouter();
     const { isSelected } = useAccardionStore();
     const { allCategory, setSelectedServiceId ,selectedServiceId } = ClientStory();
@@ -42,7 +42,7 @@ const Hair = () => {
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor="#21212E" barStyle="light-content" />
-            <NavigationMenu name={`Здоровье и красота волос`} />
+            <NavigationMenu name={`Услуги`} />
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
@@ -66,4 +66,4 @@ const Hair = () => {
     );
 };
 
-export default Hair;
+export default MasterInformation;

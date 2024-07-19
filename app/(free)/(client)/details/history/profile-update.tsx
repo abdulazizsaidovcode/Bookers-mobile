@@ -11,8 +11,6 @@ import {MaterialIcons} from "@expo/vector-icons";
 import ProfileImgUpload from "@/components/profile-img-upload";
 import financeStore from "@/helpers/state_managment/finance/financeStore";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import {Picker} from "@react-native-picker/picker";
-import Select from "@/components/select/select";
 import {
     getClientAll,
     getClientStatistics,
@@ -23,6 +21,7 @@ import {useForm, Controller} from 'react-hook-form';
 import PhoneInput from 'react-native-phone-input';
 import Toast from "react-native-simple-toast";
 import {handleRefresh} from "@/constants/refresh";
+import {SelectList} from "react-native-dropdown-select-list";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
@@ -31,9 +30,8 @@ interface FormData {
 }
 
 const genderData = [
-    {label: "Gender ni tanlang", value: ""},
-    {label: "Male", value: "true"},
-    {label: "Female", value: "false"},
+    {key: "true", value: "Male"},
+    {key: "false", value: "Female"},
 ]
 
 const ProfileUpdate = ({clientData}: { clientData: any }) => {
@@ -58,12 +56,39 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
     const [showHide, setShowHide] = useState<boolean>(false);
     const [navigate, setNavigate] = useState<boolean>(false);
     const [newUpdateClient, setNewUpdateClient] = useState<any>(clientData);
+    const [ages, setAges] = useState<any[] | null>(null);
+    const [regions, setRegions] = useState<any[] | null>(null);
+    const [districts, setDistricts] = useState<any[] | null>(null);
 
     useEffect(() => {
         setRegex(validateObject(newUpdateClient))
         newUpdateClient.attachmentId = attachmentID ? attachmentID : null
         newUpdateClient.phoneNumber = phoneNumber ? phoneNumber : newUpdateClient.phoneNumber;
         newUpdateClient.birthDate = date ? date : newUpdateClient.birthDate
+
+        if (ageData) {
+            const transformedAge = ageData.map(item => ({
+                key: item.id,
+                value: item.ageRange
+            }));
+            setAges(transformedAge)
+        }
+
+        if (regionData) {
+            const transformedRegion = regionData.map(item => ({
+                key: item.id,
+                value: item.name
+            }));
+            setRegions(transformedRegion)
+        }
+
+        if (districtData) {
+            const transformedDistrict = districtData.map(item => ({
+                key: item.id,
+                value: item.name
+            }));
+            setDistricts(transformedDistrict)
+        }
     }, [newUpdateClient]);
 
     useEffect(() => {
@@ -193,35 +218,56 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
                             />
                         </View>
                         <View style={tw`${showHide ? '' : 'hidden'}`}>
-                            <Select
-                                label={`Пол`}
-                                value={newUpdateClient.gender !== 'MALE' ? newUpdateClient.gender : newUpdateClient.gender === 'MALE' ? 'true' : 'false'}
-                                onValueChange={(e) => handleInputChange('gender', e)}
-                                child={genderData.map(item => <Picker.Item label={item.label} value={item.value}/>)}
+                            <Text style={tw`text-gray-500 mb-2 text-base`}>Пол</Text>
+                            <SelectList
+                                boxStyles={tw`w-60 z-50 w-full text-white bg-gray-500`}
+                                inputStyles={tw`text-white text-lg`}
+                                dropdownStyles={styles.dropdown}
+                                dropdownTextStyles={tw`text-white text-lg`}
+                                setSelected={(e: string) => handleInputChange('gender', e)}
+                                data={genderData}
+                                save="key"
+                                search={false}
+                                placeholder="Пол"
                             />
-                            <Select
-                                label={`Возраст`}
-                                value={newUpdateClient.ageId}
-                                onValueChange={(e) => handleInputChange('ageId', e)}
-                                child={ageData && ageData.map(item => <Picker.Item label={item.ageRange}
-                                                                                   value={item.id}/>)}
+                            <Text style={tw`text-gray-500 mb-2 mt-3 text-base`}>Возраст</Text>
+                            <SelectList
+                                boxStyles={tw`w-60 z-50 w-full text-white bg-gray-500`}
+                                inputStyles={tw`text-white text-lg`}
+                                dropdownStyles={styles.dropdown}
+                                dropdownTextStyles={tw`text-white text-lg`}
+                                setSelected={(e: string) => handleInputChange('ageId', e)}
+                                data={ages ? ages : [{key: 'Ma\'lumot yuq', value: ''}]}
+                                save='key'
+                                search={false}
+                                placeholder="Возраст"
                             />
-                            <Select
-                                label={`Регион`}
-                                value={newUpdateClient.regionId ? newUpdateClient.regionId : ''}
-                                onValueChange={(e) => {
+                            <Text style={tw`text-gray-500 mb-2 mt-3 text-base`}>Регион</Text>
+                            <SelectList
+                                boxStyles={tw`w-60 z-50 w-full text-white bg-gray-500`}
+                                inputStyles={tw`text-white text-lg`}
+                                dropdownStyles={styles.dropdown}
+                                dropdownTextStyles={tw`text-white text-lg`}
+                                setSelected={(e: string) => {
                                     handleInputChange('regionId', e)
                                     getDistrictList(setDistrictData, e)
                                 }}
-                                child={regionData && regionData.map(item => <Picker.Item label={item.name}
-                                                                                         value={item.id}/>)}
+                                data={regions ? regions : [{key: '', value: 'Ma\'lumot yuq'}]}
+                                save='key'
+                                search={false}
+                                placeholder="Регион"
                             />
-                            <Select
-                                label={`Город`}
-                                value={newUpdateClient.districtId ? newUpdateClient.districtId : ''}
-                                onValueChange={(e) => handleInputChange('districtId', e)}
-                                child={districtData && districtData.map(item => <Picker.Item label={item.name}
-                                                                                             value={item.id}/>)}
+                            <Text style={tw`text-gray-500 mb-2 mt-3 text-base`}>Город</Text>
+                            <SelectList
+                                boxStyles={tw`w-60 z-50 w-full text-white bg-gray-500`}
+                                inputStyles={tw`text-white text-lg`}
+                                dropdownStyles={styles.dropdown}
+                                dropdownTextStyles={tw`text-white text-lg`}
+                                setSelected={(e: string) => handleInputChange('districtId', e)}
+                                data={districts ? districts : [{key: '', value: 'Ma\'lumot yuq'}]}
+                                save='key'
+                                search={false}
+                                placeholder="Город"
                             />
                         </View>
                     </View>
@@ -287,6 +333,13 @@ const styles = StyleSheet.create({
     errorText: {
         color: 'red',
     },
+    dropdown: {
+        zIndex: 1000,
+        width: '100%',
+        position: 'absolute',
+        backgroundColor: '#4b4b63',
+        top: 55
+    }
 });
 
 export default ProfileUpdate;

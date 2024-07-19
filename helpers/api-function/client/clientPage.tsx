@@ -3,7 +3,7 @@ import {getConfig} from "@/app/(tabs)/(master)/main";
 import axios from "axios";
 import { client_profile_edit_url } from "@/helpers/api";
 
-export const updateClientProfile = async (datas: any, navigate?: () => void, getMe?: () => void) => {
+export const updateClientProfile = async (datas: any, navigate?: () => void, getMe?: () => void, clearData?: () => void) => {
     try {
         if (datas) {
             const config = await getConfig()
@@ -11,6 +11,8 @@ export const updateClientProfile = async (datas: any, navigate?: () => void, get
             if (data.success) {
                 Toast.show('Successfully update', Toast.LONG)
                 navigate ? navigate() : null
+                getMe ? getMe() : null
+                clearData ? clearData() : null
             } else {
                 Toast.show('An error occurred on the server', Toast.LONG)
             }
