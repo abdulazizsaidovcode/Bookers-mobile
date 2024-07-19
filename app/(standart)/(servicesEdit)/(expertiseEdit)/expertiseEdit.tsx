@@ -79,7 +79,7 @@ const ExpertiseEdit: React.FC = () => {
             const response = await axios.post(`${masterAdd_category}/${selectedCategoryId}?name=${name}`, {}, config ? config : {});
             if (response.data.success) {
                 setChildCategoryData([...childCategoryData, { id, name }]);
-                getChildCategory(id);
+                await getChildCategory(id);
             } else {
                 setChildCategoryData([]);
             }

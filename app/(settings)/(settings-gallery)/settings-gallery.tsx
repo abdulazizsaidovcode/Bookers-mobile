@@ -130,7 +130,7 @@ const SettingsGallery: React.FC = () => {
         } as any);
       });
 
-      addData(formData, albumName, setData, setImages, setAlbumName, setMainImageIndices, navigation.goBack());
+      await addData(formData, albumName, setData, setImages, setAlbumName, setMainImageIndices, navigation.goBack());
     }
   };
 

@@ -72,7 +72,7 @@ const ServesGenderEdit: React.FC = () => {
             const queryParams = selectedCategories.map(item => `genders=${item}`).join('&');
             await axios.post(`${gender_status}?${queryParams}`, '', config ? config : {});
             router.push("(standart)/(servicesEdit)/test");
-            fetchGenders();
+            await fetchGenders();
         } catch (error) {
             console.error("Error saving gender data:", error);
         } finally {

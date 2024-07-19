@@ -71,7 +71,7 @@ const ProfileImgUpload = (
                  ) : setAttachmentID(result.assets[0])
             }
 
-            else uploadImage(result.assets[0]);
+            else await uploadImage(result.assets[0]);
         }
     };
 
@@ -97,7 +97,7 @@ const ProfileImgUpload = (
                     setAttachmentID("")
                  ) : setAttachmentID(result.assets[0])
             }
-            else uploadImage(result.assets[0]);
+            else await uploadImage(result.assets[0]);
         }
     };
 
