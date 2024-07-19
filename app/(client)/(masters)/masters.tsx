@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  ActivityIndicator,
-  Pressable,
+    View,
+    Text,
+    ScrollView,
+    TouchableOpacity,
+    Image,
+    ActivityIndicator,
+    Pressable,
 } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -14,26 +14,26 @@ import Entypo from "@expo/vector-icons/Entypo";
 import moment from "moment";
 import Buttons from "@/components/(buttons)/button";
 import useTopMastersStore from "@/helpers/state_managment/masters";
-import { getCategory, getTopMasters } from "@/helpers/api-function/masters";
-import { FontAwesome } from "@expo/vector-icons";
+import {getCategory, getTopMasters} from "@/helpers/api-function/masters";
+import {FontAwesome} from "@expo/vector-icons";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import AccardionSlider from "@/components/accordions/accardionSlider";
 import AccardionSliderTwo from "@/components/accordions/accardionSliderTwo";
 import AccordionFree from "@/components/accordions/accardionFree";
 import AccordionCustom from "@/components/accordions/accardionCustom";
-import { getFile } from "@/helpers/api";
+import {getFile} from "@/helpers/api";
 import LocationInput from "@/app/locationInput";
-import { useCommunitySlider } from "@/helpers/state_managment/communitySlider/communitySliderStore";
-import { useAccardionStore } from "@/helpers/state_managment/accardion/accardionStore";
-import { postClientFilter } from "@/helpers/api-function/uslugi/uslugi";
+import {useCommunitySlider} from "@/helpers/state_managment/communitySlider/communitySliderStore";
+import {useAccardionStore} from "@/helpers/state_managment/accardion/accardionStore";
+import {postClientFilter} from "@/helpers/api-function/uslugi/uslugi";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import { useMapStore } from "@/helpers/state_managment/map/map";
 
 type SettingsScreenNavigationProp = NavigationProp<
-  RootStackParamList,
-  "app/(client)/(masters)/masters"
+    RootStackParamList,
+    "app/(client)/(masters)/masters"
 >;
 
 const Masters = () => {
@@ -47,84 +47,80 @@ const Masters = () => {
   const { setMapData } = useMapStore();
   const navigation = useNavigation<any>();
 
-  const toggleBottomModal = () => setBottomModal(!bottmModal);
+    const toggleBottomModal = () => setBottomModal(!bottmModal);
 
-  const deletePastEntries = (id: string) => {
-    const res = pastEntries.filter((state) => state !== id);
-    setPastEntries(res);
-  };
+    const deletePastEntries = (id: string) => {
+        const res = pastEntries.filter((state) => state !== id);
+        setPastEntries(res);
+    };
 
-  const handleClick = async () => {
-    try {
-      postClientFilter(
-        pastEntries,
-        genderIndex,
-        value * 1000,
-        rating,
-        userLocation.coords.latitude,
-        userLocation?.coords.longitude
-      );
-      toggleBottomModal();
-      setPastEntries([]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    const handleClick = async () => {
+        await postClientFilter(
+            pastEntries,
+            genderIndex,
+            value * 1000,
+            rating,
+            userLocation.coords.latitude,
+            userLocation?.coords.longitude
+        );
+        toggleBottomModal();
+        setPastEntries([]);
+    };
 
-  useEffect(() => {
-    getTopMasters(search);
-    getCategory();
-  }, [search]);
+    useEffect(() => {
+        getTopMasters(search);
+        getCategory();
+    }, [search]);
 
-  return (
-    <View
-      style={[
-        tw`px-5`,
-        {
-          flex: 1,
-          backgroundColor: "#21212E",
-        },
-      ]}
-    >
-      <View style={tw`mt-10 w-full flex-row justify-between`}>
-        <TouchableOpacity
-          onPress={toggleBottomModal}
-          style={[
-            tw`rounded-lg px-4 py-2 justify-center items-center flex-row`,
-            { backgroundColor: "#9c0935" },
-          ]}
+    return (
+        <View
+            style={[
+                tw`px-5`,
+                {
+                    flex: 1,
+                    backgroundColor: "#21212E",
+                },
+            ]}
         >
-          <Ionicons name="filter-sharp" size={24} color="#fff" />
-          <Text style={tw`text-white text-lg font-medium ml-2`}>Фильтр</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate(
-              "(client)/(map)/(recent-masters)/recent-masters"
-            )
-          }
-          style={[
-            tw`rounded-lg px-4 py-2 border justify-center items-center border flex-row`,
-            { borderColor: "#fff" },
-          ]}
-        >
-          <Entypo name="compass" size={24} color="#fff" />
-          <Text style={tw`text-white text-lg font-medium ml-2`}>На карте</Text>
-        </TouchableOpacity>
-      </View>
+            <View style={tw`mt-10 w-full flex-row justify-between`}>
+                <TouchableOpacity
+                    onPress={toggleBottomModal}
+                    style={[
+                        tw`rounded-lg px-4 py-2 justify-center items-center flex-row`,
+                        {backgroundColor: "#9c0935"},
+                    ]}
+                >
+                    <Ionicons name="filter-sharp" size={24} color="#fff"/>
+                    <Text style={tw`text-white text-lg font-medium ml-2`}>Фильтр</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() =>
+                        navigation.navigate(
+                            "(client)/(map)/(recent-masters)/recent-masters"
+                        )
+                    }
+                    style={[
+                        tw`rounded-lg px-4 py-2 border justify-center items-center border flex-row`,
+                        {borderColor: "#fff"},
+                    ]}
+                >
+                    <Entypo name="compass" size={24} color="#fff"/>
+                    <Text style={tw`text-white text-lg font-medium ml-2`}>На карте</Text>
+                </TouchableOpacity>
+            </View>
 
-      <View style={tw`w-full`}>
-        <LocationInput
-          onChangeText={(e) => setSearch(e)}
-          value={search}
-          placeholder="Search"
-        />
-      </View>
-      <View style={tw`flex-1`}>
-        <Text style={tw`text-white text-lg font-medium mt-5`}>
-          Топ {masters.length} специалисты
-        </Text>
-        {isLoading && <ActivityIndicator size="large" color={"#888"} />}
+            <View style={tw`w-full`}>
+                <LocationInput
+                    onChangeText={(e) => setSearch(e)}
+                    value={search}
+                    placeholder="Search"
+                />
+            </View>
+            <View style={tw`flex-1`}>
+                <Text style={tw`text-white text-lg font-medium mt-5`}>
+                    Топ {masters.length} специалисты
+                </Text>
+                {isLoading && <ActivityIndicator size="large" color={"#888"}/>}
 
         <ScrollView
           showsVerticalScrollIndicator={false}
