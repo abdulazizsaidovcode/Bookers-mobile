@@ -9,6 +9,7 @@ import { useMapStore } from '@/helpers/state_managment/map/map';
 import { useFocusEffect } from '@react-navigation/native';
 import { getCategory } from '@/helpers/api-function/masters';
 import useTopMastersStore from '@/helpers/state_managment/masters';
+import { postClientFilter } from '@/helpers/api-function/uslugi/uslugi';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)/(map)/(recent-masters)/recent-masters'>;
@@ -32,6 +33,15 @@ const RecentMastersByCategory = () => {
             return () => { };
         }, [])
     );
+
+    const hadleSumbit = () => {
+        try {
+            postClientFilter([categoryId])
+            navigation.goBack()
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -68,6 +78,9 @@ const RecentMastersByCategory = () => {
                     ))}
                 </View>
             </ScrollView>
+            <View style={{ position: 'absolute', padding: 10, bottom: 0, width: screenWidth }}>
+                <Buttons title='Показать результаты' isDisebled={categoryId !== null} onPress={hadleSumbit} />
+            </View>
         </SafeAreaView>
     );
 };

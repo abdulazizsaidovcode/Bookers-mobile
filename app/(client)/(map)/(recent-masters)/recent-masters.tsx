@@ -1,33 +1,45 @@
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Image, Pressable } from 'react-native';
 import React, { useCallback, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Circle, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import { useFocusEffect } from 'expo-router';
 import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
-import { useCommunitySlider } from '@/helpers/state_managment/communitySlider/communitySliderStore';
 import Slider from '@react-native-community/slider';
 import { mapCustomStyle } from '@/type/map/map';
 import Buttons from '@/components/(buttons)/button';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Feather } from '@expo/vector-icons';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import { getTopMasters } from '@/helpers/api-function/masters';
-import useTopMastersStore from '@/helpers/state_managment/masters';
-import { postClientFilter } from '@/helpers/api-function/uslugi/uslugi';
-import { useMapStore } from '@/helpers/state_managment/map/map';
+import useTopMastersStore, { Master } from '@/helpers/state_managment/masters';
+import { getFile } from '@/helpers/api';
+import { fetchMetroStations } from '@/helpers/api-function/map/map';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)/(map)/(recent-masters)/recent-masters'>;
 
+const haversineDistance = (userLat: number, userLon: number, salonLat: number, salonLon: number) => {
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = (salonLat - userLat) * (Math.PI / 180);
+    const dLon = (salonLon - userLon) * (Math.PI / 180);
+    const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(userLat * (Math.PI / 180)) * Math.cos(salonLat * (Math.PI / 180)) *
+        Math.sin(dLon / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in kilometers
+};
+
 
 const RecentMasters = () => {
     const { userLocation, setUserLocation } = useGetMeeStore();
-    const { categoryId } = useMapStore();
-    const { value, setValue } = useCommunitySlider();
+    const [value, setValue] = useState(5.1);
+    const [circleValue, setCircleValue] = useState(0);
     const [showByDistance, setShowByDistance] = useState(false);
-    const { masters } = useTopMastersStore()
+    const [selectedMarker, setSelectedMarker] = useState<Master | null>(null);
+    const { masters } = useTopMastersStore();
+    const [metroStations, setMetroStations] = useState<any>([]);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     useFocusEffect(
@@ -44,18 +56,28 @@ const RecentMasters = () => {
         }, [])
     );
 
+    useFocusEffect(
+        useCallback(() => {
+            fetchMetroStations(userLocation.coords.latitude, userLocation.coords.longitude, setMetroStations);
+            return () => { };
+        }, [userLocation])
+    )
+
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', metroStations);
+
     const toggleShowByDistance = () => setShowByDistance(!showByDistance);
+    const handleReset = () => setValue(5.1);
+    const handleMarkerPress = (marker: Master) => {
+        setSelectedMarker(marker);
+    };
 
-    const hadleSumbit = () => {
-        try {
-            postClientFilter(categoryId,)
-        } catch (error) {
-            console.log(error);
+    const handleValueChange = (newValue: number) => {
+        setValue(newValue);
+    };
 
-        }
-    }
 
-    if (!userLocation || !userLocation.coords) {
+
+    if (!userLocation.coords) {
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView>
@@ -72,18 +94,19 @@ const RecentMasters = () => {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View>
-                    {showByDistance ?
-                        <View style={{ height: screenHeight / 7 }}>
+                    {showByDistance ? (
+                        <View style={{ height: screenHeight / 7, paddingVertical: 10 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row', gap: 15 }}>
                                     <AntDesign name="close" size={24} color="white" onPress={toggleShowByDistance} />
                                     <Text style={{ fontSize: 20, color: 'white' }}>По расстоянию</Text>
                                 </View>
-                                <View>
-                                    <Buttons title='Сбросить' />
+                                <View style={{ width: screenWidth / 3 }}>
+                                    <Buttons title='Сбросить' onPress={handleReset} />
                                 </View>
                             </View>
-                        </View> :
+                        </View>
+                    ) : (
                         <View>
                             <NavigationMenu name="На карте" />
                             <View style={styles.buttonContainer}>
@@ -94,14 +117,20 @@ const RecentMasters = () => {
                                     <Text style={styles.buttonText}>по услугам</Text>
                                 </TouchableOpacity>
                             </View>
-                        </View>}
-
+                        </View>
+                    )}
+                    
                 </View>
                 <View>
                     <MapView
                         provider={PROVIDER_GOOGLE}
                         customMapStyle={mapCustomStyle}
+                        zoomControlEnabled
+                        zoomTapEnabled
+                        loadingEnabled
+                        showsUserLocation
                         style={styles.map}
+                        onPress={selectedMarker ? () => setSelectedMarker(null) : () => { }}
                         initialRegion={{
                             latitude: userLocation.coords.latitude,
                             longitude: userLocation.coords.longitude,
@@ -118,8 +147,20 @@ const RecentMasters = () => {
                                 }}
                                 title={item.salonName ? item.salonName : ''}
                                 description={item.fullName ? item.fullName : ''}
+                                onPress={() => handleMarkerPress(item)}
                             />
                         ))}
+                        {circleValue.toFixed(1).toString() !== '5.1' ? (
+                            <Circle
+                                center={{
+                                    latitude: userLocation.coords.latitude,
+                                    longitude: userLocation.coords.longitude,
+                                }}
+                                radius={circleValue * 1000}
+                                strokeColor="rgba(255, 0, 0, 0.5)"
+                                fillColor="rgba(255, 0, 0, 0.2)"
+                            />
+                        ) : null}
                     </MapView>
                 </View>
             </ScrollView>
@@ -131,11 +172,11 @@ const RecentMasters = () => {
                         </Text>
                         <Slider
                             style={styles.slider}
-                            minimumValue={0}
+                            minimumValue={0.25}
                             maximumValue={5.1}
                             step={0.1}
-                            value={5.1}
-                            onValueChange={setValue}
+                            value={value}
+                            onValueChange={handleValueChange}
                             minimumTrackTintColor="#8B1A1A"
                             maximumTrackTintColor="#fff"
                             thumbTintColor="#8B1A1A"
@@ -145,7 +186,48 @@ const RecentMasters = () => {
                         <Text style={styles.labelText}>250 м</Text>
                         <Text style={styles.labelText}>Все</Text>
                     </View>
-                    <Buttons title="Показать результаты" isDisebled={value.toFixed(1).toString() !== '5.1'} />
+                    <Buttons
+                        title="Показать результаты"
+                        onPress={() => {
+                            setCircleValue(value);
+                            toggleShowByDistance()
+                        }}
+                    />
+                </View>
+            )}
+            {selectedMarker && (
+                <View style={{ padding: 10, position: 'absolute', bottom: 0, width: '100%' }}>
+                    <View style={styles.detailView}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                            <View>
+                                <Image style={{ width: screenWidth / 6, height: screenHeight / 12.5, borderRadius: 50 }} source={selectedMarker.attachmentId === null ? require('../../../../assets/images/defaultImg.jpeg') : getFile + selectedMarker.attachmentId} />
+                            </View>
+                            <View>
+                                <Text style={styles.detailTitle}>{selectedMarker.salonName}</Text>
+                                <Text style={styles.detailDescription}>{selectedMarker.fullName}</Text>
+                            </View>
+                        </View>
+                        <View style={{ marginTop: 10 }}>
+                            <Text style={styles.detailTitle}>{selectedMarker.district && selectedMarker.street ? `${selectedMarker.district}, ${selectedMarker.street}` : 'Адрес салона не настроен'}</Text>
+                        </View>
+                        <View style={styles.infoDetails}>
+                            <View style={styles.infoRow}>
+                                <Feather name="send" size={24} color="#9C0A35" />
+                                <Text style={styles.infoText}>{`${haversineDistance(userLocation.coords.latitude, userLocation.coords.longitude, selectedMarker.lat === null ? 0 : selectedMarker.lat, selectedMarker.lng === null ? 0 : selectedMarker.lng).toFixed(1)} km от вас`}</Text>
+                            </View>
+                            <View style={styles.infoRow}>
+                                <Text style={styles.metroIcon}>M</Text>
+                                <Text style={styles.metroText}>Гафур Гуляма</Text>
+                                <Text style={styles.metroDistance}>0.5 км от станции</Text>
+                            </View>
+                            <View style={styles.separator} />
+
+                            <Pressable style={styles.routeButton}>
+                                <Text style={styles.routeText}>Построить маршрут</Text>
+                                <AntDesign name="right" size={20} color="#9C0A35" />
+                            </Pressable>
+                        </View>
+                    </View>
                 </View>
             )}
         </SafeAreaView>
@@ -160,11 +242,27 @@ const styles = StyleSheet.create({
         backgroundColor: '#21212E',
         position: 'relative',
     },
+    separator: {
+        borderWidth: 0.5,
+        borderColor: 'white',
+        marginVertical: 5,
+    },
     buttonContainer: {
         flexDirection: 'row',
         gap: 10,
         padding: 10,
         justifyContent: 'center',
+    },
+    routeButton: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 5,
+    },
+    routeText: {
+        color: '#9C0A35',
+        fontFamily: 'bold',
+        fontSize: 17,
     },
     sliderWrapper: {
         position: 'absolute',
@@ -188,7 +286,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#8B1A1A',
         textAlign: 'center',
-        width: '100%',
         borderRadius: 5,
     },
     slider: {
@@ -226,9 +323,51 @@ const styles = StyleSheet.create({
     distanceLabels: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 10,
+        paddingHorizontal: 10,
+        marginTop: 10,
     },
     labelText: {
+        color: '#fff',
+        fontSize: 14,
+    },
+    detailView: {
+        width: '100%',
+        backgroundColor: '#21212E',
+        padding: 20,
+        borderRadius: 20,
+    },
+    detailTitle: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    detailDescription: {
+        color: '#fff',
+        fontSize: 16,
+        marginVertical: 10,
+    },
+    infoDetails: {
+        marginTop: 10,
+        gap: 5,
+    },
+    infoRow: {
+        flexDirection: 'row',
+        gap: 10,
+        alignItems: 'center',
+    },
+    infoText: {
         color: 'white',
+    },
+    metroIcon: {
+        color: '#9C0A35',
+        fontSize: 24,
+    },
+    metroText: {
+        color: 'white',
+        fontFamily: 'bold',
+        fontSize: 15,
+    },
+    metroDistance: {
+        color: '#828282',
     },
 });
