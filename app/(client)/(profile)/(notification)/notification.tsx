@@ -11,7 +11,7 @@ const NotificationClient = () => {
                 <AntDesign name="delete" size={24} color="white" />
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                <TouchableOpacity style={styles.card}>
+                <TouchableOpacity style={styles.card} activeOpacity={1}>
                     <View style={styles.header}>
                         <Image
                             source={require('@/assets/avatar.png')}
