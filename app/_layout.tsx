@@ -137,6 +137,7 @@ import SalonLocation from "./(client)/(map)/(salon-location)/salon-location";
 import RecentMastersByCategory from "./(client)/(map)/(recent-masters)/recent-masters-by-category";
 import EditProfilePage from "./(client)/(profile)/(profileEdit)/(editPages)/editPage";
 import Masters from "./(client)/(masters)/masters";
+import SettingPage from "./(client)/(profile)/(settings)/(settingPage)/settingPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -825,7 +826,7 @@ function RootLayoutNav() {
             />
             <Stack.Screen
               name="(client)/(profile)/(settings)/(settingPage)/settingPage"
-              component={SettingsClient}
+              component={SettingPage}
               options={{ headerShown: false }}
             />
             <Stack.Screen
