@@ -72,10 +72,7 @@ const NotificationClient = () => {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.card} activeOpacity={0.9} onPress={toggleBottomModal}>
                     <View style={styles.header}>
-                        <Image
-                            source={require('@/assets/avatar.png')}
-                            style={styles.avatar}
-                        />
+
                         <Text style={styles.title}>Отмена бронирования</Text>
                     </View>
                     <Text style={styles.description}>
