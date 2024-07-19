@@ -9,7 +9,6 @@ const UserProfileCard: React.FC = () => {
   const { getme, specialization, setAddress, address } = webPageStore();
 
   useFocusEffect(
-
     useCallback(() => {
       getAddress(setAddress)
       return () => { }

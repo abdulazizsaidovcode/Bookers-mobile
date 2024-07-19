@@ -136,6 +136,7 @@ import CardClient from "./(client)/(profile)/(card)/card";
 import PaymentClient from "./(client)/(profile)/(payment)/payment";
 import SalonLocation from "./(client)/(map)/(salon-location)/salon-location";
 import EditProfilePage from "./(client)/(profile)/(profileEdit)/editPages/editPage";
+import MasterInformation from "./(client)/(uslugi)/(masterInformation)/masterInformation";
 
 
 
@@ -514,6 +515,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(client)/(uslugi)/(specialist)/specialist"
               component={Specialist}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(uslugi)/(masterInformation)/masterInformation"
+              component={MasterInformation}
               options={{ headerShown: false }}
             />
 

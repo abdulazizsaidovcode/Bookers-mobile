@@ -97,6 +97,7 @@ const ClientProfileCard: React.FC = () => {
 const styles = StyleSheet.create({
   card: {
     margin: 5
+    
   },
   header: {
     flexDirection: "row",
