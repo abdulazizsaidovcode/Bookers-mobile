@@ -1,4 +1,4 @@
-import { ScrollView, StatusBar, StyleSheet, Text, View, Alert } from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 import React, { useState, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ServicesCategory from "@/components/services/servicesCatgegory";

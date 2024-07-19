@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import HallCard from '@/components/(cards)/hall';
-import { ClientStatus } from '@/type/client/client';
-
 
 interface HallAccordionProps {
   items: OrderItem[];

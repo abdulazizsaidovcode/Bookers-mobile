@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';

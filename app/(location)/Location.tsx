@@ -2,7 +2,7 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
-import { Image, Pressable, StatusBar, Text, View } from "react-native";
+import { Pressable, StatusBar, Text, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 
 const Location = () => {

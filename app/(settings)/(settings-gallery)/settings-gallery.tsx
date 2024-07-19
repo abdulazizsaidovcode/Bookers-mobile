@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableWithoutFeedback, Switch, Dimensions } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableWithoutFeedback,  Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { addData, fetchData } from '@/helpers/api-function/gallery/settings-gallery';
+import { addData } from '@/helpers/api-function/gallery/settings-gallery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import LocationInput from '@/components/(location)/locationInput';

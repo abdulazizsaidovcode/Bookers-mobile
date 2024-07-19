@@ -1,11 +1,9 @@
-import Buttons from '@/components/(buttons)/button';
-import { master_service_list } from '@/helpers/api';
 import { getFreeTime } from '@/helpers/api-function/freeTime/freeTime';
 import { useScheduleFreeTime } from '@/helpers/state_managment/freeTime/freeTime';
 import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStore';
 import { useOrderPosdData } from '@/helpers/state_managment/order/order';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import React, { useEffect, useState, useCallback, Children } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { List } from 'react-native-paper';
 import CenteredModal from '@/components/(modals)/modal-centered';

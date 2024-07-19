@@ -1,4 +1,4 @@
-import Constants from 'expo-constants';
+// import Constants from 'expo-constants';
 // const base_url = Constants.manifest.extra.eas.API_BASE_URL;
 
 // swagger url

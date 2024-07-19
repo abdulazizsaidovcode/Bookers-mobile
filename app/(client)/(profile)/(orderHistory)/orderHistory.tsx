@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, FlatList, StyleSheet, ScrollView } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import CustomButton from "./CustomButton";
 import AccordionCard from "./AccordionCard";
 import { StatusBar } from "expo-status-bar";

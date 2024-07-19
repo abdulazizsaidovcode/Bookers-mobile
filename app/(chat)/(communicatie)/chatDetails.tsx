@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, TouchableOpacity, Image, ScrollView, Pressable, TextInput, StyleSheet, Text } from 'react-native';
 import { Ionicons, MaterialIcons, AntDesign } from '@expo/vector-icons'; // Use Expo icons
 import { useRoute } from '@react-navigation/native';
-import axios from 'axios';
+// import axios from 'axios';
 import { fetchMessages } from '@/helpers/api-function/chat/getmessages';
 import fetchChatDataStore from '@/helpers/state_managment/chat/chatfetchStore';
 import { useStomp } from '@/context/StompContext';

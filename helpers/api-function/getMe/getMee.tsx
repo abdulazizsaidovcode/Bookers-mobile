@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getMe } from "../../api";
-import { GetMee, UserLocation } from "@/type/getMee";
+import { GetMee } from "@/type/getMee";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import * as Location from 'expo-location'
 import { Alert } from "react-native";

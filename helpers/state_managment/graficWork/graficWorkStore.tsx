@@ -1,4 +1,4 @@
-import { TimeList, weekList } from "@/type/graficWork/graficWork";
+import { weekList } from "@/type/graficWork/graficWork";
 import { create } from "zustand";
 
 interface graficWorkData {

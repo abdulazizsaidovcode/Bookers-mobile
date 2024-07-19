@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { router, useNavigation } from "expo-router";
+import { useNavigation } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -23,7 +23,6 @@ import {
   OnlineBookingSettingsUrgentlyStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from "@/app/(tabs)/(master)/main";
-import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 import Toast from "react-native-simple-toast";
 
 const Booking = () => {

@@ -14,7 +14,7 @@ import {
     getSpecialization,
     master_get_Service
 } from '@/helpers/api';
-import { router, useNavigation } from 'expo-router';
+import { router } from 'expo-router';
 import MyServicesEdit from './(processEdit)/(uslugi)/uslugi';
 import { getConfig } from '@/app/(tabs)/(master)/main';
 

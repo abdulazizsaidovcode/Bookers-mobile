@@ -8,9 +8,7 @@ import {
     ScrollView,
 } from "react-native";
 import tw from "tailwind-react-native-classnames";
-import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import History from "@/helpers/state_managment/history";
 import NavigationMenu from "@/components/navigation/navigation-menu";

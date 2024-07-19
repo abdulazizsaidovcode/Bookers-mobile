@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, Alert } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { AntDesign } from '@expo/vector-icons';
 import { useCommunitySlider } from '@/helpers/state_managment/communitySlider/communitySliderStore';

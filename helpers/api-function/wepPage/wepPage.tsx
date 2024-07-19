@@ -1,7 +1,6 @@
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import {
   address_url,
-  category_Father,
   gallery_list,
   getCategory_master,
   master_get_Service,

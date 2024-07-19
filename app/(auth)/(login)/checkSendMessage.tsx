@@ -3,7 +3,7 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister';
 import {RootStackParamList} from '@/type/root';
 import {NavigationProp} from '@react-navigation/native';
-import {router, useFocusEffect, useNavigation} from 'expo-router';
+import { useFocusEffect, useNavigation} from 'expo-router';
 import React, {useState, useRef, useEffect, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import * as SecureStore from 'expo-secure-store';

@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, StatusBar, FlatList } from 'react-native';
+import { ScrollView, View, StatusBar, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import axios from 'axios';
 import Toast from "react-native-simple-toast";
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
-import { ActivityIndicator } from 'react-native-paper';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
-import { category_Father, getCategory_master, getCategory_masterAdd } from '@/helpers/api'; // Assuming getCategory is defined in your helpers/api
+import { category_Father, getCategory_masterAdd } from '@/helpers/api';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import MyServicesScreen from '../../(services)/(myServicesScreen)/MyServicesScreen';
 import { router } from 'expo-router';
 import { getConfig } from '@/app/(tabs)/(master)/main';
 
