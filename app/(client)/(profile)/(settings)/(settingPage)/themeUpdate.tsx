@@ -5,51 +5,46 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from "react-native-simple-radio-button";
-import * as SecureStore from 'expo-secure-store';
-import { useFocusEffect } from "expo-router";
-
-export interface RatioProps {
-  label: string,
-  value: string,
-  theme?: string
-}
+import * as SecureStore from "expo-secure-store";
+import { useFocusEffect } from "@react-navigation/native";
+import { useColorScheme } from "react-native"; // useColorScheme hook'ini import qilamiz
+import { RatioProps } from "./ratioOptiom";
 
 interface ComponentData {
-  radioProps: RatioProps[]
+  radioProps: RatioProps[];
   // updateName: string
 }
 
-const RatioOption: React.FC<ComponentData> = ({radioProps}) => {
-  const [Language, setLanguage] = useState<string>("");
+const ThemeUpdate: React.FC<ComponentData> = ({ radioProps }) => {
+  const [Theme, setTheme] = useState<string>("");
 
   useFocusEffect(
-
-      useCallback(() => {
-        const getStoredLanguage = async () => {
-          try {
-            const storedLanguage = await SecureStore.getItemAsync('selectedLanguage');
-            if (storedLanguage) {
-              setLanguage(storedLanguage);
-            }
-          } catch (error) {
-            console.error('Failed to get stored language:', error);
+    useCallback(() => {
+      const getStoredTheme = async () => {
+        try {
+          const storedTheme = await SecureStore.getItemAsync("selectedTheme");
+          if (storedTheme) {
+            setTheme(storedTheme);
           }
-        };
-    
-        getStoredLanguage();
-        return () => null
-      }, [])
-  )
+        } catch (error) {
+          console.error("Failed to get stored Theme:", error);
+        }
+      };
+
+      getStoredTheme();
+      return () => null;
+    }, [])
+  );
 
   const onPressRadioButton = async (key: string) => {
-    setLanguage(key);
+    setTheme(key);
     try {
-      await SecureStore.setItemAsync('selectedLanguage', key);
+      await SecureStore.setItemAsync("selectedTheme", key);
     } catch (error) {
-      console.error('Failed to save language:', error);
+      console.error("Failed to save Theme:", error);
     }
   };
-
+  
   return (
     <View style={styles.content}>
       <RadioForm formHorizontal={false} animation={true}>
@@ -58,7 +53,7 @@ const RatioOption: React.FC<ComponentData> = ({radioProps}) => {
             <RadioButtonInput
               obj={obj}
               index={i}
-              isSelected={Language === obj.value}
+              isSelected={Theme === obj.value}
               onPress={() => onPressRadioButton(obj.value)}
               buttonInnerColor={"#9C035A"}
               buttonOuterColor={"#9C035A"}
@@ -82,7 +77,7 @@ const RatioOption: React.FC<ComponentData> = ({radioProps}) => {
   );
 };
 
-export default RatioOption;
+export default ThemeUpdate;
 
 const styles = StyleSheet.create({
   content: {

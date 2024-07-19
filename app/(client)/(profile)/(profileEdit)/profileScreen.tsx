@@ -39,16 +39,6 @@ const ProfileScreen = () => {
     }, [])
   );
   
-
-  
-
-//   useFocusEffect(
-//     useCallback(() => {
-//       console.log(region, city);
-      
-//     }, [region, city])
-//   );
-
   const handlePress = (key: RouteData) => {
     setRoute(key);
     navigation.navigate(
