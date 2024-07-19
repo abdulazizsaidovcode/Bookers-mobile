@@ -29,6 +29,7 @@ import { postClientFilter } from "@/helpers/api-function/uslugi/uslugi";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
+import { useMapStore } from "@/helpers/state_managment/map/map";
 
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
@@ -43,7 +44,8 @@ const Masters = () => {
   const { rating, value } = useCommunitySlider(); // value * 1000
   const { genderIndex } = useAccardionStore();
   const { userLocation } = useGetMeeStore();
-  const navigation = useNavigation<SettingsScreenNavigationProp>();
+  const { setMapData } = useMapStore();
+  const navigation = useNavigation<any>();
 
   const toggleBottomModal = () => setBottomModal(!bottmModal);
 
@@ -212,8 +214,11 @@ const Masters = () => {
                   <View style={tw`mt-2 flex-row px-9 justify-center`}>
                     <Buttons title="Записаться" />
                     <TouchableOpacity
+                      onPress={() => {
+                        setMapData(item);
+                        navigation.navigate("(client)/(master-locations)/master-locations")
+                      }}
                       activeOpacity={0.8}
-                         
                       style={[
                         tw`w-12 h-12 items-center justify-center rounded-full bg-black ml-3`,
                         { backgroundColor: "#9c0935" },
