@@ -25,8 +25,7 @@ if (
 }
 
 const AccordionCustom: React.FC<AccordionItemProps> = ({ title, children }) => {
-  const { expanded5, setExpended5 } = useAccardionStore();
-  console.log(expanded5);
+  const [expanded5, setExpended5] = useState(false);
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -50,7 +49,7 @@ const AccordionCustom: React.FC<AccordionItemProps> = ({ title, children }) => {
         />
       </TouchableOpacity>
 
-      {expanded5 && <View>{children}</View>}
+      {expanded5 && <View style={styles.content}>{children}</View>}
     </View>
   );
 };

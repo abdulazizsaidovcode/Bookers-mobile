@@ -6,32 +6,65 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
-import { TextInput } from "react-native-paper";
 import tw from "tailwind-react-native-classnames";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Entypo from "@expo/vector-icons/Entypo";
 import moment from "moment";
 import Buttons from "@/components/(buttons)/button";
 import useTopMastersStore from "@/helpers/state_managment/masters";
-import { getTopMasters } from "@/helpers/api-function/masters";
+import { getCategory, getTopMasters } from "@/helpers/api-function/masters";
 import { FontAwesome } from "@expo/vector-icons";
 import BottomModal from "@/components/(modals)/modal-bottom";
-import AccordionItem from "@/components/accordions/accardion";
 import AccardionSlider from "@/components/accordions/accardionSlider";
 import AccardionSliderTwo from "@/components/accordions/accardionSliderTwo";
 import AccordionFree from "@/components/accordions/accardionFree";
 import AccordionCustom from "@/components/accordions/accardionCustom";
+import { getFile } from "@/helpers/api";
+import LocationInput from "@/app/locationInput";
+import { useCommunitySlider } from "@/helpers/state_managment/communitySlider/communitySliderStore";
+import { useAccardionStore } from "@/helpers/state_managment/accardion/accardionStore";
+import { postClientFilter } from "@/helpers/api-function/uslugi/uslugi";
+import useGetMeeStore from "@/helpers/state_managment/getMee";
+import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 
 const Masters = () => {
-  const { masters, isLoading } = useTopMastersStore();
+  const { masters, isLoading, category } = useTopMastersStore();
   const [bottmModal, setBottomModal] = useState(false);
+  const [pastEntries, setPastEntries] = useState<string[]>([]);
+  const [search, setSearch] = useState<any>("");
+  const { rating, value } = useCommunitySlider(); // value * 1000
+  const { genderIndex } = useAccardionStore();
+  const { userLocation } = useGetMeeStore();
 
   const toggleBottomModal = () => setBottomModal(!bottmModal);
 
+  const deletePastEntries = (id: string) => {
+    const res = pastEntries.filter((state) => state !== id);
+    setPastEntries(res);
+  };
+
+  const handleClick = async () => {
+    try {
+      postClientFilter(
+        pastEntries,
+        genderIndex,
+        value * 1000,
+        rating,
+        userLocation.coords.latitude,
+        userLocation?.coords.longitude
+      );
+      toggleBottomModal();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    getTopMasters();
-  }, []);
+    getTopMasters(search);
+    getCategory();
+  }, [search]);
 
   return (
     <View
@@ -66,8 +99,9 @@ const Masters = () => {
       </View>
 
       <View style={tw`w-full`}>
-        <TextInput
-          style={tw`bg-gray-500 rounded-xl py-1 px-5 mb-3 w-full h-10 mt-10 text-white text-lg`}
+        <LocationInput
+          onChangeText={(e) => setSearch(e)}
+          value={search}
           placeholder="Search"
         />
       </View>
@@ -146,7 +180,7 @@ const Masters = () => {
                     <Image
                       style={tw`w-full h-52 rounded-lg`}
                       source={{
-                        uri: `http://134.122.77.107:8080/attachment/getFile/${item.mainPhoto}`,
+                        uri: `${getFile}${item.mainPhoto}`,
                       }}
                     />
                   ) : (
@@ -187,20 +221,60 @@ const Masters = () => {
           toggleBottomModal={toggleBottomModal}
           children={
             <View style={tw`w-full mt-3`}>
-              <Text style={tw`text-xl text-center text-white font-bold`}>
+              <Text style={tw`text-xl text-center mb-5 text-white font-bold`}>
                 Фильтр
               </Text>
               <AccordionCustom
                 title="Направления услуг"
                 children={
                   <View>
-                    <Text>Hello</Text>
+                    {category &&
+                      category.map((item, i) => (
+                        <View style={tw`flex-row mt-2`}>
+                          {pastEntries.includes(item.id) ? (
+                            <Pressable
+                              onPress={() => deletePastEntries(item.id)}
+                              key={`checked-${item.id}`}
+                              style={[
+                                tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                                { backgroundColor: "#9C0A35" },
+                              ]}
+                            >
+                              <Ionicons
+                                name="checkmark"
+                                size={18}
+                                color="white"
+                                style={tw`font-bold`}
+                              />
+                            </Pressable>
+                          ) : (
+                            <Pressable
+                              onPress={() =>
+                                setPastEntries([...pastEntries, item.id])
+                              }
+                              key={`unchecked-${item.id}`}
+                              style={[
+                                tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                                {
+                                  backgroundColor: "#B9B9C9",
+                                  borderWidth: 2,
+                                  borderColor: "gray",
+                                },
+                              ]}
+                            ></Pressable>
+                          )}
+                          <Text key={i}>{item.name}</Text>
+                        </View>
+                      ))}
                   </View>
                 }
               />
               <AccordionFree title="Пол мастера" />
               <AccardionSlider title="Рядом со мной" />
               <AccardionSliderTwo title="Рейтинг" />
+              <View style={tw`mt-7`}>
+                <Buttons onPress={handleClick} title="Сохранять" />
+              </View>
             </View>
           }
         />
