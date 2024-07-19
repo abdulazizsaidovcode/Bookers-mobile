@@ -81,4 +81,5 @@ export type RootStackParamList = {
   '(client)/(profile)/(payment)/payment': undefined
   '(client)/(profile)/(card)/card': undefined
   '(client)/(profile)/(profileEdit)/profileScreen' : undefined
+  '(client)/(profile)/(settings)/(settingPage)/settingPage' : undefined
 };

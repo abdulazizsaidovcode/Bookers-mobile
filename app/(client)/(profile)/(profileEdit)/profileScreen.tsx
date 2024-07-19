@@ -40,6 +40,8 @@ const ProfileScreen = () => {
   );
   
 
+  
+
 //   useFocusEffect(
 //     useCallback(() => {
 //       console.log(region, city);

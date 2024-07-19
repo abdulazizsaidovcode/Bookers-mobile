@@ -36,6 +36,7 @@ const ProfileEdit = () => {
     telegram,
     regionId,
     setAttachmentId,
+    setProfile
   } = useProfileStore();
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -45,6 +46,10 @@ const ProfileEdit = () => {
       return () => {};
     }, [])
   );
+
+  console.log(getMee);
+
+
 
   useFocusEffect(
     useCallback(() => {
@@ -63,6 +68,23 @@ const ProfileEdit = () => {
       regionId,
     ])
   );
+  const clearStore = () => {
+    setProfile({
+      nickName: null,
+      firstName: null,
+      lastName: null,
+      birthDate: null,
+      job: null,
+      phoneNumber: null,
+      regionId: null,
+      districtId: 1,
+      telegram: null,
+      gender: true,
+      attachmentId: null,
+      distiricyIdData: null,
+      regionIdData: null,
+    })
+  }
 
   const putPofile = () => {
     const data = {
@@ -112,7 +134,13 @@ const ProfileEdit = () => {
     };
     console.log(data);
     
-    updateClientProfile(data, () => navigation.goBack(), () => getUser(setGetMee));
+
+    updateClientProfile(
+      data,
+      () => navigation.goBack(),
+      () => getUser(setGetMee),
+      () => clearStore()
+    );
   };
 
   return (
@@ -120,7 +148,7 @@ const ProfileEdit = () => {
       <StatusBar backgroundColor="#21212E" />
       <NavigationMenu name="Личные данные" />
       <ScrollView>
-        <View style={{ marginBottom: 16 }}>
+        <View style={{ marginBottom: 16, padding: 16 }}>
           <ProfileImgUpload
             setAttachmentId={setAttachmentId}
             attachmentID={
@@ -133,8 +161,9 @@ const ProfileEdit = () => {
           <SelectGender />
         </View>
       </ScrollView>
-      <View></View>
-      <Buttons onPress={() => putPofile()} title="Сохранить" />
+      <View style={{margin: 16}}>
+        <Buttons onPress={() => putPofile()} title="Сохранить" />
+      </View>
     </SafeAreaView>
   );
 };
@@ -144,7 +173,6 @@ export default ProfileEdit;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: "#21212E",
   },
   genderText: {
