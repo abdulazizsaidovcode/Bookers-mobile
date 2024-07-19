@@ -13,6 +13,7 @@ import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import {getConfig} from '@/app/(tabs)/(master)/main';
 import Textarea from '@/components/select/textarea';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import Toast from "react-native-simple-toast";
 
 type GenderOption = {
     title: string;
@@ -20,14 +21,13 @@ type GenderOption = {
 };
 
 const Process: React.FC = () => {
-    const {selectedServices} = useLocalSearchParams();
     const [service, setService] = useState<string>('');
     const [price, setPrice] = useState<string>('');
     const [time, setTime] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [validate, setValidate] = useState<boolean>(false);
     const [selectedGender, setSelectedGender] = useState<GenderOption | null>(null);
-    const {childCategoryData, selectedCategoryId, categoryFatherId, selectedCategory} = servicesStore();
+    const {childCategoryData, selectedCategory} = servicesStore();
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
 
     const Gender: GenderOption[] = [
@@ -54,16 +54,11 @@ const Process: React.FC = () => {
                 active: true,
                 serviceTime: convertTimeToMinutes(time),
             };
-            console.log(data);
 
             const response = await axios.post(masterAdd_service, data, config ? config : {});
-            console.log(response);
 
-            if (response.data.success = true) {
-                router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
-            } else {
-                console.error('Failed to add service:', response.data.message);
-            }
+            if (response.data.success) router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
+            else Toast.show(response.data.message, Toast.LONG)
         } catch (error) {
             console.error('Error adding service:', error);
         }
