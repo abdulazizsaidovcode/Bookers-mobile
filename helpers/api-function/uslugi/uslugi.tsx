@@ -5,7 +5,6 @@ import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 import { useState } from "react";
 
-const { freeTime, setFreeTime } = useState();
 // Client get all Category
 export const getAllCategory = async () => {
   try {
