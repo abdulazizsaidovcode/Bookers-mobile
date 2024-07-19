@@ -137,6 +137,7 @@ import PaymentClient from "./(client)/(profile)/(payment)/payment";
 import SalonLocation from "./(client)/(map)/(salon-location)/salon-location";
 import RecentMastersByCategory from "./(client)/(map)/(recent-masters)/recent-masters-by-category";
 import EditProfilePage from "./(client)/(profile)/(profileEdit)/(editPages)/editPage";
+import Masters from "./(client)/(masters)/masters";
 
 
 
@@ -269,6 +270,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/(setPinCode)/installPin"
               component={InstallPin}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="app/(client)/(masters)/masters"
+              component={Masters}
               options={{ headerShown: false }}
             />
             <Stack.Screen

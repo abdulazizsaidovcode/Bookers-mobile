@@ -28,6 +28,11 @@ import { useAccardionStore } from "@/helpers/state_managment/accardion/accardion
 import { postClientFilter } from "@/helpers/api-function/uslugi/uslugi";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'app/(client)/(masters)/masters'>;
+
 
 const Masters = () => {
   const { masters, isLoading, category } = useTopMastersStore();
@@ -37,6 +42,8 @@ const Masters = () => {
   const { rating, value } = useCommunitySlider(); // value * 1000
   const { genderIndex } = useAccardionStore();
   const { userLocation } = useGetMeeStore();
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
+
 
   const toggleBottomModal = () => setBottomModal(!bottmModal);
 
@@ -135,7 +142,7 @@ const Masters = () => {
                       source={
                         item.attachmentId
                           ? {
-                              uri: `http://134.122.77.107:8080/attachment/getFile/${item.attachmentId}`,
+                              uri: `${getFile}${item.attachmentId}`,
                             }
                           : require("../../../assets/avatar.png")
                       }
@@ -200,6 +207,7 @@ const Masters = () => {
                     <Buttons title="Записаться" />
                     <TouchableOpacity
                       activeOpacity={0.8}
+                      onPress={() => navigation.navigate('(client)/(map)/(recent-masters)/recent-masters')}
                       style={[
                         tw`w-12 h-12 items-center justify-center rounded-full bg-black ml-3`,
                         { backgroundColor: "#9c0935" },
