@@ -96,7 +96,7 @@ const NotificationClient = () => {
                     <Text style={{
                         fontSize: 14,
                         fontWeight: '400',
-                        width: '64%',
+                        textAlign: 'center',
                         color: '#494949',
                         padding: 5,
                         borderWidth: 1,
