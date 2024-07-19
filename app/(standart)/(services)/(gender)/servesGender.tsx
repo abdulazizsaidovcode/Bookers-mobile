@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from '@/components/Themed';
@@ -9,7 +9,6 @@ import ServicesCategory from '@/components/services/servicesCatgegory';
 import { router } from 'expo-router';
 import axios from 'axios';
 import { gender_status } from '@/helpers/api';
-import { ActivityIndicator } from 'react-native-paper';
 import { getConfig } from '@/app/(tabs)/(master)/main';
 
 const ServesGender = () => {
@@ -25,7 +24,7 @@ const ServesGender = () => {
         try {
             const config = await getConfig()
             console.log(config);
-            const response = await axios.post(`${gender_status}genders=${selectedCategories}`,{},config);
+            const response = await axios.post(`${gender_status}genders=${selectedCategories}`,{},config ? config : {});
             if(response.data.success === true){
               router.push("/category")  
             }

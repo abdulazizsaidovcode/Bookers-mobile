@@ -1,5 +1,4 @@
 import { ProductType } from "@/type/history";
-import React from "react";
 import { create } from "zustand";
 
 interface Type {

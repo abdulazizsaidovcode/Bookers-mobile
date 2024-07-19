@@ -2,7 +2,6 @@ import { getFile } from '@/helpers/api';
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
-import HomeCards from './homeCard';
 
 const ClientCard = ({ items }: any) => {
     return (

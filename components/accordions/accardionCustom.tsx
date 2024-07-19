@@ -1,4 +1,4 @@
-import React, { Children, useState } from "react";
+import React, {useState} from "react";
 import {
   View,
   Text,
@@ -9,7 +9,6 @@ import {
   UIManager,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import tw from "tailwind-react-native-classnames";
 import { useAccardionStore } from "@/helpers/state_managment/accardion/accardionStore";
 
 interface AccordionItemProps {
@@ -25,8 +24,7 @@ if (
 }
 
 const AccordionCustom: React.FC<AccordionItemProps> = ({ title, children }) => {
-  const { expanded5, setExpended5 } = useAccardionStore();
-  console.log(expanded5);
+  const [expanded5, setExpended5] = useState(false);
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -50,7 +48,7 @@ const AccordionCustom: React.FC<AccordionItemProps> = ({ title, children }) => {
         />
       </TouchableOpacity>
 
-      {expanded5 && <View>{children}</View>}
+      {expanded5 && <View style={styles.content}>{children}</View>}
     </View>
   );
 };

@@ -1,6 +1,6 @@
 import { getFile } from "@/helpers/api";
 import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
-import { router, useNavigation } from "expo-router";
+import { useNavigation } from "expo-router";
 import React from "react";
 import {
   View,

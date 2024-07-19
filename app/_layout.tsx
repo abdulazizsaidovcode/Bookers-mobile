@@ -124,7 +124,6 @@ import Specialist from "./(client)/(uslugi)/(specialist)/specialist";
 import Dashboard from "./(client)/(dashboard)/dashboard";
 import MasterTabLayout from "./(tabs)/(master)/_layout";
 import ClientTabLayout from "./(tabs)/(client)/_layout";
-import Health from "./(client)/(dashboard)/(health)/health";
 import OrderHistory from "./(client)/(profile)/(orderHistory)/orderHistory";
 import ProfileEdit from "./(client)/(profile)/(profileEdit)/profileEdit";
 import SettingsClient from "./(client)/(profile)/(settings)/settings";
@@ -135,13 +134,13 @@ import ClientCameraInfo from "./(auth)/(register)/(clientInformations)/getPhoto"
 import CardClient from "./(client)/(profile)/(card)/card";
 import PaymentClient from "./(client)/(profile)/(payment)/payment";
 import SalonLocation from "./(client)/(map)/(salon-location)/salon-location";
+
 import EditProfilePage from "./(client)/(profile)/(profileEdit)/editPages/editPage";
 import MasterInformation from "./(client)/(uslugi)/(masterInformation)/masterInformation";
-
-
-
+import RecentMastersByCategory from "./(client)/(map)/(recent-masters)/recent-masters-by-category";
+import Masters from "./(client)/(masters)/masters";
+import SettingPage from "./(client)/(profile)/(settings)/(settingPage)/settingPage";
 const Stack = createNativeStackNavigator();
-
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
@@ -272,6 +271,11 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="app/(client)/(masters)/masters"
+              component={Masters}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="(auth)/(setPinCode)/checkInstalledPin"
               component={CheckPin}
               options={{ headerShown: false }}
@@ -355,6 +359,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(client)/(map)/(recent-masters)/recent-masters"
               component={RecentMasters}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(map)/(recent-masters)/recent-masters-by-category"
+              component={RecentMastersByCategory}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -523,7 +532,6 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
 
-
             {/* Client Uslugi end */}
             <Stack.Screen
               name="(profile)/(sessionhistory)/sessionHistory"
@@ -608,7 +616,10 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(free)/(client)/details/history/history-details"
               component={HistoryDetailsInformation}
-              options={{ title: "HistoryDetailsInformation", headerShown: false }}
+              options={{
+                title: "HistoryDetailsInformation",
+                headerShown: false,
+              }}
             />
             <Stack.Screen
               name="(location)/Location"
@@ -718,7 +729,8 @@ function RootLayoutNav() {
               name="(profile)/(WebPage)/WebPage"
               component={WebPage}
               options={{ title: "CreatingClient", headerShown: false }}
-            /><Stack.Screen
+            />
+            <Stack.Screen
               name="(profile)/(WebPage-standart)/WebPage"
               component={WebPageStandart}
               options={{ title: "CreatingClient", headerShown: false }}
@@ -798,27 +810,28 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(client)/(dashboard)/(health)/health"
-              component={Health}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="(client)/(profile)/(orderHistory)/orderHistory"
               component={OrderHistory}
               options={{ headerShown: false }}
-            /><Stack.Screen
-            name="(client)/(profile)/(profileEdit)/profileEdit"
-            component={ProfileEdit}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(client)/(profile)/(profileEdit)/(editPages)/editPage"
-            component={EditProfilePage}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
+            />
+            <Stack.Screen
+              name="(client)/(profile)/(profileEdit)/profileEdit"
+              component={ProfileEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(profile)/(profileEdit)/(editPages)/editPage"
+              component={EditProfilePage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="(client)/(profile)/(settings)/settings"
               component={SettingsClient}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(profile)/(settings)/(settingPage)/settingPage"
+              component={SettingPage}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -840,6 +853,6 @@ function RootLayoutNav() {
         </MenuProvider>
       </StompProvider>
     </ThemeProvider>
-    // I'm a good developer 
+    // I'm a good developer
   );
 }

@@ -10,7 +10,7 @@ import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { useFocusEffect, useRouter } from 'expo-router';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { ScrollView, View, Text, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';

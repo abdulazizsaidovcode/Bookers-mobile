@@ -1,5 +1,4 @@
 import {TouchableOpacity, View, Text, StyleSheet} from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import tw from "tailwind-react-native-classnames";
 import {MaterialIcons} from "@expo/vector-icons";
 

@@ -1,8 +1,7 @@
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import SwitchWithLabel from "@/components/switchWithLabel/switchWithLabel";
 import SwitchWithLabelBlack from "@/components/switchWithLabel/switchWithLabelBlack";
 import {
   // OnlineBookingCheck,
@@ -11,11 +10,9 @@ import {
 import Buttons from "@/components/(buttons)/button";
 import {
   getOnlineConfirmationServices,
-  onlineBookingAllowClient,
   onlineConfirmationServices,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
-import { router, useFocusEffect } from "expo-router";
-import isRegister from "@/helpers/state_managment/isRegister/isRegister";
+import { useFocusEffect } from "expo-router";
 
 const ConfirmationRecord = () => {
 

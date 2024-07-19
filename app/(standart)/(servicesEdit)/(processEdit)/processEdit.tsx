@@ -14,8 +14,7 @@ import CenteredModal from '@/components/(modals)/modal-centered';
 import { AntDesign } from '@expo/vector-icons';
 import Toast from "react-native-simple-toast";
 import { getConfig } from '@/app/(tabs)/(master)/main';
-import MyServicesEdit from './(uslugi)/uslugi';
-import { Data } from '@/type/chat/chatSms';
+
 
 type GenderOption = {
     title: string;

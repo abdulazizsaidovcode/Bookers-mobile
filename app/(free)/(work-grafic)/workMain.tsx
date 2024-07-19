@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
@@ -10,7 +10,6 @@ import {
   getWorkDay,
   getWorkTime,
 } from "@/helpers/api-function/graficWork/graficWorkFunctions";
-import { getMee } from "@/helpers/token";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";

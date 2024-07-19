@@ -1,11 +1,9 @@
-import { getMe } from "@/helpers/api";
+import OnlyCalendarComponent from "@/components/calendar/onlyCalendar";
 import {
   getDistrictId,
-  getRegion,
   getRegionId,
 } from "@/helpers/api-function/profile/personalData";
 import useProfileStore, { RouteData } from "@/helpers/state_managment/client/clientEditStore";
-import clientStore from "@/helpers/state_managment/client/clientStore";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { RootStackParamList } from "@/type/root";
 import { AntDesign } from "@expo/vector-icons";
@@ -27,20 +25,29 @@ type SettingsScreenNavigationProp = NavigationProp<
 const ProfileScreen = () => {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
   const { getMee } = useGetMeeStore();
-  const { setRoute, birthDate, districtId, firstName, job, lastName, nickName, phoneNumber, telegram, regionId } = useProfileStore();
-  const [region, setRegion] = useState<any | null>(null);
-  const [city, setCity] = useState<any>(null);
+  const { setRoute, birthDate, districtId, firstName, job, lastName, nickName, phoneNumber, telegram, regionId, setShowCalendar, setDistirictIdData, setRegionIdData, regionIdData, distiricyIdData } = useProfileStore();
 
   useFocusEffect(
     useCallback(() => {
-      getRegionId(regionId ? regionId : getMee && getMee.regionId ? getMee.regionId : "", setRegion);
+      getRegionId(regionId ? regionId : getMee && getMee.regionId ? getMee.regionId : "", setRegionIdData);
       getDistrictId(
         districtId ? districtId :
         getMee && getMee.districtId ? getMee.districtId : "",
-        setCity
+        setDistirictIdData
       );
+      return () => null;
     }, [])
   );
+  
+
+  
+
+//   useFocusEffect(
+//     useCallback(() => {
+//       console.log(region, city);
+      
+//     }, [region, city])
+//   );
 
   const handlePress = (key: RouteData) => {
     setRoute(key);
@@ -79,10 +86,10 @@ const ProfileScreen = () => {
         </View>
       </TouchableOpacity>
       <View style={styles.divider} />
-
+        <OnlyCalendarComponent/>
       <TouchableOpacity
         style={styles.item}
-        // onPress={() => handlePress("birthdate")}
+        onPress={() => setShowCalendar(true)}
       >
         <Text style={styles.label}>Дата рождения</Text>
         <View style={styles.itemMenu}>
@@ -129,7 +136,7 @@ const ProfileScreen = () => {
         <Text style={styles.label}>Регион</Text>
         <View style={styles.itemMenu}>
           <Text style={styles.value}>
-            {region && region.name ? region.name : "Нет данных"}
+            {regionIdData && regionIdData.name ? regionIdData.name : "Нет данных"}
           </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>
@@ -138,12 +145,12 @@ const ProfileScreen = () => {
 
       <TouchableOpacity
         style={styles.item}
-        onPress={() => handlePress({id: 6, value: "Регион и Город"})}
+        onPress={() => handlePress({id: 5, value: "Регион и Город"})}
       >
         <Text style={styles.label}>Город</Text>
         <View style={styles.itemMenu}>
           <Text style={styles.value}>
-            {city && city.name ? city.name : "Нет данных"}
+            {distiricyIdData && distiricyIdData.name ? distiricyIdData.name : "Нет данных"}
           </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>

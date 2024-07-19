@@ -1,4 +1,4 @@
-import { View, ScrollView, StatusBar, FlatList, Text } from 'react-native';
+import { View, ScrollView, StatusBar, FlatList} from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";

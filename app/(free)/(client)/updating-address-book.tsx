@@ -14,8 +14,6 @@ import {MaterialIcons} from "@expo/vector-icons";
 import ProfileImgUpload from "@/components/profile-img-upload";
 import financeStore from "@/helpers/state_managment/finance/financeStore";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import {Picker} from "@react-native-picker/picker";
-import Select from "@/components/select/select";
 import {
     getAgeList, getClientAll,
     getClientStatistics,
@@ -24,6 +22,7 @@ import {
     updateClientData
 } from "@/helpers/api-function/client/client";
 import {handleRefresh} from "@/constants/refresh";
+import {SelectList} from "react-native-dropdown-select-list";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/updating-address-book'>;
 
@@ -59,6 +58,9 @@ const UpdatingAddressBook = () => {
     const [regex, setRegex] = useState<boolean>(false);
     const [navigate, setNavigate] = useState<boolean>(false);
     const [showHide, setShowHide] = useState<boolean>(false);
+    const [ages, setAges] = useState<any[] | null>(null);
+    const [regions, setRegions] = useState<any[] | null>(null);
+    const [districts, setDistricts] = useState<any[] | null>(null);
 
     useEffect(() => {
         getAgeList(setAgeData)
@@ -69,13 +71,6 @@ const UpdatingAddressBook = () => {
             updateClient.lastName = client.lastName
         }
     }, []);
-
-    useEffect(() => {
-        if (refreshing) {
-            getAgeList(setAgeData)
-            getRegionList(setRegionData)
-        }
-    }, [refreshing]);
 
     useEffect(() => {
         if (client) {
@@ -92,6 +87,30 @@ const UpdatingAddressBook = () => {
 
     useEffect(() => {
         setRegex(validateObject(updateClient))
+
+        if (ageData) {
+            const transformedAge = ageData.map(item => ({
+                key: item.id,
+                value: item.ageRange
+            }));
+            setAges(transformedAge)
+        }
+
+        if (regionData) {
+            const transformedRegion = regionData.map(item => ({
+                key: item.id,
+                value: item.name
+            }));
+            setRegions(transformedRegion)
+        }
+
+        if (districtData) {
+            const transformedDistrict = districtData.map(item => ({
+                key: item.id,
+                value: item.name
+            }));
+            setDistricts(transformedDistrict)
+        }
     }, [updateClient]);
 
     useEffect(() => {
@@ -129,8 +148,8 @@ const UpdatingAddressBook = () => {
     };
 
     const genderData = [
-        {label: "Male", value: "true"},
-        {label: "Female", value: "false"},
+        {key: "true", value: "Male"},
+        {key: "false", value: "Female"},
     ]
 
     function validateObject(obj: any) {
@@ -214,32 +233,56 @@ const UpdatingAddressBook = () => {
                             />
                         </View>
                         <View style={tw`${showHide ? '' : 'hidden'}`}>
-                            <Select
-                                label={`Пол`}
-                                value={updateClient.gender}
-                                onValueChange={(e) => handleInputChange('gender', e)}
-                                child={genderData.map(item => <Picker.Item label={item.label} value={item.value}/>)}
+                            <Text style={tw`text-gray-500 mb-2 text-base`}>Пол</Text>
+                            <SelectList
+                                boxStyles={tw`w-60 z-50 w-full text-white bg-gray-500`}
+                                inputStyles={tw`text-white text-lg`}
+                                dropdownStyles={styles.dropdown}
+                                dropdownTextStyles={tw`text-white text-lg`}
+                                setSelected={(e: string) => handleInputChange('gender', e)}
+                                data={genderData}
+                                save="key"
+                                search={false}
+                                placeholder="Пол"
                             />
-                            <Select
-                                label={`Возраст`}
-                                value={updateClient.ageId}
-                                onValueChange={(e) => handleInputChange('ageId', e)}
-                                child={ageData && ageData.map(item => <Picker.Item label={item.ageRange} value={item.id}/>)}
+                            <Text style={tw`text-gray-500 mb-2 mt-3 text-base`}>Возраст</Text>
+                            <SelectList
+                                boxStyles={tw`w-60 z-50 w-full text-white bg-gray-500`}
+                                inputStyles={tw`text-white text-lg`}
+                                dropdownStyles={styles.dropdown}
+                                dropdownTextStyles={tw`text-white text-lg`}
+                                setSelected={(e: string) => handleInputChange('ageId', e)}
+                                data={ages ? ages : [{key: 'Ma\'lumot yuq', value: ''}]}
+                                save='key'
+                                search={false}
+                                placeholder="Возраст"
                             />
-                            <Select
-                                label={`Регион`}
-                                value={updateClient.regionId}
-                                onValueChange={(e) => {
+                            <Text style={tw`text-gray-500 mb-2 mt-3 text-base`}>Регион</Text>
+                            <SelectList
+                                boxStyles={tw`w-60 z-50 w-full text-white bg-gray-500`}
+                                inputStyles={tw`text-white text-lg`}
+                                dropdownStyles={styles.dropdown}
+                                dropdownTextStyles={tw`text-white text-lg`}
+                                setSelected={(e: string) => {
                                     handleInputChange('regionId', e)
                                     getDistrictList(setDistrictData, e)
                                 }}
-                                child={regionData && regionData.map(item => <Picker.Item label={item.name} value={item.id}/>)}
+                                data={regions ? regions : [{key: '', value: 'Ma\'lumot yuq'}]}
+                                save='key'
+                                search={false}
+                                placeholder="Регион"
                             />
-                            <Select
-                                label={`Город`}
-                                value={updateClient.districtId}
-                                onValueChange={(e) => handleInputChange('districtId', e)}
-                                child={districtData && districtData.map(item => <Picker.Item label={item.name} value={item.id}/>)}
+                            <Text style={tw`text-gray-500 mb-2 mt-3 text-base`}>Город</Text>
+                            <SelectList
+                                boxStyles={tw`w-60 z-50 w-full text-white bg-gray-500`}
+                                inputStyles={tw`text-white text-lg`}
+                                dropdownStyles={styles.dropdown}
+                                dropdownTextStyles={tw`text-white text-lg`}
+                                setSelected={(e: string) => handleInputChange('districtId', e)}
+                                data={districts ? districts : [{key: '', value: 'Ma\'lumot yuq'}]}
+                                save='key'
+                                search={false}
+                                placeholder="Город"
                             />
                         </View>
                     </View>
@@ -249,7 +292,7 @@ const UpdatingAddressBook = () => {
                             onPress={() => {
                                 if (client) updateClientData(updateClient, client.id, setNavigate, setIsLoading)
                             }}
-                            isDisebled={!!(regex && client.id)}
+                            isDisebled={regex && client.id}
                         />
                     </View>
                 </ScrollView>
@@ -289,6 +332,13 @@ const styles = StyleSheet.create({
     flagButton: {
         marginLeft: 8,
     },
+    dropdown: {
+        zIndex: 1000,
+        width: '100%',
+        position: 'absolute',
+        backgroundColor: '#4b4b63',
+        top: 55
+    }
 });
 
 export default UpdatingAddressBook;

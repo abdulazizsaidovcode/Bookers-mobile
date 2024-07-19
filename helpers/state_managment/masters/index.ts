@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-// Define the type for a master
+
 interface Master {
   id: string;
   fullName: string;
@@ -20,18 +20,29 @@ interface Master {
   mainPhoto: string | null;
 }
 
-// Define the interface for the store
+interface CategoryType {
+  id: string;
+  name: string;
+  categoryFatherId: string | null;
+  categoryFatherName: string | null;
+  isNew: boolean;
+}
+
+
 interface useTopMasters {
   masters: Master[];
   isLoading: boolean;
+  category: CategoryType[];
+  setCategory: (category: CategoryType[]) => void;
   setTopMasters: (data: Master[]) => void;
   setIsloading: (val: boolean) => void;
 }
 
-// Create the Zustand store
 const useTopMastersStore = create<useTopMasters>((set) => ({
   masters: [],
   isLoading: false,
+  category: [],
+  setCategory: (category: CategoryType[]) => set({ category }),
   setTopMasters: (data: Master[]) => set({ masters: data }),
   setIsloading: (val: boolean) => set({ isLoading: val }),
 }));

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import {  Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ExpenseCard from './(component)/card/index';
@@ -19,7 +19,7 @@ const Expenses: React.FC = () => {
     useCallback(() => {
       const fetchData = async () => {
         try {
-          getExpenceCategory(setExpenseCategory);
+          await getExpenceCategory(setExpenseCategory);
         } catch (error) {
           console.error('Error fetching data:', error);
         }

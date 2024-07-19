@@ -5,7 +5,6 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
 import { useNavigation } from 'expo-router';
 import { NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '@/type/root';
 // Bu bo'limga teginma
 type DashboardItemType = {
   id: number;
@@ -54,13 +53,13 @@ const Navbar: React.FC = () => (
 );
 
 const Dashboard: React.FC = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<NavigationProp<any>>();
   const dataDashboard: DashboardItemType[] = [
-    { id: 1, image: IMAGES.health, title: 'Здоровье и красота волос', titleThen: 'Рядом с тобой 450', onPress: () => navigation.navigate('(client)/(dashboard)/(health)/health') },
-    { id: 2, image: IMAGES.nails, title: 'Ногтевой сервис', titleThen: 'Рядом с тобой 75' },
-    { id: 3, image: IMAGES.eyes, title: 'Ресницы и брови', titleThen: 'Рядом с тобой 322' },
-    { id: 4, image: IMAGES.body, title: 'Уход за телом', titleThen: 'Рядом с тобой 456' },
-    { id: 5, image: IMAGES.face, title: 'Уход за лицом', titleThen: 'Рядом с тобой 210' },
+    { id: 1, image: IMAGES.health, title: 'Здоровье и красота волос', titleThen: 'Рядом с тобой 450', onPress: () => navigation.navigate('(client)/(uslugi)/(hairHealth)/hair') },
+    { id: 2, image: IMAGES.nails, title: 'Ногтевой сервис', titleThen: 'Рядом с тобой 75',onPress: () => navigation.navigate('(client)/(uslugi)/(hairHealth)/hair') },
+    { id: 3, image: IMAGES.eyes, title: 'Ресницы и брови', titleThen: 'Рядом с тобой 322',onPress: () => navigation.navigate('(client)/(uslugi)/(hairHealth)/hair') },
+    { id: 4, image: IMAGES.body, title: 'Уход за телом', titleThen: 'Рядом с тобой 456',onPress: () => navigation.navigate('(client)/(uslugi)/(hairHealth)/hair') },
+    { id: 5, image: IMAGES.face, title: 'Уход за лицом', titleThen: 'Рядом с тобой 210',onPress: () => navigation.navigate('(client)/(uslugi)/(hairHealth)/hair') },
   ];
 
   return (

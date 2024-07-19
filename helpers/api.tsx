@@ -1,4 +1,4 @@
-import Constants from 'expo-constants';
+// import Constants from 'expo-constants';
 // const base_url = Constants.manifest.extra.eas.API_BASE_URL;
 
 // swagger url
@@ -178,3 +178,4 @@ export const expene_category_list: string = `${base_url}expense-category/master/
 export const expene_category_post: string = `${base_url}expense-category`
 export const expene_list: string = `${base_url}expense`
 export const address_url: string = `${base_url}address`
+export const client_profile_edit_url: string = `${base_url}client`

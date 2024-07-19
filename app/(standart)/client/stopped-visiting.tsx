@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import tw from "tailwind-react-native-classnames";
-import {FlatList, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, TextInput, View} from "react-native";
+import {FlatList, RefreshControl, ScrollView, StatusBar, Text, View} from "react-native";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import LocationInput from "@/components/(location)/locationInput";
 import {

@@ -1,9 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { masterExpense } from '@/helpers/state_managment/expence/ecpense';
-import { getExpence } from '@/helpers/api-function/expence/expence';
 
 const ExpenseArendaCard = ({ item }: any) => {
     const navigation = useNavigation<any>();

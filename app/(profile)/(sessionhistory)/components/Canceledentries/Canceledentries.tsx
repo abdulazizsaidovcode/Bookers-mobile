@@ -48,7 +48,6 @@ const Canceledentries = () => {
   const deletePastEntries = (id: string) => {
     const res = pastEntries.filter((state) => state !== id);
     setPastEntries(res);
-    console.log(res);
   };
 
   const selectAll = () => {
@@ -147,8 +146,8 @@ const Canceledentries = () => {
           data.map((item) => (
             <Pressable
               onPress={() => {
-                !isChecked && navigation.navigate("(detail)/censeled-session"),
-                  setProduct(item);
+                !isChecked && navigation.navigate("(detail)/censeled-session")
+                setProduct(item);
               }}
               key={item.id}
               style={[tw`p-4 rounded-lg mb-4 flex-row items-start`, { backgroundColor: "#B9B9C9" }]}

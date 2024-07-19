@@ -1,4 +1,4 @@
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import React, { useCallback, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -6,126 +6,62 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import { useFocusEffect } from 'expo-router';
 import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
-import ClientCard from '@/components/(cliendCard)/cliendCard';
+import { useCommunitySlider } from '@/helpers/state_managment/communitySlider/communitySliderStore';
+import Slider from '@react-native-community/slider';
+import { mapCustomStyle } from '@/type/map/map';
+import Buttons from '@/components/(buttons)/button';
+import { AntDesign } from '@expo/vector-icons';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+import { getTopMasters } from '@/helpers/api-function/masters';
+import useTopMastersStore from '@/helpers/state_managment/masters';
+import { postClientFilter } from '@/helpers/api-function/uslugi/uslugi';
+import { useMapStore } from '@/helpers/state_managment/map/map';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)/(map)/(recent-masters)/recent-masters'>;
 
-const mapCustomStyle = [
-    {
-        "elementType": "geometry",
-        "stylers": [{ "color": "#2B3343" }]
-    },
-    {
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#746855" }]
-    },
-    {
-        "elementType": "labels.text.stroke",
-        "stylers": [{ "color": "#242f3e" }]
-    },
-    {
-        "featureType": "administrative.locality",
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#d59563" }]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#d59563" }]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry",
-        "stylers": [{ "color": "#263c3f" }]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#6b9a76" }]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry",
-        "stylers": [{ "color": "#38414e" }]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry.stroke",
-        "stylers": [{ "color": "#212a37" }]
-    },
-    {
-        "featureType": "road",
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#9ca5b3" }]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [{ "color": "#61729A" }]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry.stroke",
-        "stylers": [{ "color": "#1f2835" }]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#f3d19c" }]
-    },
-    {
-        "featureType": "transit",
-        "elementType": "geometry",
-        "stylers": [{ "color": "#2f3948" }]
-    },
-    {
-        "featureType": "transit.station",
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#d59563" }]
-    },
-    {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [{ "color": "#17263c" }]
-    },
-    {
-        "featureType": "water",
-        "elementType": "labels.text.fill",
-        "stylers": [{ "color": "#515c6d" }]
-    },
-    {
-        "featureType": "water",
-        "elementType": "labels.text.stroke",
-        "stylers": [{ "color": "#17263c" }]
-    },
-    {
-        "featureType": "administrative.country",
-        "elementType": "geometry.stroke",
-        "stylers": [{ "color": "#FFFFFF" }]
-    },
-    {
-        "featureType": "landscape.man_made",
-        "elementType": "geometry.fill",
-        "stylers": [{ "color": "#394562" }]
-    }
-];
 
 const RecentMasters = () => {
     const { userLocation, setUserLocation } = useGetMeeStore();
+    const { categoryId } = useMapStore();
+    const { value, setValue } = useCommunitySlider();
+    const [showByDistance, setShowByDistance] = useState(false);
+    const { masters } = useTopMastersStore()
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     useFocusEffect(
         useCallback(() => {
-            getUserLocation(setUserLocation)
-            return () => { }
+            getUserLocation(setUserLocation);
+            return () => { };
         }, [])
-    )
+    );
+
+    useFocusEffect(
+        useCallback(() => {
+            getTopMasters();
+            return () => { };
+        }, [])
+    );
+
+    const toggleShowByDistance = () => setShowByDistance(!showByDistance);
+
+    const hadleSumbit = () => {
+        try {
+            postClientFilter(categoryId,)
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
 
     if (!userLocation || !userLocation.coords) {
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView>
                     <View style={styles.loading}>
-                        <Text>Loading...</Text>
+                        <ActivityIndicator size="large" color="#fff" />
+                        <Text style={styles.loadingText}>Loading...</Text>
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -136,22 +72,36 @@ const RecentMasters = () => {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View>
-                    <NavigationMenu name='На карте' />
-                    <View style={{ flexDirection: 'row', gap: 10, padding: 10, justifyContent: 'center' }}>
-                        <TouchableOpacity activeOpacity={0.7} style={[styles.button, { width: '48%' }]}>
-                            <Text style={styles.buttonText}>по расстоянию</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.7} style={[styles.button, { width: '48%' }]}>
-                            <Text style={styles.buttonText}>по услугам</Text>
-                        </TouchableOpacity>
-                    </View>
+                    {showByDistance ?
+                        <View style={{ height: screenHeight / 7 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, alignItems: 'center' }}>
+                                <View style={{ flexDirection: 'row', gap: 15 }}>
+                                    <AntDesign name="close" size={24} color="white" onPress={toggleShowByDistance} />
+                                    <Text style={{ fontSize: 20, color: 'white' }}>По расстоянию</Text>
+                                </View>
+                                <View>
+                                    <Buttons title='Сбросить' />
+                                </View>
+                            </View>
+                        </View> :
+                        <View>
+                            <NavigationMenu name="На карте" />
+                            <View style={styles.buttonContainer}>
+                                <TouchableOpacity activeOpacity={0.7} style={[styles.button, { width: '48%' }]} onPress={toggleShowByDistance}>
+                                    <Text style={styles.buttonText}>по расстоянию</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity activeOpacity={0.7} style={[styles.button, { width: '48%' }]} onPress={() => navigation.navigate('(client)/(map)/(recent-masters)/recent-masters-by-category')}>
+                                    <Text style={styles.buttonText}>по услугам</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>}
+
                 </View>
                 <View>
                     <MapView
                         provider={PROVIDER_GOOGLE}
                         customMapStyle={mapCustomStyle}
                         style={styles.map}
-
                         initialRegion={{
                             latitude: userLocation.coords.latitude,
                             longitude: userLocation.coords.longitude,
@@ -159,17 +109,45 @@ const RecentMasters = () => {
                             longitudeDelta: 0.0421,
                         }}
                     >
-                        <Marker
-                            coordinate={{
-                                latitude: 37.78825,
-                                longitude: -122.4324,
-                            }}
-                            title={"Marker Title"}
-                            description={"Marker Description"}
-                        />
+                        {masters.map((item, index) => (
+                            <Marker
+                                key={index}
+                                coordinate={{
+                                    latitude: item.lat ? item.lat : 0,
+                                    longitude: item.lng ? item.lng : 0,
+                                }}
+                                title={item.salonName ? item.salonName : ''}
+                                description={item.fullName ? item.fullName : ''}
+                            />
+                        ))}
                     </MapView>
                 </View>
             </ScrollView>
+            {showByDistance && (
+                <View style={styles.sliderWrapper}>
+                    <View style={styles.sliderContainer}>
+                        <Text style={styles.value}>
+                            {value === 0 ? '0' : value.toFixed(1) === '5.1' ? 'Не важно' : value.toFixed(1)}
+                        </Text>
+                        <Slider
+                            style={styles.slider}
+                            minimumValue={0}
+                            maximumValue={5.1}
+                            step={0.1}
+                            value={5.1}
+                            onValueChange={setValue}
+                            minimumTrackTintColor="#8B1A1A"
+                            maximumTrackTintColor="#fff"
+                            thumbTintColor="#8B1A1A"
+                        />
+                    </View>
+                    <View style={styles.distanceLabels}>
+                        <Text style={styles.labelText}>250 м</Text>
+                        <Text style={styles.labelText}>Все</Text>
+                    </View>
+                    <Buttons title="Показать результаты" isDisebled={value.toFixed(1).toString() !== '5.1'} />
+                </View>
+            )}
         </SafeAreaView>
     );
 };
@@ -180,7 +158,43 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#21212E',
-        position: 'relative'
+        position: 'relative',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        gap: 10,
+        padding: 10,
+        justifyContent: 'center',
+    },
+    sliderWrapper: {
+        position: 'absolute',
+        width: screenWidth,
+        height: screenHeight / 4,
+        backgroundColor: '#21212E',
+        bottom: 0,
+        padding: 17.5,
+    },
+    sliderContainer: {
+        backgroundColor: '#fff',
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
+        width: screenWidth / 1.1,
+        alignItems: 'center',
+        marginTop: 30,
+        position: 'relative',
+        height: screenHeight / 20,
+    },
+    value: {
+        fontSize: 16,
+        color: '#8B1A1A',
+        textAlign: 'center',
+        width: '100%',
+        borderRadius: 5,
+    },
+    slider: {
+        width: screenWidth / 1.03,
+        position: 'absolute',
+        bottom: -7.5,
     },
     map: {
         width: screenWidth,
@@ -190,7 +204,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        height: screenHeight / 1.17
+        height: screenHeight / 1.17,
+    },
+    loadingText: {
+        color: 'white',
+        marginTop: 10,
     },
     button: {
         backgroundColor: '#4B4B64',
@@ -198,10 +216,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 20,
         paddingVertical: 10,
-        borderRadius: 10
+        borderRadius: 10,
+        width: '48%',
     },
     buttonText: {
         color: 'white',
-        fontSize: 17
-    }
+        fontSize: 17,
+    },
+    distanceLabels: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10,
+    },
+    labelText: {
+        color: 'white',
+    },
 });

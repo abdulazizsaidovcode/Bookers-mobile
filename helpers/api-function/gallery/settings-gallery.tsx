@@ -1,4 +1,3 @@
-import { config, imageConfig } from "@/helpers/token";
 import { EditMainPhoto, GalleryData } from "@/type/gallery/gallery";
 import { main_gallery, gallery_add_photo, gallery_edit_main_photo, gallery_full_data, gallery_list, } from "@/helpers/api";
 import axios from "axios";
@@ -33,7 +32,7 @@ export const addData = async (formData: FormData, name: string, setData: (data: 
     
     const { data } = await axios.post(`${main_gallery}?name=${name}`, formData, config ? config : {});
     if (data.success) {
-      fetchData(setData)
+      await fetchData(setData)
       setImages([])
       setAlbumName('')
       setMainImageIndices([])
@@ -51,7 +50,7 @@ export const addPhoto = async (galleryId: number, formData: FormData, setFullDat
     const config = await getConfigImg()    
     const { data } = await axios.post(`${gallery_add_photo}/${galleryId}`, formData, config ? config : {});
     if (data.success) {
-      fetchFullData(galleryId, setFullData);
+      await fetchFullData(galleryId, setFullData);
       setImages([]);
       Toast.show('Пожалуйста, подождите, администратор должен одобрить вашу фотографию.', Toast.LONG)
     }
@@ -66,8 +65,8 @@ export const editName = async (id: number, setFullData: (data: GalleryData) => v
     const config = await getConfig()
     const { data } = await axios.put(`${main_gallery}/${id}?name=${editedName}`, {}, config ? config : {});
     if (data.success) {
-      fetchFullData(id, setFullData);
-      fetchData(setData)
+      await fetchFullData(id, setFullData);
+      await fetchData(setData)
       toggleModal();
       Toast.show('Название галереи успешно обновлено.', Toast.LONG)
     }
@@ -81,8 +80,8 @@ export const editMainPhoto = async (setFullData: (data: GalleryData) => void, se
     const config = await getConfig()
     const { data } = await axios.put(`${gallery_edit_main_photo}/${galleryId}`, payload, config ? config : {});
     if (data.success) {
-      fetchFullData(galleryId, setFullData);
-      fetchData(setData);
+      await fetchFullData(galleryId, setFullData);
+      await fetchData(setData);
       Toast.show('Ваша основная фотография успешно обновлена.', Toast.LONG)
     }
   } catch (error) {
@@ -111,8 +110,8 @@ export const delPhoto = async (
 
     const data = await response.json();
     if (data.success) {
-      fetchFullData(id, setFullData);
-      fetchData(setData);
+      await fetchFullData(id, setFullData);
+      await fetchData(setData);
       toggleModal();
       Toast.show('Фото успешно удалено из галереи.', Toast.LONG);
     }
@@ -127,7 +126,7 @@ export const delGallery = async (id: number | null, setData: (data: GalleryData[
     const config = await getConfig()
     const res = await axios.delete(`${main_gallery}/${id}`, config ? config : {});
     if (res.data.success) {
-      fetchData(setData);
+      await fetchData(setData);
       toggleModal()
       toggleCheckboxes()
       Toast.show('Ваша галерея успешно удалена', Toast.LONG)
