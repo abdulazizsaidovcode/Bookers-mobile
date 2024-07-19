@@ -177,3 +177,4 @@ export const expene_category_list: string = `${base_url}expense-category/master/
 export const expene_category_post: string = `${base_url}expense-category`
 export const expene_list: string = `${base_url}expense`
 export const address_url: string = `${base_url}address`
+export const client_profile_edit_url: string = `${base_url}client`
