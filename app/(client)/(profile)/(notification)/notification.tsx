@@ -1,8 +1,9 @@
-import { Image, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import {Image, StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import BottomModal from "@/components/(modals)/modal-bottom";
+import Buttons from "@/components/(buttons)/button";
 
 const NotificationClient = () => {
     const [isBottomModalVisible, setBottomModalVisible] = useState(false);
@@ -12,10 +13,10 @@ const NotificationClient = () => {
     };
 
     return (
-        <View style={{ backgroundColor: '#21212E', flex: 1, padding: 10 }}>
+        <View style={{backgroundColor: '#21212E', flex: 1, padding: 10}}>
             <View style={styles.headerContainer}>
-                <NavigationMenu name={"Уведомления"} />
-                <AntDesign name="delete" size={24} color="white" />
+                <NavigationMenu name={"Уведомления"}/>
+                <AntDesign name="delete" size={24} color="white"/>
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <TouchableOpacity style={styles.card} activeOpacity={0.9} onPress={toggleBottomModal}>
@@ -32,7 +33,7 @@ const NotificationClient = () => {
                     </Text>
                     <View style={styles.footer}>
                         <Text style={styles.date}>20.04.2024 20:57:26</Text>
-                        <AntDesign name="right" size={24} color="white" />
+                        <AntDesign name="right" size={24} color="white"/>
                     </View>
                 </TouchableOpacity>
                 {/* Qo'shimcha kartalar qo'shish uchun NotificationCard komponentini takrorlang */}
@@ -50,7 +51,7 @@ const NotificationClient = () => {
                     </Text>
                     <View style={styles.footer}>
                         <Text style={styles.date}>20.04.2024 20:57:26</Text>
-                        <AntDesign name="right" size={24} color="white" />
+                        <AntDesign name="right" size={24} color="white"/>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.card} activeOpacity={0.9} onPress={toggleBottomModal}>
@@ -67,7 +68,7 @@ const NotificationClient = () => {
                     </Text>
                     <View style={styles.footer}>
                         <Text style={styles.date}>20.04.2024 20:57:26</Text>
-                        <AntDesign name="right" size={24} color="white" />
+                        <AntDesign name="right" size={24} color="white"/>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.card} activeOpacity={0.9} onPress={toggleBottomModal}>
@@ -81,7 +82,7 @@ const NotificationClient = () => {
                     </Text>
                     <View style={styles.footer}>
                         <Text style={styles.date}>20.04.2024 20:57:36</Text>
-                        <AntDesign name="right" size={24} color="white" />
+                        <AntDesign name="right" size={24} color="white"/>
                     </View>
                 </TouchableOpacity>
             </ScrollView>
@@ -89,12 +90,25 @@ const NotificationClient = () => {
                 toggleBottomModal={toggleBottomModal}
                 isBottomModal={isBottomModalVisible}
             >
-                <View>
-                    <Text>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias asperiores, at
-                        culpa eos necessitatibus quae ullam? Assumenda cupiditate dolorem excepturi
-                        fugit iusto omnis tenetur velit voluptates! At in officia velit!
-                    </Text>
+                <View style={{width: '100%'}}>
+                    <Text style={{fontSize: 16, fontWeight: '600', color: '#fff', marginBottom: 10}}>Отмена
+                        бронирования</Text>
+                    <Text style={{
+                        fontSize: 14,
+                        fontWeight: '400',
+                        width: '64%',
+                        color: '#494949',
+                        padding: 5,
+                        borderWidth: 1,
+                        borderRadius: 5,
+                        borderColor: '#494949',
+                        marginBottom: 10
+                    }}>Наращивание 2D ресниц</Text>
+                    <Text style={{color: 'white', marginBottom: 10}}>Ваша заявка №12 на18 апреля была отменена.
+                        Причина в том, что мастер в этот день не будет на работе и отменил ваш заказ. Вы можете
+                        перенести заказ на другой день или обратиться к специалисту повторно. Спасибо за
+                        понимание.</Text>
+                    <Buttons title={'Перейти к заявке'}/>
                 </View>
             </BottomModal>
         </View>
@@ -121,7 +135,7 @@ const styles = StyleSheet.create({
         padding: 15,
         margin: 10,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.3,
         shadowRadius: 2,
         elevation: 3,
