@@ -26,7 +26,7 @@ const SalonLocation = () => {
   useFocusEffect(
     useCallback(() => {
       getUserLocation(setUserLocation);
-      return () => {};
+      return () => { };
     }, [setUserLocation])
   );
 
