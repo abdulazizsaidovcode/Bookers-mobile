@@ -27,7 +27,6 @@ import { useCommunitySlider } from "@/helpers/state_managment/communitySlider/co
 import { useAccardionStore } from "@/helpers/state_managment/accardion/accardionStore";
 import { postClientFilter } from "@/helpers/api-function/uslugi/uslugi";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
-import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 
@@ -96,6 +95,11 @@ const Masters = () => {
           <Text style={tw`text-white text-lg font-medium ml-2`}>Фильтр</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(
+              "(client)/(map)/(recent-masters)/recent-masters"
+            )
+          }
           style={[
             tw`rounded-lg px-4 py-2 border justify-center items-center border flex-row`,
             { borderColor: "#fff" },
@@ -208,11 +212,6 @@ const Masters = () => {
                     <Buttons title="Записаться" />
                     <TouchableOpacity
                       activeOpacity={0.8}
-                      onPress={() =>
-                        navigation.navigate(
-                          "(client)/(map)/(recent-masters)/recent-masters"
-                        )
-                      }
                       style={[
                         tw`w-12 h-12 items-center justify-center rounded-full bg-black ml-3`,
                         { backgroundColor: "#9c0935" },
