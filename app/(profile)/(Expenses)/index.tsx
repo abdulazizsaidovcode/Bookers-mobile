@@ -19,7 +19,7 @@ const Expenses: React.FC = () => {
     useCallback(() => {
       const fetchData = async () => {
         try {
-          getExpenceCategory(setExpenseCategory);
+          await getExpenceCategory(setExpenseCategory);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 16,
     left: 16,
-    right: 16,
+    right: 16,                     
     backgroundColor: '#9C0A35',
     padding: 16,
     borderRadius: 8,

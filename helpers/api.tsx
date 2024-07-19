@@ -56,7 +56,8 @@ export const master_add_specialization = `${base_url}master-service/specializati
 
 // Client uslugi
 export const getCategory_Client = `${base_url}category/client` // get client all categoy
-export const getClient_filter = `${base_url}client/filter` // post client filter 
+export const getClient_filter = `${base_url}client/filter` // post client filter
+export const getClient_freeTime = `${base_url}client/master/freeTime` // master freeTime !
 
 // Register page 
 export const register_page = `${base_url}auth/`
@@ -177,3 +178,4 @@ export const expene_category_list: string = `${base_url}expense-category/master/
 export const expene_category_post: string = `${base_url}expense-category`
 export const expene_list: string = `${base_url}expense`
 export const address_url: string = `${base_url}address`
+export const client_profile_edit_url: string = `${base_url}client`

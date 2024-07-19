@@ -17,7 +17,6 @@ import { getConfig } from '@/app/(tabs)/(master)/main';
 import MyServicesEdit from './(uslugi)/uslugi';
 import { Data } from '@/type/chat/chatSms';
 
-
 type GenderOption = {
     title: string;
     id: number;
@@ -78,7 +77,7 @@ const ProcessEdit: React.FC = () => {
             //     throw new Error("Please enter the required information");
             // }
     
-            axios.put(`${masterEdit_service}/${serviceId.id}`, data, config)
+            axios.put(`${masterEdit_service}/${serviceId.id}`, data, config ? config : {})
                 .then((res) => {
                     if (res.data.success) {
                         router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
@@ -94,12 +93,12 @@ const ProcessEdit: React.FC = () => {
             Toast.show(error.message, Toast.LONG);
         }
     };
+
     const deleteService = async () => {
         try {
             if (serviceId?.id) {
                 const config = await getConfig()
-                console.log(config);
-                const response = await axios.put(`${service_delete}/${serviceId.id}`,'', config);
+                const response = await axios.put(`${service_delete}/${serviceId.id}`,'', config ? config : {});
                 if (response.data.success) {
                     Toast.show("Service successfully deleted", Toast.LONG);
                     router.push('(standart)/(servicesEdit)/test');

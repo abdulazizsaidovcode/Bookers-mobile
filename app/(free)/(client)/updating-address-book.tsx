@@ -249,7 +249,7 @@ const UpdatingAddressBook = () => {
                             onPress={() => {
                                 if (client) updateClientData(updateClient, client.id, setNavigate, setIsLoading)
                             }}
-                            isDisebled={!!(regex && client.id)}
+                            isDisebled={regex && client.id}
                         />
                     </View>
                 </ScrollView>
