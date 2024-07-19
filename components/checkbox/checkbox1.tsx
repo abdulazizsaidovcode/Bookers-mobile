@@ -6,21 +6,26 @@ import tw from 'tailwind-react-native-classnames';
 interface CheckboxProps {
     value: boolean;
     onValueChange: (newValue: boolean) => void;
-    title:string;
+    title: string;
+    onPress: () => void;
 }
 
-const CustomCheckbox1: React.FC<CheckboxProps | any> = ({ value, onValueChange, title }) => {
+const CustomCheckbox1: React.FC<CheckboxProps> = ({ value, onValueChange, title, onPress }) => {
+    const handlePress = () => {
+        onValueChange(!value);
+        onPress();
+    };
+
     return (
-        <View style = {tw`flex-1 flex-row`}>
+        <View style={tw`flex-1 flex-row items-center`}>
             <TouchableOpacity
-            style={[styles.checkboxBase, value && styles.checked]}
-            onPress={() => onValueChange(!value)}
-        >
-            {value && <AntDesign name="check" size={20} color="white" />}
-        </TouchableOpacity>
-        <Text style = {tw`ml-3 text-white`}>{title}</Text>
+                style={[styles.checkboxBase, value && styles.checked]}
+                onPress={handlePress}
+            >
+                {value && <AntDesign name="check" size={20} color="white" />}
+            </TouchableOpacity>
+            <Text style={tw`ml-3 text-white`}>{title}</Text>
         </View>
-        
     );
 };
 

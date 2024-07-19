@@ -134,13 +134,12 @@ import ClientCameraInfo from "./(auth)/(register)/(clientInformations)/getPhoto"
 import CardClient from "./(client)/(profile)/(card)/card";
 import PaymentClient from "./(client)/(profile)/(payment)/payment";
 import SalonLocation from "./(client)/(map)/(salon-location)/salon-location";
-import RecentMastersByCategory from "./(client)/(map)/(recent-masters)/recent-masters-by-category";
 import EditProfilePage from "./(client)/(profile)/(profileEdit)/(editPages)/editPage";
+import MasterInformation from "./(client)/(uslugi)/(masterInformation)/masterInformation";
+import RecentMastersByCategory from "./(client)/(map)/(recent-masters)/recent-masters-by-category";
 import Masters from "./(client)/(masters)/masters";
 import SettingPage from "./(client)/(profile)/(settings)/(settingPage)/settingPage";
-
 const Stack = createNativeStackNavigator();
-
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
@@ -524,6 +523,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(client)/(uslugi)/(specialist)/specialist"
               component={Specialist}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(uslugi)/(masterInformation)/masterInformation"
+              component={MasterInformation}
               options={{ headerShown: false }}
             />
 
