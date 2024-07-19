@@ -11,7 +11,7 @@ const NotificationClient = () => {
                 <AntDesign name="delete" size={24} color="white" />
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                <TouchableOpacity style={styles.card} activeOpacity={1}>
+                <TouchableOpacity style={styles.card} activeOpacity={0.9}>
                     <View style={styles.header}>
                         <Image
                             source={require('@/assets/avatar.png')}
@@ -29,7 +29,7 @@ const NotificationClient = () => {
                     </View>
                 </TouchableOpacity>
                 {/* Qo'shimcha kartalar qo'shish uchun NotificationCard komponentini takrorlang */}
-                <TouchableOpacity style={styles.card}>
+                <TouchableOpacity style={styles.card} activeOpacity={0.9}>
                     <View style={styles.header}>
                         <Image
                             source={require('@/assets/avatar.png')}
