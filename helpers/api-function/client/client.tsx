@@ -154,7 +154,7 @@ export const getClientAllSearch = async (setData: (val: AllClient[] | null) => v
             const {data} = await axios.get(`${master_client_all_list_search}${search}`, config ? config : {});
             if (data.success) setData(data.body)
             else setData(null)
-        } else getClientAll(setData)
+        } else await getClientAll(setData)
     } catch (err) {
         console.error(err)
         setData(null)
@@ -205,7 +205,7 @@ export const getClientStoppedVisitSearch = async (setData: (val: ClientStoppedVi
             const {data} = await axios.get(`${client_stopped_visit_search}${search}`, config ? config : {});
             if (data.success) setData(data.body)
             else setData(null)
-        } else getStoppedVisiting(setData)
+        } else await getStoppedVisiting(setData)
     } catch (err) {
         console.error(err)
         setData(null)
@@ -254,7 +254,7 @@ export const getClientNotVisitSearch = async (setData: (val: ClientNotVisit[] | 
             const {data} = await axios.get(`${client_not_visit_search}${search}`, config ? config : {});
             if (data.success) setData(data.body)
             else setData(null)
-        } else getNotVisiting(setData)
+        } else await getNotVisiting(setData)
     } catch (err) {
         console.error(err)
         setData(null)
@@ -282,7 +282,7 @@ export const getClientAddressBookSearch = async (setData: (val: ClientAddressBoo
             const {data} = await axios.get(`${client_address_book_search}${search}`, config ? config : {});
             if (data.success) setData(data.body)
             else setData(null)
-        } else getClientAddressBook(setData)
+        } else await getClientAddressBook(setData)
     } catch (err) {
         console.error(err)
         setData(null)
@@ -333,7 +333,7 @@ export const getNewClientSearch = async (setData: (val: NewClient[] | null) => v
             const {data} = await axios.get(`${new_client_search}${search}`, config ? config : {});
             if (data.success) setData(data.body)
             else setData(null)
-        } else getNewClient(setData)
+        } else await getNewClient(setData)
     } catch (err) {
         console.error(err)
         setData(null)
@@ -361,7 +361,7 @@ export const getPermanentClientSearch = async (setData: (val: PermanentClient[] 
             const {data} = await axios.get(`${client_permanent_search}${search}`, config ? config : {});
             if (data.success) setData(data.body)
             else setData(null)
-        } else getPermanentClient(setData)
+        } else await getPermanentClient(setData)
     } catch (err) {
         console.error(err)
         setData(null)

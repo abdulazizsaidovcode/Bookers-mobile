@@ -48,7 +48,6 @@ const Canceledentries = () => {
   const deletePastEntries = (id: string) => {
     const res = pastEntries.filter((state) => state !== id);
     setPastEntries(res);
-    console.log(res);
   };
 
   const selectAll = () => {

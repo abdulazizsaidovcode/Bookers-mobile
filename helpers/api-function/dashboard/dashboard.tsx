@@ -60,8 +60,8 @@ export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrde
         const config = await getConfig()
         const { data } = await axios.put(`${dashboard_edit_order_status}?orderId=${orderId}&status=${status}`, {}, config ? config : {});
         if (data.success) {
-            fetchWaitingOrders(setWaitingData);
-            fetchHallingOrders(setWaitingData);
+            await fetchWaitingOrders(setWaitingData);
+            await fetchHallingOrders(setWaitingData);
             toggleModal();
             if (status === 'CONFIRMED') Toast.show(`${data.message}`, Toast.LONG)
             else if (status === 'REJECTED') Toast.show(`${data.message}`, Toast.LONG)
