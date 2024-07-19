@@ -1,17 +1,23 @@
 import {Image, StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import BottomModal from "@/components/(modals)/modal-bottom";
 
 const NotificationClient = () => {
+    const [isBottomModalVisible, setBottomModalVisible] = useState(false);
+
+    const toggleBottomModal = () => {
+        setBottomModalVisible(!isBottomModalVisible);
+    };
     return (
-        <View style={{ backgroundColor: '#21212E', flex: 1, padding: 10 }}>
+        <View style={{backgroundColor: '#21212E', flex: 1, padding: 10}}>
             <View style={styles.headerContainer}>
-                <NavigationMenu name={"Уведомления"} />
-                <AntDesign name="delete" size={24} color="white" />
+                <NavigationMenu name={"Уведомления"}/>
+                <AntDesign name="delete" size={24} color="white"/>
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                <TouchableOpacity style={styles.card} activeOpacity={0.9}>
+                <TouchableOpacity style={styles.card} activeOpacity={0.9} onPress={toggleBottomModal}>
                     <View style={styles.header}>
                         <Image
                             source={require('@/assets/avatar.png')}
@@ -25,7 +31,7 @@ const NotificationClient = () => {
                     </Text>
                     <View style={styles.footer}>
                         <Text style={styles.date}>20.04.2024 20:57:26</Text>
-                        <AntDesign name="right" size={24} color="white" />
+                        <AntDesign name="right" size={24} color="white"/>
                     </View>
                 </TouchableOpacity>
                 {/* Qo'shimcha kartalar qo'shish uchun NotificationCard komponentini takrorlang */}
@@ -43,7 +49,7 @@ const NotificationClient = () => {
                     </Text>
                     <View style={styles.footer}>
                         <Text style={styles.date}>20.04.2024 20:57:26</Text>
-                        <AntDesign name="right" size={24} color="white" />
+                        <AntDesign name="right" size={24} color="white"/>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.card} activeOpacity={0.9}>
@@ -60,7 +66,7 @@ const NotificationClient = () => {
                     </Text>
                     <View style={styles.footer}>
                         <Text style={styles.date}>20.04.2024 20:57:26</Text>
-                        <AntDesign name="right" size={24} color="white" />
+                        <AntDesign name="right" size={24} color="white"/>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.card} activeOpacity={0.9}>
@@ -77,9 +83,20 @@ const NotificationClient = () => {
                     </Text>
                     <View style={styles.footer}>
                         <Text style={styles.date}>20.04.2024 20:57:36</Text>
-                        <AntDesign name="right" size={24} color="white" />
+                        <AntDesign name="right" size={24} color="white"/>
                     </View>
                 </TouchableOpacity>
+                <BottomModal toggleBottomModal={() => {
+                    toggleBottomModal()
+                }} isBottomModal={isBottomModalVisible}
+                             children={
+                                 <View>
+                                     <Text>
+                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias asperiores, at
+                                         culpa eos necessitatibus quae ullam? Assumenda cupiditate dolorem excepturi
+                                         fugit iusto omnis tenetur velit voluptates! At in officia velit!
+                                     </Text>
+                                 </View>}/>
             </ScrollView>
         </View>
     );
@@ -105,7 +122,7 @@ const styles = StyleSheet.create({
         padding: 15,
         margin: 10,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.3,
         shadowRadius: 2,
         elevation: 3,
