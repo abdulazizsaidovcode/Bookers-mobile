@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     card: {
-        backgroundColor: '#E2E3F3', // Background rangini moslang
+        backgroundColor: '#B9B9C9', // Background rangini moslang
         borderRadius: 10,
         padding: 15,
         margin: 10,
