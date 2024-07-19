@@ -38,7 +38,7 @@ const ServesGenderEdit: React.FC = () => {
     const fetchGenders = async () => {
         try {
             const config = await getConfig()
-            const response = await axios.get<Gender[]>(getGender_status, config);
+            const response = await axios.get<Gender[]>(getGender_status, config ? config : {});
             setGenders(response.data.body);
             preselectCategories(response.data.body);
         } catch (error) {
@@ -70,20 +70,15 @@ const ServesGenderEdit: React.FC = () => {
         try {
             const config = await getConfig()
             const queryParams = selectedCategories.map(item => `genders=${item}`).join('&');
-            await axios.post(`${gender_status}?${queryParams}`, '', config);
+            await axios.post(`${gender_status}?${queryParams}`, '', config ? config : {});
             router.push("(standart)/(servicesEdit)/test");
             fetchGenders();
-            console.log("Selected category IDs:",selectedCategories); 
         } catch (error) {
             console.error("Error saving gender data:", error);
         } finally {
             setIsLoading(false);
         }
     };
-
-    useEffect(() => {
-        console.log("Initial genders:", genders);
-    }, []);
 
     useEffect(() => {
         const selectedGenderIds = genders.filter(gender => selectedCategories.includes(gender.id));
