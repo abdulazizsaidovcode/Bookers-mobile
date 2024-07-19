@@ -1,22 +1,30 @@
-import {Image, StyleSheet, Text, View, ScrollView, TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, StatusBar} from 'react-native';
 import React, {useState} from 'react';
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import BottomModal from "@/components/(modals)/modal-bottom";
 import Buttons from "@/components/(buttons)/button";
+import CenteredModal from "@/components/(modals)/modal-centered";
 
 const NotificationClient = () => {
     const [isBottomModalVisible, setBottomModalVisible] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false)
 
+    const deleteToggleModal = () => {
+        setDeleteModal(!deleteModal)
+    }
     const toggleBottomModal = () => {
         setBottomModalVisible(!isBottomModalVisible);
     };
 
     return (
         <View style={{backgroundColor: '#21212E', flex: 1, padding: 10}}>
+            <StatusBar backgroundColor={'#21212E'} barStyle={'light-content'}/>
             <View style={styles.headerContainer}>
                 <NavigationMenu name={"Уведомления"}/>
-                <AntDesign name="delete" size={24} color="white"/>
+                <TouchableOpacity onPress={deleteToggleModal}>
+                    <AntDesign name="delete" size={24} color="white"/>
+                </TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <TouchableOpacity style={styles.card} activeOpacity={0.9} onPress={toggleBottomModal}>
@@ -111,6 +119,15 @@ const NotificationClient = () => {
                     <Buttons title={'Перейти к заявке'}/>
                 </View>
             </BottomModal>
+            <CenteredModal children={
+                <>
+                    <AntDesign name="delete" size={56} color="#9C0A35"/>
+                    <Text style={{color: '#494949', fontSize: 12, marginVertical: 20}}>Вы хотите очистить все
+                        уведомлении?</Text>
+                </>
+            } isFullBtn={true} btnWhiteText={'Отмена'} btnRedText={'Да'} isModal={deleteModal} toggleModal={() => {
+                deleteToggleModal()
+            }}/>
         </View>
     );
 }
