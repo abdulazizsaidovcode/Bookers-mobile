@@ -1,3 +1,4 @@
+import { getClientNotififcations } from "@/type/client/editClient";
 import create from "zustand";
 
 export interface RouteData {
@@ -28,6 +29,8 @@ interface ProfileState {
   setRegionIdData: (data: any) => void
   distiricyIdData: any
   setDistirictIdData: (data: any) => void
+  clientNotificationData:getClientNotififcations[]
+  setClientNotificationData: (data: getClientNotififcations[]) => void
 }
 
 const useProfileStore = create<ProfileState>((set) => ({
@@ -55,7 +58,9 @@ const useProfileStore = create<ProfileState>((set) => ({
   regionIdData: [],
   setRegionIdData: (data: any) => set({regionIdData: data}),
   distiricyIdData: [],
-  setDistirictIdData: (data: any) => set({distiricyIdData: data})
+  setDistirictIdData: (data: any) => set({distiricyIdData: data}),
+  clientNotificationData: [],
+  setClientNotificationData: (data: getClientNotififcations[]) => set({clientNotificationData: data})
 }));
 
 export default useProfileStore;
