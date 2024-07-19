@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import CustomButton from "./CustomButton";
 import AccordionCard from "./AccordionCard";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFocusEffect } from "expo-router";
+import { clientSessionStorage } from "@/helpers/state_managment/clientsessions/clientsessions";
+import { useCommunitySlider } from "@/helpers/state_managment/communitySlider/communitySliderStore";
+import { getSeesions } from "@/helpers/api-function/clientsession/clientsession";
 
 const appointments = [
   {
@@ -145,6 +149,7 @@ const appointments = [
 const OrderHistory = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [openAccordionIndex, setOpenAccordionIndex] = useState<number | null>(null);
+  const { setClientSession, clientPastSession } = clientSessionStorage()
 
   const filteredAppointments = activeTab === 'upcoming'
     ? appointments // upcoming appointments uchun filter
@@ -154,33 +159,40 @@ const OrderHistory = () => {
     setOpenAccordionIndex(openAccordionIndex === index ? null : index);
   };
 
+  useFocusEffect(useCallback(() => {
+    getSeesions(setClientSession) // Fetching sessions from API (if needed)
+    setTimeout(() => {
+      console.log(clientPastSession); // Logging fetched sessions to console (if needed)
+    }, 2000)
+  }, []))
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
       <NavigationMenu name="История сеансов" />
-      <View style={{padding: 16}}>
-      <View style={styles.buttonContainer}>
-        <CustomButton title="Предстоящие" onPress={() => setActiveTab('upcoming')} active={activeTab === 'upcoming'} />
-        <CustomButton title="Прошедшие" onPress={() => setActiveTab('past')} active={activeTab === 'past'} />
-      </View>
-      {filteredAppointments && filteredAppointments.length === 0 ? (
-        <View style={styles.noAppointments}>
-          <Text>У вас пока нет записей!</Text>
+      <View style={{ padding: 16 }}>
+        <View style={styles.buttonContainer}>
+          <CustomButton title="Предстоящие" onPress={() => setActiveTab('upcoming')} active={activeTab === 'upcoming'} />
+          <CustomButton title="Прошедшие" onPress={() => setActiveTab('past')} active={activeTab === 'past'} />
         </View>
-      ) : (
-        <FlatList
-          data={filteredAppointments}
-          keyExtractor={( index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <AccordionCard
-              {...item}
-              isOpen={openAccordionIndex === index}
-              onToggle={() => handleAccordionToggle(index)}
-            />
-          )}
-          contentContainerStyle={styles.contentContainer}
-        />
-      )}
+        {filteredAppointments && filteredAppointments.length === 0 ? (
+          <View style={styles.noAppointments}>
+            <Text>У вас пока нет записей!</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={filteredAppointments}
+            keyExtractor={(index) => index.toString()}
+            renderItem={({ item, index }) => (
+              <AccordionCard
+                {...item}
+                isOpen={openAccordionIndex === index}
+                onToggle={() => handleAccordionToggle(index)}
+              />
+            )}
+            contentContainerStyle={styles.contentContainer}
+          />
+        )}
       </View>
     </SafeAreaView>
   );

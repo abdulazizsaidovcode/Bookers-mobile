@@ -1,15 +1,15 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 
-interface CommunitySlider{
+interface CommunitySlider {
     value: number
     setValue: (value: number) => void
     rating: number
     setRating: (value: number) => void
 }
 
-export const useCommunitySlider = create<CommunitySlider>((set)=>({
-    value:0,
+export const useCommunitySlider = () => create<CommunitySlider>((set) => ({
+    value: 0,
     setValue: (value) => set({ value }),
-    rating:0,
+    rating: 0,
     setRating: (value) => set({ rating: value }),
 }))
