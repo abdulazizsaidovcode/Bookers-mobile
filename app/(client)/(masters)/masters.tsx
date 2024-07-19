@@ -212,7 +212,7 @@ const Masters = () => {
                     <TouchableOpacity
                       onPress={() => {
                         setMapData(item);
-                        navigation.navigate("(client)/(master-locations)/master-locations")
+                        navigation.navigate("(client)/(map)/(master-locations)/master-locations")
                       }}
                       activeOpacity={0.8}
                       style={[

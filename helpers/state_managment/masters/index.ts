@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 
-interface Master {
+export interface Master {
   id: string;
   fullName: string;
   phone: string;
