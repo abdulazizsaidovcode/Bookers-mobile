@@ -119,6 +119,7 @@ const RecentMasters = () => {
                             </View>
                         </View>
                     )}
+                    
                 </View>
                 <View>
                     <MapView
@@ -199,7 +200,7 @@ const RecentMasters = () => {
                     <View style={styles.detailView}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                             <View>
-                                <Image style={{ width: screenWidth / 5, height: screenHeight / 10.5, borderRadius: 50 }} source={selectedMarker.attachmentId === null ? require('../../../../assets/images/defaultImg.jpeg') : getFile + selectedMarker.attachmentId} />
+                                <Image style={{ width: screenWidth / 6, height: screenHeight / 12.5, borderRadius: 50 }} source={selectedMarker.attachmentId === null ? require('../../../../assets/images/defaultImg.jpeg') : getFile + selectedMarker.attachmentId} />
                             </View>
                             <View>
                                 <Text style={styles.detailTitle}>{selectedMarker.salonName}</Text>
@@ -330,12 +331,10 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     detailView: {
-
         width: '100%',
         backgroundColor: '#21212E',
         padding: 20,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
+        borderRadius: 20,
     },
     detailTitle: {
         color: '#fff',

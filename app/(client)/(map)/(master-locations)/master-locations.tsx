@@ -8,11 +8,13 @@ import { useFocusEffect } from 'expo-router';
 import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import { mapCustomStyle } from '@/type/map/map';
+import { useMapStore } from '@/helpers/state_managment/map/map';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const MasterLocations = () => {
     const { userLocation, setUserLocation } = useGetMeeStore();
+    const { mapData, setMapData } = useMapStore();
 
     useFocusEffect(
         useCallback(() => {
@@ -62,8 +64,8 @@ const MasterLocations = () => {
                     </MapView>
                 </View>
             </ScrollView>
-            <View style={{ position: 'absolute', bottom: 0, padding: 20 }}>
-                <ClientCard imageUrl='../../../assets/imges/logo.png' name='few' masterType='few' orders={3} clients={2} address='ferwfw' />
+            <View style={{ position: 'absolute', bottom: 0, padding: 20, width: '100%' }}>
+                <ClientCard imageUrl='../../../assets/imges/logo.png' feedbackCount={3} name='few' masterType='few' orders={3} clients={2} address='ferwfw' />
             </View>
         </SafeAreaView>
     );
