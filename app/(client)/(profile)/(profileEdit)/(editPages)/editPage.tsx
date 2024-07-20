@@ -17,6 +17,7 @@ import {
   getRegionId,
 } from "@/helpers/api-function/profile/personalData";
 import { SelectList } from "react-native-dropdown-select-list";
+import PhoneInput from "react-native-phone-number-input";
 
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
@@ -76,6 +77,7 @@ const EditProfilePage: React.FC = () => {
     {}
   );
   const [showDistrictSelect, setShowDistrictSelect] = useState<boolean>(false);
+  const phoneInputRef = React.useRef<PhoneInput>(null);
 
   useEffect(() => {
     setInputValues({
@@ -200,6 +202,14 @@ const EditProfilePage: React.FC = () => {
         newErrors.telegram = "Must be less than 30 characters.";
         valid = false;
       }
+    } else if (routeName?.id === 4) {
+      if (!inputValues.phoneNumber.trim()) {
+        newErrors.phoneNumber = "This field is required.";
+        valid = false;
+      } else if (inputValues.phoneNumber.trim().length < 9) {
+        newErrors.phoneNumber = "Invalid phone number.";
+        valid = false;
+      }
     }
 
     setErrors(newErrors);
@@ -268,15 +278,16 @@ const EditProfilePage: React.FC = () => {
           <View>
             <Text style={styles.label}>Введите свое имя и фамилию</Text>
             <View style={styles.formGroup}>
-              <Text style={styles.labelS}>Введите свое имя</Text>
+            <Text style={styles.labelS}>Введите свое имя</Text>
               <TextInput
                 style={[
                   styles.input,
                   errors.firstName ? styles.inputError : null,
                 ]}
                 value={inputValues.firstName}
-                onChangeText={(value) => handleInputChange("firstName", value)}
-                maxLength={30}
+                onChangeText={(value) =>
+                  handleInputChange("firstName", value)
+                }
                 textColor="white"
                 cursorColor="#9C0A35"
                 activeUnderlineColor="#9C0A35"
@@ -286,7 +297,7 @@ const EditProfilePage: React.FC = () => {
               )}
             </View>
             <View style={styles.formGroup}>
-              <Text style={styles.labelS}>Введите свое фамилию</Text>
+            <Text style={styles.labelS}>Введите свое фамилию</Text>
               <TextInput
                 style={[
                   styles.input,
@@ -294,7 +305,6 @@ const EditProfilePage: React.FC = () => {
                 ]}
                 value={inputValues.lastName}
                 onChangeText={(value) => handleInputChange("lastName", value)}
-                maxLength={30}
                 textColor="white"
                 cursorColor="#9C0A35"
                 activeUnderlineColor="#9C0A35"
@@ -314,15 +324,16 @@ const EditProfilePage: React.FC = () => {
             <Text style={styles.label}>Введите свою профессию</Text>
             <View style={styles.formGroup}>
               <TextInput
+                style={[styles.input, errors.job ? styles.inputError : null]}
                 value={inputValues.job}
                 onChangeText={(value) => handleInputChange("job", value)}
-                style={[styles.input, errors.job ? styles.inputError : null]}
-                maxLength={30}
                 textColor="white"
                 cursorColor="#9C0A35"
                 activeUnderlineColor="#9C0A35"
               />
-              {errors.job && <Text style={styles.errorText}>{errors.job}</Text>}
+              {errors.job && (
+                <Text style={styles.errorText}>{errors.job}</Text>
+              )}
             </View>
           </View>
           <View>
@@ -332,21 +343,32 @@ const EditProfilePage: React.FC = () => {
       ) : routeName?.id === 4 ? (
         <View style={styles.containerIn}>
           <View>
-            <Text style={styles.label}>Введите свой номер</Text>
+            <Text style={styles.label}>Укажите номер телефона</Text>
             <View style={styles.formGroup}>
-              <TextInput
-                value={inputValues.phoneNumber}
-                onChangeText={(value) =>
+              <PhoneInput
+                ref={phoneInputRef}
+                defaultValue={inputValues.phoneNumber}
+                defaultCode="UZ"
+                layout="first"
+                containerStyle={[
+                  styles.phoneInput,
+                  { borderColor: errors.phoneNumber ? "red" : "#9C0A35" },
+                ]}
+                textContainerStyle={{ backgroundColor: "#4B4B64", borderTopRightRadius: 10, borderBottomRightRadius: 10 }}
+                textInputStyle={{ color: "white", backgroundColor: "#4B4B64" }}
+                codeTextStyle={{ color: "white" }}
+                onChangeFormattedText={(value) =>
                   handleInputChange("phoneNumber", value)
                 }
-                style={styles.input}
-                textColor="white"
-                cursorColor="#9C0A35"
-                activeUnderlineColor="#9C0A35"
+                withShadow
+                autoFocus
               />
+              {errors.phoneNumber && (
+                <Text style={styles.errorText}>{errors.phoneNumber}</Text>
+              )}
             </View>
             <Text style={styles.description}>
-              Номер телефона необходимо писать вместе с кодом страны (+998).
+            Будьте осторожны, пока телефон не поменяет номер! При следующем входе в систему на ваш новый номер будет отправлено SMS.
             </Text>
           </View>
           <View>
@@ -356,43 +378,58 @@ const EditProfilePage: React.FC = () => {
       ) : routeName?.id === 5 ? (
         <View style={styles.containerIn}>
           <View>
+
+          
+          <View>
+            <Text style={styles.label}>Выберите регион</Text>
             <View style={styles.formGroup}>
-              <Text style={styles.label}>Регион</Text>
               <SelectList
-                inputStyles={{ color: "#fff" }}
-                setSelected={(value: number) => {
-                  handleInputChange("regionId", value);
-                  getDataL();
-                }}
+                setSelected={(value: number) => handleInputChange("regionId", value)}
                 data={regionOptions}
-                boxStyles={styles.selectListBox}
-                dropdownStyles={styles.absoluteDropdown}
-                dropdownTextStyles={styles.selectListDropdownText}
+                save="key"
+                search={false}
+                boxStyles={{
+                  borderColor: errors.regionId ? "red" : "white",
+                  backgroundColor: "#4B4B64"
+                }}
+                dropdownStyles={styles.dropdown}
+                dropdownItemStyles={styles.dropdownItem}
+                dropdownTextStyles={styles.dropdownText}
+                inputStyles={styles.inputText}
+                placeholder="Выберите регион"
               />
               {errors.regionId && (
                 <Text style={styles.errorText}>{errors.regionId}</Text>
               )}
             </View>
-            {showDistrictSelect && (
+          </View>
+          {showDistrictSelect && (
+            <View>
+              <Text style={styles.label}>Выберите район</Text>
               <View style={styles.formGroup}>
-                <Text style={styles.label}>Город</Text>
                 <SelectList
-                  inputStyles={{ color: "#fff" }}
-                  setSelected={(value: number) => {
-                    handleInputChange("districtId", value);
-                    getDataL();
-                  }}
+                  setSelected={(value: number) =>
+                    handleInputChange("districtId", value)
+                  }
                   data={cityOptions}
-                  boxStyles={styles.selectListBox}
-                  dropdownStyles={styles.absoluteDropdown}
-                  dropdownTextStyles={styles.selectListDropdownText}
-                  notFoundText="Data not found"
+                  save="key"
+                  search={false}
+                  boxStyles={{
+                    borderColor: errors.districtId ? "red" : "white",
+                  backgroundColor: "#4B4B64"
+                  }}
+                  dropdownStyles={styles.dropdown}
+                  dropdownItemStyles={styles.dropdownItem}
+                  dropdownTextStyles={styles.dropdownText}
+                  inputStyles={styles.inputText}
+                  placeholder="Выберите район"
                 />
                 {errors.districtId && (
                   <Text style={styles.errorText}>{errors.districtId}</Text>
                 )}
               </View>
-            )}
+            </View>
+          )}
           </View>
           <View>
             <Buttons onPress={handleSave} title="Сохранить" />
@@ -401,28 +438,27 @@ const EditProfilePage: React.FC = () => {
       ) : routeName?.id === 6 ? (
         <View style={styles.containerIn}>
           <View>
-            <Text style={styles.label}>Введите ссылку на ваш телеграмм</Text>
+            <Text style={styles.label}>Введите свой telegram username</Text>
             <View style={styles.formGroup}>
               <TextInput
-                value={inputValues.telegram}
-                onChangeText={(value) => handleInputChange("telegram", value)}
                 style={[
                   styles.input,
                   errors.telegram ? styles.inputError : null,
                 ]}
+                value={inputValues.telegram}
+                onChangeText={(value) => handleInputChange("telegram", value)}
                 textColor="white"
-                maxLength={30}
                 cursorColor="#9C0A35"
                 activeUnderlineColor="#9C0A35"
               />
               {errors.telegram && (
                 <Text style={styles.errorText}>{errors.telegram}</Text>
               )}
-            </View>
-            <Text style={styles.description}>
+              <Text style={styles.description}>
               По этой ссылке в Telegram клиент сможет общаться с вами через
               Telegram.
             </Text>
+            </View>
           </View>
           <View>
             <Buttons onPress={handleSave} title="Сохранить" />
@@ -433,63 +469,65 @@ const EditProfilePage: React.FC = () => {
   );
 };
 
+export default EditProfilePage;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#21212E",
-    padding: 20,
   },
   containerIn: {
     flex: 1,
+    padding: 20,
     justifyContent: "space-between",
   },
   label: {
-    color: "#fff",
     fontSize: 18,
-    fontWeight: "bold",
+    color: "white",
     marginBottom: 10,
+  },
+  labelS: {
+    color: "#ccc",
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 14,
+    color: "grey",
+    marginTop: 10,
   },
   formGroup: {
     marginBottom: 20,
   },
   input: {
-    backgroundColor: "#2D2D44",
-    borderRadius: 5,
-    padding: 0,
-    color: "#fff",
+    backgroundColor: "#4B4B64",
+    color: "white",
+    borderWidth: 1,
+    borderColor: "#4B4B64",
+    borderRadius: 7
   },
   inputError: {
-    borderColor: "#ff0000",
-    borderWidth: 1,
+    borderColor: "red",
+  },
+  phoneInput:{
+    width: "100%",
+    borderRadius: 10
   },
   errorText: {
-    color: "#ff0000",
+    color: "red",
+    fontSize: 12,
     marginTop: 5,
   },
-  labelS: {
-    color: "#fff",
-    fontSize: 16,
-    marginBottom: 5,
+  dropdown: {
+    backgroundColor: "#4B4B64",
+    borderColor: "white",
   },
-  description: {
-    color: "#9E9E9E",
-    marginTop: 5,
+  dropdownItem: {
+    backgroundColor: "#4B4B64",
   },
-  selectListBox: {
-    backgroundColor: "#2D2D44",
-    borderRadius: 5,
-    padding: 10,
+  dropdownText: {
+    color: "white",
   },
-  absoluteDropdown: {
-    position: "absolute",
-    top: 60,
-    width: "100%",
-    backgroundColor: "#2D2D44",
-    zIndex: 1000,
-  },
-  selectListDropdownText: {
-    color: "#fff",
+  inputText: {
+    color: "white",
   },
 });
-
-export default EditProfilePage;
