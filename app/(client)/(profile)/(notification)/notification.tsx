@@ -61,7 +61,7 @@ const NotificationClient = () => {
                     )
                 ) : (
                     <View style={{ marginTop: 100 }}>
-                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white',textAlign: 'center',fontSize: 20,fontWeight: '600' }}>Not found</Text>
                     </View>
                 )}
 
