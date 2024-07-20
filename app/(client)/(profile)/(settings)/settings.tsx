@@ -18,6 +18,7 @@ import useProfileStore, {
   RouteData,
 } from "@/helpers/state_managment/client/clientEditStore";
 import CenteredModal from "@/components/(modals)/modal-centered";
+import { deleteClientProfile } from "@/helpers/api-function/client/clientPage";
 
 const SettingsClient = () => {
   const navigation = useNavigation<any>();
@@ -85,7 +86,7 @@ const SettingsClient = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <CenteredModal isFullBtn={true} btnRedText="Да" btnWhiteText="Отмена" isModal={showModal} onConfirm={() => {}} toggleModal={() => deleteModal()} children={
+      <CenteredModal isFullBtn={true} btnRedText="Да" btnWhiteText="Отмена" isModal={showModal} onConfirm={() => deleteClientProfile(navigation.navigate("(auth)/auth"))} toggleModal={() => deleteModal()} children={
         <View style={styles.modalMain}>
           <MaterialCommunityIcons name="delete-alert" size={80} color="#9C0A35" style={styles.modalImage} />
           <Text style={styles.modalText}>Вы хотите удалить свой профиль?</Text>
