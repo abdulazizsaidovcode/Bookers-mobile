@@ -64,7 +64,7 @@ const OrderHistory = () => {
               <TouchableOpacity activeOpacity={0.7} style={{paddingHorizontal: 10,paddingVertical: 5,backgroundColor: '#9C0A35',borderRadius: 5}}>
                 <Text style={{color: 'white'}}>Написать сообщение</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton}>
+              <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
                 <Feather name="message-square" size={24} color="white" />
               </TouchableOpacity>
               <TouchableOpacity style={styles.iconButton}>
