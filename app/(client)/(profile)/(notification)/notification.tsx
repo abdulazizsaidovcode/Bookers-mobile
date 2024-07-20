@@ -1,11 +1,11 @@
-import { Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import { Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, StatusBar, Alert } from 'react-native';
 import React, { useCallback, useState } from 'react';
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import BottomModal from "@/components/(modals)/modal-bottom";
 import Buttons from "@/components/(buttons)/button";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import { clientNotification } from '@/helpers/api-function/client/clientPage';
+import { clientNotification, clientNotificationDelete } from '@/helpers/api-function/client/clientPage';
 import { getClientNotififcations } from '@/type/client/editClient';
 import { useFocusEffect } from 'expo-router';
 
@@ -13,6 +13,7 @@ const NotificationClient: React.FC = () => {
     const [isBottomModalVisible, setBottomModalVisible] = useState<boolean>(false);
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [notification, setNotification] = useState<getClientNotififcations[]>([]);
+    const [notificationIds, setNotificationIds] = useState<string[] | []>([]);
     const [selectedNotification, setSelectedNotification] = useState<getClientNotififcations | null>(null);
 
     const deleteToggleModal = () => {
@@ -24,19 +25,45 @@ const NotificationClient: React.FC = () => {
         setBottomModalVisible(!isBottomModalVisible);
     };
 
+    const handleDeletePress = () => {
+        const ids: any = notification.map(notif => notif.id);
+        if (ids.length > 0) {
+            console.log(ids);
+            
+            setNotificationIds(ids);
+            deleteToggleModal();
+        } else {
+            Alert.alert('No notifications', 'There are no notifications to delete.');
+        }
+    };
+
+    const fetchNotifications = async () => {
+        await clientNotification(setNotification);
+    };
+
     useFocusEffect(
         useCallback(() => {
-            clientNotification(setNotification);
+            fetchNotifications();
             return () => { };
         }, [])
     );
+
+    const handleDeleteAll = () => {
+        if (notificationIds.length > 0) {
+            clientNotificationDelete({
+                    notificationIds
+            }, () => fetchNotifications());
+            setNotificationIds([]);
+            setDeleteModal(false);
+        }
+    };
 
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor={'#21212E'} barStyle={'light-content'} />
             <View style={styles.headerContainer}>
                 <NavigationMenu name={"Уведомления"} />
-                <TouchableOpacity onPress={deleteToggleModal}>
+                <TouchableOpacity onPress={handleDeletePress}>
                     <AntDesign name="delete" size={24} color="white" />
                 </TouchableOpacity>
             </View>
@@ -67,7 +94,7 @@ const NotificationClient: React.FC = () => {
                     ))
                 ) : (
                     <View style={styles.notFound}>
-                        <Text style={styles.notFoundText}>Not found</Text>
+                        <Text style={styles.notFoundText}>No notifications!</Text>
                     </View>
                 )}
             </ScrollView>
@@ -90,11 +117,12 @@ const NotificationClient: React.FC = () => {
                     </View>
                 </BottomModal>
             )}
-            <CenteredModal 
-                isFullBtn={true} 
-                btnWhiteText={'Отмена'} 
-                btnRedText={'Да'} 
-                isModal={deleteModal} 
+            <CenteredModal
+                isFullBtn={true}
+                btnWhiteText={'Отмена'}
+                btnRedText={'Да'}
+                onConfirm={() => handleDeleteAll()}
+                isModal={deleteModal}
                 toggleModal={deleteToggleModal}
             >
                 <>
