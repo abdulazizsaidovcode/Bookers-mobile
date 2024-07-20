@@ -31,9 +31,15 @@ const ProfileCard: React.FC<IProps> = ({
     phoneIcon,
     deleteIcon }) => {
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
+    const [ratingModal, setRatingModal] = useState<boolean>(false);
     const [textAreaValue, setTextAreaValue] = useState('')
+    const [rating, setRating] = useState<number>(0);
+    const handleRating = (value: number) => setRating(value)
     const deleteToggleModal = () => {
         setDeleteModal(!deleteModal);
+    };
+    const ratingToggleModal = () => {
+        setRatingModal(!ratingModal);
     };
     const handleChange = (e: string) => {
         const trimmedValue = e.trim();
@@ -70,7 +76,7 @@ const ProfileCard: React.FC<IProps> = ({
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.messageButton}
-
+                    onPress={ratingToggleModal}
                 >
                     <Text style={styles.messageButtonText}>{buttonName}</Text>
                 </TouchableOpacity>
@@ -108,16 +114,31 @@ const ProfileCard: React.FC<IProps> = ({
                 isFullBtn={false}
                 btnWhiteText={'Отправить'}
                 btnRedText={'Закрыть'}
-                isModal={true}
-                toggleModal={deleteToggleModal}
+                isModal={ratingModal}
+                toggleModal={ratingToggleModal}
             >
                 <>
-                    <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold', marginBottom: 40 }}>Оцените работу мастера!</Text>
+                    <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold', marginBottom: 30 }}>Оцените работу мастера!</Text>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.stars}>
+                            {Array(5).fill(0).map((_, index) => (
+                                <TouchableOpacity activeOpacity={.7} key={index} onPress={() => handleRating(index + 1)}>
+                                    <AntDesign
+                                        name={index < rating ? "star" : "staro"}
+                                        size={30}
+                                        color="#B00000"
+                                        style={styles.star}
+                                    />
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    </View>
                     <Textarea
                         placeholder='Оставьте отзыв'
                         value={textAreaValue}
-                        onChangeText={e=>handleChange(e)}
+                        onChangeText={e => handleChange(e)}
                     />
+
                 </>
             </CenteredModal>
         </View>
@@ -225,5 +246,17 @@ const styles = StyleSheet.create({
         color: '#494949',
         fontSize: 12,
         marginVertical: 20,
+    },
+    modalContainer: {
+        borderRadius: 10,
+        alignItems: 'center',
+        marginBottom: 20
+    },
+    stars: {
+        flexDirection: 'row',
+        marginBottom: 20
+    },
+    star: {
+        marginHorizontal: 5,
     },
 });
