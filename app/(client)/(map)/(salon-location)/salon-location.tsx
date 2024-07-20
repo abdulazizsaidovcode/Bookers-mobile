@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   Pressable,
   ScrollView,
@@ -36,7 +37,7 @@ const SalonLocation = () => {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loading}>
-          <Text style={styles.loadingText}>Loading...</Text>
+          <ActivityIndicator size="large" color={"#888"} />
         </View>
       </SafeAreaView>
     );

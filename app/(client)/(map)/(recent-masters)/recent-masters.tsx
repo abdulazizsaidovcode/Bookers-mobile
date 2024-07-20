@@ -82,8 +82,7 @@ const RecentMasters = () => {
             <SafeAreaView style={styles.container}>
                 <ScrollView>
                     <View style={styles.loading}>
-                        <ActivityIndicator size="large" color="#fff" />
-                        <Text style={styles.loadingText}>Loading...</Text>
+                        <ActivityIndicator size="large" color={"#888"} />
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -119,7 +118,7 @@ const RecentMasters = () => {
                             </View>
                         </View>
                     )}
-                    
+
                 </View>
                 <View>
                     <MapView

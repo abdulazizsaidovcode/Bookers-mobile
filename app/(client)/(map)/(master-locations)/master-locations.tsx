@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -14,22 +14,17 @@ import moment from 'moment';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const MasterLocations = () => {
-    const { userLocation, setUserLocation } = useGetMeeStore();
     const { mapData } = useMapStore();
 
-    useFocusEffect(
-        useCallback(() => {
-            getUserLocation(setUserLocation)
-            return () => { }
-        }, [])
-    )
+    console.log(mapData);
 
-    if (!userLocation || !userLocation.coords) {
+
+    if (!mapData) {
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView>
                     <View style={styles.loading}>
-                        <Text>Loading...</Text>
+                        <ActivityIndicator size="large" color={"#888"} />
                     </View>
                 </ScrollView>
             </SafeAreaView>
