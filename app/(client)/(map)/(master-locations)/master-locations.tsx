@@ -9,7 +9,6 @@ import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import { mapCustomStyle } from '@/type/map/map';
 import { useMapStore } from '@/helpers/state_managment/map/map';
-import { getFile } from '@/helpers/api';
 import moment from 'moment';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -68,7 +67,7 @@ const MasterLocations = () => {
             </ScrollView>
             <View style={{ position: 'absolute', bottom: 0, padding: 20, width: '100%' }}>
                 <ClientCard
-                    imageUrl={getFile + mapData.attachmentId}
+                    imageUrl={mapData.attachmentId}
                     zaps={moment().format("YYYY-MM-DD") === mapData.nextEntryDate ? "Сегодня" : moment(mapData.nextEntryDate).format("dd, DD MMM")}
                     feedbackCount={mapData.feedbackCount}
                     name={mapData.fullName}
