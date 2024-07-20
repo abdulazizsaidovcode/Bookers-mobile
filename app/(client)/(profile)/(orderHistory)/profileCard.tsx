@@ -1,5 +1,8 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
+import CenteredModal from '@/components/(modals)/modal-centered'
+import { AntDesign } from '@expo/vector-icons'
+import Textarea from '@/components/select/textarea'
 
 interface IProps {
     masterName: string,
@@ -15,7 +18,30 @@ interface IProps {
     deleteIcon?: React.ReactNode
 }
 
-const ProfileCard: React.FC<IProps> = ({ masterName, salonName, masterGender, ratingnumber, money, titleTex = [], buttonName, Adress, locationIcon, phoneIcon, deleteIcon }) => {
+const ProfileCard: React.FC<IProps> = ({
+    masterName,
+    salonName,
+    masterGender,
+    ratingnumber,
+    money,
+    titleTex = [],
+    buttonName,
+    Adress,
+    locationIcon,
+    phoneIcon,
+    deleteIcon }) => {
+    const [deleteModal, setDeleteModal] = useState<boolean>(false);
+    const [textAreaValue, setTextAreaValue] = useState('')
+    const deleteToggleModal = () => {
+        setDeleteModal(!deleteModal);
+    };
+    const handleChange = (e: string) => {
+        const trimmedValue = e.trim();
+        const regex = /^[a-zA-Z0-9а-яА-ЯёЁ.,!?;:()\s]+$/
+
+        if (regex.test(trimmedValue) && !/\s\s+/.test(e)) setTextAreaValue(e)
+        else if (e === '') setTextAreaValue('')
+    };
     return (
         <View style={styles.card}>
             <View style={styles.profileContainer}>
@@ -44,6 +70,7 @@ const ProfileCard: React.FC<IProps> = ({ masterName, salonName, masterGender, ra
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={styles.messageButton}
+
                 >
                     <Text style={styles.messageButtonText}>{buttonName}</Text>
                 </TouchableOpacity>
@@ -58,11 +85,41 @@ const ProfileCard: React.FC<IProps> = ({ masterName, salonName, masterGender, ra
                     </TouchableOpacity>
                 )}
                 {deleteIcon && (
-                    <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
+                    <TouchableOpacity activeOpacity={0.7} style={styles.iconButton} onPress={deleteToggleModal}>
                         {deleteIcon}
                     </TouchableOpacity>
                 )}
             </View>
+            <CenteredModal
+                isFullBtn={true}
+                btnWhiteText={'Отмена'}
+                btnRedText={'Да'}
+                isModal={deleteModal}
+                toggleModal={deleteToggleModal}
+            >
+                <>
+                    <AntDesign name="delete" size={56} color="#9C0A35" />
+                    <Text style={styles.deleteText}>
+                        Вы хотите очистить все уведомлении?
+                    </Text>
+                </>
+            </CenteredModal>
+            <CenteredModal
+                isFullBtn={false}
+                btnWhiteText={'Отправить'}
+                btnRedText={'Закрыть'}
+                isModal={true}
+                toggleModal={deleteToggleModal}
+            >
+                <>
+                    <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold', marginBottom: 40 }}>Оцените работу мастера!</Text>
+                    <Textarea
+                        placeholder='Оставьте отзыв'
+                        value={textAreaValue}
+                        onChangeText={e=>handleChange(e)}
+                    />
+                </>
+            </CenteredModal>
         </View>
     )
 }
@@ -163,5 +220,10 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         backgroundColor: '#9C0A35',
         marginRight: 8,
-    }
+    },
+    deleteText: {
+        color: '#494949',
+        fontSize: 12,
+        marginVertical: 20,
+    },
 });
