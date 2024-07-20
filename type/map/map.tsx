@@ -1,8 +1,8 @@
-import { ProductType } from "../history";
+import { Master } from "@/helpers/state_managment/masters";
 
 export interface MapStoreTypes {
-  mapData: ProductType;
-  setMapData: (data: ProductType) => void;
+  mapData: Master;
+  setMapData: (data: Master) => void;
   categoryId: string | null;
   setCategoryId: (
     id: string | null | ((prev: string | null) => string | null)
