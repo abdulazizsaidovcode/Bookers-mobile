@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native"; // Text komponentini import qilish
+import { View, StyleSheet, Text, TouchableOpacity, Image, Alert } from "react-native"; // Text komponentini import qilish
 import CustomButton from "./CustomButton";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -10,8 +10,9 @@ import { Feather, SimpleLineIcons } from "@expo/vector-icons";
 const OrderHistory = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
 
- 
+
   const titleTex = ['Стрижка', 'Стрижка', 'Стрижка', 'укладка', "покраска волос"];
+  // Alert.alert(activeTab.toString());
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
@@ -29,43 +30,49 @@ const OrderHistory = () => {
             active={activeTab === 'past'}
           />
         </View>
-        <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
-          <View style={styles.card}>
-            <View style={styles.profileContainer}>
-              <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <Image source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }} style={styles.profileImage} />
-                <View>
-                  <View style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
-                    <Text style={styles.profileName}>Натали</Text>
-                    <Text style={styles.salonName}>Beauty Wave</Text>
+        {activeTab === 'upcoming' && (
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <View style={styles.card}>
+              <View style={styles.profileContainer}>
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                  <Image source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }} style={styles.profileImage} />
+                  <View>
+                    <View style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
+                      <Text style={styles.profileName}>Натали</Text>
+                      <Text style={styles.salonName}>Beauty Wave</Text>
+                    </View>
+                    <Text style={styles.serviceName}>Женский мастер</Text>
                   </View>
-                  <Text style={styles.serviceName}>Женский мастер</Text>
+                </View>
+                <View style={styles.feedbackContainer}>
+                  <Text style={styles.feedbackStars}>{'⭐'.repeat(5)}</Text>
+                  <Text style={styles.price}>350 000 сум</Text>
                 </View>
               </View>
-              <View style={styles.feedbackContainer}>
-                <Text style={styles.feedbackStars}>{'⭐'.repeat(5)}</Text>
-                <Text style={styles.price}>350 000 сум</Text>
+              <View style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', gap: 10, }}>
+                {titleTex.map((title) => (
+                  <Text style={{ fontSize: 12, paddingHorizontal: 6, paddingVertical: 4, borderColor: '#828282', color: '#828282', borderRadius: 5, borderWidth: 1 }}>{title}</Text>
+                ))}
+              </View>
+              <Text style={{ fontSize: 12, color: '#828282', marginTop: 10 }}>Яккасарайский р-н, ул. Мирабад, 62а</Text>
+              <View style={styles.iconContainer}>
+                <TouchableOpacity activeOpacity={0.7} style={{ paddingHorizontal: 10, paddingVertical: 8, backgroundColor: '#9C0A35', borderRadius: 5 }}>
+                  <Text style={{ color: 'white' }}>Написать сообщение</Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
+                  <SimpleLineIcons name="location-pin" size={24} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
+                  <Feather name="phone" size={24} color="white" />
+                </TouchableOpacity>
               </View>
             </View>
-            <View style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', gap: 10, }}>
-              {titleTex.map((title) => (
-                <Text style={{ fontSize: 12, paddingHorizontal: 6, paddingVertical: 4, borderColor: '#828282', color: '#828282', borderRadius: 5, borderWidth: 1 }}>{title}</Text>
-              ))}
-            </View>
-            <Text style={{ fontSize: 12, color: '#828282', marginTop: 10 }}>Яккасарайский р-н, ул. Мирабад, 62а</Text>
-            <View style={styles.iconContainer}>
-              <TouchableOpacity activeOpacity={0.7} style={{ paddingHorizontal: 10, paddingVertical: 8, backgroundColor: '#9C0A35', borderRadius: 5 }}>
-                <Text style={{ color: 'white' }}>Написать сообщение</Text>
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
-                <SimpleLineIcons name="location-pin" size={24} color="white" />
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
-                <Feather name="phone" size={24} color="white" />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </AccardionHistory>
+          </AccardionHistory>
+        )}
+
+        {activeTab === 'past' && (
+          <Text>asaskmdkasmd</Text>
+        )}
       </View>
     </SafeAreaView>
   );
