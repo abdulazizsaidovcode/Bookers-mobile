@@ -8,27 +8,23 @@ import { useAccardionStore } from '@/helpers/state_managment/accardion/accardion
 
 interface AccordionItemProps {
     title: string;
-    onValueChange?: (value: boolean) => void;
+    date:string;
+    children: React.ReactNode;
 }
 
+// Platform uchun LayoutAnimation to'g'ri ishlashi uchun
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const AccardionHistory: React.FC<AccordionItemProps> = ({ title, onValueChange }) => {
-    const {setSelection,isSelected,expanded3,setExpended3}=useAccardionStore()
+const AccardionHistory: React.FC<AccordionItemProps> = ({ title,date,children }) => {
+    const {orderExpand,setOrderExpand}=useAccardionStore()
 
     const toggleExpand = () => {
         // Animatsiya
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        setExpended3(!expanded3);
+        setOrderExpand(!orderExpand);
     };
-
-    const handleCheckboxChange = (newValue: boolean) => {
-        setSelection(newValue);
-        onValueChange:(newValue);
-    };
-
     return (
         <View style={[styles.container]}>
             <TouchableOpacity
@@ -37,22 +33,14 @@ const AccardionHistory: React.FC<AccordionItemProps> = ({ title, onValueChange }
                 activeOpacity={1}
             >
                 <View style={styles.mainText}>
-                    <Text style={styles.headerText}>{title}</Text>
+                    <Text style={styles.titleText}>{title}</Text>
+                    <Text style={styles.headerText}>{date}</Text>
                 </View>
-                <AntDesign name={expanded3 ? 'down' : 'right'} size={20} color="#4F4F4F" />
+                <AntDesign name={orderExpand ? 'down':'right'} size={20} color="#4F4F4F" />
             </TouchableOpacity>
-            {expanded3 && (
+            {orderExpand && (
                 <View style={styles.content}>
-                    <View style={styles.communitySlider}>
-                        <CommunitySliderTwo title='+' textColor='#9C0A35' />
-                    </View>
-                    <Text style={tw`p-3 mt-4`}>
-                        <CustomCheckbox
-                            title='не важно'
-                            value={isSelected}
-                            onValueChange={handleCheckboxChange}
-                        />
-                    </Text>
+                    {children}
                 </View>
             )}
         </View>
@@ -77,6 +65,10 @@ const styles = StyleSheet.create({
     },
     mainText: {
         flexDirection: 'column',
+    },
+    titleText: {
+        fontSize:12,
+        color: '#494949',
     },
     headerText: {
         fontSize: 16,
