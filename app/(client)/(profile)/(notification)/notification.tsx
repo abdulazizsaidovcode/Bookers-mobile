@@ -94,7 +94,7 @@ const NotificationClient: React.FC = () => {
                     ))
                 ) : (
                     <View style={styles.notFound}>
-                        <Text style={styles.notFoundText}>Not found</Text>
+                        <Text style={styles.notFoundText}>No notifications!</Text>
                     </View>
                 )}
             </ScrollView>
