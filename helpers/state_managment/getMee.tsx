@@ -5,7 +5,7 @@ const useGetMeeStore = create<GetMeeStore>((set) => ({
         id: '',
         firstName: '',
         lastName: '',
-        nickname: '',
+        nickName: '',
         phoneNumber: '',
         gender: '',
         telegram: null,

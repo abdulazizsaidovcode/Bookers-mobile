@@ -17,6 +17,7 @@ import {
   getRegionId,
 } from "@/helpers/api-function/profile/personalData";
 import { SelectList } from "react-native-dropdown-select-list";
+
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
   "(client)/(profile)/(profileEdit)/(editPages)/editPage"
@@ -71,6 +72,11 @@ const EditProfilePage: React.FC = () => {
     districtId: 0,
   });
 
+  const [errors, setErrors] = useState<{ [key in keyof InputValues]?: string }>(
+    {}
+  );
+  const [showDistrictSelect, setShowDistrictSelect] = useState<boolean>(false);
+
   useEffect(() => {
     setInputValues({
       nickName: nickName || "",
@@ -94,15 +100,13 @@ const EditProfilePage: React.FC = () => {
   useFocusEffect(
     useCallback(() => {
       if (inputValues.regionId) {
-        getDistrict(inputValues.regionId, setDistrictOption); // Call getDistrict when regionId changes
+        getDistrict(inputValues.regionId, setDistrictOption);
       }
       return () => {};
     }, [inputValues.regionId])
   );
 
   const getDataL = () => {
-    console.log(regionId, districtId);
-    
     getRegionId(
       regionId ? regionId : getMee && getMee.regionId ? getMee.regionId : "",
       setRegionIdData
@@ -115,7 +119,6 @@ const EditProfilePage: React.FC = () => {
         : "",
       setDistirictIdData
     );
-    console.log("ishladi");
   };
 
   const handleInputChange = (
@@ -126,16 +129,93 @@ const EditProfilePage: React.FC = () => {
       ...prevState,
       [key]: value,
     }));
+
+    // Show district select if region is selected
+    if (key === "regionId" && value) {
+      setShowDistrictSelect(true);
+    }
+  };
+
+  const validateInput = () => {
+    let valid = true;
+    let newErrors: { [key in keyof InputValues]?: string } = {};
+    if (routeName?.id === 1) {
+      if (!inputValues.nickName.trim()) {
+        newErrors.nickName = "This field is required.";
+        valid = false;
+      } else if (inputValues.nickName.trim().length < 4) {
+        newErrors.nickName = "Must be at least 4 characters.";
+        valid = false;
+      }
+    } else if (routeName?.id === 2) {
+      if (!inputValues.firstName.trim()) {
+        newErrors.firstName = "This field is required.";
+        valid = false;
+      } else if (inputValues.firstName.trim().length < 3) {
+        newErrors.firstName = "Must be at least 3 characters.";
+        valid = false;
+      } else if (inputValues.firstName.trim().length > 30) {
+        newErrors.firstName = "Must be less than 30 characters.";
+        valid = false;
+      }
+
+      if (!inputValues.lastName.trim()) {
+        newErrors.lastName = "This field is required.";
+        valid = false;
+      } else if (inputValues.lastName.trim().length < 5) {
+        newErrors.lastName = "Must be at least 5 characters.";
+        valid = false;
+      } else if (inputValues.lastName.trim().length > 30) {
+        newErrors.lastName = "Must be less than 30 characters.";
+        valid = false;
+      }
+    } else if (routeName?.id === 3) {
+      if (!inputValues.job.trim()) {
+        newErrors.job = "This field is required.";
+        valid = false;
+      } else if (inputValues.job.trim().length < 1) {
+        newErrors.job = "Must be at least 1 character.";
+        valid = false;
+      } else if (inputValues.job.trim().length > 30) {
+        newErrors.job = "Must be less than 30 characters.";
+        valid = false;
+      }
+    } else if (routeName?.id === 5) {
+      // Check if region is selected
+      if (!inputValues.regionId) {
+        newErrors.regionId = "This field is required.";
+        valid = false;
+      }
+
+      // Check if district is selected when region is selected
+      if (inputValues.regionId && !inputValues.districtId) {
+        newErrors.districtId = "This field is required.";
+        valid = false;
+      }
+    } else if (routeName?.id === 6) {
+      if (!inputValues.telegram.trim()) {
+        newErrors.telegram = "This field is required.";
+        valid = false;
+      } else if (inputValues.telegram.trim().length > 30) {
+        newErrors.telegram = "Must be less than 30 characters.";
+        valid = false;
+      }
+    }
+
+    setErrors(newErrors);
+    return valid;
   };
 
   const handleSave = () => {
+    if (!validateInput()) return;
+
     Object.keys(inputValues).forEach((key: string) => {
       const value = inputValues[key as keyof InputValues];
       if (value) {
         updateProfileField(`${key}`, value);
-        navigation.navigate("(client)/(profile)/(profileEdit)/profileEdit");
       }
     });
+    navigation.navigate("(client)/(profile)/(profileEdit)/profileEdit");
   };
 
   const regionOptions =
@@ -160,13 +240,20 @@ const EditProfilePage: React.FC = () => {
             <Text style={styles.label}>Придумайте свой</Text>
             <View style={styles.formGroup}>
               <TextInput
-                style={styles.input}
+                style={[
+                  styles.input,
+                  errors.nickName ? styles.inputError : null,
+                ]}
                 value={inputValues.nickName}
                 onChangeText={(value) => handleInputChange("nickName", value)}
+                maxLength={20}
                 textColor="white"
                 cursorColor="#9C0A35"
                 activeUnderlineColor="#9C0A35"
               />
+              {errors.nickName && (
+                <Text style={styles.errorText}>{errors.nickName}</Text>
+              )}
             </View>
             <Text style={styles.description}>
               Будем использовать вместо вашего имени
@@ -183,24 +270,38 @@ const EditProfilePage: React.FC = () => {
             <View style={styles.formGroup}>
               <Text style={styles.labelS}>Введите свое имя</Text>
               <TextInput
+                style={[
+                  styles.input,
+                  errors.firstName ? styles.inputError : null,
+                ]}
                 value={inputValues.firstName}
                 onChangeText={(value) => handleInputChange("firstName", value)}
-                style={styles.input}
+                maxLength={30}
                 textColor="white"
                 cursorColor="#9C0A35"
                 activeUnderlineColor="#9C0A35"
               />
+              {errors.firstName && (
+                <Text style={styles.errorText}>{errors.firstName}</Text>
+              )}
             </View>
             <View style={styles.formGroup}>
               <Text style={styles.labelS}>Введите свое фамилию</Text>
               <TextInput
+                style={[
+                  styles.input,
+                  errors.lastName ? styles.inputError : null,
+                ]}
                 value={inputValues.lastName}
                 onChangeText={(value) => handleInputChange("lastName", value)}
-                style={styles.input}
+                maxLength={30}
                 textColor="white"
                 cursorColor="#9C0A35"
                 activeUnderlineColor="#9C0A35"
               />
+              {errors.lastName && (
+                <Text style={styles.errorText}>{errors.lastName}</Text>
+              )}
             </View>
           </View>
           <View>
@@ -215,11 +316,13 @@ const EditProfilePage: React.FC = () => {
               <TextInput
                 value={inputValues.job}
                 onChangeText={(value) => handleInputChange("job", value)}
-                style={styles.input}
+                style={[styles.input, errors.job ? styles.inputError : null]}
+                maxLength={30}
                 textColor="white"
                 cursorColor="#9C0A35"
                 activeUnderlineColor="#9C0A35"
               />
+              {errors.job && <Text style={styles.errorText}>{errors.job}</Text>}
             </View>
           </View>
           <View>
@@ -266,22 +369,30 @@ const EditProfilePage: React.FC = () => {
                 dropdownStyles={styles.absoluteDropdown}
                 dropdownTextStyles={styles.selectListDropdownText}
               />
+              {errors.regionId && (
+                <Text style={styles.errorText}>{errors.regionId}</Text>
+              )}
             </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Город</Text>
-              <SelectList
-                inputStyles={{ color: "#fff" }}
-                setSelected={(value: number) => {
-                  handleInputChange("districtId", value);
-                  getDataL();
-                }}
-                data={cityOptions}
-                boxStyles={styles.selectListBox}
-                dropdownStyles={styles.absoluteDropdown}
-                dropdownTextStyles={styles.selectListDropdownText}
-                notFoundText="Data not found"
-              />
-            </View>
+            {showDistrictSelect && (
+              <View style={styles.formGroup}>
+                <Text style={styles.label}>Город</Text>
+                <SelectList
+                  inputStyles={{ color: "#fff" }}
+                  setSelected={(value: number) => {
+                    handleInputChange("districtId", value);
+                    getDataL();
+                  }}
+                  data={cityOptions}
+                  boxStyles={styles.selectListBox}
+                  dropdownStyles={styles.absoluteDropdown}
+                  dropdownTextStyles={styles.selectListDropdownText}
+                  notFoundText="Data not found"
+                />
+                {errors.districtId && (
+                  <Text style={styles.errorText}>{errors.districtId}</Text>
+                )}
+              </View>
+            )}
           </View>
           <View>
             <Buttons onPress={handleSave} title="Сохранить" />
@@ -295,11 +406,18 @@ const EditProfilePage: React.FC = () => {
               <TextInput
                 value={inputValues.telegram}
                 onChangeText={(value) => handleInputChange("telegram", value)}
-                style={styles.input}
+                style={[
+                  styles.input,
+                  errors.telegram ? styles.inputError : null,
+                ]}
                 textColor="white"
+                maxLength={30}
                 cursorColor="#9C0A35"
                 activeUnderlineColor="#9C0A35"
               />
+              {errors.telegram && (
+                <Text style={styles.errorText}>{errors.telegram}</Text>
+              )}
             </View>
             <Text style={styles.description}>
               По этой ссылке в Telegram клиент сможет общаться с вами через
@@ -315,57 +433,63 @@ const EditProfilePage: React.FC = () => {
   );
 };
 
-export default EditProfilePage;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     backgroundColor: "#21212E",
+    padding: 20,
   },
   containerIn: {
     flex: 1,
     justifyContent: "space-between",
   },
-  labelS: {
-    color: "#ccc",
-    marginBottom: 8,
-  },
-  formGroup: {
-    marginBottom: 16,
-  },
-  input: {
-    backgroundColor: "#4B4B64",
-    borderRadius: 8,
-  },
   label: {
     color: "#fff",
-    fontSize: 20,
-    fontWeight: "500",
-    marginVertical: 15,
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  formGroup: {
+    marginBottom: 20,
+  },
+  input: {
+    backgroundColor: "#2D2D44",
+    borderRadius: 5,
+    padding: 0,
+    color: "#fff",
+  },
+  inputError: {
+    borderColor: "#ff0000",
+    borderWidth: 1,
+  },
+  errorText: {
+    color: "#ff0000",
+    marginTop: 5,
+  },
+  labelS: {
+    color: "#fff",
+    fontSize: 16,
+    marginBottom: 5,
   },
   description: {
-    color: "#fff",
-    fontSize: 13,
-    fontWeight: "400",
-    marginVertical: 7,
+    color: "#9E9E9E",
+    marginTop: 5,
   },
   selectListBox: {
-    backgroundColor: "#4B4B64",
-    borderRadius: 8,
-    padding: 12,
-    borderWidth: 0,
-    position: "relative",
-    zIndex: 0,
+    backgroundColor: "#2D2D44",
+    borderRadius: 5,
+    padding: 10,
+  },
+  absoluteDropdown: {
+    position: "absolute",
+    top: 60,
+    width: "100%",
+    backgroundColor: "#2D2D44",
+    zIndex: 1000,
   },
   selectListDropdownText: {
     color: "#fff",
   },
-  absoluteDropdown: {
-    position: "absolute",
-    backgroundColor: "#4B4B64",
-    top: "100%",
-    width: "100%",
-    zIndex: 100,
-  },
 });
+
+export default EditProfilePage;

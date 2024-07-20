@@ -49,17 +49,15 @@ export const clientNotificationDelete = async () => {
     }
 }
 
-
-
-export const deleteClientProfile = async (navigate?: () => void) => {
+export const deleteClientProfile = async () => {
     try {
         const config = await getConfig();
         const { data } = await axios.delete(client_profile_delete_url, config ? config : {});
         if (data.success) {
             Toast.show('Successfully deleted', Toast.LONG);
-            navigate ? navigate() : null;
         } else {
             Toast.show('An error occurred on the server', Toast.LONG);
+            console.log(data);
         }
     } catch (err) {
         Toast.show('An error occurred on the server', Toast.LONG);
