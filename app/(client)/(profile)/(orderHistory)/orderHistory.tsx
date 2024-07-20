@@ -10,15 +10,7 @@ import { EvilIcons } from '@expo/vector-icons';
 
 const OrderHistory = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     getSeesions(setClientSession); // Fetching sessions from API
-  //     setTimeout(() => {
-  //       console.log(clientPastSession); // Logging fetched sessions to console
-  //     }, 2000);
-  //   }, [])
-  // );
+  
   const titleTex = ['Стрижка', 'Стрижка', 'Стрижка', 'укладка', "покраска волос"];
   return (
     <SafeAreaView style={styles.container}>
@@ -40,10 +32,10 @@ const OrderHistory = () => {
         <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
           <View style={styles.card}>
             <View style={styles.profileContainer}>
-              <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <View style={styles.profileRow}>
                 <Image source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }} style={styles.profileImage} />
                 <View>
-                  <View style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
+                  <View style={styles.profileDetails}>
                     <Text style={styles.profileName}>Натали</Text>
                     <Text style={styles.salonName}>Beauty Wave</Text>
                   </View>
@@ -55,15 +47,15 @@ const OrderHistory = () => {
                 <Text style={styles.price}>350 000 сум</Text>
               </View>
             </View>
-            <View style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', gap: 10, }}>
-              {titleTex.map((title) => (
-                <Text style={{ fontSize: 12, paddingHorizontal: 6, paddingVertical: 4, borderColor: '#828282', color: '#828282', borderRadius: 5, borderWidth: 1 }}>{title}</Text>
+            <View style={styles.titleContainer}>
+              {titleTex.map((title, index) => (
+                <Text key={index} style={styles.titleText}>{title}</Text>
               ))}
             </View>
-            <Text style={{ fontSize: 12, color: '#828282', marginTop: 10 }}>Яккасарайский р-н, ул. Мирабад, 62а</Text>
+            <Text style={styles.address}>Яккасарайский р-н, ул. Мирабад, 62а</Text>
             <View style={styles.iconContainer}>
-              <TouchableOpacity activeOpacity={0.7} style={{ paddingHorizontal: 10, paddingVertical: 8, backgroundColor: '#9C0A35', borderRadius: 5 }}>
-                <Text style={{ color: 'white' }}>Написать сообщение</Text>
+              <TouchableOpacity activeOpacity={0.7} style={styles.messageButton}>
+                <Text style={styles.messageButtonText}>Написать сообщение</Text>
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
                 <SimpleLineIcons name="location-pin" size={24} color="white" />
@@ -95,8 +87,11 @@ const styles = StyleSheet.create({
   profileContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // alignItems: 'center',
     marginBottom: 16,
+  },
+  profileRow: {
+    display: 'flex',
+    flexDirection: 'row',
   },
   profileImage: {
     width: 64,
@@ -104,8 +99,10 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     marginRight: 16,
   },
-  profileInfo: {
-    flex: 1,
+  profileDetails: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 5,
   },
   profileName: {
     fontSize: 14,
@@ -124,12 +121,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#4F4F4F',
   },
-  masterType: {
-    fontSize: 12,
-    paddingHorizontal: 8,
-    borderColor: "#828282",
-    borderWidth: 1,
-  },
   feedbackContainer: {
     alignItems: 'flex-end',
   },
@@ -143,18 +134,47 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontWeight: '600',
   },
+  titleContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    gap: 10,
+  },
+  titleText: {
+    fontSize: 12,
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+    borderColor: '#828282',
+    color: '#828282',
+    borderRadius: 5,
+    borderWidth: 1,
+  },
+  address: {
+    fontSize: 12,
+    color: '#828282',
+    marginTop: 10,
+  },
   iconContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     marginTop: 16,
   },
+  messageButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    backgroundColor: '#9C0A35',
+    borderRadius: 5,
+  },
+  messageButtonText: {
+    color: 'white',
+  },
   iconButton: {
     padding: 8,
     borderRadius: 50,
     backgroundColor: '#9C0A35',
     marginRight: 8,
-  }
+  },
 });
 
 export default OrderHistory;
