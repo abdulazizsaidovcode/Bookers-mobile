@@ -5,44 +5,54 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import { useNavigation } from "expo-router";
-import { FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
-
+import useProfileStore, {
+  RouteData,
+} from "@/helpers/state_managment/client/clientEditStore";
+import CenteredModal from "@/components/(modals)/modal-centered";
+import { deleteClientProfile } from "@/helpers/api-function/client/clientPage";
 
 const SettingsClient = () => {
   const navigation = useNavigation<any>();
+  const { setRoute } = useProfileStore();
+  const [showModal, setShowModal] = useState(false)
 
-  const navigateTo = (screen: string) => {
-    if (screen) {
-      navigation.navigate(screen);
-    } else {
-    }
-  };
+    const deleteModal = () => setShowModal(!showModal)
 
   const navigationList = [
     {
+      id: 7,
       icon: "globe",
       label: "Сменить язык",
       screen: "(client)/(profile)/(settings)/(settingPage)/settingPage",
     },
     {
+      id: 8,
       icon: "sun",
       label: "Сменить тему",
       screen: "(client)/(profile)/(settings)/(settingPage)/settingPage",
     },
     {
+      id: 9,
       icon: "lock",
       label: "Изменить пароль",
-      screen: "(client)/(profile)/(settings)/(settingPage)/settingPage",
+      screen: "(auth)/(setPinCode)/installPin",
     },
   ];
+
+  const handlePress = (key: RouteData, route: string) => {
+    setRoute(key);
+    navigation.navigate(route);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
@@ -53,7 +63,9 @@ const SettingsClient = () => {
             <TouchableOpacity
               key={index}
               style={styles.menuItem}
-              onPress={() => navigateTo(item.screen)}
+              onPress={() =>
+                handlePress({ id: item.id, value: item.label }, item.screen)
+              }
               activeOpacity={0.7}
             >
               <View style={styles.menuItemContent}>
@@ -64,20 +76,22 @@ const SettingsClient = () => {
             </TouchableOpacity>
           ))}
           <TouchableOpacity
-              style={styles.menuItem}
-              // onPress={() => navigateTo("")}
-              activeOpacity={0.7}
-            >
-              <View style={styles.menuItemContent}>
-                
-                <Text style={styles.menuItemTextRed}>Удалить аккаунт</Text>
-              </View>
-            </TouchableOpacity>
+            style={styles.menuItem}
+            onPress={() => deleteModal()}
+            activeOpacity={0.7}
+          >
+            <View style={styles.menuItemContent}>
+              <Text style={styles.menuItemTextRed}>Удалить аккаунт</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-      <View style={{ margin: 16 }}>
-        <Buttons onPress={() => {}} title="Сохранить" />
-      </View>
+      <CenteredModal isFullBtn={true} btnRedText="Да" btnWhiteText="Отмена" isModal={showModal} onConfirm={() => deleteClientProfile(navigation.navigate("(auth)/auth"))} toggleModal={() => deleteModal()} children={
+        <View style={styles.modalMain}>
+          <MaterialCommunityIcons name="delete-alert" size={80} color="#9C0A35" style={styles.modalImage} />
+          <Text style={styles.modalText}>Вы хотите удалить свой профиль?</Text>
+        </View>
+      }/>
     </SafeAreaView>
   );
 };
@@ -110,4 +124,18 @@ const styles = StyleSheet.create({
     color: "#9C0A35",
     marginLeft: 16,
   },
+  modalMain: {
+    justifyContent: "center",
+    alignItems: "center",
+    gap:10,
+    marginVertical: 10
+  },
+  modalImage: {
+
+  },
+  modalText: {
+    color: "#fff",
+    fontSize: 16,
+
+  }
 });

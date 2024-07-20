@@ -18,7 +18,7 @@ export const getAllCategory = async () => {
 };
 
 // Client post filter
-  export const postClientFilter = async (categoryId: any, gender?: boolean | null, nextToMe?: number | null, rating?: number | null, lat: number | null, lng: number | null, inputValue?: string | null) => {
+  export const postClientFilter = async (categoryId: any, gender?: boolean | null, nextToMe?: number | null, rating?: number | null, lat?: number | null, lng?: number | null, inputValue?: string | null) => {
     try {
       const config = await getConfig();
       const postData = { categoryId, gender, nextToMe, rating, lat, lng };

@@ -3,8 +3,6 @@
 
 // swagger url
 export const base_url: string = 'https://app.bookers.one/';
-// export const base_url: string = 'http://134.122.77.107:8080/';
-// export const base_url: string = 'http://192.168.0.126/'; 
 export const getMe = `${base_url}user/me`
 export const getMeID = `${base_url}user/get/me/`
 
@@ -179,3 +177,7 @@ export const expene_category_post: string = `${base_url}expense-category`
 export const expene_list: string = `${base_url}expense`
 export const address_url: string = `${base_url}address`
 export const client_profile_edit_url: string = `${base_url}client`
+// client notificaton API
+export const getNotification_url:string=`${base_url}notification`
+
+export const client_profile_delete_url: string = `${base_url}user`
