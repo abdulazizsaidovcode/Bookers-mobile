@@ -14,13 +14,12 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const AccordionItem: React.FC<AccordionItemProps> = ({ title, children, titleThen, backgroundColor }) => {
-  const[mainExpend,setMainExpend]=useState(false)
+  const[mainExpend,setMainExpend]=useState(true)
   const toggleExpand = () => {
     // Animatsiya
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setMainExpend(!mainExpend);
   };
-
   return (
     <View style={[styles.container, { backgroundColor: backgroundColor }]}>
       <TouchableOpacity

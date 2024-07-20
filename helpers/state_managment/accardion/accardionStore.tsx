@@ -20,13 +20,13 @@ interface AccardionStoreState {
 
 export const useAccardionStore = create<AccardionStoreState>((set) => ({
   orderExpand: false,
-  expanded: false,
+  expanded: true,
   genderIndex: false,
   isSelected: false,
-  expanded2: false,
-  expanded3: false,
-  expanded4: false,
-  expanded5: false,
+  expanded2: true,
+  expanded3: true,
+  expanded4: true,
+  expanded5: true,
   setOrderExpand: (val: boolean) => set({ orderExpand: val }),
   setExpended2: (val: boolean) => set({ expanded2: val }),
   setExpended3: (val: boolean) => set({ expanded3: val }),

@@ -5,7 +5,8 @@ import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AccardionHistory from "@/components/accordions/accardionHistory";
-import { Feather } from "@expo/vector-icons";
+import { Feather, SimpleLineIcons } from "@expo/vector-icons";
+import { EvilIcons } from '@expo/vector-icons';
 
 const OrderHistory = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
@@ -18,7 +19,7 @@ const OrderHistory = () => {
   //     }, 2000);
   //   }, [])
   // );
-  const titleTex = ['Стрижка','Стрижка','Стрижка', 'укладка', "покраска волос"];
+  const titleTex = ['Стрижка', 'Стрижка', 'Стрижка', 'укладка', "покраска волос"];
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
@@ -54,18 +55,18 @@ const OrderHistory = () => {
                 <Text style={styles.price}>350 000 сум</Text>
               </View>
             </View>
-            <View style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', gap: 10,}}>
+            <View style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', gap: 10, }}>
               {titleTex.map((title) => (
-                <Text style={{ fontSize: 12, paddingHorizontal: 6,paddingVertical: 4, borderColor: '#828282',color: '#828282', borderRadius: 5, borderWidth: 1 }}>{title}</Text>
+                <Text style={{ fontSize: 12, paddingHorizontal: 6, paddingVertical: 4, borderColor: '#828282', color: '#828282', borderRadius: 5, borderWidth: 1 }}>{title}</Text>
               ))}
             </View>
-            <Text style={{fontSize:12,color: '#828282',marginTop: 10}}>Яккасарайский р-н, ул. Мирабад, 62а</Text>
+            <Text style={{ fontSize: 12, color: '#828282', marginTop: 10 }}>Яккасарайский р-н, ул. Мирабад, 62а</Text>
             <View style={styles.iconContainer}>
-              <TouchableOpacity activeOpacity={0.7} style={{paddingHorizontal: 10,paddingVertical: 8,backgroundColor: '#9C0A35',borderRadius: 5}}>
-                <Text style={{color: 'white'}}>Написать сообщение</Text>
+              <TouchableOpacity activeOpacity={0.7} style={{ paddingHorizontal: 10, paddingVertical: 8, backgroundColor: '#9C0A35', borderRadius: 5 }}>
+                <Text style={{ color: 'white' }}>Написать сообщение</Text>
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
-                <Feather name="location" size={24} color="white" />
+                <SimpleLineIcons name="location-pin" size={24} color="white" />
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
                 <Feather name="phone" size={24} color="white" />
@@ -89,12 +90,6 @@ const styles = StyleSheet.create({
     gap: 14,
   },
   card: {
-    backgroundColor: '#B9B9C9',
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     marginBottom: 16,
   },
   profileContainer: {
