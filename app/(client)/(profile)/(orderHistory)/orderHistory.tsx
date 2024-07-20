@@ -61,11 +61,11 @@ const OrderHistory = () => {
             </View>
             <Text style={{fontSize:12,color: '#828282',marginTop: 10}}>Яккасарайский р-н, ул. Мирабад, 62а</Text>
             <View style={styles.iconContainer}>
-              <TouchableOpacity activeOpacity={0.7} style={{paddingHorizontal: 10,paddingVertical: 5,backgroundColor: '#9C0A35',borderRadius: 5}}>
+              <TouchableOpacity activeOpacity={0.7} style={{paddingHorizontal: 10,paddingVertical: 8,backgroundColor: '#9C0A35',borderRadius: 5}}>
                 <Text style={{color: 'white'}}>Написать сообщение</Text>
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
-                <Feather name="message-square" size={24} color="white" />
+                <Feather name="location" size={24} color="white" />
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
                 <Feather name="phone" size={24} color="white" />
