@@ -11,22 +11,26 @@ import { useFocusEffect } from 'expo-router';
 
 const NotificationClient = () => {
     const [isBottomModalVisible, setBottomModalVisible] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false)
-    const [notification, setNotification] = useState<any>([])
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [notification, setNotification] = useState<getClientNotififcations[]>([]);
+    const [selectedNotification, setSelectedNotification] = useState<getClientNotififcations | null>(null);
 
     const deleteToggleModal = () => {
-        setDeleteModal(!deleteModal)
-    }
-    const toggleBottomModal = () => {
+        setDeleteModal(!deleteModal);
+    };
+
+    const toggleBottomModal = (notification: getClientNotififcations | null = null) => {
+        setSelectedNotification(notification);
         setBottomModalVisible(!isBottomModalVisible);
     };
-    useFocusEffect(
 
+    useFocusEffect(
         useCallback(() => {
-            clientNotification(setNotification)
-            return () => { }
+            clientNotification(setNotification);
+            return () => { };
         }, [])
-    )
+    );
+
     return (
         <View style={{ backgroundColor: '#21212E', flex: 1, padding: 10 }}>
             <StatusBar backgroundColor={'#21212E'} barStyle={'light-content'} />
@@ -38,8 +42,13 @@ const NotificationClient = () => {
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 {notification && notification.length !== 0 ? (
-                    notification.map((notifications: getClientNotififcations, index: number) =>
-                        <TouchableOpacity key={index} style={styles.card} activeOpacity={0.9} onPress={toggleBottomModal}>
+                    notification.map((notifications, index) => (
+                        <TouchableOpacity
+                            key={index}
+                            style={styles.card}
+                            activeOpacity={0.9}
+                            onPress={() => toggleBottomModal(notifications)}
+                        >
                             <View style={styles.header}>
                                 <Image
                                     source={require('@/assets/avatar.png')}
@@ -55,48 +64,50 @@ const NotificationClient = () => {
                                 <AntDesign name="right" size={24} color="#4F4F4F" />
                             </View>
                         </TouchableOpacity>
-                    )
+                    ))
                 ) : (
                     <View style={{ marginTop: 100 }}>
-                        <Text style={{ color: 'white',textAlign: 'center',fontSize: 20,fontWeight: '600' }}>Not found</Text>
+                        <Text style={{ color: 'white', textAlign: 'center', fontSize: 20, fontWeight: '600' }}>Not found</Text>
                     </View>
                 )}
-
             </ScrollView>
-            <BottomModal
-                toggleBottomModal={toggleBottomModal}
-                isBottomModal={isBottomModalVisible}
-            >
-                <View style={{ width: '100%' }}>
-                    <Text style={{ fontSize: 16, fontWeight: '600', color: '#fff', marginBottom: 10 }}>Отмена
-                        бронирования</Text>
-                    <Text style={{
-                        fontSize: 14,
-                        fontWeight: '400',
-                        textAlign: 'center',
-                        color: '#494949',
-                        padding: 5,
-                        borderWidth: 1,
-                        borderRadius: 5,
-                        borderColor: '#494949',
-                        marginBottom: 10
-                    }}>Наращивание 2D ресниц</Text>
-                    <Text style={{ color: 'white', marginBottom: 10 }}>Ваша заявка №12 на18 апреля была отменена.
-                        Причина в том, что мастер в этот день не будет на работе и отменил ваш заказ. Вы можете
-                        перенести заказ на другой день или обратиться к специалисту повторно. Спасибо за
-                        понимание.</Text>
-                    <Buttons title={'Перейти к заявке'} />
-                </View>
-            </BottomModal>
+            {selectedNotification && (
+                <BottomModal
+                    toggleBottomModal={() => toggleBottomModal(null)}
+                    isBottomModal={isBottomModalVisible}
+                >
+                    <View style={{ width: '100%' }}>
+                        <Text style={{ fontSize: 16, fontWeight: '600', color: '#fff', marginBottom: 10 }}>
+                            {selectedNotification.title === null ? 'Not title' : selectedNotification.title}
+                        </Text>
+                        <Text style={{
+                            fontSize: 14,
+                            fontWeight: '400',
+                            textAlign: 'center',
+                            color: '#494949',
+                            padding: 5,
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            borderColor: '#494949',
+                            marginBottom: 10
+                        }}>
+                            {selectedNotification.createAt === null ? 'Not found' : selectedNotification.createAt}
+                        </Text>
+                        <Text style={{ color: 'white', marginBottom: 10 }}>
+                            {selectedNotification.content}
+                        </Text>
+                        <Buttons onPress={() => toggleBottomModal()} title={'Закрыть'} />
+                    </View>
+                </BottomModal>
+            )}
             <CenteredModal children={
                 <>
                     <AntDesign name="delete" size={56} color="#9C0A35" />
-                    <Text style={{ color: '#494949', fontSize: 12, marginVertical: 20 }}>Вы хотите очистить все
-                        уведомлении?</Text>
+                    <Text style={{ color: '#494949', fontSize: 12, marginVertical: 20 }}>
+                        Вы хотите очистить все уведомлении?
+                    </Text>
                 </>
-            } isFullBtn={true} btnWhiteText={'Отмена'} btnRedText={'Да'} isModal={deleteModal} toggleModal={() => {
-                deleteToggleModal()
-            }} />
+            } isFullBtn={true} btnWhiteText={'Отмена'} btnRedText={'Да'} isModal={deleteModal} toggleModal={deleteToggleModal} />
         </View>
     );
 }
@@ -116,7 +127,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     card: {
-        backgroundColor: '#B9B9C9', // Background rangini moslang
+        backgroundColor: '#B9B9C9',
         borderRadius: 10,
         padding: 15,
         margin: 10,
