@@ -2,7 +2,7 @@ export interface GetMee {
     id: string,
     firstName: string,
     lastName: string,
-    nickname: string,
+    nickName: string,
     phoneNumber: string,
     gender: string,
     job: string | null

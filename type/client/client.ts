@@ -55,7 +55,7 @@ export interface AllClient {
     clientBirthday: null | string
     telegram: null | string
     instagram: null | string
-    nickname: null | string
+    nickName: null | string
 }
 
 export interface ClientStatus {

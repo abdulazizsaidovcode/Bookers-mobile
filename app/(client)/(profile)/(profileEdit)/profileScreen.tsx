@@ -55,7 +55,7 @@ const ProfileScreen = () => {
         <Text style={styles.label}>Никнейм</Text>
         <View style={styles.itemMenu}>
           <Text style={styles.value}>
-            {nickName ? nickName : getMee && getMee.nickname ? getMee.nickname : "Нет данных"}
+            {nickName ? nickName : getMee && getMee.nickName ? getMee.nickName : "Нет данных"}
           </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>

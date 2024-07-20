@@ -91,8 +91,8 @@ const ProfileEdit = () => {
       id: getMee && getMee.id ? getMee.id : null,
       nickName: nickName
         ? nickName
-        : getMee && getMee.nickname
-        ? getMee.nickname
+        : getMee && getMee.nickName
+        ? getMee.nickName
         : null,
       firstName: firstName
         ? firstName
