@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import BottomModal from "@/components/(modals)/modal-bottom";
@@ -9,9 +9,9 @@ import { clientNotification } from '@/helpers/api-function/client/clientPage';
 import { getClientNotififcations } from '@/type/client/editClient';
 import { useFocusEffect } from 'expo-router';
 
-const NotificationClient = () => {
-    const [isBottomModalVisible, setBottomModalVisible] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false);
+const NotificationClient: React.FC = () => {
+    const [isBottomModalVisible, setBottomModalVisible] = useState<boolean>(false);
+    const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [notification, setNotification] = useState<getClientNotififcations[]>([]);
     const [selectedNotification, setSelectedNotification] = useState<getClientNotififcations | null>(null);
 
@@ -32,7 +32,7 @@ const NotificationClient = () => {
     );
 
     return (
-        <View style={{ backgroundColor: '#21212E', flex: 1, padding: 10 }}>
+        <View style={styles.container}>
             <StatusBar backgroundColor={'#21212E'} barStyle={'light-content'} />
             <View style={styles.headerContainer}>
                 <NavigationMenu name={"Уведомления"} />
@@ -41,33 +41,33 @@ const NotificationClient = () => {
                 </TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                {notification && notification.length !== 0 ? (
-                    notification.map((notifications, index) => (
+                {notification.length ? (
+                    notification.map((notif, index) => (
                         <TouchableOpacity
                             key={index}
                             style={styles.card}
                             activeOpacity={0.9}
-                            onPress={() => toggleBottomModal(notifications)}
+                            onPress={() => toggleBottomModal(notif)}
                         >
                             <View style={styles.header}>
                                 <Image
                                     source={require('@/assets/avatar.png')}
                                     style={styles.avatar}
                                 />
-                                <Text style={styles.title}>{notifications.title}</Text>
+                                <Text style={styles.title}>{notif.title}</Text>
                             </View>
                             <Text style={styles.description}>
-                                {notifications.content}
+                                {notif.content}
                             </Text>
                             <View style={styles.footer}>
-                                <Text style={styles.date}>{notifications.createAt}</Text>
+                                <Text style={styles.date}>{notif.createAt}</Text>
                                 <AntDesign name="right" size={24} color="#4F4F4F" />
                             </View>
                         </TouchableOpacity>
                     ))
                 ) : (
-                    <View style={{ marginTop: 100 }}>
-                        <Text style={{ color: 'white', textAlign: 'center', fontSize: 20, fontWeight: '600' }}>Not found</Text>
+                    <View style={styles.notFound}>
+                        <Text style={styles.notFoundText}>Not found</Text>
                     </View>
                 )}
             </ScrollView>
@@ -76,38 +76,34 @@ const NotificationClient = () => {
                     toggleBottomModal={() => toggleBottomModal(null)}
                     isBottomModal={isBottomModalVisible}
                 >
-                    <View style={{ width: '100%' }}>
-                        <Text style={{ fontSize: 16, fontWeight: '600', color: '#fff', marginBottom: 10 }}>
-                            {selectedNotification.title === null ? 'Not title' : selectedNotification.title}
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>
+                            {selectedNotification.title || 'No title'}
                         </Text>
-                        <Text style={{
-                            fontSize: 14,
-                            fontWeight: '400',
-                            textAlign: 'center',
-                            color: '#494949',
-                            padding: 5,
-                            borderWidth: 1,
-                            borderRadius: 5,
-                            borderColor: '#494949',
-                            marginBottom: 10
-                        }}>
-                            {selectedNotification.createAt === null ? 'Not found' : selectedNotification.createAt}
+                        <Text style={styles.modalDate}>
+                            {selectedNotification.createAt || 'Not found'}
                         </Text>
-                        <Text style={{ color: 'white', marginBottom: 10 }}>
+                        <Text style={styles.modalDescription}>
                             {selectedNotification.content}
                         </Text>
                         <Buttons onPress={() => toggleBottomModal()} title={'Закрыть'} />
                     </View>
                 </BottomModal>
             )}
-            <CenteredModal children={
+            <CenteredModal 
+                isFullBtn={true} 
+                btnWhiteText={'Отмена'} 
+                btnRedText={'Да'} 
+                isModal={deleteModal} 
+                toggleModal={deleteToggleModal}
+            >
                 <>
                     <AntDesign name="delete" size={56} color="#9C0A35" />
-                    <Text style={{ color: '#494949', fontSize: 12, marginVertical: 20 }}>
+                    <Text style={styles.deleteText}>
                         Вы хотите очистить все уведомлении?
                     </Text>
                 </>
-            } isFullBtn={true} btnWhiteText={'Отмена'} btnRedText={'Да'} isModal={deleteModal} toggleModal={deleteToggleModal} />
+            </CenteredModal>
         </View>
     );
 }
@@ -115,8 +111,12 @@ const NotificationClient = () => {
 export default NotificationClient;
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#21212E',
+        flex: 1,
+        padding: 10,
+    },
     headerContainer: {
-        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -165,5 +165,43 @@ const styles = StyleSheet.create({
     date: {
         color: '#888',
         fontSize: 12,
+    },
+    notFound: {
+        marginTop: 100,
+    },
+    notFoundText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: '600',
+    },
+    modalContent: {
+        width: '100%',
+    },
+    modalTitle: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#fff',
+        marginBottom: 10,
+    },
+    modalDate: {
+        fontSize: 14,
+        fontWeight: '400',
+        textAlign: 'center',
+        color: '#494949',
+        padding: 5,
+        borderWidth: 1,
+        borderRadius: 5,
+        borderColor: '#494949',
+        marginBottom: 10,
+    },
+    modalDescription: {
+        color: 'white',
+        marginBottom: 10,
+    },
+    deleteText: {
+        color: '#494949',
+        fontSize: 12,
+        marginVertical: 20,
     },
 });
