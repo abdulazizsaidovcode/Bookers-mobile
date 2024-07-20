@@ -5,6 +5,7 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 import tw from 'tailwind-react-native-classnames';
 import { useFocusEffect } from 'expo-router';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
+import { getFile } from '@/helpers/api';
 
 type ClientCardProps = {
   salon: string;
@@ -44,7 +45,7 @@ const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl, feedback
     <View style={tw`p-4 bg-gray-300 rounded-2xl shadow-lg`}>
       <View style={tw`flex-row items-center mb-4`}>
         <Image
-          source={getme && getme.attachmentId ? { uri: getme.attachmentId } : require('../../assets/avatar.png')}
+          source={imageUrl ? getFile + imageUrl : require('../../assets/avatar.png')}
           style={tw`w-16 h-16 rounded-full mr-3`}
         />
         <View style={tw`flex-1`}>
