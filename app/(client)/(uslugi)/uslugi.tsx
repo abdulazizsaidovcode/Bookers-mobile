@@ -16,11 +16,12 @@ interface Service {
     onPress: () => void;
 }
 
+
 const ServiceCard: React.FC<Service> = ({id, name, distanceMasterCount, onPress}) => {
     const staticIcon: any = "eye";
     return (
         <TouchableOpacity style={tw`w-1/2 px-2 py-2`} activeOpacity={0.8} onPress={onPress}>
-            <View style={[tw`flex flex-col items-center rounded-3xl p-4 w-full h-50`, {backgroundColor: '#B9B9C9'}]}>
+            <View style={[tw`flex flex-col items-center rounded-3xl p-4 w-full h-56`, {backgroundColor: '#B9B9C9'}]}>
                 <View style={[tw`rounded-full p-6 mb-2`, {backgroundColor: '#9C0A35'}]}>
                     <MaterialCommunityIcons name={staticIcon} size={36} color="white"/>
                 </View>
