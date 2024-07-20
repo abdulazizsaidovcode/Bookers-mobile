@@ -1,10 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import { Fontisto } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import CustomCheckbox1 from '@/components/checkbox/checkbox1';
 import LocationInput from '@/app/locationInput';
@@ -46,6 +45,7 @@ const Specialist = () => {
       setLoading(false);
     }
   };
+
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
@@ -67,15 +67,15 @@ const Specialist = () => {
         }
       };
       fetchData();
+      return () => {}
     }, [selectedServiceId, genderIndex, value, rating, userLocation, checked, searchValue])
   );
 
   useEffect(() => {
     const latitude = userLocation?.coords?.latitude || null;
     const longitude = userLocation?.coords?.longitude || null;
-    postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => {
-    });
-  },[searchValue])
+    postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => {});
+  }, [searchValue]);
 
   const handleClick = () => {
     const latitude = userLocation?.coords?.latitude || null;
@@ -97,6 +97,10 @@ const Specialist = () => {
     }
   };
 
+  const handleClientCardPress = (id:any) => {
+    console.log("Client ID:", clientData);
+    router.push('(client)/(uslugi)/(masterInformation)/masterInformation');
+  };
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
@@ -139,6 +143,7 @@ const Specialist = () => {
               clientData.map((client: any, index: any) => (
                 <View key={index} style={tw`mb-3`}>
                   <ClientCard
+                    id={client.id}
                     salon={client.salonName}
                     imageUrl={client.imageUrl}
                     name={client.fullName}
@@ -148,6 +153,7 @@ const Specialist = () => {
                     feedbackCount={client.feedbackCount}
                     clients={client.clientCount}
                     address={`${client.district}, ${client.street}, ${client.house}`}
+                    onPress={() => handleClientCardPress(client.id)}
                   />
                 </View>
               ))

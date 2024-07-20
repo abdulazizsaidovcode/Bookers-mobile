@@ -3,8 +3,12 @@ import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollVi
 import AccordionItem from '../../../components/accordions/accardion';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
-import { useNavigation } from 'expo-router';
+import { useFocusEffect, useNavigation } from 'expo-router';
 import { NavigationProp } from '@react-navigation/native';
+import useGetMeeStore from '@/helpers/state_managment/getMee';
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
+import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
+import { getAllCategory } from '@/helpers/api-function/uslugi/uslugi';
 // Bu bo'limga teginma
 type DashboardItemType = {
   id: number;
@@ -23,6 +27,25 @@ const IMAGES = {
 };
 
 const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
+
+  const {userLocation, setUserLocation} = useGetMeeStore();
+  const {allCategory, setSelectedServiceId} = ClientStory();
+
+  useFocusEffect(
+    React.useCallback(() => {
+        getUserLocation(setUserLocation);
+        return () => {
+        };
+    }, [])
+);
+useFocusEffect(
+  React.useCallback(() => {
+      getAllCategory();
+      return () => {
+      };
+  }, [userLocation])
+);
+
   const handlePress = useCallback(() => {
     if (item.onPress) item.onPress();
   }, [item]);
