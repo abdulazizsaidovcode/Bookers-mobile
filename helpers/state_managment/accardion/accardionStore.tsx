@@ -1,5 +1,6 @@
 import { create } from "zustand";
 interface AccardionStoreState {
+  orderExpand:boolean
   expanded: boolean;
   expanded2: boolean;
   expanded3: boolean;
@@ -7,6 +8,7 @@ interface AccardionStoreState {
   expanded5: boolean;
   genderIndex: boolean;
   isSelected: boolean;
+  setOrderExpand: (val: boolean) => void;
   setExpanded: (val: boolean) => void;
   setGenderIndex: (val: boolean) => void;
   setSelection: (val: boolean) => void;
@@ -17,6 +19,7 @@ interface AccardionStoreState {
 }
 
 export const useAccardionStore = create<AccardionStoreState>((set) => ({
+  orderExpand: false,
   expanded: false,
   genderIndex: false,
   isSelected: false,
@@ -24,6 +27,7 @@ export const useAccardionStore = create<AccardionStoreState>((set) => ({
   expanded3: false,
   expanded4: false,
   expanded5: false,
+  setOrderExpand: (val: boolean) => set({ orderExpand: val }),
   setExpended2: (val: boolean) => set({ expanded2: val }),
   setExpended3: (val: boolean) => set({ expanded3: val }),
   setExpended4: (val: boolean) => set({ expanded3: val }),

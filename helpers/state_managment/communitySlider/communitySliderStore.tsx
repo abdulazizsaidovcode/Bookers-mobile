@@ -6,10 +6,9 @@ interface CommunitySlider {
     rating: number
     setRating: (value: number) => void
 }
-
-export const useCommunitySlider = () => create<CommunitySlider>((set) => ({
-    value: 0,
-    setValue: (value) => set({ value }),
+export const useCommunitySlider = create<CommunitySlider>((set) => ({
+    value: 0, 
+    setValue: (value: number) => set({ value: value }),
     rating: 0,
-    setRating: (value) => set({ rating: value }),
+    setRating: (value: number) => set({ rating: value }),
 }))
