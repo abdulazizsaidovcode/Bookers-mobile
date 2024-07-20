@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Image, Alert } from "react-native"; // Text komponentini import qilish
+import { View, StyleSheet, Text } from "react-native"; // Text komponentini import qilish
 import CustomButton from "./CustomButton";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AccardionHistory from "@/components/accordions/accardionHistory";
 import { Feather, SimpleLineIcons } from "@expo/vector-icons";
+import ProfileCard from "./profileCard";
 
 const OrderHistory = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-
-
   const titleTex = ['Стрижка', 'Стрижка', 'Стрижка', 'укладка', "покраска волос"];
+
+
   // Alert.alert(activeTab.toString());
   return (
     <SafeAreaView style={styles.container}>
@@ -32,46 +33,34 @@ const OrderHistory = () => {
         </View>
         {activeTab === 'upcoming' && (
           <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
-            <View style={styles.card}>
-              <View style={styles.profileContainer}>
-                <View style={{ display: 'flex', flexDirection: 'row' }}>
-                  <Image source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }} style={styles.profileImage} />
-                  <View>
-                    <View style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
-                      <Text style={styles.profileName}>Натали</Text>
-                      <Text style={styles.salonName}>Beauty Wave</Text>
-                    </View>
-                    <Text style={styles.serviceName}>Женский мастер</Text>
-                  </View>
-                </View>
-                <View style={styles.feedbackContainer}>
-                  <Text style={styles.feedbackStars}>{'⭐'.repeat(5)}</Text>
-                  <Text style={styles.price}>350 000 сум</Text>
-                </View>
-              </View>
-              <View style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'row', gap: 10, }}>
-                {titleTex.map((title) => (
-                  <Text style={{ fontSize: 12, paddingHorizontal: 6, paddingVertical: 4, borderColor: '#828282', color: '#828282', borderRadius: 5, borderWidth: 1 }}>{title}</Text>
-                ))}
-              </View>
-              <Text style={{ fontSize: 12, color: '#828282', marginTop: 10 }}>Яккасарайский р-н, ул. Мирабад, 62а</Text>
-              <View style={styles.iconContainer}>
-                <TouchableOpacity activeOpacity={0.7} style={{ paddingHorizontal: 10, paddingVertical: 8, backgroundColor: '#9C0A35', borderRadius: 5 }}>
-                  <Text style={{ color: 'white' }}>Написать сообщение</Text>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
-                  <SimpleLineIcons name="location-pin" size={24} color="white" />
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
-                  <Feather name="phone" size={24} color="white" />
-                </TouchableOpacity>
-              </View>
-            </View>
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
           </AccardionHistory>
         )}
 
         {activeTab === 'past' && (
-          <Text>asaskmdkasmd</Text>
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Оставить отзыв"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+            />
+          </AccardionHistory>
         )}
       </View>
     </SafeAreaView>
@@ -88,40 +77,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     gap: 14,
   },
-  card: {
-    marginBottom: 16,
-  },
-  profileContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    // alignItems: 'center',
-    marginBottom: 16,
-  },
-  profileImage: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    marginRight: 16,
-  },
   profileInfo: {
     flex: 1,
-  },
-  profileName: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  salonName: {
-    fontSize: 8,
-    color: '#666',
-    borderColor: "#828282",
-    borderRadius: 5,
-    borderWidth: 1,
-    marginRight: 16,
-    padding: 4,
-  },
-  serviceName: {
-    fontSize: 12,
-    color: '#4F4F4F',
   },
   masterType: {
     fontSize: 12,
@@ -129,31 +86,6 @@ const styles = StyleSheet.create({
     borderColor: "#828282",
     borderWidth: 1,
   },
-  feedbackContainer: {
-    alignItems: 'flex-end',
-  },
-  feedbackStars: {
-    fontSize: 10,
-    color: '#9C0A35',
-  },
-  price: {
-    fontSize: 12,
-    color: '#9C0A35',
-    marginTop: 8,
-    fontWeight: '600',
-  },
-  iconContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  iconButton: {
-    padding: 8,
-    borderRadius: 50,
-    backgroundColor: '#9C0A35',
-    marginRight: 8,
-  }
 });
 
 export default OrderHistory;
