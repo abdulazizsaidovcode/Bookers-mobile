@@ -24,6 +24,7 @@ export const getAllCategory = async () => {
       const postData = { categoryId, gender, nextToMe, rating, lat, lng };
       const { data } = await axios.post(`${getClient_filter}${inputValue ? `?nameOrPhone=${inputValue}`: ""}`, postData, config ? config : {});
       if (data.success) ClientStory.getState().setClientData(data.body);
+      ClientStory.getState().setClientId
     } catch (error) {
       console.log('Error:', error);
     }
