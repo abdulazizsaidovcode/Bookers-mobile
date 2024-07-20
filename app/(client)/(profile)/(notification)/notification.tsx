@@ -91,7 +91,6 @@ const NotificationClient = () => {
                         <Text style={{color: 'white'}}>Not found</Text>
                         <Text style={{color: 'white'}}>Not found</Text>
                         <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
                     </View>
                 )}
 
