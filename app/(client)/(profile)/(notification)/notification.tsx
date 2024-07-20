@@ -20,9 +20,6 @@ const NotificationClient = () => {
     const toggleBottomModal = () => {
         setBottomModalVisible(!isBottomModalVisible);
     };
-    // useEffect(() => {
-    //     clientNotification(setNotification)
-    // })
     useFocusEffect(
 
         useCallback(() => {
@@ -55,7 +52,7 @@ const NotificationClient = () => {
                             </Text>
                             <View style={styles.footer}>
                                 <Text style={styles.date}>{notifications.createAt}</Text>
-                                <AntDesign name="right" size={24} color="white" />
+                                <AntDesign name="right" size={24} color="#4F4F4F" />
                             </View>
                         </TouchableOpacity>
                     )

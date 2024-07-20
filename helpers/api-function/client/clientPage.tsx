@@ -31,7 +31,6 @@ export const clientNotification=async (setData: (val: getClientNotififcations[])
     const config = await getConfig()
     const ClientNotification= await axios.get(getNotification_url, config ? config : {})
     try{
-        Toast.show('Notification client ishladi', Toast.LONG)
         if(ClientNotification.data.success) setData(ClientNotification.data.body)
         else setData([])
     }
