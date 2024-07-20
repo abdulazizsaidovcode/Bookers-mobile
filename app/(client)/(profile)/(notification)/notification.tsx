@@ -41,7 +41,7 @@ const NotificationClient = () => {
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 {notification && notification.length !== 0 ? (
-                    notification.map((notifications: getClientNotififcations, index: number) => 
+                    notification.map((notifications: getClientNotififcations, index: number) =>
                         <TouchableOpacity key={index} style={styles.card} activeOpacity={0.9} onPress={toggleBottomModal}>
                             <View style={styles.header}>
                                 <Image
@@ -60,29 +60,28 @@ const NotificationClient = () => {
                         </TouchableOpacity>
                     )
                 ) : (
-                    <View style={{marginTop: 100}}>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
-                        <Text style={{color: 'white'}}>Not found</Text>
+                    <View style={{ marginTop: 100 }}>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
+                        <Text style={{ color: 'white' }}>Not found</Text>
                     </View>
                 )}
 
