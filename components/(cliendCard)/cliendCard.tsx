@@ -15,18 +15,19 @@ type ClientCardProps = {
   orders: number;
   clients: number;
   address: string;
+  mapStyle?: boolean;
   onPress?: () => void;
 };
 
-const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl,feedbackCount, name, masterType, orders, clients, address, zaps, onPress }) => {
-  const { getme,} = webPageStore();
+const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, mapStyle }) => {
+  const { getme, } = webPageStore();
 
-//   useFocusEffect(
-//     useCallback(() => {
-//       getAddress(setAddress);
-//       return () => { };
-//     }, [])
-//   );
+  //   useFocusEffect(
+  //     useCallback(() => {
+  //       getAddress(setAddress);
+  //       return () => { };
+  //     }, [])
+  //   );
 
   const generateStars = (count: number) => {
     let stars = '';
@@ -49,26 +50,27 @@ const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl,feedbackC
         <View style={tw`flex-1`}>
           <View style={tw`flex-row items-center mb-1`}>
             <Text style={tw`text-lg font-bold`}>{name || "No data"}</Text>
-            <View style={tw`border border-gray-600 px-2 py-1 rounded-lg ml-2`}>
+            {!mapStyle && <View style={tw`border border-gray-600 px-2 py-1 rounded-lg ml-2`}>
               <Text style={tw`text-xs text-gray-600`}>{salon}</Text>
-            </View>
+            </View>}
+
           </View>
           <Text style={tw`text-sm text-gray-600`}>{masterType}</Text>
         </View>
         <View style={tw`flex items-end`}>
-          <Text style={[tw`text-lg`,{color:'#9C0A35'}]}>{generateStars(feedbackCount || 0)}</Text>
+          <Text style={[tw`text-lg`, { color: '#9C0A35' }]}>{generateStars(feedbackCount || 0)}</Text>
           <Text style={tw`text-xs text-gray-600`}>{orders} заказа, {clients} клиентов</Text>
         </View>
       </View>
       <Text style={tw`text-gray-600 text-lg mb-2`}>{address || "Address is not found"}</Text>
       <Text style={tw`text-black text-lg font-bold mb-4`}>Ближайшая запись: {zaps}</Text>
-      <View style={tw`flex-row justify-between`}>
-        <TouchableOpacity activeOpacity={0.8} style={[tw`px-16 py-2  rounded-xl`, {backgroundColor:'#9C0A35'}]}>
-          <Text style={tw`text-white text-xl`}>Записаться</Text>
+      <View style={mapStyle ? tw`` : tw`flex-row justify-between`}>
+        <TouchableOpacity activeOpacity={0.8} style={[tw`px-16 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]}>
+          <Text style={tw`text-white text-xl text-center`}>Записаться</Text>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8} style={[tw`p-3 rounded-full`,{backgroundColor:'#9C0A35'}]}>
+        {!mapStyle && <TouchableOpacity activeOpacity={0.8} style={[tw`p-3 rounded-full`, { backgroundColor: '#9C0A35' }]}>
           <SimpleLineIcons name="location-pin" size={30} color="white" onPress={onPress} />
-        </TouchableOpacity>
+        </TouchableOpacity>}
       </View>
     </View>
   );
