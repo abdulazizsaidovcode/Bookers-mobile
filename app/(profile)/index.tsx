@@ -267,17 +267,17 @@ const ProfilePage: React.FC = () => {
             style={styles.avatar}
           />
           <View>
-            <View style={{flexDirection: "row", justifyContent:"center", gap: 4}}>
+            {/* <View style={{flexDirection: "row", justifyContent:"center", gap: 4}}> */}
             <Text style={styles.profileName}>
               {getMee.firstName} {getMee.lastName}
             </Text>
-              <Image
+              {/* <Image
                 source={{
                   uri: "https://img.icons8.com/?size=100&id=yXOHowNYbgM5&format=png&color=2568EF",
                 }}
                 style={{width:"12%"}}
-              />
-            </View>
+              /> */}
+            {/* </View> */}
             <Text style={styles.profilePhone}>{getMee.phoneNumber}</Text>
           </View>
         </View>
@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
   },
   profilePhone: {
     color: "#cccccc",
-    marginLeft: 7
+    // marginLeft: 7
   },
   menuItem: {
     flexDirection: "row",

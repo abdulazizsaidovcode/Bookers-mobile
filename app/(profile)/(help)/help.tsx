@@ -61,30 +61,30 @@ const HelpPage = () => {
             }
             // onPress: () => { router.push('/certificate') }
         },
-        {
-            title: "Использование приложения",
-            onPress: () => {
-                getHelpOne(setHelpDate, "USING_APPLICATION", "/aboutUs")
-                setNavigatName("Использование приложения")
-            }
-            // onPress: () => { router.push('/certificate') }
-        },
-        {
-            title: "Спецификация услуги",
-            onPress: () => {
-                getHelpOne(setHelpDate, "SERVICE_SPECIFICATION", "/aboutUs")
-                setNavigatName("Спецификация услуги")
-            }
-            // onPress: () => { router.push('/certificate') }
-        },
-        {
-            title: "Условия эксплуатации",
-            onPress: () => {
-                getHelpOne(setHelpDate, "TERMS_OF_USE", "/aboutUs")
-                setNavigatName("Условия эксплуатации")
-            }
-            // onPress: () => { router.push('/certificate') }
-        },
+        // {
+        //     title: "Использование приложения",
+        //     onPress: () => {
+        //         getHelpOne(setHelpDate, "USING_APPLICATION", "/aboutUs")
+        //         setNavigatName("Использование приложения")
+        //     }
+        //     // onPress: () => { router.push('/certificate') }
+        // },
+        // {
+        //     title: "Спецификация услуги",
+        //     onPress: () => {
+        //         getHelpOne(setHelpDate, "SERVICE_SPECIFICATION", "/aboutUs")
+        //         setNavigatName("Спецификация услуги")
+        //     }
+        //     // onPress: () => { router.push('/certificate') }
+        // },
+        // {
+        //     title: "Условия эксплуатации",
+        //     onPress: () => {
+        //         getHelpOne(setHelpDate, "TERMS_OF_USE", "/aboutUs")
+        //         setNavigatName("Условия эксплуатации")
+        //     }
+        //     // onPress: () => { router.push('/certificate') }
+        // },
     ];
 
     return (
