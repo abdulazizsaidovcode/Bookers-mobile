@@ -47,20 +47,6 @@ const OrderHistory = () => {
               phoneIcon={<Feather name="phone" size={24} color="white" />}
             />
           </AccardionHistory>
-          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
-            <ProfileCard
-              masterName="Натали"
-              salonName="Beauty Wave"
-              masterGender="Женский мастер"
-              ratingnumber={5}
-              money="100 000 сум"
-              buttonName="Написать сообщение"
-              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
-              titleTex={titleTex}
-              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
-              phoneIcon={<Feather name="phone" size={24} color="white" />}
-            />
-          </AccardionHistory>
           </ScrollView>
         )}
 
