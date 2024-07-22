@@ -19,10 +19,10 @@ import {
 } from "react-native";
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
-  "(client)/(profile)/(profileEdit)/profileScreen"
+  "(profile)/(settings)/(childSettings)/(profileEdit)/profileScreen"
 >;
 
-const ProfileScreen = () => {
+const ProfileMasterScreen = () => {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
   const { getMee } = useGetMeeStore();
   const { setRoute, birthDate, districtId, firstName, job, lastName, nickName, phoneNumber, telegram, regionId, setShowCalendar, setDistirictIdData, setRegionIdData, regionIdData, distiricyIdData } = useProfileStore();
@@ -202,4 +202,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default ProfileMasterScreen;

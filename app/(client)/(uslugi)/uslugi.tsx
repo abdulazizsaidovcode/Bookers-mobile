@@ -1,5 +1,5 @@
-import React from 'react';
-import {SafeAreaView, ScrollView, View, Text, TouchableOpacity, StatusBar, FlatList} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView, ScrollView, View, Text, TouchableOpacity, StatusBar, FlatList, ActivityIndicator} from 'react-native';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {useFocusEffect, useRouter} from 'expo-router';
 import tw from 'tailwind-react-native-classnames';
@@ -20,7 +20,7 @@ const ServiceCard: React.FC<Service> = ({id, name, distanceMasterCount, onPress}
     const staticIcon: any = "eye";
     return (
         <TouchableOpacity style={tw`w-1/2 px-2 py-2`} activeOpacity={0.8} onPress={onPress}>
-            <View style={[tw`flex flex-col items-center rounded-3xl p-4 w-full h-50`, {backgroundColor: '#B9B9C9'}]}>
+            <View style={[tw`flex flex-col items-center rounded-3xl p-4 w-full h-56`, {backgroundColor: '#B9B9C9'}]}>
                 <View style={[tw`rounded-full p-6 mb-2`, {backgroundColor: '#9C0A35'}]}>
                     <MaterialCommunityIcons name={staticIcon} size={36} color="white"/>
                 </View>
@@ -32,23 +32,24 @@ const ServiceCard: React.FC<Service> = ({id, name, distanceMasterCount, onPress}
 };
 
 const Uslugi = () => {
+    const [loading, setLoading] = useState(true);
     const {userLocation, setUserLocation} = useGetMeeStore();
     const {allCategory, setSelectedServiceId} = ClientStory();
     const router = useRouter();
 
     useFocusEffect(
         React.useCallback(() => {
-            getUserLocation(setUserLocation);
-            return () => {
-            };
+            setLoading(true);
+            getUserLocation(setUserLocation).finally(() => setLoading(false));
+            return () => {};
         }, [])
     );
 
     useFocusEffect(
         React.useCallback(() => {
-            getAllCategory();
-            return () => {
-            };
+            setLoading(true);
+            getAllCategory().finally(() => setLoading(false));
+            return () => {};
         }, [userLocation])
     );
 
@@ -80,13 +81,19 @@ const Uslugi = () => {
                     <View>
                         <Text style={tw`text-white text-2xl mb-4 px-4`}>Uslugi</Text>
                     </View>
-                    <FlatList
-                        data={allCategory}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.id.toString()}
-                        numColumns={2}
-                        showsVerticalScrollIndicator={false}
-                    />
+                    {loading ? (
+                        <View style={[tw`flex-1 justify-center items-center`]}>
+                            <ActivityIndicator size="large" color="#9C0A35"/>
+                        </View>
+                    ) : (
+                        <FlatList
+                            data={allCategory}
+                            renderItem={renderItem}
+                            keyExtractor={(item) => item.id.toString()}
+                            numColumns={2}
+                            showsVerticalScrollIndicator={false}
+                        />
+                    )}
                 </ScrollView>
             </View>
         </SafeAreaView>

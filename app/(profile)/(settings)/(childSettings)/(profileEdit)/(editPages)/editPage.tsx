@@ -21,7 +21,7 @@ import PhoneInput from "react-native-phone-number-input";
 
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
-  "(client)/(profile)/(profileEdit)/(editPages)/editPage"
+  "(profile)/(settings)/(childSettings)/(profileEdit)/(editPages)/editPage"
 >;
 
 interface InputValues {
@@ -35,7 +35,7 @@ interface InputValues {
   districtId: number | string;
 }
 
-const EditProfilePage: React.FC = () => {
+const EditProfileMasterPage: React.FC = () => {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const {
@@ -469,7 +469,7 @@ const EditProfilePage: React.FC = () => {
   );
 };
 
-export default EditProfilePage;
+export default EditProfileMasterPage;
 
 const styles = StyleSheet.create({
   container: {

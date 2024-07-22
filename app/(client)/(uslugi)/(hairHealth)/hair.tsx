@@ -35,7 +35,7 @@ const Hair = () => {
     const handleButtonPress = () => {
         const latitude = userLocation?.coords?.latitude || null;
         const longitude = userLocation?.coords?.longitude || null; 
-        postClientFilter(selectedServiceId, genderIndex ,value*1000,rating, latitude, longitude);
+        postClientFilter(selectedServiceId, genderIndex , value*1000, rating, latitude, longitude);
         router.push('(client)/(uslugi)/(specialist)/specialist');
     };
 

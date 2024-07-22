@@ -1,198 +1,96 @@
-import React, { useCallback, useState } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity } from "react-native"; // Text komponentini import qilish
 import CustomButton from "./CustomButton";
-import AccordionCard from "./AccordionCard";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useFocusEffect } from "expo-router";
-import { clientSessionStorage } from "@/helpers/state_managment/clientsessions/clientsessions";
-import { useCommunitySlider } from "@/helpers/state_managment/communitySlider/communitySliderStore";
-import { getSeesions } from "@/helpers/api-function/clientsession/clientsession";
-
-const appointments = [
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  {
-    title: "Наращивание ресниц",
-    date: "Пн, 10 февраля 12:30 - 13:30",
-    details: "Стрижка, укладка, покраска волос",
-    master: "Натали",
-    rating: 5,
-    price: "350 000 сум",
-    location: "Яккасарайский р-н, ул. Мирабад, 62а",
-    services: ["Стрижка", "Укладка", "Покраска Волос"],
-    phone: "+998901234567",
-  },
-  // Add more objects as needed
-];
+import AccardionHistory from "@/components/accordions/accardionHistory";
+import { AntDesign, Feather, SimpleLineIcons } from "@expo/vector-icons";
+import ProfileCard from "./profileCard";
+import CenteredModal from "@/components/(modals)/modal-centered";
 
 const OrderHistory = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
-  const [openAccordionIndex, setOpenAccordionIndex] = useState<number | null>(null);
-  const { setClientSession, clientPastSession } = clientSessionStorage()
-
-  const filteredAppointments = activeTab === 'upcoming'
-    ? appointments // upcoming appointments uchun filter
-    : []; // past appointments uchun filter (haqiqiy malumotlar bilan almashtiring)
-
-  const handleAccordionToggle = (index: number) => {
-    setOpenAccordionIndex(openAccordionIndex === index ? null : index);
-  };
-
-  useFocusEffect(useCallback(() => {
-    getSeesions(setClientSession) // Fetching sessions from API (if needed)
-    setTimeout(() => {
-      console.log(clientPastSession); // Logging fetched sessions to console (if needed)
-    }, 2000)
-  }, []))
+  const [modalDelete, setModalDelete] = useState<boolean>(false);
+  const titleTex = ['Стрижка', 'Стрижка', 'Стрижка', 'укладка', "покраска волос"];
+  const deleteToggleModal = () => {
+    setModalDelete(!modalDelete)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
-      <NavigationMenu name="История сеансов" />
-      <View style={{ padding: 16 }}>
+      <View style={styles.header}>
+        <NavigationMenu name="История сеансов" />
+        <TouchableOpacity onPress={() => {
+          deleteToggleModal()
+        }}>
+          <AntDesign name="delete" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+      <View>
         <View style={styles.buttonContainer}>
-          <CustomButton title="Предстоящие" onPress={() => setActiveTab('upcoming')} active={activeTab === 'upcoming'} />
-          <CustomButton title="Прошедшие" onPress={() => setActiveTab('past')} active={activeTab === 'past'} />
-        </View>
-        {filteredAppointments && filteredAppointments.length === 0 ? (
-          <View style={styles.noAppointments}>
-            <Text>У вас пока нет записей!</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={filteredAppointments}
-            keyExtractor={(index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <AccordionCard
-                {...item}
-                isOpen={openAccordionIndex === index}
-                onToggle={() => handleAccordionToggle(index)}
-              />
-            )}
-            contentContainerStyle={styles.contentContainer}
+          <CustomButton
+            title="Предстоящие"
+            onPress={() => setActiveTab('upcoming')}
+            active={activeTab === 'upcoming'}
           />
+          <CustomButton
+            title="Прошедшие"
+            onPress={() => setActiveTab('past')}
+            active={activeTab === 'past'}
+          />
+        </View>
+        {activeTab === 'upcoming' && (
+          <ScrollView>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Написать сообщение"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                titleTex={titleTex}
+                locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+                phoneIcon={<Feather name="phone" size={24} color="white" />}
+              />
+            </AccardionHistory>
+          </ScrollView>
         )}
+
+        {activeTab === 'past' && (
+          <ScrollView>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+          </ScrollView>
+        )}
+        <CenteredModal
+          isFullBtn={true}
+          btnWhiteText={'Отмена'}
+          btnRedText={'Да'}
+          onConfirm={() => deleteToggleModal()}
+          isModal={modalDelete}
+          toggleModal={deleteToggleModal}
+        >
+          <>
+            <AntDesign name="delete" size={56} color="#9C0A35" />
+            <Text style={styles.deleteText}>
+              Вы хотите очистить все увед
+            </Text>
+          </>
+        </CenteredModal>
       </View>
     </SafeAreaView>
   );
@@ -202,27 +100,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#21212E",
+    paddingHorizontal: 10,
   },
-  container2: {
-    flex: 1,
-    padding: 16,
-  },
-  contentContainer: {
-    paddingBottom: 130, // This will ensure there's enough space at the bottom
-  },
-  scroll: {
-    flex: 1,
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   buttonContainer: {
     flexDirection: "row",
     marginBottom: 20,
     gap: 14,
   },
-  noAppointments: {
+  profileInfo: {
     flex: 1,
-    color: "white",
-    justifyContent: "center",
-    alignItems: "center",
+  },
+  masterType: {
+    fontSize: 12,
+    paddingHorizontal: 8,
+    borderColor: "#828282",
+    borderWidth: 1,
+  },
+  deleteText: {
+    color: '#494949',
+    fontSize: 12,
+    marginVertical: 20,
   },
 });
 

@@ -1,10 +1,9 @@
-
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import { Fontisto } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import CustomCheckbox1 from '@/components/checkbox/checkbox1';
 import LocationInput from '@/app/locationInput';
@@ -47,10 +46,10 @@ const Specialist = () => {
     }
   };
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       const fetchData = async () => {
-        setLoading(true);
-        try {
+        setLoading(true);   
+        try {  
           if (checked) {
             const freeTimeData = await getFreeTime();
             setClientData(freeTimeData);
@@ -62,46 +61,48 @@ const Specialist = () => {
           }
         } catch (error) {
           console.log("Error fetching client data:", error);
-        } finally {
+        } 
+        finally {
           setLoading(false);
         }
       };
       fetchData();
+      return () => null
     }, [selectedServiceId, genderIndex, value, rating, userLocation, checked, searchValue])
   );
-
-  useEffect(() => {
+  
+ useEffect(
+  useCallback(() => {
     const latitude = userLocation?.coords?.latitude || null;
     const longitude = userLocation?.coords?.longitude || null;
-    postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => {
-    });
-  },[searchValue])
+    postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => {});
+  }, [searchValue])
+);   
 
   const handleClick = () => {
     const latitude = userLocation?.coords?.latitude || null;
     const longitude = userLocation?.coords?.longitude || null;
     postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => {
       toggleBottomModal();
-    });
-  };
+    });  
+  }; 
 
-  const getFreeTime = async () => {
-    try {
-      const config = await getConfig();
-      const response = await axios.post(`${getClient_freeTime}`, {}, config ? config : {});
-      const freeTime = response.data.body;
-      console.log("Free Time Data:", freeTime);
-      return freeTime;
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
+  // useFocusEffect(
+  //   useCallback(() =>{
+  //     postClientFilter()
+  //      return () => null
+  //   },[])
+  //  )
 
+  const handleClientCardPress = (id:any) => {
+    console.log("Client ID:", clientData);
+    router.push('(client)/(uslugi)/(masterInformation)/masterInformation');
+  }; 
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
       <NavigationMenu name={`Здоровье и красота волос`} />
-      <ScrollView
+      <ScrollView 
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
       >
@@ -120,7 +121,7 @@ const Specialist = () => {
                 value={checked}
                 onValueChange={() => setChecked(!checked)}
                 title="Запись на сегодня"
-                onPress={handleFree}
+                onPress={getFreeTime}
               />
             </View>
           </View>
@@ -135,10 +136,11 @@ const Specialist = () => {
               <ActivityIndicator size="large" color="#9C0A35" />
             </View>
           ) : (
-            clientData && clientData.length > 0 ? (
+            clientData && clientData ? (
               clientData.map((client: any, index: any) => (
                 <View key={index} style={tw`mb-3`}>
                   <ClientCard
+                    id={client.id}
                     salon={client.salonName}
                     imageUrl={client.imageUrl}
                     name={client.fullName}
@@ -148,6 +150,7 @@ const Specialist = () => {
                     feedbackCount={client.feedbackCount}
                     clients={client.clientCount}
                     address={`${client.district}, ${client.street}, ${client.house}`}
+                    onPress={() => handleClientCardPress(client.id)}
                   />
                 </View>
               ))
@@ -168,8 +171,8 @@ const Specialist = () => {
               Фильтр
             </Text>
             <AccordionFree title="Пол мастера" />
-            <AccardionSliderTwo title="Рядом со мной" />
-            <AccardionSlider title="Рейтинг" />
+            <AccardionSliderTwo title="Рейтинг" />
+            <AccardionSlider title="Рядом со мной" />
             <View style={tw`mt-3`}>
               <Buttons
                 title='Сохранять'

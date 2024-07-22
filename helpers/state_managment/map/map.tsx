@@ -1,30 +1,28 @@
 import { ProductType } from "@/type/history";
 import { MapStoreTypes } from "@/type/map/map";
 import { create } from "zustand";
+import { Master } from "../masters";
 
 export const useMapStore = create<MapStoreTypes>((set) => ({
     mapData: {
         id: '',
         fullName: '',
-        clientStatus: [],
         phone: '',
-        serviceName: '',
-        servicePrice: 0,
-        serviceHour: 0,
-        serviceMinute: 0,
-        orderDate: '',
-        prePayment: 0,
-        paid: 0,
-        toPay: 0,
-        startTime: '',
-        finishTime: '',
-        notifyForHour: 0,
-        notifyForMinute: 0,
-        orderStatus: '',
-        hallStatus: '',
+        salonName: '',
+        genderName: 'FEMALE',
+        feedbackCount: 0,
+        orderCount: 0,
+        clientCount: 0,
+        lat: 0,
+        lng: 0,
+        district: '',
+        street: '',
+        house: '',
         attachmentId: '',
+        nextEntryDate: '',
+        mainPhoto: '',
     },
-    setMapData: (data: ProductType) => set({ mapData: data }),
+    setMapData: (data: Master) => set({ mapData: data }),
     categoryId: null,
     setCategoryId: (id) =>
         set((state) => ({

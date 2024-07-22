@@ -6,7 +6,6 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import ProfileImgUpload from "@/components/profile-img-upload";
 import { useFocusEffect, useNavigation } from "expo-router";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
-import SelectGender from "./selectGender";
 import ProfileScreen from "./profileScreen";
 import Buttons from "@/components/(buttons)/button";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
@@ -14,13 +13,14 @@ import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import useProfileStore from "@/helpers/state_managment/client/clientEditStore";
 import { updateClientProfile } from "@/helpers/api-function/client/clientPage";
+import SelectMasterGender from "./selectGender";
 
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
-  "(client)/(profile)/(profileEdit)/profileEdit"
+  "(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit"
 >;
 
-const ProfileEdit = () => {
+const ProfileMasterEdit = () => {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
   const { getMee, setGetMee } = useGetMeeStore();
   const {
@@ -158,7 +158,7 @@ const ProfileEdit = () => {
           />
           <ProfileScreen />
           <Text style={styles.genderText}>Ваш пол</Text>
-          <SelectGender />
+          <SelectMasterGender />
         </View>
       </ScrollView>
       <View style={{margin: 16}}>
@@ -168,7 +168,7 @@ const ProfileEdit = () => {
   );
 };
 
-export default ProfileEdit;
+export default ProfileMasterEdit;
 
 const styles = StyleSheet.create({
   container: {

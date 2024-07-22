@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -9,26 +9,22 @@ import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import { mapCustomStyle } from '@/type/map/map';
 import { useMapStore } from '@/helpers/state_managment/map/map';
+import moment from 'moment';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const MasterLocations = () => {
-    const { userLocation, setUserLocation } = useGetMeeStore();
-    const { mapData, setMapData } = useMapStore();
+    const { mapData } = useMapStore();
 
-    useFocusEffect(
-        useCallback(() => {
-            getUserLocation(setUserLocation)
-            return () => { }
-        }, [])
-    )
+    console.log(mapData);
 
-    if (!userLocation || !userLocation.coords) {
+
+    if (!mapData) {
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView>
                     <View style={styles.loading}>
-                        <Text>Loading...</Text>
+                        <ActivityIndicator size="large" color={"#888"} />
                     </View>
                 </ScrollView>
             </SafeAreaView>
@@ -47,25 +43,35 @@ const MasterLocations = () => {
                         customMapStyle={mapCustomStyle}
                         style={styles.map}
                         initialRegion={{
-                            latitude: userLocation.coords.latitude,
-                            longitude: userLocation.coords.longitude,
+                            latitude: mapData.lat ? mapData.lat : 0,
+                            longitude: mapData.lng ? mapData.lng : 0,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         }}
                     >
                         <Marker
                             coordinate={{
-                                latitude: 37.78825,
-                                longitude: -122.4324,
+                                latitude: mapData.lat ? mapData.lat : 0,
+                                longitude: mapData.lng ? mapData.lng : 0,
                             }}
-                            title={"Marker Title"}
-                            description={"Marker Description"}
+                            title={mapData.fullName}
+                            description={mapData.fullName}
                         />
                     </MapView>
                 </View>
             </ScrollView>
             <View style={{ position: 'absolute', bottom: 0, padding: 20, width: '100%' }}>
-                <ClientCard imageUrl='../../../assets/imges/logo.png' feedbackCount={3} name='few' masterType='few' orders={3} clients={2} address='ferwfw' />
+                <ClientCard
+                    imageUrl={mapData.attachmentId}
+                    zaps={moment().format("YYYY-MM-DD") === mapData.nextEntryDate ? "Сегодня" : moment(mapData.nextEntryDate).format("dd, DD MMM")}
+                    feedbackCount={mapData.feedbackCount}
+                    name={mapData.fullName}
+                    masterType={mapData.genderName === "MALE" ? "Мужской мастер" : mapData.genderName === "FEMALE" ? "Женский мастер" : "Не найдено"}
+                    orders={mapData.orderCount}
+                    clients={mapData.clientCount}
+                    address={`${mapData.district}, ${mapData.street}`}
+                    mapStyle={true}
+                />
             </View>
         </SafeAreaView>
     );
