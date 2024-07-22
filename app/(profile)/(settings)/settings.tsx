@@ -48,7 +48,8 @@ const data: { icon: any, label: string, screen: string }[] = [
         icon: "user",
         label: "Личные данные",
         screen:
-            "(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData",
+            // "(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData",
+            "(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit"
     },
 ]
 
