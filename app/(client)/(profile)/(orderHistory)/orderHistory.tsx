@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text } from "react-native"; // Text komponentini import qilish
+import { View, StyleSheet, Text, ScrollView } from "react-native"; // Text komponentini import qilish
 import CustomButton from "./CustomButton";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -32,6 +32,21 @@ const OrderHistory = () => {
           />
         </View>
         {activeTab === 'upcoming' && (
+          <ScrollView>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
+          </AccardionHistory>
           <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
             <ProfileCard
               masterName="Натали"
@@ -46,9 +61,6 @@ const OrderHistory = () => {
               phoneIcon={<Feather name="phone" size={24} color="white" />}
             />
           </AccardionHistory>
-        )}
-
-        {activeTab === 'past' && (
           <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
             <ProfileCard
               masterName="Натали"
@@ -56,11 +68,303 @@ const OrderHistory = () => {
               masterGender="Женский мастер"
               ratingnumber={5}
               money="100 000 сум"
-              buttonName="Оставить отзыв"
+              buttonName="Написать сообщение"
               Adress="Яккасарайский р-н, ул. Мирабад, 62а"
-              deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
             />
           </AccardionHistory>
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
+          </AccardionHistory>
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
+          </AccardionHistory>
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
+          </AccardionHistory>
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
+          </AccardionHistory>
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
+          </AccardionHistory>
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
+          </AccardionHistory>
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
+          </AccardionHistory>
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
+          </AccardionHistory>
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
+          </AccardionHistory>
+          <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <ProfileCard
+              masterName="Натали"
+              salonName="Beauty Wave"
+              masterGender="Женский мастер"
+              ratingnumber={5}
+              money="100 000 сум"
+              buttonName="Написать сообщение"
+              Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+              titleTex={titleTex}
+              locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
+              phoneIcon={<Feather name="phone" size={24} color="white" />}
+            />
+          </AccardionHistory>
+          </ScrollView>
+        )}
+
+        {activeTab === 'past' && (
+          <ScrollView>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistory>
+          </ScrollView>
         )}
       </View>
     </SafeAreaView>
