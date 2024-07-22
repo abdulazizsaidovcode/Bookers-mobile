@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Image, Pressable, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -12,6 +12,7 @@ import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery'
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import Toast from 'react-native-simple-toast'
+import { useFocusEffect } from 'expo-router';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(settings)/(settings-gallery)/settings-gallery-main'>;
 const { width, height } = Dimensions.get('window');
@@ -24,9 +25,11 @@ const SettingsGalleryMain = () => {
     const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
     const [showAllAttachments, setShowAllAttachments] = useState(false); // New state for attachment condition
 
-    useEffect(() => {
-        fetchData(setData);
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            fetchData(setData);
+        }, [])
+    );
 
     const handlePress = (id: number) => {
         if (showCheckboxes) {
@@ -107,7 +110,7 @@ const SettingsGalleryMain = () => {
                                                 }
                                                 {sortedAttachments.length < 4 &&
                                                     Array.from({ length: 4 - sortedAttachments.length }).map((_, placeholderIndex) => (
-                                                        <Pressable key={placeholderIndex} style={[styles.imageContainer, selectedItemId === item.id && styles.selectedAlbum]}>
+                                                        <Pressable onPress={() => handlePress(item.id)} key={placeholderIndex} style={[styles.imageContainer, selectedItemId === item.id && styles.selectedAlbum]} >
                                                             <Image
                                                                 source={require('@/assets/images/defaultImg.jpeg')}
                                                                 style={styles.image}

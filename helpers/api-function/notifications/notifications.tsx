@@ -85,14 +85,38 @@ export const editCancelOrder = async (isActive: boolean | undefined, text: strin
     }
 }
 
-export const editChangingOrder = async (isActive: boolean | undefined, text: string | undefined, setHasChanges: (val: boolean) => void, goBack: void) => {
+export const editChangingOrder = async (isActive: boolean | undefined, text: string | undefined, setHasChanges: (val: boolean) => void, goBack: () => void) => {
+    if (text && !text.includes('(дата сеанса)')) {
+        Toast.show('Поместите слово (дата сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(время сеанса)')) {
+        Toast.show('Поместите слово (время сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(процедура)')) {
+        Toast.show('Поместите слово (процедура) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(адреес)')) {
+        Toast.show('Поместите слово (адреес) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(дата новый сеанса)')) {
+        Toast.show('Поместите слово (дата новый сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(время новый сеанса)')) {
+        Toast.show('Поместите слово (время новый сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
     const payload = { isActive, text }
     try {
         const config = await getConfig()
         const { data } = await axios.put(notifications_changing_edit, payload, config ? config : {});
         if (data.success) {
             setHasChanges(false);
-            goBack
+            goBack()
             Toast.show('Изменение записи успешно обновлено.', Toast.LONG)
         }
     } catch (error) {
@@ -101,13 +125,17 @@ export const editChangingOrder = async (isActive: boolean | undefined, text: str
     }
 }
 
-export const editFeedbeckOrder = async (text: string | undefined, setHasChanges: (val: boolean) => void, goBack: void) => {
+export const editFeedbeckOrder = async (text: string | undefined, setHasChanges: (val: boolean) => void, goBack: () => void) => {
+    if (text && !text.includes('(линк на отзыв)')) {
+        Toast.show('Поместите слово (линк на отзыв) куда-нибудь', Toast.LONG)
+        return
+    }
     try {
         const config = await getConfig()
         const { data } = await axios.put(notifications_feedback_edit, { text }, config ? config : {});
         if (data.success) {
             setHasChanges(false);
-            goBack
+            goBack()
             Toast.show('Запрос отзыва успешно обновлено.', Toast.LONG)
         }
     } catch (error) {
@@ -116,13 +144,14 @@ export const editFeedbeckOrder = async (text: string | undefined, setHasChanges:
     }
 }
 
-export const editAppoinmentOrder = async (text: string | undefined, hour: number | undefined, minute: number | undefined, isActive: boolean | undefined, goBack: void, setHasChanges: (val: boolean) => void) => {
+export const editAppoinmentOrder = async (text: string | undefined, hour: number | undefined, minute: number | undefined, isActive: boolean | undefined, goBack: () => void, setHasChanges: (val: boolean) => void) => {
+    
     try {
         const config = await getConfig()
         const { data } = await axios.put(`${notifications_appointment_edit}?hour=${hour}&minute=${minute}&text=${text}&active=${isActive}`, {}, config ? config : {});
         if (data.success) {
             Toast.show('Ваш напоминание о встрече успешно обновлено.', Toast.LONG)
-            goBack
+            goBack()
             setHasChanges(false)
         }
     } catch (error) {
@@ -131,13 +160,29 @@ export const editAppoinmentOrder = async (text: string | undefined, hour: number
     }
 }
 
-export const editWindowOrder = async (text: string | undefined, setHasChanges: (val: boolean) => void, goBack: void) => {
+export const editWindowOrder = async (text: string | undefined, setHasChanges: (val: boolean) => void, goBack: () => void) => {
+    if (text && !text.includes('(дата сеанса)')) {
+        Toast.show('Поместите слово (дата сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(время сеанса)')) {
+        Toast.show('Поместите слово (время сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(адреес)')) {
+        Toast.show('Поместите слово (адреес) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(процедура)')) {
+        Toast.show('Поместите слово (процедура) куда-нибудь', Toast.LONG)
+        return
+    }
     try {
         const config = await getConfig()
         const { data } = await axios.put(notifications_window_edit, { text }, config ? config : {});
         if (data.success) {
             Toast.show('Ваш запрос окошка успешно обновлено.', Toast.LONG)
-            goBack
+            goBack()
             setHasChanges(false)
         }
     } catch (error) {

@@ -8,7 +8,9 @@ export interface GalleryData {
         {
             attachmentId: string,
             main: boolean,
-            newStatus: boolean
+            newStatus: boolean,
+            attachmentStatus: string,
+            message: string | null
         },
     ]
 }
