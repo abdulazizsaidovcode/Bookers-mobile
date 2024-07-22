@@ -97,9 +97,9 @@ const WorkMain = () => {
             icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
             title="Время работы"
             subTitle={
-              (timeData && timeData.from !== undefined && timeData.end !== undefined) ? 
-              `From ${timeData.from !== undefined ? timeData.from : "00:00"}  to ${
-              timeData.end !== undefined ? timeData.end : "00:00"
+              (timeData && timeData.from && timeData.end) ? 
+              `From ${timeData.from ? timeData.from : "00:00"}  to ${
+              timeData.end ? timeData.end : "00:00"
             }` : "Рабочее время не настроено!"
             }
           route={() => navigation.navigate("(free)/(work-grafic)/workTime")}

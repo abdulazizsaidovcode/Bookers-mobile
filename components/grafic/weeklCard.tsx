@@ -10,7 +10,7 @@ interface WeeklCardProps {
 const WeeklCard: React.FC<WeeklCardProps> = ({ title, onSelect, isSelected }) => {
     return (
         <TouchableOpacity onPress={onSelect} style={styles.container}>
-            <Text style={{ color: isSelected ? '#9c0a35' : 'white', fontSize: 16 }}>{title}</Text>
+            <Text style={{ color: isSelected ? '#9c0a35' : 'white', fontSize: 13 }}>{title}</Text>
         </TouchableOpacity>
     );
 };
