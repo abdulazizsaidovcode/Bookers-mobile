@@ -78,21 +78,26 @@ const WorkMainEdit = () => {
         <WorkMainCardEdit
           icon={<AntDesign name="calendar" size={24} color="#9C0A35" />}
           title="График работы"
-          subTitle={
-            weekData
-              .filter((item: any) => item.active) // faqat active elementlarni filter qilamiz
-              .map((item: any) => item.dayName.substring(0, 3)) // har bir active elementning birinchi 3 harfini chiqaramiz
-              .join(", ") // elementlarni vergul bilan ajratamiz
-          }
+          subTitle={`${
+            weekData.length !== 0
+              ? weekData
+                  .filter((item: any) => item.active) // faqat active elementlarni filter qilamiz
+                  .map((item: any) => item.dayName.substring(0, 3)) // har bir active elementning birinchi 3 harfini chiqaramiz
+                  .join(", ") // elementlarni vergul bilan ajratamiz
+              : "Рабочие дни недели не настроены!"
+          }`}
           navigation={() => navigation.navigate("(free)/(work-grafic-edit)/workGraffic")}
         />
 
         <WorkMainCardEdit
           icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
           title="Время работы"
-          subTitle={`From ${timeData ? timeData.from : "00:00"}  to ${
-            timeData ? timeData.end : "00:00"
-          }`}
+          subTitle={
+            (timeData && timeData.from && timeData.end) ? 
+            `From ${timeData.from ? timeData.from : "00:00"}  to ${
+            timeData.end ? timeData.end : "00:00"
+          }` : "Рабочее время не настроено!"
+          }
           navigation={() => navigation.navigate("(free)/(work-grafic-edit)/workTime")}
         />
       </View>

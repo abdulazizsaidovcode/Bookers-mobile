@@ -16,7 +16,6 @@ const OrderHistory = () => {
   const deleteToggleModal = () => {
     setModalDelete(!modalDelete)
   }
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />

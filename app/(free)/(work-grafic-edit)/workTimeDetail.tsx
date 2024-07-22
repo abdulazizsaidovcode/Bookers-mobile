@@ -12,12 +12,14 @@ import WeeklCard from "@/components/grafic/weeklCard";
 import Buttons from "@/components/(buttons)/button";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import { postWorkTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import { putWorkTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import { useFocusEffect, useNavigation } from "expo-router";
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/client-list'>;
-
+type SettingsScreenNavigationProp = NavigationProp<
+  RootStackParamList,
+  "(free)/(work-grafic-edit)/workTimeDetail"
+>;
 
 const timeList = [
   "08:00",
@@ -54,14 +56,13 @@ const timeList = [
   "23:30",
 ];
 
-const TimeWorkEdit: React.FC = () => {
+const TimeWorkDetail: React.FC = () => {
   const { weekData, timeData } = graficWorkStore();
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(true);
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   useFocusEffect(
-
     useCallback(() => {
       if (timeData && timeData.from && timeData.end) {
         const fromTime = timeData.from.substring(0, 5);
@@ -70,16 +71,16 @@ const TimeWorkEdit: React.FC = () => {
           setSelectedTimeSlots([fromTime, endTime]);
         }
       }
-    return () => {}
-  }, [timeData])
-  )
-useFocusEffect(
+      return () => {};
+    }, [timeData])
+  );
 
-  useCallback(() => {
-    setIsDisabled(selectedTimeSlots.length < 2);
-    return () => {}
-  }, [selectedTimeSlots])
-)
+  useFocusEffect(
+    useCallback(() => {
+      setIsDisabled(selectedTimeSlots.length < 2);
+      return () => {};
+    }, [selectedTimeSlots])
+  );
 
   const toggleTimeSlotSelection = (time: string) => {
     if (selectedTimeSlots.includes(time)) {
@@ -87,7 +88,10 @@ useFocusEffect(
         prevSelectedTimeSlots.filter((slot) => slot !== time)
       );
     } else if (selectedTimeSlots.length < 2) {
-      setSelectedTimeSlots((prevSelectedTimeSlots) => [...prevSelectedTimeSlots, time]);
+      setSelectedTimeSlots((prevSelectedTimeSlots) => [
+        ...prevSelectedTimeSlots,
+        time,
+      ]);
     }
   };
 
@@ -112,7 +116,7 @@ useFocusEffect(
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
       <View style={{ paddingLeft: 10 }}>
-      <NavigationMenu name={`Время работы`} />
+        <NavigationMenu name={`Время работы`} />
       </View>
       <ScrollView style={{ marginTop: 15 }}>
         <View>
@@ -178,7 +182,7 @@ useFocusEffect(
         <Buttons
           title="Продолжить"
           onPress={() =>
-            postWorkTime(
+            putWorkTime(
               +selectedTimeSlots[0].substring(0, 1) === 0
                 ? +selectedTimeSlots[0].substring(1, 2)
                 : +selectedTimeSlots[0].substring(0, 2),
@@ -191,7 +195,7 @@ useFocusEffect(
               +selectedTimeSlots[1].substring(3, 4) === 0
                 ? +selectedTimeSlots[1].substring(3, 5)
                 : +selectedTimeSlots[1].substring(3, 5),
-                () => navigation.navigate("(free)/(work-grafic)/workMain")
+              () => navigation.navigate("(free)/(work-grafic-edit)/workMain")
             )
           }
           isDisebled={!isDisabled}
@@ -201,7 +205,7 @@ useFocusEffect(
   );
 };
 
-export default TimeWorkEdit;
+export default TimeWorkDetail;
 
 const styles = StyleSheet.create({
   container: {

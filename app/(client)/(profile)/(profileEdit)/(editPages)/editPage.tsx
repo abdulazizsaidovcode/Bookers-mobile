@@ -243,7 +243,9 @@ const EditProfilePage: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
+      <View style={{ paddingLeft: 10 }}>
       <NavigationMenu name={`${routeName?.value ?? "Edit"}`} />
+      </View>
       {routeName?.id === 1 ? (
         <View style={styles.containerIn}>
           <View>

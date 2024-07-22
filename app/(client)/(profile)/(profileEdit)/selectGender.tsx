@@ -16,10 +16,10 @@ const radioProps = [
 const SelectGender = () => {
   const { getMee } = useGetMeeStore();
   const {updateProfileField} = useProfileStore()
-  const [genderIndex, setGenderIndex] = useState<string>(getMee && getMee.gender ? getMee.gender : "");
+  const [genderIndex, setGenderIndex] = useState<boolean>(getMee && getMee.gender ? getMee.gender === "MALE" : getMee.gender === "FEMALE");
 
-  const onPressRadioButton = (key: string) => {
-    setGenderIndex(key);
+  const onPressRadioButton = (key: boolean) => {
+    setGenderIndex(key)
     updateProfileField("gender", key)
   };
 
@@ -31,8 +31,8 @@ const SelectGender = () => {
             <RadioButtonInput
               obj={obj}
               index={i}
-              isSelected={genderIndex === obj.value}
-              onPress={onPressRadioButton}
+              isSelected={genderIndex === obj.isTrue}
+              onPress={ () => onPressRadioButton(obj.isTrue)}
               buttonInnerColor={"#9C035A"}
               buttonOuterColor={"#9C035A"}
               buttonSize={15}

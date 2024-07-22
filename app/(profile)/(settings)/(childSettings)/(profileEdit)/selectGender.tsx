@@ -9,7 +9,7 @@ import useGetMeeStore from "@/helpers/state_managment/getMee";
 import useProfileStore from "@/helpers/state_managment/client/clientEditStore";
 
 const radioProps = [
-  { label: "Erkak", value: "MALE", isTrue: true },
+  { label: "Erkak", value: "MALE", isTrue: false },
   { label: "Ayol", value: "FEMALE", isTrue: false },
 ];
 

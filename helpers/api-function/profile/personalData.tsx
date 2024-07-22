@@ -78,9 +78,7 @@ export const getAge = async (setData: (data: any) => void) => {
     const response = await axios.get(`${base_url}age`, config ? config : {});
 
     if (response.data.success) {
-      setData(response.data.boy.map((item: any) => {
-        return { key: item.id, value: item.ageRange }
-      }));
+      setData(response.data.body);
     } else {
       setData([]);
     }
@@ -103,7 +101,7 @@ export const getAgeId = async (id: string | number, setData: (data: any | null) 
     const response = await axios.get(`${base_url}age/${id}`, config ? config : {});
 
     if (response.data.success) {
-      setData({ key: response.data.body.id, value: response.data.body.ageRange });
+      setData(response.data.body);
     } else {
       setData([]);
     }

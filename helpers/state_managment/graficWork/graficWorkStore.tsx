@@ -16,6 +16,8 @@ interface graficWorkData {
     setStartTime: (val: string) => void;
     endTime: string,
     setEndTime: (val: string) => void;
+    selectedTimeSlots:string[];
+    setSelectedTimeSlots: (data: string[]) => void;
   }
 
   const graficWorkStore = create<graficWorkData>((set) => ({
@@ -32,7 +34,9 @@ interface graficWorkData {
     weekData: [],
     setWeekData: (data: weekList[]) => set({weekData: data}),
     timeData: [],
-    setTimeData: (data: any) => set({timeData: data})
+    setTimeData: (data: any) => set({timeData: data}),
+    selectedTimeSlots: [],
+    setSelectedTimeSlots: (data: string[]) => set({selectedTimeSlots: data})
   }));
   
   export default graficWorkStore;
