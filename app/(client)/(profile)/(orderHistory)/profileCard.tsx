@@ -1,184 +1,262 @@
-import { getFile } from "@/helpers/api";
-import { getAddress } from "@/helpers/api-function/wepPage/wepPage";
-import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
-import { useFocusEffect } from "expo-router";
-import React, { useCallback } from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
+import CenteredModal from '@/components/(modals)/modal-centered'
+import { AntDesign } from '@expo/vector-icons'
+import Textarea from '@/components/select/textarea'
 
-const ClientProfileCard: React.FC = () => {
-  const { getme, specialization, setAddress, address } = webPageStore();
+interface IProps {
+    masterName: string,
+    salonName: string,
+    masterGender: string,
+    ratingnumber: number,
+    money: string,
+    titleTex?: string[], // majburiy emas
+    buttonName: string,
+    Adress: string
+    locationIcon?: React.ReactNode
+    phoneIcon?: React.ReactNode
+    deleteIcon?: React.ReactNode
+}
 
-  useFocusEffect(
+const ProfileCard: React.FC<IProps> = ({
+    masterName,
+    salonName,
+    masterGender,
+    ratingnumber,
+    money,
+    titleTex = [],
+    buttonName,
+    Adress,
+    locationIcon,
+    phoneIcon,
+    deleteIcon }) => {
+    const [deleteModal, setDeleteModal] = useState<boolean>(false);
+    const [ratingModal, setRatingModal] = useState<boolean>(false);
+    const [textAreaValue, setTextAreaValue] = useState('')
+    const [rating, setRating] = useState<number>(0);
+    const handleRating = (value: number) => setRating(value)
+    const deleteToggleModal = () => {
+        setDeleteModal(!deleteModal);
+    };
+    const ratingToggleModal = () => {
+        setRatingModal(!ratingModal);
+    };
+    const handleChange = (e: string) => {
+        const trimmedValue = e.trim();
+        const regex = /^[a-zA-Z0-9а-яА-ЯёЁ.,!?;:()\s]+$/
 
-    useCallback(() => {
-      getAddress(setAddress)
-      return () => {}
-    }, [])
-  )
-
-
-  // Function to generate star rating
-  const generateStars = (count: number) => {
-    let stars = '';
-    for (let i = 0; i < count; i++) {
-      stars += '★';
-    }
-    for (let i = count; i < 5; i++) {
-      stars += '☆';
-    }
-    return stars;
-  };
-
-  return (
-    <View style={styles.card}>
-      <View style={styles.header}>
-        <Image
-          source={{
-            uri: getme
-              ? getme.attachmentId
-                ? getFile + getme.attachmentId
-                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-              : "noData"
-          }} // Profil rasm manzili
-          style={styles.avatar}
-        />
-        <View style={styles.headerInfo}>
-          <View style={styles.headerInfoin}>
-            <Text style={styles.name}>
-              {getme && getme.firstName ? getme.firstName : "No data"}
-            </Text>
-            <View style={styles.tag}>
-              <Text style={styles.tagText}>Beauty Wave</Text>
+        if (regex.test(trimmedValue) && !/\s\s+/.test(e)) setTextAreaValue(e)
+        else if (e === '') setTextAreaValue('')
+    };
+    return (
+        <View style={styles.card}>
+            <View style={styles.profileContainer}>
+                <View style={styles.profileRow}>
+                    <Image source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }} style={styles.profileImage} />
+                    <View>
+                        <View style={styles.profileDetails}>
+                            <Text style={styles.profileName}>{masterName}</Text>
+                            <Text style={styles.salonName}>{salonName}</Text>
+                        </View>
+                        <Text style={styles.serviceName}>{masterGender}</Text>
+                    </View>
+                </View>
+                <View style={styles.feedbackContainer}>
+                    <Text style={styles.feedbackStars}>{'⭐'.repeat(ratingnumber > 5 ? 5 : ratingnumber)}</Text>
+                    <Text style={styles.price}>{money}</Text>
+                </View>
             </View>
-          </View>
-          <Text style={styles.role}>
-            {getme && getme.gender
-              ? getme.gender === "MALE"
-                ? "Erkak master"
-                : getme.gender === "FEMALE"
-                ? "Женский мастер"
-                : ""
-              : "No data"}
-          </Text>
-          <Text style={styles.phone}>
-            {getme && getme.phoneNumber ? getme.phoneNumber : "No data"}
-          </Text>
-        </View>
-        <View style={styles.rating}>
-          <Text style={styles.stars}>
-            {getme && getme.starCount ? generateStars(getme.starCount) : generateStars(0)}
-          </Text>
-          <Text style={styles.orderInfo}>
-            {getme && getme.orderCount ? getme.orderCount : "No data"} заказа,{" "}
-            {getme && getme.clientCount ? getme.clientCount : "No data"} клиентов
-          </Text>
-        </View>
-      </View>
-      <View style={styles.body}>
-        <View style={styles.buttons}>
-          {
-            specialization ? specialization.map((item: any) => 
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>{item.name}</Text>
-          </TouchableOpacity>
-            ) : 
-            <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Malumot topilmadi</Text>
-          </TouchableOpacity>
+            <View style={styles.titleContainer}>
+                {titleTex.map((title, index) => (
+                    <Text key={index} style={styles.titleText}>{title}</Text>
+                ))}
+            </View>
+            <Text style={styles.address}>{Adress}</Text>
+            <View style={styles.iconContainer}>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.messageButton}
+                    onPress={ratingToggleModal}
+                >
+                    <Text style={styles.messageButtonText}>{buttonName}</Text>
+                </TouchableOpacity>
+                {locationIcon && (
+                    <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
+                        {locationIcon}
+                    </TouchableOpacity>
+                )}
+                {phoneIcon && (
+                    <TouchableOpacity activeOpacity={0.7} style={styles.iconButton}>
+                        {phoneIcon}
+                    </TouchableOpacity>
+                )}
+                {deleteIcon && (
+                    <TouchableOpacity activeOpacity={0.7} style={styles.iconButton} onPress={deleteToggleModal}>
+                        {deleteIcon}
+                    </TouchableOpacity>
+                )}
+            </View>
+            <CenteredModal
+                isFullBtn={true}
+                btnWhiteText={'Отмена'}
+                btnRedText={'Да'}
+                isModal={deleteModal}
+                toggleModal={deleteToggleModal}
+            >
+                <>
+                    <AntDesign name="delete" size={56} color="#9C0A35" />
+                    <Text style={styles.deleteText}>
+                        Вы хотите очистить все уведомлении?
+                    </Text>
+                </>
+            </CenteredModal>
+            <CenteredModal
+                isFullBtn={false}
+                btnWhiteText={'Отправить'}
+                btnRedText={'Закрыть'}
+                isModal={ratingModal}
+                toggleModal={ratingToggleModal}
+            >
+                <>
+                    <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold', marginBottom: 30 }}>Оцените работу мастера!</Text>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.stars}>
+                            {Array(5).fill(0).map((_, index) => (
+                                <TouchableOpacity activeOpacity={.7} key={index} onPress={() => handleRating(index + 1)}>
+                                    <AntDesign
+                                        name={index < rating ? "star" : "staro"}
+                                        size={30}
+                                        color="#B00000"
+                                        style={styles.star}
+                                    />
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    </View>
+                    <Textarea
+                        placeholder='Оставьте отзыв'
+                        value={textAreaValue}
+                        onChangeText={e => handleChange(e)}
+                    />
 
-          } 
+                </>
+            </CenteredModal>
         </View>
-        {/* <Text style={styles.address}>{(address.homeNumber && address.street) ? `Street: ${address.street}, home: ${address.homeNumber} ` : "Address is not found"}</Text> */}
-      </View>
-    </View>
-  );
-};
+    )
+}
+
+export default ProfileCard
 
 const styles = StyleSheet.create({
-  card: {
-    margin: 5
-    
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginBottom: 12,
-  },
-  headerInfo: {
-    flex: 1,
-    marginLeft: 10,
-  },
-  headerInfoin: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 10,
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#000",
-  },
-  tag: {
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: "#828282",
-    paddingVertical: 2,
-    paddingHorizontal: 5,
-    marginTop: 2,
-  },
-  tagText: {
-    color: "#4F4F4F",
-    fontSize: 11,
-  },
-  rating: {
-    alignItems: "flex-end",
-  },
-  stars: {
-    color: "red",
-    fontSize: 20,
-  },
-  orderInfo: {
-    color: "#4F4F4F",
-    fontSize: 10,
-  },
-  body: {
-    marginTop: 15,
-  },
-  role: {
-    color: "#4F4F4F",
-    fontSize: 13,
-    marginBottom: 5,
-  },
-  phone: {
-    color: "#4F4F4F",
-    fontSize: 13,
-    marginBottom: 15,
-  },
-  buttons: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 15,
-  },
-  button: {
-    borderWidth: 1,
-    borderColor: "#828282",
-    borderRadius: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-  },
-  buttonText: {
-    color: "#4F4F4F",
-    fontSize: 14,
-  },
-  address: {
-    color: "#4F4F4F",
-    fontSize: 14,
-  },
+    card: {
+        marginBottom: 16,
+    },
+    profileContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 16,
+    },
+    profileRow: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    profileImage: {
+        width: 64,
+        height: 64,
+        borderRadius: 32,
+        marginRight: 16,
+    },
+    profileDetails: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 5,
+    },
+    profileName: {
+        fontSize: 14,
+        fontWeight: '600',
+    },
+    salonName: {
+        fontSize: 8,
+        color: '#666',
+        borderColor: "#828282",
+        borderRadius: 5,
+        borderWidth: 1,
+        marginRight: 16,
+        padding: 4,
+    },
+    serviceName: {
+        fontSize: 12,
+        color: '#4F4F4F',
+    },
+    feedbackContainer: {
+        alignItems: 'flex-end',
+    },
+    feedbackStars: {
+        fontSize: 10,
+        color: '#9C0A35',
+    },
+    price: {
+        fontSize: 12,
+        color: '#9C0A35',
+        marginTop: 8,
+        fontWeight: '600',
+    },
+    titleContainer: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        gap: 10,
+    },
+    titleText: {
+        fontSize: 12,
+        paddingHorizontal: 6,
+        paddingVertical: 4,
+        borderColor: '#828282',
+        color: '#828282',
+        borderRadius: 5,
+        borderWidth: 1,
+    },
+    address: {
+        fontSize: 12,
+        color: '#828282',
+        marginTop: 10,
+    },
+    iconContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 16,
+    },
+    messageButton: {
+        paddingHorizontal: 30,
+        paddingVertical: 8,
+        backgroundColor: '#9C0A35',
+        borderRadius: 5,
+    },
+    messageButtonText: {
+        color: 'white',
+    },
+    iconButton: {
+        padding: 8,
+        borderRadius: 50,
+        backgroundColor: '#9C0A35',
+        marginRight: 8,
+    },
+    deleteText: {
+        color: '#494949',
+        fontSize: 12,
+        marginVertical: 20,
+    },
+    modalContainer: {
+        borderRadius: 10,
+        alignItems: 'center',
+        marginBottom: 20
+    },
+    stars: {
+        flexDirection: 'row',
+        marginBottom: 20
+    },
+    star: {
+        marginHorizontal: 5,
+    },
 });
-
-export default ClientProfileCard;

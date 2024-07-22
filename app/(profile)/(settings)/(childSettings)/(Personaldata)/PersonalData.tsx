@@ -49,7 +49,7 @@ const EditProfile: React.FC = () => {
   const [name, setName] = useState<any>(getMee?.firstName);
   const [surname, setSurname] = useState<any>(getMee?.lastName);
   const [phone, setPhone] = useState<any>(formatPhoneNumber(getMee.phoneNumber));
-  const [nickname, setNickname] = useState<any>(getMee.nickname);
+  const [nickname, setNickname] = useState<any>(getMee.nickName);
   const [gender, setGender] = useState<any>(null);
   const [age, setAge] = useState<any | null>(null);
   const [region, setRegion] = useState<any | null>(null);
@@ -92,7 +92,7 @@ const EditProfile: React.FC = () => {
       setSurname(getMee?.lastName)
       setGender(getMee?.gender)
       setPhone(formatPhoneNumber(getMee.phoneNumber))
-      setNickname(getMee?.nickname)
+      setNickname(getMee?.nickName)
       setTelegram(getMee?.telegram)
       setInstagram(getMee?.instagram)
       return () => {}
@@ -153,7 +153,7 @@ const EditProfile: React.FC = () => {
               {getMee.firstName} {getMee.lastName}
             </Text>
             <Text style={styles.profilePhone}>{getMee.phoneNumber}</Text>
-            <Text style={styles.profileUsername}>{getMee.nickname}</Text>
+            <Text style={styles.profileUsername}>{getMee.nickName}</Text>
           </View>
         </View>
 

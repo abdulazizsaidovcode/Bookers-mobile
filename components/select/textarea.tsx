@@ -13,6 +13,7 @@ const Textarea = ({value, onChangeText, placeholder}: {value?: string, onChangeT
             style={[styles.textArea, {height}]}
             multiline
             placeholder={placeholder ? placeholder : ''}
+            placeholderTextColor='#828282'
             onContentSizeChange={handleContentSizeChange}
             onChangeText={onChangeText}
         />
@@ -31,6 +32,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         textAlignVertical: 'top', // Align text to the top
     },
+    
 });
 
 export default Textarea;
