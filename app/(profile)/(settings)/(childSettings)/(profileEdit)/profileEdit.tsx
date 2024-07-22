@@ -12,7 +12,7 @@ import { getUser } from "@/helpers/api-function/getMe/getMee";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import useProfileStore from "@/helpers/state_managment/client/clientEditStore";
-import { updateClientProfile } from "@/helpers/api-function/client/clientPage";
+import { updateClientProfile, updateMasterProfile } from "@/helpers/api-function/client/clientPage";
 import SelectMasterGender from "./selectGender";
 
 type SettingsScreenNavigationProp = NavigationProp<
@@ -28,15 +28,17 @@ const ProfileMasterEdit = () => {
     attachmentId,
     districtId,
     firstName,
-    gender,
+    gender1,
     job,
+    ageId,
     lastName,
     nickName,
     phoneNumber,
     telegram,
+    instagram,
     regionId,
     setAttachmentId,
-    setProfile
+    setProfile,
   } = useProfileStore();
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -49,8 +51,6 @@ const ProfileMasterEdit = () => {
 
   console.log(getMee);
 
-
-
   useFocusEffect(
     useCallback(() => {
       setIsDisabled(true);
@@ -59,7 +59,7 @@ const ProfileMasterEdit = () => {
       attachmentId,
       districtId,
       firstName,
-      gender,
+      gender1,
       job,
       lastName,
       nickName,
@@ -75,6 +75,7 @@ const ProfileMasterEdit = () => {
       lastName: null,
       birthDate: null,
       job: null,
+      ageId: null,
       phoneNumber: null,
       regionId: null,
       districtId: 1,
@@ -83,12 +84,11 @@ const ProfileMasterEdit = () => {
       attachmentId: null,
       distiricyIdData: null,
       regionIdData: null,
-    })
-  }
+    });
+  };
 
   const putPofile = () => {
     const data = {
-      id: getMee && getMee.id ? getMee.id : null,
       nickName: nickName
         ? nickName
         : getMee && getMee.nickName
@@ -109,17 +109,27 @@ const ProfileMasterEdit = () => {
         : getMee && getMee.phoneNumber
         ? getMee.phoneNumber
         : null,
-      birthDate: birthDate
-        ? birthDate
-        : getMee && getMee.birthDate
-        ? getMee.birthDate
+      ageId: ageId
+        ? ageId
+        : getMee && getMee.ageId
+        ? getMee.ageId
         : null,
-      gender: gender ? gender : true,
+      gender: gender1 ? gender1 : "MALE",
       telegram: telegram
         ? telegram
         : getMee && getMee.telegram
         ? getMee.telegram
         : null,
+      instagram: instagram
+        ? instagram
+        : getMee && getMee.instagram
+        ? getMee.instagram
+        : null,
+      regionId: regionId
+        ? regionId
+        : getMee && getMee.regionId
+        ? getMee.regionId
+        : 0,
       districtId: districtId
         ? districtId
         : getMee && getMee.districtId
@@ -130,12 +140,15 @@ const ProfileMasterEdit = () => {
         : getMee && getMee.attachmentId
         ? getMee.attachmentId
         : null,
-      job: job ? job : getMee && getMee.job ? getMee.job : null,
+      // job: job ? job : getMee && getMee.job ? getMee.job : null,
+      starCount: 0,
+      clientCount: 0,
+      orderCount: 0,
+      birthDate: null,
     };
     console.log(data);
-    
 
-    updateClientProfile(
+    updateMasterProfile(
       data,
       () => navigation.goBack(),
       () => getUser(setGetMee),
@@ -161,7 +174,7 @@ const ProfileMasterEdit = () => {
           <SelectMasterGender />
         </View>
       </ScrollView>
-      <View style={{margin: 16}}>
+      <View style={{ margin: 16 }}>
         <Buttons onPress={() => putPofile()} title="Сохранить" />
       </View>
     </SafeAreaView>

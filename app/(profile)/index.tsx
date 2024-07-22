@@ -29,14 +29,14 @@ import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import registerStory from "@/helpers/state_managment/auth/register";
 
-const data: { name: any, color: string, label: string }[] = [
+const data: { name: any; color: string; label: string }[] = [
   { name: "facebook", color: "#3b5998", label: "Facebook" },
   { name: "telegram", color: "#0088cc", label: "Telegram" },
   { name: "instagram", color: "#C13584", label: "Instagram" },
   { name: "linkedin", color: "#0e76a8", label: "LinkedIn" },
   { name: "skype", color: "#00aff0", label: "Skype" },
-  { name: "copy", color: "#E74C3C", label: "Копировать ссылку", },
-]
+  { name: "copy", color: "#E74C3C", label: "Копировать ссылку" },
+];
 
 const ProfilePage: React.FC = () => {
   const [isInviteModalVisible, setInviteModalVisible] = useState(false);
@@ -46,10 +46,11 @@ const ProfilePage: React.FC = () => {
   const [toggle, setToggle] = useState(false);
   const { role } = registerStory();
 
-
-  useFocusEffect(useCallback(() => {
-    getUser(setGetMee);
-  }, []))
+  useFocusEffect(
+    useCallback(() => {
+      getUser(setGetMee);
+    }, [])
+  );
 
   const openInviteModal = () => {
     setInviteModalVisible(true);
@@ -85,8 +86,7 @@ const ProfilePage: React.FC = () => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message:
-          'https://t.me/senior_BX',
+        message: "https://t.me/senior_BX",
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -97,7 +97,7 @@ const ProfilePage: React.FC = () => {
       } else if (result.action === Share.dismissedAction) {
         // dismissed
       }
-    } catch (error: any) {
+    } catch (error) {
       Alert.alert(error.message);
     }
   };
@@ -105,60 +105,60 @@ const ProfilePage: React.FC = () => {
   const navigationList =
     role === "ROLE_MASTER"
       ? [
-        {
-          icon: "user",
-          label: "Подписка",
-          screen: "(profile)/(tariff)/tariff",
-        },
-        {
-          icon: "history",
-          label: "История сеансов",
-          screen: "(profile)/(sessionhistory)/sessionHistory",
-        },
-        {
-          icon: "info-circle",
-          label: "Справка",
-          screen: "(profile)/(help)/help",
-        },
-        {
-          icon: "bell",
-          label: "Уведомления",
-          screen: "(profile)/(notification)/index",
-        },
-        {
-          icon: "wallet",
-          label: "Расходы",
-          screen: "(profile)/(Expenses)/index",
-        },
-        {
-          icon: "globe",
-          label: "Веб страница",
-          screen: "(profile)/(WebPage)/WebPage",
-        },
-        {
-          icon: "cogs",
-          label: "Настройки",
-          screen: "(profile)/(settings)/settings",
-        },
-        {
-          icon: "users",
-          label: "Клиенты",
-          screen: "(free)/(client)/main",
-        },
-        {
-          icon: "sign-out",
-          label: "Выйти",
-          screen: "Logout",
-          modal: true,
-        },
-      ]
+          {
+            icon: "user",
+            label: "Подписка",
+            screen: "(profile)/(tariff)/tariff",
+          },
+          {
+            icon: "history",
+            label: "История сеансов",
+            screen: "(profile)/(sessionhistory)/sessionHistory",
+          },
+          {
+            icon: "info-circle",
+            label: "Справка",
+            screen: "(profile)/(help)/help",
+          },
+          {
+            icon: "bell",
+            label: "Уведомления",
+            screen: "(profile)/(notification)/index",
+          },
+          {
+            icon: "wallet",
+            label: "Расходы",
+            screen: "(profile)/(Expenses)/index",
+          },
+          {
+            icon: "globe",
+            label: "Веб страница",
+            screen: "(profile)/(WebPage)/WebPage",
+          },
+          {
+            icon: "cogs",
+            label: "Настройки",
+            screen: "(profile)/(settings)/settings",
+          },
+          {
+            icon: "users",
+            label: "Клиенты",
+            screen: "(free)/(client)/main",
+          },
+          {
+            icon: "sign-out",
+            label: "Выйти",
+            screen: "Logout",
+            modal: true,
+          },
+        ]
       : role === "ROLE_CLIENT"
-        ? [
+      ? [
           {
             icon: "share-alt",
             label: "Поделиться",
             screen: "",
-            openInviteModal: true
+            openInviteModal: true,
           },
           // {
           //   icon: "wallet",
@@ -202,7 +202,7 @@ const ProfilePage: React.FC = () => {
             modal: true,
           },
         ]
-        : [
+      : [
           {
             icon: "share-alt",
             label: "Поделиться",
@@ -267,9 +267,17 @@ const ProfilePage: React.FC = () => {
             style={styles.avatar}
           />
           <View>
+            <View style={{flexDirection: "row", justifyContent:"center", gap: 4}}>
             <Text style={styles.profileName}>
               {getMee.firstName} {getMee.lastName}
             </Text>
+              <Image
+                source={{
+                  uri: "https://img.icons8.com/?size=100&id=yXOHowNYbgM5&format=png&color=2568EF",
+                }}
+                style={{width:"12%"}}
+              />
+            </View>
             <Text style={styles.profilePhone}>{getMee.phoneNumber}</Text>
           </View>
         </View>
@@ -279,8 +287,11 @@ const ProfilePage: React.FC = () => {
             key={index}
             style={styles.menuItem}
             onPress={() =>
-              item.icon === "share-alt" ? onShare() :
-                item.modal ? setToggle(true) : navigateTo(item.screen)
+              item.icon === "share-alt"
+                ? onShare()
+                : item.modal
+                ? setToggle(true)
+                : navigateTo(item.screen)
             }
             activeOpacity={0.7}
           >
@@ -408,6 +419,7 @@ const styles = StyleSheet.create({
   },
   profilePhone: {
     color: "#cccccc",
+    marginLeft: 7
   },
   menuItem: {
     flexDirection: "row",

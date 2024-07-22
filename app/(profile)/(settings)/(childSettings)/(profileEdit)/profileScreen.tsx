@@ -1,5 +1,6 @@
 import OnlyCalendarComponent from "@/components/calendar/onlyCalendar";
 import {
+  getAgeId,
   getDistrictId,
   getRegionId,
 } from "@/helpers/api-function/profile/personalData";
@@ -25,7 +26,7 @@ type SettingsScreenNavigationProp = NavigationProp<
 const ProfileMasterScreen = () => {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
   const { getMee } = useGetMeeStore();
-  const { setRoute, birthDate, districtId, firstName, job, lastName, nickName, phoneNumber, telegram, regionId, setShowCalendar, setDistirictIdData, setRegionIdData, regionIdData, distiricyIdData } = useProfileStore();
+  const { setRoute, birthDate, ageId, districtId, firstName, job, lastName, nickName, phoneNumber, telegram, instagram, regionId, setShowCalendar, setDistirictIdData, setRegionIdData, regionIdData, distiricyIdData, setAgeIdData, ageIdData } = useProfileStore();
 
   useFocusEffect(
     useCallback(() => {
@@ -35,6 +36,8 @@ const ProfileMasterScreen = () => {
         getMee && getMee.districtId ? getMee.districtId : "",
         setDistirictIdData
       );
+      getAgeId(ageId ? ageId : getMee && getMee.ageId ? getMee.ageId : 0, setAgeIdData)
+      
       return () => null;
     }, [])
   );
@@ -42,7 +45,7 @@ const ProfileMasterScreen = () => {
   const handlePress = (key: RouteData) => {
     setRoute(key);
     navigation.navigate(
-      "(client)/(profile)/(profileEdit)/(editPages)/editPage"
+      "(profile)/(settings)/(childSettings)/(profileEdit)/(editPages)/editPage"
     );
   };
 
@@ -76,22 +79,21 @@ const ProfileMasterScreen = () => {
         </View>
       </TouchableOpacity>
       <View style={styles.divider} />
-        <OnlyCalendarComponent/>
       <TouchableOpacity
         style={styles.item}
-        onPress={() => setShowCalendar(true)}
+        onPress={() => handlePress({id: 3, value: "Возраст"})}
       >
-        <Text style={styles.label}>Дата рождения</Text>
+        <Text style={styles.label}>Возраст</Text>
         <View style={styles.itemMenu}>
           <Text style={styles.value}>
-            {birthDate ? birthDate : getMee && getMee.birthDate ? getMee.birthDate : "Нет данных"}
+            {ageIdData && ageIdData.ageRange ? ageIdData.ageRange : "Нет данных"}
           </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>
       </TouchableOpacity>
       <View style={styles.divider} />
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.item}
         onPress={() => handlePress({id: 3, value: "Профессия"})}
       >
@@ -103,7 +105,7 @@ const ProfileMasterScreen = () => {
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>
       </TouchableOpacity>
-      <View style={styles.divider} />
+      <View style={styles.divider} /> */}
 
       <TouchableOpacity
         style={styles.item}
@@ -155,6 +157,21 @@ const ProfileMasterScreen = () => {
         <View style={styles.itemMenu}>
           <Text style={styles.value}>
             {telegram ? telegram : getMee && getMee.telegram ? getMee.telegram : "Нет данных"}
+          </Text>
+          <AntDesign name={"right"} size={20} color="#4F4F4F" />
+        </View>
+      </TouchableOpacity>
+      <View style={styles.divider} />
+
+
+      <TouchableOpacity
+        style={styles.item}
+        onPress={() => handlePress({id: 7, value: "Instagram"})}
+      >
+        <Text style={styles.label}>Instagram</Text>
+        <View style={styles.itemMenu}>
+          <Text style={styles.value}>
+            {instagram ? instagram : getMee && getMee.instagram ? getMee.instagram : "Нет данных"}
           </Text>
           <AntDesign name={"right"} size={20} color="#4F4F4F" />
         </View>
