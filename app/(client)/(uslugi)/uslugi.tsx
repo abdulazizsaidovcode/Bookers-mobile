@@ -1,5 +1,5 @@
-import React from 'react';
-import {SafeAreaView, ScrollView, View, Text, TouchableOpacity, StatusBar, FlatList} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView, ScrollView, View, Text, TouchableOpacity, StatusBar, FlatList, ActivityIndicator} from 'react-native';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {useFocusEffect, useRouter} from 'expo-router';
 import tw from 'tailwind-react-native-classnames';
@@ -15,7 +15,6 @@ interface Service {
     icon?: string;
     onPress: () => void;
 }
-
 
 const ServiceCard: React.FC<Service> = ({id, name, distanceMasterCount, onPress}) => {
     const staticIcon: any = "eye";
@@ -33,23 +32,24 @@ const ServiceCard: React.FC<Service> = ({id, name, distanceMasterCount, onPress}
 };
 
 const Uslugi = () => {
+    const [loading, setLoading] = useState(true);
     const {userLocation, setUserLocation} = useGetMeeStore();
     const {allCategory, setSelectedServiceId} = ClientStory();
     const router = useRouter();
 
     useFocusEffect(
         React.useCallback(() => {
-            getUserLocation(setUserLocation);
-            return () => {
-            };
+            setLoading(true);
+            getUserLocation(setUserLocation).finally(() => setLoading(false));
+            return () => {};
         }, [])
     );
 
     useFocusEffect(
         React.useCallback(() => {
-            getAllCategory();
-            return () => {
-            };
+            setLoading(true);
+            getAllCategory().finally(() => setLoading(false));
+            return () => {};
         }, [userLocation])
     );
 
@@ -81,13 +81,19 @@ const Uslugi = () => {
                     <View>
                         <Text style={tw`text-white text-2xl mb-4 px-4`}>Uslugi</Text>
                     </View>
-                    <FlatList
-                        data={allCategory}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.id.toString()}
-                        numColumns={2}
-                        showsVerticalScrollIndicator={false}
-                    />
+                    {loading ? (
+                        <View style={[tw`flex-1 justify-center items-center`]}>
+                            <ActivityIndicator size="large" color="#9C0A35"/>
+                        </View>
+                    ) : (
+                        <FlatList
+                            data={allCategory}
+                            renderItem={renderItem}
+                            keyExtractor={(item) => item.id.toString()}
+                            numColumns={2}
+                            showsVerticalScrollIndicator={false}
+                        />
+                    )}
                 </ScrollView>
             </View>
         </SafeAreaView>
