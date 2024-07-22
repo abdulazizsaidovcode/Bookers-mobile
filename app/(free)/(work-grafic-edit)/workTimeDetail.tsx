@@ -57,7 +57,7 @@ const timeList = [
 ];
 
 const TimeWorkDetail: React.FC = () => {
-  const { weekData, timeData } = graficWorkStore();
+  const { weekData, timeData, selectedTimeSlot } = graficWorkStore();
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(true);
   const navigation = useNavigation<SettingsScreenNavigationProp>();
@@ -138,34 +138,18 @@ const TimeWorkDetail: React.FC = () => {
           <Text style={[styles.title, { marginTop: 15 }]}>Время работы</Text>
 
           <>
+            <View style={{}}>
             <Text style={{ color: "white", paddingHorizontal: 15, width: 340 }}>
-              Выберите рабочее время в которое запись будет доступна для ваших
-              клиентов
+             {` c ${selectedTimeSlot[0]} до ${selectedTimeSlot[1]}`}
             </Text>
-            <View style={styles.timeListContainer}>
-              {timeList.map((time, index) => (
-                <TimesCard
-                  key={index}
-                  title={time}
-                  onSelect={() => toggleTimeSlotSelection(time)}
-                  isSelected={selectedTimeSlots.includes(time)}
-                  isInRange={rangeIndices.includes(time)}
-                  disabled={
-                    (selectedTimeSlots.length > 0 &&
-                      timeList.indexOf(time) <
-                        timeList.indexOf(selectedTimeSlots[0])) ||
-                    (selectedTimeSlots.length >= 2 &&
-                      !selectedTimeSlots.includes(time) &&
-                      !rangeIndices.includes(time))
-                  }
-                />
-              ))}
+              
+              
             </View>
           </>
         </View>
         <View>
           <Text style={[styles.title, { marginTop: 15 }]}>Выходные дни</Text>
-          <Text style={{ color: "white", paddingHorizontal: 15 }}>
+          <Text style={{ color: "white", paddingHorizontal: 15, fontSize: 12 }}>
             {weekendDays.length === 0 ? "Без выходных" : weekendDays.join(", ")}
           </Text>
         </View>
@@ -183,18 +167,18 @@ const TimeWorkDetail: React.FC = () => {
           title="Продолжить"
           onPress={() =>
             putWorkTime(
-              +selectedTimeSlots[0].substring(0, 1) === 0
-                ? +selectedTimeSlots[0].substring(1, 2)
-                : +selectedTimeSlots[0].substring(0, 2),
-              +selectedTimeSlots[0].substring(3, 4) === 0
-                ? +selectedTimeSlots[0].substring(4, 5)
-                : +selectedTimeSlots[0].substring(3, 5),
-              +selectedTimeSlots[1].substring(0, 1) === 0
-                ? +selectedTimeSlots[1].substring(1, 2)
-                : +selectedTimeSlots[1].substring(0, 2),
-              +selectedTimeSlots[1].substring(3, 4) === 0
-                ? +selectedTimeSlots[1].substring(3, 5)
-                : +selectedTimeSlots[1].substring(3, 5),
+              +selectedTimeSlot[0].substring(0, 1) === 0
+                ? +selectedTimeSlot[0].substring(1, 2)
+                : +selectedTimeSlot[0].substring(0, 2),
+              +selectedTimeSlot[0].substring(3, 4) === 0
+                ? +selectedTimeSlot[0].substring(4, 5)
+                : +selectedTimeSlot[0].substring(3, 5),
+              +selectedTimeSlot[1].substring(0, 1) === 0
+                ? +selectedTimeSlot[1].substring(1, 2)
+                : +selectedTimeSlot[1].substring(0, 2),
+              +selectedTimeSlot[1].substring(3, 4) === 0
+                ? +selectedTimeSlot[1].substring(3, 5)
+                : +selectedTimeSlot[1].substring(3, 5),
               () => navigation.navigate("(free)/(work-grafic-edit)/workMain")
             )
           }

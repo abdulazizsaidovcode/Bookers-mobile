@@ -90,7 +90,9 @@ const HelpPage = () => {
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <NavigationMenu name={`Помощь`} />
+            <View style={{ paddingLeft: 10, backgroundColor: "#21212E" }}>
+                <NavigationMenu name={`Помощь`} />
+            </View>
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}

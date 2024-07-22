@@ -57,7 +57,7 @@ const timeList = [
 ];
 
 const TimeWorkEdit: React.FC = () => {
-  const { weekData, timeData } = graficWorkStore();
+  const { weekData, timeData, setSelectedTimeSlot } = graficWorkStore();
   const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
   const [isDisabled, setIsDisabled] = useState(true);
   const navigation = useNavigation<SettingsScreenNavigationProp>();
@@ -181,22 +181,25 @@ const TimeWorkEdit: React.FC = () => {
       >
         <Buttons
           title="Продолжить"
-          onPress={() =>
-            putWorkTime(
-              +selectedTimeSlots[0].substring(0, 1) === 0
-                ? +selectedTimeSlots[0].substring(1, 2)
-                : +selectedTimeSlots[0].substring(0, 2),
-              +selectedTimeSlots[0].substring(3, 4) === 0
-                ? +selectedTimeSlots[0].substring(4, 5)
-                : +selectedTimeSlots[0].substring(3, 5),
-              +selectedTimeSlots[1].substring(0, 1) === 0
-                ? +selectedTimeSlots[1].substring(1, 2)
-                : +selectedTimeSlots[1].substring(0, 2),
-              +selectedTimeSlots[1].substring(3, 4) === 0
-                ? +selectedTimeSlots[1].substring(3, 5)
-                : +selectedTimeSlots[1].substring(3, 5),
-              () => navigation.navigate("(free)/(work-grafic-edit)/workTimeDetail")
-            )
+          onPress={() => {
+            setSelectedTimeSlot(selectedTimeSlots);
+            navigation.navigate("(free)/(work-grafic-edit)/workTimeDetail")
+          }
+            // putWorkTime(
+            //   +selectedTimeSlots[0].substring(0, 1) === 0
+            //     ? +selectedTimeSlots[0].substring(1, 2)
+            //     : +selectedTimeSlots[0].substring(0, 2),
+            //   +selectedTimeSlots[0].substring(3, 4) === 0
+            //     ? +selectedTimeSlots[0].substring(4, 5)
+            //     : +selectedTimeSlots[0].substring(3, 5),
+            //   +selectedTimeSlots[1].substring(0, 1) === 0
+            //     ? +selectedTimeSlots[1].substring(1, 2)
+            //     : +selectedTimeSlots[1].substring(0, 2),
+            //   +selectedTimeSlots[1].substring(3, 4) === 0
+            //     ? +selectedTimeSlots[1].substring(3, 5)
+            //     : +selectedTimeSlots[1].substring(3, 5),
+            //   () => navigation.navigate("(free)/(work-grafic-edit)/workTimeDetail")
+            // )
           }
           isDisebled={!isDisabled}
         />
