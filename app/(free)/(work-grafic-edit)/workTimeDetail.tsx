@@ -57,56 +57,9 @@ const timeList = [
 ];
 
 const TimeWorkDetail: React.FC = () => {
-  const { weekData, timeData, selectedTimeSlot } = graficWorkStore();
-  const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
-  const [isDisabled, setIsDisabled] = useState(true);
-  const navigation = useNavigation<SettingsScreenNavigationProp>();
+  const { weekData, selectedTimeSlot } = graficWorkStore();
+  const navigation = useNavigation<SettingsScreenNavigationProp>(); 
 
-  useFocusEffect(
-    useCallback(() => {
-      if (timeData && timeData.from && timeData.end) {
-        const fromTime = timeData.from.substring(0, 5);
-        const endTime = timeData.end.substring(0, 5);
-        if (timeList.includes(fromTime) && timeList.includes(endTime)) {
-          setSelectedTimeSlots([fromTime, endTime]);
-        }
-      }
-      return () => {};
-    }, [timeData])
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      setIsDisabled(selectedTimeSlots.length < 2);
-      return () => {};
-    }, [selectedTimeSlots])
-  );
-
-  const toggleTimeSlotSelection = (time: string) => {
-    if (selectedTimeSlots.includes(time)) {
-      setSelectedTimeSlots((prevSelectedTimeSlots) =>
-        prevSelectedTimeSlots.filter((slot) => slot !== time)
-      );
-    } else if (selectedTimeSlots.length < 2) {
-      setSelectedTimeSlots((prevSelectedTimeSlots) => [
-        ...prevSelectedTimeSlots,
-        time,
-      ]);
-    }
-  };
-
-  const getRangeIndices = () => {
-    if (selectedTimeSlots.length < 2) return [];
-
-    const indices = selectedTimeSlots
-      .map((slot) => timeList.indexOf(slot))
-      .sort((a, b) => a - b);
-    const [start, end] = [indices[0], indices[indices.length - 1]];
-
-    return timeList.slice(start, end + 1);
-  };
-
-  const rangeIndices = getRangeIndices();
 
   const weekendDays = weekData
     .filter((day) => !day.active)
@@ -182,7 +135,6 @@ const TimeWorkDetail: React.FC = () => {
               () => navigation.navigate("(free)/(work-grafic-edit)/workMain")
             )
           }
-          isDisebled={!isDisabled}
         />
       </View>
     </SafeAreaView>
