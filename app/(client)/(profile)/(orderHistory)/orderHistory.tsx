@@ -231,19 +231,7 @@ const OrderHistory = () => {
                 Adress="Яккасарайский р-н, ул. Мирабад, 62а"
                 deleteIcon={<Feather name="trash-2" size={24} color="white" />}
               />
-            </AccardionHistory>
-            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
-              <ProfileCard
-                masterName="Натали"
-                salonName="Beauty Wave"
-                masterGender="Женский мастер"
-                ratingnumber={5}
-                money="100 000 сум"
-                buttonName="Оставить отзыв"
-                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
-                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
-              />
-            </AccardionHistory>
+            </AccardionHistory>s
             <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
               <ProfileCard
                 masterName="Натали"
