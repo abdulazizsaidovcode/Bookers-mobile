@@ -70,12 +70,14 @@ const Specialist = () => {
       return () => null
     }, [selectedServiceId, genderIndex, value, rating, userLocation, checked, searchValue])
   );
- 
-  useEffect(() => {
+  
+ useEffect(
+  useCallback(() => {
     const latitude = userLocation?.coords?.latitude || null;
     const longitude = userLocation?.coords?.longitude || null;
     postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => {});
-  }, [searchValue]);   
+  }, [searchValue])
+);   
 
   const handleClick = () => {
     const latitude = userLocation?.coords?.latitude || null;
@@ -85,16 +87,12 @@ const Specialist = () => {
     });  
   }; 
 
-  const getFreeTime = async () => { 
-    try {
-      const config = await getConfig();
-      const response = await axios.post(`${getClient_freeTime}`, {}, config ? config : {});
-      const freeTime = response.data.body;
-      return freeTime;
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
+  // useFocusEffect(
+  //   useCallback(() =>{
+  //     postClientFilter()
+  //      return () => null
+  //   },[])
+  //  )
 
   const handleClientCardPress = (id:any) => {
     console.log("Client ID:", clientData);
@@ -123,7 +121,7 @@ const Specialist = () => {
                 value={checked}
                 onValueChange={() => setChecked(!checked)}
                 title="Запись на сегодня"
-                onPress={handleFree}
+                onPress={getFreeTime}
               />
             </View>
           </View>
@@ -173,8 +171,8 @@ const Specialist = () => {
               Фильтр
             </Text>
             <AccordionFree title="Пол мастера" />
-            <AccardionSliderTwo title="Рядом со мной" />
-            <AccardionSlider title="Рейтинг" />
+            <AccardionSliderTwo title="Рейтинг" />
+            <AccardionSlider title="Рядом со мной" />
             <View style={tw`mt-3`}>
               <Buttons
                 title='Сохранять'

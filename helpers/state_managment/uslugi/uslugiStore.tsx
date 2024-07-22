@@ -21,6 +21,8 @@ export interface ClientAllCategory {
   setSelectedServiceId: (id: string | null) => void;
   clientData: any | null;
   setClientData: (data: any) => void;
+  clientId:string | null
+  setClientId: (id:string | null) => void
 }
 
 const ClientStory = create<ClientAllCategory>((set) => ({
@@ -36,6 +38,8 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   setSelectedServiceId: (id: string | null) => set({ selectedServiceId: id }),
   clientData: null,
   setClientData: (data: any) => set({ clientData: data }),
+  clientId:'',
+  setClientId:(val:string | null) => set({clientId:val}),
 }));
 
 export default ClientStory;
