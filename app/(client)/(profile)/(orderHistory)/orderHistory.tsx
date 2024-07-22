@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { View, StyleSheet, Text, ScrollView, TouchableOpacity } from "react-native"; // Text komponentini import qilish
 import CustomButton from "./CustomButton";
 import { StatusBar } from "expo-status-bar";
@@ -8,14 +8,29 @@ import AccardionHistory from "@/components/accordions/accardionHistory";
 import { AntDesign, Feather, SimpleLineIcons } from "@expo/vector-icons";
 import ProfileCard from "./profileCard";
 import CenteredModal from "@/components/(modals)/modal-centered";
+import { getOrderClientUpcoming } from "@/type/client/editClient";
+import { getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
+import { useFocusEffect } from "expo-router";
 
 const OrderHistory = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [modalDelete, setModalDelete] = useState<boolean>(false);
-  const titleTex = ['Стрижка', 'Стрижка', 'Стрижка', 'укладка', "покраска волос"];
+  const [upcoming, setUpcoming] = useState<getOrderClientUpcoming[]>([])
+
+  const getUpcomingClient = async () => {
+    await getorderClientUpcoming(setUpcoming)
+  }
   const deleteToggleModal = () => {
     setModalDelete(!modalDelete)
   }
+
+  useFocusEffect(() => {
+    useCallback(() => {
+      getUpcomingClient()
+      return () => { };
+    }, [])
+  })
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
@@ -51,7 +66,7 @@ const OrderHistory = () => {
                 money="100 000 сум"
                 buttonName="Написать сообщение"
                 Adress="Яккасарайский р-н, ул. Мирабад, 62а"
-                titleTex={titleTex}
+                titleTex={["Красивый мастер", "Красивый мастер"]}
                 locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
                 phoneIcon={<Feather name="phone" size={24} color="white" />}
               />
