@@ -100,13 +100,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#21212E",
-    padding: 10,
+    paddingHorizontal: 10,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 5,
     marginBottom: 10,
   },
   buttonContainer: {
