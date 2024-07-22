@@ -87,7 +87,7 @@ const OrderHistory = () => {
           <>
             <AntDesign name="delete" size={56} color="#9C0A35" />
             <Text style={styles.deleteText}>
-              Вы хотите очистить все уведомлении?
+              Вы хотите очистить все увед
             </Text>
           </>
         </CenteredModal>
