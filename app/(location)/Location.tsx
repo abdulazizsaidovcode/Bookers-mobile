@@ -15,7 +15,7 @@ const Location = () => {
       <Pressable
         onPress={() => router.push("/(location-data)/LocationData")}
         style={[
-          tw`flex-row items-center justify-between p-3 rounded-xl mt-4`,
+          tw`flex-row items-center justify-between p-3 rounded-2xl mt-4`,
           { backgroundColor: "#b9b9c9" },
         ]}
       >
