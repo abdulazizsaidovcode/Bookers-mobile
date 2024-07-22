@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-
 export interface Master {
   id: string;
   fullName: string;
@@ -27,7 +26,6 @@ interface CategoryType {
   categoryFatherName: string | null;
   isNew: boolean;
 }
-
 
 interface useTopMasters {
   masters: Master[];
