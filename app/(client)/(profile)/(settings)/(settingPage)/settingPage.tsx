@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
@@ -23,7 +23,9 @@ const SettingPage = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
+      <View style={{ paddingLeft: 10 }}>
       <NavigationMenu name={routeName && routeName.value ? routeName.value : ""} />
+      </View>
       <ScrollView style={{ padding: 16 }}>
         {routeName && routeName.id === 7
           ? <RatioOption radioProps={langData} />

@@ -159,7 +159,9 @@ const ProfileMasterEdit = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
+      <View style={{ paddingLeft: 10 }}>
       <NavigationMenu name="Личные данные" />
+      </View>
       <ScrollView>
         <View style={{ marginBottom: 16, padding: 16 }}>
           <ProfileImgUpload

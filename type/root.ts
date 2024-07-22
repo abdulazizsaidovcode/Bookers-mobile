@@ -85,4 +85,5 @@ export type RootStackParamList = {
   '(profile)/(settings)/(childSettings)/(profileEdit)/profileScreen' : undefined
   '(client)/(profile)/(settings)/(settingPage)/settingPage' : undefined
   '(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit' : undefined
+  "(free)/(work-grafic-edit)/workTimeDetail": undefined
 };

@@ -195,7 +195,7 @@ const TimeWorkEdit: React.FC = () => {
               +selectedTimeSlots[1].substring(3, 4) === 0
                 ? +selectedTimeSlots[1].substring(3, 5)
                 : +selectedTimeSlots[1].substring(3, 5),
-              () => navigation.navigate("(free)/(work-grafic-edit)/workMain")
+              () => navigation.navigate("(free)/(work-grafic-edit)/workTimeDetail")
             )
           }
           isDisebled={!isDisabled}

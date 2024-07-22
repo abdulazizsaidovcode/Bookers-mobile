@@ -56,7 +56,9 @@ const SettingsClient = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
+      <View style={{ paddingLeft: 10 }}>
       <NavigationMenu name="Настройки" />
+      </View>
       <ScrollView>
         <View style={{ padding: 16 }}>
           {navigationList.map((item, index) => (

@@ -63,7 +63,7 @@ const EditProfileMasterPage: React.FC = () => {
     setDistrictOption,
     districtOption,
     ageOption,
-    setAgeOption
+    setAgeOption,
   } = useGetMeeStore();
 
   const [inputValues, setInputValues] = useState<InputValues>({
@@ -75,7 +75,7 @@ const EditProfileMasterPage: React.FC = () => {
     telegram: "",
     regionId: 0,
     districtId: 0,
-    instagram: ""
+    instagram: "",
   });
 
   const [errors, setErrors] = useState<{ [key in keyof InputValues]?: string }>(
@@ -96,7 +96,16 @@ const EditProfileMasterPage: React.FC = () => {
       districtId: districtId || 0,
       instagram: instagram || "",
     });
-  }, [nickName, instagram, firstName, lastName, ageId, phoneNumber, telegram, regionId]);
+  }, [
+    nickName,
+    instagram,
+    firstName,
+    lastName,
+    ageId,
+    phoneNumber,
+    telegram,
+    regionId,
+  ]);
 
   useFocusEffect(
     useCallback(() => {
@@ -183,7 +192,6 @@ const EditProfileMasterPage: React.FC = () => {
         newErrors.ageId = "This field is required.";
         valid = false;
       }
-
     } else if (routeName?.id === 5) {
       // Check if region is selected
       if (!inputValues.regionId) {
@@ -226,10 +234,11 @@ const EditProfileMasterPage: React.FC = () => {
       if (value) {
         updateProfileField(`${key}`, value);
         console.log("saqlandi");
-        
       }
     });
-    navigation.navigate("(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit");
+    navigation.navigate(
+      "(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit"
+    );
   };
 
   const regionOptions =
@@ -238,13 +247,13 @@ const EditProfileMasterPage: React.FC = () => {
       return { key: item.id, value: item.name };
     });
 
-    const cityOptions =
+  const cityOptions =
     districtOption &&
     districtOption.map((item: any) => {
       return { key: item.id, value: item.name };
     });
-    
-    const ageOptions =
+
+  const ageOptions =
     ageOption &&
     ageOption.map((item: any) => {
       return { key: item.id, value: item.ageRange };
@@ -253,7 +262,9 @@ const EditProfileMasterPage: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
-      <NavigationMenu name={`${routeName?.value ?? "Edit"}`} />
+      <View style={{ paddingLeft: 10 }}>
+        <NavigationMenu name={`${routeName?.value ?? "Edit"}`} />
+      </View>
       {routeName?.id === 1 ? (
         <View style={styles.containerIn}>
           <View>
@@ -288,16 +299,14 @@ const EditProfileMasterPage: React.FC = () => {
           <View>
             <Text style={styles.label}>Введите свое имя и фамилию</Text>
             <View style={styles.formGroup}>
-            <Text style={styles.labelS}>Введите свое имя</Text>
+              <Text style={styles.labelS}>Введите свое имя</Text>
               <TextInput
                 style={[
                   styles.input,
                   errors.firstName ? styles.inputError : null,
                 ]}
                 value={inputValues.firstName}
-                onChangeText={(value) =>
-                  handleInputChange("firstName", value)
-                }
+                onChangeText={(value) => handleInputChange("firstName", value)}
                 textColor="white"
                 cursorColor="#9C0A35"
                 activeUnderlineColor="#9C0A35"
@@ -307,7 +316,7 @@ const EditProfileMasterPage: React.FC = () => {
               )}
             </View>
             <View style={styles.formGroup}>
-            <Text style={styles.labelS}>Введите свое фамилию</Text>
+              <Text style={styles.labelS}>Введите свое фамилию</Text>
               <TextInput
                 style={[
                   styles.input,
@@ -334,14 +343,15 @@ const EditProfileMasterPage: React.FC = () => {
             <Text style={styles.label}>Выберите Возраст</Text>
             <View style={styles.formGroup}>
               <SelectList
-                setSelected={(value: number) => handleInputChange("ageId", value)}
-                
+                setSelected={(value: number) =>
+                  handleInputChange("ageId", value)
+                }
                 data={ageOptions}
                 save="key"
                 search={false}
                 boxStyles={{
                   borderColor: errors.regionId ? "red" : "white",
-                  backgroundColor: "#4B4B64"
+                  backgroundColor: "#4B4B64",
                 }}
                 dropdownStyles={styles.dropdown}
                 dropdownItemStyles={styles.dropdownItem}
@@ -372,7 +382,11 @@ const EditProfileMasterPage: React.FC = () => {
                   styles.phoneInput,
                   { borderColor: errors.phoneNumber ? "red" : "#9C0A35" },
                 ]}
-                textContainerStyle={{ backgroundColor: "#4B4B64", borderTopRightRadius: 10, borderBottomRightRadius: 10 }}
+                textContainerStyle={{
+                  backgroundColor: "#4B4B64",
+                  borderTopRightRadius: 10,
+                  borderBottomRightRadius: 10,
+                }}
                 textInputStyle={{ color: "white", backgroundColor: "#4B4B64" }}
                 codeTextStyle={{ color: "white" }}
                 onChangeFormattedText={(value) =>
@@ -386,7 +400,8 @@ const EditProfileMasterPage: React.FC = () => {
               )}
             </View>
             <Text style={styles.description}>
-            Будьте осторожны, пока телефон не поменяет номер! При следующем входе в систему на ваш новый номер будет отправлено SMS.
+              Будьте осторожны, пока телефон не поменяет номер! При следующем
+              входе в систему на ваш новый номер будет отправлено SMS.
             </Text>
           </View>
           <View>
@@ -396,58 +411,58 @@ const EditProfileMasterPage: React.FC = () => {
       ) : routeName?.id === 5 ? (
         <View style={styles.containerIn}>
           <View>
-
-          
-          <View>
-            <Text style={styles.label}>Выберите регион</Text>
-            <View style={styles.formGroup}>
-              <SelectList
-                setSelected={(value: number) => handleInputChange("regionId", value)}
-                data={regionOptions}
-                save="key"
-                search={false}
-                boxStyles={{
-                  borderColor: errors.regionId ? "red" : "white",
-                  backgroundColor: "#4B4B64"
-                }}
-                dropdownStyles={styles.dropdown}
-                dropdownItemStyles={styles.dropdownItem}
-                dropdownTextStyles={styles.dropdownText}
-                inputStyles={styles.inputText}
-                placeholder="Выберите регион"
-              />
-              {errors.regionId && (
-                <Text style={styles.errorText}>{errors.regionId}</Text>
-              )}
-            </View>
-          </View>
-          {showDistrictSelect && (
             <View>
-              <Text style={styles.label}>Выберите район</Text>
+              <Text style={styles.label}>Выберите регион</Text>
               <View style={styles.formGroup}>
                 <SelectList
                   setSelected={(value: number) =>
-                    handleInputChange("districtId", value)
+                    handleInputChange("regionId", value)
                   }
-                  data={cityOptions}
+                  data={regionOptions}
                   save="key"
                   search={false}
                   boxStyles={{
-                    borderColor: errors.districtId ? "red" : "white",
-                  backgroundColor: "#4B4B64"
+                    borderColor: errors.regionId ? "red" : "white",
+                    backgroundColor: "#4B4B64",
                   }}
                   dropdownStyles={styles.dropdown}
                   dropdownItemStyles={styles.dropdownItem}
                   dropdownTextStyles={styles.dropdownText}
                   inputStyles={styles.inputText}
-                  placeholder="Выберите район"
+                  placeholder="Выберите регион"
                 />
-                {errors.districtId && (
-                  <Text style={styles.errorText}>{errors.districtId}</Text>
+                {errors.regionId && (
+                  <Text style={styles.errorText}>{errors.regionId}</Text>
                 )}
               </View>
             </View>
-          )}
+            {showDistrictSelect && (
+              <View>
+                <Text style={styles.label}>Выберите район</Text>
+                <View style={styles.formGroup}>
+                  <SelectList
+                    setSelected={(value: number) =>
+                      handleInputChange("districtId", value)
+                    }
+                    data={cityOptions}
+                    save="key"
+                    search={false}
+                    boxStyles={{
+                      borderColor: errors.districtId ? "red" : "white",
+                      backgroundColor: "#4B4B64",
+                    }}
+                    dropdownStyles={styles.dropdown}
+                    dropdownItemStyles={styles.dropdownItem}
+                    dropdownTextStyles={styles.dropdownText}
+                    inputStyles={styles.inputText}
+                    placeholder="Выберите район"
+                  />
+                  {errors.districtId && (
+                    <Text style={styles.errorText}>{errors.districtId}</Text>
+                  )}
+                </View>
+              </View>
+            )}
           </View>
           <View>
             <Buttons onPress={handleSave} title="Сохранить" />
@@ -473,17 +488,16 @@ const EditProfileMasterPage: React.FC = () => {
                 <Text style={styles.errorText}>{errors.telegram}</Text>
               )}
               <Text style={styles.description}>
-              По этой ссылке в Telegram клиент сможет общаться с вами через
-              Telegram.
-            </Text>
+                По этой ссылке в Telegram клиент сможет общаться с вами через
+                Telegram.
+              </Text>
             </View>
           </View>
           <View>
             <Buttons onPress={handleSave} title="Сохранить" />
           </View>
         </View>
-      )
-      : routeName?.id === 7 ? (
+      ) : routeName?.id === 7 ? (
         <View style={styles.containerIn}>
           <View>
             <Text style={styles.label}>Введите свой instagram username</Text>
@@ -503,9 +517,9 @@ const EditProfileMasterPage: React.FC = () => {
                 <Text style={styles.errorText}>{errors.instagram}</Text>
               )}
               <Text style={styles.description}>
-              По этой ссылке в Telegram клиент сможет общаться с вами через
-              Telegram.
-            </Text>
+                По этой ссылке в Telegram клиент сможет общаться с вами через
+                Telegram.
+              </Text>
             </View>
           </View>
           <View>
@@ -551,14 +565,14 @@ const styles = StyleSheet.create({
     color: "white",
     borderWidth: 1,
     borderColor: "#4B4B64",
-    borderRadius: 7
+    borderRadius: 7,
   },
   inputError: {
     borderColor: "red",
   },
-  phoneInput:{
+  phoneInput: {
     width: "100%",
-    borderRadius: 10
+    borderRadius: 10,
   },
   errorText: {
     color: "red",
