@@ -46,7 +46,7 @@ const RequestFeedback = () => {
         <View style={styles.buttonContainer}>
           <Buttons
             title="Сохранить"
-            onPress={() => editFeedbeckOrder(feedbackData.text, setHasChanges, navigation.goBack())}
+            onPress={() => editFeedbeckOrder(feedbackData.text, setHasChanges, navigation.goBack)}
             isDisebled={hasChanges}
           />
         </View>

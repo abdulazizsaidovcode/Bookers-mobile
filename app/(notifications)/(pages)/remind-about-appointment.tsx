@@ -177,7 +177,7 @@ const RemindAboutAppointment: React.FC = () => {
                 appoinmentData.hour,
                 appoinmentData.minute,
                 appoinmentActiveData,
-                navigation.goBack(),
+                navigation.goBack,
                 setHasChanges
               )
             }

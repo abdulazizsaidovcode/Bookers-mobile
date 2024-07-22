@@ -25,7 +25,7 @@ const RequestWindow = () => {
   };
 
   const handleSave = () => {
-    editWindowOrder(windowData.text, setHasChanges, navigation.goBack());
+    editWindowOrder(windowData.text, setHasChanges, navigation.goBack);
     putNumbers(7);
   };
 
@@ -33,7 +33,7 @@ const RequestWindow = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.navigationMenu}>
-          <NavigationMenu name='Напоминание о отзыве' />
+          <NavigationMenu name='Запрс окошка' />
         </View>
         <View style={styles.content}>
           <Text style={{ color: 'white', fontSize: 20 }}>Уведомление о попадании клиента в свободное окошко</Text>

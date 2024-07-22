@@ -43,6 +43,8 @@ const useGalleryStore = create<GalleryState>((set) => ({
     resGalleryAttachments: [
       {
         attachmentId: '',
+        attachmentStatus: '',
+        message: null,
         main: false,
         newStatus: false,
       },

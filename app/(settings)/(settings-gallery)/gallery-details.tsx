@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Dimensions, Pressable} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Dimensions, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useRoute } from '@react-navigation/native';
@@ -168,13 +168,17 @@ const GalleryDetails: React.FC = () => {
                     <MaterialIcons name={selectedImages.includes(albumItem.attachmentId) ? "check-box" : "check-box-outline-blank"} size={24} color="#9C0A35" />
                   </TouchableOpacity>
                 )}
-                {showMainSwitch && (
+                {albumItem.attachmentStatus === 'CANCELED' ? null : showMainSwitch && (
                   <TouchableOpacity style={styles.checkIcon}>
                     <MaterialIcons name={albumItem.main ? "check-box" : 'check-box-outline-blank'} size={26} color="#9C0A35" />
                   </TouchableOpacity>
-                )}
+                ) }
                 <Pressable onLongPress={toggleMainSwitch} style={styles.imageWrapper}>
                   <Image style={styles.image} source={{ uri: getFile + albumItem.attachmentId }} />
+                  {!isDeleteMode && albumItem.attachmentStatus === 'NEW' && <View style={{ position: 'absolute', width: 15, borderRadius: 50, height: 15, backgroundColor: '#F29339', top: 0, right: 0, margin: 7 }}></View>}
+                  {albumItem.attachmentStatus === 'CANCELED' && <View style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: 'black', opacity: 0.8, top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', borderRadius: 14.5, }}>
+                    <Text style={{ color: 'red' }}>{albumItem.message}</Text>
+                  </View>}
                 </Pressable>
               </View>
             ))}
