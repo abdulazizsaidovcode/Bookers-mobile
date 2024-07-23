@@ -134,7 +134,7 @@ const OrderHistory = () => {
                     salonName={pastComing.salonName}
                     masterGender=""
                     ratingnumber={pastComing.feedbackCount}
-                    money="100 000 сум"
+                    money={`${pastComing.orderPrice} сум`}
                     buttonName="Оставить отзыв"
                     Adress="Яккасарайский р-н, ул. Мирабад, 62а"
                     deleteIcon={<Feather name="trash-2" size={24} color="white" />}
