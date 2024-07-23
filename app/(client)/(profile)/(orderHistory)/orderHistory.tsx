@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { View, StyleSheet, Text, ScrollView, TouchableOpacity } from "react-native"; // Text komponentini import qilish
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Linking } from "react-native"; // Linking import qilish
 import CustomButton from "./CustomButton";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -11,25 +11,35 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import { getOrderClientUpcoming } from "@/type/client/editClient";
 import { getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
 import { useFocusEffect } from "expo-router";
+import { useMapStore } from "@/helpers/state_managment/map/map";
+import { useNavigation } from "@react-navigation/native";
+import AccardionHistoryTwo from "@/components/accordions/accardionHistoryTwo";
 
 const OrderHistory = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [modalDelete, setModalDelete] = useState<boolean>(false);
-  const [upcoming, setUpcoming] = useState<getOrderClientUpcoming[]>([])
+  const [upcoming, setUpcoming] = useState<getOrderClientUpcoming[]>([]);
+  const { setMapData } = useMapStore();
+  const navigate = useNavigation<any>();
 
   const getUpcomingClient = async () => {
-    await getorderClientUpcoming(setUpcoming)
-  }
-  const deleteToggleModal = () => {
-    setModalDelete(!modalDelete)
-  }
+    await getorderClientUpcoming(setUpcoming);
+  };
 
-  useFocusEffect(() => {
+  const deleteToggleModal = () => {
+    setModalDelete(!modalDelete);
+  };
+
+  const handlePhonePress = (phoneNumber: string) => {
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
+
+  useFocusEffect(
     useCallback(() => {
-      getUpcomingClient()
+      getUpcomingClient();
       return () => { };
     }, [])
-  })
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -37,7 +47,7 @@ const OrderHistory = () => {
       <View style={styles.header}>
         <NavigationMenu name="История сеансов" />
         <TouchableOpacity onPress={() => {
-          deleteToggleModal()
+          deleteToggleModal();
         }}>
           <AntDesign name="delete" size={24} color="white" />
         </TouchableOpacity>
@@ -57,27 +67,56 @@ const OrderHistory = () => {
         </View>
         {activeTab === 'upcoming' && (
           <ScrollView>
-            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
-              <ProfileCard
-                masterName="Натали"
-                salonName="Beauty Wave"
-                masterGender="Женский мастер"
-                ratingnumber={5}
-                money="100 000 сум"
-                buttonName="Написать сообщение"
-                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
-                titleTex={["Красивый мастер", "Красивый мастер"]}
-                locationIcon={<SimpleLineIcons name="location-pin" size={24} color="white" />}
-                phoneIcon={<Feather name="phone" size={24} color="white" />}
-              />
-            </AccardionHistory>
+            {upcoming.length !== 0 ? (
+              upcoming.map((upcoming, index) => (
+                <AccardionHistory id={upcoming.serviceIds} key={index} title={upcoming.serviceName} date={upcoming.orderDate} >
+                  <ProfileCard
+                    imageURL={upcoming.userAttachmentId}
+                    masterName={upcoming.firstName + " " + upcoming.lastName}
+                    salonName={upcoming.salonName}
+                    masterGender=""
+                    ratingnumber={upcoming.feedbackCount}
+                    money={`${upcoming.orderPrice} сум`}
+                    buttonName="Написать сообщение"
+                    Adress={upcoming.address}
+                    titleTex={upcoming.serviceName.split(' ')} // Stringni massivga aylantiramiz
+                    locationIcon={
+                      <SimpleLineIcons
+                        onPress={() => {
+                          setMapData(upcoming);
+                          navigate.navigate('(client)/(map)/(master-locations)/master-locations');
+                        }}
+                        name="location-pin"
+                        size={24}
+                        color="white"
+                      />
+                    }
+                    phoneIcon={
+                      <Feather
+                        name="phone"
+                        size={24}
+                        color="white"
+                        onPress={() => handlePhonePress(upcoming.phoneNumber)} // Telefon qilish funksiyasini qo'shamiz
+                      />
+                    }
+                  />
+                </AccardionHistory>
+              ))
+            ) : (
+              <View style={styles.notFound}>
+                <Text style={styles.notFoundText}>No notifications!</Text>
+              </View>
+            )}
+
           </ScrollView>
         )}
 
         {activeTab === 'past' && (
           <ScrollView>
-            <AccardionHistory title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            <AccardionHistoryTwo id={'1'} title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
               <ProfileCard
+                titleTex={['Наращивание ресниц', 'Наращивание ресниц', 'Наращивание ресниц']}
+                imageURL={''}
                 masterName="Натали"
                 salonName="Beauty Wave"
                 masterGender="Женский мастер"
@@ -87,7 +126,21 @@ const OrderHistory = () => {
                 Adress="Яккасарайский р-н, ул. Мирабад, 62а"
                 deleteIcon={<Feather name="trash-2" size={24} color="white" />}
               />
-            </AccardionHistory>
+            </AccardionHistoryTwo>
+            <AccardionHistoryTwo id={'2'} title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+              <ProfileCard
+                titleTex={['Наращивание ресниц', 'Наращивание ресниц', 'Наращивание ресниц']}
+                imageURL={''}
+                masterName="Натали"
+                salonName="Beauty Wave"
+                masterGender="Женский мастер"
+                ratingnumber={5}
+                money="100 000 сум"
+                buttonName="Оставить отзыв"
+                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+              />
+            </AccardionHistoryTwo>
           </ScrollView>
         )}
         <CenteredModal
@@ -140,6 +193,15 @@ const styles = StyleSheet.create({
     color: '#494949',
     fontSize: 12,
     marginVertical: 20,
+  },
+  notFound: {
+    marginTop: 100,
+  },
+  notFoundText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: '600',
   },
 });
 

@@ -3,28 +3,31 @@ import React, { useState } from 'react'
 import CenteredModal from '@/components/(modals)/modal-centered'
 import { AntDesign } from '@expo/vector-icons'
 import Textarea from '@/components/select/textarea'
+import { getFile } from '@/helpers/api'
 
 interface IProps {
     masterName: string,
-    salonName: string,
+    salonName: string | null,
     masterGender: string,
-    ratingnumber: number,
-    money: string,
-    titleTex?: string[], // majburiy emas
+    ratingnumber: number | null,
+    money: string | null,
+    titleTex?: string[] | null, // majburiy emas
     buttonName: string,
-    Adress: string
+    Adress: string | null
     locationIcon?: React.ReactNode
-    phoneIcon?: React.ReactNode
+    phoneIcon?: string | React.ReactNode
     deleteIcon?: React.ReactNode
+    imageURL: string | null
 }
 
 const ProfileCard: React.FC<IProps> = ({
     masterName,
     salonName,
+    imageURL,
     masterGender,
     ratingnumber,
     money,
-    titleTex = [],
+    titleTex = '',
     buttonName,
     Adress,
     locationIcon,
@@ -48,28 +51,39 @@ const ProfileCard: React.FC<IProps> = ({
         if (regex.test(trimmedValue) && !/\s\s+/.test(e)) setTextAreaValue(e)
         else if (e === '') setTextAreaValue('')
     };
+
+    const generateStars = (count: number) => {
+        let stars = '';
+        for (let i = 0; i < count; i++) {
+            stars += '★';
+        }
+        for (let i = count; i < 5; i++) {
+            stars += '☆';
+        }
+        return stars;
+    };
+
     return (
         <View style={styles.card}>
             <View style={styles.profileContainer}>
                 <View style={styles.profileRow}>
-                    <Image source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }} style={styles.profileImage} />
+                    <Image source={{ uri: imageURL ? getFile + imageURL : 'https://randomuser.me/api/portraits/men/1.jpg' }} style={styles.profileImage} />
                     <View>
                         <View style={styles.profileDetails}>
                             <Text style={styles.profileName}>{masterName}</Text>
                             <Text style={styles.salonName}>{salonName}</Text>
                         </View>
-                        <Text style={styles.serviceName}>{masterGender}</Text>
+                        <View style={styles.titleContainer}>
+                            {titleTex.map((title, index) => (
+                                <Text key={index} style={styles.titleText}>{title}</Text>
+                            ))}
+                        </View>
                     </View>
                 </View>
                 <View style={styles.feedbackContainer}>
-                    <Text style={styles.feedbackStars}>{'⭐'.repeat(ratingnumber > 5 ? 5 : ratingnumber)}</Text>
+                    <Text style={styles.feedbackStars}>{generateStars(ratingnumber as number)}</Text>
                     <Text style={styles.price}>{money}</Text>
                 </View>
-            </View>
-            <View style={styles.titleContainer}>
-                {titleTex.map((title, index) => (
-                    <Text key={index} style={styles.titleText}>{title}</Text>
-                ))}
             </View>
             <Text style={styles.address}>{Adress}</Text>
             <View style={styles.iconContainer}>
@@ -153,11 +167,13 @@ const styles = StyleSheet.create({
     },
     profileContainer: {
         flexDirection: 'row',
+        width: '100%',
         justifyContent: 'space-between',
         marginBottom: 16,
     },
     profileRow: {
         display: 'flex',
+        width: '50%',
         flexDirection: 'row',
     },
     profileImage: {
