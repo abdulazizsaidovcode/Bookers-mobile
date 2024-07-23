@@ -47,4 +47,11 @@ export interface getOrderClientPastcomingInterface{
     clientCount:number|null
     instagram:string|null
     telegram:string|null
+    orderId:string|null
+}
+
+export interface addfedbackmaster{
+    count:number|null
+    orderId:string|null
+    text:string|null
 }

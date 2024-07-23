@@ -1,14 +1,15 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import CenteredModal from '@/components/(modals)/modal-centered'
 import { AntDesign } from '@expo/vector-icons'
 import Textarea from '@/components/select/textarea'
 import { getFile } from '@/helpers/api'
+import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore'
 
 interface IProps {
     masterName: string,
     salonName: string | null,
-    masterGender: string[]|null,
+    masterGender: string[] | null,
     ratingnumber: number | null,
     money: string | null,
     titleTex?: string[] | null, // majburiy emas
@@ -18,6 +19,7 @@ interface IProps {
     phoneIcon?: string | React.ReactNode
     deleteIcon?: React.ReactNode
     imageURL: string | null
+    orderId?: string | null
 }
 
 const ProfileCard: React.FC<IProps> = ({
@@ -32,18 +34,36 @@ const ProfileCard: React.FC<IProps> = ({
     Adress,
     locationIcon,
     phoneIcon,
-    deleteIcon }) => {
+    deleteIcon,
+    orderId
+}) => {
+
+    const { activeTab, setActiveTab } = useAccardionStoreId();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [ratingModal, setRatingModal] = useState<boolean>(false);
+    const [selectOrderID, setSelectOrderID] = useState<string | null>(null)
     const [textAreaValue, setTextAreaValue] = useState('')
     const [rating, setRating] = useState<number>(0);
     const handleRating = (value: number) => setRating(value)
+
+    const datas = {
+        count: rating,
+        orderId: selectOrderID,
+        text: textAreaValue
+    }
+
     const deleteToggleModal = () => {
         setDeleteModal(!deleteModal);
     };
+
+
     const ratingToggleModal = () => {
         setRatingModal(!ratingModal);
     };
+
+
+
+
     const handleChange = (e: string) => {
         const trimmedValue = e.trim();
         const regex = /^[a-zA-Z0-9а-яА-ЯёЁ.,!?;:()\s]+$/
@@ -93,7 +113,10 @@ const ProfileCard: React.FC<IProps> = ({
                 <TouchableOpacity
                     activeOpacity={0.7}
                     style={[styles.messageButton, locationIcon && phoneIcon ? {} : { width: '80%', justifyContent: 'center' }]}
-                    onPress={ratingToggleModal}
+                    onPress={() => {
+                        setSelectOrderID(orderId)
+                        ratingToggleModal()
+                    }}
                 >
                     <Text style={styles.messageButtonText}>{buttonName}</Text>
                 </TouchableOpacity>

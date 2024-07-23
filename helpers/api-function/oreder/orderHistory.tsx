@@ -1,7 +1,7 @@
 import { getConfig } from "@/app/(tabs)/(master)/main"
 import Toast from "react-native-simple-toast";
 import { addFebdaback_Url, clientOrderaPastComing, clientOrderUpcoming } from "@/helpers/api";
-import { getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
+import { addfedbackmaster, getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
 import axios from "axios";
 
 
@@ -34,7 +34,8 @@ export const getOrderClientPustComing = async (setData: (val: getOrderClientPast
 }
 
 // Leave feedback function 
-export const addFebbacFunction = async (datas: any) => {
+export const addFebbakFunction = async (datas:(val:addfedbackmaster[])=>void) => {
+   if(datas){
     const config = await getConfig();
     const addFedbackMasterByClient = await axios.post(addFebdaback_Url, datas, config ? config : {});
     try {
@@ -43,5 +44,6 @@ export const addFebbacFunction = async (datas: any) => {
     }
     catch {
         Toast.show('Add fedback funksiya ishlamadi yani catchga tushdi', Toast.LONG)
-    }
+    }}
+    else Toast.show('Something went wrong', Toast.LONG)
 }
