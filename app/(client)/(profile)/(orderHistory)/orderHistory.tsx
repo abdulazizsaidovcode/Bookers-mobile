@@ -130,7 +130,7 @@ const OrderHistory = () => {
                     titleTex={['Наращивание ресниц', 'Наращивание ресниц', 'Наращивание ресниц']}
                     imageURL={pastComing.userAttachmentId}
                     masterName={pastComing.firstName + " " + pastComing.lastName}
-                    salonName="Beauty Wave"
+                    salonName={pastComing.salonName}
                     masterGender="Женский мастер"
                     ratingnumber={5}
                     money="100 000 сум"
