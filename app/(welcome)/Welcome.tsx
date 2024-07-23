@@ -125,7 +125,7 @@ const Welcome = () => {
       title: "Помощь",
       description: "Ознакомьтесь с документацией сервиса",
       icon: <AntDesign name="questioncircleo" size={24} color="white" />,
-      onPress: () => navigation.navigate("(free)/(help)/help"),
+      onPress: () => navigation.navigate("(profile)/(help)/help"),
     },
   ];
 
@@ -157,7 +157,7 @@ const Welcome = () => {
             />
             <View style={styles.editIconContainer}>
               <TouchableOpacity activeOpacity={0.5} onPress={() => {
-                navigation.navigate("(profile)/(settings)/(childSettings)/(Personaldata)/PersonalData")
+                navigation.navigate("(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit")
               }}>
                 <MaterialIcons name="edit" size={24} color="white" />
               </TouchableOpacity>
