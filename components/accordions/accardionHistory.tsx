@@ -4,7 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { useAccardionStore, useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
 
 interface AccordionItemProps {
-  id: string|null;
+  id: string[]|null;
   title: string | null;
   date: string | null;
   children: React.ReactNode;

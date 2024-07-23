@@ -8,7 +8,7 @@ export interface getClientNotififcations {
     createAt:string|null
 }
 
-export interface getOrderClientUpcoming{
+export interface getOrderClientUpcomingInterface{
     serviceIds:string[]|null
     serviceName:string|null 
     orderDate:string|null 

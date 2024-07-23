@@ -8,7 +8,7 @@ import AccardionHistory from "@/components/accordions/accardionHistory";
 import { AntDesign, Feather, SimpleLineIcons } from "@expo/vector-icons";
 import ProfileCard from "./profileCard";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import { getOrderClientUpcoming } from "@/type/client/editClient";
+import { getOrderClientUpcomingInterface } from "@/type/client/editClient";
 import { getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
 import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
@@ -18,7 +18,7 @@ import AccardionHistoryTwo from "@/components/accordions/accardionHistoryTwo";
 const OrderHistory = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [modalDelete, setModalDelete] = useState<boolean>(false);
-  const [upcoming, setUpcoming] = useState<getOrderClientUpcoming[]>([]);
+  const [upcoming, setUpcoming] = useState<getOrderClientUpcomingInterface[]>([]);
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>();
 
