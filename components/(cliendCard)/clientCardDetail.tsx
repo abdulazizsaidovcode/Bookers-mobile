@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 
 import tw from 'tailwind-react-native-classnames';
-import RadioGroup from 'react-native-radio-buttons-group';
+// import RadioGroup from 'react-native-radio-buttons-group';
 
 type ClientCardDetailProps = {
   type: string;
@@ -28,11 +28,11 @@ const ClientCardDetail: React.FC<ClientCardDetailProps> = ({ type, services = []
   return (
     <View style={[tw`p-4 rounded-2xl`, { backgroundColor: "#B9B9C9" }]}>
       <View style={tw`flex-row items-center mb-4`}>
-        <RadioGroup
+        {/* <RadioGroup
           radioButtons={radioButtons}
           onPress={setSelectedId}
           selectedId={selectedId}
-        />
+        /> */}
       </View>
       <ScrollView
         horizontal
