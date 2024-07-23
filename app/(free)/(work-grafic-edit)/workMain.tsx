@@ -1,8 +1,14 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import React, { useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
-import {  useFocusEffect, useNavigation } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
@@ -13,18 +19,24 @@ import {
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic-edit)/workMain'>;
-
+type SettingsScreenNavigationProp = NavigationProp<
+  RootStackParamList,
+  "(free)/(work-grafic-edit)/workMain"
+>;
 
 export const WorkMainCardEdit: React.FC<{
   icon: any;
   title: string;
   subTitle: string;
   navigation?: () => void;
-}> = ({ icon, title, subTitle, navigation }) => {
-
+  disabled?: boolean;
+}> = ({ icon, title, subTitle, navigation, disabled }) => {
   return (
-    <TouchableOpacity onPress={navigation}>
+    <TouchableOpacity
+      disabled={disabled}
+      activeOpacity={0.7}
+      onPress={navigation}
+    >
       <View style={styles.card}>
         <View>
           <View style={{ flexDirection: "row", gap: 5 }}>
@@ -54,23 +66,24 @@ const WorkMainEdit = () => {
   } = graficWorkStore();
 
   useFocusEffect(
-
     useCallback(() => {
       getUser(setGetMee);
       getWorkDay(setWeekData);
-      return () => {}
+      return () => {};
     }, [])
-  )
-  
+  );
+
   useFocusEffect(
     useCallback(() => {
       getWorkTime(setTimeData, getme ? getme.id : "");
-      return () => {}
+      return () => {};
     }, [getme])
-  )
-  
-  const navigation = useNavigation<SettingsScreenNavigationProp>();
+  );
 
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
+  const isDisabled = weekData.every(
+    (item: { dayName: string; active: boolean }) => !item.active
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -86,20 +99,34 @@ const WorkMainEdit = () => {
                   .join(", ") // elementlarni vergul bilan ajratamiz
               : "Рабочие дни недели не настроены!"
           }`}
-          navigation={() => navigation.navigate("(free)/(work-grafic-edit)/workGraffic")}
-        />
-
-        <WorkMainCardEdit
-          icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
-          title="Время работы"
-          subTitle={
-            (timeData && timeData.from && timeData.end) ? 
-            `From ${timeData.from ? timeData.from : "00:00"}  to ${
-            timeData.end ? timeData.end : "00:00"
-          }` : "Рабочее время не настроено!"
+          navigation={() =>
+            navigation.navigate("(free)/(work-grafic-edit)/workGraffic")
           }
-          navigation={() => navigation.navigate("(free)/(work-grafic-edit)/workTime")}
         />
+        <Pressable
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.8 : isDisabled ? 0.5 : 1,
+            },
+          ]}
+          disabled={isDisabled}
+        >
+          <WorkMainCardEdit
+            disabled={isDisabled}
+            icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
+            title="Время работы"
+            subTitle={
+              timeData && timeData.from && timeData.end
+                ? `From ${timeData.from ? timeData.from : "00:00"}  to ${
+                    timeData.end ? timeData.end : "00:00"
+                  }`
+                : "Рабочее время не настроено!"
+            }
+            navigation={() =>
+              navigation.navigate("(free)/(work-grafic-edit)/workTime")
+            }
+          />
+        </Pressable>
       </View>
       <View
         style={{
@@ -110,10 +137,7 @@ const WorkMainEdit = () => {
           justifyContent: "center",
         }}
       >
-        <Buttons
-          title="На главную"
-          onPress={() => navigation.goBack()}
-        />
+        <Buttons title="На главную" onPress={() => navigation.goBack()} />
       </View>
     </SafeAreaView>
   );

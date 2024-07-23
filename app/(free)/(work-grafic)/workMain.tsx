@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import React, { useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
@@ -14,17 +20,20 @@ import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting"
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic)/workTime'>;
+import { WorkMainCardEdit } from "../(work-grafic-edit)/workMain";
 
+type SettingsScreenNavigationProp = NavigationProp<
+  RootStackParamList,
+  "(free)/(work-grafic)/workMain"
+>;
 
 export const WorkMainCard: React.FC<{
   icon: any;
   title: string;
   subTitle: string;
   route?: () => void;
-  disabled?: boolean
-}> = ({ icon, title, subTitle, route, disabled=false  }) => {
-
+  disabled?: boolean;
+}> = ({ icon, title, subTitle, route, disabled = false }) => {
   return (
     <TouchableOpacity disabled={disabled} activeOpacity={0.7} onPress={route}>
       <View style={styles.card}>
@@ -54,26 +63,25 @@ const WorkMain = () => {
     setGetMee,
     getme,
     timeData,
-    calendarDate
+    calendarDate,
   } = graficWorkStore();
 
   useFocusEffect(
-
     useCallback(() => {
       getUser(setGetMee);
       getWorkDay(setWeekData);
-      return () => {}
+      return () => {};
     }, [])
-  )
-  
-  useFocusEffect(
+  );
 
+  useFocusEffect(
     useCallback(() => {
       getWorkTime(setTimeData, getme ? getme.id : "");
-      return () => {}
+      return () => {};
     }, [getme])
-  )
+  );
 
+  const isDisabled = weekData.every((item: { dayName: string; active: boolean }) => !item.active);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -91,20 +99,28 @@ const WorkMain = () => {
           }`}
           route={() => navigation.navigate("(free)/(work-grafic)/workGraffic")}
         />
-        <TouchableOpacity activeOpacity={0.7} disabled>
+        <Pressable
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.8 : isDisabled ? 0.5 : 1,
+            },
+          ]}
+          disabled={isDisabled}
+        >
           <WorkMainCard
-            disabled={weekData.every(item => !item.active)}
+            disabled={isDisabled}
             icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
             title="Время работы"
             subTitle={
-              (timeData && timeData.from && timeData.end) ? 
-              `From ${timeData.from ? timeData.from : "00:00"}  to ${
-              timeData.end ? timeData.end : "00:00"
-            }` : "Рабочее время не настроено!"
+              timeData && timeData.from && timeData.end
+                ? `From ${timeData.from ? timeData.from : "00:00"}  to ${
+                    timeData.end ? timeData.end : "00:00"
+                  }`
+                : "Рабочее время не настроено!"
             }
-          route={() => navigation.navigate("(free)/(work-grafic)/workTime")}
+            route={() => navigation.navigate("(free)/(work-grafic)/workTime")}
           />
-        </TouchableOpacity>
+        </Pressable>
       </View>
       <View
         style={{
@@ -118,7 +134,12 @@ const WorkMain = () => {
         <Buttons
           title="На главную"
           onPress={() => {
-            if (calendarDate && timeData.from !== undefined && timeData.end !== undefined && weekData.some(item => item.active)) {
+            if (
+              calendarDate &&
+              timeData.from !== undefined &&
+              timeData.end !== undefined &&
+              weekData.some((item) => item.active)
+            ) {
               putNumbers(3);
             }
             navigation.navigate("(welcome)/Welcome");
