@@ -62,7 +62,9 @@ const ClientCard: React.FC<ClientCardProps> = ({
         <Text style={tw`text-gray-600 text-lg mb-2`}>{address || "Address is not found"}</Text>
         <Text style={tw`text-black text-lg font-bold mb-4`}>Ближайшая запись: {zaps}</Text>
         <View style={tw`flex-row justify-between`}>
-          <TouchableOpacity activeOpacity={0.8} style={[tw`px-16 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]}>
+          <TouchableOpacity activeOpacity={0.8} style={[tw`px-16 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]}
+          onPress={onPress}
+          >
             <Text style={tw`text-white text-xl`}>Записаться</Text>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.8} style={[tw`p-3 rounded-full`, { backgroundColor: '#9C0A35' }]}>

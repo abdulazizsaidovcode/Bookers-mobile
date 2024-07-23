@@ -31,21 +31,13 @@ const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
   const {userLocation, setUserLocation} = useGetMeeStore();
   const {allCategory, setSelectedServiceId} = ClientStory();
 
-  useFocusEffect(
-    React.useCallback(() => {
-        getUserLocation(setUserLocation);
-        return () => {
-        };
-    }, [])
-);
-useFocusEffect(
-  React.useCallback(() => {
-      getAllCategory();
-      return () => {
-      };
-  }, [userLocation])
-);
-
+//   useFocusEffect(
+//     React.useCallback(() => {
+//         getUserLocation(setUserLocation);
+//         return () => {
+//         };
+//     }, [])
+// );
   const handlePress = useCallback(() => {
     if (item.onPress) item.onPress();
   }, [item]);
