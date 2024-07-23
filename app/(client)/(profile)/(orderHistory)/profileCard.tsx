@@ -5,6 +5,8 @@ import { AntDesign } from '@expo/vector-icons'
 import Textarea from '@/components/select/textarea'
 import { getFile } from '@/helpers/api'
 import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore'
+import { addFebbakFunction } from '@/helpers/api-function/oreder/orderHistory'
+import { addfedbackmaster } from '@/type/client/editClient'
 
 interface IProps {
     masterName: string,
@@ -46,7 +48,7 @@ const ProfileCard: React.FC<IProps> = ({
     const [rating, setRating] = useState<number>(0);
     const handleRating = (value: number) => setRating(value)
 
-    const datas = {
+    const datas:addfedbackmaster = {
         count: rating,
         orderId: selectOrderID,
         text: textAreaValue
@@ -82,7 +84,7 @@ const ProfileCard: React.FC<IProps> = ({
         }
         return stars;
     };
-
+    
     return (
         <View style={styles.card}>
             <View style={styles.profileContainer}>
@@ -115,7 +117,11 @@ const ProfileCard: React.FC<IProps> = ({
                     style={[styles.messageButton, locationIcon && phoneIcon ? {} : { width: '80%', justifyContent: 'center' }]}
                     onPress={() => {
                         setSelectOrderID(orderId)
-                        ratingToggleModal()
+                        if (activeTab === 'past') {
+                            ratingToggleModal()
+                        } else {
+                            Alert.alert('Error', 'This option is not available yet')
+                        }
                     }}
                 >
                     <Text style={styles.messageButtonText}>{buttonName}</Text>
@@ -151,6 +157,10 @@ const ProfileCard: React.FC<IProps> = ({
                 </>
             </CenteredModal>
             <CenteredModal
+                onConfirm={() => {
+                    addFebbakFunction(datas,() => ratingToggleModal())
+                    
+                }}
                 isFullBtn={false}
                 btnWhiteText={'Отправить'}
                 btnRedText={'Закрыть'}

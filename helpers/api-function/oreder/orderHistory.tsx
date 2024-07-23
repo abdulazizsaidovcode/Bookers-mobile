@@ -7,9 +7,9 @@ import axios from "axios";
 
 // Upcoming function
 export const getorderClientUpcoming = async (setData: (val: getOrderClientUpcomingInterface[]) => void) => {
-    const config = await getConfig();
-    const getclientOrderUpcoming = await axios.get(clientOrderUpcoming, config ? config : {});
     try {
+        const config = await getConfig();
+        const getclientOrderUpcoming = await axios.get(clientOrderUpcoming, config ? config : {});
         if (getclientOrderUpcoming.data.success) setData(getclientOrderUpcoming.data.body)
         else setData([])
     }
@@ -21,9 +21,9 @@ export const getorderClientUpcoming = async (setData: (val: getOrderClientUpcomi
 //Pastcoming function 
 
 export const getOrderClientPustComing = async (setData: (val: getOrderClientPastcomingInterface[]) => void) => {
-    const config = await getConfig();
-    const getclientOrderPastcoming = await axios.get(clientOrderaPastComing, config ? config : {});
     try {
+        const config = await getConfig();
+        const getclientOrderPastcoming = await axios.get(clientOrderaPastComing, config ? config : {});
         if (getclientOrderPastcoming.data.success) setData(getclientOrderPastcoming.data.body)
         else setData([])
     }
@@ -34,16 +34,27 @@ export const getOrderClientPustComing = async (setData: (val: getOrderClientPast
 }
 
 // Leave feedback function 
-export const addFebbakFunction = async (datas:(val:addfedbackmaster[])=>void) => {
-   if(datas){
-    const config = await getConfig();
-    const addFedbackMasterByClient = await axios.post(addFebdaback_Url, datas, config ? config : {});
+export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: () => void) => {
     try {
-        if (addFedbackMasterByClient.data.success) Toast.show(addFedbackMasterByClient.data.message, Toast.LONG)
-        else Toast.show('Add fedback ishlamadi', Toast.LONG)
+        if (datas) {
+            const config = await getConfig();
+            const res = await axios.post(addFebdaback_Url, datas, config ? config : {});
+            if (res.data.success) {
+                Toast.show("Hammasi yahshi Sardor xavotir olma", Toast.LONG)
+
+                console.log(res.data.message);
+                toggleModal();
+            }
+            else {
+                Toast.show('Add fedback ishlamadi', Toast.LONG)
+                console.log(res.data.message);
+
+            }
+        }
+        else Toast.show('Something went wrong', Toast.LONG)
     }
-    catch {
+    catch(err) {
         Toast.show('Add fedback funksiya ishlamadi yani catchga tushdi', Toast.LONG)
-    }}
-    else Toast.show('Something went wrong', Toast.LONG)
+        console.log(err);
+    }
 }
