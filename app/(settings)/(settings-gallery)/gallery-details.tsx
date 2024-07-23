@@ -24,7 +24,6 @@ const GalleryDetails: React.FC = () => {
   const [name, setName] = useState('');
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
-  const [selectedMainImages, setSelectedMainImages] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
   const [isBottomModalOpen, setIsBottomModalOpen] = useState(false);
@@ -177,7 +176,7 @@ const GalleryDetails: React.FC = () => {
                   <Image style={styles.image} source={{ uri: getFile + albumItem.attachmentId }} />
                   {!isDeleteMode && albumItem.attachmentStatus === 'NEW' && <View style={{ position: 'absolute', width: 15, borderRadius: 50, height: 15, backgroundColor: '#F29339', top: 0, right: 0, margin: 7 }}></View>}
                   {albumItem.attachmentStatus === 'CANCELED' && <View style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: 'black', opacity: 0.8, top: 0, right: 0, left: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', borderRadius: 14.5, }}>
-                    <Text style={{ color: 'red' }}>{albumItem.message}</Text>
+                    <Text style={{ color: 'red', textAlign: 'center' }}>{albumItem.message}</Text>
                   </View>}
                 </Pressable>
               </View>
