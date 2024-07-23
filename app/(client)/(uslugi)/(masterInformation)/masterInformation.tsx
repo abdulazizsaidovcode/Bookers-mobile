@@ -9,13 +9,16 @@ import CenteredModal from '@/components/(modals)/modal-centered';
 import Textarea from '@/components/select/textarea';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import axios from 'axios';
+import ClientCard from '@/components/(cliendCard)/cliendCard';
+import { FontAwesome6, Octicons, SimpleLineIcons } from '@expo/vector-icons';
+import ClientCardUslugi from '@/components/(cliendCard)/clientCardUslugi';
 
 const MasterInformation = () => {
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
     const { selectedClient, setClientId } = ClientStory();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [value, setValue] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [value, setValue] = useState<string>('');
+    const [phoneNumber, setPhoneNumber] = useState<string>('');
 
     useEffect(() => {
         // Fetch the phone number from the backend
@@ -42,7 +45,7 @@ const MasterInformation = () => {
         }
     };
 
-    const handleCategorySelect = (categoryId: string, index: any) => {
+    const handleCategorySelect = (categoryId: string, index: number) => {
         setSelectedCategory(index);
         console.log("Selected category ID:", categoryId);
     };
@@ -78,10 +81,6 @@ const MasterInformation = () => {
         }
     ];
 
-    const servicec = [
-        { id: '1', name: 'nimadir' }
-    ];
-
     const clintCardUslugiData = [
         {
             salon: selectedClient?.salon,
@@ -93,9 +92,13 @@ const MasterInformation = () => {
             clients: selectedClient?.clients,
             address: selectedClient?.address,
             feedbackCount: selectedClient?.feedbackCount,
-            btnTitle: 'Написать сообщение',
             spicalist: selectedClient?.masterSpecialization,
+            btntext: 'Написать сообщение'
         },
+    ];
+
+    const servicec = [
+        { id: '1', name: 'nimadir' }
     ];
 
     return (
@@ -105,14 +108,13 @@ const MasterInformation = () => {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
-                
                 <View style={tw`mb-5`}>
                     <FlatList
                         data={clintCardUslugiData}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item }) => (
                             <View style={tw`mb-4`}>
-                                <ClintCardUslugi
+                                <ClientCardUslugi
                                     salon={item.salon}
                                     imageUrl={item.imageUrl}
                                     name={item.name}
@@ -123,16 +125,24 @@ const MasterInformation = () => {
                                     address={item.address}
                                     spicalist={item.spicalist}
                                     feedbackCount={item.feedbackCount}
-                                    btnTitle={item.btnTitle}
+                                    btntext={item.btntext}
                                     services={item.services}
                                     onPress={openModal}
-                                    onPhonePress={() => makePhoneCall(phoneNumber)} 
+                                    onPhonePress={() => makePhoneCall(phoneNumber)}
+                                    locationIcon={
+                                        <SimpleLineIcons name="location-pin" size={24} color="white" />
+                                    }
+                                    anotherIcon={
+                                        <FontAwesome6 name="phone" size={24} color="white" />
+                                    }
+                                    phoneIcon={
+                                        <Octicons name="bookmark" size={26} color="white" />
+                                    }
                                 />
                             </View>
                         )}
                     />
                 </View>
-
                 <View style={tw`mb-4`}>
                     <Text style={tw`text-2xl text-white font-bold`}>Услуги {selectedClient?.name}</Text>
                 </View>
@@ -142,15 +152,15 @@ const MasterInformation = () => {
                     contentContainerStyle={{ gap: 16, marginBottom: 10 }}
                     showsHorizontalScrollIndicator={false}
                 >
-                    {servicec.map((service, index) => (
+                    {servicec.map((service) => (
                         <View key={service.id}>
                             <TouchableOpacity
                                 activeOpacity={0.7}
-                                onPress={() => handleCategorySelect(service.id, index)}
+                                onPress={() => handleCategorySelect(service.id, servicec.findIndex(item => item.id === service.id))}
                             >
                                 <Text style={[
                                     tw`rounded-lg border border-gray-600 px-4 py-3 text-gray-600 mb-3`,
-                                    selectedCategory === index ? tw`bg-white text-black` : tw`bg-transparent text-gray-600`
+                                    selectedCategory === servicec.findIndex(item => item.id === service.id) ? tw`bg-white text-black` : tw`bg-transparent text-gray-600`
                                 ]}>
                                     {service.name}
                                 </Text>
@@ -178,17 +188,18 @@ const MasterInformation = () => {
             <CenteredModal
                 isModal={modalVisible}
                 btnWhiteText='Отправить'
-                btnRedText='Закрыть '
+                btnRedText='Закрыть'
                 isFullBtn={false}
                 toggleModal={closeModal}
                 onConfirm={handleAdd}
             >
-                <View style={tw`p-4 text-center`}>
-                    <Text style={tw`text-white text-xl mb-2 w-full`}>Добавьте свою специализацию</Text>
+                <View style={tw`p-4 items-center justify-center`}>
+                    <Text style={tw`text-white text-xl mb-5 text-center w-full`}>Написать сообщение</Text>
                     <Textarea
-                        placeholder=''
+                        placeholder='Введите специализацию'
                         onChangeText={(text) => setValue(text)}
-                        value={value} />
+                        value={value}
+                    />
                 </View>
             </CenteredModal>
         </SafeAreaView>

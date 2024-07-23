@@ -1,31 +1,29 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import tw from 'tailwind-react-native-classnames';
 import { router } from 'expo-router';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
-import { Feather } from '@expo/vector-icons';
-import ContactInformation from '../contact-information/contact-information';
 
 type ClientCardProps = {
     salon: string | undefined;
-    imageUrl: string;
+    imageUrl: string | undefined;
     name: string | undefined;
     zaps: string | undefined;
     masterType: string | undefined;
     orders: number | undefined;
     clients: number | undefined;
     address: string | undefined;
-    services?: string[];
     feedbackCount: number | undefined;
     onPress?: () => void;
-    btnTitle?: string;
-    spicalist?:string;
-    
+    locationIcon?: React.ReactNode
+    btntext?: string | undefined;
+    anotherIcon?: React.ReactNode
+    phoneIcon?:React.ReactNode
 };
 
-const ClintCardUslugi: React.FC<ClientCardProps> = ({
-    salon, imageUrl, feedbackCount, services = [], name, masterType, orders, clients, address, zaps, onPress, btnTitle, spicalist,
+const ClientCardUslugi: React.FC<ClientCardProps> = ({
+    salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, locationIcon, btntext, anotherIcon,phoneIcon
 }) => {
     const { getme } = webPageStore();
 
@@ -41,61 +39,74 @@ const ClintCardUslugi: React.FC<ClientCardProps> = ({
     };
 
     return (
-        <View style={tw`p-4 bg-gray-300 rounded-2xl shadow-lg`}>
-            <View style={tw`flex-row items-center mb-5`}>
-                <Image
-                    source={getme && getme.attachmentId ? { uri: getme.attachmentId } : require('../../assets/avatar.png')}
-                    style={tw`w-16 h-16 rounded-full mr-3`}
-                />
-                <View style={tw`flex-1`}>
-                    <View style={tw`flex-row items-center mb-1`}>
-                        <Text style={tw`text-lg font-bold`}>{name || "No data"}</Text>
-                        <View style={tw`border border-gray-600 px-2 py-1 rounded-lg ml-2`}>
-                            <Text style={tw`text-xs text-gray-600`}>{salon}</Text>
+        <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={onPress}
+        >
+            <View style={tw`p-4 bg-gray-300 rounded-2xl shadow-lg`}>
+                <View style={tw`flex-row items-center mb-4`}>
+                    <Image
+                        source={getme && getme.attachmentId ? { uri: getme.attachmentId } : require('../../assets/avatar.png')}
+                        style={tw`w-16 h-16 rounded-full mr-3`}
+                    />
+                    <View style={tw`flex-1`}>
+                        <View style={tw`flex-row items-center mb-1`}>
+                            <Text style={tw`text-lg font-bold`}>{name || "No data"}</Text>
+                            <View style={tw`border border-gray-600 px-2 py-1 rounded-lg ml-2`}>
+                                <Text style={tw`text-xs text-gray-600`}>{salon}</Text>
+                            </View>
                         </View>
+                        <Text style={tw`text-sm text-gray-600`}>{masterType}</Text>
                     </View>
-                    <Text style={tw`text-sm text-gray-600`}>{masterType}</Text>
+                    <View style={tw`flex items-end`}>
+                        <Text style={[tw`text-lg`, { color: '#9C0A35' }]}>{generateStars(feedbackCount || 0)}</Text>
+                        <Text style={tw`text-xs text-gray-600`}>{orders} заказа, {clients} клиентов</Text>
+                    </View>
                 </View>
-                <View style={tw`flex items-end`}>
-                    <Text style={[tw`text-lg`, { color: '#9C0A35' }]}>{generateStars(feedbackCount || 0)}</Text>
-                    <Text style={tw`text-xs text-gray-600 mb-1`}>{orders} заказа, {clients} клиентов</Text>
-                </View>
-            </View>
-            <ScrollView
-                horizontal
-                contentContainerStyle={{ gap: 10 }}
-                showsHorizontalScrollIndicator={false}
-            >
-                <View style={tw`flex-row mb-3`}>
-                    {services.map((service, index) => (
-                        <TouchableOpacity key={index} style={tw`p-2 ml-2 border border-gray-600 rounded-lg ${index !== 0 ? 'mr-2' : ''}`}>
-                            <Text style={tw`text-center text-gray-600`}>{service}</Text>
+                <Text style={tw`text-gray-600 text-lg mb-2`}>{address || "Address is not found"}</Text>
+                <View style={tw`flex mb-3 flex-row items-center justify-center`}>
+                    {locationIcon && (
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            style={[tw`px-3 py-3 rounded-full mx-2`, { backgroundColor: '#9C0A35' }]} // Changed ml-2 to mx-2 for equal spacing
+                        >
+                            {locationIcon}
                         </TouchableOpacity>
-                    ))}
+                    )}
+                    {anotherIcon && (
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            style={[tw`px-3 py-3 rounded-full mx-2`, { backgroundColor: '#9C0A35' }]} // Customize the style as needed
+                        >
+                            {anotherIcon}
+                        </TouchableOpacity>
+                    )}
+                    {phoneIcon && (
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            style={[tw`px-4 py-3 rounded-full mx-2`, { backgroundColor: '#9C0A35' }]} // Customize the style as needed
+                        >
+                            {phoneIcon}
+                        </TouchableOpacity>
+                    )}
                 </View>
-            </ScrollView>
-            <Text style={tw`text-gray-600 text-lg mb-4`}>{address || "Address is not found"}</Text>
-            <View style={[tw`flex-row `, {justifyContent:'center',alignItems:'center',width:'100%'}]}>
-                <TouchableOpacity activeOpacity={0.8} style={[tw`p-3 rounded-full mr-2`, { backgroundColor: '#9C0A35' }]}>
-                    <SimpleLineIcons name="location-pin" size={30} color="white"/>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8} style={[tw`p-3 rounded-full mr-2`, { backgroundColor: '#9C0A35' }]}>
-                    <Feather name="phone" size={30} color="white"/>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    activeOpacity={0.8}
-                    style={[tw`p-3 rounded-full mr-2`, { backgroundColor: '#9C0A35' }]}   
-                >
-                 <Feather name="phone" size={30} color="white" />
-                </TouchableOpacity>
+
+
+                <View style={tw`flex-row`}>
+                    <TouchableOpacity activeOpacity={0.8} style={[tw`px-10 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]}
+                        onPress={onPress}
+                    >
+                        <Text style={tw`text-white text-xl`}>{btntext}</Text>
+                    </TouchableOpacity>
+                    {locationIcon && (
+                        <TouchableOpacity activeOpacity={0.7} style={[tw`px-3 py-3 rounded-full ml-2 `, { backgroundColor: '#9C0A35' }]}>
+                            {locationIcon}
+                        </TouchableOpacity>
+                    )}
+                </View>
             </View>
-            <View style={tw`flex-row justify-between mt-4`}>
-                <TouchableOpacity activeOpacity={0.8} style={[tw`flex-1 p-3 rounded-xl`, { backgroundColor: '#9C0A35' }]}>
-                    <Text style={tw`text-white text-center text-xl`} onPress={onPress}>{btnTitle}</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
-export default ClintCardUslugi;
+export default ClientCardUslugi;

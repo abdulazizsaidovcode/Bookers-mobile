@@ -7,6 +7,7 @@ interface AccardionStoreState {
   expanded5: boolean;
   genderIndex: boolean;
   isSelected: boolean;
+  isSelected1:boolean;
   setExpanded: (val: boolean) => void;
   setGenderIndex: (val: boolean) => void;
   setSelection: (val: boolean) => void;
@@ -14,6 +15,7 @@ interface AccardionStoreState {
   setExpended3: (val: boolean) => void;
   setExpended4: (val: boolean) => void;
   setExpended5: (val: boolean) => void;
+  setSelected1: (val:boolean) => void;
 }
 
 export const useAccardionStore = create<AccardionStoreState>((set) => ({
@@ -21,6 +23,7 @@ export const useAccardionStore = create<AccardionStoreState>((set) => ({
   expanded: true,
   genderIndex: false,
   isSelected: false,
+  isSelected1:false,
   expanded2: true,
   expanded3: true,
   expanded4: true,
@@ -32,6 +35,7 @@ export const useAccardionStore = create<AccardionStoreState>((set) => ({
   setExpanded: (val: boolean) => set({ expanded: val }),
   setGenderIndex: (val: boolean) => set({ genderIndex: val }),
   setSelection: (val: boolean) => set({ isSelected: val }),
+  setSelected1: (val:boolean) => set({isSelected1:val}),
 }));
 
 

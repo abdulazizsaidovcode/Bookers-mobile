@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, StatusBar, ActivityIndicator, FlatList } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
-import { Fontisto, Ionicons } from '@expo/vector-icons';
+import { Fontisto, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useFocusEffect, useNavigation } from 'expo-router';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
@@ -21,7 +21,7 @@ import Buttons from '@/components/(buttons)/button';
 import { useMapStore } from '@/helpers/state_managment/map/map';
 
 const Specialist = () => {
-  const { clientData, setSelectedServiceId, selectedServiceId, setClientData, setSelectedClient, selectedClient } = ClientStory();
+  const { clientData, selectedServiceId, setClientData, setSelectedClient,} = ClientStory();
   const { genderIndex } = useAccardionStore();
   const { rating, value } = useCommunitySlider();
   const { userLocation } = useGetMeeStore();
@@ -58,59 +58,58 @@ const Specialist = () => {
   useEffect(() => {
     fetchClientData();
   }, [searchValue]);
-
   useFocusEffect(
-    useCallback(() =>{
+    useCallback(() => {
       const latitude = userLocation?.coords?.latitude || null;
       const longitude = userLocation?.coords?.longitude || null;
-      postClientFilter([selectedServiceId], genderIndex, value*1000, rating, latitude, longitude, searchValue).finally(() => {});
-       return () => null
-    },[])
-   );
+      postClientFilter([selectedServiceId], genderIndex, value * 1000, rating, latitude, longitude, searchValue).finally(() => { });
+      return () => null
+    }, [])
+  );
 
-   useEffect(() =>{
-      const latitude = userLocation?.coords?.latitude || null;
-      const longitude = userLocation?.coords?.longitude || null;
-      postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => {});
-    }, [searchValue]);   
+  useEffect(() => {
+    const latitude = userLocation?.coords?.latitude || null;
+    const longitude = userLocation?.coords?.longitude || null;
+    postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => { });
+  }, [searchValue]);
 
-    const handleFilterClick = async () => {
-      setLoading(true);
-      const latitude = userLocation?.coords?.latitude || null;
-      const longitude = userLocation?.coords?.longitude || null;
-      try {
-        await postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue, () => toggleBottomModal());
-      } catch (error) {
-        console.error("Error during filter:", error);
-      } finally {
-        setLoading(false);
-        toggleBottomModal();
-      }
+  const handleFilterClick = async () => {
+    setLoading(true);
+    const latitude = userLocation?.coords?.latitude || null;
+    const longitude = userLocation?.coords?.longitude || null;
+    try {
+      await postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue, () => toggleBottomModal());
+    } catch (error) {
+      console.error("Error during filter:", error);
+    } finally {
+      setLoading(false);
+      toggleBottomModal();
+    }
+  };
+
+  const handleClientCardPress = (item: any) => {
+    const client = {
+      id: item.id,
+      masterId: item.masterId,
+      salon: item.salonName,
+      imageUrl: item.imageUrl,
+      name: item.fullName,
+      zaps: item.nextEntryDate,
+      masterType: item.masterSpecialization,
+      orders: item.orderCount,
+      feedbackCount: item.feedbackCount,
+      clients: item.clientCount,
+      btntext:"Записаться",
+      address: `${item.district}, ${item.street}, ${item.house}`,
     };
-    
-    const handleClientCardPress = (item: any) => {
-      const client = {
-        id: item.id,
-        masterId: item.masterId,
-        salon: item.salonName,
-        imageUrl: item.imageUrl,
-        name: item.fullName,
-        zaps: item.nextEntryDate,
-        masterType: item.masterSpecialization,
-        orders: item.orderCount,
-        feedbackCount: item.feedbackCount,
-        clients: item.clientCount,
-        address: `${item.district}, ${item.street}, ${item.house}`,
-      };
-      setSelectedClient(client);
-      router.push('(client)/(uslugi)/(masterInformation)/masterInformation');
-    };
-
+    setSelectedClient(client);
+    router.push('(client)/(uslugi)/(masterInformation)/masterInformation');
+  };
   const renderClientCard = ({ item }) => (
     <View style={tw`mb-3`}>
       <ClientCard
         id={item.id}
-         masterId={item.masterId}
+        masterId={item.masterId}
         salon={item.salonName}
         imageUrl={item.imageUrl}
         name={item.fullName}
@@ -121,7 +120,11 @@ const Specialist = () => {
         clients={item.clientCount}
         address={`${item.district}, ${item.street}, ${item.house}`}
         onPress={() => handleClientCardPress(item)}
-      />
+        btntext='Записаться'
+        locationIcon = {
+          <SimpleLineIcons name="location-pin" size={24} color="white" />
+      }
+        />
     </View>
   );
 
@@ -129,7 +132,7 @@ const Specialist = () => {
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
       <NavigationMenu name={`Здоровье и красота волос`} />
-      <ScrollView 
+      <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
       >
@@ -145,12 +148,12 @@ const Specialist = () => {
             </TouchableOpacity>
             <View>
               <CustomCheckbox1
-              value={checked}
-              onValueChange={() => setChecked(!checked)}
-              title="Запись на сегодня"
-              onPress={getFreeTime}
-            />
-            </View> 
+                value={checked}
+                onValueChange={() => setChecked(!checked)}
+                title="Запись на сегодня"
+                onPress={getFreeTime}
+              />
+            </View>
           </View>
           <LocationInput
             placeholder='🔍 Search'
