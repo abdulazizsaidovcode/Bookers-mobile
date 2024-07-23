@@ -69,8 +69,8 @@ const UserProfileCardEdit: React.FC = () => {
             {getme && getme.starCount ? generateStars(getme.starCount) : generateStars(0)}
           </Text>
           <Text style={styles.orderInfo}>
-            {getme && getme.orderCount ? getme.orderCount : "No data"} заказа,{" "}
-            {getme && getme.clientCount ? getme.clientCount : "No data"} клиентов
+            {getme && getme.orderCount ? getme.orderCount : "0"} заказа,{" "}
+            {getme && getme.clientCount ? getme.clientCount : "0"} клиентов
           </Text>
         </View>
       </View>

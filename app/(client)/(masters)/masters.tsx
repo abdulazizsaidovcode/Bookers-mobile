@@ -66,6 +66,13 @@ const Masters = () => {
         userLocation.coords.latitude,
         userLocation?.coords.longitude
       );
+      console.log(pastEntries,
+        genderIndex,
+        value * 1000,
+        rating,
+        userLocation.coords.latitude,
+        userLocation?.coords.longitude);
+      
       toggleBottomModal();
       setPastEntries([]);
     } catch (error) {
@@ -179,7 +186,7 @@ const Masters = () => {
         </View>
       </View>
     );
-  };
+  };  
 
   useEffect(() => {
     getTopMasters(search);

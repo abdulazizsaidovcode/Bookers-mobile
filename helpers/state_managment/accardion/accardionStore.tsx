@@ -44,11 +44,15 @@ interface AccardionState {
   setExpandedId: (id: string | null) => void;
   expandidIdTwo: string | null;
   setExpendidIdTwo: (id: string | null) => void;
+  activeTab: 'upcoming' | 'past';
+  setActiveTab: (tab: 'upcoming' | 'past') => void;
 }
 
 export const useAccardionStoreId = create<AccardionState>((set) => ({
   expandedId: null,
   setExpandedId: (id) => set({ expandedId: id }),
+  activeTab: 'upcoming',
+  setActiveTab: (tab) => set({ activeTab: tab }),
   expandidIdTwo: null,
   setExpendidIdTwo: (id) => set({ expandidIdTwo: id }),
 }));

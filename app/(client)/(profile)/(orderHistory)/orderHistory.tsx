@@ -14,10 +14,10 @@ import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
 import { useNavigation } from "@react-navigation/native";
 import AccardionHistoryTwo from "@/components/accordions/accardionHistoryTwo";
-import PastHistory from "@/app/(free)/(client)/details/history/past-history";
+import { useAccardionStoreId } from "@/helpers/state_managment/accardion/accardionStore";
 
 const OrderHistory = () => {
-  const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
+  const {activeTab, setActiveTab}=useAccardionStoreId();
   const [modalDelete, setModalDelete] = useState<boolean>(false);
   const [upcoming, setUpcoming] = useState<getOrderClientUpcomingInterface[]>([]);
   const [pastComing, setPastComing] = useState<getOrderClientPastcomingInterface[]>([]);
@@ -85,7 +85,7 @@ const OrderHistory = () => {
                     imageURL={upcoming.userAttachmentId}
                     masterName={upcoming.firstName + " " + upcoming.lastName}
                     salonName={upcoming.salonName}
-                    masterGender=""
+                    masterGender={upcoming.specializations}
                     ratingnumber={upcoming.feedbackCount}
                     money={`${upcoming.orderPrice} сум`}
                     buttonName="Написать сообщение"
@@ -132,11 +132,12 @@ const OrderHistory = () => {
                     imageURL={pastComing.userAttachmentId}
                     masterName={pastComing.firstName + " " + pastComing.lastName}
                     salonName={pastComing.salonName}
-                    masterGender=""
+                    masterGender={pastComing.specializations}
                     ratingnumber={pastComing.feedbackCount}
                     money={`${pastComing.orderPrice} сум`}
                     buttonName="Оставить отзыв"
                     Adress={pastComing.address}
+                    orderId={pastComing.orderId}
                     deleteIcon={<Feather name="trash-2" size={24} color="white" />}
                   />
                 </AccardionHistoryTwo>
@@ -146,21 +147,6 @@ const OrderHistory = () => {
                 <Text style={styles.notFoundText}>No Pastcoming!</Text>
               </View>
             )}
-
-            {/* <AccardionHistoryTwo id={'2'} title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
-              <ProfileCard
-                titleTex={['Наращивание ресниц', 'Наращивание ресниц', 'Наращивание ресниц']}
-                imageURL={''}
-                masterName="Натали"
-                salonName="Beauty Wave"
-                masterGender="Женский мастер"
-                ratingnumber={5}
-                money="100 000 сум"
-                buttonName="Оставить отзыв"
-                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
-                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
-              />
-            </AccardionHistoryTwo> */}
           </ScrollView>
         )}
         <CenteredModal

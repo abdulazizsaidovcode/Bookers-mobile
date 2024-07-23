@@ -24,7 +24,9 @@ const WebPageEdit: React.FC = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <View style={{ paddingLeft: 10 }}>
             <NavigationMenu name='Веб страница' />
+            </View>
 
             <View style={styles.tabsContainer}>
                 <TouchableOpacity style={[styles.tabButton, activeTab === 'services' && styles.activeTab]} onPress={() => setActiveTab('services')}>

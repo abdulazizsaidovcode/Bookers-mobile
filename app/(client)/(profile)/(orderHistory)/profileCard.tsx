@@ -1,14 +1,17 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import CenteredModal from '@/components/(modals)/modal-centered'
 import { AntDesign } from '@expo/vector-icons'
 import Textarea from '@/components/select/textarea'
 import { getFile } from '@/helpers/api'
+import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore'
+import { addFebbakFunction } from '@/helpers/api-function/oreder/orderHistory'
+import { addfedbackmaster } from '@/type/client/editClient'
 
 interface IProps {
     masterName: string,
     salonName: string | null,
-    masterGender: string,
+    masterGender: string[] | null,
     ratingnumber: number | null,
     money: string | null,
     titleTex?: string[] | null, // majburiy emas
@@ -18,6 +21,7 @@ interface IProps {
     phoneIcon?: string | React.ReactNode
     deleteIcon?: React.ReactNode
     imageURL: string | null
+    orderId?: string | null
 }
 
 const ProfileCard: React.FC<IProps> = ({
@@ -32,18 +36,36 @@ const ProfileCard: React.FC<IProps> = ({
     Adress,
     locationIcon,
     phoneIcon,
-    deleteIcon }) => {
+    deleteIcon,
+    orderId
+}) => {
+
+    const { activeTab, setActiveTab } = useAccardionStoreId();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [ratingModal, setRatingModal] = useState<boolean>(false);
+    const [selectOrderID, setSelectOrderID] = useState<string | null>(null)
     const [textAreaValue, setTextAreaValue] = useState('')
     const [rating, setRating] = useState<number>(0);
     const handleRating = (value: number) => setRating(value)
+
+    const datas:addfedbackmaster = {
+        count: rating,
+        orderId: selectOrderID,
+        text: textAreaValue
+    }
+
     const deleteToggleModal = () => {
         setDeleteModal(!deleteModal);
     };
+
+
     const ratingToggleModal = () => {
         setRatingModal(!ratingModal);
     };
+
+
+
+
     const handleChange = (e: string) => {
         const trimmedValue = e.trim();
         const regex = /^[a-zA-Z0-9а-яА-ЯёЁ.,!?;:()\s]+$/
@@ -62,21 +84,19 @@ const ProfileCard: React.FC<IProps> = ({
         }
         return stars;
     };
-
+    
     return (
         <View style={styles.card}>
             <View style={styles.profileContainer}>
                 <View style={styles.profileRow}>
-                    <Image source={{ uri: imageURL ? getFile + imageURL : 'https://randomuser.me/api/portraits/men/1.jpg' }} style={styles.profileImage} />
+                    <Image source={{ uri: imageURL ? getFile + imageURL : 'https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg' }} style={styles.profileImage} />
                     <View>
                         <View style={styles.profileDetails}>
                             <Text style={styles.profileName}>{masterName}</Text>
                             <Text style={styles.salonName}>{salonName}</Text>
                         </View>
-                        <View style={styles.titleContainer}>
-                            {titleTex.map((title, index) => (
-                                <Text key={index} style={styles.titleText}>{title}</Text>
-                            ))}
+                        <View>
+                            <Text style={styles.gender}>{masterGender}</Text>
                         </View>
                     </View>
                 </View>
@@ -85,12 +105,24 @@ const ProfileCard: React.FC<IProps> = ({
                     <Text style={styles.price}>{money}</Text>
                 </View>
             </View>
+            <View style={styles.titleContainer}>
+                {titleTex.map((title, index) => (
+                    <Text key={index} style={styles.titleText}>{title}</Text>
+                ))}
+            </View>
             <Text style={styles.address}>{Adress}</Text>
-            <View style={styles.iconContainer}>
+            <View style={[styles.iconContainer, locationIcon && phoneIcon ? { justifyContent: 'space-between' } : { gap: 10 }]}>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    style={styles.messageButton}
-                    onPress={ratingToggleModal}
+                    style={[styles.messageButton, locationIcon && phoneIcon ? {} : { width: '80%', justifyContent: 'center' }]}
+                    onPress={() => {
+                        setSelectOrderID(orderId)
+                        if (activeTab === 'past') {
+                            ratingToggleModal()
+                        } else {
+                            Alert.alert('Error', 'This option is not available yet')
+                        }
+                    }}
                 >
                     <Text style={styles.messageButtonText}>{buttonName}</Text>
                 </TouchableOpacity>
@@ -125,6 +157,10 @@ const ProfileCard: React.FC<IProps> = ({
                 </>
             </CenteredModal>
             <CenteredModal
+                onConfirm={() => {
+                    addFebbakFunction(datas,() => ratingToggleModal())
+                    
+                }}
                 isFullBtn={false}
                 btnWhiteText={'Отправить'}
                 btnRedText={'Закрыть'}
@@ -169,7 +205,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        marginBottom: 16,
+        // marginBottom: 16,
     },
     profileRow: {
         display: 'flex',
@@ -177,15 +213,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     profileImage: {
-        width: 64,
-        height: 64,
+        width: 50,
+        height: 50,
         borderRadius: 32,
-        marginRight: 16,
+        marginRight: 8,
     },
     profileDetails: {
         display: 'flex',
         flexDirection: 'row',
         gap: 5,
+        marginBottom: 5,
     },
     profileName: {
         fontSize: 14,
@@ -208,13 +245,13 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     feedbackStars: {
-        fontSize: 10,
+        fontSize: 14,
         color: '#9C0A35',
     },
     price: {
-        fontSize: 12,
+        fontSize: 14,
         color: '#9C0A35',
-        marginTop: 8,
+        marginTop: 4,
         fontWeight: '600',
     },
     titleContainer: {
@@ -239,24 +276,25 @@ const styles = StyleSheet.create({
     },
     iconContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 16,
     },
     messageButton: {
         paddingHorizontal: 30,
-        paddingVertical: 8,
+        paddingVertical: 16,
         backgroundColor: '#9C0A35',
         borderRadius: 5,
     },
     messageButtonText: {
         color: 'white',
+        textAlign: 'center',
+        fontSize: 16,
     },
     iconButton: {
-        padding: 8,
+        padding: 16,
         borderRadius: 50,
         backgroundColor: '#9C0A35',
-        marginRight: 8,
+        // marginRight: 4,
     },
     deleteText: {
         color: '#494949',
@@ -275,4 +313,9 @@ const styles = StyleSheet.create({
     star: {
         marginHorizontal: 5,
     },
+    gender: {
+        fontSize: 14,
+        color: '#4F4F4F',
+        marginBottom: 20
+    }
 });
