@@ -86,10 +86,10 @@ const ProfileCard: React.FC<IProps> = ({
                 </View>
             </View>
             <Text style={styles.address}>{Adress}</Text>
-            <View style={styles.iconContainer}>
+            <View style={[styles.iconContainer, locationIcon && phoneIcon ? { justifyContent: 'space-between' } : {gap: 10} ]}>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    style={styles.messageButton}
+                    style={[styles.messageButton,  locationIcon && phoneIcon ? {} : { width: '80%', justifyContent: 'center' } ]}
                     onPress={ratingToggleModal}
                 >
                     <Text style={styles.messageButtonText}>{buttonName}</Text>
@@ -239,24 +239,25 @@ const styles = StyleSheet.create({
     },
     iconContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 16,
     },
     messageButton: {
         paddingHorizontal: 30,
-        paddingVertical: 8,
+        paddingVertical: 16,
         backgroundColor: '#9C0A35',
         borderRadius: 5,
     },
     messageButtonText: {
         color: 'white',
+        textAlign: 'center',
+        fontSize: 16,
     },
     iconButton: {
-        padding: 8,
+        padding: 16,
         borderRadius: 50,
         backgroundColor: '#9C0A35',
-        marginRight: 8,
+        // marginRight: 4,
     },
     deleteText: {
         color: '#494949',
