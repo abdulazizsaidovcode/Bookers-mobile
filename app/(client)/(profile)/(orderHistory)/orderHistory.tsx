@@ -126,9 +126,9 @@ const OrderHistory = () => {
           <ScrollView>
             {pastComing.length !== 0 ? (
               pastComing.map((pastComing, index) => (
-                <AccardionHistoryTwo key={index} id={pastComing.serviceIds} title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+                <AccardionHistoryTwo key={index} id={pastComing.serviceIds} title={pastComing.serviceName} date="Пн, 10 февраля 12:30 - 13:30 " >
                   <ProfileCard
-                    titleTex={['Наращивание ресниц', 'Наращивание ресниц', 'Наращивание ресниц']}
+                    titleTex={pastComing.serviceName.split('  ')}
                     imageURL={pastComing.userAttachmentId}
                     masterName={pastComing.firstName + " " + pastComing.lastName}
                     salonName={pastComing.salonName}
