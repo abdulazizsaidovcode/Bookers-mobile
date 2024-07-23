@@ -36,6 +36,7 @@ export const getAllCategory = async () => {
         ClientStory.getState().setClientData(data.body)
         toggleModal ? toggleModal() : null
         setTopMasters(data.body)
+        console.log(data); 
       };
       console.log(data);
       

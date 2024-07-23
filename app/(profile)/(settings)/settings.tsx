@@ -21,7 +21,7 @@ const data: { icon: any, label: string, screen: string }[] = [
     {
         icon: "briefcase",
         label: "Место работы",
-        screen: "(location)/Location",
+        screen: "(location)/LocationEdit",
     },
     {
         icon: "calendar",
