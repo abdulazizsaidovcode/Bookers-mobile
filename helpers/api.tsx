@@ -181,3 +181,6 @@ export const client_profile_edit_url: string = `${base_url}client`
 export const getNotification_url:string=`${base_url}notification`
 
 export const client_profile_delete_url: string = `${base_url}user`
+
+// Client order history upcoming function 
+export const clientOrderUpcoming:string=`${base_url}order/client/history/upcoming`
