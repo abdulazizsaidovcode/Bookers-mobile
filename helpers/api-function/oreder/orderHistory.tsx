@@ -19,3 +19,8 @@ export const getorderClientUpcoming=async(setData:(val:getOrderClientUpcomingInt
     }
 }
 //Pastcoming function 
+
+export const getOrderClientPustComing=async (setData:(val:getOrderClientUpcomingInterface[])=>void)=>{
+    const config=await getConfig();
+    const getclientOrderPustComing=await axios.get()
+}
