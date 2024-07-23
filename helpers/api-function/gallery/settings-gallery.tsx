@@ -126,7 +126,8 @@ export const delGallery = async (id: number | null, setData: (data: GalleryData[
     const config = await getConfig()
     const res = await axios.delete(`${main_gallery}/${id}`, config ? config : {});
     if (res.data.success) {
-      await fetchData(setData);
+      setData([])
+      fetchData(setData);
       toggleModal()
       toggleCheckboxes()
       Toast.show('Ваша галерея успешно удалена', Toast.LONG)

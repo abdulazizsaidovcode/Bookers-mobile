@@ -139,6 +139,10 @@ import MasterInformation from "./(client)/(uslugi)/(masterInformation)/masterInf
 import RecentMastersByCategory from "./(client)/(map)/(recent-masters)/recent-masters-by-category";
 import Masters from "./(client)/(masters)/masters";
 import SettingPage from "./(client)/(profile)/(settings)/(settingPage)/settingPage";
+import ProfileMasterEdit from "./(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit";
+import ProfileMasterScreen from "./(profile)/(settings)/(childSettings)/(profileEdit)/profileScreen";
+import EditProfileMasterPage from "./(profile)/(settings)/(childSettings)/(profileEdit)/(editPages)/editPage";
+import TimeWorkDetail from "./(free)/(work-grafic-edit)/workTimeDetail";
 const Stack = createNativeStackNavigator();
 export { ErrorBoundary } from "expo-router";
 
@@ -846,6 +850,26 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(client)/(profile)/(payment)/payment"
               component={PaymentClient}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit"
+              component={ProfileMasterEdit}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(settings)/(childSettings)/(profileEdit)/profileScreen"
+              component={ProfileMasterScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/(settings)/(childSettings)/(profileEdit)/(editPages)/editPage"
+              component={EditProfileMasterPage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(free)/(work-grafic-edit)/workTimeDetail"
+              component={TimeWorkDetail}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

@@ -29,7 +29,7 @@ const ChangingEnEntry = () => {
   };
 
   const handleSave = () => {
-    editChangingOrder(changingData.isActive, changingData.text, setHasChanges, navigation.goBack());
+    editChangingOrder(changingData.isActive, changingData.text, setHasChanges, navigation.goBack);
   };
 
   return (

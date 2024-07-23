@@ -64,7 +64,9 @@ useFocusEffect(
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
+      <View style={{ paddingLeft: 10 }}>
       <NavigationMenu name="График работы" />
+      </View>
       <ScrollView>
         <View style={styles.section}>
           <Text style={styles.title}>График работы с</Text>

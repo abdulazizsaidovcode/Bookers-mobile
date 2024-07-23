@@ -76,10 +76,14 @@ export type RootStackParamList = {
    '(client)/(profile)/(notification)/notification': undefined
    '(client)/(profile)/(profileEdit)/profileEdit': undefined
    '(client)/(profile)/(profileEdit)/(editPages)/editPage': undefined
+   '(profile)/(settings)/(childSettings)/(profileEdit)/(editPages)/editPage': undefined
    '(client)/(profile)/(orderHistory)/orderHistory': undefined
   '(auth)/(register)/(clientInformations)/getNameSurname': undefined
   '(client)/(profile)/(payment)/payment': undefined
   '(client)/(profile)/(card)/card': undefined
   '(client)/(profile)/(profileEdit)/profileScreen' : undefined
+  '(profile)/(settings)/(childSettings)/(profileEdit)/profileScreen' : undefined
   '(client)/(profile)/(settings)/(settingPage)/settingPage' : undefined
+  '(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit' : undefined
+  "(free)/(work-grafic-edit)/workTimeDetail": undefined
 };

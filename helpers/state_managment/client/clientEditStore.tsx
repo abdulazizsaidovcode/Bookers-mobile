@@ -10,14 +10,17 @@ interface ProfileState {
   nickName: string | null;
   firstName: string | null;
   lastName: string | null;
-  birthDate: string | null;
+  birthDate: string | number | null;
   job: string | null;
   phoneNumber: string | null;
   regionId: string| number | null;
   districtId: number | string| null;
   telegram: string | null;
-  gender: boolean;
+  gender: boolean | string | null;
+  gender1: string | null;
+  ageId: number | null;
   attachmentId: string | null;
+  instagram:  string | null;
   setProfile: (profile: Partial<ProfileState>) => void;
   updateProfileField: (key: keyof ProfileState | string, value: any) => void;
   routeName: RouteData
@@ -27,6 +30,8 @@ interface ProfileState {
   setShowCalendar: (data: boolean) => void
   regionIdData: any
   setRegionIdData: (data: any) => void
+  ageIdData: any
+  setAgeIdData: (data: any) => void
   distiricyIdData: any
   setDistirictIdData: (data: any) => void
   clientNotificationData:getClientNotififcations[]
@@ -34,17 +39,20 @@ interface ProfileState {
 }
 
 const useProfileStore = create<ProfileState>((set) => ({
-  nickName: "",
-  firstName: "",
-  lastName: "",
-  birthDate: "",
-  job: "",
-  phoneNumber: "",
-  regionId: "",
+  nickName: null,
+  firstName: null,
+  lastName: null,
+  birthDate: null,
+  job: null,
+  phoneNumber: null,
+  regionId: null,
   districtId: 0,
-  telegram: "",
+  telegram: null,
   gender: true,
-  attachmentId: "",
+  gender1 : "",
+  attachmentId: null,
+  instagram: null,
+  ageId: 0,
   setProfile: (profile) => set((state) => ({ ...state, ...profile })),
   updateProfileField: (key, value) => set((state) => ({ ...state, [key]: value })),
   routeName: {
@@ -57,6 +65,8 @@ const useProfileStore = create<ProfileState>((set) => ({
   setShowCalendar: (data: boolean) => set({showCalendar: data}),
   regionIdData: [],
   setRegionIdData: (data: any) => set({regionIdData: data}),
+  ageIdData: [],
+  setAgeIdData: (data: any) => set({regionIdData: data}),
   distiricyIdData: [],
   setDistirictIdData: (data: any) => set({distiricyIdData: data}),
   clientNotificationData: [],

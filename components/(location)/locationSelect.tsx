@@ -18,8 +18,10 @@ const LocationSelect = ({ setDistrictId, city, setCity }: Types) => {
   const [toggle, setToggle] = useState(false);
 
   const getCity = async () => {
-    const config = await getConfig()
-    const { data } = await axios.get(`${base_url}district/name/filter?name=${city}`, config ? config : {}
+    const config = await getConfig();
+    const { data } = await axios.get(
+      `${base_url}district/name/filter?name=${city}`,
+      config ? config : {}
     );
     setData(data.body);
   };
@@ -32,10 +34,12 @@ const LocationSelect = ({ setDistrictId, city, setCity }: Types) => {
 
   useEffect(() => {
     getCity();
-    if (city.length && city.length === 0) {
-      setToggle(false);
-    } else {
+    console.log();
+
+    if (city.trim().length) {
       setToggle(true);
+    } else {
+      setToggle(false);
     }
   }, [city]);
 

@@ -13,7 +13,7 @@ const CalendarGrafficEdit: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<MarkedDates>({});
   const { setCalendarDate } = graficWorkStore();
 
-  useFocusEffect (
+  useFocusEffect(
     useCallback(() => {
       const today = moment().format("YYYY-MM-DD");
       const newSelectedDate: MarkedDates = {
@@ -21,14 +21,14 @@ const CalendarGrafficEdit: React.FC = () => {
           selected: true,
           marked: true,
           dotColor: "red",
-          color: "red",
+          color: "#9C0A35",
         },
       };
       setSelectedDate(newSelectedDate);
       setCalendarDate(today); // Default bugungi sanani saqlash
       return () => {}
     }, [setCalendarDate])
-  )
+  );
 
   const onDayPress = (day: DateObject) => {
     const today = moment().format("YYYY-MM-DD");
@@ -52,7 +52,6 @@ const CalendarGrafficEdit: React.FC = () => {
   };
 
   useFocusEffect(
-
     useCallback(() => {
       if (Platform.OS === 'ios') {
         console.log('Running on iOS');
@@ -61,17 +60,37 @@ const CalendarGrafficEdit: React.FC = () => {
       }
       return () => {}
     }, [])
-  )
+  );
+
+  const getMarkedDates = () => {
+    const today = moment().format("YYYY-MM-DD");
+    const markedDates: MarkedDates = {};
+    const startOfMonth = moment().startOf('month');
+    const endOfMonth = moment().endOf('month');
+
+    for (let date = startOfMonth; date.isBefore(endOfMonth); date.add(1, 'day')) {
+      const dayString = date.format("YYYY-MM-DD");
+      if (date.isBefore(today)) {
+        markedDates[dayString] = { color: 'gray', textColor: 'white', disabled: true };
+      } else if (date.day() === 0 || date.day() === 6) {
+        markedDates[dayString] = { textColor: 'red', color: 'transparent' }; // Ensure weekends are red
+      } else {
+        markedDates[dayString] = {};
+      }
+    }
+    return markedDates;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <Calendar
         style={[tw`w-80`]}
         onDayPress={onDayPress}
-        markedDates={selectedDate}
+        markedDates={{ ...getMarkedDates(), ...selectedDate }}
+        firstDay={1} // Haftani dushanbadan boshlash
         theme={{
           calendarBackground: '#ffffff',
-          textSectionTitleColor: '#b6c1cd',
+          textSectionTitleColor: '#000',
           dayTextColor: 'black',
           todayTextColor: '#9C0A35',
           selectedDayTextColor: '#ffffff',

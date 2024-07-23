@@ -9,17 +9,17 @@ import useGetMeeStore from "@/helpers/state_managment/getMee";
 import useProfileStore from "@/helpers/state_managment/client/clientEditStore";
 
 const radioProps = [
-  { label: "Erkak", value: "MALE", isTrue: true },
+  { label: "Erkak", value: "MALE", isTrue: false },
   { label: "Ayol", value: "FEMALE", isTrue: false },
 ];
 
-const SelectGender = () => {
+const SelectMasterGender = () => {
   const { getMee } = useGetMeeStore();
   const {updateProfileField} = useProfileStore()
-  const [genderIndex, setGenderIndex] = useState<boolean>(getMee && getMee.gender ? getMee.gender === "MALE" : getMee.gender === "FEMALE");
+  const [genderIndex, setGenderIndex] = useState<string>(getMee && getMee.gender ? getMee.gender : "");
 
-  const onPressRadioButton = (key: boolean) => {
-    setGenderIndex(key)
+  const onPressRadioButton = (key: string) => {
+    setGenderIndex(key);
     updateProfileField("gender", key)
   };
 
@@ -31,8 +31,8 @@ const SelectGender = () => {
             <RadioButtonInput
               obj={obj}
               index={i}
-              isSelected={genderIndex === obj.isTrue}
-              onPress={ () => onPressRadioButton(obj.isTrue)}
+              isSelected={genderIndex === obj.value}
+              onPress={onPressRadioButton}
               buttonInnerColor={"#9C035A"}
               buttonOuterColor={"#9C035A"}
               buttonSize={15}
@@ -55,7 +55,7 @@ const SelectGender = () => {
   );
 };
 
-export default SelectGender;
+export default SelectMasterGender;
 
 const styles = StyleSheet.create({
   content: {

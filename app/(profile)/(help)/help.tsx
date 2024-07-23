@@ -61,36 +61,38 @@ const HelpPage = () => {
             }
             // onPress: () => { router.push('/certificate') }
         },
-        {
-            title: "Использование приложения",
-            onPress: () => {
-                getHelpOne(setHelpDate, "USING_APPLICATION", "/aboutUs")
-                setNavigatName("Использование приложения")
-            }
-            // onPress: () => { router.push('/certificate') }
-        },
-        {
-            title: "Спецификация услуги",
-            onPress: () => {
-                getHelpOne(setHelpDate, "SERVICE_SPECIFICATION", "/aboutUs")
-                setNavigatName("Спецификация услуги")
-            }
-            // onPress: () => { router.push('/certificate') }
-        },
-        {
-            title: "Условия эксплуатации",
-            onPress: () => {
-                getHelpOne(setHelpDate, "TERMS_OF_USE", "/aboutUs")
-                setNavigatName("Условия эксплуатации")
-            }
-            // onPress: () => { router.push('/certificate') }
-        },
+        // {
+        //     title: "Использование приложения",
+        //     onPress: () => {
+        //         getHelpOne(setHelpDate, "USING_APPLICATION", "/aboutUs")
+        //         setNavigatName("Использование приложения")
+        //     }
+        //     // onPress: () => { router.push('/certificate') }
+        // },
+        // {
+        //     title: "Спецификация услуги",
+        //     onPress: () => {
+        //         getHelpOne(setHelpDate, "SERVICE_SPECIFICATION", "/aboutUs")
+        //         setNavigatName("Спецификация услуги")
+        //     }
+        //     // onPress: () => { router.push('/certificate') }
+        // },
+        // {
+        //     title: "Условия эксплуатации",
+        //     onPress: () => {
+        //         getHelpOne(setHelpDate, "TERMS_OF_USE", "/aboutUs")
+        //         setNavigatName("Условия эксплуатации")
+        //     }
+        //     // onPress: () => { router.push('/certificate') }
+        // },
     ];
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <NavigationMenu name={`Помощь`} />
+            <View style={{ paddingLeft: 10, backgroundColor: "#21212E" }}>
+                <NavigationMenu name={`Помощь`} />
+            </View>
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
