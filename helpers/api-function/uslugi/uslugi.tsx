@@ -3,6 +3,7 @@ import { getConfig } from "@/app/(tabs)/(master)/main";
 import { getCategory_Client, getClient_filter, getClient_freeTime } from "@/helpers/api";
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
+import useTopMastersStore from "@/helpers/state_managment/masters";
 
 // Client get all Category
 export const getAllCategory = async () => {
@@ -25,6 +26,8 @@ export const getAllCategory = async () => {
 
 // Client post filter
   export const postClientFilter = async (categoryId?: any, gender?: boolean | null, nextToMe?: number | null, rating?: number | null, lat?: number | null, lng?: number | null, inputValue?: string | null, toggleModal?: () => void) => {
+    const {setTopMasters} = useTopMastersStore()
+   
     try {
       const config = await getConfig();
       const postData = { categoryId, gender, nextToMe, rating, lat, lng };
@@ -32,7 +35,10 @@ export const getAllCategory = async () => {
       if (data.success) {
         ClientStory.getState().setClientData(data.body)
         toggleModal ? toggleModal() : null
+        setTopMasters(data.body)
       };
+      console.log(data);
+      
       ClientStory.getState().setClientId(data.body.id)
 
     } catch (error) {

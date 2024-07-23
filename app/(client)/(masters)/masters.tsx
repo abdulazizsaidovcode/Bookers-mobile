@@ -181,9 +181,13 @@ const Masters = () => {
     );
   };
 
+  console.log(pastEntries);
+  
+
   useEffect(() => {
     getTopMasters(search);
     getCategory();
+    console.log("hello"); 
   }, [search]);
 
   return (
