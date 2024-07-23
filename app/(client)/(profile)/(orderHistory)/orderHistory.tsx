@@ -14,6 +14,7 @@ import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
 import { useNavigation } from "@react-navigation/native";
 import AccardionHistoryTwo from "@/components/accordions/accardionHistoryTwo";
+import PastHistory from "@/app/(free)/(client)/details/history/past-history";
 
 const OrderHistory = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
@@ -131,8 +132,8 @@ const OrderHistory = () => {
                     imageURL={pastComing.userAttachmentId}
                     masterName={pastComing.firstName + " " + pastComing.lastName}
                     salonName={pastComing.salonName}
-                    masterGender="Женский мастер"
-                    ratingnumber={5}
+                    masterGender=""
+                    ratingnumber={pastComing.feedbackCount}
                     money="100 000 сум"
                     buttonName="Оставить отзыв"
                     Adress="Яккасарайский р-н, ул. Мирабад, 62а"
