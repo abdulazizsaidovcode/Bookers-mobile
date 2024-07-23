@@ -136,7 +136,7 @@ const OrderHistory = () => {
                     ratingnumber={pastComing.feedbackCount}
                     money={`${pastComing.orderPrice} сум`}
                     buttonName="Оставить отзыв"
-                    Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                    Adress={pastComing.address}
                     deleteIcon={<Feather name="trash-2" size={24} color="white" />}
                   />
                 </AccardionHistoryTwo>
