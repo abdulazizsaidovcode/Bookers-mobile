@@ -68,7 +68,7 @@ const NotificationClient: React.FC = () => {
                 </TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                {notification.length ? (
+                {notification.length!==0 ? (
                     notification.map((notif, index) => (
                         <TouchableOpacity
                             key={index}

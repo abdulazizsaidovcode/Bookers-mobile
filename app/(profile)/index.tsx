@@ -178,7 +178,7 @@ const ProfilePage: React.FC = () => {
           {
             icon: "exclamation-circle",
             label: "О сервиса",
-            screen: "(free)/(help)/help",
+            screen: "(profile)/(help)/help",
           },
           {
             icon: "bell",
