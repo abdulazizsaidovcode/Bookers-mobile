@@ -1,7 +1,7 @@
 import { getConfig } from "@/app/(tabs)/(master)/main"
 import Toast from "react-native-simple-toast";
-import { clientOrderUpcoming } from "@/helpers/api";
-import { getOrderClientUpcomingInterface } from "@/type/client/editClient";
+import { clientOrderaPastComing, clientOrderUpcoming } from "@/helpers/api";
+import { getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
 import axios from "axios";
 
 
@@ -20,7 +20,15 @@ export const getorderClientUpcoming=async(setData:(val:getOrderClientUpcomingInt
 }
 //Pastcoming function 
 
-export const getOrderClientPustComing=async (setData:(val:getOrderClientUpcomingInterface[])=>void)=>{
+export const getOrderClientPustComing=async (setData:(val:getOrderClientPastcomingInterface[])=>void)=>{
     const config=await getConfig();
-    const getclientOrderPustComing=await axios.get()
+    const getclientOrderPastcoming=await axios.get(clientOrderaPastComing,config ? config : {});
+    try{
+        if(getclientOrderPastcoming.data.success)setData(getclientOrderPastcoming.data.body)
+        else setData([])
+    }
+    catch{
+        Toast.show('Upcoming topilmadi afsuski', Toast.LONG)
+        setData([])
+    }
 }

@@ -8,8 +8,8 @@ import AccardionHistory from "@/components/accordions/accardionHistory";
 import { AntDesign, Feather, SimpleLineIcons } from "@expo/vector-icons";
 import ProfileCard from "./profileCard";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import { getOrderClientUpcomingInterface } from "@/type/client/editClient";
-import { getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
+import { getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
+import { getOrderClientPustComing, getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
 import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
 import { useNavigation } from "@react-navigation/native";
@@ -19,13 +19,17 @@ const OrderHistory = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
   const [modalDelete, setModalDelete] = useState<boolean>(false);
   const [upcoming, setUpcoming] = useState<getOrderClientUpcomingInterface[]>([]);
+  const [pastComing, setPastComing] = useState<getOrderClientPastcomingInterface[]>([]);
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>();
 
   const getUpcomingClient = async () => {
     await getorderClientUpcoming(setUpcoming);
   };
-
+  const getPastcomingClient = async () => {
+    await getOrderClientPustComing(setPastComing);
+  }
+  
   const deleteToggleModal = () => {
     setModalDelete(!modalDelete);
   };
@@ -40,6 +44,12 @@ const OrderHistory = () => {
       return () => { };
     }, [])
   );
+  useFocusEffect(
+    useCallback(()=>{
+      getPastcomingClient();
+      return () => { };
+    },[])
+  )
 
   return (
     <SafeAreaView style={styles.container}>
@@ -79,7 +89,7 @@ const OrderHistory = () => {
                     money={`${upcoming.orderPrice} сум`}
                     buttonName="Написать сообщение"
                     Adress={upcoming.address}
-                    titleTex={upcoming.serviceName.split(' ')} // Stringni massivga aylantiramiz
+                    titleTex={upcoming.serviceName.split('  ')} // Stringni massivga aylantiramiz
                     locationIcon={
                       <SimpleLineIcons
                         onPress={() => {
@@ -104,7 +114,7 @@ const OrderHistory = () => {
               ))
             ) : (
               <View style={styles.notFound}>
-                <Text style={styles.notFoundText}>No notifications!</Text>
+                <Text style={styles.notFoundText}>No upcoming!</Text>
               </View>
             )}
 
@@ -113,7 +123,30 @@ const OrderHistory = () => {
 
         {activeTab === 'past' && (
           <ScrollView>
-            <AccardionHistoryTwo id={'1'} title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+            {pastComing.length !== 0 ? (
+              pastComing.map((pastComing, index) => (
+                <AccardionHistoryTwo key={index} id={pastComing.serviceIds} title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
+                  <ProfileCard
+                    titleTex={['Наращивание ресниц', 'Наращивание ресниц', 'Наращивание ресниц']}
+                    imageURL={pastComing.userAttachmentId}
+                    masterName={pastComing.firstName + " " + pastComing.lastName}
+                    salonName="Beauty Wave"
+                    masterGender="Женский мастер"
+                    ratingnumber={5}
+                    money="100 000 сум"
+                    buttonName="Оставить отзыв"
+                    Adress="Яккасарайский р-н, ул. Мирабад, 62а"
+                    deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+                  />
+                </AccardionHistoryTwo>
+              ))
+            ) : (
+              <View style={styles.notFound}>
+                <Text style={styles.notFoundText}>No Pastcoming!</Text>
+              </View>
+            )}
+
+            {/* <AccardionHistoryTwo id={'2'} title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
               <ProfileCard
                 titleTex={['Наращивание ресниц', 'Наращивание ресниц', 'Наращивание ресниц']}
                 imageURL={''}
@@ -126,21 +159,7 @@ const OrderHistory = () => {
                 Adress="Яккасарайский р-н, ул. Мирабад, 62а"
                 deleteIcon={<Feather name="trash-2" size={24} color="white" />}
               />
-            </AccardionHistoryTwo>
-            <AccardionHistoryTwo id={'2'} title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
-              <ProfileCard
-                titleTex={['Наращивание ресниц', 'Наращивание ресниц', 'Наращивание ресниц']}
-                imageURL={''}
-                masterName="Натали"
-                salonName="Beauty Wave"
-                masterGender="Женский мастер"
-                ratingnumber={5}
-                money="100 000 сум"
-                buttonName="Оставить отзыв"
-                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
-                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
-              />
-            </AccardionHistoryTwo>
+            </AccardionHistoryTwo> */}
           </ScrollView>
         )}
         <CenteredModal
