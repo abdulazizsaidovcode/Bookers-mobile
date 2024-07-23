@@ -146,21 +146,6 @@ const OrderHistory = () => {
                 <Text style={styles.notFoundText}>No Pastcoming!</Text>
               </View>
             )}
-
-            {/* <AccardionHistoryTwo id={'2'} title="Наращивание ресниц" date="Пн, 10 февраля 12:30 - 13:30 " >
-              <ProfileCard
-                titleTex={['Наращивание ресниц', 'Наращивание ресниц', 'Наращивание ресниц']}
-                imageURL={''}
-                masterName="Натали"
-                salonName="Beauty Wave"
-                masterGender="Женский мастер"
-                ratingnumber={5}
-                money="100 000 сум"
-                buttonName="Оставить отзыв"
-                Adress="Яккасарайский р-н, ул. Мирабад, 62а"
-                deleteIcon={<Feather name="trash-2" size={24} color="white" />}
-              />
-            </AccardionHistoryTwo> */}
           </ScrollView>
         )}
         <CenteredModal
