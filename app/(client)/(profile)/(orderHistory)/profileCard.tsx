@@ -8,7 +8,7 @@ import { getFile } from '@/helpers/api'
 interface IProps {
     masterName: string,
     salonName: string | null,
-    masterGender: string,
+    masterGender: string[]|null,
     ratingnumber: number | null,
     money: string | null,
     titleTex?: string[] | null, // majburiy emas
@@ -67,7 +67,7 @@ const ProfileCard: React.FC<IProps> = ({
         <View style={styles.card}>
             <View style={styles.profileContainer}>
                 <View style={styles.profileRow}>
-                    <Image source={{ uri: imageURL ? getFile + imageURL : 'https://randomuser.me/api/portraits/men/1.jpg' }} style={styles.profileImage} />
+                    <Image source={{ uri: imageURL ? getFile + imageURL : 'https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg' }} style={styles.profileImage} />
                     <View>
                         <View style={styles.profileDetails}>
                             <Text style={styles.profileName}>{masterName}</Text>
