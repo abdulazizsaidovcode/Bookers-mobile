@@ -14,7 +14,7 @@ import { NavigationProp } from "@react-navigation/native";
 import { useFocusEffect, useNavigation } from "expo-router";
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
-  "(free)/(work-grafic)/workMain"
+  "(free)/(work-grafic)/workGraffic"
 >;
 
 const GrafficWorkEdit: React.FC = () => {
