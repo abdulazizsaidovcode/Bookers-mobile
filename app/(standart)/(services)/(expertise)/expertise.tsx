@@ -6,7 +6,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
 import CenteredModal from '@/components/(modals)/modal-centered';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import axios from 'axios';
 import { category_child, masterAdd_category } from '@/helpers/api';
@@ -30,6 +30,15 @@ const Expertise: React.FC = () => {
             postCategory(selectedCategory, '');
         }
     }, [selectedCategory]);
+    
+    useFocusEffect(
+        React.useCallback(() => {
+            setLoading(true);
+            if(selectedCategory)
+                getChildCategory(selectedCategory).finally(() => setLoading(false));
+            return () => { };
+        }, [selectedCategory])
+    );
 
     useEffect(() => {
         if (value.trim() === "") {
@@ -63,11 +72,14 @@ const Expertise: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        if (selectedCategory) {
-            getChildCategory(selectedCategory);
-        }
-    }, [selectedCategory]);
+    useFocusEffect(
+        React.useCallback(() => {
+            setLoading(true);
+            if(selectedCategory)
+                getChildCategory(selectedCategory).finally(() => setLoading(false));
+            return () => { };
+        }, [selectedCategory])
+    );
 
     const postCategory = async (selectedCategoryId: string, name: string) => {
         try {
@@ -105,6 +117,10 @@ const Expertise: React.FC = () => {
                 return [...prevSelected, item];
             }
         });
+    };
+
+    const logSelectedServices = () => {
+        console.log("Selected Services:", selectedServices);
     };
 
     const renderItem = ({ item }: { item: any }) => {

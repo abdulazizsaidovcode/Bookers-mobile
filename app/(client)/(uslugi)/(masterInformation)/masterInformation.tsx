@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ScrollView, View, StatusBar, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, StatusBar, Text, TouchableOpacity, FlatList, Linking, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -7,12 +7,28 @@ import ClintCardUslugi from '@/components/(cliendCard)/clientCardUslugi';
 import ClientCardDetail from '@/components/(cliendCard)/clientCardDetail';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import Textarea from '@/components/select/textarea';
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
+import axios from 'axios';
 
 const MasterInformation = () => {
-
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const { selectedClient, setClientId } = ClientStory();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [value, setValue] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+
+    useEffect(() => {
+        // Fetch the phone number from the backend
+        const fetchPhoneNumber = async () => {
+            try {
+                const response = await axios.get('YOUR_BACKEND_API_ENDPOINT'); // Replace with your actual API endpoint
+                setPhoneNumber(response.data.phoneNumber);
+            } catch (error) {
+                console.error('Error fetching phone number:', error);
+            }
+        };
+        fetchPhoneNumber();
+    }, []);
 
     const openModal = () => setModalVisible(true);
     const closeModal = () => {
@@ -29,6 +45,19 @@ const MasterInformation = () => {
     const handleCategorySelect = (categoryId: string, index: any) => {
         setSelectedCategory(index);
         console.log("Selected category ID:", categoryId);
+    };
+
+    const makePhoneCall = (number: string) => {
+        const url = `tel:${number}`;
+        Linking.canOpenURL(url)
+            .then((supported) => {
+                if (supported) {
+                    Linking.openURL(url);
+                } else {
+                    Alert.alert('Error', 'Your device does not support this feature');
+                }
+            })
+            .catch((err) => console.error('Error making phone call:', err));
     };
 
     const clientDetails = [
@@ -55,20 +84,18 @@ const MasterInformation = () => {
 
     const clintCardUslugiData = [
         {
-            salon: 'Test',
+            salon: selectedClient?.salon,
             imageUrl: '',
-            name: 'Xoji',
-            zaps: 'sas',
-            masterType: 'Hammasi',
-            orders: 20,
-            clients: 10,
-            address: 'Мирабадский р-н, ул. Нурафшон, 32',
-            feedbackCount: 4,
+            name: selectedClient?.name,
+            zaps: selectedClient?.zaps,
+            masterType: selectedClient?.masterType,
+            orders: selectedClient?.orders,
+            clients: selectedClient?.clients,
+            address: selectedClient?.address,
+            feedbackCount: selectedClient?.feedbackCount,
             btnTitle: 'Написать сообщение',
-            spicalist:'Имеется скидка',
-            services: ['укладка', 'укладка', 'укладка', 'укладка', 'укладка', 'укладка12']
+            spicalist: selectedClient?.masterSpecialization,
         },
-        // Add more data objects as needed
     ];
 
     return (
@@ -78,30 +105,38 @@ const MasterInformation = () => {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
+                
                 <View style={tw`mb-5`}>
-                    {clintCardUslugiData.map((uslugi, index) => (
-                        <View key={index} style={tw`mb-4`}>
-                            <ClintCardUslugi
-                                salon={uslugi.salon}
-                                imageUrl={uslugi.imageUrl}
-                                name={uslugi.name}
-                                zaps={uslugi.zaps}
-                                masterType={uslugi.masterType}
-                                orders={uslugi.orders}
-                                clients={uslugi.clients}
-                                address={uslugi.address}
-                                spicalist={uslugi.spicalist}
-                                feedbackCount={uslugi.feedbackCount}
-                                btnTitle={uslugi.btnTitle}
-                                services={uslugi.services}
-                                onPress={openModal}
-                            />
-                        </View>
-                    ))}
+                    <FlatList
+                        data={clintCardUslugiData}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => (
+                            <View style={tw`mb-4`}>
+                                <ClintCardUslugi
+                                    salon={item.salon}
+                                    imageUrl={item.imageUrl}
+                                    name={item.name}
+                                    zaps={item.zaps}
+                                    masterType={item.masterType}
+                                    orders={item.orders}
+                                    clients={item.clients}
+                                    address={item.address}
+                                    spicalist={item.spicalist}
+                                    feedbackCount={item.feedbackCount}
+                                    btnTitle={item.btnTitle}
+                                    services={item.services}
+                                    onPress={openModal}
+                                    onPhonePress={() => makePhoneCall(phoneNumber)} 
+                                />
+                            </View>
+                        )}
+                    />
                 </View>
+
                 <View style={tw`mb-4`}>
-                    <Text style={tw`text-2xl text-white font-bold`}>Услуги Натали</Text>
+                    <Text style={tw`text-2xl text-white font-bold`}>Услуги {selectedClient?.name}</Text>
                 </View>
+
                 <ScrollView
                     horizontal
                     contentContainerStyle={{ gap: 16, marginBottom: 10 }}
@@ -123,6 +158,7 @@ const MasterInformation = () => {
                         </View>
                     ))}
                 </ScrollView>
+
                 <View style={tw`mb-3`}>
                     {clientDetails.map((detail, index) => (
                         <View key={index} style={tw`mb-5`}>
@@ -138,23 +174,23 @@ const MasterInformation = () => {
                     ))}
                 </View>
             </ScrollView>
+
             <CenteredModal
-                            isModal={modalVisible}
-                            btnWhiteText='Отправить'
-                            btnRedText='Закрыть '
-                            isFullBtn={false}
-                            toggleModal={closeModal}
-                            onConfirm={handleAdd}
-                        // disabled={!validate}
-                        >
-                            <View style={tw`p-4 text-center`}>
-                                <Text style={tw`text-white text-xl mb-2 w-full`}>Добавьте свою специализацию</Text>
-                                <Textarea
-                                    placeholder=''
-                                    onChangeText={(text) => setValue(text)}
-                                    value={value} />
-                            </View>
-                        </CenteredModal>
+                isModal={modalVisible}
+                btnWhiteText='Отправить'
+                btnRedText='Закрыть '
+                isFullBtn={false}
+                toggleModal={closeModal}
+                onConfirm={handleAdd}
+            >
+                <View style={tw`p-4 text-center`}>
+                    <Text style={tw`text-white text-xl mb-2 w-full`}>Добавьте свою специализацию</Text>
+                    <Textarea
+                        placeholder=''
+                        onChangeText={(text) => setValue(text)}
+                        value={value} />
+                </View>
+            </CenteredModal>
         </SafeAreaView>
     );
 };

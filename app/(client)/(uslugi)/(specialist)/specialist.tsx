@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StatusBar, ActivityIndicator, FlatList } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
-import { Fontisto } from '@expo/vector-icons';
+import { Fontisto, Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, useNavigation } from 'expo-router';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import CustomCheckbox1 from '@/components/checkbox/checkbox1';
 import LocationInput from '@/app/locationInput';
@@ -18,86 +18,113 @@ import AccordionFree from '@/components/accordions/accardionFree';
 import AccardionSliderTwo from '@/components/accordions/accardionSliderTwo';
 import AccardionSlider from '@/components/accordions/accardionSlider';
 import Buttons from '@/components/(buttons)/button';
-import { getConfig } from '@/app/(tabs)/(master)/main';
-import axios from 'axios';
-import { getClient_freeTime } from '@/helpers/api';
+import { useMapStore } from '@/helpers/state_managment/map/map';
 
 const Specialist = () => {
-  const { clientData, setSelectedServiceId, selectedServiceId, setClientData } = ClientStory();
+  const { clientData, setSelectedServiceId, selectedServiceId, setClientData, setSelectedClient, selectedClient } = ClientStory();
   const { genderIndex } = useAccardionStore();
   const { rating, value } = useCommunitySlider();
   const { userLocation } = useGetMeeStore();
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState(false);
-  const [bottmModal, setBottomModal] = useState(false);
+  const [bottomModal, setBottomModal] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
-  const toggleBottomModal = () => setBottomModal(!bottmModal);
+  const toggleBottomModal = () => setBottomModal(!bottomModal);
+  const { setMapData } = useMapStore();
+  const navigate = useNavigation<any>();
 
-  const handleFree = async () => {
+  const fetchClientData = useCallback(async () => {
     setLoading(true);
     try {
-      const freeTimeData = await getFreeTime();
-      setClientData(freeTimeData);
+      let data;
+      if (checked) {
+        data = await getFreeTime();
+      } else {
+        const latitude = userLocation?.coords?.latitude || null;
+        const longitude = userLocation?.coords?.longitude || null;
+        postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue);
+      }
+      setClientData(data);
     } catch (error) {
-      console.log("Error fetching free time data:", error);
+      console.error("Error fetching client data:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedServiceId, genderIndex, value, rating, userLocation, checked, searchValue]);
+
+  useFocusEffect(fetchClientData);
+
+  useEffect(() => {
+    fetchClientData();
+  }, [searchValue]);
+
   useFocusEffect(
-    useCallback(() => {
-      const fetchData = async () => {
-        setLoading(true);   
-        try {  
-          if (checked) {
-            const freeTimeData = await getFreeTime();
-            setClientData(freeTimeData);
-          } else {
-            const latitude = userLocation?.coords?.latitude || null;
-            const longitude = userLocation?.coords?.longitude || null;
-            const filteredData = await postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue);
-            setClientData(filteredData);
-          }
-        } catch (error) {
-          console.log("Error fetching client data:", error);
-        } 
-        finally {
-          setLoading(false);
-        }
+    useCallback(() =>{
+      const latitude = userLocation?.coords?.latitude || null;
+      const longitude = userLocation?.coords?.longitude || null;
+      postClientFilter([selectedServiceId], genderIndex, value*1000, rating, latitude, longitude, searchValue).finally(() => {});
+       return () => null
+    },[])
+   );
+
+   useEffect(() =>{
+      const latitude = userLocation?.coords?.latitude || null;
+      const longitude = userLocation?.coords?.longitude || null;
+      postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => {});
+    }, [searchValue]);   
+
+    const handleFilterClick = async () => {
+      setLoading(true);
+      const latitude = userLocation?.coords?.latitude || null;
+      const longitude = userLocation?.coords?.longitude || null;
+      try {
+        await postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue, () => toggleBottomModal());
+      } catch (error) {
+        console.error("Error during filter:", error);
+      } finally {
+        setLoading(false);
+        toggleBottomModal();
+      }
+    };
+    
+    const handleClientCardPress = (item: any) => {
+      const client = {
+        id: item.id,
+        masterId: item.masterId,
+        salon: item.salonName,
+        imageUrl: item.imageUrl,
+        name: item.fullName,
+        zaps: item.nextEntryDate,
+        masterType: item.masterSpecialization,
+        orders: item.orderCount,
+        feedbackCount: item.feedbackCount,
+        clients: item.clientCount,
+        address: `${item.district}, ${item.street}, ${item.house}`,
       };
-      fetchData();
-      return () => null
-    }, [selectedServiceId, genderIndex, value, rating, userLocation, checked, searchValue])
+      setSelectedClient(client);
+      router.push('(client)/(uslugi)/(masterInformation)/masterInformation');
+    };
+
+  const renderClientCard = ({ item }) => (
+    <View style={tw`mb-3`}>
+      <ClientCard
+        id={item.id}
+         masterId={item.masterId}
+        salon={item.salonName}
+        imageUrl={item.imageUrl}
+        name={item.fullName}
+        zaps={item.nextEntryDate}
+        masterType={item.masterSpecialization}
+        orders={item.orderCount}
+        feedbackCount={item.feedbackCount}
+        clients={item.clientCount}
+        address={`${item.district}, ${item.street}, ${item.house}`}
+        onPress={() => handleClientCardPress(item)}
+      />
+    </View>
   );
-  
- useEffect(
-  useCallback(() => {
-    const latitude = userLocation?.coords?.latitude || null;
-    const longitude = userLocation?.coords?.longitude || null;
-    postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => {});
-  }, [searchValue])
-);   
 
-  const handleClick = () => {
-    const latitude = userLocation?.coords?.latitude || null;
-    const longitude = userLocation?.coords?.longitude || null;
-    postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => {
-      toggleBottomModal();
-    });  
-  }; 
-
-  // useFocusEffect(
-  //   useCallback(() =>{
-  //     postClientFilter()
-  //      return () => null
-  //   },[])
-  //  )
-
-  const handleClientCardPress = (id:any) => {
-    console.log("Client ID:", clientData);
-    router.push('(client)/(uslugi)/(masterInformation)/masterInformation');
-  }; 
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
@@ -107,53 +134,40 @@ const Specialist = () => {
         contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
       >
         <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
-          <View style={[tw`flex flex-row items-center justify-between mb-2`]}>
+          <View style={[tw`flex flex-row items-center justify-between `]}>
             <TouchableOpacity
               activeOpacity={0.8}
-              style={[tw`flex-row items-center border px-8 py-3  rounded-xl`, { backgroundColor: '#9C0A35' }]}
+              style={[tw`flex-row items-center border px-8 py-3 rounded-xl`, { backgroundColor: '#9C0A35' }]}
               onPress={toggleBottomModal}
             >
-              <Fontisto name="arrow-swap" size={24} color="white" />
+              <Ionicons name="filter" size={24} color="white" />
               <Text style={[tw`text-white ml-2 text-xl`]}>Фильтр</Text>
             </TouchableOpacity>
             <View>
               <CustomCheckbox1
-                value={checked}
-                onValueChange={() => setChecked(!checked)}
-                title="Запись на сегодня"
-                onPress={getFreeTime}
-              />
-            </View>
-          </View>
-          <View style={tw`mb-3`}>
-            <LocationInput
-              placeholder='🔍 Search'
-              onChangeText={setSearchValue}
+              value={checked}
+              onValueChange={() => setChecked(!checked)}
+              title="Запись на сегодня"
+              onPress={getFreeTime}
             />
+            </View> 
           </View>
+          <LocationInput
+            placeholder='🔍 Search'
+            onChangeText={setSearchValue}
+          />
           {loading ? (
             <View style={tw`flex-1 justify-center items-center`}>
               <ActivityIndicator size="large" color="#9C0A35" />
             </View>
           ) : (
-            clientData && clientData ? (
-              clientData.map((client: any, index: any) => (
-                <View key={index} style={tw`mb-3`}>
-                  <ClientCard
-                    id={client.id}
-                    salon={client.salonName}
-                    imageUrl={client.imageUrl}
-                    name={client.fullName}
-                    zaps={client.nextEntryDate}
-                    masterType={client.masterSpecialization}
-                    orders={client.orderCount}
-                    feedbackCount={client.feedbackCount}
-                    clients={client.clientCount}
-                    address={`${client.district}, ${client.street}, ${client.house}`}
-                    onPress={() => handleClientCardPress(client.id)}
-                  />
-                </View>
-              ))
+            clientData?.length ? (
+              <FlatList
+                data={clientData}
+                renderItem={renderClientCard}
+                keyExtractor={(item) => item.id.toString()}
+                contentContainerStyle={tw`pt-3`}
+              />
             ) : (
               <View style={tw`flex-1 justify-center items-center`}>
                 <Text style={tw`text-white`}>No Data Available</Text>
@@ -163,7 +177,7 @@ const Specialist = () => {
         </View>
       </ScrollView>
       <BottomModal
-        isBottomModal={bottmModal}
+        isBottomModal={bottomModal}
         toggleBottomModal={toggleBottomModal}
         children={
           <View style={tw`w-full mt-3`}>
@@ -176,7 +190,7 @@ const Specialist = () => {
             <View style={tw`mt-3`}>
               <Buttons
                 title='Сохранять'
-                onPress={handleClick}
+                onPress={handleFilterClick}
               />
             </View>
           </View>

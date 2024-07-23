@@ -184,3 +184,7 @@ export const client_profile_delete_url: string = `${base_url}user`
 
 // Client order history upcoming function 
 export const clientOrderUpcoming:string=`${base_url}order/client/history/upcoming`
+//Client order history past function api
+export const clientOrderaPastComing:string=`${base_url}order/client/history/past`
+//leave feedback API
+export const addFebdaback_Url:string=`${base_url}feedback/for/master/by/client`

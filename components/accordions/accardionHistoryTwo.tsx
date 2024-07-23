@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { useAccardionStore, useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
+import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
 
 interface AccordionItemProps {
-  id: string[]|null;
+  id: string|null;
   title: string | null;
   date: string | null;
   children: React.ReactNode;
@@ -14,16 +14,16 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const AccardionHistory: React.FC<AccordionItemProps> = ({ id, title, date, children }) => {
-  const { expandedId, setExpandedId } = useAccardionStoreId();
+const AccardionHistoryTwo: React.FC<AccordionItemProps> = ({ id, title, date, children }) => {
+  const { expandidIdTwo, setExpendidIdTwo } = useAccardionStoreId();
 
   const toggleExpand = () => {
     // Animatsiya
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setExpandedId(expandedId === id ? null : id);
+    setExpendidIdTwo(expandidIdTwo === id ? null : id);
   };
 
-  const isExpanded = expandedId === id;
+  const isExpanded = expandidIdTwo === id;
 
   return (
     <View style={[styles.container]}>
@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AccardionHistory;
+export default AccardionHistoryTwo;
