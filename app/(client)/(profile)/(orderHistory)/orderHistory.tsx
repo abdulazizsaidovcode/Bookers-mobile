@@ -132,7 +132,7 @@ const OrderHistory = () => {
                     imageURL={pastComing.userAttachmentId}
                     masterName={pastComing.firstName + " " + pastComing.lastName}
                     salonName={pastComing.salonName}
-                    masterGender=""
+                    masterGender={pastComing.specializations}
                     ratingnumber={pastComing.feedbackCount}
                     money={`${pastComing.orderPrice} сум`}
                     buttonName="Оставить отзыв"

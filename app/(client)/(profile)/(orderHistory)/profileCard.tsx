@@ -73,10 +73,8 @@ const ProfileCard: React.FC<IProps> = ({
                             <Text style={styles.profileName}>{masterName}</Text>
                             <Text style={styles.salonName}>{salonName}</Text>
                         </View>
-                        <View style={styles.titleContainer}>
-                            {titleTex.map((title, index) => (
-                                <Text key={index} style={styles.titleText}>{title}</Text>
-                            ))}
+                        <View>
+                            <Text style={styles.gender}>{masterGender}</Text>
                         </View>
                     </View>
                 </View>
@@ -85,11 +83,16 @@ const ProfileCard: React.FC<IProps> = ({
                     <Text style={styles.price}>{money}</Text>
                 </View>
             </View>
+            <View style={styles.titleContainer}>
+                {titleTex.map((title, index) => (
+                    <Text key={index} style={styles.titleText}>{title}</Text>
+                ))}
+            </View>
             <Text style={styles.address}>{Adress}</Text>
-            <View style={[styles.iconContainer, locationIcon && phoneIcon ? { justifyContent: 'space-between' } : {gap: 10} ]}>
+            <View style={[styles.iconContainer, locationIcon && phoneIcon ? { justifyContent: 'space-between' } : { gap: 10 }]}>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    style={[styles.messageButton,  locationIcon && phoneIcon ? {} : { width: '80%', justifyContent: 'center' } ]}
+                    style={[styles.messageButton, locationIcon && phoneIcon ? {} : { width: '80%', justifyContent: 'center' }]}
                     onPress={ratingToggleModal}
                 >
                     <Text style={styles.messageButtonText}>{buttonName}</Text>
@@ -169,7 +172,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        marginBottom: 16,
+        // marginBottom: 16,
     },
     profileRow: {
         display: 'flex',
@@ -177,15 +180,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     profileImage: {
-        width: 64,
-        height: 64,
+        width: 50,
+        height: 50,
         borderRadius: 32,
-        marginRight: 16,
+        marginRight: 8,
     },
     profileDetails: {
         display: 'flex',
         flexDirection: 'row',
         gap: 5,
+        marginBottom: 5,
     },
     profileName: {
         fontSize: 14,
@@ -208,13 +212,13 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     feedbackStars: {
-        fontSize: 10,
+        fontSize: 14,
         color: '#9C0A35',
     },
     price: {
-        fontSize: 12,
+        fontSize: 14,
         color: '#9C0A35',
-        marginTop: 8,
+        marginTop: 4,
         fontWeight: '600',
     },
     titleContainer: {
@@ -276,4 +280,9 @@ const styles = StyleSheet.create({
     star: {
         marginHorizontal: 5,
     },
+    gender: {
+        fontSize: 14,
+        color: '#4F4F4F',
+        marginBottom: 20
+    }
 });
