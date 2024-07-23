@@ -5,25 +5,27 @@ import tw from 'tailwind-react-native-classnames';
 import { router } from 'expo-router';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
 import { Feather } from '@expo/vector-icons';
+import ContactInformation from '../contact-information/contact-information';
 
 type ClientCardProps = {
-    salon: string;
+    salon: string | undefined;
     imageUrl: string;
-    name: string;
-    zaps: string;
-    masterType: string;
-    orders: number;
-    clients: number;
-    address: string;
+    name: string | undefined;
+    zaps: string | undefined;
+    masterType: string | undefined;
+    orders: number | undefined;
+    clients: number | undefined;
+    address: string | undefined;
     services?: string[];
-    feedbackCount: number;
+    feedbackCount: number | undefined;
     onPress?: () => void;
     btnTitle?: string;
-    spicalist?:string
+    spicalist?:string;
+    
 };
 
 const ClintCardUslugi: React.FC<ClientCardProps> = ({
-    salon, imageUrl, feedbackCount, services = [], name, masterType, orders, clients, address, zaps, onPress, btnTitle, spicalist
+    salon, imageUrl, feedbackCount, services = [], name, masterType, orders, clients, address, zaps, onPress, btnTitle, spicalist,
 }) => {
     const { getme } = webPageStore();
 
@@ -57,7 +59,6 @@ const ClintCardUslugi: React.FC<ClientCardProps> = ({
                 <View style={tw`flex items-end`}>
                     <Text style={[tw`text-lg`, { color: '#9C0A35' }]}>{generateStars(feedbackCount || 0)}</Text>
                     <Text style={tw`text-xs text-gray-600 mb-1`}>{orders} заказа, {clients} клиентов</Text>
-                    <Text style={[tw`border px-4 py-1 rounded-lg `, { borderColor: '#9C0A35', color:'#9C0A35' }]}>{spicalist}</Text>
                 </View>
             </View>
             <ScrollView
@@ -79,10 +80,13 @@ const ClintCardUslugi: React.FC<ClientCardProps> = ({
                     <SimpleLineIcons name="location-pin" size={30} color="white"/>
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.8} style={[tw`p-3 rounded-full mr-2`, { backgroundColor: '#9C0A35' }]}>
-                    <Feather name="phone" size={30} color="white" />
+                    <Feather name="phone" size={30} color="white"/>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8} style={[tw`p-3 rounded-full mr-2`, { backgroundColor: '#9C0A35' }]}>
-                    <Feather name="bookmark" size={30} color="white" />
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={[tw`p-3 rounded-full mr-2`, { backgroundColor: '#9C0A35' }]}   
+                >
+                 <Feather name="phone" size={30} color="white" />
                 </TouchableOpacity>
             </View>
             <View style={tw`flex-row justify-between mt-4`}>

@@ -34,6 +34,7 @@ const ServesGender = () => {
             setIsLoading(false)
         }
     }; 
+    
     const handleCategorySelect = (id: number) => {
         setSelectedCategories((prevSelected) => {
             if (prevSelected.includes(id)) {

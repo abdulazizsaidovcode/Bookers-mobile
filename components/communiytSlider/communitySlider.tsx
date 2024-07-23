@@ -15,13 +15,13 @@ const CommunitySlider: React.FC<DistanceSliderProps> = ({ title, textColor }) =>
     return (
         <View style={styles.container}>
             <View style={styles.value}>
-                <Text style={{ fontSize: 16, color: textColor }} > {value.toFixed(1)} {title}</Text>
+                <Text style={{ fontSize: 20, color: textColor }} > {value.toFixed(1)} {title}</Text>
             </View>
             <Slider
                 style={styles.slider}
                 minimumValue={0}
                 maximumValue={5}
-                step={0.1}
+                step={.1}
                 value={value}
                 onValueChange={setValue}
                 minimumTrackTintColor="#8B1A1A"
@@ -37,12 +37,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 10,
         width: width * 0.8, // to fit most screens
+        
         alignItems: 'center',
     },
     value: {
         fontSize: 14,
         color: '#8B1A1A',
         position: 'absolute',
+        
         top: 12,
         left: 25,
     },
