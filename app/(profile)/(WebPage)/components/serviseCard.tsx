@@ -1,3 +1,4 @@
+import { getFile } from "@/helpers/api";
 import { getAddress } from "@/helpers/api-function/wepPage/wepPage";
 import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
 import { useFocusEffect } from "expo-router";
@@ -9,20 +10,19 @@ const UserProfileCard: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getAddress(setAddress)
-      return () => { }
+      getAddress(setAddress);
+      return () => {};
     }, [])
-  )
-
+  );
 
   // Function to generate star rating
   const generateStars = (count: number) => {
-    let stars = '';
+    let stars = "";
     for (let i = 0; i < count; i++) {
-      stars += '★';
+      stars += "★";
     }
     for (let i = count; i < 5; i++) {
-      stars += '☆';
+      stars += "☆";
     }
     return stars;
   };
@@ -31,9 +31,12 @@ const UserProfileCard: React.FC = () => {
     <View style={styles.card}>
       <View style={styles.header}>
         <Image
-          source={getme && getme.attachmentId ? {
-            uri: getme.attachmentId
-          } : require('../../../../assets/avatar.png')} // Profil rasm manzili
+          source={{
+            uri:
+              getme && getme.attachmentId
+                ? `${getFile + getme.attachmentId}`
+                : "https://static.thenounproject.com/png/363639-200.png",
+          }}
           style={styles.avatar}
         />
         <View style={styles.headerInfo}>
@@ -50,8 +53,8 @@ const UserProfileCard: React.FC = () => {
               ? getme.gender === "MALE"
                 ? "Erkak master"
                 : getme.gender === "FEMALE"
-                  ? "Женский мастер"
-                  : ""
+                ? "Женский мастер"
+                : ""
               : "No data"}
           </Text>
           <Text style={styles.phone}>
@@ -60,29 +63,35 @@ const UserProfileCard: React.FC = () => {
         </View>
         <View style={styles.rating}>
           <Text style={styles.stars}>
-            {getme && getme.starCount ? generateStars(getme.starCount) : generateStars(0)}
+            {getme && getme.starCount
+              ? generateStars(getme.starCount)
+              : generateStars(0)}
           </Text>
           <Text style={styles.orderInfo}>
-            {getme && getme.orderCount ? getme.orderCount : "No data"} заказа,{" "}
-            {getme && getme.clientCount ? getme.clientCount : "No data"} клиентов
+            {getme && getme.orderCount ? getme.orderCount : "0"} заказа,{" "}
+            {getme && getme.clientCount ? getme.clientCount : "0"} клиентов
           </Text>
         </View>
       </View>
       <View style={styles.body}>
         <View style={styles.buttons}>
-          {
-            specialization ? specialization.map((item: any) =>
+          {specialization ? (
+            specialization.map((item: any) => (
               <TouchableOpacity style={styles.button}>
                 <Text style={styles.buttonText}>{item.name}</Text>
               </TouchableOpacity>
-            ) :
-              <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Malumot topilmadi</Text>
-              </TouchableOpacity>
-
-          }
+            ))
+          ) : (
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Malumot topilmadi</Text>
+            </TouchableOpacity>
+          )}
         </View>
-        <Text style={styles.address}>{(address && address.homeNumber && address.street) ? `Street: ${address.street}, home: ${address.homeNumber} ` : "Address is not found"}</Text>
+        <Text style={styles.address}>
+          {address && address.homeNumber && address.street
+            ? `Street: ${address.street}, home: ${address.homeNumber} `
+            : "Address is not found"}
+        </Text>
       </View>
     </View>
   );

@@ -67,7 +67,9 @@ const GalleryDetail: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <NavigationMenu name='https://bookers/link/natali...' />
+      <View style={{ paddingLeft: 10 }}>
+      <NavigationMenu name='Веб страница' />
+      </View>
       <ScrollView style={styles.contentContainer}>
         {item && item.resGalleryAttachments && item.resGalleryAttachments.length > 0 ? (
           <View style={styles.galleryContainer} key={item.id}>
