@@ -41,7 +41,7 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
             const config = await getConfig();
             const res = await axios.post(addFebdaback_Url, datas, config ? config : {});
             if (res.data.success) {
-                Alert.alert("Muvaffaqqiaytli","Izohingiz yuborildi.")
+                Alert.alert("Muvaffaqqiaytli", "Izohingiz yuborildi.")
                 console.log(res.data.message);
                 toggleModal();
             } else {
@@ -53,7 +53,7 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
         }
     } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 404) {
-            Alert.alert("O'xshamadi",'Faqat bir marotaba izoh qoldirishingiz mumkin !')
+            Alert.alert("O'xshamadi", 'Faqat bir marotaba izoh qoldirishingiz mumkin !')
             toggleModal();
         } else {
             Toast.show('Add fedback funksiya ishlamadi yani catchga tushdi', Toast.LONG);
@@ -64,7 +64,20 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
 
 //Delete pastcoming order 
 
-export const deletePastComingFunction=async(orderId:string)=>{
-    const config=await getConfig()
-    const res=await axios.delete(`${deletePastcoming_Url}one?orderId=${orderId}&status=PAST_SESSIONS`)
-}
+export const deletePastComingFunction = async (orderId: string) => {
+    try {
+        const config = await getConfig(); // Configni olish
+        const res = await axios.delete(`${deletePastcoming_Url}one?orderId=${orderId}&status=PAST_SESSIONS`,  config ? config : {}); // URL va config bilan so'rov yuborish
+
+        if (res.data.success) {
+            // Muvaffaqiyatli natija, xabar bering
+            console.log('Order deleted successfully');
+        } else {
+            // Xato yoki boshqa javob kodi, xabar bering
+            console.error('Failed to delete order:', res.status);
+        }
+    } catch (error) {
+        // Xatolik bilan ishlash
+        console.error('An error occurred while deleting the order:', error);
+    }
+};
