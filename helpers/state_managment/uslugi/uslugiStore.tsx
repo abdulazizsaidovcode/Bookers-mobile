@@ -50,6 +50,8 @@ export interface ClientAllCategory {
   setSelectedClient: (client: Client | null) => void;
   commentData: CommentData | null;  // Added
   setCommentData: (data: CommentData | null) => void;  // Added
+  services:any | null;
+  setServices:(data:any) => void;
 }
 
 // Create the Zustand store
@@ -75,6 +77,8 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   setSelectedClient: (client: Client | null) => set({ selectedClient: client }),
   commentData: null,  // Initialize with null
   setCommentData: (data: CommentData | null) => set({ commentData: data }),  // Add method to set comment data
+  services:'',
+  setServices:(val:string | null) => set({services:val})
 }));
 
 export default ClientStory;

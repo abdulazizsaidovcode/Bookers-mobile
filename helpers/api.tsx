@@ -57,6 +57,7 @@ export const getCategory_Client = `${base_url}category/client` // get client all
 export const getClient_filter = `${base_url}client/filter` // post client filter
 export const getClient_freeTime = `${base_url}client/master/freeTime` // master freeTime !
 export const postComment = `${base_url}message/for/master/by/client` // comment client by master 
+export const serviceClient = `${base_url}service/client` // comment client by master 
 
 // Register page 
 export const register_page = `${base_url}auth/`
