@@ -3,6 +3,7 @@ import Toast from "react-native-simple-toast";
 import { addFebdaback_Url, clientOrderaPastComing, clientOrderUpcoming } from "@/helpers/api";
 import { addfedbackmaster, getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
 import axios from "axios";
+import { Alert } from "react-native";
 
 
 // Upcoming function
@@ -40,19 +41,23 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
             const config = await getConfig();
             const res = await axios.post(addFebdaback_Url, datas, config ? config : {});
             if (res.data.success) {
-                Toast.show("Hammasi yahshi Sardor xavotir olma", Toast.LONG)
+                Toast.show("Hammasi yahshi Sardor xavotir olma", Toast.LONG);
                 console.log(res.data.message);
                 toggleModal();
-            }
-            else {
-                Toast.show('Add fedback ishlamadi', Toast.LONG)
+            } else {
+                Toast.show('Add fedback ishlamadi', Toast.LONG);
                 console.log(res.data.message);
             }
+        } else {
+            Toast.show('Something went wrong', Toast.LONG);
         }
-        else Toast.show('Something went wrong', Toast.LONG)
-    }
-    catch(err) {
-        Toast.show('Add fedback funksiya ishlamadi yani catchga tushdi', Toast.LONG)
+    } catch (err) {
+        if (axios.isAxiosError(err) && err.response?.status === 404) {
+            Alert.alert("O'xshamadi",'Faqat bir marotaba izoh qoldirishingiz mumkin !')
+            toggleModal();
+        } else {
+            Toast.show('Add fedback funksiya ishlamadi yani catchga tushdi', Toast.LONG);
+        }
         console.log(err);
     }
 }
