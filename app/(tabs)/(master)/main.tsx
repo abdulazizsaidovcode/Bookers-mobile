@@ -237,15 +237,15 @@ useFocusEffect(
     "/"
   );
   const regularVisitCount =
-    dailyTimeData &&
-    dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length;
+    dailyTimeData && dailyTimeData.length !== 0 ?
+    dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length : 0;
   const notVisitCount =
-    dailyTimeData &&
-    dailyTimeData.filter((item) => item.type === "NOT_VISIT").length;
+    dailyTimeData && dailyTimeData.length !== 0 ?
+    dailyTimeData.filter((item) => item.type === "NOT_VISIT").length : 0;
   const vipCientsCount =
-    dailyTimeData && dailyTimeData.filter((item) => item.type === "VIP").length;
+    dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData.filter((item) => item.type === "VIP").length : 0;
   const newClientsCount =
-    dailyTimeData && dailyTimeData.filter((item) => item.type === "NEW").length;
+    dailyTimeData ? dailyTimeData.filter((item) => item.type === "NEW").length : 0;
 
   return (
     <SafeAreaView style={styles.container}>

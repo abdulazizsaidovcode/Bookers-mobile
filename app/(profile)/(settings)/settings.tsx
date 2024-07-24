@@ -29,7 +29,7 @@ const data: { icon: any, label: string, screen: string }[] = [
         screen: "(free)/(work-grafic-edit)/workMain",
     },
     {
-        icon: "calendar-check",
+        icon: "clipboard",
         label: "Онлайн бронирование",
         screen: "(standart)/(onlineBooking)/onlineBooking",
     },
