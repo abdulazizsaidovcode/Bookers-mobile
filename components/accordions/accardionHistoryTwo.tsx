@@ -50,7 +50,7 @@ const AccardionHistoryTwo: React.FC<AccordionItemProps> = ({ id, title, date, ch
 const styles = StyleSheet.create({
   container: {
     marginBottom: 10,
-    overflow: 'hidden',
+    overflow: 'hidden', 
     width: '100%',
   },
   header: {
