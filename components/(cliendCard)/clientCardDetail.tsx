@@ -1,56 +1,88 @@
-import React, { useMemo, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
-
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
-// import RadioGroup from 'react-native-radio-buttons-group';
 
 type ClientCardDetailProps = {
-  type: string;
+  name: string;
   services?: string[];
   price: any;
   img?: string;
   description: string;
   subDescription: string;
+  genderId: number[];
 };
 
-const ClientCardDetail: React.FC<ClientCardDetailProps> = ({ type, services = [], price, img, description, subDescription }) => {
-  const radioButtons = useMemo(() => ([
-    {
-      id: '1', 
-      label: `${type}`,
-      value: 'option1'
-    },
-  ]), []);
-  const [selectedId, setSelectedId] = useState(false);
+const genderMapping = {
+  1: 'Мужчины для взрослых',
+  2: 'Женщины для взрослых',
+  3: 'Мужчины для мальчиков',
+  4: 'Женщины для девочек',
+};
 
-  console.log(selectedId);
-  
+const ClientCardDetail: React.FC<ClientCardDetailProps> = ({ name, services = [], price, img, description, subDescription, genderId }) => {
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  const handleSelect = (id: number) => {
+    setSelectedId(prevSelectedId => (prevSelectedId === id ? null : id));
+  };
+
   return (
     <View style={[tw`p-4 rounded-2xl`, { backgroundColor: "#B9B9C9" }]}>
-      <View style={tw`flex-row items-center mb-4`}>
-        {/* <RadioGroup
-          radioButtons={radioButtons}
-          onPress={setSelectedId}
-          selectedId={selectedId}
-        /> */}
-      </View>
-      <ScrollView
-        horizontal
-        contentContainerStyle={{ gap: 10, marginBottom: 5 }}
-        showsHorizontalScrollIndicator={false}
-      >
-        <View style={tw`flex-row mb-4`}>
-          {services.map((service, index) => (
-            <TouchableOpacity key={index} style={tw`p-2 ml-2 border border-gray-600 rounded-lg ${index !== 0 ? 'mr-2' : ''}`}>
-              <Text style={tw`text-center text-gray-600`}>
-                {service}
+      <View style={tw`mb-4`}>
+        {genderId.length > 0 ? (
+          genderId.map(id => (
+            <TouchableOpacity
+              key={id}
+              style={tw`flex-row items-center mb-2`}
+              onPress={() => handleSelect(id)}
+            >
+              <View
+                style={[
+                  tw`w-5 h-5 rounded-full border`,
+                  {
+                    borderColor: selectedId === id ? '#9C0A35' : '#000',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }
+                ]}
+              >
+                {selectedId === id && (
+                  <View style={[tw`w-3 h-3 rounded-full`, { backgroundColor: '#9C0A35' }]} />
+                )}
+              </View>
+              <Text style={[tw`ml-2 text-xl font-bold`, { color: '#000' }]}>
+                {genderMapping[id] || 'Hamma uchun'}
               </Text>
             </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
-      <View style={tw`flex-row items-center mb-4`}>
-        <Text style={[tw`text-2xl font-bold`, {color:'#9C0A35'}]}>{price} сум</Text>
+          ))
+        ) : (
+          <TouchableOpacity
+            style={tw`flex-row items-center mb-2`}
+            onPress={() => handleSelect(id)}
+          >
+            <View
+              style={[
+                tw`w-5 h-5 rounded-full border`,
+                {
+                  borderColor: selectedId === null ? '#9C0A35' : '#000',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }
+              ]}
+            >
+              {selectedId === null && (
+                <View style={[tw`w-3 h-3 rounded-full`, { backgroundColor: '#9C0A35' }]} />
+              )}
+            </View>
+            <Text style={[tw`ml-2 text-xl font-bold`, { color: '#000' }]}>
+              Hamma uchun
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      <View style={tw`flex-row items-center mb-3 justify-between`}>
+        <Text style={tw`border-gray-600 border px-3 py-2 rounded-lg`}>{name}</Text>
+        <Text style={[tw`text-xl font-bold`, { color: '#9C0A35' }]}>{price} сум</Text>
       </View>
       {img && (
         <Image
@@ -61,8 +93,9 @@ const ClientCardDetail: React.FC<ClientCardDetailProps> = ({ type, services = []
       <Text style={tw`text-black mb-4`}>{description}</Text>
       <Text style={tw`text-black mb-4`}>{subDescription}</Text>
       <TouchableOpacity
-        activeOpacity={.8}
-        style={[tw` w-1/2 p-3 rounded-lg`, { backgroundColor: '#9C0A35' }]}>
+        activeOpacity={0.8}
+        style={[tw`w-1/2 p-3 rounded-lg`, { backgroundColor: '#9C0A35' }]}
+      >
         <Text style={[tw`text-center text-xl`, { color: '#FFFFFF' }]}>Подробнее</Text>
       </TouchableOpacity>
     </View>
