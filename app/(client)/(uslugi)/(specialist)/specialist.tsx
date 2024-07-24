@@ -66,7 +66,7 @@ const Specialist = () => {
       return () => null
     }, [])
   );
-
+  
   useEffect(() => {
     const latitude = userLocation?.coords?.latitude || null;
     const longitude = userLocation?.coords?.longitude || null;
@@ -79,6 +79,15 @@ const Specialist = () => {
     const longitude = userLocation?.coords?.longitude || null;
     try {
       await postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue, () => toggleBottomModal());
+      console.log('Posting filter data:', {
+        selectedServiceId,
+        genderIndex,
+        value,
+        rating,
+        latitude,
+        longitude,
+        searchValue,
+      });
     } catch (error) {
       console.error("Error during filter:", error);
     } finally {
@@ -122,7 +131,15 @@ const Specialist = () => {
         onPress={() => handleClientCardPress(item)}
         btntext='Записаться'
         locationIcon = {
-          <SimpleLineIcons name="location-pin" size={24} color="white" />
+          <SimpleLineIcons name="location-pin" size={24} color="white"
+          onPress={() => {
+            setMapData(item)
+            navigate.navigate('(client)/(map)/(master-locations)/master-locations');
+          }  
+          }
+          
+          
+           />
       }
         />
     </View>

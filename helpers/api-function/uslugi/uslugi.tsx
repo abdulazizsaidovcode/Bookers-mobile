@@ -26,21 +26,17 @@ export const getAllCategory = async () => {
 
 // Client post filter
   export const postClientFilter = async (categoryId?: any, gender?: boolean | null, nextToMe?: number | null, rating?: number | null, lat?: number | null, lng?: number | null, inputValue?: string | null, toggleModal?: () => void) => {
-    const {setTopMasters} = useTopMastersStore()
-   
     try {
       const config = await getConfig();
       const postData = { categoryId, gender, nextToMe, rating, lat, lng };
       const { data } = await axios.post(`${getClient_filter}${inputValue ? `?nameOrPhone=${inputValue}`: ""}`, postData, config ? config : {});
       if (data.success) {
         ClientStory.getState().setClientData(data.body)
-        toggleModal ? toggleModal() : null
-        setTopMasters(data.body)
-        console.log(data); 
+        toggleModal ? toggleModal() : null 
       };
+      ClientStory.getState().setClientId(data.body.id)
       console.log(data);
       
-      ClientStory.getState().setClientId(data.body.id)
 
     } catch (error) {
       console.log('Error:', error);
