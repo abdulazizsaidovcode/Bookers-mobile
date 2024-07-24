@@ -41,7 +41,7 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
             const config = await getConfig();
             const res = await axios.post(addFebdaback_Url, datas, config ? config : {});
             if (res.data.success) {
-                Toast.show("Hammasi yahshi Sardor xavotir olma", Toast.LONG);
+                Alert.alert("Muvaffaqqiaytli","Izohingiz yuborildi.")
                 console.log(res.data.message);
                 toggleModal();
             } else {
