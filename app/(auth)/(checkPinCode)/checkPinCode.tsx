@@ -71,8 +71,8 @@ const CheckPinOnCome: React.FC = () => {
 
     const handleContinue = async () => {
         // await SecureStore.deleteItemAsync("number");
-        // await AsyncStorage.removeItem("registerToken");
         // await SecureStore.deleteItemAsync("password");
+        // await AsyncStorage.removeItem("registerToken");
 
         const enteredOtp = otp.join('');
         if (enteredOtp === code) {
