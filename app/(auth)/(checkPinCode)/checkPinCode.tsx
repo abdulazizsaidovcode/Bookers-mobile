@@ -20,6 +20,23 @@ const CheckPinOnCome: React.FC = () => {
     const navigation = useNavigation<any>();
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
 
+    useFocusEffect(
+        useCallback(() => {
+            async function handleContinue() {
+                try {
+                    let parol = await SecureStore.getItemAsync('password')
+                    setCode(parol)
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            handleContinue()
+            getClientOrMaster(setRole)
+            alert(code)
+            console.log(code);
+
+        }, [])
+    );
 
     useEffect(() => {
         const getStoredOtp = async () => {
@@ -35,21 +52,7 @@ const CheckPinOnCome: React.FC = () => {
         getClientOrMaster(setRole)
     }, []);
 
-    useFocusEffect(
-        useCallback(() => {
-            async function handleContinue() {
-                try {
-                    let parol = await SecureStore.getItemAsync('password')
-                    setCode(parol)
 
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-            handleContinue()
-            getClientOrMaster(setRole)
-        }, [])
-    );
 
     // ---------- check if otp is correct ----------
     const handleChangeText = (text: string, index: number) => {
@@ -73,7 +76,6 @@ const CheckPinOnCome: React.FC = () => {
         // await SecureStore.deleteItemAsync("number");
         // await SecureStore.deleteItemAsync("password");
         // await AsyncStorage.removeItem("registerToken");
-
         const enteredOtp = otp.join('');
         if (enteredOtp === code) {
             setIsCorrect(true);
