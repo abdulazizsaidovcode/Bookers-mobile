@@ -4,6 +4,7 @@ import { getCategory_Client, getClient_filter, getClient_freeTime } from "@/help
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 import useTopMastersStore from "@/helpers/state_managment/masters";
+import { config } from "@/helpers/token";
 
 // Client get all Category
 export const getAllCategory = async () => {
@@ -35,14 +36,30 @@ export const getAllCategory = async () => {
         toggleModal ? toggleModal() : null 
       };
       ClientStory.getState().setClientId(data.body.id)
-      console.log(data);
-      
-
     } catch (error) {
       console.log('Error:', error);
     }
   };
-  
+// Clinet commnet by master 
+interface CommentData {
+  clientId: string | null;
+  masterId: string | null;
+  adminId: string | null;
+  message: string;
+  messageStatus: string;
+}
+export const postComment = async (commentData: CommentData) => {
+  try {
+    console.log('Posting comment data:', commentData);
+    const response = await axios.post(`${postComment}`, commentData, config ? config : {});
+    console.log(config);
+    
+    console.log('Comment posted successfully:', response.data);
+  } catch (error) {
+    console.error('Error posting comment:', error);
+  }
+};
+
 
 // Client masterlarni bo'sh vaqti borlarini  chiqarib ber 
 export const getFreeTime = async () => {
@@ -50,7 +67,6 @@ export const getFreeTime = async () => {
     const config = await getConfig();
     const response = await axios.post(`${getClient_freeTime}`, {}, config ? config : {});
     const freeTime = response.data.body;
-    console.log("Free Time Data:", freeTime);
     return freeTime;
   } catch (error) {
     console.log("Error:", error);

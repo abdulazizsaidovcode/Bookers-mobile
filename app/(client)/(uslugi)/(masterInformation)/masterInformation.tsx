@@ -8,10 +8,11 @@ import ClientCardDetail from '@/components/(cliendCard)/clientCardDetail';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import Textarea from '@/components/select/textarea';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
-import axios from 'axios';
-import ClientCard from '@/components/(cliendCard)/cliendCard';
 import { FontAwesome6, Octicons, SimpleLineIcons } from '@expo/vector-icons';
 import ClientCardUslugi from '@/components/(cliendCard)/clientCardUslugi';
+import { postComment } from '@/helpers/api-function/uslugi/uslugi';
+import { useMapStore } from '@/helpers/state_managment/map/map';
+import { useNavigation } from 'expo-router';
 
 const MasterInformation = () => {
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
@@ -19,19 +20,8 @@ const MasterInformation = () => {
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [value, setValue] = useState<string>('');
     const [phoneNumber, setPhoneNumber] = useState<string>('');
-
-    useEffect(() => {
-        // Fetch the phone number from the backend
-        const fetchPhoneNumber = async () => {
-            try {
-                const response = await axios.get('YOUR_BACKEND_API_ENDPOINT'); // Replace with your actual API endpoint
-                setPhoneNumber(response.data.phoneNumber);
-            } catch (error) {
-                console.error('Error fetching phone number:', error);
-            }
-        };
-        fetchPhoneNumber();
-    }, []);
+    const { setMapData } = useMapStore();
+    const navigate = useNavigation<any>();
 
     const openModal = () => setModalVisible(true);
     const closeModal = () => {
@@ -40,6 +30,7 @@ const MasterInformation = () => {
     };
     const handleAdd = () => {
         if (value.trim() !== "") {
+            postComment(commentData);
             closeModal();
             setValue("");
         }
@@ -80,6 +71,13 @@ const MasterInformation = () => {
             subDescription: 'Парикмахеры салона Beauty Wave в Ташкенте могут выполнить стрижку любой сложности. Также они смогут помочь вам подобрать безупречную укладку, которая подчеркнет все ваши достоинства.'
         }
     ];
+    const commentData = {
+        clientId: null,
+        masterId: selectedClient.id,
+        adminId: null,
+        message: value,
+        messageStatus: 'CLIENT_MASTER_MESSAGE'
+      };
 
     const clintCardUslugiData = [
         {
@@ -129,9 +127,17 @@ const MasterInformation = () => {
                                     services={item.services}
                                     onPress={openModal}
                                     onPhonePress={() => makePhoneCall(phoneNumber)}
-                                    locationIcon={
-                                        <SimpleLineIcons name="location-pin" size={24} color="white" />
-                                    }
+                                    locationIcon = {
+                                        <SimpleLineIcons name="location-pin" size={24} color="white"
+                                        onPress={() => {
+                                          setMapData(selectedClient)
+                                          navigate.navigate('(client)/(map)/(master-locations)/master-locations');
+                                        }  
+                                        }
+                                        
+                                        
+                                         />
+                                    }  
                                     anotherIcon={
                                         <FontAwesome6 name="phone" size={24} color="white" />
                                     }

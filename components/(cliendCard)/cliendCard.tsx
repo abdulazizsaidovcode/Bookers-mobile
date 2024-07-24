@@ -18,6 +18,8 @@ type ClientCardProps = {
   address: string;
   mapStyle?: boolean;
   onPress?: () => void;
+  feedbackCount: number;
+  locationIcon?: React.ReactNode; 
 };
 
 const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, mapStyle }) => {
@@ -32,7 +34,7 @@ const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl, feedback
 
   const generateStars = (count: number) => {
     let stars = '';
-    for (let i = 0; i < count; i++) {
+    for (let i = 1; i < count; i++) {
       stars += '★';
     }
     for (let i = count; i < 5; i++) {

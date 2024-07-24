@@ -29,10 +29,10 @@ const ClientCardUslugi: React.FC<ClientCardProps> = ({
 
     const generateStars = (count: number) => {
         let stars = '';
-        for (let i = 0; i < count; i++) {
+        for (let i = 1; i < count; i++) {
             stars += '★';
         }
-        for (let i = count; i < 5; i++) {
+        for (let i = count; i <= 5; i++) {
             stars += '☆';
         }
         return stars;

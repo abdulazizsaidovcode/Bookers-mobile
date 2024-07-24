@@ -19,6 +19,7 @@ import AccardionSliderTwo from '@/components/accordions/accardionSliderTwo';
 import AccardionSlider from '@/components/accordions/accardionSlider';
 import Buttons from '@/components/(buttons)/button';
 import { useMapStore } from '@/helpers/state_managment/map/map';
+import ClientCard1 from '@/components/(cliendCard)/cliendCard1';
 
 const Specialist = () => {
   const { clientData, selectedServiceId, setClientData, setSelectedClient,} = ClientStory();
@@ -72,7 +73,6 @@ const Specialist = () => {
     const longitude = userLocation?.coords?.longitude || null;
     postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => { });
   }, [searchValue]);
-
   const handleFilterClick = async () => {
     setLoading(true);
     const latitude = userLocation?.coords?.latitude || null;
@@ -116,7 +116,7 @@ const Specialist = () => {
   };
   const renderClientCard = ({ item }) => (
     <View style={tw`mb-3`}>
-      <ClientCard
+      <ClientCard1
         id={item.id}
         masterId={item.masterId}
         salon={item.salonName}
