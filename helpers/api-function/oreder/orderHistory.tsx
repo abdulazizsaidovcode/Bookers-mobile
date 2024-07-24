@@ -1,6 +1,6 @@
 import { getConfig } from "@/app/(tabs)/(master)/main"
 import Toast from "react-native-simple-toast";
-import { addFebdaback_Url, clientOrderaPastComing, clientOrderUpcoming } from "@/helpers/api";
+import { addFebdaback_Url, clientOrderaPastComing, clientOrderUpcoming, deletePastcoming_Url } from "@/helpers/api";
 import { addfedbackmaster, getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
 import axios from "axios";
 import { Alert } from "react-native";
@@ -60,4 +60,11 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
         }
         console.log(err);
     }
+}
+
+//Delete pastcoming order 
+
+export const deletePastComingFunction=async(orderId:string)=>{
+    const config=await getConfig()
+    const res=await axios.delete(`${deletePastcoming_Url}one?orderId=${orderId}&status=PAST_SESSIONS`)
 }

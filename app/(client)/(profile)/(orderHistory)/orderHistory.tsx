@@ -9,7 +9,7 @@ import { AntDesign, Feather, SimpleLineIcons } from "@expo/vector-icons";
 import ProfileCard from "./profileCard";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import { getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
-import { getOrderClientPustComing, getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
+import { deletePastComingFunction, getOrderClientPustComing, getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
 import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
 import { useNavigation } from "@react-navigation/native";
@@ -17,7 +17,7 @@ import AccardionHistoryTwo from "@/components/accordions/accardionHistoryTwo";
 import { useAccardionStoreId } from "@/helpers/state_managment/accardion/accardionStore";
 
 const OrderHistory = () => {
-  const {activeTab, setActiveTab}=useAccardionStoreId();
+  const { activeTab, setActiveTab } = useAccardionStoreId();
   const [modalDelete, setModalDelete] = useState<boolean>(false);
   const [upcoming, setUpcoming] = useState<getOrderClientUpcomingInterface[]>([]);
   const [pastComing, setPastComing] = useState<getOrderClientPastcomingInterface[]>([]);
@@ -30,7 +30,7 @@ const OrderHistory = () => {
   const getPastcomingClient = async () => {
     await getOrderClientPustComing(setPastComing);
   }
-  
+
   const deleteToggleModal = () => {
     setModalDelete(!modalDelete);
   };
@@ -46,10 +46,10 @@ const OrderHistory = () => {
     }, [])
   );
   useFocusEffect(
-    useCallback(()=>{
+    useCallback(() => {
       getPastcomingClient();
       return () => { };
-    },[])
+    }, [])
   )
 
   return (
@@ -138,7 +138,7 @@ const OrderHistory = () => {
                     buttonName="Оставить отзыв"
                     Adress={pastComing.address}
                     orderId={pastComing.orderId}
-                    deleteIcon={<Feather name="trash-2" size={24} color="white" />}
+                    deleteIcon={<Feather name="trash-2" size={24} color="white"/>}
                   />
                 </AccardionHistoryTwo>
               ))
