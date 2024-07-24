@@ -5,18 +5,35 @@ import Toast from "react-native-simple-toast";
 import { authStorage, setClientOrMaster } from "@/constants/storage";
 import * as SecureStore from 'expo-secure-store';
 
-export const checkNumberFunction = (phoneNumber: string, setCode: (value: any) => void, status: boolean) => {
+export const checkNumberFunction = async (phoneNumber: string, setCode: (value: any) => void, pending: (val: boolean) => void, setStatus: (val: boolean) => void) => {
     const sentData = { phoneNumber: phoneNumber }
+    let status: null | boolean = null
 
-    axios.post(`${register_page}sendCode?purpose=${status}`, sentData)
+    await axios.post(`${base_url}user/checking/phone`, sentData)
         .then(res => {
-            setCode(res.data.body);
-            router.push('(auth)/(login)/checkSendMessage')
+            status = res.data.success
+            setStatus(res.data.success)
         })
         .catch(err => {
-            console.log(err, "dec");
             if (err.response.data.success === false) Toast.show(err.response.data.message, Toast.LONG)
         })
+
+
+    if (status === true || status === false) {
+        await axios.post(`${register_page}sendCode?purpose=${status}`, sentData)
+            .then(res => {
+                setCode(res.data.body);
+                router.push('(auth)/(login)/checkSendMessage')
+                pending(false)
+            })
+            .catch(err => {
+                pending(false)
+                if (err.response.data.success === false) Toast.show(err.response.data.message, Toast.LONG)
+            })
+    }
+
+
+
 }
 
 export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any, isRegtered: boolean) => {

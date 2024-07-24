@@ -171,7 +171,6 @@ const LocationData = () => {
               search={false}
               placeholder="Название салона"
             />
-            <Text>{districtId}</Text>
             <Text style={tw`text-base text-white my-2`}>
               Не нашли свой салон красоты?
             </Text>
@@ -186,7 +185,7 @@ const LocationData = () => {
                 Обратиться к администратору
               </Text>
             </TouchableOpacity>
-            <View style={tw``}>
+            <View>
               <View>
                 <LocationSelect
                   setDistrictId={setDistrictId}

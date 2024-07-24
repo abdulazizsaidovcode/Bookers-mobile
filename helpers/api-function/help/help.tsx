@@ -3,7 +3,6 @@ import { help_url } from "@/helpers/api";
 import { Help } from "@/helpers/state_managment/help/helpStore";
 import axios from "axios";
 import { router } from "expo-router";
-
 export const getHelpOne = async (
   setData: (val: Help | null) => void,
   status: string,
@@ -12,7 +11,6 @@ export const getHelpOne = async (
   try {
     const config = await getConfig();
     const response = await axios.get(`${help_url}${status}`, config ? config : {});
-
     if (response.data.success) {
       setData(response.data.body);
       router.push(route);
@@ -24,7 +22,6 @@ export const getHelpOne = async (
     setData(null);
   }
 };
-
 export const getHelpType = async (
   setData: (val: Help | null) => void,
   status: string,
@@ -33,7 +30,6 @@ export const getHelpType = async (
   try {
     const config = await getConfig();
     const response = await axios.get(`${help_url}${status}`, config ? config : {});
-
     if (response.data.success) {
       setData(response.data.body);
       router.push(route);

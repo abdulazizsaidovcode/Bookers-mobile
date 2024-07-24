@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   FlatList,
 } from "react-native";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import tw from "tailwind-react-native-classnames";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import SwitchWithLabel from "@/components/switchWithLabel/switchWithLabel";
@@ -28,6 +28,7 @@ import { useTranslation } from "react-i18next";
 
 const OnlineBooking = () => {
   const { allowClient, setAllowClient } = OnlineBookingStory();
+  const navigation = useNavigation<any>()
   
     const {t}=useTranslation()
   const data = [
@@ -145,7 +146,7 @@ const OnlineBooking = () => {
               title={t("to_home")}
               onPress={() => {
                 putNumbers(6);
-                router.push("(welcome)/Welcome");
+                navigation.goBack()
               }}
             />
           </View>

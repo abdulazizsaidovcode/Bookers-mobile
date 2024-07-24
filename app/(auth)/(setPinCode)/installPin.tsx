@@ -5,6 +5,7 @@ import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity, NativeSynth
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/(setPinCode)/installPin'>;
 
 
@@ -12,6 +13,7 @@ const InstallPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const inputs = useRef<TextInput[]>([]);
+    const [pending, setPending] = useState(false);
 
     useEffect(() => {
         const getStoredOtp = async () => {
@@ -57,11 +59,14 @@ const InstallPin: React.FC = () => {
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
 
     const handleContinue = async () => {
+        setPending(true)
         try {
             await AsyncStorage.setItem('otp', otp.join(''));
             navigation.navigate('(auth)/(setPinCode)/checkInstalledPin');
+            setPending(false)
             setOtp(['', '', '', ''])
         } catch (error) {
+            setPending(false)
             console.log('Failed to save OTP to storage', error);
         }
     };
@@ -90,21 +95,28 @@ const InstallPin: React.FC = () => {
                     </View>
                 </View>
                 <View style={styles.bottomSection}>
-                    <TouchableOpacity
-                        style={[
-                            styles.button,
-                            { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
-                        ]}
-                        onPress={handleContinue}
-                        disabled={!isButtonEnabled}
-                    >
-                        <Text style={[
-                            styles.buttonText,
-                            { color: isButtonEnabled ? '#FFF' : '#FFF' }
-                        ]}>
-                            {t("Continue")}
-                        </Text>
-                    </TouchableOpacity>
+                    {!pending ?
+                        <TouchableOpacity
+                            style={[
+                                styles.button,
+                                { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
+                            ]}
+                            onPress={handleContinue}
+                            disabled={!isButtonEnabled}
+                        >
+                            <Text style={[
+                                styles.buttonText,
+                                { color: isButtonEnabled ? '#FFF' : '#FFF' }
+                            ]}>
+                                {t("Continue")}
+                            </Text>
+                        </TouchableOpacity>
+                        :
+                        <LoadingButtons
+                            title={t("Continue")}
+                        />
+                    }
+
                 </View>
             </View>
         </SafeAreaView>

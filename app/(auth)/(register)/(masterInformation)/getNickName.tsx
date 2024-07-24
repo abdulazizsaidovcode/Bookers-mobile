@@ -1,3 +1,5 @@
+import Buttons from '@/components/(buttons)/button';
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 import registerStory from '@/helpers/state_managment/auth/register';
 import clientStore from '@/helpers/state_managment/client/clientStore';
 import { router } from 'expo-router';
@@ -8,22 +10,28 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 const getMasterNickName = () => {
     const { nickname, setNickname } = registerStory();
     const { setAttachmentID } = clientStore();
-    const {t}=useTranslation()
+    const { t } = useTranslation()
     const handleSkip = () => {
+        setPending(true);
         // Nickname ni bo'sh qilib belgilash
         setNickname('');
         // Navigate to the next page
         router.push('(auth)/(register)/(masterInformation)/getPhoto');
+        setPending(false);
     };
+    const [pending, setPending] = React.useState(false);
+
 
     const handleContinue = () => {
+        setPending(true);
         // Navigate to the next page
         router.push('(auth)/(register)/(masterInformation)/getPhoto');
+        setPending(false);
     };
 
     useEffect(() => {
-        setAttachmentID(''); 
-    },[])
+        setAttachmentID('');
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -49,16 +57,18 @@ const getMasterNickName = () => {
                         <Text style={styles.skipButtonText}>{t("skip")}</Text>
                     </TouchableOpacity>
                 ) : null}
-                <TouchableOpacity
-                    style={[
-                        styles.continueButton,
-                        { backgroundColor: nickname.length > 0 ? '#9C0A35' : '#8A8A8A' },
-                    ]}
-                    onPress={handleContinue}
-                    disabled={nickname.length === 0}
-                >
-                    <Text style={styles.continueButtonText}>{t("Continue")}</Text>
-                </TouchableOpacity>
+                {
+                    !pending ? <Buttons
+                        title={t("Continue")}
+                        onPress={handleContinue}
+                        isDisebled={nickname.length !== 0}
+                    />
+                        :
+                        <LoadingButtons
+                            title={t("Continue")}
+                        />
+                }
+
             </View>
         </View>
     );

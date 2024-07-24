@@ -1,3 +1,5 @@
+import Buttons from '@/components/(buttons)/button';
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 import registerStory from '@/helpers/state_managment/auth/register';
 import { router } from 'expo-router';
 import React from 'react';
@@ -6,11 +8,12 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 
 const ClientInfo: React.FC = () => {
     const { firstName, setFirstName, lastName, setLastName, firstNameError, setFirstNameError, lastNameError, setLastNameError } = registerStory();
-    const {t}=useTranslation()
+    const { t } = useTranslation()
     const validateName = (name: string): boolean => {
         const nameRegEx = /^[a-zA-Zа-яА-ЯёЁ]{2,30}$/;
         return nameRegEx.test(name);
     };
+    const [pending, setPending] = React.useState(false);
 
     const handleFirstNameChange = (name: string): void => {
         setFirstName(name);
@@ -58,18 +61,23 @@ const ClientInfo: React.FC = () => {
                 {lastNameError ? <Text style={styles.errorText}>{lastNameError}</Text> : null}
             </View>
             <View style={styles.bottomSection}>
-                <TouchableOpacity
-                    style={[
-                        styles.button,
-                        { backgroundColor: isButtonEnabled ? '#9C0A35' : '#8A8A8A' },
-                    ]}
-                    disabled={!isButtonEnabled}
-                    onPress={() => {
-                        router.push('(auth)/(register)/(clientInformations)/getPhoto')
-                    }}
-                >
-                    <Text style={styles.buttonText}>{t("Continue")}</Text>
-                </TouchableOpacity>
+
+                {
+                    !pending
+                        ?
+                        <Buttons
+                            title={t("Continue")}
+                            isDisebled={isButtonEnabled}
+                            onPress={() => {
+                                setPending(true)
+                                router.push('(auth)/(register)/(clientInformations)/getPhoto')
+                                setPending(false)
+                            }}
+                        /> :
+                        <LoadingButtons
+                            title={t("Continue")}
+                        />
+                }
             </View>
         </View>
     );

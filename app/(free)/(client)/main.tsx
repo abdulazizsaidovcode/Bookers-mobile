@@ -119,7 +119,7 @@ const MainClient = () => {
                     <View style={tw`pb-5`}>
                         <Buttons title={`Настроить позже и перейти на главную`} onPress={() => {
                             putNumbers(8)
-                            router.push('(welcome)/Welcome')
+                            navigation.goBack()
                         }}/>
                     </View>
                 </ScrollView>

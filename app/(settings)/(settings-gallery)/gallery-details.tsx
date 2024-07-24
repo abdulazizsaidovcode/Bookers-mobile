@@ -62,7 +62,7 @@ const GalleryDetails: React.FC = () => {
     const toggleTextModal = (text: string | null) => {
         setTextModal((!textModal))
         setText(text)
-    }    
+    }
 
     const spliceText = (text: string | null, setText: (val: string | null) => void) => {
         if (text === null) return null;
@@ -144,7 +144,7 @@ const GalleryDetails: React.FC = () => {
         }
     };
 
-    const toggleMainSwitch = () => {
+    const toggleShowMain = () => {
         setShowMainSwitch(!showMainSwitch);
     };
 
@@ -177,136 +177,137 @@ const GalleryDetails: React.FC = () => {
     return (
         <ScrollView style={styles.container}>
             <SafeAreaView>
-                {isDeleteMode ? (
-                    <View style={styles.deleteModeBar}>
-                        <View style={styles.deleteModeLeft}>
-                            <AntDesign onPress={handleDeleteMode} name="close" size={24} color="white" />
-                            <Text style={styles.deleteModeText}>{selectedImages.length}</Text>
-                            <TouchableOpacity style={styles.selectAllButton} onPress={() => setSelectAll(!selectAll)}>
-                                <MaterialIcons name={selectAll ? "check-box" : "check-box-outline-blank"} size={24}
-                                    color="#9C0A35" />
-                            </TouchableOpacity>
-                            <Text style={styles.deleteModeText}>выделить все</Text>
-                        </View>
-                        <TouchableOpacity onPress={toggleAllModal}>
-                            <MaterialIcons name="delete" size={24} color="white" />
+                {isDeleteMode ? (<View style={styles.deleteModeBar}>
+                    <View style={styles.deleteModeLeft}>
+                        <AntDesign onPress={handleDeleteMode} name="close" size={24} color="white" />
+                        <Text style={styles.deleteModeText}>{selectedImages.length}</Text>
+                        <TouchableOpacity style={styles.selectAllButton} onPress={() => setSelectAll(!selectAll)}>
+                            <MaterialIcons name={selectAll ? "check-box" : "check-box-outline-blank"} size={24}
+                                color="#9C0A35" />
                         </TouchableOpacity>
+                        <Text style={styles.deleteModeText}>выделить все</Text>
                     </View>
-                ) : (
-                    <NavigationMenu all={true} name='' editOnPress={toggleModal} delOnPress={handleDeleteMode}
-                        addOnPress={toggleBottomModal} />
-                )}
+                    <TouchableOpacity onPress={toggleAllModal}>
+                        <MaterialIcons name="delete" size={24} color="white" />
+                    </TouchableOpacity>
+                </View>) : (<NavigationMenu
+                    all={true}
+                    name=''
+                    editOnPress={toggleModal}
+                    delOnPress={showMainSwitch ? () => { } : handleDeleteMode}
+                    addOnPress={toggleBottomModal}
+                />)}
                 <View style={styles.content}>
                     <Text style={styles.title}>{fullData.albumName}</Text>
-                <View style={styles.imagesContainer}>
-                    {fullData.resGalleryAttachments.length <= 0 ? (
-                        <Text style={styles.noImagesText}>В этой галерее нет фотографий</Text>
-                    ) : fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
-                        <View key={albumIndex} style={styles.imageWrapper}>
-                            {isDeleteMode && (
-                                <TouchableOpacity style={styles.checkIcon}
-                                    onPress={() => handleImageSelect(albumItem.attachmentId)}>
-                                    <MaterialIcons
-                                        name={selectedImages.includes(albumItem.attachmentId) ? "check-box" : "check-box-outline-blank"}
-                                        size={24} color="#9C0A35" />
-                                </TouchableOpacity>
-                            )}
-                            {albumItem.attachmentStatus === 'CANCELED' ? null : showMainSwitch && (
-                                <TouchableOpacity style={styles.checkIcon}>
-                                    <MaterialIcons name={albumItem.main ? "check-box" : 'check-box-outline-blank'}
-                                        size={26} color="#9C0A35" />
-                                </TouchableOpacity>
-                            )}
-                            <Pressable onLongPress={toggleMainSwitch} style={styles.imageWrapper}>
-                                <Image style={styles.image} source={{ uri: getFile + albumItem.attachmentId }} />
-                                {!isDeleteMode && albumItem.attachmentStatus === 'NEW' && <View style={{
-                                    position: 'absolute',
-                                    width: 15,
-                                    borderRadius: 50,
-                                    height: 15,
-                                    backgroundColor: '#F29339',
-                                    top: 0,
-                                    right: 0,
-                                    margin: 7
-                                }}></View>}
-                                {albumItem.attachmentStatus === 'CANCELED' && <View style={{
-                                    position: 'absolute',
-                                    width: '100%',
-                                    height: '100%',
-                                    backgroundColor: 'black',
-                                    opacity: 0.8,
-                                    top: 0,
-                                    right: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    borderRadius: 14.5,
-                                }}>
-                                    {spliceText(albumItem.message, setText)}
-                                </View>}
-                            </Pressable>
-                        </View>
-                    ))}
-                    {images.map((item, index) => (
-                        <Image key={index} style={styles.image} source={{ uri: item }} />
-                    ))}
-                    {images.length !== 0 && (
-                        <Buttons title='Сохранить' onPress={handleSave} />
-                    )}
+                    <View style={styles.imagesContainer}>
+                        {fullData.resGalleryAttachments.length <= 0 ? (
+                            <Text style={styles.noImagesText}>В этой галерее нет фотографий</Text>
+                        ) : fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
+                            <View key={albumIndex} style={styles.imageWrapper}>
+                                {isDeleteMode && (
+                                    <TouchableOpacity style={styles.checkIcon}
+                                        onPress={() => handleImageSelect(albumItem.attachmentId)}>
+                                        <MaterialIcons
+                                            name={selectedImages.includes(albumItem.attachmentId) ? "check-box" : "check-box-outline-blank"}
+                                            size={24} color="#9C0A35" />
+                                    </TouchableOpacity>
+                                )}
+                                {albumItem.attachmentStatus === 'CANCELED' ? null : showMainSwitch && (
+                                    <TouchableOpacity style={styles.checkIcon}>
+                                        <MaterialIcons name={albumItem.main ? "check-box" : 'check-box-outline-blank'}
+                                            size={26} color="#9C0A35" />
+                                    </TouchableOpacity>
+                                )}
+                                <Pressable onLongPress={isDeleteMode ? () => { } : toggleShowMain} style={styles.imageWrapper}>
+                                    <Image style={styles.image} source={{ uri: getFile + albumItem.attachmentId }} />
+                                    {!isDeleteMode && albumItem.attachmentStatus === 'NEW' && <View style={{
+                                        position: 'absolute',
+                                        width: 15,
+                                        borderRadius: 50,
+                                        height: 15,
+                                        backgroundColor: '#F29339',
+                                        top: 0,
+                                        right: 0,
+                                        margin: 7
+                                    }}></View>}
+                                    {albumItem.attachmentStatus === 'CANCELED' && <View style={{
+                                        position: 'absolute',
+                                        width: '100%',
+                                        height: '100%',
+                                        backgroundColor: 'black',
+                                        opacity: 0.8,
+                                        top: 0,
+                                        right: 0,
+                                        left: 0,
+                                        bottom: 0,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        borderRadius: 14.5,
+                                    }}>
+                                        {spliceText(albumItem.message, setText)}
+                                    </View>}
+                                </Pressable>
+                            </View>
+                        ))}
+                        {images.map((item, index) => (
+                            <Image key={index} style={styles.image} source={{ uri: item }} />
+                        ))}
+                        {images.length !== 0 && (
+                            <Buttons title='Сохранить' onPress={handleSave} />
+                        )}
+                    </View>
                 </View>
-            </View>
-            <CenteredModal
-                toggleModal={toggleModal}
-                isModal={isOpen}
-                btnWhiteText="Отмена"
-                btnRedText="Подтверждать"
-                isFullBtn={true}
-                onConfirm={handleConfirm}
-            >
-                <View>
-                    <Text style={styles.modalTitle}>Переименовать</Text>
-                    <TextInput
-                        value={name}
-                        onChangeText={setName}
-                        placeholder='Enter edited name'
-                        style={styles.textInput}
-                    />
-                </View>
-            </CenteredModal>
-            <CenteredModal
-                toggleModal={toggleAllModal}
-                isModal={isAllOpen}
-                btnWhiteText="Отмена"
-                btnRedText="Подтверждать"
-                isFullBtn={true}
-                onConfirm={handleDelete}
-            >
-                <Text style={styles.modalContentText}>
-                    {selectedImages.length === fullData.resGalleryAttachments.length
-                        ? 'Вы уверены, что хотите удалить все фото альбома?'
-                        : 'Вы уверены, что хотите удалить фото?'}
-                </Text>
-            </CenteredModal>
-            <BottomModal isBottomModal={isBottomModalOpen} toggleBottomModal={toggleBottomModal}>
-                <View style={styles.bottomModalContent}>
-                    <TouchableOpacity onPress={addImageFromCamera}>
-                        <Text style={styles.bottomModalText}>Сделать снимок</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={addImageFromGallery}>
-                        <Text style={styles.bottomModalText}>Выбрать из галереи</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={toggleBottomModal}>
-                        <Text style={styles.bottomModalCancelText}>Отмена</Text>
-                    </TouchableOpacity>
-                </View>
-            </BottomModal>
-            <BottomModal isBottomModal={textModal} toggleBottomModal={() => toggleTextModal(text)}>
-                <View>
-                    <Text style={{fontSize: 20, textAlign: 'center', color: 'white'}}>{text}</Text>
-                </View>
-            </BottomModal>
-        </SafeAreaView>
+                <CenteredModal
+                    toggleModal={toggleModal}
+                    isModal={isOpen}
+                    btnWhiteText="Отмена"
+                    btnRedText="Подтверждать"
+                    isFullBtn={true}
+                    onConfirm={handleConfirm}
+                >
+                    <View>
+                        <Text style={styles.modalTitle}>Переименовать</Text>
+                        <TextInput
+                            value={name}
+                            onChangeText={setName}
+                            placeholder='Enter edited name'
+                            style={styles.textInput}
+                        />
+                    </View>
+                </CenteredModal>
+                <CenteredModal
+                    toggleModal={toggleAllModal}
+                    isModal={isAllOpen}
+                    btnWhiteText="Отмена"
+                    btnRedText="Подтверждать"
+                    isFullBtn={true}
+                    onConfirm={handleDelete}
+                >
+                    <Text style={styles.modalContentText}>
+                        {selectedImages.length === fullData.resGalleryAttachments.length
+                            ? 'Вы уверены, что хотите удалить все фото альбома?'
+                            : 'Вы уверены, что хотите удалить фото?'}
+                    </Text>
+                </CenteredModal>
+                <BottomModal isBottomModal={isBottomModalOpen} toggleBottomModal={toggleBottomModal}>
+                    <View style={styles.bottomModalContent}>
+                        <TouchableOpacity onPress={addImageFromCamera}>
+                            <Text style={styles.bottomModalText}>Сделать снимок</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={addImageFromGallery}>
+                            <Text style={styles.bottomModalText}>Выбрать из галереи</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={toggleBottomModal}>
+                            <Text style={styles.bottomModalCancelText}>Отмена</Text>
+                        </TouchableOpacity>
+                    </View>
+                </BottomModal>
+                <BottomModal isBottomModal={textModal} toggleBottomModal={() => toggleTextModal(text)}>
+                    <View>
+                        <Text style={{ fontSize: 20, textAlign: 'center', color: 'white' }}>{text}</Text>
+                    </View>
+                </BottomModal>
+            </SafeAreaView>
 
         </ScrollView >
     );

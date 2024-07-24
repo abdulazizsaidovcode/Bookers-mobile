@@ -873,7 +873,9 @@ function RootLayoutNav() {
               component={TimeWorkDetail}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="(location)/locationEdit"
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="(location)/LocationEdit"
               component={LocationEdit}
             />
           </Stack.Navigator>
