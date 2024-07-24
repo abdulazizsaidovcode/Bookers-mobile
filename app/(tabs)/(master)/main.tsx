@@ -107,7 +107,7 @@ const TabOneScreen: React.FC = () => {
   const { number, setNumber } = numberSettingStore();
   const { getMee, setGetMee } = useGetMeeStore();
   const navigation = useNavigation<any>();
-  const {isRegtered} = isRegister()
+  const { isRegtered } = isRegister()
   const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
   const {
     mainStatisticData,
@@ -128,37 +128,37 @@ const TabOneScreen: React.FC = () => {
   const { refreshing, setRefreshing } = clientStore();
   const [backPressCount, setBackPressCount] = useState(0);
 
-// navigatsiyani login registratsiyadan o'tganda bloklash
-useEffect(() => {
-  const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
-    e.preventDefault();
-  });
+  // navigatsiyani login registratsiyadan o'tganda bloklash
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
+      e.preventDefault();
+    });
 
-  return unsubscribe;
-}, [navigation]);
+    return unsubscribe;
+  }, [navigation]);
 
-// 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
-useFocusEffect(
-  useCallback(() => {
-    const onBackPress = () => {
-      if (backPressCount === 0) {
-        setBackPressCount(backPressCount + 1);
-        Toast.show('Orqaga qaytish uchun yana bir marta bosing', Toast.SHORT);
-        setTimeout(() => {
-          setBackPressCount(0);
-        }, 2000); // 2 soniya ichida ikkinchi marta bosilmasa, holatni qayta boshlaydi
-        return true; // Orqaga qaytishni bloklaydi
-      } else {
-        BackHandler.exitApp(); // Ilovadan chiqish
-        return false;
-      }
-    };
+  // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        if (backPressCount === 0) {
+          setBackPressCount(backPressCount + 1);
+          Toast.show('Orqaga qaytish uchun yana bir marta bosing', Toast.SHORT);
+          setTimeout(() => {
+            setBackPressCount(0);
+          }, 2000); // 2 soniya ichida ikkinchi marta bosilmasa, holatni qayta boshlaydi
+          return true; // Orqaga qaytishni bloklaydi
+        } else {
+          BackHandler.exitApp(); // Ilovadan chiqish
+          return false;
+        }
+      };
 
-    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-  }, [backPressCount])
-);
+      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [backPressCount])
+  );
 
 
 
@@ -238,10 +238,10 @@ useFocusEffect(
   );
   const regularVisitCount =
     dailyTimeData && dailyTimeData.length !== 0 ?
-    dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length : 0;
+      dailyTimeData && dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length : 0;
   const notVisitCount =
     dailyTimeData && dailyTimeData.length !== 0 ?
-    dailyTimeData.filter((item) => item.type === "NOT_VISIT").length : 0;
+      dailyTimeData && dailyTimeData.filter((item) => item.type === "NOT_VISIT").length : 0;
   const vipCientsCount =
     dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData.filter((item) => item.type === "VIP").length : 0;
   const newClientsCount =
@@ -294,7 +294,7 @@ useFocusEffect(
               title="настройку"
               onPress={() => navigation.navigate("(profile)/(tariff)/tariff")}
             />
-            <View style={{marginTop: 10}}>
+            <View style={{ marginTop: 10 }}>
               <Buttons title="Выйти" onPress={() => handleSubmit()} />
             </View>
           </View>
@@ -358,9 +358,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
     <View style={styles.scheduleSection}>
       <Text style={styles.sectionTitle}>Расписание на сегодня</Text>
       <Text style={styles.sectionSubtitle}>
-        Время работы: с{" "}
-        {todayGraficData.from === null ? "" : todayGraficData.from.slice(0, 5)}{" "}
-        до {todayGraficData.end === null ? "" : todayGraficData.end.slice(0, 5)}
+        {todayGraficData ? `Время работы: с ${todayGraficData.from === null ? "" : todayGraficData.from.slice(0, 5)} до ${todayGraficData.end === null ? "" : todayGraficData.end.slice(0, 5)}` : 'ваша графическая работа не настроена'}
       </Text>
     </View>
     {dailyTimeData && (
@@ -535,10 +533,10 @@ const renderTimeSlot: React.FC<{ item: DashboardDailyTimeOrders }> = ({
       item.type === "REGULAR_VISIT"
         ? styles.bookedSlot
         : item.type === "NOT_VISIT"
-        ? styles.freeSlot
-        : item.type === "VIP"
-        ? styles.vipSlot
-        : styles.newSlot,
+          ? styles.freeSlot
+          : item.type === "VIP"
+            ? styles.vipSlot
+            : styles.newSlot,
     ]}
   >
     <Text style={{ color: COLORS.white }}>
