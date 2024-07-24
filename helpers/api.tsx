@@ -188,3 +188,5 @@ export const clientOrderUpcoming:string=`${base_url}order/client/history/upcomin
 export const clientOrderaPastComing:string=`${base_url}order/client/history/past`
 //leave feedback API
 export const addFebdaback_Url:string=`${base_url}feedback/for/master/by/client`
+// delete pastcoming order api
+export const deletePastcoming_Url:string=`${base_url}order/`
