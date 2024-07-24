@@ -41,14 +41,12 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
             const res = await axios.post(addFebdaback_Url, datas, config ? config : {});
             if (res.data.success) {
                 Toast.show("Hammasi yahshi Sardor xavotir olma", Toast.LONG)
-
                 console.log(res.data.message);
                 toggleModal();
             }
             else {
                 Toast.show('Add fedback ishlamadi', Toast.LONG)
                 console.log(res.data.message);
-
             }
         }
         else Toast.show('Something went wrong', Toast.LONG)
