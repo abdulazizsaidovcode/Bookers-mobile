@@ -16,10 +16,12 @@ type ClientCardProps = {
   address: string;
   feedbackCount: number;
   onPress?: () => void;
+  locationIcon?: React.ReactNode
+  btntext?:string;
 };
 
 const ClientCard: React.FC<ClientCardProps> = ({
-  salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress
+  salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress,locationIcon,btntext
 }) => {
   const { getme } = webPageStore();
 
@@ -61,15 +63,17 @@ const ClientCard: React.FC<ClientCardProps> = ({
         </View>
         <Text style={tw`text-gray-600 text-lg mb-2`}>{address || "Address is not found"}</Text>
         <Text style={tw`text-black text-lg font-bold mb-4`}>Ближайшая запись: {zaps}</Text>
-        <View style={tw`flex-row justify-between`}>
+        <View style={tw`flex-row`}>
           <TouchableOpacity activeOpacity={0.8} style={[tw`px-16 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]}
-          onPress={onPress}
+              onPress={onPress}
           >
-            <Text style={tw`text-white text-xl`}>Записаться</Text>
+            <Text style={tw`text-white text-xl`}>{btntext}</Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.8} style={[tw`p-3 rounded-full`, { backgroundColor: '#9C0A35' }]}>
-            <SimpleLineIcons name="location-pin" size={30} color="white" onPress={onPress} />
-          </TouchableOpacity>
+          {locationIcon && (
+                    <TouchableOpacity activeOpacity={0.7} style={[tw`px-3 py-3 rounded-full ml-3 `, { backgroundColor: '#9C0A35' }]}>
+                        {locationIcon}
+                    </TouchableOpacity>
+                )}
         </View>
       </View>
     </TouchableOpacity>

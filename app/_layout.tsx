@@ -143,6 +143,7 @@ import ProfileMasterEdit from "./(profile)/(settings)/(childSettings)/(profileEd
 import ProfileMasterScreen from "./(profile)/(settings)/(childSettings)/(profileEdit)/profileScreen";
 import EditProfileMasterPage from "./(profile)/(settings)/(childSettings)/(profileEdit)/(editPages)/editPage";
 import TimeWorkDetail from "./(free)/(work-grafic-edit)/workTimeDetail";
+import LocationEdit from "./(location)/LocationEdit";
 const Stack = createNativeStackNavigator();
 export { ErrorBoundary } from "expo-router";
 
@@ -871,6 +872,9 @@ function RootLayoutNav() {
               name="(free)/(work-grafic-edit)/workTimeDetail"
               component={TimeWorkDetail}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen name="(location)/locationEdit"
+              component={LocationEdit}
             />
           </Stack.Navigator>
         </MenuProvider>

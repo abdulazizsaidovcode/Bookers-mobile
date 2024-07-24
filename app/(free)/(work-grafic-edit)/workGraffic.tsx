@@ -14,8 +14,6 @@ import { NavigationProp } from "@react-navigation/native";
 import { useFocusEffect, useNavigation } from "expo-router";
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(work-grafic-edit)/workGraffic'>;
 
-
-
 const GrafficWorkEdit: React.FC = () => {
   const { calendarDate, setWeek, week, weekData } = graficWorkStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();

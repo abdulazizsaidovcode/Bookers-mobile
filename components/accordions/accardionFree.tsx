@@ -15,7 +15,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const AccordionFree: React.FC<AccordionItemProps> = ({title}) => {
-    const {genderIndex, setGenderIndex, isSelected, setSelection, expanded2, setExpended2} = useAccardionStore();
+    const {genderIndex, setGenderIndex, isSelected, setSelection, isSelected1, setSelected1, expanded2, setExpended2} = useAccardionStore();
 
     const toggleExpand = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -69,8 +69,8 @@ const AccordionFree: React.FC<AccordionItemProps> = ({title}) => {
                     </RadioForm>
                     <Text style={tw`p-3`}>
                         <CustomCheckbox
-                            value={isSelected}
-                            onValueChange={setSelection}
+                            value={isSelected1}
+                            onValueChange={setSelected1}
                             title="не важно"
                         />
                     </Text>

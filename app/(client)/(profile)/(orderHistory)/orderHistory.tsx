@@ -14,10 +14,10 @@ import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
 import { useNavigation } from "@react-navigation/native";
 import AccardionHistoryTwo from "@/components/accordions/accardionHistoryTwo";
-import PastHistory from "@/app/(free)/(client)/details/history/past-history";
+import { useAccardionStoreId } from "@/helpers/state_managment/accardion/accardionStore";
 
 const OrderHistory = () => {
-  const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
+  const {activeTab, setActiveTab}=useAccardionStoreId();
   const [modalDelete, setModalDelete] = useState<boolean>(false);
   const [upcoming, setUpcoming] = useState<getOrderClientUpcomingInterface[]>([]);
   const [pastComing, setPastComing] = useState<getOrderClientPastcomingInterface[]>([]);
@@ -137,6 +137,7 @@ const OrderHistory = () => {
                     money={`${pastComing.orderPrice} сум`}
                     buttonName="Оставить отзыв"
                     Adress={pastComing.address}
+                    orderId={pastComing.orderId}
                     deleteIcon={<Feather name="trash-2" size={24} color="white" />}
                   />
                 </AccardionHistoryTwo>
