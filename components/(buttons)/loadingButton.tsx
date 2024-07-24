@@ -2,19 +2,18 @@ import React from 'react';
 import { Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { IButton } from "@/type/button/button";
 
-const LoadingButtons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', icon, textColor = 'white', textSize = 18, onPress, isDisebled = true }) => {
+const LoadingButtons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', textColor = 'white', textSize = 18, isDisebled = true }) => {
     return (
         <TouchableOpacity
             style={[
                 styles.button,
                 { backgroundColor: isDisebled ? 'gray' : backgroundColor }
             ]}
-            onPress={onPress}
             activeOpacity={.8}
             disabled={isDisebled}
         >
             <Text style={[styles.buttonText, { color: textColor }, { fontSize: textSize }]}>
-                {icon ? icon : ''} {title}
+                {title}
             </Text>
             <ActivityIndicator size="small" color={textColor} style={styles.loader} />
         </TouchableOpacity>

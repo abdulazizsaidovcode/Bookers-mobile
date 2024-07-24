@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image, Pressable } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import Buttons from '@/components/(buttons)/button';
@@ -9,12 +9,12 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import { checkNumberFunction } from '@/helpers/api-function/register/registrFC';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister'
 import LoadingButtons from '@/components/(buttons)/loadingButton';
+import { useFocusEffect } from 'expo-router';
 
 const PhoneNumberInput: React.FC = () => {
-    const { phoneNumber, setPhoneNumber, setIsValid, isValid, setCode, code } = registerStory()
+    const { phoneNumber, setPhoneNumber, setIsValid, isValid, setCode } = registerStory()
     const phoneInput = useRef<PhoneInput>(null);
     const { setIsRegtered } = isRegister()
-    const [navTitle, setNavTitle] = useState('Login');
     const [status, setStatus] = useState<boolean>(false);
     const { t } = useTranslation();
     const [pending, setPending] = useState(false);
@@ -28,12 +28,11 @@ const PhoneNumberInput: React.FC = () => {
         setIsValid(phoneInput.current?.isValidNumber(text) ?? false);
     };
 
-    const changeStatus = (val: boolean) => {
-        setStatus(val); // Yangi statusni o'zgartiramiz
-        setNavTitle(val ? 'Register' : 'Login');
-        setCode('');
-        setIsRegtered(val);
-    };
+    useFocusEffect(
+        useCallback(() => {
+            setIsRegtered(status);
+        }, [status])
+    )
 
     return (
         <View style={styles.container}>
@@ -88,7 +87,7 @@ const PhoneNumberInput: React.FC = () => {
                     <Buttons
                         title={"Войти"}
                         onPress={() => {
-                            checkNumberFunction(phoneNumber, setCode, setPending)
+                            checkNumberFunction(phoneNumber, setCode, setPending, setStatus)
                             setPending(true)
                         }}
                         backgroundColor={'#9C0A35'}

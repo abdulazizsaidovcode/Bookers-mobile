@@ -5,13 +5,14 @@ import Toast from "react-native-simple-toast";
 import { authStorage, setClientOrMaster } from "@/constants/storage";
 import * as SecureStore from 'expo-secure-store';
 
-export const checkNumberFunction = async (phoneNumber: string, setCode: (value: any) => void, pending: (val: boolean) => void) => {
+export const checkNumberFunction = async (phoneNumber: string, setCode: (value: any) => void, pending: (val: boolean) => void, setStatus: (val: boolean) => void) => {
     const sentData = { phoneNumber: phoneNumber }
     let status: null | boolean = null
 
     await axios.post(`${base_url}user/checking/phone`, sentData)
         .then(res => {
             status = res.data.success
+            setStatus(res.data.success)
         })
         .catch(err => {
             if (err.response.data.success === false) Toast.show(err.response.data.message, Toast.LONG)
