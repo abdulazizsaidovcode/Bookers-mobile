@@ -39,7 +39,7 @@ const Index: React.FC = () => {
     );
   }
 
-  if (isPasswordSet === false) {
+  if (isPasswordSet == false) {
     return <InstallPin />;
   }
 
