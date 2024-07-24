@@ -1,21 +1,23 @@
-import React, { useRef, useState} from 'react';
-import {View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image,  Pressable} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image, Pressable } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import Buttons from '@/components/(buttons)/button';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import registerStory from '@/helpers/state_managment/auth/register';
-import {checkNumberFunction} from '@/helpers/api-function/register/registrFC';
+import { checkNumberFunction } from '@/helpers/api-function/register/registrFC';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister'
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 
 const PhoneNumberInput: React.FC = () => {
-    const {phoneNumber, setPhoneNumber, setIsValid, isValid, setCode, code} = registerStory()
+    const { phoneNumber, setPhoneNumber, setIsValid, isValid, setCode, code } = registerStory()
     const phoneInput = useRef<PhoneInput>(null);
-    const {setIsRegtered} = isRegister()
+    const { setIsRegtered } = isRegister()
     const [navTitle, setNavTitle] = useState('Login');
     const [status, setStatus] = useState<boolean>(false);
-    const {t} = useTranslation();
+    const { t } = useTranslation();
+    const [pending, setPending] = useState(false);
 
     // useEffect(() => {
     //     if (code) setPhoneNumber('')
@@ -35,16 +37,16 @@ const PhoneNumberInput: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            <SafeAreaView style={{marginBottom: 16}}>
-                <StatusBar barStyle="dark-content" backgroundColor="#21212E"/>
-                <NavigationMenu name={navTitle} deleteIcon={false} key={1}/>
+            <SafeAreaView style={{ marginBottom: 16 }}>
+                <StatusBar barStyle="dark-content" backgroundColor="#21212E" />
+                <NavigationMenu name='' deleteIcon={false} key={1} />
             </SafeAreaView>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{alignItems: 'center'}}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center' }}>
                 <View style={styles.textContainer}>
                     <Text style={styles.title}>{t("phone_number")}</Text>
                     <Text style={styles.subTitle}>{t("sms_code")}</Text>
                 </View>
-                <StatusBar barStyle="dark-content"/>
+                <StatusBar barStyle="dark-content" />
                 <View style={styles.phoneNumber}>
                     <View style={styles.phoneInputWrapper}>
                         <PhoneInput
@@ -70,48 +72,33 @@ const PhoneNumberInput: React.FC = () => {
                         <Text style={styles.errorText}>{t("invalid_phone_number")}</Text>
                     )}
                 </View>
-                <View style={{marginVertical: 20, width: '100%'}}>
+                <View style={{ marginVertical: 20, width: '100%' }}>
                     <TouchableOpacity style={styles.socialButton} activeOpacity={0.7}>
-                        <Image source={require('../../../assets/images/auth/google.png')}/>
+                        <Image source={require('../../../assets/images/auth/google.png')} />
                         <Text style={styles.socialButtonText}>{t('login_google')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.socialButton} activeOpacity={0.7}>
-                        <Image source={require('../../../assets/images/auth/facebook.png')}/>
+                        <Image source={require('../../../assets/images/auth/facebook.png')} />
                         <Text style={styles.socialButtonText}>{t("login_facebook")}</Text>
                     </TouchableOpacity>
                 </View>
-                {!status ? (
-                    <Pressable
-                        onPress={() => {
-                            changeStatus(!status);
-                        }}
-                        style={{marginVertical: 20, flexDirection: 'row'}}
-                    >
-                        <Text style={styles.phoneInputText}>еще </Text>
-                        <Text style={[styles.phoneInputText, {color: '#9C0A35'}]}>не</Text>
-                        <Text style={styles.phoneInputText}> зарегистрирован?</Text>
-                    </Pressable>
-                ) : (
-                    <Pressable
-                        onPress={() => {
-                            changeStatus(!status);
-                        }}
-                        style={{marginVertical: 20, flexDirection: 'row'}}
-                    >
-                        <Text style={styles.phoneInputText}>я уже </Text>
-                        <Text style={[styles.phoneInputText, {color: '#9C0A35'}]}>зарегистрирован</Text>
-                    </Pressable>
-                )}
-
             </ScrollView>
-            <View style={{marginVertical: 20}}>
-                <Buttons
-                    title={"Войти"}
-                    onPress={() => {
-                        checkNumberFunction(phoneNumber, setCode, status)
-                    }}
-                    backgroundColor={'#9C0A35'}
-                />
+            <View style={{ marginVertical: 20 }}>
+                {!pending ?
+                    <Buttons
+                        title={"Войти"}
+                        onPress={() => {
+                            checkNumberFunction(phoneNumber, setCode, setPending)
+                            setPending(true)
+                        }}
+                        backgroundColor={'#9C0A35'}
+                    />
+                    :
+                    <LoadingButtons
+                        title={"Войти"}
+                        backgroundColor={'#9C0A35'}
+                    />
+                }
             </View>
         </View>
     );

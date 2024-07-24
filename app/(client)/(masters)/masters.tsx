@@ -72,7 +72,7 @@ const Masters = () => {
         rating,
         userLocation.coords.latitude,
         userLocation?.coords.longitude);
-      
+
       toggleBottomModal();
       setPastEntries([]);
     } catch (error) {
@@ -80,7 +80,7 @@ const Masters = () => {
     }
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item }: any) => {
     const {
       id,
       attachmentId,
@@ -106,8 +106,8 @@ const Masters = () => {
       genderName === "MALE"
         ? "Мужской мастер"
         : genderName === "FEMALE"
-        ? "Женский мастер"
-        : "Не найдено";
+          ? "Женский мастер"
+          : "Не найдено";
 
     const nextBookingDate =
       moment().format("YYYY-MM-DD") === nextEntryDate
@@ -186,7 +186,7 @@ const Masters = () => {
         </View>
       </View>
     );
-  };  
+  };
 
   useEffect(() => {
     getTopMasters(search);
