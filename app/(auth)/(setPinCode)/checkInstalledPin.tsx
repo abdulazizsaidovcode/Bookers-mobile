@@ -160,29 +160,36 @@ const CheckPin: React.FC = () => {
 
     // ----------- REGISTER ----------------- //
     const register = () => {
-        if (role === 'ROLE_MASTER') {
-            registerMaster({
-                firstName: firstName,
-                lastName: lastName,
-                nickname: nickname,
-                phoneNumber: phoneNumber,
-                role: role,
-                setData: setTokenData,
-                password: enteredOtp,
-                language: language,
-                img
-            })
-        } else {
-            registerClient({
-                firstName: firstName,
-                lastName: lastName,
-                phoneNumber: phoneNumber,
-                setData: setTokenData,
-                password: enteredOtp,
-                language: language,
-                img
-            })
+        if (enteredOtp === storedOtp) {
+            if (role === 'ROLE_MASTER') {
+                registerMaster({
+                    firstName: firstName,
+                    lastName: lastName,
+                    nickname: nickname,
+                    phoneNumber: phoneNumber,
+                    role: role,
+                    setData: setTokenData,
+                    password: enteredOtp,
+                    language: language,
+                    img
+                })
+            } else {
+                registerClient({
+                    firstName: firstName,
+                    lastName: lastName,
+                    phoneNumber: phoneNumber,
+                    setData: setTokenData,
+                    password: enteredOtp,
+                    language: language,
+                    img
+                })
+            }
+        }else {
+            setIsCorrect(false);
+            setPending(false)
+            Toast.show("неверный пин-код", Toast.SHORT);
         }
+
     }
 
     return (

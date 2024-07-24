@@ -1,23 +1,25 @@
-import { StyleSheet, Text, TouchableOpacity, View} from 'react-native'
-import React, {useEffect, useState} from 'react'
-import {useNavigation} from 'expo-router';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { useNavigation } from 'expo-router';
 import ProfileImgUpload from '@/components/profile-img-upload';
 import registerStory from '@/helpers/state_managment/auth/register';
 import Buttons from '@/components/(buttons)/button';
 import clientStore from '@/helpers/state_managment/client/clientStore';
-import {useTranslation} from 'react-i18next';
-import {NavigationProp} from '@react-navigation/native';
-import {RootStackParamList} from '@/type/root';
+import { useTranslation } from 'react-i18next';
+import { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/address-book'>;
 
 const UserCameraInfo = () => {
-    const {setImg} = registerStory()
+    const { setImg } = registerStory()
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
-    const {attachmentID} = clientStore();
+    const { attachmentID } = clientStore();
     const [checkUpload, setCheckUpload] = useState<boolean>(false);
-    const {t} = useTranslation();
+    const { t } = useTranslation();
+    const [pending, setPending] = useState<boolean>(false);
 
     const handleSkip = () => {
         setImg(null)
@@ -32,20 +34,24 @@ const UserCameraInfo = () => {
         else setCheckUpload(false)
     }, [attachmentID])
 
-    const handleContinue = () => navigation.navigate('(auth)/(setPinCode)/installPin')
+    const handleContinue = () => {
+        setPending(true)
+        navigation.navigate('(auth)/(setPinCode)/installPin')
+        setPending(false)
+    }
 
     return (
         <View style={styles.container}>
             <View style={styles.topSection}>
                 <View style={styles.progressBar}>
-                    <View style={styles.progressIndicator}/>
-                    <View style={styles.progressSegment}/>
-                    <View style={styles.progressSegment1}/>
-                    <View style={styles.progressSegment2}/>
+                    <View style={styles.progressIndicator} />
+                    <View style={styles.progressSegment} />
+                    <View style={styles.progressSegment1} />
+                    <View style={styles.progressSegment2} />
                 </View>
                 <Text style={styles.label}>{t("add_your_photo")}</Text>
                 <Text style={styles.description}>{t("do_not_wish_to_add_photo")}</Text>
-                <ProfileImgUpload registerProfileImg={`registerProfileImg`}/>
+                <ProfileImgUpload registerProfileImg={`registerProfileImg`} />
             </View>
 
             <View style={styles.bottomSection}>
@@ -55,11 +61,18 @@ const UserCameraInfo = () => {
                 >
                     <Text style={styles.skipButtonText}>{t("skip")}</Text>
                 </TouchableOpacity>
-                <Buttons
-                    isDisebled={checkUpload}
-                    title={t("Continue")}
-                    onPress={handleContinue}
-                />
+
+                {!pending ?
+                    <Buttons
+                        isDisebled={checkUpload}
+                        title={t("Continue")}
+                        onPress={handleContinue}
+                    />
+                    :
+                    <LoadingButtons
+                        title={t('Continue')}
+                    />
+                }
             </View>
 
         </View>
