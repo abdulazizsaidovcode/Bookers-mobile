@@ -1,12 +1,13 @@
 import Buttons from "@/components/(buttons)/button";
-import { useNavigation } from "expo-router";
-import React from "react";
-import { StyleSheet, View, Text, Image, SafeAreaView } from "react-native";
+import { useFocusEffect, useNavigation } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, View, Text, Image, SafeAreaView, BackHandler } from "react-native";
 import { useTranslation } from "react-i18next";
 import "../../i18next";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import { langstore } from "@/helpers/state_managment/lang/lang";
+import Toast from "react-native-simple-toast";
 import * as SecureStore from "expo-secure-store";
 
 type SettingsScreenNavigationProp = NavigationProp<
@@ -18,12 +19,47 @@ const Auth: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
   const { language, setLanguage } = langstore();
+  const [backPressCount, setBackPressCount] = useState(0);
+
 
   const changeLanguage = async (lng: string) => {
     i18n.changeLanguage(lng);
     await SecureStore.setItemAsync("selectedLanguage", lng);
     setLanguage(lng);
   };
+
+  // navigatsiyani login registratsiyadan o'tganda bloklash
+useEffect(() => {
+  const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
+    e.preventDefault();
+  });
+
+  return unsubscribe;
+}, [navigation]);
+
+// 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
+useFocusEffect(
+  useCallback(() => {
+    const onBackPress = () => {
+      if (backPressCount === 0) {
+        setBackPressCount(backPressCount + 1);
+        Toast.show('Orqaga qaytish uchun yana bir marta bosing', Toast.SHORT);
+        setTimeout(() => {
+          setBackPressCount(0);
+        }, 2000); // 2 soniya ichida ikkinchi marta bosilmasa, holatni qayta boshlaydi
+        return true; // Orqaga qaytishni bloklaydi
+      } else {
+        BackHandler.exitApp(); // Ilovadan chiqish
+        return false;
+      }
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  }, [backPressCount])
+);
+
   return (
     <SafeAreaView style={styles.container}>
       {/* <NavigationMenu name="" deleteIcon={false} key={1} /> */}

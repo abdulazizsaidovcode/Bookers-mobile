@@ -11,11 +11,13 @@ import {
   RefreshControl,
   Share,
   Alert,
+  BackHandler,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PieChart from "react-native-pie-chart";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Toast from "react-native-simple-toast";
 import {
   editOrderStatus,
   fetchDaylyOrderTimes,
@@ -39,7 +41,7 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
 import Buttons from "@/components/(buttons)/button";
-import { useNavigation } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { getData } from "@/helpers/token";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -47,6 +49,7 @@ import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSe
 import { getNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { handleRefresh } from "@/constants/refresh";
+import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -104,6 +107,7 @@ const TabOneScreen: React.FC = () => {
   const { number, setNumber } = numberSettingStore();
   const { getMee, setGetMee } = useGetMeeStore();
   const navigation = useNavigation<any>();
+  const {isRegtered} = isRegister()
   const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
   const {
     mainStatisticData,
@@ -122,6 +126,41 @@ const TabOneScreen: React.FC = () => {
     setWaitingData,
   } = useDashboardStore();
   const { refreshing, setRefreshing } = clientStore();
+  const [backPressCount, setBackPressCount] = useState(0);
+
+// navigatsiyani login registratsiyadan o'tganda bloklash
+useEffect(() => {
+  const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
+    e.preventDefault();
+  });
+
+  return unsubscribe;
+}, [navigation]);
+
+// 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
+useFocusEffect(
+  useCallback(() => {
+    const onBackPress = () => {
+      if (backPressCount === 0) {
+        setBackPressCount(backPressCount + 1);
+        Toast.show('Orqaga qaytish uchun yana bir marta bosing', Toast.SHORT);
+        setTimeout(() => {
+          setBackPressCount(0);
+        }, 2000); // 2 soniya ichida ikkinchi marta bosilmasa, holatni qayta boshlaydi
+        return true; // Orqaga qaytishni bloklaydi
+      } else {
+        BackHandler.exitApp(); // Ilovadan chiqish
+        return false;
+      }
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  }, [backPressCount])
+);
+
+
 
   useEffect(() => {
     getNumbers(setNumber);
