@@ -11,7 +11,6 @@ export const getHelpOne = async (
   try {
     const config = await getConfig();
     const response = await axios.get(`${help_url}${status}`, config ? config : {});
-
     if (response.data.success) {
       setData(response.data.body);
       router.push(route);
@@ -31,7 +30,6 @@ export const getHelpType = async (
   try {
     const config = await getConfig();
     const response = await axios.get(`${help_url}${status}`, config ? config : {});
-
     if (response.data.success) {
       setData(response.data.body);
       router.push(route);
