@@ -228,7 +228,11 @@ const CheckPin: React.FC = () => {
                             ]}
                             onPress={() => {
                                 setPending(true)
-                                if (!token && numbers !== null) register()
+                                if (!token) {
+                                    register()
+                                    if (phoneNumber == null) register()
+                                    else installPinCode()
+                                }
                                 else installPinCode()
                             }}
                             disabled={!isButtonEnabled}
