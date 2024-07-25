@@ -29,7 +29,6 @@ const NotificationClient: React.FC = () => {
         const ids: any = notification.map(notif => notif.id);
         if (ids.length > 0) {
             console.log(ids);
-            
             setNotificationIds(ids);
             deleteToggleModal();
         } else {
@@ -47,7 +46,6 @@ const NotificationClient: React.FC = () => {
             return () => { };
         }, [])
     );
-
     const handleDeleteAll = () => {
         if (notificationIds.length > 0) {
             clientNotificationDelete({notificationIds}, () => fetchNotifications());

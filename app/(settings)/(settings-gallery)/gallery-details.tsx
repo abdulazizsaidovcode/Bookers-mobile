@@ -13,7 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useRoute } from '@react-navigation/native';
-import { addPhoto, delPhoto, editName, fetchFullData } from '@/helpers/api-function/gallery/settings-gallery';
+import { addPhoto, delPhoto, editMainPhoto, editName, fetchFullData } from '@/helpers/api-function/gallery/settings-gallery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import { getFile } from '@/helpers/api';
 import CenteredModal from '@/components/(modals)/modal-centered';
@@ -23,6 +23,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import BottomModal from '@/components/(modals)/modal-bottom';
 import * as ImagePicker from 'expo-image-picker';
 import Toast from 'react-native-simple-toast';
+import { EditMainPhoto } from '@/type/gallery/gallery';
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -38,8 +40,10 @@ const GalleryDetails: React.FC = () => {
     const [selectAll, setSelectAll] = useState(false);
     const [isBottomModalOpen, setIsBottomModalOpen] = useState(false);
     const [showMainSwitch, setShowMainSwitch] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [textModal, setTextModal] = useState(false);
     const [text, setText] = useState<string | null>(null)
+    const [selectedMainImages, setSelectedMainImages] = useState<EditMainPhoto[]>([]);
     const { id } = route.params as { id: number };
 
     useEffect(() => {
@@ -48,11 +52,22 @@ const GalleryDetails: React.FC = () => {
 
     useEffect(() => {
         if (selectAll) {
-            setSelectedImages(fullData.resGalleryAttachments.map(item => item.attachmentId));
+            setSelectedImages(fullData.resGalleryAttachments.map(item => item.attachmentStatus === 'CANCELED' ? '' : item.attachmentId));
         } else {
             setSelectedImages([]);
         }
     }, [selectAll, fullData.resGalleryAttachments]);
+
+    useEffect(() => {
+        const updatedMainImages = fullData.resGalleryAttachments
+            .map(item => item.attachmentStatus === 'APPROVED' && ({
+                attachmentId: item.attachmentId,
+                main: selectedImages.includes(item.attachmentId)
+            }))
+            .filter(Boolean) as EditMainPhoto[];
+        setSelectedMainImages(updatedMainImages);
+    }, [selectedImages, fullData.resGalleryAttachments]);
+
 
     const toggleModal = () => {
         setName(fullData.albumName);
@@ -64,7 +79,7 @@ const GalleryDetails: React.FC = () => {
         setText(text)
     }
 
-    const spliceText = (text: string | null, setText: (val: string | null) => void) => {
+    const spliceText = (text: string | null) => {
         if (text === null) return null;
 
         const isLongText = text.length > 25;
@@ -86,7 +101,7 @@ const GalleryDetails: React.FC = () => {
     };
 
     const handleConfirm = () => {
-        editName(id, setFullData, name, toggleModal, setData);
+        editName(id, setFullData, name, toggleModal, setData, setIsLoading);
     };
 
     const handleDeleteMode = () => {
@@ -103,9 +118,14 @@ const GalleryDetails: React.FC = () => {
     };
 
     const handleSelectMainPhoto = (imageId: string) => {
-        // buu yerga hamma image larni arr ni ichida object lar yani har bir rasmni shunday qlib ob kelish kerak {atachmentId: string boladi va bu yerga ayanan tanlanga rasmni attachmentId sini op kelish kerak,main: boolen keladi agar usha image select qilingan bolsa true aks holda false} bularni bajarish uchun alohida setSelectedMainImages, selectedMainImages ochil shundan tanlaganlarni olib kelinadi bullarni hammsini
-        // MAIN PHOTOLARNI YIG'ISH UCHUN  SHU FUNCSIYADAN FOYDALAN
-    }
+        setSelectedImages(prev => {
+            if (prev.includes(imageId)) {
+                return prev.filter(id => id !== imageId);
+            } else {
+                return [...prev, imageId];
+            }
+        });
+    };
 
     const handleDelete = () => {
         setIsDeleteMode(false);
@@ -144,13 +164,8 @@ const GalleryDetails: React.FC = () => {
         }
     };
 
-    const toggleShowMain = () => {
-        setShowMainSwitch(!showMainSwitch);
-    };
-
-    const toggleBottomModal = () => {
-        setIsBottomModalOpen(!isBottomModalOpen);
-    };
+    const toggleShowMain = () => setShowMainSwitch(!showMainSwitch);
+    const toggleBottomModal = () => setIsBottomModalOpen(!isBottomModalOpen);
 
     const addImageFromCamera = () => {
         pickImage('camera');
@@ -171,12 +186,14 @@ const GalleryDetails: React.FC = () => {
                 name: `photos[${index}].image`,
             } as any);
         });
-        addPhoto(id, formData, setFullData, setImages);
+        addPhoto(id, formData, setFullData, setImages, setIsLoading);
     };
 
+    const handleSaveMainPhotos = () => editMainPhoto(setFullData, setData, id, selectedMainImages, toggleShowMain, setIsLoading)
+
     return (
-        <ScrollView style={styles.container}>
-            <SafeAreaView>
+        <SafeAreaView style={styles.container}>
+            <ScrollView>
                 {isDeleteMode ? (<View style={styles.deleteModeBar}>
                     <View style={styles.deleteModeLeft}>
                         <AntDesign onPress={handleDeleteMode} name="close" size={24} color="white" />
@@ -204,7 +221,7 @@ const GalleryDetails: React.FC = () => {
                             <Text style={styles.noImagesText}>В этой галерее нет фотографий</Text>
                         ) : fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
                             <View key={albumIndex} style={styles.imageWrapper}>
-                                {isDeleteMode && (
+                                {albumItem.attachmentStatus === 'CANCELED' ? null : isDeleteMode && (
                                     <TouchableOpacity style={styles.checkIcon}
                                         onPress={() => handleImageSelect(albumItem.attachmentId)}>
                                         <MaterialIcons
@@ -212,13 +229,18 @@ const GalleryDetails: React.FC = () => {
                                             size={24} color="#9C0A35" />
                                     </TouchableOpacity>
                                 )}
-                                {albumItem.attachmentStatus === 'CANCELED' ? null : showMainSwitch && (
-                                    <TouchableOpacity style={styles.checkIcon}>
-                                        <MaterialIcons name={albumItem.main ? "check-box" : 'check-box-outline-blank'}
+                                {albumItem.attachmentStatus === 'CANCELED' || albumItem.attachmentStatus === 'NEW' ? null : showMainSwitch && (
+                                    <TouchableOpacity
+                                        style={styles.checkIcon}
+                                        onPress={() => handleSelectMainPhoto(albumItem.attachmentId)}
+                                        disabled={selectedMainImages.some(image => image.attachmentId === albumItem.attachmentId && image.main)} // Disable button if already selected as main
+                                    >
+                                        <MaterialIcons
+                                            name={selectedMainImages.some(image => image.attachmentId === albumItem.attachmentId && image.main) ? "check-box" : 'check-box-outline-blank'}
                                             size={26} color="#9C0A35" />
                                     </TouchableOpacity>
                                 )}
-                                <Pressable onLongPress={isDeleteMode ? () => { } : toggleShowMain} style={styles.imageWrapper}>
+                                <Pressable onLongPress={isDeleteMode ? () => { } : albumItem.attachmentStatus === 'NEW' || albumItem.attachmentStatus === 'CANCELED' ? null : toggleShowMain} style={styles.imageWrapper}>
                                     <Image style={styles.image} source={{ uri: getFile + albumItem.attachmentId }} />
                                     {!isDeleteMode && albumItem.attachmentStatus === 'NEW' && <View style={{
                                         position: 'absolute',
@@ -244,7 +266,7 @@ const GalleryDetails: React.FC = () => {
                                         alignItems: 'center',
                                         borderRadius: 14.5,
                                     }}>
-                                        {spliceText(albumItem.message, setText)}
+                                        {spliceText(albumItem.message)}
                                     </View>}
                                 </Pressable>
                             </View>
@@ -252,9 +274,6 @@ const GalleryDetails: React.FC = () => {
                         {images.map((item, index) => (
                             <Image key={index} style={styles.image} source={{ uri: item }} />
                         ))}
-                        {images.length !== 0 && (
-                            <Buttons title='Сохранить' onPress={handleSave} />
-                        )}
                     </View>
                 </View>
                 <CenteredModal
@@ -307,9 +326,12 @@ const GalleryDetails: React.FC = () => {
                         <Text style={{ fontSize: 20, textAlign: 'center', color: 'white' }}>{text}</Text>
                     </View>
                 </BottomModal>
-            </SafeAreaView>
-
-        </ScrollView >
+            </ScrollView>
+            <View style={{ position: 'absolute', width: '100%', bottom: 0, padding: 10 }}>
+                {images.length !== 0 && (isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title='Сохранить' onPress={showMainSwitch ? handleSaveMainPhotos : handleSave} />)}
+                {showMainSwitch && (isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title='Сохранить' onPress={handleSaveMainPhotos} />)}
+            </View>
+        </SafeAreaView>
     );
 };
 
@@ -319,6 +341,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#21212e',
+        position: 'relative'
     },
     content: {
         padding: 10,

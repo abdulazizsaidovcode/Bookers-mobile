@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Linking } from "react-native"; // Linking import qilish
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Linking, Alert } from "react-native"; // Linking import qilish
 import CustomButton from "./CustomButton";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -14,13 +14,14 @@ import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
 import { useNavigation } from "@react-navigation/native";
 import AccardionHistoryTwo from "@/components/accordions/accardionHistoryTwo";
-import { useAccardionStoreId } from "@/helpers/state_managment/accardion/accardionStore";
+import { useAccardionStore, useAccardionStoreId } from "@/helpers/state_managment/accardion/accardionStore";
 
 const OrderHistory = () => {
-  const {activeTab, setActiveTab}=useAccardionStoreId();
+  const { activeTab, setActiveTab } = useAccardionStoreId();
+  const { pastComing, setPastComing } = useAccardionStore()
+  const [deleteAllPastComing,setDeleteAllPastComing] = useState<string[]|[]>([])
   const [modalDelete, setModalDelete] = useState<boolean>(false);
   const [upcoming, setUpcoming] = useState<getOrderClientUpcomingInterface[]>([]);
-  const [pastComing, setPastComing] = useState<getOrderClientPastcomingInterface[]>([]);
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>();
 
@@ -30,7 +31,7 @@ const OrderHistory = () => {
   const getPastcomingClient = async () => {
     await getOrderClientPustComing(setPastComing);
   }
-  
+
   const deleteToggleModal = () => {
     setModalDelete(!modalDelete);
   };
@@ -38,7 +39,16 @@ const OrderHistory = () => {
   const handlePhonePress = (phoneNumber: string) => {
     Linking.openURL(`tel:${phoneNumber}`);
   };
-
+  const DeleteAllPastComing=()=>{
+    const ids:any=pastComing.map(past=>past.orderId)
+    if(ids.length>0){
+      console.log(ids);
+      setDeleteAllPastComing(ids)
+      deleteToggleModal()
+    }else{
+      Alert.alert("No orderId ")
+    }
+  }
   useFocusEffect(
     useCallback(() => {
       getUpcomingClient();
@@ -46,23 +56,32 @@ const OrderHistory = () => {
     }, [])
   );
   useFocusEffect(
-    useCallback(()=>{
+    useCallback(() => {
       getPastcomingClient();
       return () => { };
-    },[])
+    }, [])
   )
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
-      <View style={styles.header}>
-        <NavigationMenu name="История сеансов" />
-        <TouchableOpacity onPress={() => {
-          deleteToggleModal();
-        }}>
-          <AntDesign name="delete" size={24} color="white" />
-        </TouchableOpacity>
-      </View>
+      {activeTab === 'upcoming' && (
+        <View style={styles.header}>
+          <NavigationMenu name="Записи" />
+        </View>
+      )}
+      {activeTab === 'past' && (
+        <View style={styles.header}>
+          <NavigationMenu  name="История сеансов" />
+          <TouchableOpacity onPress={() => {
+            deleteToggleModal();
+          }}>
+            <AntDesign name="delete" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+      )}
+
+
       <View>
         <View style={styles.buttonContainer}>
           <CustomButton
@@ -72,7 +91,9 @@ const OrderHistory = () => {
           />
           <CustomButton
             title="Прошедшие"
-            onPress={() => setActiveTab('past')}
+            onPress={() =>{ 
+              DeleteAllPastComing()
+              setActiveTab('past') }}
             active={activeTab === 'past'}
           />
         </View>

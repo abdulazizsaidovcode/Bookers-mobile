@@ -129,6 +129,8 @@ const TabOneScreen: React.FC = () => {
   } = useDashboardStore();
   const { refreshing, setRefreshing } = clientStore();
   const [backPressCount, setBackPressCount] = useState(0);
+  const [orderId, setOrderId] = useState('');
+
 
   // navigatsiyani login registratsiyadan o'tganda bloklash
   useEffect(() => {
@@ -237,8 +239,14 @@ const TabOneScreen: React.FC = () => {
     // setToggle(false);
   };
 
-  const toggleConfirmModal = () => setConfirmIsModal(!isConfirmModal);
-  const toggleRejectModal = () => setRejectedIsModal(!isRejectedModal);
+  const toggleConfirmModal = (id?: string) => {
+    setConfirmIsModal(!isConfirmModal)
+    setOrderId(id ? id : '')
+  };
+  const toggleRejectModal = (id?: string) => {
+    setOrderId(id ? id : '')
+    setRejectedIsModal(!isRejectedModal)
+  };
 
   const chartFraction = mainStatisticData.completedSessions;
   const [chartNumerator, chartDenominator] = chartFraction.split("/");
@@ -256,6 +264,23 @@ const TabOneScreen: React.FC = () => {
     dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData.filter((item) => item.type === "VIP").length : 0;
   const newClientsCount =
     dailyTimeData ? dailyTimeData.filter((item) => item.type === "NEW").length : 0;
+
+  const handleConfirm = () =>
+    editOrderStatus(
+      setWaitingData,
+      setHallData,
+      orderId,
+      "CONFIRMED",
+      toggleConfirmModal
+    );
+  const handleReject = () =>
+    editOrderStatus(
+      setWaitingData,
+      setHallData,
+      orderId,
+      "REJECTED",
+      toggleRejectModal
+    );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -298,6 +323,38 @@ const TabOneScreen: React.FC = () => {
           isRejectedModal={isRejectedModal}
           isConfirmModal={isConfirmModal}
         />
+        <CenteredModal
+          isModal={isConfirmModal ? isConfirmModal : isRejectedModal}
+          toggleModal={isConfirmModal ? toggleConfirmModal : toggleRejectModal}
+          isFullBtn
+          btnRedText={"Одобрить"}
+          onConfirm={isConfirmModal ? handleConfirm : handleReject}
+          btnWhiteText="Назад"
+        >
+          <View>
+            <Text
+              style={{ fontSize: 17, color: COLORS.white, textAlign: "center" }}
+            >
+              Вы уверены, что хотите Одобрить этот заказ?
+            </Text>
+          </View>
+        </CenteredModal>
+        {/* <CenteredModal
+          isModal={isRejectedModal}
+          toggleModal={toggleRejectModal}
+          isFullBtn
+          btnRedText={"Отклонить"}
+          onConfirm={handleReject}
+          btnWhiteText="Назад"
+        >
+          <View>
+            <Text
+              style={{ fontSize: 17, color: COLORS.white, textAlign: "center" }}
+            >
+              Вы уверены, что хотите Отклонить этот заказ?
+            </Text>
+          </View>
+        </CenteredModal> */}
         {!hasAllNumbers && (
           <View style={{ margin: 10 }}>
             <Buttons
@@ -388,6 +445,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
       vipCientsCount={vipCientsCount}
       newClientsCount={newClientsCount}
     />
+
   </>
 );
 
@@ -559,27 +617,8 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
   item,
   toggleConfirmModal,
   toggleRejectedModal,
-  isConfirmModal,
-  isRejectedModal,
-  setWaitingData,
-  setHallData,
 }) => {
-  const handleConfirm = () =>
-    editOrderStatus(
-      setWaitingData,
-      setHallData,
-      item.id,
-      "CONFIRMED",
-      toggleConfirmModal
-    );
-  const handleReject = () =>
-    editOrderStatus(
-      setWaitingData,
-      setHallData,
-      item.id,
-      "REJECTED",
-      toggleRejectedModal
-    );
+
   return (
     <View style={styles.bookingCard}>
       <View style={styles.cardHeader}>
@@ -624,51 +663,20 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
       <View style={styles.actionButtons}>
         <TouchableOpacity
           style={styles.approveButton}
-          onPress={toggleConfirmModal}
+          onPress={() => toggleConfirmModal(item.id)}
         >
           <Text style={styles.buttonText}>Одобрить</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.rejectButton}
-          onPress={toggleRejectedModal}
+          onPress={() => toggleRejectedModal(item.id)}
         >
           <Text style={{ color: COLORS.mainRed, fontWeight: "bold" }}>
             Отклонить
           </Text>
         </TouchableOpacity>
       </View>
-      <CenteredModal
-        isModal={isConfirmModal}
-        toggleModal={toggleConfirmModal}
-        isFullBtn
-        btnRedText={"Одобрить"}
-        onConfirm={handleConfirm}
-        btnWhiteText="Назад"
-      >
-        <View>
-          <Text
-            style={{ fontSize: 17, color: COLORS.white, textAlign: "center" }}
-          >
-            Вы уверены, что хотите Одобрить этот заказ?
-          </Text>
-        </View>
-      </CenteredModal>
-      <CenteredModal
-        isModal={isRejectedModal}
-        toggleModal={toggleRejectedModal}
-        isFullBtn
-        btnRedText={"Отклонить"}
-        onConfirm={handleReject}
-        btnWhiteText="Назад"
-      >
-        <View>
-          <Text
-            style={{ fontSize: 17, color: COLORS.white, textAlign: "center" }}
-          >
-            Вы уверены, что хотите Отклонить этот заказ?
-          </Text>
-        </View>
-      </CenteredModal>
+
     </View>
   );
 };

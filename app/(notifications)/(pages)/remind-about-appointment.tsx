@@ -22,18 +22,12 @@ import {
 } from "@/helpers/api-function/notifications/notifications";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import LoadingButtons from "@/components/(buttons)/loadingButton";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 const RemindAboutAppointment: React.FC = () => {
-  const {
-    isAppoinmentModal,
-    appoinmentData,
-    appoinmentActiveData,
-    setAppoinmentActiveData,
-    setAppoinmentData,
-    setIsAppoinmentModal,
-  } = useNotificationsStore();
+  const { isAppoinmentModal, appoinmentData, appoinmentActiveData, isLoading, setIsloading, setAppoinmentActiveData, setAppoinmentData, setIsAppoinmentModal, } = useNotificationsStore();
   const navigation = useNavigation();
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -103,7 +97,7 @@ const RemindAboutAppointment: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <NavigationMenu name="Напоминание о записи" />
-        <View style={{ padding: 15, height: screenHeight / 1.23 }}>
+        <View style={{ padding: 15 }}>
           <View>
             <Text style={styles.title}>
               Отправка сообщений клиенту перед сеансом
@@ -158,7 +152,9 @@ const RemindAboutAppointment: React.FC = () => {
               <View style={styles.messageContainer}>
                 <Text style={styles.messageLabel}>Шаблон сообщения</Text>
                 <TextInput
+                  scrollEnabled={false}
                   style={styles.textInput}
+                  textColor="#fff"
                   multiline
                   numberOfLines={10}
                   onChangeText={onMessageChange}
@@ -168,22 +164,7 @@ const RemindAboutAppointment: React.FC = () => {
             </View>
           )}
         </View>
-        <View style={{ padding: 15 }}>
-          <Buttons
-            title="Сохранить"
-            onPress={() =>
-              editAppoinmentOrder(
-                appoinmentData.content,
-                appoinmentData.hour,
-                appoinmentData.minute,
-                appoinmentActiveData,
-                navigation.goBack,
-                setHasChanges
-              )
-            }
-            isDisebled={hasChanges}
-          />
-        </View>
+
         <BottomModal
           isBottomModal={isAppoinmentModal}
           toggleBottomModal={toggleModal}
@@ -211,6 +192,25 @@ const RemindAboutAppointment: React.FC = () => {
           </View>
         </BottomModal>
       </ScrollView>
+      <View style={{ padding: 15, position: 'absolute', bottom: 0, width: '100%', backgroundColor: "#21212E" }}>
+        {isLoading ? <LoadingButtons title="Сохранить" /> :
+          <Buttons
+            title="Сохранить"
+            onPress={() =>
+              editAppoinmentOrder(
+                appoinmentData.content,
+                appoinmentData.hour,
+                appoinmentData.minute,
+                appoinmentActiveData,
+                navigation.goBack,
+                setHasChanges,
+                setIsloading
+              )
+            }
+            isDisebled={hasChanges}
+          />
+        }
+      </View>
     </SafeAreaView>
   );
 };
@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#21212E",
+    position: 'relative'
   },
   reminderContainer: {
     flexDirection: "row",
@@ -301,10 +302,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     backgroundColor: "#3a3a4e",
-    color: "#000",
-    padding: 5,
     borderRadius: 8,
-    height: "auto",
     maxHeight: screenHeight / 3,
     textAlignVertical: "top",
   },

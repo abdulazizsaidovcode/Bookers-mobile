@@ -4,8 +4,8 @@ import CenteredModal from '@/components/(modals)/modal-centered';
 import { AntDesign } from '@expo/vector-icons';
 import Textarea from '@/components/select/textarea';
 import { getFile } from '@/helpers/api';
-import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
-import { addFebbakFunction } from '@/helpers/api-function/oreder/orderHistory';
+import { useAccardionStore, useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
+import { addFebbakFunction, deletePastComingFunction, getOrderClientPustComing } from '@/helpers/api-function/oreder/orderHistory';
 import { addfedbackmaster } from '@/type/client/editClient';
 
 interface IProps {
@@ -40,6 +40,7 @@ const ProfileCard: React.FC<IProps> = ({
     orderId
 }) => {
     const { activeTab, setActiveTab } = useAccardionStoreId();
+    const { pastComing, setPastComing } = useAccardionStore()
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [ratingModal, setRatingModal] = useState<boolean>(false);
     const [selectOrderID, setSelectOrderID] = useState<string | null>(null);
@@ -53,8 +54,11 @@ const ProfileCard: React.FC<IProps> = ({
         orderId: selectOrderID,
         text: textAreaValue
     };
-
+    const getPastcomingClient = () => {
+        getOrderClientPustComing(setPastComing);
+    }
     const deleteToggleModal = () => {
+        setSelectOrderID(orderId)
         setDeleteModal(!deleteModal);
     };
 
@@ -62,6 +66,14 @@ const ProfileCard: React.FC<IProps> = ({
         setRatingModal(!ratingModal);
     };
 
+    const deleteOrderHistory = () => {
+        if (selectOrderID) {
+            deletePastComingFunction(selectOrderID, () =>getOrderClientPustComing(setPastComing));
+            setDeleteModal(!deleteModal);
+        } else {
+            Alert.alert('Xatolik', 'Xatolik yuz berdi. Iltimos qaytadan urunib ko`ring!')
+        }
+    }
     const handleChange = (e: string) => {
         const trimmedValue = e.trim();
         const regex = /^[a-zA-Z0-9а-яА-ЯёЁ.,!?;:()\s]+$/;
@@ -163,6 +175,7 @@ const ProfileCard: React.FC<IProps> = ({
                 btnRedText={'Да'}
                 isModal={deleteModal}
                 toggleModal={deleteToggleModal}
+                onConfirm={deleteOrderHistory}
             >
                 <>
                     <AntDesign name="delete" size={56} color="#9C0A35" />

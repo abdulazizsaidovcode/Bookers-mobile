@@ -7,12 +7,11 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editMessenger, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import { useNavigation } from '@react-navigation/native';
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 
 const Messengers = () => {
   const navigation = useNavigation();
-  const { smsData, setSmsData } = useNotificationsStore();
+  const { smsData, setSmsData, setIsloading, isLoading } = useNotificationsStore();
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
@@ -25,7 +24,7 @@ const Messengers = () => {
   };
 
   const handleSave = () => {
-    editMessenger(!smsData.isActive, navigation.goBack(), setHasChanges);
+    editMessenger(!smsData.isActive, navigation.goBack, setHasChanges, setIsloading);
   };
 
   return (
@@ -47,10 +46,10 @@ const Messengers = () => {
             />
           </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <Buttons title='Сохранить' onPress={handleSave} isDisebled={hasChanges} />
-        </View>
       </ScrollView>
+      <View style={styles.buttonContainer}>
+        {isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title='Сохранить' onPress={handleSave} isDisebled={hasChanges} />}
+      </View>
     </SafeAreaView>
   );
 };
@@ -59,6 +58,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#21212E',
+    position: 'relative'
   },
   scrollContainer: {
     flexGrow: 1,
@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     flex: 1,
-    height: screenHeight / 1.13,
   },
   description: {
     color: '#B0B0B0',
@@ -93,7 +92,11 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   buttonContainer: {
-    marginVertical: 16,
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
+    padding: 10,
+    backgroundColor: '#21212E',
   },
 });
 
