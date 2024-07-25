@@ -129,7 +129,7 @@ import ProfileEdit from "./(client)/(profile)/(profileEdit)/profileEdit";
 import SettingsClient from "./(client)/(profile)/(settings)/settings";
 import NotificationClient from "./(client)/(profile)/(notification)/notification";
 import ClientInfo from "./(auth)/(register)/(clientInformations)/getNameSurname";
-import GetMasterNickName from "./(auth)/(register)/(masterInformation)/getNickName";
+import getMasterNickName from "./(auth)/(register)/(masterInformation)/getNickName";
 import ClientCameraInfo from "./(auth)/(register)/(clientInformations)/getPhoto";
 import CardClient from "./(client)/(profile)/(card)/card";
 import PaymentClient from "./(client)/(profile)/(payment)/payment";
@@ -259,7 +259,7 @@ function RootLayoutNav() {
             />
             <Stack.Screen
               name="(auth)/(register)/(masterInformation)/getNickName"
-              component={GetMasterNickName}
+              component={getMasterNickName}
               options={{ headerShown: false }}
             />
             <Stack.Screen

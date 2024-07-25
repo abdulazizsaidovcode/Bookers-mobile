@@ -70,14 +70,16 @@ const OtpInputExample: React.FC = () => {
             inputs.current[index - 1].focus();
         }
     };
-
     const handlePress = async () => {
         setPending(true)
+        console.log(isRegister, 'erf');
+        console.log('salom');
+
 
         if (isRegtered) {
-            checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
+            await checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
         } else {
-            authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, setRoles)
+            await authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setRoles)
         }
     }
     useEffect(() => {
@@ -85,10 +87,11 @@ const OtpInputExample: React.FC = () => {
     }, [phoneNumber])
 
     useEffect(() => {
+        console.log(response, 'wef');
 
         async function finishwork() {
             if (roles) setRole(roles)
-            setPending(false)
+            // setPending(false)
             if (response) {
                 let parol = await SecureStore.getItemAsync('password')
 
@@ -113,7 +116,7 @@ const OtpInputExample: React.FC = () => {
                         setOtpValue(['', '', '', ''])
                     }
                 }
-                setRespone(null);
+                setRespone(false);
             }
         }
 

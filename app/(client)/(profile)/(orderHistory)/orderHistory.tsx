@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Linking, Alert } from "react-native"; // Linking import qilish
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Linking } from "react-native"; // Linking import qilish
 import CustomButton from "./CustomButton";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -8,20 +8,19 @@ import AccardionHistory from "@/components/accordions/accardionHistory";
 import { AntDesign, Feather, SimpleLineIcons } from "@expo/vector-icons";
 import ProfileCard from "./profileCard";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import { getOrderClientUpcomingInterface } from "@/type/client/editClient";
+import { getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
 import { deleteAllPastComingFunction, getOrderClientPustComing, getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
 import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
 import { useNavigation } from "@react-navigation/native";
 import AccardionHistoryTwo from "@/components/accordions/accardionHistoryTwo";
-import { useAccardionStore, useAccardionStoreId } from "@/helpers/state_managment/accardion/accardionStore";
+import { useAccardionStoreId } from "@/helpers/state_managment/accardion/accardionStore";
 
 const OrderHistory = () => {
-  const { activeTab, setActiveTab } = useAccardionStoreId();
-  const { pastComing, setPastComing } = useAccardionStore()
-  const [deletePastall, setDeleteAllPastComing] = useState<string[] | []>([])
+  const {activeTab, setActiveTab}=useAccardionStoreId();
   const [modalDelete, setModalDelete] = useState<boolean>(false);
   const [upcoming, setUpcoming] = useState<getOrderClientUpcomingInterface[]>([]);
+  const [pastComing, setPastComing] = useState<getOrderClientPastcomingInterface[]>([]);
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>();
 
@@ -31,7 +30,7 @@ const OrderHistory = () => {
   const getPastcomingClient = async () => {
     await getOrderClientPustComing(setPastComing);
   }
-
+  
   const deleteToggleModal = () => {
     setModalDelete(!modalDelete);
   };
@@ -58,10 +57,10 @@ const OrderHistory = () => {
     }, [])
   );
   useFocusEffect(
-    useCallback(() => {
+    useCallback(()=>{
       getPastcomingClient();
       return () => { };
-    }, [])
+    },[])
   )
 
   return (

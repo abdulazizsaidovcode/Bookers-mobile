@@ -20,7 +20,7 @@ export interface getOrderClientUpcomingInterface{
     feedbackCount:number|null
     orderPrice:number|null
     address:string|null
-    phoneNumber:string
+    phoneNumber:string|null
     lng:number|null
     lat:number|null
     orderCount:number|null

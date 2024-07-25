@@ -1,4 +1,3 @@
-import { getOrderClientPastcomingInterface } from "@/type/client/editClient";
 import { create } from "zustand";
 interface AccardionStoreState {
   expanded: boolean;
@@ -9,8 +8,6 @@ interface AccardionStoreState {
   genderIndex: boolean;
   isSelected: boolean;
   isSelected1:boolean;
-  pastComing:getOrderClientPastcomingInterface[]
-  setPastComing: (val: getOrderClientPastcomingInterface[]) => void;
   setExpanded: (val: boolean) => void;
   setGenderIndex: (val: boolean) => void;
   setSelection: (val: boolean) => void;
@@ -31,8 +28,6 @@ export const useAccardionStore = create<AccardionStoreState>((set) => ({
   expanded3: true,
   expanded4: true,
   expanded5: true,
-  pastComing: [],
-  setPastComing: (val: getOrderClientPastcomingInterface[]) => set({ pastComing: val }),
   setExpended2: (val: boolean) => set({ expanded2: val }),
   setExpended3: (val: boolean) => set({ expanded3: val }),
   setExpended4: (val: boolean) => set({ expanded3: val }),

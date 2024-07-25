@@ -26,9 +26,6 @@ const CheckPinOnCome: React.FC = () => {
                 try {
                     let parol = await SecureStore.getItemAsync('password')
                     setCode(parol)
-                    // if (parol == null) {
-                    //     navigation.navigate("(auth)/(setPinCode)/installPin");
-                    // }
                 } catch (error) {
                     console.log(error);
                 }
@@ -76,7 +73,6 @@ const CheckPinOnCome: React.FC = () => {
         // await SecureStore.deleteItemAsync("number");
         // await SecureStore.deleteItemAsync("password");
         // await AsyncStorage.removeItem("registerToken");
-
         const enteredOtp = otp.join('');
         if (enteredOtp === code) {
             setIsCorrect(true);

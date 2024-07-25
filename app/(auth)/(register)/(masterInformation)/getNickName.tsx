@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const GetMasterNickName = () => {
+const getMasterNickName = () => {
     const { nickname, setNickname } = registerStory();
     const { setAttachmentID } = clientStore();
     const { t } = useTranslation()
@@ -153,4 +153,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default GetMasterNickName;
+export default getMasterNickName;

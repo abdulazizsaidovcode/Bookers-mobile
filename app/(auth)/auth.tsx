@@ -50,7 +50,7 @@ useFocusEffect(
         return true; // Orqaga qaytishni bloklaydi
       } else {
         BackHandler.exitApp(); // Ilovadan chiqish
-        return false;
+        return false;d
       }
     };
 
