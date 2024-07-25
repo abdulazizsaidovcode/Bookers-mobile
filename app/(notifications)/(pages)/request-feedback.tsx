@@ -1,4 +1,5 @@
 import Buttons from '@/components/(buttons)/button';
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editFeedbeckOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
@@ -11,7 +12,7 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 const RequestFeedback = () => {
-  const { feedbackData, setFeedbackData } = useNotificationsStore();
+  const { feedbackData, setFeedbackData, isLoading, setIsloading } = useNotificationsStore();
   const [hasChanges, setHasChanges] = useState(false);
   const navigation = useNavigation();
 
@@ -44,11 +45,12 @@ const RequestFeedback = () => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons
-            title="Сохранить"
-            onPress={() => editFeedbeckOrder(feedbackData.text, setHasChanges, navigation.goBack)}
-            isDisebled={hasChanges}
-          />
+          {isLoading ? <LoadingButtons title='Сохранить' /> :
+            <Buttons
+              title="Сохранить"
+              onPress={() => editFeedbeckOrder(feedbackData.text, setHasChanges, navigation.goBack, setIsloading)}
+              isDisebled={hasChanges}
+            />}
         </View>
       </ScrollView>
     </SafeAreaView>

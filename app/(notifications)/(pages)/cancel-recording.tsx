@@ -1,4 +1,5 @@
 import Buttons from '@/components/(buttons)/button';
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editCancelOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
@@ -11,7 +12,7 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 const CancelRecording = () => {
-  const { cancelData, setCancelData } = useNotificationsStore();
+  const { cancelData, setCancelData, isLoading, setIsloading } = useNotificationsStore();
   const navigation = useNavigation();
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -30,7 +31,7 @@ const CancelRecording = () => {
   }, []);
 
   const handleSave = () => {
-    editCancelOrder(cancelData.isActive, cancelData.text, setHasChanges, navigation.goBack());
+    editCancelOrder(cancelData.isActive, cancelData.text, setHasChanges, navigation.goBack, setIsloading);
   };
 
   return (
@@ -66,10 +67,10 @@ const CancelRecording = () => {
             </View>
           )}
         </View>
-        <View style={styles.buttonContainer}>
-          <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />
-        </View>
       </ScrollView>
+      <View style={styles.buttonContainer}>
+        {isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />}
+      </View>
     </SafeAreaView>
   );
 };
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#21212E',
+    position: 'relative'
   },
   navigationMenu: {
     padding: 16,
@@ -90,7 +92,6 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
-    height: screenHeight / 1.35
   },
   switchContainer: {
     flexDirection: 'row',
@@ -125,7 +126,10 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   buttonContainer: {
-    marginTop: 20,
-    padding: 10
+    width: '100%',
+    padding: 10,
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: '#21212E'
   },
 });

@@ -1,4 +1,5 @@
 import Buttons from '@/components/(buttons)/button';
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editChangingOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
@@ -10,7 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const ChangingEnEntry = () => {
-  const { changingData, setChangingData } = useNotificationsStore();
+  const { changingData, isLoading, setIsloading, setChangingData } = useNotificationsStore();
   const navigation = useNavigation();
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -29,7 +30,7 @@ const ChangingEnEntry = () => {
   };
 
   const handleSave = () => {
-    editChangingOrder(changingData.isActive, changingData.text, setHasChanges, navigation.goBack);
+    editChangingOrder(changingData.isActive, changingData.text, setHasChanges, navigation.goBack, setIsloading);
   };
 
   return (
@@ -66,10 +67,10 @@ const ChangingEnEntry = () => {
             </View>
           )}
         </View>
-        <View style={styles.buttonContainer}>
-          <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />
-        </View>
       </ScrollView>
+      <View style={styles.buttonContainer}>
+        {isLoading ? <LoadingButtons title='Сохранить'/> : <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />}
+      </View>
     </SafeAreaView>
   );
 };
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#21212E',
+    position: 'relative'
   },
   navigationMenu: {
     padding: 16,
@@ -90,7 +92,6 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
-    height: screenHeight / 1.35,
   },
   switchContainer: {
     flexDirection: 'row',
@@ -126,7 +127,10 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   buttonContainer: {
-    marginTop: 20,
     padding: 10,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: '#21212E'
   },
 });

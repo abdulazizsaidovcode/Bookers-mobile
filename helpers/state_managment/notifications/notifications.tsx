@@ -3,6 +3,8 @@ import { create } from "zustand";
 
 const useNotificationsStore = create<NotificationsStore>((set) => ({
     isMainSwitch: false,
+    isLoading: false,
+    setIsloading: (val: boolean) => set({ isLoading: val }),
     appoinmentData: {
         id: '',
         content: '',
