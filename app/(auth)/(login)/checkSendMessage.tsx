@@ -74,7 +74,7 @@ const OtpInputExample: React.FC = () => {
         setPending(true)
         console.log(isRegister, 'erf');
         console.log('salom');
-        
+
 
         if (isRegtered) {
             await checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
@@ -87,10 +87,11 @@ const OtpInputExample: React.FC = () => {
     }, [phoneNumber])
 
     useEffect(() => {
-        console.log(response,'wef');
-        
+        console.log(response, 'wef');
+
         async function finishwork() {
             if (roles) setRole(roles)
+            // setPending(false)
             if (response) {
                 let parol = await SecureStore.getItemAsync('password')
 

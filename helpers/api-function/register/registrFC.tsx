@@ -56,6 +56,7 @@ export const authLogin = async (phoneNumber: string, otpValue: string, setRespon
         code: otpValue
     }
 
+
     if (phoneNumber) {
         axios.post(`${base_url}auth/login`, authData)
             .then(res => {
@@ -65,11 +66,15 @@ export const authLogin = async (phoneNumber: string, otpValue: string, setRespon
                     setClientOrMaster(res.data.message)
                     setRole(res.data.message)
                     SecureStore.setItemAsync('number', phoneNumber)
-                } else setRespone(false)
+                    Toast.show(res.data, Toast.LONG)
+                } else {
+                    setRespone(false)
+                    Toast.show(res.data, Toast.LONG)
+                }
             })
             .catch(err => {
                 setRespone(false)
-                console.log(err)
+                Toast.show(err.response.data.message, Toast.LONG)
             })
     } else Toast.show('Номер телефона обязателен', Toast.SHORT)
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getConfig } from "@/app/(tabs)/(master)/main";
-import { getCategory_Client, getClient_filter, getClient_freeTime } from "@/helpers/api";
+import { getCategory_Client, getClient_filter, getClient_freeTime, serviceClient } from "@/helpers/api";
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 import useTopMastersStore from "@/helpers/state_managment/masters";
@@ -40,6 +40,20 @@ export const getAllCategory = async () => {
       console.log('Error:', error);
     }
   };
+
+// Servuces Get
+export const ServicesClient = async (masterId?: string, categoryId?: string) => {
+  try {
+    const config = await getConfig();
+    const url = `${serviceClient}/${masterId}/${categoryId}`;
+    const { data } = await axios.get(url, config ? config : {});
+    if (data.success) {
+      ClientStory.getState().setServices(data.body);
+    }
+  } catch (error) {
+    console.log('Error:', error);
+  }
+};
 // Clinet commnet by master 
 interface CommentData {
   clientId: string | null;
@@ -52,9 +66,6 @@ export const postComment = async (commentData: CommentData) => {
   try {
     console.log('Posting comment data:', commentData);
     const response = await axios.post(`${postComment}`, commentData, config ? config : {});
-    console.log(config);
-    
-    console.log('Comment posted successfully:', response.data);
   } catch (error) {
     console.error('Error posting comment:', error);
   }
@@ -72,4 +83,5 @@ export const getFreeTime = async () => {
     console.log("Error:", error);
   }
 };
+
 

@@ -32,17 +32,14 @@ const ClientCardUslugi: React.FC<ClientCardProps> = ({
         for (let i = 1; i < count; i++) {
             stars += '★';
         }
-        for (let i = count; i <= 5; i++) {
+        for (let i = count; i < 5; i++) {
             stars += '☆';
         }
         return stars;
     };
 
     return (
-        <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={onPress}
-        >
+       
             <View style={tw`p-4 bg-gray-300 rounded-2xl shadow-lg`}>
                 <View style={tw`flex-row items-center mb-4`}>
                     <Image
@@ -105,7 +102,6 @@ const ClientCardUslugi: React.FC<ClientCardProps> = ({
                     )}
                 </View>
             </View>
-        </TouchableOpacity>
     );
 };
 

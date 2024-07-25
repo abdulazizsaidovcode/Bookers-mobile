@@ -1,5 +1,5 @@
 import Buttons from "@/components/(buttons)/button";
-import { useFocusEffect, useNavigation } from "expo-router";
+import { router, useFocusEffect, useNavigation } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, SafeAreaView, BackHandler } from "react-native";
 import { useTranslation } from "react-i18next";
@@ -29,13 +29,13 @@ const Auth: React.FC = () => {
   };
 
   // navigatsiyani login registratsiyadan o'tganda bloklash
-useEffect(() => {
-  const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
-    e.preventDefault();
-  });
+// useEffect(() => {
+//   const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
+//     e.preventDefault();
+//   });
 
-  return unsubscribe;
-}, [navigation]);
+//   return unsubscribe;
+// }, [navigation]);
 
 // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
 useFocusEffect(
@@ -50,7 +50,7 @@ useFocusEffect(
         return true; // Orqaga qaytishni bloklaydi
       } else {
         BackHandler.exitApp(); // Ilovadan chiqish
-        return false;
+        return false;d
       }
     };
 
@@ -74,7 +74,7 @@ useFocusEffect(
           title="Русский"
           backgroundColor="#9C0A35"
           onPress={() => {
-            navigation.navigate("(auth)/(login)/number-create");
+            router.push("(auth)/(login)/number-create");
             changeLanguage("ru");
           }}
         />
@@ -82,7 +82,7 @@ useFocusEffect(
           title="O‘zbek"
           backgroundColor="#9C0A35"
           onPress={() => {
-            navigation.navigate("(auth)/(login)/number-create");
+            router.push("(auth)/(login)/number-create");
             changeLanguage("uz");
           }}
         />
@@ -90,7 +90,7 @@ useFocusEffect(
           title="English"
           backgroundColor="#9C0A35"
           onPress={() => {
-            navigation.navigate("(auth)/(login)/number-create");
+            router.push("(auth)/(login)/number-create");
             changeLanguage("en");
           }}
         />
