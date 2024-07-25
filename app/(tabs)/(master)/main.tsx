@@ -425,7 +425,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
     <View style={styles.scheduleSection}>
       <Text style={styles.sectionTitle}>Расписание на сегодня</Text>
       <Text style={styles.sectionSubtitle}>
-        {todayGraficData ? `Время работы: с ${todayGraficData.from === null ? "" : todayGraficData.from.slice(0, 5)} до ${todayGraficData.end === null ? "" : todayGraficData.end.slice(0, 5)}` : 'ваша графическая работа не настроена'}
+        {todayGraficData.from && todayGraficData.end ? `Время работы: с ${todayGraficData.from.slice(0, 5)} до ${todayGraficData.end.slice(0, 5)}` : 'Время работы: ваша графическая работа не настроена'}
       </Text>
     </View>
     {dailyTimeData && (
