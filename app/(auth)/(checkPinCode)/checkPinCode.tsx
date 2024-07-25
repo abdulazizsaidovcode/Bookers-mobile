@@ -32,9 +32,6 @@ const CheckPinOnCome: React.FC = () => {
             }
             handleContinue()
             getClientOrMaster(setRole)
-            alert(code)
-            console.log(code);
-
         }, [])
     );
 

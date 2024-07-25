@@ -51,7 +51,7 @@ const CheckPin: React.FC = () => {
     const [tokenData, setTokenData] = useState<string | null>('');
     const [isLogin, setIslogin] = useState<any>(false);
     const [pending, setPending] = useState(false);
-
+    const [numbers, setNumbers] = useState<any | null>(null);
 
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
     let enteredOtp = otp.join('');
@@ -61,7 +61,11 @@ const CheckPin: React.FC = () => {
             const getStoredOtp = async () => {
                 try {
                     const otp = await AsyncStorage.getItem('otp');
+                    const number = await SecureStore.deleteItemAsync("number");
                     const token = await getConfig()
+                    console.log(number, 'er');
+
+                    setNumbers(number)
                     setToken(token)
                     setStoredOtp(otp);
                 } catch (error) {
@@ -184,7 +188,7 @@ const CheckPin: React.FC = () => {
                     img
                 })
             }
-        }else {
+        } else {
             setIsCorrect(false);
             setPending(false)
             Toast.show("неверный пин-код", Toast.SHORT);
@@ -224,7 +228,7 @@ const CheckPin: React.FC = () => {
                             ]}
                             onPress={() => {
                                 setPending(true)
-                                if (!token) register()
+                                if (!token && numbers !== null) register()
                                 else installPinCode()
                             }}
                             disabled={!isButtonEnabled}

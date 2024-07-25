@@ -8,7 +8,6 @@ import { useNavigation } from "expo-router";
 
 const Index: React.FC = () => {
   const [isFirstLaunch, setIsFirstLaunch] = useState<null | boolean>(null);
-  const [isPasswordSet, setIsPasswordSet] = useState<null | boolean>(null);
   const navigation = useNavigation<any>();
 
   useEffect(() => {
@@ -22,16 +21,12 @@ const Index: React.FC = () => {
       }
     };
 
-    const checkPassword = async () => {
-      const password = await SecureStore.getItemAsync("password");
-      setIsPasswordSet(password !== null);
-    };
+    
 
     checkFirstLaunch();
-    checkPassword();
   }, []);
 
-  if (isFirstLaunch === null || isPasswordSet === null) {
+  if (isFirstLaunch === null) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color={"#9C0A35"} />
@@ -39,9 +34,9 @@ const Index: React.FC = () => {
     );
   }
 
-  if (isPasswordSet == false) {
-    return <InstallPin />;
-  }
+  // if (isPasswordSet == false) {
+  //   return <InstallPin />;
+  // }
 
   if (isFirstLaunch) {
     return <Auth />;

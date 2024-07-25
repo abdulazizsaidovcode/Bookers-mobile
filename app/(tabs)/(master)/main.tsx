@@ -50,6 +50,7 @@ import { getNumbers } from "@/helpers/api-function/numberSittings/numbersetting"
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { handleRefresh } from "@/constants/refresh";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
+import InstallPin from "@/app/(auth)/(setPinCode)/installPin";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -109,6 +110,7 @@ const TabOneScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const { isRegtered } = isRegister()
   const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
+  const [isPasswordSet, setIsPasswordSet] = useState<null | boolean>(null);
   const {
     mainStatisticData,
     waitingData,
@@ -182,8 +184,16 @@ const TabOneScreen: React.FC = () => {
         console.error("Error fetching data:", error);
       }
     };
+    const checkPassword = async () => {
+      const password = await SecureStore.getItemAsync("password");
+      setIsPasswordSet(password !== null);
+    };
     fetchData();
   }, [hasAllNumbers]);
+
+  if (isPasswordSet == false) {
+    return <InstallPin />;
+  }
 
   useEffect(() => {
     fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
@@ -320,7 +330,7 @@ const Header: React.FC = () => {
       } else if (result.action === Share.dismissedAction) {
         // dismissed
       }
-    } catch (error) {
+    } catch (error: any) {
       Alert.alert(error.message);
     }
   };
