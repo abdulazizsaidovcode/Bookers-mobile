@@ -1,6 +1,6 @@
 import { getConfig } from "@/app/(tabs)/(master)/main"
 import Toast from "react-native-simple-toast";
-import { addFebdaback_Url, clientOrderaPastComing, clientOrderUpcoming, deletePastcoming_Url } from "@/helpers/api";
+import { addFebdaback_Url, clientOrderaPastComing, clientOrderUpcoming, deleteAllpastcoming_Url, deletePastcoming_Url } from "@/helpers/api";
 import { addfedbackmaster, getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
 import axios from "axios";
 import { Alert } from "react-native";
@@ -63,19 +63,17 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
 }
 
 //Delete pastcoming order 
-
-export const deletePastComingFunction = async (orderId: string,getFunction: () => void) => {
-    
+export const deletePastComingFunction = async (orderId: string, getFunction: () => void) => {
     try {
-        if(!orderId) {
+        if (!orderId) {
             Alert.alert('Delete qilishda xatolik', 'Xatolik yuz berdi')
         };
-        const config = await getConfig(); 
-        const res = await axios.delete(`${deletePastcoming_Url}one?orderId=${orderId}&status=PAST_SESSIONS`,  config ? config : {}); // URL va config bilan so'rov yuborish
+        const config = await getConfig();
+        const res = await axios.delete(`${deletePastcoming_Url}one?orderId=${orderId}&status=PAST_SESSIONS`, config ? config : {}); // URL va config bilan so'rov yuborish
 
-        if (res.data.success) { 
+        if (res.data.success) {
             getFunction()
-            console.log('Order deleted successfully');
+            Toast.show('✅Order deleted successfully', Toast.LONG);
         } else {
             console.error('Failed to delete order:', res.status);
         }
@@ -84,3 +82,31 @@ export const deletePastComingFunction = async (orderId: string,getFunction: () =
         console.error('An error occurred while deleting the order:', error);
     }
 };
+
+export const deleteAllPastComingFunction = async (datas: string[]) => {
+    try {
+        if (datas.length !== 0) {
+            const data = {
+                "status": "PAST_SESSIONS",
+                "orderIdList": datas
+            }
+
+            console.log(data);
+
+            // const config = await getConfig();
+            // const res = await axios.post(`${deleteAllpastcoming_Url}`, data, config ? config : {});
+            // if (res.data.success) {
+            //     Toast.show('All orders deleted successfully', Toast.LONG);
+            // } else {
+            //     Toast.show('All orders deleted error sssssssss', Toast.LONG);
+            // }
+        } else {
+            Toast.show('Data malumotlar topilmadi', Toast.LONG);
+        }
+    } catch {
+        Toast.show('All orders deleted error', Toast.LONG);
+    }
+
+
+
+}

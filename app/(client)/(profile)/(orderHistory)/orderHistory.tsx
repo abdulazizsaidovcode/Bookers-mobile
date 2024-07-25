@@ -8,8 +8,8 @@ import AccardionHistory from "@/components/accordions/accardionHistory";
 import { AntDesign, Feather, SimpleLineIcons } from "@expo/vector-icons";
 import ProfileCard from "./profileCard";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import { getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
-import { getOrderClientPustComing, getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
+import { getOrderClientUpcomingInterface } from "@/type/client/editClient";
+import { deleteAllPastComingFunction, getOrderClientPustComing, getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
 import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
 import { useNavigation } from "@react-navigation/native";
@@ -19,7 +19,7 @@ import { useAccardionStore, useAccardionStoreId } from "@/helpers/state_managmen
 const OrderHistory = () => {
   const { activeTab, setActiveTab } = useAccardionStoreId();
   const { pastComing, setPastComing } = useAccardionStore()
-  const [deleteAllPastComing,setDeleteAllPastComing] = useState<string[]|[]>([])
+  const [deletePastall, setDeleteAllPastComing] = useState<string[] | []>([])
   const [modalDelete, setModalDelete] = useState<boolean>(false);
   const [upcoming, setUpcoming] = useState<getOrderClientUpcomingInterface[]>([]);
   const { setMapData } = useMapStore();
@@ -39,16 +39,18 @@ const OrderHistory = () => {
   const handlePhonePress = (phoneNumber: string) => {
     Linking.openURL(`tel:${phoneNumber}`);
   };
-  const DeleteAllPastComing=()=>{
-    const ids:any=pastComing.map(past=>past.orderId)
-    if(ids.length>0){
-      console.log(ids);
-      setDeleteAllPastComing(ids)
-      deleteToggleModal()
-    }else{
-      Alert.alert("No orderId ")
+  const DeleteAllPastComing = () => {
+    const ids: any = pastComing.map(past => past.orderId)
+    if (ids.length > 0) {
+      console.log("order ids", ids);
+      deleteAllPastComingFunction(ids)
+      
+
+    } else {
+      console.log("Order is not found");
     }
   }
+
   useFocusEffect(
     useCallback(() => {
       getUpcomingClient();
@@ -72,7 +74,7 @@ const OrderHistory = () => {
       )}
       {activeTab === 'past' && (
         <View style={styles.header}>
-          <NavigationMenu  name="История сеансов" />
+          <NavigationMenu name="История сеансов" />
           <TouchableOpacity onPress={() => {
             deleteToggleModal();
           }}>
@@ -91,16 +93,16 @@ const OrderHistory = () => {
           />
           <CustomButton
             title="Прошедшие"
-            onPress={() =>{ 
-              DeleteAllPastComing()
-              setActiveTab('past') }}
+            onPress={() => {
+              setActiveTab('past')
+            }}
             active={activeTab === 'past'}
           />
         </View>
         {activeTab === 'upcoming' && (
           <ScrollView>
             {upcoming.length !== 0 ? (
-              upcoming.map((upcoming, index) => (
+              upcoming.map((upcoming: any, index: number) => (
                 <AccardionHistory id={upcoming.serviceIds} key={index} title={upcoming.serviceName} date={upcoming.orderDate} >
                   <ProfileCard
                     imageURL={upcoming.userAttachmentId}
@@ -146,7 +148,7 @@ const OrderHistory = () => {
         {activeTab === 'past' && (
           <ScrollView>
             {pastComing.length !== 0 ? (
-              pastComing.map((pastComing, index) => (
+              pastComing.map((pastComing: any, index: number) => (
                 <AccardionHistoryTwo key={index} id={pastComing.serviceIds} title={pastComing.serviceName} date={pastComing.orderDate} >
                   <ProfileCard
                     titleTex={pastComing.serviceName.split('  ')}
@@ -174,7 +176,9 @@ const OrderHistory = () => {
           isFullBtn={true}
           btnWhiteText={'Отмена'}
           btnRedText={'Да'}
-          onConfirm={() => deleteToggleModal()}
+          onConfirm={() => {
+            DeleteAllPastComing()
+          }}
           isModal={modalDelete}
           toggleModal={deleteToggleModal}
         >

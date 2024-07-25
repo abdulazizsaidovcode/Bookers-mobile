@@ -26,15 +26,18 @@ const ClientCard1: React.FC<ClientCardProps> = ({
   const { getme } = webPageStore();
 
   const generateStars = (count: number) => {
+    const roundedCount = Math.round(count); // Yaqinlashtirilgan baho
+    const starsCount = Math.min(roundedCount, 5); // 5 tadan oshmaydigan yulduzlar soni
     let stars = '';
-    for (let i = 1; i < count; i++) {
-      stars += '★';
+    for (let i = 0; i < starsCount; i++) {
+        stars += '★';
     }
-    for (let i = count; i < 5; i++) {
-      stars += '☆';
+    for (let i = starsCount; i < 5; i++) {
+        stars += '☆';
     }
     return stars;
-  };
+};
+
 
   return (
     <TouchableOpacity
