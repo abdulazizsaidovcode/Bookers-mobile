@@ -64,12 +64,17 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
 
 //Delete pastcoming order 
 
-export const deletePastComingFunction = async (orderId: string) => {
+export const deletePastComingFunction = async (orderId: string,getFunction: () => void) => {
+    
     try {
+        if(!orderId) {
+            Alert.alert('Delete qilishda xatolik', 'Xatolik yuz berdi')
+        };
         const config = await getConfig(); 
         const res = await axios.delete(`${deletePastcoming_Url}one?orderId=${orderId}&status=PAST_SESSIONS`,  config ? config : {}); // URL va config bilan so'rov yuborish
 
-        if (res.data.success) {
+        if (res.data.success) { 
+            getFunction()
             console.log('Order deleted successfully');
         } else {
             console.error('Failed to delete order:', res.status);
