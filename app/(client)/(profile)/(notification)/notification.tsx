@@ -50,9 +50,7 @@ const NotificationClient: React.FC = () => {
 
     const handleDeleteAll = () => {
         if (notificationIds.length > 0) {
-            clientNotificationDelete({
-                    notificationIds
-            }, () => fetchNotifications());
+            clientNotificationDelete({notificationIds}, () => fetchNotifications());
             setNotificationIds([]);
             setDeleteModal(false);
         }

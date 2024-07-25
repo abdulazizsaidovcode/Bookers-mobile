@@ -66,14 +66,12 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
 
 export const deletePastComingFunction = async (orderId: string) => {
     try {
-        const config = await getConfig(); // Configni olish
+        const config = await getConfig(); 
         const res = await axios.delete(`${deletePastcoming_Url}one?orderId=${orderId}&status=PAST_SESSIONS`,  config ? config : {}); // URL va config bilan so'rov yuborish
 
         if (res.data.success) {
-            // Muvaffaqiyatli natija, xabar bering
             console.log('Order deleted successfully');
         } else {
-            // Xato yoki boshqa javob kodi, xabar bering
             console.error('Failed to delete order:', res.status);
         }
     } catch (error) {
