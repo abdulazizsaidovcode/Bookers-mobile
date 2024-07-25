@@ -65,14 +65,14 @@ export const authLogin = async (phoneNumber: string, otpValue: string, setRespon
                     setClientOrMaster(res.data.message)
                     setRole(res.data.message)
                     SecureStore.setItemAsync('number', phoneNumber)
-                    Toast.show("Вы успешно авторизовались", Toast.LONG)
+                    Toast.show("siz logindan o'tdingiz", Toast.LONG)
                 } else {
-                    setRespone(false)
+                    setRespone(null)
                     Toast.show(res.data.message, Toast.LONG)
                 }
             })
             .catch(err => {
-                setRespone(false)
+                setRespone(null)
                 Toast.show(err?.response?.data?.message, Toast.LONG)
             })
     } else Toast.show('Номер телефона обязателен', Toast.SHORT)

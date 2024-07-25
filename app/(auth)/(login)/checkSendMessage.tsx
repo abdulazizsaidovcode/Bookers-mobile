@@ -85,12 +85,12 @@ const OtpInputExample: React.FC = () => {
     }, [phoneNumber])
 
     useEffect(() => {
-
         async function finishwork() {
             if (roles) setRole(roles)
             setPending(false)
             if (response) {
                 let parol = await SecureStore.getItemAsync('password')
+                console.log(parol);
 
                 if (isRegtered) {
                     navigation.navigate("(auth)/(register)/(greetings)/greetingFirst");
