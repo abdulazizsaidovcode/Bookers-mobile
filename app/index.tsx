@@ -21,8 +21,6 @@ const Index: React.FC = () => {
       }
     };
 
-    
-
     checkFirstLaunch();
   }, []);
 
@@ -34,11 +32,7 @@ const Index: React.FC = () => {
     );
   }
 
-  // if (isPasswordSet == false) {
-  //   return <InstallPin />;
-  // }
-
-  if (isFirstLaunch) {
+  if (!isFirstLaunch) {
     return <Auth />;
   }
 

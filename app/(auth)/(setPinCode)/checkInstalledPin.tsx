@@ -144,16 +144,15 @@ const CheckPin: React.FC = () => {
         if (enteredOtp === storedOtp) {
             Toast.show("пин-код установлен", Toast.SHORT);
             SecureStore.setItemAsync('password', enteredOtp)
-
+            console.log(role);
+            
             if (role === 'ROLE_MASTER') {
                 navigation.navigate('(tabs)/(master)')
                 setPending(false)
-                enteredOtp = ''
             }
             else if (role === 'ROLE_CLIENT') {
                 navigation.navigate('(tabs)/(client)')
                 setPending(false)
-                enteredOtp = ''
             }
         } else {
             setIsCorrect(false);
@@ -228,7 +227,11 @@ const CheckPin: React.FC = () => {
                             ]}
                             onPress={() => {
                                 setPending(true)
-                                if (!token && numbers !== null) register()
+                                if (!token) {
+                                    // register()
+                                    if (phoneNumber == null) register()
+                                    else installPinCode()
+                                }
                                 else installPinCode()
                             }}
                             disabled={!isButtonEnabled}
