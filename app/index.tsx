@@ -5,6 +5,7 @@ import Auth from "./(auth)/auth";
 import CheckPinOnCome from "./(auth)/(checkPinCode)/checkPinCode";
 import InstallPin from "./(auth)/(setPinCode)/installPin";
 import { useNavigation } from "expo-router";
+import { Loading } from "@/components/loading/loading";
 
 const Index: React.FC = () => {
   const [isFirstLaunch, setIsFirstLaunch] = useState<null | boolean>(null);
@@ -33,9 +34,7 @@ const Index: React.FC = () => {
 
   if (isFirstLaunch === null) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color={"#9C0A35"} />
-      </View>
+      <Loading/>
     );
   }
 
