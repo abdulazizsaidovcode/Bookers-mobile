@@ -10,6 +10,7 @@ type ClientCardDetailProps = {
   description: string;
   subDescription: string;
   genderId: number[];
+  onPress: () => void
 };
 
 const genderMapping = {
@@ -19,7 +20,7 @@ const genderMapping = {
   4: 'Женщины для девочек',
 };
 
-const ClientCardDetail: React.FC<ClientCardDetailProps> = ({ name, services = [], price, img, description, subDescription, genderId }) => {
+const ClientCardDetail: React.FC<ClientCardDetailProps> = ({ name, services = [], price, img, description, subDescription, genderId,onPress }) => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const handleSelect = (id: number) => {
@@ -95,6 +96,7 @@ const ClientCardDetail: React.FC<ClientCardDetailProps> = ({ name, services = []
       <TouchableOpacity
         activeOpacity={0.8}
         style={[tw`w-1/2 p-3 rounded-lg`, { backgroundColor: '#9C0A35' }]}
+        onPress={onPress}
       >
         <Text style={[tw`text-center text-xl`, { color: '#FFFFFF' }]}>Подробнее</Text>
       </TouchableOpacity>

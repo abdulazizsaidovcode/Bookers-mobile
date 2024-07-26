@@ -1,10 +1,11 @@
 import axios from "axios";
 import { getConfig } from "@/app/(tabs)/(master)/main";
-import { getCategory_Client, getClient_filter, getClient_freeTime, serviceClient } from "@/helpers/api";
+import { feedbackMasterForClient, getCategory_Client, getClient_filter, getClient_freeTime, masterGalery, serviceClient } from "@/helpers/api";
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 import useTopMastersStore from "@/helpers/state_managment/masters";
 import { config } from "@/helpers/token";
+import { useReviewsStore } from "@/helpers/state_managment/reviews/reviewsStore";
 
 // Client get all Category
 export const getAllCategory = async () => {
@@ -64,7 +65,6 @@ interface CommentData {
 }
 export const postComment = async (commentData: CommentData) => {
   try {
-    console.log('Posting comment data:', commentData);
     const response = await axios.post(`${postComment}`, commentData, config ? config : {});
   } catch (error) {
     console.error('Error posting comment:', error);
@@ -84,4 +84,33 @@ export const getFreeTime = async () => {
   }
 };
 
+
+// Galery master 
+export const getMasterGallery = async (id: string) => {
+  try {
+    const config = await getConfig();
+    const { data } = await axios.get(`${masterGalery}${id}`, config ? config : {});
+    if (data.success) {
+      ClientStory.getState().setMasterGallery(data.body);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Bitta masterga tegishli bo'lgan Отзывы lar
+export const getMasterOtzif = async (id:string) => {
+  try{
+    const config = await getConfig();
+    const response = await axios.get(`${feedbackMasterForClient}/${id}`, config ? config : {});
+    console.log(response.data.body);
+    if (response.data.success) {
+      useReviewsStore.getState().setReviews(response.data.body);
+    }
+    
+  }catch(error){
+    console.log(error);
+    
+  }
+}
 
