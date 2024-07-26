@@ -93,13 +93,13 @@ export const deleteAllPastComingFunction = async (datas: string[]) => {
 
             console.log(data);
 
-            // const config = await getConfig();
-            // const res = await axios.post(`${deleteAllpastcoming_Url}`, data, config ? config : {});
-            // if (res.data.success) {
-            //     Toast.show('All orders deleted successfully', Toast.LONG);
-            // } else {
-            //     Toast.show('All orders deleted error sssssssss', Toast.LONG);
-            // }
+            const config = await getConfig();
+            const res = await axios.post(`${deleteAllpastcoming_Url}`, data, config ? config : {});
+            if (res.data.success) {
+                Toast.show('All orders deleted successfully', Toast.LONG);
+            } else {
+                Toast.show('All orders deleted error sssssssss', Toast.LONG);
+            }
         } else {
             Toast.show('Data malumotlar topilmadi', Toast.LONG);
         }
