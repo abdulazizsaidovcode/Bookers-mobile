@@ -31,7 +31,7 @@ import * as SecureStore from "expo-secure-store";
 import {getUser} from "@/helpers/api-function/getMe/getMee";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import {getFile} from "@/helpers/api";
-import {getTariff, postTariff} from "@/app/(profile)/(tariff)/tariff";
+import {postTariff} from "@/app/(profile)/(tariff)/tariff";
 
 const screenWidht = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -130,8 +130,6 @@ const Welcome = () => {
         },
     ];
 
-    console.log(getTariffStatus,'datas')
-
     return (
         <SafeAreaView style={styles.safeArea}>
             <StatusBar backgroundColor="#21212E" barStyle="light-content"/>
@@ -208,8 +206,8 @@ const Welcome = () => {
                             <Buttons title="Вперёд" onPress={() => {
                                 navigation.navigate('(tabs)/(master)')
                                 registered()
-                                if (getTariffStatus === 'free') postTariff('all_free')
-                                else if (getTariffStatus === 'standard') postTariff('all_standard')
+                                // if (getTariffStatus === 'free') postTariff('all_free')
+                                // else if (getTariffStatus === 'standard') postTariff('all_standard')
                             }}/>
                         </View>
                     )}

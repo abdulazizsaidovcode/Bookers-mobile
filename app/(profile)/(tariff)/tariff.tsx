@@ -12,7 +12,7 @@ import { useFocusEffect } from 'expo-router';
 import clientStore from '@/helpers/state_managment/client/clientStore';
 import { Loading } from '@/components/loading/loading';
 
-export const postTariff = async (status: string) => {
+export const postTariff = async (status: string|number) => {
     let config = await getConfig()
     await axios.post(`${base_url}tariff/test?tariffName=${status}`, '', config ? config : {})
 }
