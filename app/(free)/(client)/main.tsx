@@ -14,6 +14,7 @@ import {useCallback, useEffect} from "react";
 import {getClientAll, getClientStatistics} from "@/helpers/api-function/client/client";
 import {putNumbers} from '@/helpers/api-function/numberSittings/numbersetting';
 import {handleRefresh} from "@/constants/refresh";
+import {getMasterTariff} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/main'>;
 
@@ -25,7 +26,8 @@ const MainClient = () => {
         statusData,
         setAllClients,
         refreshing,
-        setRefreshing
+        setRefreshing,
+        setTariff
     } = clientStore()
     const toggleClientModal = () => setIsClientModal(!isClientModal);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
@@ -33,6 +35,9 @@ const MainClient = () => {
     useEffect(() => {
         getClientAll(setAllClients)
         getClientStatistics(setStatusData)
+
+        // tariff u/n
+        getMasterTariff(setTariff)
     }, []);
 
     useEffect(() => {
