@@ -63,7 +63,7 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
 }
 
 //Delete pastcoming order 
-export const deletePastComingFunction = async (orderId: string, getFunction: () => void) => {
+export const deletePastComingFunction = async (orderId: string|null|undefined, getFunction: () => void) => {
     try {
         if (!orderId) {
             Alert.alert('Delete qilishda xatolik', 'Xatolik yuz berdi')
@@ -87,8 +87,8 @@ export const deleteAllPastComingFunction = async (datas: string[]) => {
     try {
         if (datas.length !== 0) {
             const data = {
-                "status": "PAST_SESSIONS",
-                "orderIdList": datas
+                "orderIdList": datas,
+                "status": "PAST_SESSIONS"
             }
 
             console.log(data);
@@ -104,7 +104,7 @@ export const deleteAllPastComingFunction = async (datas: string[]) => {
             Toast.show('Data malumotlar topilmadi', Toast.LONG);
         }
     } catch {
-        Toast.show('All orders deleted error', Toast.LONG);
+        Toast.show('All orders deleted errorrrrrrrrrrrr', Toast.LONG);
     }
 
 
