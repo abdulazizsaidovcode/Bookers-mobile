@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import Toast from "react-native-simple-toast";
 import { authStorage, setClientOrMaster } from "@/constants/storage";
 import * as SecureStore from 'expo-secure-store';
+import { getConfig } from "@/app/(tabs)/(master)/main";
 
 export const checkNumberFunction = async (phoneNumber: string, setCode: (value: any) => void, pending: (val: boolean) => void, setStatus: (val: boolean) => void) => {
     const sentData = { phoneNumber: phoneNumber }
@@ -55,7 +56,7 @@ export const authLogin = async (phoneNumber: string, otpValue: string, setRespon
         phone: phoneNumber,
         code: otpValue
     }
-    
+
     if (phoneNumber) {
         axios.post(`${base_url}auth/login`, authData)
             .then(res => {
@@ -99,7 +100,7 @@ export const registerMaster = async (
         img,
         setData,
         password,
-        language
+        language,
     }: IRegister) => {
     let files: any
     const formData = new FormData();
@@ -171,3 +172,18 @@ export const registerClient = async ({ firstName, lastName, phoneNumber, img, se
         Toast.show("Произошла ошибка при регистрации", Toast.SHORT);
     });
 }
+
+export const deviceInfo = async (deviceId: string | null, deviceType: string | null, fcmToken: string) => {
+    const payload = { deviceId, deviceType, fcmToken }
+    console.log('adadasdewfjnerijnerwijgfneign erijgneijogneijogneiojgn ', payload);
+    
+    const config = await getConfig()
+    try {
+        const { data } = await axios.post(`${register_page}device-info`, payload, config ? config : {})
+        if (data.success) {
+            console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+} 

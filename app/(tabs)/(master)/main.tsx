@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,7 @@ import {
   Share,
   Alert,
   BackHandler,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -51,6 +52,11 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import { handleRefresh } from "@/constants/refresh";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 import InstallPin from "@/app/(auth)/(setPinCode)/installPin";
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+import * as Device from 'expo-device';
+import Constants from 'expo-constants';
+import { deviceInfo } from "@/helpers/api-function/register/registrFC";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -105,6 +111,13 @@ export const getConfigImg = async () => {
 };
 
 const TabOneScreen: React.FC = () => {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
   const { number, setNumber } = numberSettingStore();
   const { getMee, setGetMee } = useGetMeeStore();
   const navigation = useNavigation<any>();
@@ -130,9 +143,48 @@ const TabOneScreen: React.FC = () => {
   const { refreshing, setRefreshing } = clientStore();
   const [backPressCount, setBackPressCount] = useState(0);
   const [orderId, setOrderId] = useState('');
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
+  const pushNotifications = async () => {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    const token = (await Notifications.getExpoPushTokenAsync()).data;
+    // const deviceId = Constants.deviceId;
+    const deviceType = Device.modelName;
+    deviceInfo(deviceType, Platform.OS , token);
 
-  // navigatsiyani login registratsiyadan o'tganda bloklash
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+    return token;
+
+  }
+  useEffect(() => {
+    pushNotifications()
+    return () => {
+      if (notificationListener.current) {
+        Notifications.removeNotificationSubscription(notificationListener.current);
+      }
+      if (responseListener.current) {
+        Notifications.removeNotificationSubscription(responseListener.current);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
       e.preventDefault();
