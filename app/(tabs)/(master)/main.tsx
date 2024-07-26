@@ -143,7 +143,7 @@ const TabOneScreen: React.FC = () => {
     setWaitingData,
   } = useDashboardStore();
   const { refreshing, setRefreshing } = clientStore();
-  const [masterTariff, setMasterTariff] = useState<null|string>(null)
+  const [masterTariff, setTariffMaster] = useState<null|string>(null)
   const [backPressCount, setBackPressCount] = useState(0);
   const [orderId, setOrderId] = useState('');
   const notificationListener = useRef();
@@ -259,7 +259,7 @@ const TabOneScreen: React.FC = () => {
     fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
     getData();
     getNumbers(setNumber);
-    getTariffMaster(setMasterTariff)
+    getTariffMaster(setTariffMaster)
   }, []);
 
   const onRefresh = useCallback(() => {

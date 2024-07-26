@@ -1,5 +1,5 @@
 import {Text, View} from "@/components/Themed";
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {
     Image,
     ScrollView,
@@ -31,7 +31,8 @@ import * as SecureStore from "expo-secure-store";
 import {getUser} from "@/helpers/api-function/getMe/getMee";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import {getFile} from "@/helpers/api";
-// import {postTariff} from "@/app/(profile)/(tariff)/tariff";
+import {getTariffMaster} from "@/app/(profile)/(tariff)/tariff";
+import {setMasterTariff} from "@/constants/storage";
 
 const screenWidht = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -44,12 +45,12 @@ const Welcome = () => {
     const {number, setNumber} = numberSettingStore();
     const {getMee, setGetMee} = useGetMeeStore()
     const navigation = useNavigation<SettingsScreenNavigationProp | any>();
-    const [getTariffStatus, setGetTariffStatus] = useState<string | null>('');
+    const [getTariffStatus, setGetTariffStatus] = useState<string | null>(null);
 
     useFocusEffect(useCallback(() => {
         getNumbers(setNumber);
         getUser(setGetMee)
-        // getTariff(setGetTariffStatus)
+        getTariffMaster(setGetTariffStatus)
 
         if (number.length === 0) putNumbers(1);
 
@@ -57,6 +58,9 @@ const Welcome = () => {
         }
     }, [number]))
 
+    useEffect(() => {
+        getTariffStatus && setMasterTariff(getTariffStatus)
+    }, [getTariffStatus]);
 
     const removeDuplicates = (array: any) => {
         return [...new Set(array)];
@@ -206,8 +210,6 @@ const Welcome = () => {
                             <Buttons title="Вперёд" onPress={() => {
                                 navigation.navigate('(tabs)/(master)')
                                 registered()
-                                // if (getTariffStatus === 'free') postTariff('all_free')
-                                // else if (getTariffStatus === 'standard') postTariff('all_standard')
                             }}/>
                         </View>
                     )}
