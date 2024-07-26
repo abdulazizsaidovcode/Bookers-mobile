@@ -145,7 +145,9 @@ import EditProfileMasterPage from "./(profile)/(settings)/(childSettings)/(profi
 import TimeWorkDetail from "./(free)/(work-grafic-edit)/workTimeDetail";
 import LocationEdit from "./(location)/LocationEdit";
 import InternetNotice from "@/components/InternetNotise/internetNotice";
-import { StatusBar } from "expo-status-bar";
+import LocationEditData from "./(location)/(location-data)/LocationEditData";
+// import ResponseLocationEdit from "./(location)/(response-location)/responseLocationEdit";
+
 const Stack = createNativeStackNavigator();
 export { ErrorBoundary } from "expo-router";
 
@@ -881,6 +883,16 @@ function RootLayoutNav() {
               name="(location)/LocationEdit"
               component={LocationEdit}
             />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="(location)/(location-data)/LocationEditData"
+              component={LocationEditData}
+            />
+            {/* <Stack.Screen
+              options={{ headerShown: false }}
+              name="(location)/(response-location)/ResponseLocationEdit"
+              component={ResponseLocationEdit}
+            /> */}
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>

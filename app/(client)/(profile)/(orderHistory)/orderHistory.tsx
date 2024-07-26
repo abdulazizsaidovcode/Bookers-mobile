@@ -17,13 +17,12 @@ import AccardionHistoryTwo from "@/components/accordions/accardionHistoryTwo";
 import { useAccardionStoreId } from "@/helpers/state_managment/accardion/accardionStore";
 
 const OrderHistory = () => {
-  const {activeTab, setActiveTab}=useAccardionStoreId();
+  const {activeTab, setActiveTab,pastComing,setPastComing}=useAccardionStoreId();
   const [modalDelete, setModalDelete] = useState<boolean>(false);
   const [upcoming, setUpcoming] = useState<getOrderClientUpcomingInterface[]>([]);
-  const [pastComing, setPastComing] = useState<getOrderClientPastcomingInterface[]>([]);
   const { setMapData } = useMapStore();
-  const navigate = useNavigation<any>();
-
+  const navigate = useNavigation<any>()
+  
   const getUpcomingClient = async () => {
     await getorderClientUpcoming(setUpcoming);
   };
@@ -42,9 +41,7 @@ const OrderHistory = () => {
     const ids: any = pastComing.map(past => past.orderId)
     if (ids.length > 0) {
       console.log("order ids", ids);
-      deleteAllPastComingFunction(ids)
-      
-
+      deleteAllPastComingFunction(ids,() => deleteToggleModal(),() => getOrderClientPustComing(setPastComing) )
     } else {
       console.log("Order is not found");
     }
@@ -62,6 +59,7 @@ const OrderHistory = () => {
       return () => { };
     },[])
   )
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -158,7 +156,7 @@ const OrderHistory = () => {
                     ratingnumber={pastComing.feedbackCount}
                     money={`${pastComing.orderPrice} сум`}
                     buttonName="Оставить отзыв"
-                    Adress={pastComing.address}
+                    Adress={pastComing.adress}
                     orderId={pastComing.orderId}
                     deleteIcon={<Feather name="trash-2" size={24} color="white" />}
                   />

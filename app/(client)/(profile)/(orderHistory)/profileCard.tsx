@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import Textarea from '@/components/select/textarea';
 import { getFile } from '@/helpers/api';
 import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
-import { addFebbakFunction } from '@/helpers/api-function/oreder/orderHistory';
+import { addFebbakFunction, deletePastComingFunction, getOrderClientPustComing } from '@/helpers/api-function/oreder/orderHistory';
 import { addfedbackmaster } from '@/type/client/editClient';
 
 interface IProps {
@@ -39,15 +39,15 @@ const ProfileCard: React.FC<IProps> = ({
     deleteIcon,
     orderId
 }) => {
-    const { activeTab, setActiveTab } = useAccardionStoreId();
+    const { activeTab, setActiveTab, pastComing, setPastComing } = useAccardionStoreId();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [ratingModal, setRatingModal] = useState<boolean>(false);
-    const [selectOrderID, setSelectOrderID] = useState<string | null>(null);
+    const [selectOrderID, setSelectOrderID] = useState<string | null|undefined>(null);
     const [textAreaValue, setTextAreaValue] = useState<string>('');
     const [rating, setRating] = useState<number>(0);
 
     const handleRating = (value: number) => setRating(value);
-
+    
     const datas: addfedbackmaster = {
         count: rating,
         orderId: selectOrderID,
@@ -57,7 +57,7 @@ const ProfileCard: React.FC<IProps> = ({
     const deleteToggleModal = () => {
         setDeleteModal(!deleteModal);
     };
-
+    
     const ratingToggleModal = () => {
         setRatingModal(!ratingModal);
     };
@@ -163,8 +163,16 @@ const ProfileCard: React.FC<IProps> = ({
                 btnRedText={'Да'}
                 isModal={deleteModal}
                 toggleModal={deleteToggleModal}
+                onConfirm={() => {
+                    if (orderId) {
+                        deletePastComingFunction(orderId, () => {
+                            getOrderClientPustComing(setPastComing);
+                            deleteToggleModal();
+                        });
+                    }
+                }}
             >
-                <>
+                <> 
                     <AntDesign name="delete" size={56} color="#9C0A35" />
                     <Text style={styles.deleteText}>Удалить прошедшую запись?</Text>
                 </>

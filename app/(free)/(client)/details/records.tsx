@@ -19,6 +19,7 @@ import {handleRefresh} from "@/constants/refresh";
 import {getClientIdStore} from "@/constants/storage";
 import {getUser} from "@/helpers/api-function/getMe/getMee";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
+import CalendarGrafficEdit from "@/app/(free)/(work-grafic-edit)/calendar";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records'>;
 
@@ -144,7 +145,7 @@ const Records = () => {
                                 </TouchableOpacity>
                             )}
                         </>}
-                        <CalendarGraffic/>
+                        <CalendarGrafficEdit/>
                         <View style={styles.tabContainer}>
                             <ScrollView
                                 showsHorizontalScrollIndicator={false}

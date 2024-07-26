@@ -63,7 +63,7 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
 }
 
 //Delete pastcoming order 
-export const deletePastComingFunction = async (orderId: string, getFunction: () => void) => {
+export const deletePastComingFunction = async (orderId: string|null|undefined, getFunction: () => void) => {
     try {
         if (!orderId) {
             Alert.alert('Delete qilishda xatolik', 'Xatolik yuz berdi')
@@ -83,28 +83,30 @@ export const deletePastComingFunction = async (orderId: string, getFunction: () 
     }
 };
 
-export const deleteAllPastComingFunction = async (datas: string[]) => {
+export const deleteAllPastComingFunction = async (datas: string[],toggleModal: () => void, getFunction: () => void) => {
     try {
         if (datas.length !== 0) {
             const data = {
-                "status": "PAST_SESSIONS",
-                "orderIdList": datas
+                "orderIdList": datas,
+                "status": "PAST_SESSIONS"
             }
 
             console.log(data);
 
-            // const config = await getConfig();
-            // const res = await axios.post(`${deleteAllpastcoming_Url}`, data, config ? config : {});
-            // if (res.data.success) {
-            //     Toast.show('All orders deleted successfully', Toast.LONG);
-            // } else {
-            //     Toast.show('All orders deleted error sssssssss', Toast.LONG);
-            // }
+            const config = await getConfig();
+            const res = await axios.post(`${deleteAllpastcoming_Url}`, data, config ? config : {});
+            if (res.data.success) {
+                Toast.show('All orders deleted successfully', Toast.LONG);
+                getFunction();
+                toggleModal();
+            } else {
+                Toast.show('All orders deleted error sssssssss', Toast.LONG);
+            }
         } else {
             Toast.show('Data malumotlar topilmadi', Toast.LONG);
         }
     } catch {
-        Toast.show('All orders deleted error', Toast.LONG);
+        Toast.show('All orders deleted errorrrrrrrrrrrr', Toast.LONG);
     }
 
 

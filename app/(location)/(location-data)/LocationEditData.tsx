@@ -28,7 +28,7 @@ interface ListData {
   value: string;
 }
 
-const LocationData = () => {
+const LocationEditData = () => {
   const [salonId, setSalonId] = useState("");
   const [data, setData] = useState<ListData[]>([]);
   const [districtId, setDistrictId] = useState("");
@@ -64,6 +64,8 @@ const LocationData = () => {
         `${base_url}salon`,
         config ? config : {}
       );
+      console.log(data);
+
       const listData: ListData[] =
         data.body &&
         data.body.map((item: any) => ({
@@ -100,9 +102,11 @@ const LocationData = () => {
         data,
         config ? config : {}
       );
+      console.log(res);
 
-      if (res.data.success === true)
-        router.push("../(response-location)/ResponseLocation");
+      if (res.data.success) {
+        router.push("../(response-location)/ResponseLocationEdit");
+      }
       else {
         resetForm();
       }
@@ -171,7 +175,6 @@ const LocationData = () => {
               search={false}
               placeholder="Название салона"
             />
-            <Text>{districtId}</Text>
             <Text style={tw`text-base text-white my-2`}>
               Не нашли свой салон красоты?
             </Text>
@@ -314,4 +317,4 @@ const styles = StyleSheet.create({
     textAlignVertical: "top", // Align text to the top
   },
 });
-export default LocationData;
+export default LocationEditData;
