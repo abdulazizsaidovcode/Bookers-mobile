@@ -18,7 +18,7 @@ import { getConfig } from '@/app/(tabs)/(master)/main';
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, 'category'>;
 
 const Category = () => {
-    const { setData, data, setChildCategoryData, childCategoryData, selectedCategory, setSelectedCategory } = servicesStore();
+    const { setData, data, setChildCategoryData, childCategoryData, selectedCategory, setSelectedCategory, setCompleted } = servicesStore();
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
@@ -63,8 +63,10 @@ const Category = () => {
         try {
             const config = await getConfig();
             const response = await axios.post(`${getCategory_masterAdd}categoryIds=${selectedCategory}`, {}, config ? config : {});
-            if (response.data.success === true) {
+            if (response.data.success) {
                 router.push('(standart)/(services)/(expertise)/expertise');
+                setCompleted([true, true, true, false])
+
             } else {
                 console.log();
             }

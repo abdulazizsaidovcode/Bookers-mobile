@@ -60,7 +60,7 @@ const NotificationClient: React.FC = () => {
         <View style={styles.container}>
             <StatusBar backgroundColor={'#21212E'} barStyle={'light-content'} />
             <View style={styles.headerContainer}>
-                <NavigationMenu name={"Уведомления"} />
+                <NavigationMenu name={"Уведомления"}/>
                 <TouchableOpacity onPress={handleDeletePress}>
                     <AntDesign name="delete" size={24} color="white" />
                 </TouchableOpacity>

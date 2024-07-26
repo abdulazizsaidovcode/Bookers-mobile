@@ -31,8 +31,6 @@ const IMAGES = {
 
 const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
 
-  const {userLocation, setUserLocation} = useGetMeeStore();
-  const {allCategory, setSelectedServiceId} = ClientStory();
 
 //   useFocusEffect(
 //     React.useCallback(() => {
@@ -44,7 +42,6 @@ const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
   const handlePress = useCallback(() => {
     if (item.onPress) item.onPress();
   }, [item]);
-
   return (
     <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={handlePress}>
       <View style={styles.item}>
@@ -71,6 +68,10 @@ const Navbar: React.FC = () => (
 );
 
 const Dashboard: React.FC = () => {
+  
+  const {userLocation, setUserLocation} = useGetMeeStore();
+  const {allCategory, setSelectedServiceId} = ClientStory();
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation<NavigationProp<any>>();
   const [backPressCount, setBackPressCount] = useState(0);
 
@@ -90,6 +91,16 @@ useEffect(() => {
 
   return unsubscribe;
 }, [navigation]);
+
+useFocusEffect(
+  React.useCallback(() => {
+      getAllCategory().finally(() => setLoading(false));
+      return () => { };
+  }, [userLocation])
+);
+
+
+console.log(allCategory);
 
 // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
 useFocusEffect(

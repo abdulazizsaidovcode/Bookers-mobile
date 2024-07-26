@@ -57,7 +57,7 @@ const Hair = () => {
                         <Buttons
                             title="Подобрать мастера"
                             onPress={handleButtonPress}
-                            isDisebled={!isSelected} // Disable button if !isSelected
+                            isDisebled={!isSelected}
                         />
                     </View>
                 </View>

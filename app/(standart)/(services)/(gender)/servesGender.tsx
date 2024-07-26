@@ -10,9 +10,11 @@ import { router } from 'expo-router';
 import axios from 'axios';
 import { gender_status } from '@/helpers/api';
 import { getConfig } from '@/app/(tabs)/(master)/main';
+import servicesStore from '@/helpers/state_managment/services/servicesStore';
 
 const ServesGender = () => {
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+    const {setCompleted} = servicesStore()
     const [isLoading, setIsLoading] = useState(false)
 
     const categories = [
@@ -25,8 +27,9 @@ const ServesGender = () => {
             const config = await getConfig()
             console.log(config);
             const response = await axios.post(`${gender_status}genders=${selectedCategories}`,{},config ? config : {});
-            if(response.data.success === true){
+            if(response.data.success){
               router.push("/category")  
+              setCompleted([true, true, false, false])
             }
             } catch (error) {
             console.error("Error fetching services: ", error);    

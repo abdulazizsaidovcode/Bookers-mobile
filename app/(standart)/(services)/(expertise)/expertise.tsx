@@ -16,7 +16,7 @@ import { getConfig } from '@/app/(tabs)/(master)/main';
 
 const Expertise: React.FC = () => {
     const route = useRoute();
-    const { childCategoryData, categoryFatherId, setChildCategoryData, selectedCategory } = servicesStore();
+    const { childCategoryData, categoryFatherId, setChildCategoryData, selectedCategory, setCompleted } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [value, setValue] = useState('');
     const [validate, setValidate] = useState(false);
@@ -160,7 +160,11 @@ const Expertise: React.FC = () => {
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
                                 title="Сохранить"
-                                onPress={() => router.push('../(process)/process')}
+                                onPress={() => {
+                                    router.push('../(process)/process')
+                                    setCompleted([true, true, true, true])
+
+                                }}
                                 isDisebled={selectedServices.length === 0}
                             />
                         </View>
