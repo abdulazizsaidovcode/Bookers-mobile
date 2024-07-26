@@ -1,20 +1,22 @@
 // TariffsPage.tsx
-import React, { useCallback, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, {useCallback, useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { SafeAreaView } from 'react-native-safe-area-context'
+import {SafeAreaView} from 'react-native-safe-area-context'
 import * as SecureStore from "expo-secure-store";
-import { base_url } from "@/helpers/api";
+import {base_url} from "@/helpers/api";
 import axios from "axios";
-import { getConfig } from "@/app/(tabs)/(master)/main";
-import { useFocusEffect } from 'expo-router';
+import {getConfig} from "@/app/(tabs)/(master)/main";
+import {useFocusEffect} from 'expo-router';
 import clientStore from '@/helpers/state_managment/client/clientStore';
-import { Loading } from '@/components/loading/loading';
+import {Loading} from '@/components/loading/loading';
 
-export const postTariff = async (status: string|number) => {
+export const postTariff = async (id: string | number) => {
     let config = await getConfig()
-    await axios.post(`${base_url}tariff/test?tariffName=${status}`, '', config ? config : {})
+    if (id) {
+        await axios.post(`${base_url}tariff/save?tariffId=${id}`, '', config ? config : {})
+    }
 }
 
 export const getTariffMaster = async (setTariffStatus: (val: any) => void) => {
@@ -31,7 +33,7 @@ export const getAllTariff = async (setData: (val: any[] | null) => void, setLoad
     setLoading(true)
     try {
         const config = await getConfig()
-        const { data } = await axios.get(`${base_url}tariff/list`, config ? config : {})
+        const {data} = await axios.get(`${base_url}tariff/list`, config ? config : {})
         if (data.success) {
             setLoading(false)
             setData(data.body.reverse());
@@ -48,7 +50,7 @@ export const getAllTariff = async (setData: (val: any[] | null) => void, setLoad
 
 const TariffsPage: React.FC = () => {
     const navigation = useNavigation<any>();
-    const { isLoading, setIsLoading } = clientStore()
+    const {isLoading, setIsLoading} = clientStore()
     const [tariffStatus, setTariffStatus] = useState<string | null>(null);
     const [tariffList, setTariffList] = useState<any[] | null>(null);
 
@@ -63,29 +65,28 @@ const TariffsPage: React.FC = () => {
         };
 
         fetchTariffStatus();
-        // getTariffMaster(setTariffStatus)
         getAllTariff(setTariffList, setIsLoading)
-
+        // getTariffMaster(setTariffStatus)
     }, []))
 
     // useFocusEffect(useCallback(() => {
     //     getTariffMaster(setTariffStatus)
     // }, [navigation]))
 
-    const setTariff = async (type: string) => await SecureStore.setItemAsync("tariff", type)
-
-    const handleDisabled = () => {
-        if (tariffStatus === 'free') return 'free'
-        else if (tariffStatus === 'standard') return 'standard'
-        else return 'all'
-    }
+    // const setTariff = async (type: string) => await SecureStore.setItemAsync("tariff", type)
+    //
+    // const handleDisabled = () => {
+    //     if (tariffStatus === 'free') return 'free'
+    //     else if (tariffStatus === 'standard') return 'standard'
+    //     else return 'all'
+    // }
 
     return (
         <>
-            {isLoading ? <Loading /> : (
+            {isLoading ? <Loading/> : (
                 <SafeAreaView style={styles.container}>
                     <ScrollView>
-                        <NavigationMenu name='Tarifi' />
+                        <NavigationMenu name='Tarifi'/>
                         <View>
                             {tariffList && tariffList.map((tariff, index) => (
                                 <TouchableOpacity
@@ -93,18 +94,20 @@ const TariffsPage: React.FC = () => {
                                     key={index}
                                     // { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }
                                     style={[styles.card]}
-                                // disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
+                                    // disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
                                 >
                                     <Text style={styles.name}>Тариф {tariff.name}</Text>
-                                    <Text style={styles.description}>{tariff.name === 'Free' ? 'Стандартный набор функций' : 'Продвинутый набор функций'}</Text>
-                                    <Text style={styles.price}>{tariff.name === 'Free' ? 'Срок до: 31.12.2024' : '49 000 в месяц'}</Text>
-                                    {tariff.name === 'Standard' && <Text style={styles.trial}>Пробный период доступен на 3 месяца</Text>}
+                                    <Text
+                                        style={styles.description}>{tariff.name === 'Free' ? 'Стандартный набор функций' : 'Продвинутый набор функций'}</Text>
+                                    <Text
+                                        style={styles.price}>{tariff.name === 'Free' ? 'Срок до: 31.12.2024' : '49 000 в месяц'}</Text>
+                                    {tariff.name === 'Standard' &&
+                                        <Text style={styles.trial}>Пробный период доступен на 3 месяца</Text>}
                                     <View style={styles.buttonContainer}>
                                         <TouchableOpacity
                                             onPress={() => {
-                                                // postTariff(tariffStatus === 'all' ? 'all' : tariff.unicName)
-                                                // setTariff(tariffStatus === 'all' ? 'all' : tariff.unicName)
-                                                // navigation.navigate(tariff.navigate)
+                                                postTariff(tariff.id)
+                                                navigation.navigate(tariff.navigate)
                                             }}
                                             activeOpacity={.7}
                                             // { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }
@@ -143,7 +146,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         shadowColor: '#000',
         shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowRadius: 5,
         elevation: 3,
     },
