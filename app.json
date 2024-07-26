@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Bookers",
-    "slug": "testprojectname",
+    "slug": "notification-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/mainLogo.png",
@@ -16,6 +16,7 @@
       "bundleIdentifier": "com.alisher09.bookersapp"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/mainLogo.png",
         "backgroundColor": "#ffffff"
@@ -40,14 +41,24 @@
           "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos."
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "icon": "./local/assets/notification-icon.png",
+          "color": "#ffffff",
+          "sounds": [
+            "./local/assets/notification-sound.wav"
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
       "eas": {
-        "projectId": "4a39dfa7-984a-48f7-a8ec-16d0aaee030a",
+        "projectId": "9f50422d-d7e6-41fb-b97a-2b512201ab01",
         "apiBaseUrl": "https://app.bookers.one/"
       }
     }
