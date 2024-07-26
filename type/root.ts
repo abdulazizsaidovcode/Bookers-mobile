@@ -20,6 +20,7 @@ export type RootStackParamList = {
   '(auth)/(register)/(greetings)/greetingSecond': undefined;
   '(auth)/(register)/(greetings)/greetingThird': undefined;
   '(standart)/(onlineBooking)/onlineBooking': undefined;
+  '(standart)/(onlineBooking)/(booking)/booking': undefined
   '(notifications)/notifications': undefined;
   '(settings)/(settings-location)/settings-locations-main': undefined;
   '(settings)/(settings-location)/settings-locations': undefined;

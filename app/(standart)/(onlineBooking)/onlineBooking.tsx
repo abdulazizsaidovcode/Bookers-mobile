@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   FlatList,
 } from "react-native";
-import { router, useNavigation } from "expo-router";
+import { router, useFocusEffect, useNavigation } from "expo-router";
 import tw from "tailwind-react-native-classnames";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import SwitchWithLabel from "@/components/switchWithLabel/switchWithLabel";
@@ -18,29 +18,45 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import {
+  OnlineBookingSettingsUrgentlyStory,
   OnlineBookingStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import {
   getOnlineBookingAllowClient,
+  GetOnlineBookingSettingsUrgently,
   onlineBookingAllowClient,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import { useTranslation } from "react-i18next";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/onlineBooking'>;
+
 
 const OnlineBooking = () => {
+  const { Urgently, setUrgentlyt } = OnlineBookingSettingsUrgentlyStory();
   const { allowClient, setAllowClient } = OnlineBookingStory();
-  const navigation = useNavigation<any>()
+  const navigation = useNavigation<SettingsScreenNavigationProp>()
+
+  const {t}=useTranslation()
+
+  useFocusEffect(
+    useCallback(() => {
+      GetOnlineBookingSettingsUrgently(setUrgentlyt);
+      return () => null
+    }, [])
+  )
   
-    const {t}=useTranslation()
   const data = [
     {
       id: "1",
       title: t("record_duration"),
-      subtitle: t("not_set"),
+      subtitle: `${Urgently ? "Enabled" : "Disabled"}`,
       IconComponent: (
         <FontAwesome5 name="calendar-alt" size={30} color="#9C0A35" />
       ),
       onPress: () => {
-        router.push("/booking");
+        navigation.navigate("(standart)/(onlineBooking)/(booking)/booking");
       },
       
     },
@@ -50,7 +66,7 @@ const OnlineBooking = () => {
       subtitle: t("not_set"),
       IconComponent: <Ionicons name="wine" size={30} color="#9C0A35" />,
       onPress: () => {
-        router.push("/breakBetweenSessions");
+        router.push("(standart)/(onlineBooking)/(booking)/breakBetweenSessions");
       },
     },
     {
@@ -59,7 +75,7 @@ const OnlineBooking = () => {
       subtitle: t("not_set"),
       IconComponent: <Feather name="check-circle" size={30} color="#9C0A35" />,
       onPress: () => {
-        router.push("/confirmationRecor");
+        router.push("(standart)/(onlineBooking)/(booking)/confirmationRecor");
       },
     },
     {
@@ -68,7 +84,7 @@ const OnlineBooking = () => {
       subtitle: t("not_set"),
       IconComponent: <Feather name="watch" size={30} color="#9C0A35" />,
       onPress: () => {
-        router.push("/requestWindow");
+        router.push("(standart)/(onlineBooking)/(booking)/requestWindow");
       },
     },
     {
@@ -77,7 +93,7 @@ const OnlineBooking = () => {
       subtitle: t("not_set"),
       IconComponent: <FontAwesome name="diamond" size={24} color="#9C0A35" />,
       onPress: () => {
-        router.push("/timeSelect");
+        router.push("(standart)/(onlineBooking)/(booking)/timeSelect");
       },
     },
   ];

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { useNavigation } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -28,12 +28,17 @@ import Toast from "react-native-simple-toast";
 const Booking = () => {
   const { Urgently, setUrgentlyt } = OnlineBookingSettingsUrgentlyStory();
   const [salonId, setSalonId] = useState("");
-  const [isEnabled, setIsEnabled] = useState(Urgently);
+  const [isEnabled, setIsEnabled] = useState(false);
   const [data, setData] = useState([]);
   const navigation = useNavigation<any>();
-  // const { isRegtered } = isRegister();
-  // const { setBreack } = OnlineBookingCheck();
-  // setBreack(isRegister);
+  
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsEnabled(Urgently)
+      return () => null
+    }, [])
+  )
 
   const getData = async () => {
     try {
@@ -41,9 +46,11 @@ const Booking = () => {
       const { data } = await axios.get(`${base_url}order-days/master`, config ? config : {});
       setData(data.body);
     } catch (error) {
-      console.log(error);
     }
   };
+  
+
+
 
   const addOnlineBook = async () => {
     try {
@@ -57,7 +64,6 @@ const Booking = () => {
       Toast.show(res.data.message, Toast.SHORT);
       navigation.goBack();
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -65,7 +71,6 @@ const Booking = () => {
     getData();
   }, []);
   useEffect(() => {
-    console.log(isEnabled);
 
     GetOnlineBookingSettingsUrgently(setUrgentlyt);
   }, [setUrgentlyt]);
@@ -74,7 +79,6 @@ const Booking = () => {
     let newUrgently = !isEnabled;
     onlineBookingSettingsUrgently(newUrgently);
     setIsEnabled((previousState) => !previousState);
-    console.log(Urgently);
 
     GetOnlineBookingSettingsUrgently(setUrgentlyt);
   };
@@ -82,7 +86,9 @@ const Booking = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
+      <View style={{ paddingLeft: 10, marginTop: 14 }}>
       <NavigationMenu name={`Онлайн бронирование`} />
+      </View>
       <View style={styles.innerContainer}>
         <ScrollView
           showsVerticalScrollIndicator={false}
