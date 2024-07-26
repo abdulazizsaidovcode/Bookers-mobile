@@ -1,43 +1,58 @@
 // TariffsPage.tsx
-import React, { useCallback, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, {useCallback, useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { SafeAreaView } from 'react-native-safe-area-context'
+import {SafeAreaView} from 'react-native-safe-area-context'
 import * as SecureStore from "expo-secure-store";
-import { base_url } from "@/helpers/api";
+import {base_url} from "@/helpers/api";
 import axios from "axios";
-import { getConfig } from "@/app/(tabs)/(master)/main";
-import { useFocusEffect } from 'expo-router';
+import {getConfig} from "@/app/(tabs)/(master)/main";
+import {useFocusEffect} from 'expo-router';
+import clientStore from '@/helpers/state_managment/client/clientStore';
+import {Loading} from '@/components/loading/loading';
 
-const tariffs = [
-    {
-        unicName: 'free',
-        name: 'Тариф бесплатный',
-        description: 'Стандартный набор функций',
-        price: 'Срок до: 31.12.2024',
-        details: ['Бронирование услуг', 'Галерея', 'Предоплата'],
-        navigate: '(welcome)/Welcome'
-    },
-    {
-        unicName: 'standard',
-        name: 'Тариф STANDART',
-        description: 'Продвинутый набор функций',
-        price: '49 000 в месяц',
-        trial: 'Пробный период доступен на 3 месяца',
-        details: ['Бронирование услуг', 'Галерея', 'Предоплата', 'Еще функции'],
-        navigate: ''
-    },
-];
-
-export const postTariff = async (status: string) => {
+export const postTariff = async (id: string | number) => {
     let config = await getConfig()
-    await axios.post(`${base_url}tariff/test?tariffName=${status}`, '', config ? config : {})
+    if (id) {
+        await axios.post(`${base_url}tariff/save?tariffId=${id}`, '', config ? config : {})
+    }
+}
+
+export const getTariffMaster = async (setTariffStatus: (val: any) => void) => {
+    let config = await getConfig()
+    axios.get(`${base_url}tariff/master`, config ? config : {})
+        .then(res => {
+            if (res.data.success) setTariffStatus(res.data.body)
+            else setTariffStatus(res.data.body)
+        })
+        .catch(err => console.log(err))
+}
+
+export const getAllTariff = async (setData: (val: any[] | null) => void, setLoading: (val: boolean) => void) => {
+    setLoading(true)
+    try {
+        const config = await getConfig()
+        const {data} = await axios.get(`${base_url}tariff/list`, config ? config : {})
+        if (data.success) {
+            setLoading(false)
+            setData(data.body.reverse());
+        } else {
+            setData(null);
+            setLoading(false);
+        }
+    } catch (error) {
+        setData(null);
+        setLoading(false);
+        console.error(error);
+    }
 }
 
 const TariffsPage: React.FC = () => {
     const navigation = useNavigation<any>();
+    const {isLoading, setIsLoading} = clientStore()
     const [tariffStatus, setTariffStatus] = useState<string | null>(null);
+    const [tariffList, setTariffList] = useState<any[] | null>(null);
 
     useFocusEffect(useCallback(() => {
         const fetchTariffStatus = async () => {
@@ -50,83 +65,71 @@ const TariffsPage: React.FC = () => {
         };
 
         fetchTariffStatus();
-        getTariff()
-
-        // test uchun clear function, yani storege remove qilib test qilib kurdim
-        // const clearSecureStore = async () => {
-        //   try {
-        //     await SecureStore.deleteItemAsync('tariff');
-        //   } catch (error) {
-        //     console.log('Error clearing secure store:', error);
-        //   }
-        // };
-        // clearSecureStore()
+        getAllTariff(setTariffList, setIsLoading)
+        // getTariffMaster(setTariffStatus)
     }, []))
 
-    useFocusEffect(useCallback(() => {
-        getTariff()
-    }, [navigation]))
+    // useFocusEffect(useCallback(() => {
+    //     getTariffMaster(setTariffStatus)
+    // }, [navigation]))
 
-    const setTariff = async (type: string) => await SecureStore.setItemAsync("tariff", type)
-
-    const getTariff = async () => {
-        let config = await getConfig()
-        axios.get(`${base_url}tariff/test`, config ? config : {})
-            .then(res => {
-                console.log('get: ', res.data.body)
-                if (res.data.body === undefined) setTariffStatus('')
-                else setTariffStatus(res.data.body)
-            })
-            .catch(err => console.log(err))
-    }
-
-    const handleDisabled = () => {
-        if (tariffStatus === 'free') return 'free'
-        else if (tariffStatus === 'standard') return 'standard'
-        else return 'all'
-    }
+    // const setTariff = async (type: string) => await SecureStore.setItemAsync("tariff", type)
+    //
+    // const handleDisabled = () => {
+    //     if (tariffStatus === 'free') return 'free'
+    //     else if (tariffStatus === 'standard') return 'standard'
+    //     else return 'all'
+    // }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <NavigationMenu name='Tarifi' />
-                <View>
-                    {tariffs.map((tariff, index) => (
-                        <TouchableOpacity
-                            activeOpacity={1}
-                            key={index}
-                            style={[styles.card, { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }]}
-                            disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
-                        >
-                            <Text style={styles.name}>{tariff.name}</Text>
-                            <Text style={styles.description}>{tariff.description}</Text>
-                            <Text style={styles.price}>{tariff.price}</Text>
-                            {tariff.trial && <Text style={styles.trial}>{tariff.trial}</Text>}
-                            <View style={styles.buttonContainer}>
+        <>
+            {isLoading ? <Loading/> : (
+                <SafeAreaView style={styles.container}>
+                    <ScrollView>
+                        <NavigationMenu name='Tarifi'/>
+                        <View>
+                            {tariffList && tariffList.map((tariff, index) => (
                                 <TouchableOpacity
-                                    onPress={() => {
-                                        postTariff(tariffStatus === 'all' ? 'all' : tariff.unicName)
-                                        setTariff(tariffStatus === 'all' ? 'all' : tariff.unicName)
-                                        navigation.navigate(tariff.navigate)
-                                    }}
-                                    activeOpacity={.7}
-                                    disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
-                                    style={[styles.activateButton, { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }]}
+                                    activeOpacity={1}
+                                    key={index}
+                                    // { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }
+                                    style={[styles.card]}
+                                    // disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
                                 >
-                                    <Text style={styles.buttonText}>Активировать</Text>
+                                    <Text style={styles.name}>Тариф {tariff.name}</Text>
+                                    <Text
+                                        style={styles.description}>{tariff.name === 'Free' ? 'Стандартный набор функций' : 'Продвинутый набор функций'}</Text>
+                                    <Text
+                                        style={styles.price}>{tariff.name === 'Free' ? 'Срок до: 31.12.2024' : '49 000 в месяц'}</Text>
+                                    {tariff.name === 'Standard' &&
+                                        <Text style={styles.trial}>Пробный период доступен на 3 месяца</Text>}
+                                    <View style={styles.buttonContainer}>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                postTariff(tariff.id)
+                                                navigation.navigate(tariff.navigate)
+                                            }}
+                                            activeOpacity={.7}
+                                            // { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }
+                                            // disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
+                                            style={[styles.activateButton]}
+                                        >
+                                            <Text style={styles.buttonText}>Активировать</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            activeOpacity={.4}
+                                            style={styles.detailsButton}
+                                        >
+                                            <Text style={[styles.buttonText, styles.detailsButtonText]}>Подробнее</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity
-                                    activeOpacity={.4}
-                                    style={styles.detailsButton}
-                                >
-                                    <Text style={[styles.buttonText, styles.detailsButtonText]}>Подробнее</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+                            ))}
+                        </View>
+                    </ScrollView>
+                </SafeAreaView>
+            )}
+        </>
     );
 };
 
@@ -143,7 +146,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         shadowColor: '#000',
         shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowRadius: 5,
         elevation: 3,
     },

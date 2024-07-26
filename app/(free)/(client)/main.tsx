@@ -13,7 +13,6 @@ import {RootStackParamList} from "@/type/root";
 import {useCallback, useEffect} from "react";
 import {getClientAll, getClientStatistics} from "@/helpers/api-function/client/client";
 import {putNumbers} from '@/helpers/api-function/numberSittings/numbersetting';
-import {router} from 'expo-router';
 import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/main'>;

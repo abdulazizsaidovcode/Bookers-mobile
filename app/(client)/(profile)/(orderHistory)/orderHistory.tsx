@@ -40,11 +40,10 @@ const OrderHistory = () => {
   };
   const DeleteAllPastComing = () => {
     const ids: any = pastComing.map(past => past.orderId)
+    
     if (ids.length > 0) {
       console.log("order ids", ids);
       deleteAllPastComingFunction(ids)
-      
-
     } else {
       console.log("Order is not found");
     }

@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, ImageSourcePropType, BackHandler } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, ImageSourcePropType, BackHandler, Platform } from 'react-native';
 import AccordionItem from '../../../components/accordions/accardion';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
@@ -10,6 +10,11 @@ import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
 import { getAllCategory } from '@/helpers/api-function/uslugi/uslugi';
 import Toast from "react-native-simple-toast";
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+import * as Device from 'expo-device';
+import Constants from 'expo-constants';
+import { deviceInfo } from "@/helpers/api-function/register/registrFC";
 
 
 // Bu bo'limga teginma
@@ -30,6 +35,7 @@ const IMAGES = {
 };
 
 const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
+  
 
   const {userLocation, setUserLocation} = useGetMeeStore();
   const {allCategory, setSelectedServiceId} = ClientStory();
@@ -64,7 +70,7 @@ const Navbar: React.FC = () => (
   <View style={styles.navbar}>
     <Text style={styles.title}>Главная</Text>
     <View style={styles.iconGroup}>
-      <FontAwesome5 name="bell" size={28} color="white" />
+      <FontAwesome5 name="bell" size={28} color="white" on />
       <Feather name="bookmark" size={28} color="white" />
     </View>
   </View>
@@ -73,6 +79,53 @@ const Navbar: React.FC = () => (
 const Dashboard: React.FC = () => {
   const navigation = useNavigation<NavigationProp<any>>();
   const [backPressCount, setBackPressCount] = useState(0);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
+  const pushNotifications = async () => {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    const token = (await Notifications.getExpoPushTokenAsync()).data;
+    // const deviceId = Constants.deviceId;
+    const deviceType = Device.modelName;
+    deviceInfo(deviceType, Platform.OS , token);
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+    return token;
+
+  }
+  useEffect(() => {
+    pushNotifications()
+    return () => {
+      if (notificationListener.current) {
+        Notifications.removeNotificationSubscription(notificationListener.current);
+      }
+      if (responseListener.current) {
+        Notifications.removeNotificationSubscription(responseListener.current);
+      }
+    };
+  }, []);
 
   const dataDashboard: DashboardItemType[] = [
     { id: 1, image: IMAGES.health, title: 'Здоровье и красота волос', titleThen: 'Рядом с тобой 450', onPress: () => navigation.navigate('(client)/(uslugi)/(hairHealth)/hair') },
