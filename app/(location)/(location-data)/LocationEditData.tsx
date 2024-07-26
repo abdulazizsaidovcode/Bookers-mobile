@@ -28,7 +28,7 @@ interface ListData {
   value: string;
 }
 
-const LocationData = () => {
+const LocationEditData = () => {
   const [salonId, setSalonId] = useState("");
   const [data, setData] = useState<ListData[]>([]);
   const [districtId, setDistrictId] = useState("");
@@ -171,7 +171,6 @@ const LocationData = () => {
               search={false}
               placeholder="Название салона"
             />
-            <Text>{districtId}</Text>
             <Text style={tw`text-base text-white my-2`}>
               Не нашли свой салон красоты?
             </Text>
@@ -314,4 +313,4 @@ const styles = StyleSheet.create({
     textAlignVertical: "top", // Align text to the top
   },
 });
-export default LocationData;
+export default LocationEditData;

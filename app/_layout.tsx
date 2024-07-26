@@ -146,6 +146,7 @@ import TimeWorkDetail from "./(free)/(work-grafic-edit)/workTimeDetail";
 import LocationEdit from "./(location)/LocationEdit";
 import InternetNotice from "@/components/InternetNotise/internetNotice";
 import { StatusBar } from "expo-status-bar";
+import LocationEditData from "./(location)/(location-data)/LocationEditData";
 const Stack = createNativeStackNavigator();
 export { ErrorBoundary } from "expo-router";
 
@@ -880,6 +881,11 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
               name="(location)/LocationEdit"
               component={LocationEdit}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="(location)/(location-data)/LocationEditData"
+              component={LocationEditData}
             />
           </Stack.Navigator>
         </MenuProvider>
