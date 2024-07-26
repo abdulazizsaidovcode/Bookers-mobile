@@ -68,7 +68,6 @@ const TariffsPage: React.FC = () => {
         getAllTariff(setTariffList, setIsLoading)
         getMasterTariff(setTariffStatus)
     }, []))
-    console.log(tariffStatus, 'masterTariff')
 
     return (
         <>

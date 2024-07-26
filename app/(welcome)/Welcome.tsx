@@ -124,7 +124,7 @@ const Welcome = () => {
             title: "Клиенты",
             description: "Добавьте своих клинетов",
             icon: <Fontisto name="persons" size={24} color="white"/>,
-            onPress: () => navigation.navigate("(free)/(client)/main"),
+            onPress: () => navigation.navigate(`${getTariffStatus === 'FREE' ? `(free)/(client)/main` : '(standart)/client/standard-main'}`),
         },
         {
             title: "Помощь",

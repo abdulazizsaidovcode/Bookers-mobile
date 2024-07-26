@@ -64,6 +64,8 @@ const LocationEditData = () => {
         `${base_url}salon`,
         config ? config : {}
       );
+      console.log(data);
+
       const listData: ListData[] =
         data.body &&
         data.body.map((item: any) => ({
@@ -100,9 +102,11 @@ const LocationEditData = () => {
         data,
         config ? config : {}
       );
+      console.log(res);
 
-      if (res.data.success === true)
-        router.push("../(response-location)/ResponseLocation");
+      if (res.data.success) {
+        router.push("../(response-location)/ResponseLocationEdit");
+      }
       else {
         resetForm();
       }

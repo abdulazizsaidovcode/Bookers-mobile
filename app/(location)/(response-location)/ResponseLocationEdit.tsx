@@ -19,7 +19,7 @@ interface Types {
     target: string;
 }
 
-const ResponseLocation = () => {
+const ResponseLocationEdit = () => {
     const [data, setData] = useState<Types>();
 
     useEffect(() => {
@@ -43,10 +43,10 @@ const ResponseLocation = () => {
             <View style={tw`mt-2 bg-transparent pb-5`}>
                 <NavigationMenu name="Мой адрес работы"/>
             </View>
-            <View style={tw`px-9 bg-transparent w-full flex-1 items-center`}>
+            <View style={tw`px-10 bg-transparent w-full flex-1 items-center`}>
                 <View
                     style={[
-                        tw`w-full p-2 px-5 rounded-xl w-full`,
+                        tw`w-full px-10 rounded-lg w-full`,
                         {backgroundColor: "#b9b9c9"},
                     ]}
                 >
@@ -89,10 +89,10 @@ const ResponseLocation = () => {
                 </View>
                 <View style={tw`bg-transparent absolute bottom-5 w-full`}>
                     <Buttons
-                        title="На главную"
+                        title="Настройки"
                         onPress={() => {
                             if (data) putNumbers(4)
-                            router.push("(welcome)/Welcome");
+                            router.push("../../(profile)/(settings)/settings");
                         }}
                     />
                 </View>
@@ -101,4 +101,4 @@ const ResponseLocation = () => {
     );
 };
 
-export default ResponseLocation;
+export default ResponseLocationEdit;

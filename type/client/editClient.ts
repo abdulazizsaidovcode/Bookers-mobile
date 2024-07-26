@@ -73,6 +73,6 @@ export interface getClientPastcomingInterface{
 
 export interface addfedbackmaster{
     count:number|null
-    orderId:string|null
+    orderId:string|null|undefined
     text:string|null
 }   

@@ -76,7 +76,9 @@ const clientStore = create<Client>((set) => ({
     canceledData: null,
     setCanceledData: (val: HistorySessions[] | null) => set({canceledData: val}),
     refreshing: false,
-    setRefreshing: (val: boolean) => set({refreshing: val})
+    setRefreshing: (val: boolean) => set({refreshing: val}),
+    tariff: null,
+    setTariff: (val: string | null) => set({tariff: val})
 }))
 
 export default clientStore

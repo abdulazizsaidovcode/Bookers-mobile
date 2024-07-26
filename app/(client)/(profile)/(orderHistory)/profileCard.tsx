@@ -42,7 +42,7 @@ const ProfileCard: React.FC<IProps> = ({
     const { activeTab, setActiveTab, pastComing, setPastComing } = useAccardionStoreId();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [ratingModal, setRatingModal] = useState<boolean>(false);
-    const [selectOrderID, setSelectOrderID] = useState<string | null>(null);
+    const [selectOrderID, setSelectOrderID] = useState<string | null|undefined>(null);
     const [textAreaValue, setTextAreaValue] = useState<string>('');
     const [rating, setRating] = useState<number>(0);
 

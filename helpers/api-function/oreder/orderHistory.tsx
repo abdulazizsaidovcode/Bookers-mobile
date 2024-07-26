@@ -83,7 +83,7 @@ export const deletePastComingFunction = async (orderId: string|null|undefined, g
     }
 };
 
-export const deleteAllPastComingFunction = async (datas: string[]) => {
+export const deleteAllPastComingFunction = async (datas: string[],toggleModal: () => void, getFunction: () => void) => {
     try {
         if (datas.length !== 0) {
             const data = {
@@ -97,6 +97,8 @@ export const deleteAllPastComingFunction = async (datas: string[]) => {
             const res = await axios.post(`${deleteAllpastcoming_Url}`, data, config ? config : {});
             if (res.data.success) {
                 Toast.show('All orders deleted successfully', Toast.LONG);
+                getFunction();
+                toggleModal();
             } else {
                 Toast.show('All orders deleted error sssssssss', Toast.LONG);
             }
