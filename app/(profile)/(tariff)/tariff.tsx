@@ -105,12 +105,14 @@ const TariffsPage: React.FC = () => {
                                     // disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
                                 >
                                     <Text style={styles.name}>Тариф {tariff.name}</Text>
-                                    <Text
-                                        style={styles.description}>{tariff.name === 'Free' ? 'Стандартный набор функций' : 'Продвинутый набор функций'}</Text>
-                                    <Text
-                                        style={styles.price}>{tariff.name === 'Free' ? 'Срок до: 31.12.2024' : '49 000 в месяц'}</Text>
-                                    {tariff.name === 'Standard' &&
-                                        <Text style={styles.trial}>Пробный период доступен на 3 месяца</Text>}
+                                    <Text style={styles.description}>
+                                        {tariff.name === 'Free' ? 'Стандартный набор функций' : 'Продвинутый набор функций'}</Text>
+                                    <Text style={styles.price}>
+                                        {tariff.name === 'Free' ? 'Срок до: 31.12.2024' : '49 000 в месяц'}
+                                    </Text>
+                                    {tariff.name === 'Standard' && (
+                                        <Text style={styles.trial}>Пробный период доступен на 3 месяца</Text>
+                                    )}
                                     <View style={styles.buttonContainer}>
                                         <TouchableOpacity
                                             onPress={() => {
