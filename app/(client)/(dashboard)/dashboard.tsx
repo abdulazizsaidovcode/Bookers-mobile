@@ -64,7 +64,7 @@ const Navbar: React.FC = () => (
   <View style={styles.navbar}>
     <Text style={styles.title}>Главная</Text>
     <View style={styles.iconGroup}>
-      <FontAwesome5 name="bell" size={28} color="white" />
+      <FontAwesome5 name="bell" size={28} color="white" on />
       <Feather name="bookmark" size={28} color="white" />
     </View>
   </View>
