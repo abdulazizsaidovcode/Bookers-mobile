@@ -50,31 +50,29 @@ export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any
         })
 }
 
-export const authLogin = async (phoneNumber: string, otpValue: string, setRespone: any, isRegtered: boolean, setRole: any) => {
+export const authLogin = async (phoneNumber: string, otpValue: string, setRespone: any, setRole: any) => {
     const authData = {
         phone: phoneNumber,
         code: otpValue
     }
-
-
+    
     if (phoneNumber) {
         axios.post(`${base_url}auth/login`, authData)
             .then(res => {
-                if (res.data.success) {
+                if (res?.data?.success) {
                     setRespone(true)
                     authStorage(res.data.body)
                     setClientOrMaster(res.data.message)
                     setRole(res.data.message)
-                    SecureStore.setItemAsync('number', phoneNumber)
-                    Toast.show(res.data, Toast.LONG)
+                    Toast.show("siz logindan o'tdingiz", Toast.LONG)
                 } else {
-                    setRespone(false)
-                    Toast.show(res.data, Toast.LONG)
+                    setRespone(null)
+                    Toast.show(res.data.message, Toast.LONG)
                 }
             })
             .catch(err => {
-                setRespone(false)
-                Toast.show(err.response.data.message, Toast.LONG)
+                setRespone(null)
+                Toast.show(err?.response?.data?.message, Toast.LONG)
             })
     } else Toast.show('Номер телефона обязателен', Toast.SHORT)
 }

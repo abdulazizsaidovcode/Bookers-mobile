@@ -70,16 +70,14 @@ const OtpInputExample: React.FC = () => {
             inputs.current[index - 1].focus();
         }
     };
+
     const handlePress = async () => {
         setPending(true)
-        console.log(isRegister, 'erf');
-        console.log('salom');
-
 
         if (isRegtered) {
-            await checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
+            checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
         } else {
-            await authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setRoles)
+            authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, setRoles)
         }
     }
     useEffect(() => {
@@ -87,13 +85,15 @@ const OtpInputExample: React.FC = () => {
     }, [phoneNumber])
 
     useEffect(() => {
-        console.log(response, 'wef');
-
         async function finishwork() {
             if (roles) setRole(roles)
-            // setPending(false)
+            setPending(false)
+        
+            console.log(response);
+
             if (response) {
                 let parol = await SecureStore.getItemAsync('password')
+                console.log(parol);
 
                 if (isRegtered) {
                     navigation.navigate("(auth)/(register)/(greetings)/greetingFirst");
@@ -116,7 +116,7 @@ const OtpInputExample: React.FC = () => {
                         setOtpValue(['', '', '', ''])
                     }
                 }
-                setRespone(false);
+                // setRespone(null);
             }
         }
 

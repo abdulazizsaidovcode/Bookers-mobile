@@ -13,15 +13,20 @@ const Index: React.FC = () => {
   useEffect(() => {
     const checkFirstLaunch = async () => {
       try {
-        const value = await SecureStore.getItemAsync("number");
-        setIsFirstLaunch(value === null);
+        const number = await SecureStore.getItemAsync("number");
+        const password = await SecureStore.getItemAsync("password");
+        console.log(`Number: ${number}`);
+        console.log(`Password: ${password}`);
+        
+        // Agar number yoki password mavjud bo'lmasa, isFirstLaunch true bo'ladi
+        setIsFirstLaunch(number === null && password === null);
       } catch (error) {
+        console.error("Error checking secure store:", error);
+        // Xatolik yuz bersa, barcha saqlangan ma'lumotlarni o'chiring
         await SecureStore.deleteItemAsync("number");
-        console.log(error);
+        await SecureStore.deleteItemAsync("password");
       }
     };
-
-    
 
     checkFirstLaunch();
   }, []);
@@ -33,10 +38,6 @@ const Index: React.FC = () => {
       </View>
     );
   }
-
-  // if (isPasswordSet == false) {
-  //   return <InstallPin />;
-  // }
 
   if (isFirstLaunch) {
     return <Auth />;

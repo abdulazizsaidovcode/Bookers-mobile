@@ -60,6 +60,7 @@ export const GetOnlineBookingSettingsUrgently = async (setStatus: any) => {
         setStatus(res.data.body);
     } catch (error) {
         console.log(error);
+        setStatus(false);
     }
 };
 
