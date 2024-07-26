@@ -14,10 +14,16 @@ import {Loading} from '@/components/loading/loading';
 
 export const postTariff = async (id: string | number) => {
     let config = await getConfig()
-    if (id) {
-        const {data} = await axios.post(`${base_url}tariff/save?tariffId=${id}`, '', config ? config : {})
-        console.log(data);
-        
+    console.log(config)
+    try {
+        if (id) {
+            const {data} = await axios.post(`${base_url}tariff/save?tariffId=${id}`, '', config ? config : {})
+            console.log(data)
+        } else {
+            console.log('bunga tushmadi')
+        }
+    } catch (err) {
+        console.error(err)
     }
 }
 
@@ -109,7 +115,7 @@ const TariffsPage: React.FC = () => {
                                         <TouchableOpacity
                                             onPress={() => {
                                                 postTariff(tariff.id)
-                                                navigation.navigate('(welcome)/welcome')
+                                                navigation.navigate('(welcome)/Welcome')
                                             }}
                                             activeOpacity={.7}
                                             // { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }
