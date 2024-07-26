@@ -97,7 +97,7 @@ const ProfilePage: React.FC = () => {
       } else if (result.action === Share.dismissedAction) {
         // dismissed
       }
-    } catch (error) {
+    } catch (error: any) {
       Alert.alert(error.message);
     }
   };
@@ -105,55 +105,55 @@ const ProfilePage: React.FC = () => {
   const navigationList =
     role === "ROLE_MASTER"
       ? [
-          {
-            icon: "user",
-            label: "Подписка",
-            screen: "(profile)/(tariff)/tariff",
-          },
-          {
-            icon: "history",
-            label: "История сеансов",
-            screen: "(profile)/(sessionhistory)/sessionHistory",
-          },
-          {
-            icon: "info-circle",
-            label: "Справка",
-            screen: "(profile)/(help)/help",
-          },
-          {
-            icon: "bell",
-            label: "Уведомления",
-            screen: "(profile)/(notification)/index",
-          },
-          {
-            icon: "wallet",
-            label: "Расходы",
-            screen: "(profile)/(Expenses)/index",
-          },
-          {
-            icon: "globe",
-            label: "Веб страница",
-            screen: "(profile)/(WebPage)/WebPage",
-          },
-          {
-            icon: "cogs",
-            label: "Настройки",
-            screen: "(profile)/(settings)/settings",
-          },
-          {
-            icon: "users",
-            label: "Клиенты",
-            screen: "(free)/(client)/main",
-          },
-          {
-            icon: "sign-out",
-            label: "Выйти",
-            screen: "Logout",
-            modal: true,
-          },
-        ]
+        {
+          icon: "user",
+          label: "Подписка",
+          screen: "(profile)/(tariff)/tariff",
+        },
+        {
+          icon: "history",
+          label: "История сеансов",
+          screen: "(profile)/(sessionhistory)/sessionHistory",
+        },
+        {
+          icon: "info-circle",
+          label: "Справка",
+          screen: "(profile)/(help)/help",
+        },
+        {
+          icon: "bell",
+          label: "Уведомления",
+          screen: "(profile)/(notification)/index",
+        },
+        {
+          icon: "wallet",
+          label: "Расходы",
+          screen: "(profile)/(Expenses)/index",
+        },
+        {
+          icon: "globe",
+          label: "Веб страница",
+          screen: "(profile)/(WebPage)/WebPage",
+        },
+        {
+          icon: "cogs",
+          label: "Настройки",
+          screen: "(profile)/(settings)/settings",
+        },
+        {
+          icon: "users",
+          label: "Клиенты",
+          screen: "(free)/(client)/main",
+        },
+        {
+          icon: "sign-out",
+          label: "Выйти",
+          screen: "Logout",
+          modal: true,
+        },
+      ]
       : role === "ROLE_CLIENT"
-      ? [
+        ? [
           {
             icon: "share-alt",
             label: "Поделиться",
@@ -202,7 +202,7 @@ const ProfilePage: React.FC = () => {
             modal: true,
           },
         ]
-      : [
+        : [
           {
             icon: "share-alt",
             label: "Поделиться",
@@ -271,7 +271,7 @@ const ProfilePage: React.FC = () => {
             <Text style={styles.profileName}>
               {getMee.firstName} {getMee.lastName}
             </Text>
-              {/* <Image
+            {/* <Image
                 source={{
                   uri: "https://img.icons8.com/?size=100&id=yXOHowNYbgM5&format=png&color=2568EF",
                 }}
@@ -290,8 +290,8 @@ const ProfilePage: React.FC = () => {
               item.icon === "share-alt"
                 ? onShare()
                 : item.modal
-                ? setToggle(true)
-                : navigateTo(item.screen)
+                  ? setToggle(true)
+                  : navigateTo(item.screen)
             }
             activeOpacity={0.7}
           >
