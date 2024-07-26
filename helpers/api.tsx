@@ -194,3 +194,5 @@ export const clientOrderaPastComing:string=`${base_url}order/client/history/past
 export const addFebdaback_Url:string=`${base_url}feedback/for/master/by/client`
 // delete pastcoming order api
 export const deletePastcoming_Url:string=`${base_url}order/`
+//delete all pastcoming API
+export const deleteAllpastcoming_Url:string=`${base_url}order/all`

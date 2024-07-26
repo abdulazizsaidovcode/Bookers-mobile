@@ -1,4 +1,5 @@
 import Buttons from '@/components/(buttons)/button';
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editWindowOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
@@ -11,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const RequestWindow = () => {
-  const { windowData, setWindowData } = useNotificationsStore();
+  const { windowData, setWindowData, isLoading, setIsloading } = useNotificationsStore();
   const [hasChanges, setHasChanges] = useState(false);
   const navigation = useNavigation();
 
@@ -25,7 +26,7 @@ const RequestWindow = () => {
   };
 
   const handleSave = () => {
-    editWindowOrder(windowData.text, setHasChanges, navigation.goBack);
+    editWindowOrder(windowData.text, setHasChanges, navigation.goBack, setIsloading);
     putNumbers(7);
   };
 
@@ -49,7 +50,7 @@ const RequestWindow = () => {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />
+          {isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -72,7 +73,6 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
-    height: screenHeight / 1.35,
   },
   messageContainer: {
     backgroundColor: '#B9B9C9',

@@ -3,20 +3,18 @@ import { View, ActivityIndicator } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import Auth from "./(auth)/auth";
 import CheckPinOnCome from "./(auth)/(checkPinCode)/checkPinCode";
+import InstallPin from "./(auth)/(setPinCode)/installPin";
+import { useNavigation } from "expo-router";
 
 const Index: React.FC = () => {
   const [isFirstLaunch, setIsFirstLaunch] = useState<null | boolean>(null);
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
     const checkFirstLaunch = async () => {
       try {
         const value = await SecureStore.getItemAsync("number");
-
-        if (value === null) {
-          setIsFirstLaunch(true);
-        } else {
-          setIsFirstLaunch(false);
-        }
+        setIsFirstLaunch(value === null);
       } catch (error) {
         await SecureStore.deleteItemAsync("number");
         console.log(error);
@@ -34,7 +32,11 @@ const Index: React.FC = () => {
     );
   }
 
-  return isFirstLaunch ? <Auth /> : <CheckPinOnCome />;
+  if (!isFirstLaunch) {
+    return <Auth />;
+  }
+
+  return <CheckPinOnCome />;
 };
 
 export default Index;

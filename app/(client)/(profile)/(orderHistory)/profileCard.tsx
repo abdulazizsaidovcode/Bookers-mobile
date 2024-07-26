@@ -135,7 +135,7 @@ const ProfileCard: React.FC<IProps> = ({
                         if (activeTab === 'past') {
                             ratingToggleModal();
                         } else {
-                            Alert.alert('Error', 'This option is not available yet');
+                            Alert.alert('Sizning xatongiz emas', 'Hozircha chat mavjud emas ');
                         }
                     }}
                 >

@@ -144,6 +144,8 @@ import ProfileMasterScreen from "./(profile)/(settings)/(childSettings)/(profile
 import EditProfileMasterPage from "./(profile)/(settings)/(childSettings)/(profileEdit)/(editPages)/editPage";
 import TimeWorkDetail from "./(free)/(work-grafic-edit)/workTimeDetail";
 import LocationEdit from "./(location)/LocationEdit";
+import InternetNotice from "@/components/InternetNotise/internetNotice";
+import { StatusBar } from "expo-status-bar";
 const Stack = createNativeStackNavigator();
 export { ErrorBoundary } from "expo-router";
 
@@ -181,6 +183,7 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <InternetNotice />
       <StompProvider>
         <MenuProvider>
           <Stack.Navigator initialRouteName="index">

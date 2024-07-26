@@ -9,7 +9,7 @@ import { AntDesign, Feather, SimpleLineIcons } from "@expo/vector-icons";
 import ProfileCard from "./profileCard";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import { getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
-import { getOrderClientPustComing, getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
+import { deleteAllPastComingFunction, getOrderClientPustComing, getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
 import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
 import { useNavigation } from "@react-navigation/native";
@@ -38,6 +38,17 @@ const OrderHistory = () => {
   const handlePhonePress = (phoneNumber: string) => {
     Linking.openURL(`tel:${phoneNumber}`);
   };
+  const DeleteAllPastComing = () => {
+    const ids: any = pastComing.map(past => past.orderId)
+    if (ids.length > 0) {
+      console.log("order ids", ids);
+      deleteAllPastComingFunction(ids)
+      
+
+    } else {
+      console.log("Order is not found");
+    }
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -55,14 +66,23 @@ const OrderHistory = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
-      <View style={styles.header}>
-        <NavigationMenu name="История сеансов" />
-        <TouchableOpacity onPress={() => {
-          deleteToggleModal();
-        }}>
-          <AntDesign name="delete" size={24} color="white" />
-        </TouchableOpacity>
-      </View>
+      {activeTab === 'upcoming' && (
+        <View style={styles.header}>
+          <NavigationMenu name="Записи" />
+        </View>
+      )}
+      {activeTab === 'past' && (
+        <View style={styles.header}>
+          <NavigationMenu name="История сеансов" />
+          <TouchableOpacity onPress={() => {
+            deleteToggleModal();
+          }}>
+            <AntDesign name="delete" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+      )}
+
+
       <View>
         <View style={styles.buttonContainer}>
           <CustomButton
@@ -72,14 +92,16 @@ const OrderHistory = () => {
           />
           <CustomButton
             title="Прошедшие"
-            onPress={() => setActiveTab('past')}
+            onPress={() => {
+              setActiveTab('past')
+            }}
             active={activeTab === 'past'}
           />
         </View>
         {activeTab === 'upcoming' && (
           <ScrollView>
             {upcoming.length !== 0 ? (
-              upcoming.map((upcoming, index) => (
+              upcoming.map((upcoming: any, index: number) => (
                 <AccardionHistory id={upcoming.serviceIds} key={index} title={upcoming.serviceName} date={upcoming.orderDate} >
                   <ProfileCard
                     imageURL={upcoming.userAttachmentId}
@@ -125,7 +147,7 @@ const OrderHistory = () => {
         {activeTab === 'past' && (
           <ScrollView>
             {pastComing.length !== 0 ? (
-              pastComing.map((pastComing, index) => (
+              pastComing.map((pastComing: any, index: number) => (
                 <AccardionHistoryTwo key={index} id={pastComing.serviceIds} title={pastComing.serviceName} date={pastComing.orderDate} >
                   <ProfileCard
                     titleTex={pastComing.serviceName.split('  ')}
@@ -153,7 +175,9 @@ const OrderHistory = () => {
           isFullBtn={true}
           btnWhiteText={'Отмена'}
           btnRedText={'Да'}
-          onConfirm={() => deleteToggleModal()}
+          onConfirm={() => {
+            DeleteAllPastComing()
+          }}
           isModal={modalDelete}
           toggleModal={deleteToggleModal}
         >

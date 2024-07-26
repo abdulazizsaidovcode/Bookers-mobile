@@ -138,7 +138,6 @@ const Category = () => {
                             <Buttons
                                 title="Сохранить"
                                 onPress={addCategory}
-                                 isDisebled={selectedCategories === 1}
                             />
                         </View>
                         <CenteredModal

@@ -9,6 +9,7 @@ export const getExpenceCategory = async (setExpenceCategory: any) => {
         const res = await axios.get(expene_category_list, config ? config : {});
         if (res.data.success) {
             setExpenceCategory(res.data.body);
+
         } else {
             setExpenceCategory([]);
         }
