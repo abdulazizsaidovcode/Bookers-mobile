@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 
+
 // Define the interfaces
 export interface Service {
   id: string;
@@ -48,10 +49,16 @@ export interface ClientAllCategory {
   setClientId: (val: string | null) => void;
   selectedClient: Client | null;
   setSelectedClient: (client: Client | null) => void;
-  commentData: CommentData | null;  // Added
-  setCommentData: (data: CommentData | null) => void;  // Added
-  services:any | null;
-  setServices:(data:any) => void;
+  commentData: CommentData | null;
+  setCommentData: (data: CommentData | null) => void;
+  services: any | null;
+  setServices: (data: any) => void;
+  activeTab: string | null;
+  setActiveTab: (val: string | null) => void;
+  masterGallery: any[];  
+  setMasterGallery: (data: any[]) => void;  
+  feedbackForMaster: []
+  setFeedbackForMaster:(data: []) => void;
 }
 
 // Create the Zustand store
@@ -73,12 +80,19 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   setClientData: (data: any) => set({ clientData: data }),
   clientId: '',
   setClientId: (val: string | null) => set({ clientId: val }),
-  selectedClient: null,  // Initialize with null
+  selectedClient: null,
   setSelectedClient: (client: Client | null) => set({ selectedClient: client }),
-  commentData: null,  // Initialize with null
-  setCommentData: (data: CommentData | null) => set({ commentData: data }),  // Add method to set comment data
-  services:'',
-  setServices:(val:string | null) => set({services:val})
+  commentData: null,
+  setCommentData: (data: CommentData | null) => set({ commentData: data }),
+  services: '',
+  setServices: (val: string | null) => set({ services: val }),
+  activeTab: '',
+  setActiveTab: (val: string | null) => set({ activeTab: val }),
+  masterGallery: [],  
+  setMasterGallery: (data: any[]) => set({ masterGallery: data }),  
+  feedbackForMaster:[],
+  setFeedbackForMaster: (data:[]) => set({feedbackForMaster:[]})
 }));
 
 export default ClientStory;
+
