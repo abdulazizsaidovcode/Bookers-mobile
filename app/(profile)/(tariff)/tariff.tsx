@@ -14,11 +14,9 @@ import {Loading} from '@/components/loading/loading';
 
 export const postTariff = async (id: string | number) => {
     let config = await getConfig()
-    console.log(config)
     try {
         if (id) {
-            const {data} = await axios.post(`${base_url}tariff/save?tariffId=${id}`, '', config ? config : {})
-            console.log(data)
+            await axios.post(`${base_url}tariff/save?tariffId=${id}`, '', config ? config : {})
         } else {
             console.log('bunga tushmadi')
         }
@@ -27,14 +25,17 @@ export const postTariff = async (id: string | number) => {
     }
 }
 
-export const getTariffMaster = async (setTariffStatus: (val: any) => void) => {
+export const getTariffMaster = async (setTariffStatus: (val: any|null) => void) => {
     let config = await getConfig()
     axios.get(`${base_url}tariff/master`, config ? config : {})
         .then(res => {
-            if (res.data.success) setTariffStatus(res.data.body)
-            else setTariffStatus(res.data.body)
+            if (res.data.success) setTariffStatus(res.data.body.tariffCode)
+            else setTariffStatus(null)
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            setTariffStatus(null)
+        })
 }
 
 export const getAllTariff = async (setData: (val: any[] | null) => void, setLoading: (val: boolean) => void) => {

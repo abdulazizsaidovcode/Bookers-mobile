@@ -5,8 +5,6 @@ import axios from "axios";
 export const getNumbers = async (setData: (data: any) => void) => {
   try {
     const config = await getConfig();
-    console.log(config);
-    
     const response = await axios.get(master_get_number, config ? config : {});
 
     if (response.data.success) {

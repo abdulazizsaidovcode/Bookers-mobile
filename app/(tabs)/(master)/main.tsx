@@ -57,6 +57,8 @@ import * as Permissions from 'expo-permissions';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
 import { deviceInfo } from "@/helpers/api-function/register/registrFC";
+import {getTariffMaster} from "@/app/(profile)/(tariff)/tariff";
+import {setMasterTariff} from "@/constants/storage";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -141,6 +143,7 @@ const TabOneScreen: React.FC = () => {
     setWaitingData,
   } = useDashboardStore();
   const { refreshing, setRefreshing } = clientStore();
+  const [masterTariff, setMasterTariff] = useState<null|string>(null)
   const [backPressCount, setBackPressCount] = useState(0);
   const [orderId, setOrderId] = useState('');
   const notificationListener = useRef();
@@ -193,6 +196,10 @@ const TabOneScreen: React.FC = () => {
     return unsubscribe;
   }, [navigation]);
 
+  useEffect(() => {
+    masterTariff && setMasterTariff(masterTariff)
+  }, [masterTariff]);
+
   // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
   useFocusEffect(
     useCallback(() => {
@@ -215,12 +222,6 @@ const TabOneScreen: React.FC = () => {
       return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, [backPressCount])
   );
-
-
-
-  useEffect(() => {
-    getNumbers(setNumber);
-  }, []);
 
   useEffect(() => {
     if (number && number.length > 1) {
@@ -257,6 +258,8 @@ const TabOneScreen: React.FC = () => {
     getUser(setGetMee);
     fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
     getData();
+    getNumbers(setNumber);
+    getTariffMaster(setMasterTariff)
   }, []);
 
   const onRefresh = useCallback(() => {
@@ -303,9 +306,7 @@ const TabOneScreen: React.FC = () => {
   const chartFraction = mainStatisticData.completedSessions;
   const [chartNumerator, chartDenominator] = chartFraction.split("/");
   const statisticFraction = mainStatisticData.incomeToday;
-  const [statisticNumerator, statisticDenominator] = statisticFraction.split(
-    "/"
-  );
+  const [statisticNumerator, statisticDenominator] = statisticFraction.split("/");
   const regularVisitCount =
     dailyTimeData && dailyTimeData.length !== 0 ?
       dailyTimeData && dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length : 0;
