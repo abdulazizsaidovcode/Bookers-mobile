@@ -88,6 +88,9 @@ const OtpInputExample: React.FC = () => {
         async function finishwork() {
             if (roles) setRole(roles)
             setPending(false)
+        
+            console.log(response);
+
             if (response) {
                 let parol = await SecureStore.getItemAsync('password')
                 console.log(parol);
@@ -113,7 +116,7 @@ const OtpInputExample: React.FC = () => {
                         setOtpValue(['', '', '', ''])
                     }
                 }
-                setRespone(null);
+                // setRespone(null);
             }
         }
 

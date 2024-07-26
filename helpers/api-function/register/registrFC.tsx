@@ -64,7 +64,6 @@ export const authLogin = async (phoneNumber: string, otpValue: string, setRespon
                     authStorage(res.data.body)
                     setClientOrMaster(res.data.message)
                     setRole(res.data.message)
-                    SecureStore.setItemAsync('number', phoneNumber)
                     Toast.show("siz logindan o'tdingiz", Toast.LONG)
                 } else {
                     setRespone(null)

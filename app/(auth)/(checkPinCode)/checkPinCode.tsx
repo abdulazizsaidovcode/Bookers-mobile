@@ -27,9 +27,9 @@ const CheckPinOnCome: React.FC = () => {
                 try {
                     let parol = await SecureStore.getItemAsync('password')
                     setCode(parol)
-                    if (parol == null) {
-                        navigation.navigate("(auth)/(setPinCode)/installPin");
-                    }
+                    // if (parol == null) {
+                    //     navigation.navigate("(auth)/(setPinCode)/installPin");
+                    // }
                 } catch (error) {
                     console.log(error);
                 }
