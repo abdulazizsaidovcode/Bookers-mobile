@@ -23,18 +23,22 @@ import {
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import {
   getOnlineBookingAllowClient,
+  getOnlineBookingRecordDay,
   GetOnlineBookingSettingsUrgently,
   onlineBookingAllowClient,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import { useTranslation } from "react-i18next";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
+import clientStore from "@/helpers/state_managment/client/clientStore";
+import { getMasterTariff } from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/onlineBooking'>;
 
 
 const OnlineBooking = () => {
-  const { Urgently, setUrgentlyt } = OnlineBookingSettingsUrgentlyStory();
+  const {tariff, setTariff} = clientStore()
+  const { Urgently, setUrgentlyt, salonId, setSalonId } = OnlineBookingSettingsUrgentlyStory();
   const { allowClient, setAllowClient } = OnlineBookingStory();
   const navigation = useNavigation<SettingsScreenNavigationProp>()
 
@@ -42,7 +46,9 @@ const OnlineBooking = () => {
 
   useFocusEffect(
     useCallback(() => {
+      getMasterTariff(setTariff)
       GetOnlineBookingSettingsUrgently(setUrgentlyt);
+      getOnlineBookingRecordDay(setSalonId)
       return () => null
     }, [])
   )
@@ -51,19 +57,20 @@ const OnlineBooking = () => {
     {
       id: "1",
       title: t("record_duration"),
-      subtitle: `${Urgently ? "Enabled" : "Disabled"}`,
+      subtitle: salonId
+        ? `${salonId.day} дня`
+        : t("not_set"),
       IconComponent: (
         <FontAwesome5 name="calendar-alt" size={30} color="#9C0A35" />
       ),
       onPress: () => {
         navigation.navigate("(standart)/(onlineBooking)/(booking)/booking");
       },
-      
     },
     {
       id: "2",
       title: t("break_between_sessions"),
-      subtitle: t("not_set"),
+      subtitle: "Разные перерывы для каждой процедуры",
       IconComponent: <Ionicons name="wine" size={30} color="#9C0A35" />,
       onPress: () => {
         router.push("(standart)/(onlineBooking)/(booking)/breakBetweenSessions");
@@ -78,7 +85,13 @@ const OnlineBooking = () => {
         router.push("(standart)/(onlineBooking)/(booking)/confirmationRecor");
       },
     },
-    {
+  ];
+
+  console.log(tariff);
+  
+  
+  if (tariff && tariff === "STANDARD") {
+    data.push({
       id: "4",
       title: t("request_slot"),
       subtitle: t("not_set"),
@@ -95,8 +108,8 @@ const OnlineBooking = () => {
       onPress: () => {
         router.push("(standart)/(onlineBooking)/(booking)/timeSelect");
       },
-    },
-  ];
+    });
+  }
 
   const [isEnabled, setIsEnabled] = useState(allowClient);
 

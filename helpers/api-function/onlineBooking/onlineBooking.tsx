@@ -1,9 +1,9 @@
-import { onlineBookingAllowClient_url, onlineBookingHallWaitin_url, onlineBookingUgly_url, onlineBookingUserviceTimeAll_url, onlineBookingUserviceTimeservice_url, onlineConfirmationServices_url } from "@/helpers/api";
+import { onlineBookingAllowClient_url, onlineBookingHallWaitin_url, onlineBookingRecordDay_url, onlineBookingUgly_url, onlineBookingUserviceTimeAll_url, onlineBookingUserviceTimeservice_url, onlineConfirmationServices_url } from "@/helpers/api";
 import axios from "axios";
 import { Alert } from "react-native"
+import Toast from "react-native-simple-toast"
 import { IsActive } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from '@/app/(tabs)/(master)/main'
-import Toast from "react-native-simple-toast"
 
 
 export const onlineBookingAllowClient = async (isEnabled: boolean) => {
@@ -35,21 +35,21 @@ export const getOnlineBookingAllowClient = async (setData: (val: boolean) => voi
     }
 };
 
-export const onlineBookingSettingsUrgently = async (isEnabled: boolean) => {
+export const onlineBookingSettingsUrgently = async (isEnabled: boolean, setIsEnabled: (data: boolean) => void) => {
     try {
         if (isEnabled === true || isEnabled === false) {
             const config = await getConfig();
             const res = await axios.post(`${onlineBookingUgly_url}?isUrgent=${isEnabled}`, {}, config ? config : {});
-            console.log(res.data);
 
             if (res.data.success) {
-                Alert.alert("успешно изменено");
+                Toast.show(res.data.message, Toast.SHORT);
+                setIsEnabled(isEnabled)
             } else {
-                Alert.alert("Произошла ошибка при конвертации");
+                Toast.show(res.data.message, Toast.SHORT);
             }
         }
     } catch (error) {
-        Alert.alert("Произошла ошибка при конвертации");
+        Alert.alert(`${error}`);        
     }
 };
 
@@ -162,5 +162,20 @@ export const getOnlineBookingHallWaiting = async (setData: (val: any | null) => 
     } catch (error: any) {
         console.log(error);
         Toast.show(error.response.data.message, Toast.SHORT);
+    }
+};
+
+export const getOnlineBookingRecordDay = async (setData: (val: any) => void, status?: "DAY" | "PERIOD") => {
+    try {
+        const config = await getConfig();
+        const res = await axios.get(`${onlineBookingRecordDay_url}?status=${status ? status : "DAY"}`, config ? config : {});
+        if(res.data.success){
+            console.log(res.data.body);
+            
+        }
+        setData(res.data.body);
+    } catch (error: any) {
+        console.log(error);
+        
     }
 };

@@ -72,6 +72,7 @@ export const onlineBookingUserviceTimeAll_url = `${base_url}online-booking-setti
 export const onlineBookingUserviceTimeservice_url = `${base_url}online-booking-settings/service-time`
 export const onlineConfirmationServices_url = `${base_url}online-booking-settings/confirm-entry`
 export const onlineBookingHallWaitin_url = `${base_url}online-booking-settings/hall-waiting`
+export const onlineBookingRecordDay_url = `${base_url}online-booking-settings/record-duration/day-or-period`
 
 
 // Grafic Work page

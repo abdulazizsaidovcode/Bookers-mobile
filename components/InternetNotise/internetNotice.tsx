@@ -13,7 +13,7 @@ const InternetNotice = () => {
 
     useEffect(() => {
         const unsubscribe = NetInfo.addEventListener(state => {
-            setIsConnected(state.isConnected);
+            setIsConnected(state.isConnected)
         });
 
         return () => unsubscribe();
