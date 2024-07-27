@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollVi
 import AccordionItem from '../../../components/accordions/accardion';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
-import { useFocusEffect, useNavigation } from 'expo-router';
+import { router, useFocusEffect, useNavigation } from 'expo-router';
 import { NavigationProp } from '@react-navigation/native';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
@@ -17,6 +17,7 @@ import Constants from 'expo-constants';
 import { deviceInfo } from "@/helpers/api-function/register/registrFC";
 import { getFile } from '@/helpers/api';
 import tw from 'tailwind-react-native-classnames';
+
 
 
 // Bu bo'limga teginma
@@ -79,20 +80,6 @@ const Dashboard: React.FC = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setLoading(true);
-      getUserLocation(setUserLocation).finally(() => setLoading(false));
-      return () => { };
-    }, [])
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getAllCategory().finally(() => setLoading(false));
-      return () => { };
-    }, [userLocation])
-  );
 
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -147,6 +134,14 @@ const Dashboard: React.FC = () => {
 
     return unsubscribe;
   }, [navigation]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setLoading(true);
+      getUserLocation(setUserLocation).finally(() => setLoading(false));
+      return () => { };
+    }, [])
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -226,7 +221,7 @@ const Dashboard: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity style={styles.touchableItem}
           onPress={() => {
-            navigation.navigate('(client)/(masters)/masters')
+            router.push('../(masters)/masters')
           }}
           >
             <View style={styles.itemTwo}>
