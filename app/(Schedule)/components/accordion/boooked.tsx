@@ -75,9 +75,9 @@ const BookedAccordion: React.FC = () => {
         setActiveTime('');
     }, [calendarDate]);
 
-    const handleTabChange = (tab: string) => {
+    const handleTabChange = (tab: any) => {
         setActiveTab(tab);
-        setServiceId(tab)
+        setServiceId([tab])
         setActiveTime(''); // Reset active time when tab changes
     };
 
