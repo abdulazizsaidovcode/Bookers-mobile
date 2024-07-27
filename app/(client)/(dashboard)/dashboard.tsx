@@ -224,7 +224,11 @@ const Dashboard: React.FC = () => {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.touchableItem}>
+          <TouchableOpacity style={styles.touchableItem}
+          onPress={() => {
+            navigation.navigate('(client)/(masters)/masters')
+          }}
+          >
             <View style={styles.itemTwo}>
               <View style={styles.textContainer}>
                 <Text style={styles.titleTextTwo}>Записаться к совему мастеру</Text>
