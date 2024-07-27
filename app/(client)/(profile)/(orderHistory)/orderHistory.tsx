@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Linking } from "react-native"; // Linking import qilish
+import { View, StyleSheet, Text, ScrollView, TouchableOpacity, Linking, Alert } from "react-native"; // Linking import qilish
 import CustomButton from "./CustomButton";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -31,6 +31,7 @@ const OrderHistory = () => {
   }
   
   const deleteToggleModal = () => {
+    
     setModalDelete(!modalDelete);
   };
 
@@ -43,7 +44,7 @@ const OrderHistory = () => {
       console.log("order ids", ids);
       deleteAllPastComingFunction(ids,() => deleteToggleModal(),() => getOrderClientPustComing(setPastComing) )
     } else {
-      console.log("Order is not found");
+      Alert.alert("No pastComing", "There are no pastcoming to delete");
     }
   }
 
