@@ -6,7 +6,7 @@ export interface Service {
   id: string;
   name: string;
   distanceMasterCount: number;
-  icon?: string;
+  attachmentId?: string | undefined;
   onPress?: () => void;
 }
 
@@ -70,10 +70,7 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   distanceMasterCount: 0,
   setDistanceMasterCount: (val: number) => set({ distanceMasterCount: val }),
   allCategory: [],
-  setAllCategory: (val: Service[]) => {
-    console.log('Setting allCategory:', val); // Debugging log
-    set({ allCategory: val });
-  },
+  setAllCategory: (val: Service[]) => set({ allCategory: val }),
   selectedServiceId: null,
   setSelectedServiceId: (id: string | null) => set({ selectedServiceId: id }),
   clientData: null,
