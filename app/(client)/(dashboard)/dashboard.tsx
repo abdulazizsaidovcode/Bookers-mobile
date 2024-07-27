@@ -15,39 +15,23 @@ import * as Permissions from 'expo-permissions';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
 import { deviceInfo } from "@/helpers/api-function/register/registrFC";
+import { getFile } from '@/helpers/api';
+import tw from 'tailwind-react-native-classnames';
 
 
 // Bu bo'limga teginma
 type DashboardItemType = {
-  id: number;
-  image: ImageSourcePropType;
+  id: string | null;
+  image: string | undefined;
   title: string;
-  titleThen: string;
+  titleThen: number;
   onPress?: () => void;
 };
 
-const IMAGES = {
-  health: require('@/assets/clientDashboard/Layer_1.png'),
-  nails: require('@/assets/clientDashboard/pomada.png'),
-  eyes: require('@/assets/clientDashboard/eyes.png'),
-  body: require('@/assets/clientDashboard/aranow.png'),
-  face: require('@/assets/clientDashboard/dont.png'),
-};
+
 
 const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
-  
 
-
-//   useFocusEffect(
-//     React.useCallback(() => {
-//         getUserLocation(setUserLocation);
-//         return () => {
-//         };
-//     }, [])
-// );
-  const handlePress = useCallback(() => {
-    if (item.onPress) item.onPress();
-  }, [item]);
   return (
     <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={handlePress}>
       <View style={styles.item}>
@@ -63,25 +47,53 @@ const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
   );
 };
 
-const Navbar: React.FC = () => (
-  <View style={styles.navbar}>
-    <Text style={styles.title}>Главная</Text>
-    <View style={styles.iconGroup}>
-      <FontAwesome5 name="bell" size={28} color="white" on />
-      <Feather name="bookmark" size={28} color="white" />
+const Navbar: React.FC = () => {
+  const navigation = useNavigation();
+
+  return (
+    <View style={styles.navbar}>
+      <Text style={styles.title}>Главная</Text>
+      <View style={styles.iconGroup}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate('(client)/(profile)/(notification)/notification')}
+        >
+          <FontAwesome5 name="bell" size={28} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Feather name="bookmark" size={28} color="white" />
+        </TouchableOpacity>
+      </View>
     </View>
-  </View>
-);
+  );
+};
+
 
 const Dashboard: React.FC = () => {
-  
-  const {userLocation, setUserLocation} = useGetMeeStore();
-  const {allCategory, setSelectedServiceId} = ClientStory();
+
+  const { userLocation, setUserLocation } = useGetMeeStore();
+  const { allCategory, setSelectedServiceId } = ClientStory();
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation<NavigationProp<any>>();
   const [backPressCount, setBackPressCount] = useState(0);
   const notificationListener = useRef();
   const responseListener = useRef();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setLoading(true);
+      getUserLocation(setUserLocation).finally(() => setLoading(false));
+      return () => { };
+    }, [])
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getAllCategory().finally(() => setLoading(false));
+      return () => { };
+    }, [userLocation])
+  );
+
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,
@@ -103,7 +115,7 @@ const Dashboard: React.FC = () => {
     const token = (await Notifications.getExpoPushTokenAsync()).data;
     // const deviceId = Constants.deviceId;
     const deviceType = Device.modelName;
-    deviceInfo(deviceType, Platform.OS , token);
+    deviceInfo(deviceType, Platform.OS, token);
 
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
@@ -127,56 +139,44 @@ const Dashboard: React.FC = () => {
       }
     };
   }, []);
-
-  const dataDashboard: DashboardItemType[] = [
-    { id: 1, image: IMAGES.health, title: 'Здоровье и красота волос', titleThen: 'Рядом с тобой 450', onPress: () => navigation.navigate('(client)/(uslugi)/(hairHealth)/hair') },
-    { id: 2, image: IMAGES.nails, title: 'Ногтевой сервис', titleThen: 'Рядом с тобой 75',onPress: () => navigation.navigate('(client)/(uslugi)/(hairHealth)/hair') },
-    { id: 3, image: IMAGES.eyes, title: 'Ресницы и брови', titleThen: 'Рядом с тобой 322',onPress: () => navigation.navigate('(client)/(uslugi)/(hairHealth)/hair') },
-    { id: 4, image: IMAGES.body, title: 'Уход за телом', titleThen: 'Рядом с тобой 456',onPress: () => navigation.navigate('(client)/(uslugi)/(hairHealth)/hair') },
-    { id: 5, image: IMAGES.face, title: 'Уход за лицом', titleThen: 'Рядом с тобой 210',onPress: () => navigation.navigate('(client)/(uslugi)/(hairHealth)/hair') },
-  ];
-
   // navigatsiyani login registratsiyadan o'tganda bloklash
-useEffect(() => {
-  const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
-    e.preventDefault();
-  });
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
+      e.preventDefault();
+    });
 
-  return unsubscribe;
-}, [navigation]);
+    return unsubscribe;
+  }, [navigation]);
 
-useFocusEffect(
-  React.useCallback(() => {
+  useFocusEffect(
+    React.useCallback(() => {
       getAllCategory().finally(() => setLoading(false));
       return () => { };
-  }, [userLocation])
-);
+    }, [userLocation])
+  );
 
+  // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        if (backPressCount === 0) {
+          setBackPressCount(backPressCount + 1);
+          Toast.show('Orqaga qaytish uchun yana bir marta bosing', Toast.SHORT);
+          setTimeout(() => {
+            setBackPressCount(0);
+          }, 2000); // 2 soniya ichida ikkinchi marta bosilmasa, holatni qayta boshlaydi
+          return true; // Orqaga qaytishni bloklaydi
+        } else {
+          BackHandler.exitApp(); // Ilovadan chiqish
+          return false;
+        }
+      };
 
-console.log(allCategory);
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-// 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
-useFocusEffect(
-  useCallback(() => {
-    const onBackPress = () => {
-      if (backPressCount === 0) {
-        setBackPressCount(backPressCount + 1);
-        Toast.show('Orqaga qaytish uchun yana bir marta bosing', Toast.SHORT);
-        setTimeout(() => {
-          setBackPressCount(0);
-        }, 2000); // 2 soniya ichida ikkinchi marta bosilmasa, holatni qayta boshlaydi
-        return true; // Orqaga qaytishni bloklaydi
-      } else {
-        BackHandler.exitApp(); // Ilovadan chiqish
-        return false;
-      }
-    };
-
-    BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-  }, [backPressCount])
-);
+      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [backPressCount])
+  );
 
 
   return (
@@ -184,9 +184,37 @@ useFocusEffect(
       <Navbar />
       <ScrollView>
         <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
-          {dataDashboard.map(item => (
-            <DashboardItem key={item.id} item={item} />
-          ))}
+          {allCategory && allCategory.length > 0 ? (
+            allCategory.map((item, index) => (
+              <TouchableOpacity
+                activeOpacity={.7}
+                key={index}
+                style={styles.touchableItem}
+                onPress={() => {
+                  navigation.navigate('(client)/(uslugi)/(hairHealth)/hair')
+                }}
+              >
+                <View style={styles.item}>
+                  <View style={styles.imageContainer}>
+                    <Image
+                      source={{ uri: `${getFile}${item.attachmentId}` }}
+                      style={tw`p-3 w-1/2`}
+
+                    />
+                    {/* <Image source={item.attachmentId} style={styles.image} /> */}
+                  </View>
+                  <View style={styles.textContainer}>
+                    <Text style={styles.titleText}>{item.name}</Text>
+                    <Text style={styles.subtitleText}>Рядом с тобой {item.distanceMasterCount}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))
+          ) : (
+            null
+          )}
+
+
         </AccordionItem>
         <AccordionItem title="Мои мастера" titleThen="У вас пока нет своих мастеров" backgroundColor="#21212E">
           <TouchableOpacity style={styles.touchableItem}>
@@ -268,10 +296,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#9C0A35',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 10
   },
   image: {
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 20,
+    padding: 50,
     borderRadius: 20,
   },
   textContainer: {
@@ -280,7 +310,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "bold",
     color: '#111',
   },
   titleText1: {
@@ -291,7 +321,7 @@ const styles = StyleSheet.create({
   },
   titleTextTwo: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "900",
     textAlign: 'center',
     color: '#fff',
   },
