@@ -8,7 +8,7 @@ import AccardionHistory from "@/components/accordions/accardionHistory";
 import { AntDesign, Feather, SimpleLineIcons } from "@expo/vector-icons";
 import ProfileCard from "./profileCard";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import { getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
+import { getOrderClientUpcomingInterface } from "@/type/client/editClient";
 import { deleteAllPastComingFunction, getOrderClientPustComing, getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
 import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
