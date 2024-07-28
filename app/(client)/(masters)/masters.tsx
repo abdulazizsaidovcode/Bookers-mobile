@@ -1,64 +1,94 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
-  ScrollView,
   TouchableOpacity,
-  Image,
   ActivityIndicator,
-  Pressable,
   FlatList,
+  Pressable,
 } from "react-native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import tw from "tailwind-react-native-classnames";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Entypo from "@expo/vector-icons/Entypo";
-import moment from "moment";
+import debounce from "lodash.debounce";
 import Buttons from "@/components/(buttons)/button";
 import useTopMastersStore from "@/helpers/state_managment/masters";
-import { getCategory, getTopMasters } from "@/helpers/api-function/masters";
-import { FontAwesome } from "@expo/vector-icons";
+import { getTopMasters } from "@/helpers/api-function/masters";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import AccardionSlider from "@/components/accordions/accardionSlider";
 import AccardionSliderTwo from "@/components/accordions/accardionSliderTwo";
 import AccordionFree from "@/components/accordions/accardionFree";
 import AccordionCustom from "@/components/accordions/accardionCustom";
-import { getFile } from "@/helpers/api";
 import LocationInput from "@/app/locationInput";
 import { useCommunitySlider } from "@/helpers/state_managment/communitySlider/communitySliderStore";
 import { useAccardionStore } from "@/helpers/state_managment/accardion/accardionStore";
 import { postClientFilter } from "@/helpers/api-function/uslugi/uslugi";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "@/type/root";
 import { useMapStore } from "@/helpers/state_managment/map/map";
-import { ProductType } from "@/type/history";
-
-type SettingsScreenNavigationProp = NavigationProp<
-  RootStackParamList,
-  "app/(client)/(masters)/masters"
->;
+import { TopMasterCard } from "./masterCard";
 
 const Masters = () => {
   const { masters, isLoading, category } = useTopMastersStore();
-  const [bottmModal, setBottomModal] = useState(false);
+  const [bottomModal, setBottomModal] = useState(false);
   const [pastEntries, setPastEntries] = useState<string[]>([]);
-  const [search, setSearch] = useState<any>("");
+  const [search, setSearch] = useState<string>("");
   const { rating, value } = useCommunitySlider(); // value * 1000
   const { genderIndex } = useAccardionStore();
   const { userLocation } = useGetMeeStore();
   const { setMapData } = useMapStore();
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation();
+  const [page, setPage] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  const toggleBottomModal = () => setBottomModal(!bottmModal);
+  const toggleBottomModal = () => setBottomModal(!bottomModal);
 
   const deletePastEntries = (id: string) => {
     const res = pastEntries.filter((state) => state !== id);
     setPastEntries(res);
   };
 
+  useEffect(() => {
+    getTopMasters(page);
+  }, [page]);
+
+  const loadMore = useCallback(
+    debounce(() => {
+      if (!loadingMore && !isLoading) {
+        setLoadingMore(true);
+        setPage((prevPage) => prevPage + 1);
+      }
+    }, 200),
+    [loadingMore, isLoading]
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => loadMore.cancel();
+    }, [loadMore])
+  );
+
+  useEffect(() => {
+    if (loadingMore && !isLoading) {
+      setLoadingMore(false);
+    }
+  }, [isLoading, loadingMore]);
+
+  const renderFooter = () => {
+    return loadingMore ? (
+      <View style={{ padding: 10 }}>
+        <ActivityIndicator size="large" />
+      </View>
+    ) : null;
+  };
+
+  if (!masters || !Array.isArray(masters)) {
+    return null; // or some loading indicator
+  }
+
   const handleClick = async () => {
     try {
-      postClientFilter(
+      await postClientFilter(
         pastEntries,
         genderIndex,
         value * 1000,
@@ -66,132 +96,12 @@ const Masters = () => {
         userLocation.coords.latitude,
         userLocation?.coords.longitude
       );
-      console.log(pastEntries,
-        genderIndex,
-        value * 1000,
-        rating,
-        userLocation.coords.latitude,
-        userLocation?.coords.longitude);
-
       toggleBottomModal();
       setPastEntries([]);
     } catch (error) {
       console.log(error);
     }
   };
-
-  const renderItem = ({ item }: any) => {
-    const {
-      id,
-      attachmentId,
-      fullName,
-      salonName,
-      genderName,
-      orderCount,
-      clientCount,
-      street,
-      mainPhoto,
-      nextEntryDate,
-    } = item;
-
-    const avatarSource = attachmentId
-      ? { uri: `${getFile}${attachmentId}` }
-      : require("../../../assets/avatar.png");
-
-    const mainPhotoSource = mainPhoto
-      ? { uri: `${getFile}${mainPhoto}` }
-      : null;
-
-    const genderLabel =
-      genderName === "MALE"
-        ? "Мужской мастер"
-        : genderName === "FEMALE"
-          ? "Женский мастер"
-          : "Не найдено";
-
-    const nextBookingDate =
-      moment().format("YYYY-MM-DD") === nextEntryDate
-        ? "Сегодня"
-        : moment(nextEntryDate).format("dd, DD MMM");
-
-    return (
-      <View
-        key={id}
-        style={[tw`rounded-lg p-2 mt-2`, { backgroundColor: "#b9b9c9" }]}
-      >
-        <View style={tw`flex-row justify-between`}>
-          <View style={tw`flex-row`}>
-            <Image style={tw`w-16 h-16 rounded-full`} source={avatarSource} />
-            <View>
-              <View style={tw`flex-row items-center ml-2`}>
-                <Text style={tw`text-lg font-bold`}>{fullName}</Text>
-                <View
-                  style={[
-                    tw`border rounded-lg p-1 ml-2`,
-                    { borderColor: "#4F4F4F" },
-                  ]}
-                >
-                  <Text style={{ fontSize: 8, textTransform: "capitalize" }}>
-                    {salonName || "Не найдено"}
-                  </Text>
-                </View>
-              </View>
-              <Text style={tw`ml-3 capitalize text-gray-500`}>
-                {genderLabel}
-              </Text>
-            </View>
-          </View>
-          <View>
-            <Text>{orderCount} заказа</Text>
-            <Text>{clientCount} клиентов</Text>
-          </View>
-        </View>
-        <View>
-          <Text style={tw`ml-3 my-2 text-gray-500`}>
-            {street || "Не найдено"}
-          </Text>
-          {mainPhotoSource ? (
-            <Image
-              style={tw`w-full h-80 rounded-lg`}
-              source={mainPhotoSource}
-            />
-          ) : (
-            <View
-              style={tw`w-full h-80 bg-gray-600 rounded-lg items-center justify-center`}
-            >
-              <FontAwesome name="photo" size={70} color="#fff" />
-            </View>
-          )}
-          <Text style={tw`ml-3 mt-3 text-base font-medium`}>
-            Ближайшая запись: {nextBookingDate}
-          </Text>
-          <View style={tw`mt-2 flex-row px-9 justify-center`}>
-            <Buttons title="Записаться" />
-            <TouchableOpacity
-              onPress={() => {
-                setMapData(item);
-                navigation.navigate(
-                  "(client)/(master-locations)/master-locations"
-                );
-              }}
-              activeOpacity={0.8}
-              style={[
-                tw`w-12 h-12 items-center justify-center rounded-full bg-black ml-3`,
-                { backgroundColor: "#9c0935" },
-              ]}
-            >
-              <Ionicons name="location-outline" size={24} color="#fff" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  useEffect(() => {
-    getTopMasters(search);
-    getCategory();
-  }, [search]);
 
   return (
     <View
@@ -215,11 +125,11 @@ const Masters = () => {
           <Text style={tw`text-white text-lg font-medium ml-2`}>Фильтр</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate(
-              "(client)/(map)/(recent-masters)/recent-masters"
-            )
-          }
+          // onPress={() =>
+          //   navigation.navigate(
+          //     "(client)/(map)/(recent-masters)/recent-masters"
+          //   )
+          // }
           style={[
             tw`rounded-lg px-4 py-2 border justify-center items-center border flex-row`,
             { borderColor: "#fff" },
@@ -241,24 +151,21 @@ const Masters = () => {
         <Text style={tw`text-white text-lg font-medium mt-5`}>
           Топ {masters.length} специалисты
         </Text>
-        {isLoading && <ActivityIndicator size="large" color={"#888"} />}
+        
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: "space-between",
-            backgroundColor: "#21212E",
-          }}
-        >
-          <FlatList
-            keyExtractor={(item) => item.id}
-            data={masters}
-            renderItem={renderItem}
-          />
-        </ScrollView>
+        <FlatList
+          data={masters.filter((item) => item)} // Filter out undefined items
+          keyExtractor={(item) => item.id}
+          renderItem={TopMasterCard}
+          ListFooterComponent={renderFooter}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.5}
+        />
+        
+        {isLoading && <ActivityIndicator size="large" color={"#888"} />}
+        
         <BottomModal
-          isBottomModal={bottmModal}
+          isBottomModal={bottomModal}
           toggleBottomModal={toggleBottomModal}
           children={
             <View style={tw`w-full mt-3`}>
@@ -271,7 +178,7 @@ const Masters = () => {
                   <View>
                     {category &&
                       category.map((item, i) => (
-                        <View style={tw`flex-row mt-2`}>
+                        <View style={tw`flex-row mt-2`} key={i}>
                           {pastEntries.includes(item.id) ? (
                             <Pressable
                               onPress={() => deletePastEntries(item.id)}
