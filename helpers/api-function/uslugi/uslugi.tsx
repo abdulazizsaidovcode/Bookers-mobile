@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getConfig } from "@/app/(tabs)/(master)/main";
-import { feedbackMasterForClient, getCategory_Client, getClient_filter, getClient_freeTime, masterGalery, serviceClient } from "@/helpers/api";
+import { feedbackMasterForClient, getCategory_Client, getClient_filter, getClient_freeTime, masterGalery, serviceClient, serviceMaster } from "@/helpers/api";
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 import useTopMastersStore from "@/helpers/state_managment/masters";
@@ -113,4 +113,19 @@ export const getMasterOtzif = async (id:string) => {
     
   }
 }
+
+export const getMAstersServeses = async (id: string) => {
+  try {
+    const config = await getConfig();
+    const { data } = await axios.get(`${serviceMaster}${id}`, config ? config : {});
+    if (data.success) {
+      
+      ClientStory.getState().setmasterServis(data.body);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 

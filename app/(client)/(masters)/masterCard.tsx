@@ -1,18 +1,16 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import moment from "moment";
 import Buttons from "@/components/(buttons)/button";
 import { FontAwesome } from "@expo/vector-icons";
 import { getFile } from "@/helpers/api";
+import { useMapStore } from "@/helpers/state_managment/map/map";
+import { useNavigation } from "expo-router";
 
-export const TopMasterCard = ({ item }: any) => {
+export const TopMasterCard = ({ item }:any) => {
+
     const {
       id,
       attachmentId,
@@ -98,14 +96,18 @@ export const TopMasterCard = ({ item }: any) => {
             Ближайшая запись: {nextBookingDate}
           </Text>
           <View style={tw`mt-2 flex-row px-9 justify-center`}>
-            <Buttons title="Записаться" />
+            <Buttons title="Записаться" 
+            onPress={()=>{
+                // navigation.navigate('(client)/(uslugi)/(masterInformation)/masterInformation')
+            }}
+            />
             <TouchableOpacity
-            //   onPress={() => {
-            //     setMapData(item);
-            //     navigation.navigate(
-            //       "(client)/(master-locations)/master-locations"
-            //     );
-            //   }}
+              onPress={() => {
+                // setMapData(item);
+                // navigation.navigate(
+                //   "(client)/(master-locations)/master-locations"
+                // );
+              }}
               activeOpacity={0.8}
               style={[
                 tw`w-12 h-12 items-center justify-center rounded-full bg-black ml-3`,
@@ -118,4 +120,6 @@ export const TopMasterCard = ({ item }: any) => {
         </View>
       </View>
     );
-  };
+};
+
+
