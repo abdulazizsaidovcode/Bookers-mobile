@@ -15,10 +15,15 @@ import {
 import { useFocusEffect, useNavigation } from "expo-router";
 import { RootStackParamList } from "@/type/root";
 import { NavigationProp } from "@react-navigation/native";
-type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/(booking)/confirmationRecor'>;
-
+import clientStore from "@/helpers/state_managment/client/clientStore";
+type SettingsScreenNavigationProp = NavigationProp<
+  RootStackParamList,
+  "(standart)/(onlineBooking)/(booking)/confirmationRecor"
+>;
 
 const ConfirmationRecord = () => {
+  const { tariff } = clientStore();
+
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const {
@@ -32,25 +37,21 @@ const ConfirmationRecord = () => {
     data,
   } = OnlineBookingStory();
 
-
-  
-
-    useFocusEffect(
-      useCallback(() => {
-  
-        if (data) {
-          setIsEnabled(data.allClient);
-          setIsEnabled2(data.newClient);
-          setIsEnabled3(data.notConfirm);
-        }
-      }, [data]));
+  useFocusEffect(
+    useCallback(() => {
+      if (data) {
+        setIsEnabled(data.allClient);
+        setIsEnabled2(data.newClient);
+        setIsEnabled3(data.notConfirm);
+      }
+    }, [data])
+  );
 
   const toggleSwitch = () => {
     const newValue = !isEnabled;
     setIsEnabled(newValue);
     setIsEnabled2(false);
     setIsEnabled3(false);
-
   };
 
   const toggleSwitch2 = () => {
@@ -66,7 +67,6 @@ const ConfirmationRecord = () => {
     setIsEnabled2(false);
     setIsEnabled3(newValue);
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -88,35 +88,39 @@ const ConfirmationRecord = () => {
             onToggle={toggleSwitch}
           />
         </View>
-        <View
-          style={{
-            paddingHorizontal: 16,
-            marginBottom: 10,
-            backgroundColor: "#B9B9C9",
-            borderRadius: 15,
-          }}
-        >
-          <SwitchWithLabelBlack
-            label="Подтверждать записи только 
+        {tariff === "STANDARD" && (
+          <View>
+            <View
+              style={{
+                paddingHorizontal: 16,
+                marginBottom: 10,
+                backgroundColor: "#B9B9C9",
+                borderRadius: 15,
+              }}
+            >
+              <SwitchWithLabelBlack
+                label="Подтверждать записи только 
                     для новых клиентов"
-            value={isEnabled2}
-            onToggle={toggleSwitch2}
-          />
-        </View>
-        <View
-          style={{
-            paddingHorizontal: 16,
-            marginBottom: 20,
-            backgroundColor: "#B9B9C9",
-            borderRadius: 15,
-          }}
-        >
-          <SwitchWithLabelBlack
-            label="Не подтверждать записи"
-            value={isEnabled3}
-            onToggle={toggleSwitch3}
-          />
-        </View>
+                value={isEnabled2}
+                onToggle={toggleSwitch2}
+              />
+            </View>
+            <View
+              style={{
+                paddingHorizontal: 16,
+                marginBottom: 20,
+                backgroundColor: "#B9B9C9",
+                borderRadius: 15,
+              }}
+            >
+              <SwitchWithLabelBlack
+                label="Не подтверждать записи"
+                value={isEnabled3}
+                onToggle={toggleSwitch3}
+              />
+            </View>
+          </View>
+        )}
 
         <Text style={{ marginBottom: 10, color: "white" }}>
           Настройте подтверждение записи Вы можете подтверждать каждую запись и
@@ -131,7 +135,12 @@ const ConfirmationRecord = () => {
         title="Сохранить"
         backgroundColor="#9C0A35"
         onPress={() => {
-          onlineConfirmationServices(isEnabled, isEnabled2, isEnabled3, navigation);
+          onlineConfirmationServices(
+            isEnabled,
+            isEnabled2,
+            isEnabled3,
+            navigation
+          );
           console.log(isEnabled, isEnabled2, isEnabled3);
           // router.push("(standart)/(onlineBooking)/onlineBooking");
         }}

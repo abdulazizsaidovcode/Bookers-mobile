@@ -30,11 +30,12 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standar
 
 const BreakBetweenSession = () => {
   const { hour, setHour, minute, setMinute, servicesId, setServicesId } = OnlineBookingSettingsUrgentlyStory()
+
   const [selectedTime, setSelectedTime] = useState("");
   const [activeButton, setActiveButton] = useState("everyService");
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<SettingsScreenNavigationProp>();
-  const { services, setServices } = clientStore();
+  const { services, setServices, tariff } = clientStore();
 
   const hours: any = [
     { title: "0 ч.", minutes: ["0 мин.", "30 мин."] },
@@ -123,6 +124,8 @@ const BreakBetweenSession = () => {
                   После любой услуги
                 </Text>
               </TouchableOpacity>
+              {
+                tariff === "STANDARD" &&
               <TouchableOpacity
                 activeOpacity={0.8}
                 style={[
@@ -143,6 +146,7 @@ const BreakBetweenSession = () => {
                   Для каждой процедуры разный
                 </Text>
               </TouchableOpacity>
+              }
             </ScrollView>
             {services && services.length !== 0 &&
             <View style={styles.section}>
