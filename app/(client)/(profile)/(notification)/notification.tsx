@@ -8,6 +8,7 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import { clientNotification, clientNotificationDelete } from '@/helpers/api-function/client/clientPage';
 import { getClientNotififcations } from '@/type/client/editClient';
 import { useFocusEffect } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 const NotificationClient: React.FC = () => {
     const [isBottomModalVisible, setBottomModalVisible] = useState<boolean>(false);
@@ -29,7 +30,7 @@ const NotificationClient: React.FC = () => {
         const ids: any = notification.map(notif => notif.id);
         if (ids.length > 0) {
             console.log(ids);
-            
+
             setNotificationIds(ids);
             deleteToggleModal();
         } else {
@@ -50,7 +51,7 @@ const NotificationClient: React.FC = () => {
 
     const handleDeleteAll = () => {
         if (notificationIds.length > 0) {
-            clientNotificationDelete({notificationIds}, () => fetchNotifications());
+            clientNotificationDelete({ notificationIds }, () => fetchNotifications());
             setNotificationIds([]);
             setDeleteModal(false);
         }
@@ -60,13 +61,14 @@ const NotificationClient: React.FC = () => {
         <View style={styles.container}>
             <StatusBar backgroundColor={'#21212E'} barStyle={'light-content'} />
             <View style={styles.headerContainer}>
-                <NavigationMenu name={"Уведомления"}/>
-                <TouchableOpacity onPress={handleDeletePress}>
-                    <AntDesign name="delete" size={24} color="white" />
+                <NavigationMenu name={"Уведомления"} />
+                <TouchableOpacity style={styles.delete_read_Button} >
+                    <Ionicons name="checkmark-done-circle-outline" size={30} color="white" />
+                    <AntDesign name="delete" size={24} color="white" onPress={handleDeletePress} />
                 </TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                {notification.length!==0 ? (
+                {notification.length !== 0 ? (
                     notification.map((notif, index) => (
                         <TouchableOpacity
                             key={index}
@@ -151,6 +153,11 @@ const styles = StyleSheet.create({
     },
     scrollViewContent: {
         paddingBottom: 10,
+    },
+    delete_read_Button: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
     },
     card: {
         backgroundColor: '#B9B9C9',
