@@ -13,9 +13,13 @@ import {
   onlineConfirmationServices,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import { useFocusEffect, useNavigation } from "expo-router";
+import { RootStackParamList } from "@/type/root";
+import { NavigationProp } from "@react-navigation/native";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/(booking)/confirmationRecor'>;
+
 
 const ConfirmationRecord = () => {
-  // const navigation = useNavigation<any>();
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const {
     isEnabled,
@@ -127,7 +131,7 @@ const ConfirmationRecord = () => {
         title="Сохранить"
         backgroundColor="#9C0A35"
         onPress={() => {
-          onlineConfirmationServices(isEnabled, isEnabled2, isEnabled3);
+          onlineConfirmationServices(isEnabled, isEnabled2, isEnabled3, navigation);
           console.log(isEnabled, isEnabled2, isEnabled3);
           // router.push("(standart)/(onlineBooking)/onlineBooking");
         }}
