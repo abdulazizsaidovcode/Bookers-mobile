@@ -9,8 +9,6 @@ import { getAllCategory } from '@/helpers/api-function/uslugi/uslugi';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { getFile } from '@/helpers/api';
 import { useNavigation } from '@react-navigation/native';
-import { Icon } from 'react-native-paper';
-// import MyIcon from './path/to/MyIcon.svg';  // Import the SVG component
 
 interface Service {
     id: string;
@@ -24,17 +22,15 @@ interface Service {
 const ServiceCard: React.FC<Service> = ({ id, name, distanceMasterCount, onPress, attachmentId }) => {
     return (
         <TouchableOpacity style={tw`w-1/2 px-2 py-2`} activeOpacity={0.8} onPress={onPress}>
-            <View style={[tw`flex flex-col items-center rounded-xl p-4 w-full h-56`, { backgroundColor: '#B9B9C9' }]}>
-                <View style={[tw`rounded-full p-3`, { backgroundColor: '#9C0A35' }]}>
+            <View style={[tw`flex flex-col items-center rounded-xl p-4 h-56`, { backgroundColor: '#B9B9C9' }]}>
+                <View style={[tw`rounded-full p-5`, { backgroundColor: '#9C0A35' }]}>
                     <Image
                         source={attachmentId ? { uri: `${getFile}${attachmentId}` } : require('../../../assets/avatar.png')}
-                        style={tw`w-20 h-20 rounded-full`}
-                        
+                        style={tw`p-5 w-15 h-15`}
                     />
-                     
                 </View>
-                <Text style={[tw`text-lg font-bold text-center`]}>{name}</Text>
-                <Text>Рядом с тобой {distanceMasterCount}</Text>
+                <Text style={[tw`text-lg font-bold text-center`, { fontFamily: 'Montserrat_700Bold' }]}>{name}</Text>
+                <Text style={{ fontFamily: 'Montserrat_400Regular' }}>Рядом с тобой {distanceMasterCount}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -72,7 +68,6 @@ const Uslugi = () => {
             onPress={() => {
                 setSelectedServiceId(item.id);
                 router.push(`/(hairHealth)/hair`);
-                console.log("id", setSelectedServiceId);
             }}
         />
     );
@@ -90,7 +85,7 @@ const Uslugi = () => {
                         backgroundColor: '#21212E'
                     }}>
                     <View style={tw`flex flex-row items-center justify-between p-3`}>
-                        <Text style={tw`text-white text-3xl font-bold mb-4 px-4`}>Услуги</Text>
+                        <Text style={[tw`text-white text-3xl font-bold mb-4 px-4`, { fontFamily: 'Montserrat_700Bold' }]}>Услуги</Text>
                         <TouchableOpacity
                             activeOpacity={0.7}
                             onPress={() => navigation.navigate('(client)/(profile)/(notification)/notification')}
