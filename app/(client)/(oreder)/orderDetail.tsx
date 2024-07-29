@@ -1,21 +1,21 @@
-import {View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image, RefreshControl} from 'react-native';
+import { View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image, RefreshControl } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
-import {SafeAreaView} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
-import {RootStackParamList} from "@/type/root";
+import { NavigationProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
 import HistoryCard from "@/components/(cards)/history-card";
-import {AntDesign, Feather, Fontisto} from "@expo/vector-icons";
-import React, {useCallback, useEffect, useState} from "react";
-import {orderGetOne} from "@/helpers/api-function/oreder/oreder";
-import {getFile} from "@/helpers/api";
+import { AntDesign, Feather, Fontisto } from "@expo/vector-icons";
+import React, { useCallback, useEffect, useState } from "react";
+import { orderGetOne } from "@/helpers/api-function/oreder/oreder";
+import { getFile } from "@/helpers/api";
 import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import {addFeedbackMaster, sliceTextFullName, updateOrderStatus} from "@/helpers/api-function/client/client";
+import { addFeedbackMaster, sliceTextFullName, updateOrderStatus } from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import {handleRefresh} from "@/constants/refresh";
+import { handleRefresh } from "@/constants/refresh";
 import ContactInformation from "@/components/contact-information/contact-information";
-import {getMee} from "@/helpers/token";
+import { getMee } from "@/helpers/token";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
@@ -42,12 +42,12 @@ export interface OrderOne {
     attachmentId: null | string
 }
 
-const RecordsInformation = () => {
+const ClientOrderDetail = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<any>();
-    const {orderID} = route.params;
-    const {isLoading, setIsLoading, refreshing, setRefreshing} = clientStore()
-    const {setGetMee} = useGetMeeStore()
+    const { id } = route.params;
+    const { isLoading, setIsLoading, refreshing, setRefreshing } = clientStore()
+    const { setGetMee } = useGetMeeStore()
     const [orderOneData, setOrderOneData] = useState<OrderOne | null>(null)
     const [isModal, setIsModal] = useState<boolean>(true)
     const [toast, setToast] = useState<boolean>(false)
@@ -56,13 +56,13 @@ const RecordsInformation = () => {
     const [successStatus, setSuccessStatus] = useState('');
 
     useEffect(() => {
-        if (orderID) orderGetOne(orderID, setOrderOneData)
+        if (id) orderGetOne(id, setOrderOneData)
         getMee(setGetMee)
     }, []);
 
     useEffect(() => {
         if (successStatus === 'ACCEPTED') {
-            orderGetOne(orderID, setOrderOneData)
+            orderGetOne(id, setOrderOneData)
             toggleConfirm()
             setSuccessStatus('')
         }
@@ -86,12 +86,21 @@ const RecordsInformation = () => {
         else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
+    const statusRegex = (statusR: string) => {
+        if (statusR === 'CLIENT_CONFIRMED' || statusR === 'MASTER_CONFIRMED') return '#217355'
+        else if (statusR === 'COMPLETED') return '#6FCF97'
+        else if (statusR === 'CLIENT_REJECTED' || statusR === 'MASTER_REJECTED') return '#EB5757'
+        else if (statusR === 'WAIT') return '#F2C94C'
+    }
 
     return (
-        <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
-            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
-            <NavigationMenu name={``} navigate={() => navigation.navigate('(free)/(client)/main')}/>
+        <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
+            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
+            <NavigationMenu name={orderOneData ? orderOneData.fullName : ''} />
             <View style={tw`flex-1`}>
+                <View style={[styles.head, { backgroundColor: orderOneData && orderOneData.orderStatus ? statusRegex(orderOneData.orderStatus) : '#9C0A35' }]}>
+                    <Text style={{textAlign: 'center', color: '#fff'}}>{orderOneData ? orderOneData.orderStatus : ''}</Text>
+                </View>
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{
@@ -100,28 +109,28 @@ const RecordsInformation = () => {
                         flexGrow: 1,
                         justifyContent: 'space-between'
                     }}
-                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 >
                     <View style={tw`mt-3`}>
                         <TouchableOpacity
                             style={[
                                 tw`flex-row items-start justify-start px-4 py-5 mb-3 rounded-2xl`,
-                                {backgroundColor: "#B9B9C9"},
+                                { backgroundColor: "#B9B9C9" },
                             ]}
                             activeOpacity={0.8}
                         >
                             <Image
                                 source={(orderOneData && orderOneData.attachmentId !== null)
-                                    ? {uri: `${getFile}${orderOneData.attachmentId}`}
+                                    ? { uri: `${getFile}${orderOneData.attachmentId}` }
                                     : require('../../../assets/avatar.png')
                                 }
                                 style={tw`w-12 h-12 rounded-full`}
                             />
                             <View style={tw`ml-4 flex-col`}>
-                                <Text style={[tw`text-black text-lg font-bold`, {lineHeight: 22}]}>
+                                <Text style={[tw`text-black text-lg font-bold`, { lineHeight: 22 }]}>
                                     {sliceTextFullName(orderOneData ? orderOneData.fullName : '')}
                                 </Text>
-                                <Text style={[tw`text-gray-500 text-base`, {lineHeight: 22}]}>
+                                <Text style={[tw`text-gray-500 text-base`, { lineHeight: 22 }]}>
                                     {orderOneData && orderOneData.phone}
                                 </Text>
                             </View>
@@ -146,23 +155,15 @@ const RecordsInformation = () => {
                                 statusName={orderOneData ? `${orderOneData.servicePrice} сум` : ''}
                             />
                         </View>
-                        <View style={tw`mt-3`}>
+                        <View style={tw`mt-3 mb-4`}>
                             <HistoryCard
                                 name={`Уведомить за:`}
                                 btnOrText={false}
                                 statusName={orderOneData ? `${orderOneData.notifyForHour}.${orderOneData.notifyForMinute} часа` : ''}
                             />
                         </View>
-                        <View style={tw`mt-3 mb-7`}>
-                            <HistoryCard
-                                name={`Статус:`}
-                                btnOrText={false}
-                                orderStatus={orderOneData ? orderOneData.orderStatus : ''}
-                                statusName={orderOneData ? statusName(orderOneData.orderStatus) : ''}
-                            />
-                        </View>
 
-                        <ContactInformation/>
+                        <ContactInformation />
                         {(orderOneData && (orderOneData.orderStatus === 'CLIENT_CONFIRMED' || orderOneData.orderStatus === 'MASTER_CONFIRMED')) && (
                             <>
                                 <Text style={styles.contactTitle}>Дополнительно</Text>
@@ -176,7 +177,7 @@ const RecordsInformation = () => {
                                     activeOpacity={.9}
                                     style={[styles.button, tw`mb-4 items-center flex-row`]}
                                 >
-                                    <Fontisto name="arrow-move" size={30} color="#9C0A35"/>
+                                    <Fontisto name="arrow-move" size={30} color="#9C0A35" />
                                     <Text style={[tw`font-bold text-lg ml-4`]}>
                                         Передвинуть
                                     </Text>
@@ -186,7 +187,7 @@ const RecordsInformation = () => {
                                     activeOpacity={.9}
                                     style={[styles.button, tw`mb-4 items-center flex-row`]}
                                 >
-                                    <AntDesign name="closecircleo" size={30} color="#9C0A35"/>
+                                    <AntDesign name="closecircleo" size={30} color="#9C0A35" />
                                     <Text style={[tw`font-bold text-lg ml-4`]}>
                                         Отменить
                                     </Text>
@@ -208,7 +209,7 @@ const RecordsInformation = () => {
                             toggleModal={() => console.log('toggle')}
                         >
                             <View style={styles.modalContainer}>
-                                <Feather name="check-circle" size={70} color="#9C0A35"/>
+                                <Feather name="check-circle" size={70} color="#9C0A35" />
                                 <Text style={styles.message}>Клиент записан на процедуру</Text>
                                 <View style={styles.stars}>
                                     {Array(5).fill(0).map((_, index) => (
@@ -231,10 +232,10 @@ const RecordsInformation = () => {
                             isModal={isConfirm}
                             btnWhiteText={`Закрыть`}
                             btnRedText={isLoading ? 'loading...' : `Отправить`}
-                            onConfirm={() => updateOrderStatus(orderID, 'REJECTED', setIsLoading, setSuccessStatus)}
+                            onConfirm={() => updateOrderStatus(id, 'REJECTED', setIsLoading, setSuccessStatus)}
                             toggleModal={toggleConfirm}
                         >
-                            <Text style={[styles.message, {marginTop: 5}]}>
+                            <Text style={[styles.message, { marginTop: 5 }]}>
                                 Reject the order?
                             </Text>
                         </CenteredModal>
@@ -246,6 +247,13 @@ const RecordsInformation = () => {
 };
 
 const styles = StyleSheet.create({
+    head: {
+        width: '100%',
+        paddingHorizontal: 10,
+        paddingVertical: 15,
+        marginBottom: 20,
+        justifyContent: 'center',
+    },
     modalContainer: {
         borderRadius: 10,
         padding: 20,
@@ -290,4 +298,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default RecordsInformation;
+export default ClientOrderDetail;

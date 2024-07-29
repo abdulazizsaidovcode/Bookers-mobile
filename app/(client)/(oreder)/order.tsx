@@ -11,13 +11,19 @@ import { useSheduleData } from '@/helpers/state_managment/schedule/schedule'
 import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStore'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Toast from 'react-native-simple-toast'
+import { useNavigation } from '@react-navigation/native'
 
 const OrderClient = () => {
   const { selectedCategoryId, selectedClient } = ClientStory()
   const { FreeTime } = useScheduleFreeTime()
   const { timeHour } = useSheduleData()
   const { calendarDate } = graficWorkStore()
+
+  const navigation = useNavigation<any>()
+
   const [orderMessageStatus, setOrderMessageStatus] = useState<string>("");
+  const [state, setState] = useState<any>()
+  const [orderId, setOrderId] = useState<string>("")
 
   async function setOrder() {
     let data: any = {
@@ -29,19 +35,22 @@ const OrderClient = () => {
       clientId: selectedClient && selectedClient.id,
     }
 
-    console.log(data);
+    // console.log(data);
     await postOrder({
       data,
+      setStatus: setState,
+      setOrderId: setOrderId,
       messageSatus: (message: string) => setOrderMessageStatus(message),
     })
   }
   useEffect(() => {
-    console.log(orderMessageStatus);
-
+    if (state == "success") {
+      navigation.navigate('(client)/(oreder)/orderDetail', { id: orderId })
+    }
     if (orderMessageStatus) {
       Toast.show(orderMessageStatus, Toast.LONG);
     }
-  }, [orderMessageStatus])
+  }, [orderMessageStatus, state])
 
   return (
     <SafeAreaView style={styles.container}>

@@ -84,7 +84,10 @@ export const orderGetOne = async (orderID: string, setData: (val: any | null) =>
             const response = await axios.get(`${order_get_one}${orderID}`, config ? config : {});
 
             if (response.data.success) setData(response.data.body)
+                
             else setData(null)
+            console.log(response.data);
+
         }
     } catch (error) {
         console.error(error);

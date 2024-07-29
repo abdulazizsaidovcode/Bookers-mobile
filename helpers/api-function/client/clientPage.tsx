@@ -96,15 +96,13 @@ export const clientNotificationDelete = async (datas: any, getData: () => void) 
 }
 //client notification not ready or ready
 export const clientPostReadyORnotReady = async (datas: any, getData: () => void) => {
-    const config = await getConfig()
-    console.log('read -------------------------------',datas);  
+    const config = await getConfig() 
     
     const res = await axios.post(clientReadNotification_url, datas, config ? config : {})
     console.log(res.data);
     
     try{
         if(res.data.success){
-            Toast.show('Successfully updated', Toast.LONG)
             getData()
         }else{
             Toast.show('An error occurred on the server', Toast.LONG)
