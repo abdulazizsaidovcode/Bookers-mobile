@@ -147,6 +147,7 @@ import LocationEdit from "./(location)/LocationEdit";
 import InternetNotice from "@/components/InternetNotise/internetNotice";
 import LocationEditData from "./(location)/(location-data)/LocationEditData";
 import OrderClient from "./(client)/(oreder)/order";
+import ClientOrderDetail from "./(client)/(oreder)/orderDetail";
 // import ResponseLocationEdit from "./(location)/(response-location)/responseLocationEdit";
 
 const Stack = createNativeStackNavigator();
@@ -893,6 +894,11 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
               name="(client)/(oreder)/order"
               component={OrderClient}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="(client)/(oreder)/orderDetail"
+              component={ClientOrderDetail}
             />
           </Stack.Navigator>
         </MenuProvider>
