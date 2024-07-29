@@ -6,6 +6,7 @@ export interface getClientNotififcations {
     clientId:string|null
     masterId:string|null
     createAt:string|null
+    read:boolean|null
 }
 
 export interface getOrderClientUpcomingInterface{

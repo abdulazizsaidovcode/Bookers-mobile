@@ -29,10 +29,9 @@ const NotificationClient: React.FC = () => {
     const handleDeletePress = () => {
         const ids: any = notification.map(notif => notif.id);
         if (ids.length > 0) {
-            console.log(ids);
-
             setNotificationIds(ids);
             deleteToggleModal();
+            
         } else {
             Alert.alert('No notifications', 'There are no notifications to delete.');
         }
@@ -72,7 +71,8 @@ const NotificationClient: React.FC = () => {
                     notification.map((notif, index) => (
                         <TouchableOpacity
                             key={index}
-                            style={styles.card}
+                            style={[styles.card, notif.read === true ?
+                                [] : styles.unreadCard]}
                             activeOpacity={0.9}
                             onPress={() => toggleBottomModal(notif)}
                         >
@@ -169,6 +169,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 2,
         elevation: 3,
+        borderLeftWidth: 10, // Kartochkaning chap tomoni uchun chegara qo'shish
+        borderLeftColor: '#B9B9C9', // Standart oq rang
+    },
+    unreadCard: {
+        borderLeftColor: '#9C0A35', // Tasdiqlanmagan bildirishnomalar uchun qizil rang
     },
     header: {
         flexDirection: 'row',
