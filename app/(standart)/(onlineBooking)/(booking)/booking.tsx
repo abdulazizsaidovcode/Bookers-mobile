@@ -25,6 +25,9 @@ import {
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import Toast from "react-native-simple-toast";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/(booking)/booking'>;
 
 const Booking = () => {
   
@@ -32,7 +35,7 @@ const Booking = () => {
   const { Urgently, setUrgentlyt, salonId, setSalonId } = OnlineBookingSettingsUrgentlyStory();
   const [isEnabled, setIsEnabled] = useState(false);
   const [data, setData] = useState([]);
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
   
 
   useFocusEffect(

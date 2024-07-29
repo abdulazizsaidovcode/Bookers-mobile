@@ -24,11 +24,25 @@ import tw from "tailwind-react-native-classnames";
 import {router, useNavigation} from "expo-router";
 import {getConfig} from "@/app/(tabs)/(master)/main";
 import { NotificationsAllData } from "@/type/notifications/notifications";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/(booking)/timeSelect'>;
+
+export const getVipCountS = async (setVipCount: (data: any) => void) => {
+    try {
+        const config = await getConfig();
+        const {data} = await axios.get(`http://134.122.77.107:8080/online-booking-settings/vip-client`, config ? config : {});
+
+        if (data.success) setVipCount(data.body);
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 const {width: screenWidth, height: screenHeight} = Dimensions.get("window");
 
 const TimeSelect = () => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     const {setTimeEnabled, timeEnabled, vipCount, setVipCount} = OnlineBookingStory3();
     

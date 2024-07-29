@@ -98,8 +98,7 @@ export const OnlineBookingUserviceTimeService = async (val: object) => {
     }
 };
 
-export const onlineConfirmationServices = async (isEnabled: boolean, isEnabled2: boolean, isEnabled3: boolean) => {
-  const navigation = useNavigation<any>();
+export const onlineConfirmationServices = async (isEnabled: boolean, isEnabled2: boolean, isEnabled3: boolean, navigation: any) => {
 
     try {
         const data = {
@@ -139,9 +138,7 @@ export const getOnlineConfirmationServices = async (setData: (val: IsActive | nu
 
 // hall waiting post API function 
 
-export const onlineBookingHallWaiting = async (isEnabled: boolean, isEnabled2: boolean) => {
-    console.log(isEnabled, isEnabled2);
-    const navigation = useNavigation<any>();
+export const onlineBookingHallWaiting = async (isEnabled: boolean, isEnabled2: boolean, navigation: any) => {
     try {
         const data = {
             allClient: isEnabled,
@@ -149,7 +146,6 @@ export const onlineBookingHallWaiting = async (isEnabled: boolean, isEnabled2: b
         };
         const config = await getConfig();
         const res = await axios.post(`${onlineBookingHallWaitin_url}`, data, config ? config : {});
-    console.log(isEnabled, isEnabled2);
 
         if (res.data.success) {
            Toast.show("res.data.message", Toast.LONG);
@@ -167,19 +163,18 @@ export const onlineBookingHallWaiting = async (isEnabled: boolean, isEnabled2: b
 
 //hall waiting get API function
 export const getOnlineBookingHallWaiting = async (setData: (val: any | null) => void) => {
-  const navigation = useNavigation<any>();
 
     try {
         const config = await getConfig();
         const res = await axios.get(`${onlineBookingHallWaitin_url}`, config ? config : {});
-        if(res.data.success){
-            Toast.show(res.data.message, Toast.SHORT);
-            navigation.goBack()
+        if(res.data.success){  
+            setData(res.data.body);
+            console.log(res.data.body);
+            
         }
-        setData(res.data.body);
     } catch (error: any) {
         console.log(error);
-        Toast.show(error.response.data.message, Toast.SHORT);
+      
     }
 };
 

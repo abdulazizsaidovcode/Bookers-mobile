@@ -36,6 +36,7 @@ import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { getMasterTariff } from "@/constants/storage";
+import { getVipCountS } from "./(booking)/timeSelect";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/onlineBooking'>;
 
@@ -44,7 +45,7 @@ const OnlineBooking = () => {
   
   const {tariff, setTariff} = clientStore()
   const {setUrgentlyt, salonId, setSalonId } = OnlineBookingSettingsUrgentlyStory();
-  const {vipCount} = OnlineBookingStory3();
+  const {vipCount, setVipCount} = OnlineBookingStory3();
   const {
     data2,
     setData2,
@@ -66,6 +67,7 @@ const OnlineBooking = () => {
       getOnlineBookingRecordDay(setSalonId)
       getOnlineConfirmationServices(setData);
       getOnlineBookingHallWaiting(setData2)
+      getVipCountS(setVipCount)
       return () => null
     }, [])
   )
@@ -111,7 +113,7 @@ const OnlineBooking = () => {
     datas.push({
       id: "4",
       title: t("request_slot"),
-      subtitle: data2 && data2.allClient ? "" : data2 && data2.regularClient ? "" : ("not_set"),
+      subtitle: data2 && data2.allClient ? "для всех клиентов" : data2 && data2.regularClient ? "для постоянных клиентов" : ("not_set"),
       IconComponent: <Feather name="watch" size={30} color="#9C0A35" />,
       onPress: () => {
        navigation.navigate("(standart)/(onlineBooking)/(booking)/requestWindow");

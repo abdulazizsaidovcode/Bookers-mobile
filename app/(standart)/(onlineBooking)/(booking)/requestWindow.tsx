@@ -11,9 +11,14 @@ import {
   getOnlineBookingHallWaiting,
   onlineBookingHallWaiting,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/(booking)/requestWindow'>;
 
 const RequestWindowBook = () => {
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
+
   const {
     isEnabled,
     setIsEnabled,
@@ -101,7 +106,7 @@ const RequestWindowBook = () => {
         title="Сохранить"
         backgroundColor="#9C0A35"
         onPress={() => {
-          onlineBookingHallWaiting(isEnabled, !isEnabled);
+          onlineBookingHallWaiting(isEnabled, !isEnabled, navigation);
         }}
       />
     </SafeAreaView>
