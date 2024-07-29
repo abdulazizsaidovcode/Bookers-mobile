@@ -2,18 +2,20 @@ import { getConfig } from "@/app/(tabs)/(master)/main";
 import { help_url } from "@/helpers/api";
 import { Help } from "@/helpers/state_managment/help/helpStore";
 import axios from "axios";
-import { router } from "expo-router";
+import { useNavigation } from "expo-router";
+
 export const getHelpOne = async (
   setData: (val: Help | null) => void,
   status: string,
   route: string
 ) => {
+  const navigation = useNavigation<any>()
   try {
     const config = await getConfig();
     const response = await axios.get(`${help_url}${status}`, config ? config : {});
     if (response.data.success) {
       setData(response.data.body);
-      router.push(route);
+      navigation.navigate(route);
     } else {
       setData(null);
     }
@@ -28,11 +30,12 @@ export const getHelpType = async (
   route: string
 ) => {
   try {
-    const config = await getConfig();
+  const navigation = useNavigation<any>()
+  const config = await getConfig();
     const response = await axios.get(`${help_url}${status}`, config ? config : {});
     if (response.data.success) {
       setData(response.data.body);
-      router.push(route);
+      navigation.navigate(route);
     } else {
       setData(null);
     }

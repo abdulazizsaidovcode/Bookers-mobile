@@ -23,6 +23,7 @@ import {
 } from "@/helpers/api-function/client/client";
 import {handleRefresh} from "@/constants/refresh";
 import {SelectList} from "react-native-dropdown-select-list";
+import {getMasterTariff} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/updating-address-book'>;
 
@@ -51,7 +52,9 @@ const UpdatingAddressBook = () => {
         isLoading,
         setIsLoading,
         refreshing,
-        setRefreshing
+        setRefreshing,
+        tariff,
+        setTariff
     } = clientStore()
     const {control, formState: {errors}} = useForm<FormData>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -65,6 +68,7 @@ const UpdatingAddressBook = () => {
     useEffect(() => {
         getAgeList(setAgeData)
         getRegionList(setRegionData)
+        getMasterTariff(setTariff)
         if (client) {
             updateClient.phoneNumber = client.phoneNumber
             updateClient.firstName = client.firstName
@@ -119,7 +123,8 @@ const UpdatingAddressBook = () => {
 
     useEffect(() => {
         if (navigate) {
-            navigation.navigate('(free)/(client)/main')
+            if (tariff==='FREE') navigation.navigate('(free)/(client)/main')
+            else navigation.navigate('(standart)/client/standard-main')
             setUpdateClient(updateClientDef)
             getClientStatistics(setStatusData)
             getClientAll(setAllClients)

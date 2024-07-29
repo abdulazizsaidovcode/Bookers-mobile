@@ -1,4 +1,6 @@
-import React from 'react';
+import { getMasterTariff } from '@/constants/storage';
+import { useFocusEffect } from 'expo-router';
+import React, { useCallback, useEffect } from 'react';
 import { Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
 interface TabsProps {
@@ -7,6 +9,14 @@ interface TabsProps {
 }
 
 const Tabs: React.FC<TabsProps> = ({ activeTab, onTabChange }) => {
+  const [tariff, setTariff] = React.useState<string | null>(null);
+  
+  useFocusEffect(
+    useCallback(() => {
+      getMasterTariff(setTariff)
+    },[tariff, setTariff])
+  )
+
   return (
     <ScrollView
       contentContainerStyle={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 20, gap: 10, marginBottom: 10 }}
@@ -37,7 +47,7 @@ const Tabs: React.FC<TabsProps> = ({ activeTab, onTabChange }) => {
           Запросы
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      {tariff === 'STANDARD' && <TouchableOpacity
         style={[
           styles.tabButton,
           activeTab === 'hall' && styles.activeTab,
@@ -48,7 +58,7 @@ const Tabs: React.FC<TabsProps> = ({ activeTab, onTabChange }) => {
         <Text style={[styles.tabText, activeTab !== 'requests' && styles.inactiveText]}>
           Запрос окошка
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity>}
     </ScrollView>
   );
 };

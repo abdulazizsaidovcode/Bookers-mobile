@@ -14,8 +14,8 @@ type ScheduleStatedate = {
 };
 
 type ScheduleStore = {
-    serviceId: string;
-    setServiceId: (newServiceId: string) => void;
+    serviceIds: any;
+    setServiceId: (newServiceId: any) => void;
     date: string;
     setDate: (newDate: string) => void;
     timeHour: string;
@@ -39,8 +39,8 @@ export const useScheduleDateStore = create<ScheduleStatedate>((set) => ({
 }));
 
 export const useSheduleData = create<ScheduleStore>((set) => ({
-    serviceId: '',
-    setServiceId: (newServiceId) => set({ serviceId: newServiceId }),
+    serviceIds: [],
+    setServiceId: (newServiceId: any) => set({ serviceIds: newServiceId }),
     date: '',
     setDate: (newDate) => set({ date: newDate }),
     timeHour: '',

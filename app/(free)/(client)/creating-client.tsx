@@ -24,6 +24,7 @@ import {useForm, Controller} from 'react-hook-form';
 import PhoneInput from 'react-native-phone-input';
 import {SelectList} from "react-native-dropdown-select-list";
 import {handleRefresh} from "@/constants/refresh";
+import {getMasterTariff} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/creating-client'>;
 
@@ -55,7 +56,9 @@ const CreatingClient = () => {
         isLoading,
         setIsLoading,
         refreshing,
-        setRefreshing
+        setRefreshing,
+        tariff,
+        setTariff
     } = clientStore()
     const {control, formState: {errors}} = useForm<FormData>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -70,6 +73,7 @@ const CreatingClient = () => {
         getAgeList(setAgeData)
         getRegionList(setRegionData)
         setUpdateClient(updateClientDef)
+        getMasterTariff(setTariff)
     }, []);
 
     useEffect(() => {
@@ -117,7 +121,8 @@ const CreatingClient = () => {
 
     useEffect(() => {
         if (navigate) {
-            navigation.navigate('(free)/(client)/main')
+            if (tariff==='FREE') navigation.navigate('(free)/(client)/main')
+            else navigation.navigate('(standart)/client/standard-main')
             setUpdateClient(updateClientDef)
             getClientStatistics(setStatusData)
             getClientAll(setAllClients)

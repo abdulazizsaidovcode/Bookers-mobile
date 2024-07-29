@@ -11,7 +11,7 @@ import CenteredModal from '@/components/(modals)/modal-centered';
 import Textarea from '@/components/select/textarea';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { AntDesign, FontAwesome6, Octicons, SimpleLineIcons } from '@expo/vector-icons';
-import { getMasterGallery, getMasterOtzif, postComment, ServicesClient } from '@/helpers/api-function/uslugi/uslugi';
+import { getMasterGallery, getMasterOtzif, getMAstersServeses, postComment, ServicesClient } from '@/helpers/api-function/uslugi/uslugi';
 import { useMapStore } from '@/helpers/state_managment/map/map';
 import { useFocusEffect, useNavigation } from 'expo-router';
 import ClientCardUslugi from '@/components/(cliendCard)/clientCardUslugi';
@@ -26,7 +26,7 @@ const isSmallDevice = width < 375;
 
 const MasterInformation = () => {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const { selectedClient, services, setServices, activeTab, setActiveTab, masterGallery, feedbackForMaster } = ClientStory();
+  const { selectedClient, masterServis, services, setServices, activeTab, setActiveTab, masterGallery, feedbackForMaster, clientData } = ClientStory();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -42,19 +42,22 @@ const MasterInformation = () => {
     setModalVisible(false);
     setValue('');
   };
+
   const closeGaleryModal = () => setSelectedImage(null);
 
   const handleAdd = () => {
-    if (value.trim() !== '') {
-      postComment({
-        clientId: null,
-        masterId: selectedClient.id,
-        adminId: null,
-        message: value,
-        messageStatus: 'CLIENT_MASTER_MESSAGE'
-      });
-      closeModal();
-      setValue('');
+    if (selectedClient) {
+      if (value.trim() !== '') {
+        postComment({
+          clientId: null,
+          masterId: selectedClient.id,
+          adminId: null,
+          message: value,
+          messageStatus: 'CLIENT_MASTER_MESSAGE'
+        });
+        closeModal();
+        setValue('');
+      }
     }
   };
 
@@ -101,17 +104,34 @@ const MasterInformation = () => {
 
   useFocusEffect(
     useCallback(() => {
-      const masterId = selectedClient.id;
-      const categoryId = selectedServiceId;
-      ServicesClient(masterId, categoryId);
+      if (selectedClient) {
+        const masterId = selectedClient.id;
+        const categoryId = services.categoryId;
+        ServicesClient(masterId, categoryId);
+
+      }
       return () => null;
     }, [])
   );
 
   useFocusEffect(
     useCallback(() => {
-      const id = selectedClient.id;
-      getMasterOtzif(id);
+      console.log(selectedClient, 'salom');
+
+      if (selectedClient) {
+        const masterId = selectedClient.id;
+        getMAstersServeses(masterId);
+      }
+      return () => null;
+    }, [])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      if (selectedClient) {
+        const id = selectedClient.id;
+        getMasterOtzif(id);
+      }
       return () => null;
     }, [])
   );
@@ -122,7 +142,7 @@ const MasterInformation = () => {
     }
   }, [selectedClient]);
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }: any) => (
     <View style={tw`mb-4`}>
       <Text style={tw`text-white`}>{item.clientName}</Text>
       <Text style={tw`text-gray-400`}>{item.text}</Text>
@@ -182,7 +202,7 @@ const MasterInformation = () => {
           borderColor='#9E9E9E'
           onPress={() => {
             setActiveTab('pastStart');
-            handleClick();
+            // handleClick();
           }}
           active={activeTab === 'pastStart'}
           textColor='#9E9E9E'
@@ -193,8 +213,8 @@ const MasterInformation = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
           <View style={tw`mb-5`}>
-            <FlatList
-              data={clintCardUslugiData}
+            {clientData && <FlatList
+              data={clientData}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
                 <View style={tw`mb-4`}>
@@ -216,7 +236,9 @@ const MasterInformation = () => {
                     locationIcon={
                       <SimpleLineIcons name="location-pin" size={24} color="white"
                         onPress={() => {
-                          setMapData(selectedClient);
+                          if (selectedClient) {
+                            setMapData(selectedClient);
+                          }
                           navigate.navigate('(client)/(map)/(master-locations)/master-locations');
                         }}
                       />
@@ -230,7 +252,7 @@ const MasterInformation = () => {
                   />
                 </View>
               )}
-            />
+            />}
           </View>
           <View style={tw`mb-4`}>
             <Text style={tw`text-2xl text-white font-bold`}>Услуги {selectedClient?.name}</Text>
@@ -240,7 +262,19 @@ const MasterInformation = () => {
             contentContainerStyle={{ gap: 16, marginBottom: 10 }}
             showsHorizontalScrollIndicator={false}
           >
-            {servicec.map((service) => (
+            <View >
+              <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => handleCategorySelect('',0)}
+                style={[
+                  styles.categoryCard,
+                  styles.activeCategoryCard
+                ]}
+              >
+                <Text style={tw`text-white text-center`}>evse</Text>
+              </TouchableOpacity>
+            </View>
+            {masterServis && masterServis.map((service: any) => (
               <View key={service.id}>
                 <TouchableOpacity
                   activeOpacity={0.9}
@@ -250,30 +284,17 @@ const MasterInformation = () => {
                     selectedCategory === service.id && styles.activeCategoryCard
                   ]}
                 >
-                  <Image source={{ uri: getFile + service.attachmentId }} style={styles.categoryImage} />
                   <Text style={tw`text-white text-center`}>{service.name}</Text>
                 </TouchableOpacity>
               </View>
             ))}
           </ScrollView>
           <FlatList
-            data={services}
+            data={masterServis}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={tw`mb-4`}>
-                <ClientCardDetail
-                  title={item.name}
-                  text={item.description}
-                  price={item.price}
-                  time={item.serviceTime}
-                  imageId={item.attachmentId}
-                  anotherIcon={
-                    <FontAwesome6 name="phone" size={24} color="white" />
-                  }
-                  phoneIcon={
-                    <Octicons name="bookmark" size={26} color="white" />
-                  }
-                />
+                <ClientCardDetail item={item} />
               </View>
             )}
           />
@@ -301,7 +322,7 @@ const MasterInformation = () => {
           />
         </ScrollView>
       )}
-      <CenteredModal
+      {/* <CenteredModal
         isVisible={modalVisible}
         onClose={closeModal}
         onAdd={handleAdd}
@@ -314,7 +335,7 @@ const MasterInformation = () => {
         onClose={toggleBottomModal}
         selectedImage={selectedImage}
         onImagePress={closeGaleryModal}
-      />
+      /> */}
     </SafeAreaView>
   );
 };

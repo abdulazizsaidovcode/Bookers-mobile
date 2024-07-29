@@ -2,18 +2,50 @@ import { getConfig } from "@/app/(tabs)/(master)/main";
 import { base_url } from "@/helpers/api";
 import useTopMastersStore from "@/helpers/state_managment/masters";
 import axios from "axios";
+export interface Master {
+  id: string;
+  fullName: string;
+  phone: string;
+  salonName: string | null;
+  genderName: "MALE" | "FEMALE" | null;
+  feedbackCount: number;
+  orderCount: number;
+  clientCount: number;
+  lat: number | null;
+  lng: number | null;
+  district: string | null;
+  street: string | null;
+  house: string | null;
+  attachmentId: string | null;
+  nextEntryDate: string;
+  mainPhoto: string | null;
+}
 
-export const getTopMasters = async (name?: string) => {
-  const { setTopMasters, setIsloading } = useTopMastersStore.getState();
+
+interface ApiResponse {
+  body: {
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPage: number;
+    object: Master[];
+  };
+  status: string;
+  message: string;
+  success: boolean;
+}
+
+export const getTopMasters = async (page = 0, size = 10, name?: string): Promise<void> => {
+  const { setTopMasters, setIsloading, masters } = useTopMastersStore.getState();
   setIsloading(true);
   try {
     const config = await getConfig();
     const url = name
-      ? `${base_url}user/top/masters?nameOrPhone=${name}`
-      : `${base_url}user/top/masters`;
-    const { data } = await axios.get(url, config || {});
+      ? `${base_url}user/top/masters?page=${page}&size=${size}&nameOrPhone=${name}`
+      : `${base_url}user/top/masters?page=${page}&size=${size}`;
+    const { data } = await axios.get<ApiResponse>(url, config || {});
     if (data.success) {
-      setTopMasters(data.body);
+      setTopMasters([...masters, ...data.body.object]);
     } else {
       setTopMasters([]);
     }
@@ -24,6 +56,7 @@ export const getTopMasters = async (name?: string) => {
     setIsloading(false);
   }
 };
+
 
 export const getCategory = async () => {
   const { setCategory } = useTopMastersStore.getState();

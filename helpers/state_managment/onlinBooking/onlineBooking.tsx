@@ -1,5 +1,9 @@
 import { create } from "zustand";
 
+export interface SalonIdObj {
+  day: number | string
+  id: string
+}
 export interface IState {
   allowClient: boolean;
   setAllowClient: (val: boolean) => void;
@@ -24,9 +28,19 @@ export interface IState3 {
   timeEnabled: boolean;
   setTimeEnabled: (val: boolean) => void;
 }
+
+
 export interface Urgently {
   Urgently: boolean;
   setUrgentlyt: (val: boolean) => void;
+  salonId: SalonIdObj | null
+  setSalonId: (val: SalonIdObj | null) => void
+  servicesId: string | null
+  setServicesId: (val: string | null) => void
+  minute: string | null
+  setMinute: (val: string | null) => void
+  hour: string | null
+  setHour: (val: string | null) => void
 }
 
 export interface IsActive {
@@ -63,6 +77,15 @@ export const OnlineBookingStory3 = create<IState3>((set) => ({
 export const OnlineBookingSettingsUrgentlyStory = create<Urgently>((set) => ({
   Urgently: false,
   setUrgentlyt: (val: boolean) => set({ Urgently: val }),
+  salonId: null,
+  setSalonId: (val: SalonIdObj | null) => set({salonId: val}),
+  servicesId: null,
+  setServicesId: (val: string | null) => set({servicesId: val}),
+  minute: "0 мин.",
+  setMinute: (val: string | null) => set({minute: val}),
+  hour: "0 ч.",
+  setHour: (val: string | null) => set({hour: val}),
+  
 }));
 
 // export const OnlineBookingCheck = create((set) => ({

@@ -14,7 +14,7 @@ import { fetchServices } from '@/helpers/api-function/client/client';
 const { width, height } = Dimensions.get('window');
 
 
-const BookedAccordion: React.FC = () => {
+const Booked: React.FC = () => {
     const [services, setServices] = useState<any>([]);
     const [activeTab, setActiveTab] = useState('');
     const [activeTime, setActiveTime] = useState('');
@@ -214,4 +214,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default BookedAccordion;
+export default Booked;
