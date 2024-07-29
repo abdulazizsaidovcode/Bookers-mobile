@@ -25,7 +25,7 @@ const LocationSelect = ({ setDistrictId, city, setCity }: Types) => {
       const { data } = await axios.get(
         `${base_url}district/name/filter?name=${city}`,
         config ? config : {}
-      );9
+      );
 
       setData(data.body);
     } catch (error) {

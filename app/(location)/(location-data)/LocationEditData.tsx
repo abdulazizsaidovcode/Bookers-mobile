@@ -155,7 +155,8 @@ const LocationEditData = () => {
             justifyContent: "space-between",
             backgroundColor: "#21212E",
           }}
-        >
+      
+    >
           <View style={tw``}>
             <Text style={tw`text-base my-2 text-gray-400`}>
               Название салона
