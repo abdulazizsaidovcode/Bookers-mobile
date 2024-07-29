@@ -48,6 +48,7 @@ const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
 
 const Navbar: React.FC = () => {
   const navigation = useNavigation();
+  const [hasNotification, setHasNotification] = useState(true);
 
   return (
     <View style={styles.navbar}>
@@ -57,7 +58,10 @@ const Navbar: React.FC = () => {
           activeOpacity={0.7}
           onPress={() => navigation.navigate('(client)/(profile)/(notification)/notification')}
         >
-          <FontAwesome5 name="bell" size={28} color="white" />
+          <View style={styles.notificationIconContainer}>
+            <FontAwesome5 name="bell" size={28} color="white" />
+            {hasNotification && <View style={styles.notificationDot} />}
+          </View>
         </TouchableOpacity>
         <TouchableOpacity>
           <Feather name="bookmark" size={28} color="white" />
@@ -218,9 +222,9 @@ const Dashboard: React.FC = () => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.touchableItem}
-          onPress={() => {
-            router.push('../(masters)/masters')
-          }}
+            onPress={() => {
+              router.push('../(masters)/masters')
+            }}
           >
             <View style={styles.itemTwo}>
               <View style={styles.textContainer}>
@@ -325,6 +329,18 @@ const styles = StyleSheet.create({
   subtitleText: {
     fontSize: 14,
     color: 'gray',
+  },
+  notificationIconContainer: {
+    position: 'relative',
+  },
+  notificationDot: {
+    position: 'absolute',
+    top: 1,
+    right: 0,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#9C0A35',
   },
 });
 
