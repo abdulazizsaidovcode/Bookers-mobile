@@ -43,10 +43,10 @@ const ResponseLocation = () => {
             <View style={tw`mt-2 bg-transparent pb-5`}>
                 <NavigationMenu name="Мой адрес работы"/>
             </View>
-            <View style={tw`px-5 bg-transparent w-full flex-1 items-center`}>
+            <View style={tw`px-9 bg-transparent w-full flex-1 items-center`}>
                 <View
                     style={[
-                        tw`w-full p-2 rounded-lg w-full`,
+                        tw`w-full p-2 px-5 rounded-xl w-full`,
                         {backgroundColor: "#b9b9c9"},
                     ]}
                 >

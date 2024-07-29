@@ -39,6 +39,8 @@ export interface Services {
     setServiceSelectId: (val:string | null) => void
     serviceId: any | null
     setServiceId: (val:Data) => void
+    completed: boolean[]
+    setCompleted: (val: boolean[]) => void
 }
 
 export interface Data {

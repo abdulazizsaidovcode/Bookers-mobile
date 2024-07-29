@@ -19,7 +19,7 @@ import Toast from "react-native-simple-toast";
 import {getConfigImg} from "@/app/(tabs)/(master)/main";
 import {useFocusEffect} from "expo-router";
 
-const ProfileImgUpload = (
+const ProfileImgUploadProfile = (
     {
         attachmentID,
         editPin = false,
@@ -292,4 +292,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ProfileImgUpload;
+export default ProfileImgUploadProfile;

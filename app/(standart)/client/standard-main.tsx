@@ -20,7 +20,7 @@ import {RootStackParamList} from "@/type/root";
 import {View, Text, ScrollView, StatusBar, FlatList, RefreshControl} from 'react-native';
 import LocationInput from "@/components/(location)/locationInput";
 import {StandardNowAndConstClient} from "@/components/clients/client-items";
-import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import {putNumbers} from "@/helpers/api-function/numberSittings/numbersetting";
 import {handleRefresh} from "@/constants/refresh";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
@@ -145,7 +145,10 @@ const StandardMain = () => {
                                         toggleClientModal()
                                     }}
                                 >
-                                    <Text style={[tw`text-base text-white text-center mb-5`, {opacity: .8, lineHeight: 22}]}>
+                                    <Text style={[tw`text-base text-white text-center mb-5`, {
+                                        opacity: .8,
+                                        lineHeight: 22
+                                    }]}>
                                         Разрешить приложению “Bookers” доступ к фото, мультимедиа и файлам на устройстве
                                     </Text>
                                 </CenteredModal>
@@ -163,7 +166,8 @@ const StandardMain = () => {
                                 {newClient ? (
                                     <FlatList
                                         data={newClient}
-                                        renderItem={({item}) => <StandardNowAndConstClient client={item} key={item.id}/>}
+                                        renderItem={({item}) => <StandardNowAndConstClient client={item}
+                                                                                           key={item.id}/>}
                                     />
                                 ) : (
                                     <View style={tw`flex-1 justify-center items-center`}>
@@ -186,7 +190,8 @@ const StandardMain = () => {
                                 {permanentClient ? (
                                     <FlatList
                                         data={permanentClient}
-                                        renderItem={({item}) => <StandardNowAndConstClient client={item} key={item.id}/>}
+                                        renderItem={({item}) => <StandardNowAndConstClient client={item}
+                                                                                           key={item.id}/>}
                                     />
                                 ) : (
                                     <View style={tw`flex-1 justify-center items-center`}>
@@ -200,12 +205,13 @@ const StandardMain = () => {
                     </View>
                     {isFilter === 'all' && (
                         <View style={tw`pb-5`}>
-                            <Buttons title={`Настроить позже и перейти на главную`}
-                                     onPress={() => {
-                                        putNumbers(2)
-                                       navigation.navigate('(welcome)/Welcome')
-                                     }
-                                    }/>
+                            <Buttons
+                                title={`Настроить позже и перейти на главную`}
+                                onPress={() => {
+                                    putNumbers(2)
+                                    navigation.goBack()
+                                }}
+                            />
                         </View>
                     )}
                 </ScrollView>

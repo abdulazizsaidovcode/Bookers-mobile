@@ -11,22 +11,32 @@ import {getConfig} from "@/app/(tabs)/(master)/main";
 import {useFocusEffect} from 'expo-router';
 import clientStore from '@/helpers/state_managment/client/clientStore';
 import {Loading} from '@/components/loading/loading';
+import {getMasterTariff} from "@/constants/storage";
 
 export const postTariff = async (id: string | number) => {
     let config = await getConfig()
-    if (id) {
-        await axios.post(`${base_url}tariff/save?tariffId=${id}`, '', config ? config : {})
+    try {
+        if (id) {
+            await axios.post(`${base_url}tariff/save?tariffId=${id}`, '', config ? config : {})
+        } else {
+            console.log('bunga tushmadi')
+        }
+    } catch (err) {
+        console.error(err)
     }
 }
 
-export const getTariffMaster = async (setTariffStatus: (val: any) => void) => {
+export const getTariffMaster = async (setTariffStatus: (val: any|null) => void) => {
     let config = await getConfig()
     axios.get(`${base_url}tariff/master`, config ? config : {})
         .then(res => {
-            if (res.data.success) setTariffStatus(res.data.body)
-            else setTariffStatus(res.data.body)
+            if (res.data.success) setTariffStatus(res.data.body.tariffCode)
+            else setTariffStatus(null)
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            setTariffStatus(null)
+        })
 }
 
 export const getAllTariff = async (setData: (val: any[] | null) => void, setLoading: (val: boolean) => void) => {
@@ -55,63 +65,39 @@ const TariffsPage: React.FC = () => {
     const [tariffList, setTariffList] = useState<any[] | null>(null);
 
     useFocusEffect(useCallback(() => {
-        const fetchTariffStatus = async () => {
-            try {
-                const storedTariffStatus = await SecureStore.getItemAsync('tariff');
-                setTariffStatus(storedTariffStatus);
-            } catch (error) {
-                console.error('Error fetching tariff status:', error);
-            }
-        };
-
-        fetchTariffStatus();
         getAllTariff(setTariffList, setIsLoading)
-        // getTariffMaster(setTariffStatus)
+        getMasterTariff(setTariffStatus)
     }, []))
-
-    // useFocusEffect(useCallback(() => {
-    //     getTariffMaster(setTariffStatus)
-    // }, [navigation]))
-
-    // const setTariff = async (type: string) => await SecureStore.setItemAsync("tariff", type)
-    //
-    // const handleDisabled = () => {
-    //     if (tariffStatus === 'free') return 'free'
-    //     else if (tariffStatus === 'standard') return 'standard'
-    //     else return 'all'
-    // }
 
     return (
         <>
             {isLoading ? <Loading/> : (
                 <SafeAreaView style={styles.container}>
                     <ScrollView>
-                        <NavigationMenu name='Tarifi'/>
+                        <NavigationMenu name='Tariff'/>
                         <View>
                             {tariffList && tariffList.map((tariff, index) => (
                                 <TouchableOpacity
                                     activeOpacity={1}
                                     key={index}
-                                    // { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }
                                     style={[styles.card]}
-                                    // disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
                                 >
                                     <Text style={styles.name}>Тариф {tariff.name}</Text>
-                                    <Text
-                                        style={styles.description}>{tariff.name === 'Free' ? 'Стандартный набор функций' : 'Продвинутый набор функций'}</Text>
-                                    <Text
-                                        style={styles.price}>{tariff.name === 'Free' ? 'Срок до: 31.12.2024' : '49 000 в месяц'}</Text>
-                                    {tariff.name === 'Standard' &&
-                                        <Text style={styles.trial}>Пробный период доступен на 3 месяца</Text>}
+                                    <Text style={styles.description}>
+                                        {tariff.tariffCode === 'FREE' ? 'Стандартный набор функций' : 'Продвинутый набор функций'}</Text>
+                                    <Text style={styles.price}>
+                                        {tariff.tariffCode === 'FREE' ? 'Срок до: 31.12.2024' : '49 000 в месяц'}
+                                    </Text>
+                                    {tariff.tariffCode === 'STANDARD' && (
+                                        <Text style={styles.trial}>Пробный период доступен на 3 месяца</Text>
+                                    )}
                                     <View style={styles.buttonContainer}>
                                         <TouchableOpacity
                                             onPress={() => {
                                                 postTariff(tariff.id)
-                                                navigation.navigate(tariff.navigate)
+                                                navigation.navigate('(welcome)/Welcome')
                                             }}
                                             activeOpacity={.7}
-                                            // { opacity: handleDisabled() === tariff.unicName ? 1 : handleDisabled() === 'all' ? 1 : .75 }
-                                            // disabled={handleDisabled() === tariff.unicName ? false : handleDisabled() === 'all' ? false : true}
                                             style={[styles.activateButton]}
                                         >
                                             <Text style={styles.buttonText}>Активировать</Text>

@@ -3,6 +3,8 @@ export interface NotificationsStore {
   isLoading: boolean;
   setIsloading: (val: boolean) => void;
   appoinmentActiveData: boolean;
+  tariff: null,
+  setTariff: (val: null) => void;
   isMainSwitch: boolean;
   windowData: NotificationsAllData;
   smsData: NotificationsAllData;

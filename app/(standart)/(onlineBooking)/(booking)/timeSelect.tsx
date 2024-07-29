@@ -21,14 +21,31 @@ import {
 } from "@/helpers/api-function/notifications/notifications";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import tw from "tailwind-react-native-classnames";
-import {router} from "expo-router";
+import {router, useNavigation} from "expo-router";
 import {getConfig} from "@/app/(tabs)/(master)/main";
+import { NotificationsAllData } from "@/type/notifications/notifications";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/(booking)/timeSelect'>;
+
+export const getVipCountS = async (setVipCount: (data: any) => void) => {
+    try {
+        const config = await getConfig();
+        const {data} = await axios.get(`http://134.122.77.107:8080/online-booking-settings/vip-client`, config ? config : {});
+
+        if (data.success) setVipCount(data.body);
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 const {width: screenWidth, height: screenHeight} = Dimensions.get("window");
 
 const TimeSelect = () => {
-    const {setTimeEnabled, timeEnabled} = OnlineBookingStory3();
-    const [vipCount, setVipCount] = useState({});
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
+
+    const {setTimeEnabled, timeEnabled, vipCount, setVipCount} = OnlineBookingStory3();
+    
     const {
         isAppoinmentModal,
         appoinmentData,
@@ -104,7 +121,9 @@ const TimeSelect = () => {
         try {
             const config = await getConfig()
             const res = await axios.put(`${base_url}online-booking-settings/vip-client`, data, config ? config : {});
-            router.back();
+            if (res.data.success) {
+                navigation.goBack()
+            }
         } catch (error) {
             console.log(error);
         }

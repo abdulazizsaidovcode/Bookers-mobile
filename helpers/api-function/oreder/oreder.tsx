@@ -36,8 +36,9 @@ export const postOrder = async (
         const config = await getConfig()
         const response = await axios.post(`${order_add}?status=${status}`, data, config ? config : {});
         if (setLoading) setLoading(false);
+        
         if (response.data.success) {
-            Toast.show('Successfully saved order', Toast.LONG);
+            Toast.show(response.data.message, Toast.LONG);
             if (setOrderId) setOrderId(response.data.body);
             if (setStatus) setStatus("success");
             if (navigation) navigation.goBack();

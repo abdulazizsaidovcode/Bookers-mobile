@@ -24,13 +24,18 @@ import {
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import Toast from "react-native-simple-toast";
+import clientStore from "@/helpers/state_managment/client/clientStore";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/(booking)/booking'>;
 
 const Booking = () => {
-  const { Urgently, setUrgentlyt } = OnlineBookingSettingsUrgentlyStory();
-  const [salonId, setSalonId] = useState("");
+  
+  const {tariff} = clientStore()
+  const { Urgently, setUrgentlyt, salonId, setSalonId } = OnlineBookingSettingsUrgentlyStory();
   const [isEnabled, setIsEnabled] = useState(false);
   const [data, setData] = useState([]);
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
   
 
   useFocusEffect(
@@ -57,12 +62,13 @@ const Booking = () => {
       const config = await getConfig();
       let res = await axios.post(
         `${base_url}online-booking-settings/record-duration/day`,
-        { day: salonId },
+       salonId,
         config ? config : {}
       );
-
-      Toast.show(res.data.message, Toast.SHORT);
-      navigation.goBack();
+      if (res.data.success) {
+        Toast.show(res.data.message, Toast.SHORT);
+        navigation.goBack();
+      }
     } catch (error) {
     }
   };
@@ -77,10 +83,10 @@ const Booking = () => {
 
   const toggleSwitch = () => {
     let newUrgently = !isEnabled;
-    onlineBookingSettingsUrgently(newUrgently);
-    setIsEnabled((previousState) => !previousState);
-
+    onlineBookingSettingsUrgently(newUrgently, setIsEnabled);
+    setIsEnabled(() => isEnabled);
     GetOnlineBookingSettingsUrgently(setUrgentlyt);
+
   };
 
   return (
@@ -117,16 +123,25 @@ const Booking = () => {
               inputStyles={styles.selectListInput}
               dropdownStyles={styles.selectListDropdown}
               dropdownTextStyles={styles.selectListDropdownText}
-              setSelected={(val: string) => setSalonId(val)}
-              data={data.map((item, i) => ({ key: i, value: `${item} day` }))}
+              setSelected={(val: string) => {
+                setSalonId({
+                  id: "", 
+                  day: val
+                })
+              }}
+              defaultOption={data.find((item) => item === salonId?.day) ? { key: salonId?.day, value: `${salonId?.day} day` } : { key: 0, value: 0 }}
+              data={data.map((item) => ({ key: item, value: `${item} day` }))}
               save="key"
               search={false}
             />
-            <SwitchWithLabel
-              label="Без срочно"
-              value={isEnabled}
-              onToggle={toggleSwitch}
-            />
+            {
+              tariff && tariff === "STANDARD" && 
+              <SwitchWithLabel
+                label="Без срочно"
+                value={isEnabled}
+                onToggle={toggleSwitch}
+              />
+            }
           </View>
           <View style={styles.buttonContainer}>
             <Buttons
@@ -144,7 +159,7 @@ const Booking = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 6,
+    paddingVertical: 16,
     backgroundColor: "#21212E",
   },
   innerContainer: {
@@ -198,7 +213,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     justifyContent: "flex-end",
-    marginBottom: 5,
     backgroundColor: "#21212E",
   },
 });

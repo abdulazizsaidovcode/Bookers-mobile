@@ -58,6 +58,7 @@ export const getClient_filter = `${base_url}client/filter` // post client filter
 export const getClient_freeTime = `${base_url}client/master/freeTime` // master freeTime !
 export const postComment = `${base_url}message/for/master/by/client` // comment client by master 
 export const serviceClient = `${base_url}service/client` // comment client by master 
+export const serviceMaster = `${base_url}service/` // comment client by master 
 export const masterGalery = `${base_url}gallery/user/`//galery master 
 export const feedbackMasterForClient = `${base_url}feedback/for/master`// feedbackMasterForClient
 
@@ -72,6 +73,7 @@ export const onlineBookingUserviceTimeAll_url = `${base_url}online-booking-setti
 export const onlineBookingUserviceTimeservice_url = `${base_url}online-booking-settings/service-time`
 export const onlineConfirmationServices_url = `${base_url}online-booking-settings/confirm-entry`
 export const onlineBookingHallWaitin_url = `${base_url}online-booking-settings/hall-waiting`
+export const onlineBookingRecordDay_url = `${base_url}online-booking-settings/record-duration/day-or-period`
 
 
 // Grafic Work page
@@ -183,6 +185,8 @@ export const address_url: string = `${base_url}address`
 export const client_profile_edit_url: string = `${base_url}client`
 // client notificaton API
 export const getNotification_url:string=`${base_url}notification`
+export const getNotificationNotReady_url:string =`${base_url}notification/not-ready`
+export const clientReadNotification_url:string=`${base_url}notification/is-read`
 
 export const client_profile_delete_url: string = `${base_url}user`
 
@@ -195,4 +199,4 @@ export const addFebdaback_Url:string=`${base_url}feedback/for/master/by/client`
 // delete pastcoming order api
 export const deletePastcoming_Url:string=`${base_url}order/`
 //delete all pastcoming API
-export const deleteAllpastcoming_Url:string=`${base_url}order/all`
+export const deleteAllpastcoming_Url:string=`${base_url}order/delete/all`

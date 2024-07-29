@@ -1,3 +1,5 @@
+import Tariff from "@/app/(profile)/(tariff)/tariff";
+
 export interface Client {
     isLoading: boolean;
     setIsLoading: (val: boolean) => void;
@@ -42,6 +44,8 @@ export interface Client {
     setCanceledData: (val: HistorySessions[] | null) => void;
     refreshing: boolean;
     setRefreshing: (val: boolean) => void;
+    tariff: null|string
+    setTariff: (val: string | null) => void;
 }
 
 export interface AllClient {

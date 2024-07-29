@@ -6,6 +6,7 @@ export interface getClientNotififcations {
     clientId:string|null
     masterId:string|null
     createAt:string|null
+    read:boolean|null
 }
 
 export interface getOrderClientUpcomingInterface{
@@ -73,6 +74,6 @@ export interface getClientPastcomingInterface{
 
 export interface addfedbackmaster{
     count:number|null
-    orderId:string|null
+    orderId:string|null|undefined
     text:string|null
 }   

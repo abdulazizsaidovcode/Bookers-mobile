@@ -1,5 +1,10 @@
+import { NotificationsAllData } from "@/type/notifications/notifications";
 import { create } from "zustand";
 
+export interface SalonIdObj {
+  day: number | string
+  id: string
+}
 export interface IState {
   allowClient: boolean;
   setAllowClient: (val: boolean) => void;
@@ -17,16 +22,28 @@ export interface IState2 {
   setIsEnabled: (val: boolean) => void;
   isEnabled2: boolean;
   setIsEnabled2: (val: boolean) => void;
-  data: any;
-  setData: (val: any) => void;
+  data2: any;
+  setData2: (val: any) => void;
 }
 export interface IState3 {
   timeEnabled: boolean;
   setTimeEnabled: (val: boolean) => void;
+  vipCount: NotificationsAllData | null,
+  setVipCount: (data: NotificationsAllData | null) => void
 }
+
+
 export interface Urgently {
   Urgently: boolean;
   setUrgentlyt: (val: boolean) => void;
+  salonId: SalonIdObj | null
+  setSalonId: (val: SalonIdObj | null) => void
+  servicesId: string | null
+  setServicesId: (val: string | null) => void
+  minute: string | null
+  setMinute: (val: string | null) => void
+  hour: string | null
+  setHour: (val: string | null) => void
 }
 
 export interface IsActive {
@@ -52,17 +69,28 @@ export const OnlineBookingStory2 = create<IState2>((set) => ({
   setIsEnabled: (val: boolean) => set({ isEnabled: val }),
   isEnabled2: false,
   setIsEnabled2: (val: boolean) => set({ isEnabled2: val }),
-  data: null,
-  setData: (val: any) => set({ data: val }),
+  data2: null,
+  setData2: (val: any) => set({ data2: val }),
 }));
 export const OnlineBookingStory3 = create<IState3>((set) => ({
   timeEnabled: false,
   setTimeEnabled: (val: boolean) => set({ timeEnabled: val }),
+  vipCount: null,
+  setVipCount: (data: NotificationsAllData | null) => set({vipCount: data})
 }));
 
 export const OnlineBookingSettingsUrgentlyStory = create<Urgently>((set) => ({
   Urgently: false,
   setUrgentlyt: (val: boolean) => set({ Urgently: val }),
+  salonId: null,
+  setSalonId: (val: SalonIdObj | null) => set({salonId: val}),
+  servicesId: null,
+  setServicesId: (val: string | null) => set({servicesId: val}),
+  minute: "0 мин.",
+  setMinute: (val: string | null) => set({minute: val}),
+  hour: "0 ч.",
+  setHour: (val: string | null) => set({hour: val}),
+  
 }));
 
 // export const OnlineBookingCheck = create((set) => ({

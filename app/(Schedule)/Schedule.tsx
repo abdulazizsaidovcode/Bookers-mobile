@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 
@@ -19,13 +19,14 @@ import { getFreeTime } from "@/helpers/api-function/freeTime/freeTime";
 import { useScheduleFreeTime } from "@/helpers/state_managment/freeTime/freeTime";
 import Buttons from "@/components/(buttons)/button";
 import { useOrderPosdData } from "@/helpers/state_managment/order/order";
-import { useNavigation } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import HallSchedule from "./hall";
 import axios from "axios";
 import { base_url } from "@/helpers/api";
 import { getConfig } from "../(tabs)/(master)/main";
 import CenteredModal from "@/components/(modals)/modal-centered";
+import { getMasterTariff } from "@/constants/storage";
 
 const Schedule: React.FC = () => {
   const [activeTab, setActiveTab] = useState("booked");
@@ -36,23 +37,27 @@ const Schedule: React.FC = () => {
   const { scheduleBooked, setScheduleBooked } = useScheduleAvialableStore();
   const { FreeTime, setFreeTime } = useScheduleFreeTime();
 
-  const tarif = "STANDART";
-
-  const { serviceId, date, timeHour, setServiceId, setDate, setTime } =
-    useSheduleData();
+  const { serviceIds, date, timeHour, setServiceId, setDate, setTime } = useSheduleData();
   const { setOrderData } = useOrderPosdData();
   const navigation = useNavigation<any>();
   const { calendarDate } = graficWorkStore();
+  const [tariff, setTariff] = useState();
 
   const toggle = () => setToggleModal(!toggleModal);
 
+  useFocusEffect(
+    useCallback(() => {
+      getMasterTariff(setTariff)
+    }, [tariff, setTariff])
+  )
+
   useEffect(() => {
-    if (serviceId && calendarDate && timeHour) {
+    if (serviceIds && calendarDate && timeHour) {
       setActive(false);
     } else {
       setActive(true);
     }
-  }, [serviceId, timeHour, calendarDate]);
+  }, [serviceIds, timeHour, calendarDate]);
 
   useEffect(() => {
     setServiceId("");
@@ -62,7 +67,7 @@ const Schedule: React.FC = () => {
 
   const setOrder = () => {
     const order = {
-      serviceId: serviceId,
+      serviceIds: serviceIds,
       date: calendarDate,
       timeHour: parseInt(timeHour.split(":")[0], 10),
       timeMin: parseInt(timeHour.split(":")[1], 10),
@@ -133,7 +138,7 @@ const Schedule: React.FC = () => {
               isDisebled={!active}
               onPress={setOrder}
             />
-            {tarif === "STANDART" && (
+            {tariff === "STANDARD" && (
               <Buttons title="Остановить запись" onPress={toggle} />
             )}
           </View>

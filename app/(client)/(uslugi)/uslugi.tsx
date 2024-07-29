@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, StatusBar, FlatList, ActivityIndicator } from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, StatusBar, FlatList, ActivityIndicator, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import tw from 'tailwind-react-native-classnames';
 import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import { getAllCategory } from '@/helpers/api-function/uslugi/uslugi';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
+import { getFile } from '@/helpers/api';
+import { useNavigation } from '@react-navigation/native';
 
 interface Service {
     id: string;
@@ -14,18 +16,21 @@ interface Service {
     distanceMasterCount: number;
     icon?: string;
     onPress: () => void;
+    attachmentId?: string;
 }
 
-const ServiceCard: React.FC<Service> = ({ id, name, distanceMasterCount, onPress }) => {
-    const staticIcon = "eye";
+const ServiceCard: React.FC<Service> = ({ id, name, distanceMasterCount, onPress, attachmentId }) => {
     return (
         <TouchableOpacity style={tw`w-1/2 px-2 py-2`} activeOpacity={0.8} onPress={onPress}>
-            <View style={[tw`flex flex-col items-center rounded-3xl p-4 w-full h-56`, { backgroundColor: '#B9B9C9' }]}>
-                <View style={[tw`rounded-full p-6 mb-2`, { backgroundColor: '#9C0A35' }]}>
-                    <MaterialCommunityIcons name={staticIcon} size={36} color="white" />
+            <View style={[tw`flex flex-col items-center rounded-xl p-4 h-56`, { backgroundColor: '#B9B9C9' }]}>
+                <View style={[tw`rounded-full p-5`, { backgroundColor: '#9C0A35' }]}>
+                    <Image
+                        source={attachmentId ? { uri: `${getFile}${attachmentId}` } : require('../../../assets/avatar.png')}
+                        style={tw`p-5 w-15 h-15`}
+                    />
                 </View>
-                <Text style={[tw`text-lg font-bold text-center`]}>{name}</Text>
-                <Text>Рядом с тобой {distanceMasterCount}</Text>
+                <Text style={[tw`text-lg font-bold text-center`, { fontFamily: 'Montserrat_700Bold' }]}>{name}</Text>
+                <Text style={{ fontFamily: 'Montserrat_400Regular' }}>Рядом с тобой {distanceMasterCount}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -36,6 +41,7 @@ const Uslugi = () => {
     const { userLocation, setUserLocation } = useGetMeeStore();
     const { allCategory, setAllCategory, setSelectedServiceId } = ClientStory();
     const router = useRouter();
+    const navigation = useNavigation();
 
     useFocusEffect(
         React.useCallback(() => {
@@ -44,11 +50,11 @@ const Uslugi = () => {
             return () => { };
         }, [])
     );
+
     useFocusEffect(
         React.useCallback(() => {
-            getAllCategory();
-            return () => {
-            };
+            getAllCategory().finally(() => setLoading(false));
+            return () => { };
         }, [userLocation])
     );
 
@@ -57,12 +63,11 @@ const Uslugi = () => {
             key={item.id}
             id={item.id}
             name={item.name}
+            attachmentId={item.attachmentId}
             distanceMasterCount={item.distanceMasterCount}
             onPress={() => {
                 setSelectedServiceId(item.id);
                 router.push(`/(hairHealth)/hair`);
-                console.log("id", setSelectedServiceId);
-
             }}
         />
     );
@@ -79,9 +84,14 @@ const Uslugi = () => {
                         justifyContent: 'space-between',
                         backgroundColor: '#21212E'
                     }}>
-                    <View style={tw`flex flex-row items-center justify-between`}>
-                        <Text style={tw`text-white text-3xl font-bold mb-4 px-4`}>Услуги</Text>
-                        <Ionicons name="notifications" size={24} color="white" />
+                    <View style={tw`flex flex-row items-center justify-between p-3`}>
+                        <Text style={[tw`text-white text-3xl font-bold mb-4 px-4`, { fontFamily: 'Montserrat_700Bold' }]}>Услуги</Text>
+                        <TouchableOpacity
+                            activeOpacity={0.7}
+                            onPress={() => navigation.navigate('(client)/(profile)/(notification)/notification')}
+                        >
+                            <Ionicons name="notifications" size={30} color="white" />
+                        </TouchableOpacity>
                     </View>
 
                     {loading ? (

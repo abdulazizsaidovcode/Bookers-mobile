@@ -31,6 +31,8 @@ const servicesStore = create<Services>((set) => ({
     setServiceSelectId: (val: string | null) => set({serviceSelectId:val}),
     serviceId:false,
     setServiceId: (data) => set({serviceId:data}),
+    completed: [true, false, false, false],
+    setCompleted: (val: boolean[]) => set({completed: val })
 
 }))
 

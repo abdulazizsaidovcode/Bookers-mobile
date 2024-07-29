@@ -1,4 +1,4 @@
-import { EditMainPhoto, GalleryData } from "@/type/gallery/gallery";
+import { BooleanState, EditMainPhoto, GalleryData } from "@/type/gallery/gallery";
 import { main_gallery, gallery_add_photo, gallery_edit_main_photo, gallery_full_data, gallery_list, } from "@/helpers/api";
 import axios from "axios";
 import Toast from "react-native-simple-toast";
@@ -10,7 +10,9 @@ export const fetchData = async (setData: (data: GalleryData[]) => void) => {
     console.log(config);
 
     const { data } = await axios.get(gallery_list, config ? config : {});
-    setData(data.body);
+    if (data.success) {
+      setData(data.body);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -20,7 +22,9 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
   try {
     const config = await getConfig()
     const { data } = await axios.get(`${gallery_full_data}/${id}`, config ? config : {});
-    setFullData(data.body);
+    if (data.success) {
+      setFullData(data.body);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -29,7 +33,6 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
 export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void, setMainImageIndices: (val: number[]) => void, goBack: void) => {
   try {
     const config = await getConfigImg()
-
     const { data } = await axios.post(`${main_gallery}?name=${name}`, formData, config ? config : {});
     if (data.success) {
       await fetchData(setData)
@@ -39,14 +42,14 @@ export const addData = async (formData: FormData, name: string, setData: (data: 
       goBack
       Toast.show("Ваша галерея добавлена", Toast.LONG);
     }
-  } catch (error) {
-    Toast.show(`Пожалуйста, повторите попытку позже`, Toast.LONG);
+  } catch (error: any) {
+    Toast.show(error.response.data.message, Toast.LONG);
     console.log(error);
   }
 };
 
-export const addPhoto = async (galleryId: number, formData: FormData, setFullData: (data: GalleryData) => void, setImages: (val: string[]) => void, setIsLoading: (val: boolean) => void) => {
-  setIsLoading(true)
+export const addPhoto = async (galleryId: number, formData: FormData, setFullData: (data: GalleryData) => void, setImages: (val: string[]) => void, setBooleanState: (val: BooleanState) => void, booleanState: BooleanState) => {
+  setBooleanState({ ...booleanState, isLoading: true })
   try {
     const config = await getConfigImg()
     const { data } = await axios.post(`${gallery_add_photo}/${galleryId}`, formData, config ? config : {});
@@ -54,35 +57,35 @@ export const addPhoto = async (galleryId: number, formData: FormData, setFullDat
       await fetchFullData(galleryId, setFullData);
       setImages([]);
       Toast.show('Пожалуйста, подождите, администратор должен одобрить вашу фотографию.', Toast.LONG)
-      setIsLoading(false)
-    } else setIsLoading(false)
+      setBooleanState({ ...booleanState, isLoading: false })
+    } else setBooleanState({ ...booleanState, isLoading: false })
   } catch (error) {
     Toast.show(`Пожалуйста, повторите попытку позже`, Toast.LONG);
     console.log(error);
-    setIsLoading(false)
+    setBooleanState({ ...booleanState, isLoading: false })
   }
 };
 
-export const editName = async (id: number, setFullData: (data: GalleryData) => void, editedName: string, toggleModal: () => void, setData: (data: GalleryData[]) => void, setIsLoading: (val: boolean) => void) => {
-  setIsLoading(true)
+export const editName = async (id: number, setFullData: (data: GalleryData) => void, editedName: string, toggleModal: () => void, setData: (data: GalleryData[]) => void, setIsLoading: (val: BooleanState) => void, booleanState: BooleanState) => {
+  setIsLoading({ ...booleanState, isLoading: true })
   try {
     const config = await getConfig()
     const { data } = await axios.put(`${main_gallery}/${id}?name=${editedName}`, {}, config ? config : {});
     if (data.success) {
       await fetchFullData(id, setFullData);
       await fetchData(setData)
-      setIsLoading(false)
+      setIsLoading({ ...booleanState, isLoading: false })
       toggleModal();
       Toast.show('Название галереи успешно обновлено.', Toast.LONG)
-    } else setIsLoading(false)
+    } else setIsLoading({ ...booleanState, isLoading: false })
   } catch (error) {
     console.log(error);
-    setIsLoading(false)
+    setIsLoading({ ...booleanState, isLoading: false })
   }
 };
 
-export const editMainPhoto = async (setFullData: (data: GalleryData) => void, setData: (data: GalleryData[]) => void, galleryId: number, payload: EditMainPhoto[], toggleShowMain: () => void, setIsLoading: (val: boolean) => void) => {
-  setIsLoading(true)
+export const editMainPhoto = async (setFullData: (data: GalleryData) => void, setData: (data: GalleryData[]) => void, galleryId: number, payload: EditMainPhoto[], toggleShowMain: () => void, setBooleanState: (val: BooleanState) => void, booleanState: BooleanState) => {
+  setBooleanState({ ...booleanState, isLoading: true })
   try {
     const config = await getConfig()
     const { data } = await axios.put(`${gallery_edit_main_photo}/${galleryId}`, payload, config ? config : {});
@@ -90,12 +93,12 @@ export const editMainPhoto = async (setFullData: (data: GalleryData) => void, se
       fetchFullData(galleryId, setFullData);
       fetchData(setData);
       toggleShowMain()
-      setIsLoading(false)
+      setBooleanState({ ...booleanState, isLoading: false })
       Toast.show('Ваша основная фотография успешно обновлена.', Toast.LONG)
-    } else setIsLoading(false)
+    } else setBooleanState({ ...booleanState, isLoading: false })
   } catch (error) {
     console.log(error);
-    setIsLoading(false)
+    setBooleanState({ ...booleanState, isLoading: false })
   }
 }
 
@@ -114,8 +117,8 @@ export const delPhoto = async (id: number, attachmentIds: string[], setFullData:
 
     const data = await response.json();
     if (data.success) {
-      fetchFullData(id, setFullData);
-      fetchData(setData);
+      await fetchFullData(id, setFullData);
+      await fetchData(setData);
       toggleModal();
       Toast.show('Фото успешно удалено из галереи.', Toast.LONG);
     }
@@ -131,7 +134,7 @@ export const delGallery = async (id: number | null, setData: (data: GalleryData[
     const res = await axios.delete(`${main_gallery}/${id}`, config ? config : {});
     if (res.data.success) {
       setData([])
-      fetchData(setData);
+      await fetchData(setData);
       toggleModal()
       toggleCheckboxes()
       Toast.show('Ваша галерея успешно удалена', Toast.LONG)

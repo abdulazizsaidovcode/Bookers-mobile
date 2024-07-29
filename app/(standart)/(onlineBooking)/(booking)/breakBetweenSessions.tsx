@@ -18,18 +18,24 @@ import {
   OnlineBookingUserviceTimeAll,
   OnlineBookingUserviceTimeService,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
+import {
+  OnlineBookingSettingsUrgentlyStory,
+} from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { fetchServices } from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/(booking)/breakBetweenSessions'>;
+
 
 const BreakBetweenSession = () => {
+  const { hour, setHour, minute, setMinute, servicesId, setServicesId } = OnlineBookingSettingsUrgentlyStory()
+
   const [selectedTime, setSelectedTime] = useState("");
   const [activeButton, setActiveButton] = useState("everyService");
   const [modalVisible, setModalVisible] = useState(false);
-  const [hour, setHour] = useState("0 ч.");
-  const [minute, setMinute] = useState("0 мин.");
-  const [servicesId, setServicesId] = useState("");
-  const navigation = useNavigation<any>();
-  const { services, setServices } = clientStore();
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
+  const { services, setServices, tariff } = clientStore();
 
   const hours: any = [
     { title: "0 ч.", minutes: ["0 мин.", "30 мин."] },
@@ -55,13 +61,13 @@ const BreakBetweenSession = () => {
 
   const postTile = () => {
     let obg = {
-      hour: hour.split(" ")[0],
-      minute: minute.slice(0, 2),
+      hour: hour?.split(" ")[0],
+      minute: minute?.slice(0, 2),
     };
     let obgser = {
       serviceId: servicesId,
-      hour: hour.split(" ")[0],
-      minute: minute.slice(0, 2),
+      hour: hour?.split(" ")[0],
+      minute: minute?.slice(0, 2),
     };
     if (servicesId) {
       OnlineBookingUserviceTimeService(obgser);
@@ -118,6 +124,8 @@ const BreakBetweenSession = () => {
                   После любой услуги
                 </Text>
               </TouchableOpacity>
+              {
+                tariff === "STANDARD" &&
               <TouchableOpacity
                 activeOpacity={0.8}
                 style={[
@@ -138,18 +146,21 @@ const BreakBetweenSession = () => {
                   Для каждой процедуры разный
                 </Text>
               </TouchableOpacity>
+              }
             </ScrollView>
+            {services && services.length !== 0 &&
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Перерывы между сеансами</Text>
               <Text style={styles.sectionSubtitle}>
                 Настройте перерывы между сеансами
               </Text>
             </View>
+            }
             {activeButton === "eachProcedure" ? (
               <View>
-                {services &&
-                  services.map((service: any, index: number) => (
-                    <View style={styles.procedureContainer}>
+                {services && services.length !== 0 ?
+                  services.map((service: any, i: number) => (
+                    <View key={i} style={styles.procedureContainer}>
                       <Text style={styles.procedureTitle}>
                         {service.category.name}
                       </Text>
@@ -180,7 +191,7 @@ const BreakBetweenSession = () => {
                         </View>
                       </TouchableOpacity>
                     </View>
-                  ))}
+                  )) : <Text style={styles.noDataText}>No servise data available</Text>}
               </View>
             ) : (
               <TouchableOpacity
@@ -243,7 +254,6 @@ const BreakBetweenSession = () => {
               style={styles.selectButtonModal}
               onPress={() => {
                 setModalVisible(false);
-                setSelectedTime(`${hour} ${minute}`);
               }}
             >
               <Text style={styles.selectButtonTextModal}>Выбрать</Text>
@@ -266,6 +276,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 6,
+    paddingVertical: 16,
     backgroundColor: "#21212E",
   },
   content: {
@@ -414,6 +425,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  noDataText: {
+    color: "white",
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 18,
   },
 });
 

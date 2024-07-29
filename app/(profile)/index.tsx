@@ -28,6 +28,8 @@ import tw from "tailwind-react-native-classnames";
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import registerStory from "@/helpers/state_managment/auth/register";
+import {getMasterTariff} from "@/constants/storage";
+import clientStore from "@/helpers/state_managment/client/clientStore";
 
 const data: { name: any; color: string; label: string }[] = [
   { name: "facebook", color: "#3b5998", label: "Facebook" },
@@ -43,12 +45,14 @@ const ProfilePage: React.FC = () => {
   const [isShareModalVisible, setShareModalVisible] = useState(false);
   const navigation = useNavigation<any>();
   const { getMee, setGetMee } = useGetMeeStore();
+  const {tariff, setTariff} = clientStore()
   const [toggle, setToggle] = useState(false);
   const { role } = registerStory();
 
   useFocusEffect(
     useCallback(() => {
       getUser(setGetMee);
+      getMasterTariff(setTariff)
     }, [])
   );
 
@@ -143,7 +147,7 @@ const ProfilePage: React.FC = () => {
         {
           icon: "users",
           label: "Клиенты",
-          screen: "(free)/(client)/main",
+          screen: `${tariff === 'FREE' ? '(free)/(client)/main' : '(standart)/client/standard-main'}`,
         },
         {
           icon: "sign-out",

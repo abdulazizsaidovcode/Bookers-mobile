@@ -19,3 +19,14 @@ export interface EditMainPhoto {
     main: boolean,
     attachmentId: string
 }
+
+export interface BooleanState {
+    isOpen: boolean,
+    isAllOpen: boolean,
+    isDeleteMode: boolean,
+    isBottomModalOpen: boolean,
+    showMainSwitch: boolean,
+    selectAll: boolean,
+    textModal: boolean,
+    isLoading: boolean
+}

@@ -43,3 +43,21 @@ export const authStorage = async (token: string) => {
         console.error(e);
     }
 };
+
+//master tariff
+export const setMasterTariff = async (tariff: any) => {
+    try {
+        await AsyncStorage.setItem('masterTariff', tariff);
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+export const getMasterTariff = async (setData: any) => {
+    try {
+        const value = await AsyncStorage.getItem('masterTariff');
+        if (value !== null) setData(value)
+    } catch (e) {
+        console.error(e);
+    }
+}

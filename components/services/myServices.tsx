@@ -10,7 +10,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 const MyServicess: React.FC<MyServicesProps> = ({ title, subTitle, onPress }) => {
     return (
        <View style = {[tw`mt-3 rounded-xl`, {backgroundColor:'#ffff'}]}>
-        <View style = {[tw`mt-3 rounded-xl`, {backgroundColor:'#ffff'}]}>
+        
             <TouchableOpacity
             activeOpacity={.8}
                 style={tw`bg-white rounded-2xl  p-4 flex-row justify-between items-center`}
@@ -22,7 +22,6 @@ const MyServicess: React.FC<MyServicesProps> = ({ title, subTitle, onPress }) =>
                 </View>
                 <MaterialIcons name="navigate-next" size={36} color='gray'/>
             </TouchableOpacity>
-        </View>
        </View> 
         
     );

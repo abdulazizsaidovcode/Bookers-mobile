@@ -6,7 +6,7 @@ export interface Service {
   id: string;
   name: string;
   distanceMasterCount: number;
-  icon?: string;
+  attachmentId?: string | undefined;
   onPress?: () => void;
 }
 
@@ -31,6 +31,39 @@ export interface CommentData {
   message: string;
   messageStatus: string;
 }
+export interface ClientCardProps {
+  salon: string | undefined;
+  imageUrl: string | undefined;
+  name: string | undefined;
+  zaps: string | undefined;
+  masterType: string | undefined;
+  orders: number | undefined;
+  clients: number | undefined;
+  address: string | undefined;
+  feedbackCount: number | undefined;
+  services: any
+  onPress?: () => void;
+  locationIcon?: React.ReactNode
+  btntext?: string | undefined;
+  anotherIcon?: React.ReactNode
+  phoneIcon?: React.ReactNode
+};
+
+export interface ServiceCategory {
+  id: string;
+  name: string;
+  genderId: number[];
+  price: number;
+  serviceTime: 90,
+  description: string,
+  attachmentId: string | null,
+  servisece: Service[];
+  paymentPercent: 0,
+  paymentPrice: 0,
+  message: string,
+  serviceStatus: string,
+  active: false
+}
 
 export interface ClientAllCategory {
   id: string;
@@ -43,7 +76,7 @@ export interface ClientAllCategory {
   setAllCategory: (val: Service[]) => void;
   selectedServiceId: string | null;
   setSelectedServiceId: (id: string | null) => void;
-  clientData: any | null;
+  clientData: ClientCardProps[];
   setClientData: (data: any) => void;
   clientId: string | null;
   setClientId: (val: string | null) => void;
@@ -55,10 +88,14 @@ export interface ClientAllCategory {
   setServices: (data: any) => void;
   activeTab: string | null;
   setActiveTab: (val: string | null) => void;
-  masterGallery: any[];  
-  setMasterGallery: (data: any[]) => void;  
+  masterGallery: any[];
+  setMasterGallery: (data: any[]) => void;
   feedbackForMaster: []
-  setFeedbackForMaster:(data: []) => void;
+  setFeedbackForMaster: (data: []) => void;
+  masterServis: ServiceCategory[]
+  setmasterServis: (data: []) => void;
+  selectedCategoryId: string[];
+  setSelectedCategoryId: (val: string[]) => void;
 }
 
 // Create the Zustand store
@@ -70,13 +107,10 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   distanceMasterCount: 0,
   setDistanceMasterCount: (val: number) => set({ distanceMasterCount: val }),
   allCategory: [],
-  setAllCategory: (val: Service[]) => {
-    console.log('Setting allCategory:', val); // Debugging log
-    set({ allCategory: val });
-  },
+  setAllCategory: (val: Service[]) => set({ allCategory: val }),
   selectedServiceId: null,
   setSelectedServiceId: (id: string | null) => set({ selectedServiceId: id }),
-  clientData: null,
+  clientData: [],
   setClientData: (data: any) => set({ clientData: data }),
   clientId: '',
   setClientId: (val: string | null) => set({ clientId: val }),
@@ -88,10 +122,14 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   setServices: (val: string | null) => set({ services: val }),
   activeTab: '',
   setActiveTab: (val: string | null) => set({ activeTab: val }),
-  masterGallery: [],  
-  setMasterGallery: (data: any[]) => set({ masterGallery: data }),  
-  feedbackForMaster:[],
-  setFeedbackForMaster: (data:[]) => set({feedbackForMaster:[]})
+  masterGallery: [],
+  setMasterGallery: (data: any[]) => set({ masterGallery: data }),
+  feedbackForMaster: [],
+  setFeedbackForMaster: (data: []) => set({ feedbackForMaster: [] }),
+  masterServis: [],
+  setmasterServis: (data: any) => set({ masterServis: data }),
+  selectedCategoryId: [],
+  setSelectedCategoryId: (val: string[]) => set({ selectedCategoryId: val }),
 }));
 
 export default ClientStory;

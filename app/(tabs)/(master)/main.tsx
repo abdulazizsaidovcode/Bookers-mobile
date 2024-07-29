@@ -57,6 +57,9 @@ import * as Permissions from 'expo-permissions';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
 import { deviceInfo } from "@/helpers/api-function/register/registrFC";
+import { getTariffMaster } from "@/app/(profile)/(tariff)/tariff";
+import { setMasterTariff } from "@/constants/storage";
+import { Loading } from "@/components/loading/loading";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -141,7 +144,9 @@ const TabOneScreen: React.FC = () => {
     setWaitingData,
   } = useDashboardStore();
   const { refreshing, setRefreshing } = clientStore();
+  const [masterTariff, setTariffMaster] = useState<null | string>(null)
   const [backPressCount, setBackPressCount] = useState(0);
+  const [pending, setPending] = useState(true);
   const [orderId, setOrderId] = useState('');
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -160,7 +165,7 @@ const TabOneScreen: React.FC = () => {
     const token = (await Notifications.getExpoPushTokenAsync()).data;
     // const deviceId = Constants.deviceId;
     const deviceType = Device.modelName;
-    deviceInfo(deviceType, Platform.OS , token);
+    deviceInfo(deviceType, Platform.OS, token);
 
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
@@ -174,6 +179,7 @@ const TabOneScreen: React.FC = () => {
 
   }
   useEffect(() => {
+    setPending(true)
     pushNotifications()
     return () => {
       if (notificationListener.current) {
@@ -192,6 +198,10 @@ const TabOneScreen: React.FC = () => {
 
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    masterTariff && setMasterTariff(masterTariff)
+  }, [masterTariff]);
 
   // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
   useFocusEffect(
@@ -216,17 +226,12 @@ const TabOneScreen: React.FC = () => {
     }, [backPressCount])
   );
 
-
-
-  useEffect(() => {
-    getNumbers(setNumber);
-  }, []);
-
   useEffect(() => {
     if (number && number.length > 1) {
       const res = removeDuplicatesAndSort(number);
       const result = containsAllNumbers(res);
       setHasAllNumbers(result);
+      setPending(false)
     }
   }, [number]);
 
@@ -257,6 +262,8 @@ const TabOneScreen: React.FC = () => {
     getUser(setGetMee);
     fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
     getData();
+    getNumbers(setNumber);
+    getTariffMaster(setTariffMaster)
   }, []);
 
   const onRefresh = useCallback(() => {
@@ -303,9 +310,7 @@ const TabOneScreen: React.FC = () => {
   const chartFraction = mainStatisticData.completedSessions;
   const [chartNumerator, chartDenominator] = chartFraction.split("/");
   const statisticFraction = mainStatisticData.incomeToday;
-  const [statisticNumerator, statisticDenominator] = statisticFraction.split(
-    "/"
-  );
+  const [statisticNumerator, statisticDenominator] = statisticFraction.split("/");
   const regularVisitCount =
     dailyTimeData && dailyTimeData.length !== 0 ?
       dailyTimeData && dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length : 0;
@@ -407,17 +412,22 @@ const TabOneScreen: React.FC = () => {
             </Text>
           </View>
         </CenteredModal> */}
-        {!hasAllNumbers && (
-          <View style={{ margin: 10 }}>
-            <Buttons
-              title="настройку"
-              onPress={() => navigation.navigate("(profile)/(tariff)/tariff")}
-            />
-            <View style={{ marginTop: 10 }}>
-              <Buttons title="Выйти" onPress={() => handleSubmit()} />
+        {
+          pending ? (
+            <View style={{ marginTop: 20 }}>
+              <Loading />
             </View>
-          </View>
-        )}
+          ) : !hasAllNumbers && (
+            <View style={{ margin: 10 }}>
+              <Buttons
+                title="настройку"
+                onPress={() => navigation.navigate("(profile)/(tariff)/tariff")}
+              />
+              <View style={{ marginTop: 10 }}>
+                <Buttons title="Выйти" onPress={() => handleSubmit()} />
+              </View>
+            </View>)
+        }
       </ScrollView>
     </SafeAreaView>
   );
