@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    ScrollView,
-    Image,
-    TouchableOpacity,
-    TextInput,
-    Dimensions,
-    Pressable
-} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Dimensions, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useRoute } from '@react-navigation/native';
@@ -30,33 +20,25 @@ const { width, height } = Dimensions.get('window');
 
 const GalleryDetails: React.FC = () => {
     const route = useRoute();
-    const { fullData, setFullData, setData } = useGalleryStore();
-    const [isOpen, setIsOpen] = useState(false);
-    const [isAllOpen, setIsAllOpen] = useState(false);
+    const { id } = route.params as { id: number };
+    const { fullData, setFullData, setData, booleanState, setBooleanState } = useGalleryStore();
     const [name, setName] = useState('');
-    const [isDeleteMode, setIsDeleteMode] = useState(false);
     const [selectedImages, setSelectedImages] = useState<string[]>([]);
     const [images, setImages] = useState<string[]>([]);
-    const [selectAll, setSelectAll] = useState(false);
-    const [isBottomModalOpen, setIsBottomModalOpen] = useState(false);
-    const [showMainSwitch, setShowMainSwitch] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [textModal, setTextModal] = useState(false);
     const [text, setText] = useState<string | null>(null)
     const [selectedMainImages, setSelectedMainImages] = useState<EditMainPhoto[]>([]);
-    const { id } = route.params as { id: number };
 
     useEffect(() => {
         fetchFullData(id, setFullData);
     }, [id, setFullData]);
 
     useEffect(() => {
-        if (selectAll) {
+        if (booleanState.selectAll) {
             setSelectedImages(fullData.resGalleryAttachments.map(item => item.attachmentStatus === 'CANCELED' ? '' : item.attachmentId));
         } else {
             setSelectedImages([]);
         }
-    }, [selectAll, fullData.resGalleryAttachments]);
+    }, [booleanState.selectAll, fullData.resGalleryAttachments]);
 
     useEffect(() => {
         const updatedMainImages = fullData.resGalleryAttachments
@@ -68,14 +50,13 @@ const GalleryDetails: React.FC = () => {
         setSelectedMainImages(updatedMainImages);
     }, [selectedImages, fullData.resGalleryAttachments]);
 
-
     const toggleModal = () => {
         setName(fullData.albumName);
-        setIsOpen(!isOpen);
+        setBooleanState({ ...booleanState, isOpen: !booleanState.isOpen });
     };
 
     const toggleTextModal = (text: string | null) => {
-        setTextModal((!textModal))
+        setBooleanState({ ...booleanState, textModal: !booleanState.textModal })
         setText(text)
     }
 
@@ -96,18 +77,18 @@ const GalleryDetails: React.FC = () => {
         if (selectedImages.length === 0) {
             Toast.show('Сначала, выберите фотографии', Toast.LONG);
         } else {
-            setIsAllOpen(!isAllOpen);
+            setBooleanState({ ...booleanState, isOpen: !booleanState.isAllOpen });
         }
     };
 
     const handleConfirm = () => {
-        editName(id, setFullData, name, toggleModal, setData, setIsLoading);
+        editName(id, setFullData, name, toggleModal, setData, setBooleanState, booleanState);
     };
 
     const handleDeleteMode = () => {
-        setIsDeleteMode(!isDeleteMode);
+        setBooleanState({ ...booleanState, isDeleteMode: !booleanState.isDeleteMode });
         setSelectedImages([]);
-        setSelectAll(false);
+        setBooleanState({ ...booleanState, selectAll: false });
     };
 
     const handleImageSelect = (imageId: string) => {
@@ -116,22 +97,22 @@ const GalleryDetails: React.FC = () => {
             : [...prev, imageId]
         );
     };
-
-    const handleSelectMainPhoto = (imageId: string) => {
-        setSelectedImages(prev => {
-            if (prev.includes(imageId)) {
-                return prev.filter(id => id !== imageId);
-            } else {
-                return [...prev, imageId];
-            }
-        });
-    };
     
+    // const handleSelectMainPhoto = (imageId: string) => {
+    //     setSelectedImages(prev => {
+    //         if (prev.includes(imageId)) {
+    //             return prev.filter(id => id !== imageId);
+    //         } else {
+    //             return [...prev, imageId];
+    //         }
+    //     });
+    // };
+
     const handleDelete = () => {
-        setIsDeleteMode(false);
+        setBooleanState({ ...booleanState, isDeleteMode: false });
         delPhoto(id, selectedImages, setFullData, setData, toggleAllModal);
         setSelectedImages([]);
-        setSelectAll(false);
+        setBooleanState({ ...booleanState, selectAll: false });
     };
 
     const requestPermissions = async (type: 'camera' | 'gallery') => {
@@ -164,42 +145,41 @@ const GalleryDetails: React.FC = () => {
         }
     };
 
-    const toggleShowMain = () => setShowMainSwitch(!showMainSwitch);
-    const toggleBottomModal = () => setIsBottomModalOpen(!isBottomModalOpen);
+    const toggleShowMain = () => setBooleanState({ ...booleanState, showMainSwitch: !booleanState.showMainSwitch });
+    const toggleBottomModal = () => setBooleanState({ ...booleanState, isBottomModalOpen: !booleanState.isBottomModalOpen });
 
-    const addImageFromCamera = () => {
-        pickImage('camera');
+    const pickFromImagePicker = (from: 'camera' | 'gallery') => {
+        pickImage(from);
         toggleBottomModal();
     };
 
-    const addImageFromGallery = () => {
-        pickImage('gallery');
-        toggleBottomModal();
+    const handleSave = (type: 'photo' | 'mainPhoto') => {
+        if (type === 'photo') {
+            const formData = new FormData();
+            images.forEach((item, index) => {
+                formData.append('photos', {
+                    uri: item,
+                    type: 'image/jpeg',
+                    name: `photos[${index}].image`,
+                } as any);
+            });
+            addPhoto(id, formData, setFullData, setImages, setBooleanState, booleanState);
+        } else {
+            editMainPhoto(setFullData, setData, id, selectedMainImages, toggleShowMain, setBooleanState, booleanState)
+        }
     };
-
-    const handleSave = () => {
-        const formData = new FormData();
-        images.forEach((item, index) => {
-            formData.append('photos', {
-                uri: item,
-                type: 'image/jpeg',
-                name: `photos[${index}].image`,
-            } as any);
-        });
-        addPhoto(id, formData, setFullData, setImages, setIsLoading);
-    };
-
-    const handleSaveMainPhotos = () => editMainPhoto(setFullData, setData, id, selectedMainImages, toggleShowMain, setIsLoading)
-
+    console.log(selectedImages);
+    console.log(selectedMainImages);
+    
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                {isDeleteMode ? (<View style={styles.deleteModeBar}>
+                {booleanState.isDeleteMode ? (<View style={styles.deleteModeBar}>
                     <View style={styles.deleteModeLeft}>
                         <AntDesign onPress={handleDeleteMode} name="close" size={24} color="white" />
                         <Text style={styles.deleteModeText}>{selectedImages.length}</Text>
-                        <TouchableOpacity style={styles.selectAllButton} onPress={() => setSelectAll(!selectAll)}>
-                            <MaterialIcons name={selectAll ? "check-box" : "check-box-outline-blank"} size={24}
+                        <TouchableOpacity style={styles.selectAllButton} onPress={() => setBooleanState({ ...booleanState, selectAll: !booleanState.selectAll })}>
+                            <MaterialIcons name={booleanState.selectAll ? "check-box" : "check-box-outline-blank"} size={24}
                                 color="#9C0A35" />
                         </TouchableOpacity>
                         <Text style={styles.deleteModeText}>выделить все</Text>
@@ -211,7 +191,7 @@ const GalleryDetails: React.FC = () => {
                     all={true}
                     name=''
                     editOnPress={toggleModal}
-                    delOnPress={showMainSwitch ? () => { } : handleDeleteMode}
+                    delOnPress={booleanState.showMainSwitch ? () => { } : handleDeleteMode}
                     addOnPress={toggleBottomModal}
                 />)}
                 <View style={styles.content}>
@@ -221,7 +201,7 @@ const GalleryDetails: React.FC = () => {
                             <Text style={styles.noImagesText}>В этой галерее нет фотографий</Text>
                         ) : fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
                             <View key={albumIndex} style={styles.imageWrapper}>
-                                {albumItem.attachmentStatus === 'CANCELED' ? null : isDeleteMode && (
+                                {albumItem.attachmentStatus === 'CANCELED' ? null : booleanState.isDeleteMode && (
                                     <TouchableOpacity style={styles.checkIcon}
                                         onPress={() => handleImageSelect(albumItem.attachmentId)}>
                                         <MaterialIcons
@@ -229,20 +209,20 @@ const GalleryDetails: React.FC = () => {
                                             size={24} color="#9C0A35" />
                                     </TouchableOpacity>
                                 )}
-                                {albumItem.attachmentStatus === 'CANCELED' || albumItem.attachmentStatus === 'NEW' ? null : showMainSwitch && (
+                                {albumItem.attachmentStatus === 'CANCELED' || albumItem.attachmentStatus === 'NEW' ? null : booleanState.showMainSwitch && (
                                     <TouchableOpacity
                                         style={styles.checkIcon}
-                                        onPress={() => handleSelectMainPhoto(albumItem.attachmentId)}
-                                        disabled={selectedMainImages.some(image => image.attachmentId === albumItem.attachmentId && image.main)} // Disable button if already selected as main
+                                        onPress={() => handleImageSelect(albumItem.attachmentId)}
+                                        disabled={selectedMainImages.some(image => image.attachmentId === albumItem.attachmentId && image.main)}
                                     >
                                         <MaterialIcons
                                             name={selectedMainImages.some(image => image.attachmentId === albumItem.attachmentId && image.main) ? "check-box" : 'check-box-outline-blank'}
                                             size={26} color="#9C0A35" />
                                     </TouchableOpacity>
                                 )}
-                                <Pressable onLongPress={isDeleteMode ? () => { } : albumItem.attachmentStatus === 'NEW' || albumItem.attachmentStatus === 'CANCELED' ? null : toggleShowMain} style={styles.imageWrapper}>
+                                <Pressable onLongPress={booleanState.isDeleteMode ? () => { } : albumItem.attachmentStatus === 'NEW' || albumItem.attachmentStatus === 'CANCELED' ? null : toggleShowMain} style={styles.imageWrapper}>
                                     <Image style={styles.image} source={{ uri: getFile + albumItem.attachmentId }} />
-                                    {!isDeleteMode && albumItem.attachmentStatus === 'NEW' && <View style={{
+                                    {!booleanState.isDeleteMode && albumItem.attachmentStatus === 'NEW' && <View style={{
                                         position: 'absolute',
                                         width: 15,
                                         borderRadius: 50,
@@ -278,7 +258,7 @@ const GalleryDetails: React.FC = () => {
                 </View>
                 <CenteredModal
                     toggleModal={toggleModal}
-                    isModal={isOpen}
+                    isModal={booleanState.isOpen}
                     btnWhiteText="Отмена"
                     btnRedText="Подтверждать"
                     isFullBtn={true}
@@ -296,7 +276,7 @@ const GalleryDetails: React.FC = () => {
                 </CenteredModal>
                 <CenteredModal
                     toggleModal={toggleAllModal}
-                    isModal={isAllOpen}
+                    isModal={booleanState.isAllOpen}
                     btnWhiteText="Отмена"
                     btnRedText="Подтверждать"
                     isFullBtn={true}
@@ -308,12 +288,12 @@ const GalleryDetails: React.FC = () => {
                             : 'Вы уверены, что хотите удалить фото?'}
                     </Text>
                 </CenteredModal>
-                <BottomModal isBottomModal={isBottomModalOpen} toggleBottomModal={toggleBottomModal}>
+                <BottomModal isBottomModal={booleanState.isBottomModalOpen} toggleBottomModal={toggleBottomModal}>
                     <View style={styles.bottomModalContent}>
-                        <TouchableOpacity onPress={addImageFromCamera}>
+                        <TouchableOpacity onPress={() => pickFromImagePicker('camera')}>
                             <Text style={styles.bottomModalText}>Сделать снимок</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={addImageFromGallery}>
+                        <TouchableOpacity onPress={() => pickFromImagePicker('gallery')}>
                             <Text style={styles.bottomModalText}>Выбрать из галереи</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={toggleBottomModal}>
@@ -321,15 +301,15 @@ const GalleryDetails: React.FC = () => {
                         </TouchableOpacity>
                     </View>
                 </BottomModal>
-                <BottomModal isBottomModal={textModal} toggleBottomModal={() => toggleTextModal(text)}>
+                <BottomModal isBottomModal={booleanState.textModal} toggleBottomModal={() => toggleTextModal(text)}>
                     <View>
                         <Text style={{ fontSize: 20, textAlign: 'center', color: 'white' }}>{text}</Text>
                     </View>
                 </BottomModal>
             </ScrollView>
             <View style={{ position: 'absolute', width: '100%', bottom: 0, padding: 10 }}>
-                {images.length !== 0 && (isLoading ? <LoadingButtons title='Сохраfнить' /> : <Buttons title='Сохранить' onPress={handleSave} />)}
-                {showMainSwitch && (isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title='Сохранить' onPress={handleSaveMainPhotos} />)}
+                {images.length !== 0 && (booleanState.isLoading ? <LoadingButtons title='Сохраfнить' /> : <Buttons title='Сохранить' onPress={() =>handleSave('photo')} />)}
+                {booleanState.showMainSwitch && (booleanState.isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title='Сохранить' onPress={() =>handleSave('mainPhoto')} />)}
             </View>
         </SafeAreaView>
     );
