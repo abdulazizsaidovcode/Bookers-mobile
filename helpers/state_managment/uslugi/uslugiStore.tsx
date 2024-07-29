@@ -47,6 +47,7 @@ export interface ClientCardProps {
   btntext?: string | undefined;
   anotherIcon?: React.ReactNode
   phoneIcon?: React.ReactNode
+  phone:string
 };
 
 export interface ServiceCategory {
@@ -94,8 +95,6 @@ export interface ClientAllCategory {
   setFeedbackForMaster: (data: []) => void;
   masterServis: ServiceCategory[]
   setmasterServis: (data: []) => void;
-  selectedCategoryId: string[];
-  setSelectedCategoryId: (val: string[]) => void;
 }
 
 // Create the Zustand store

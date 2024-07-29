@@ -69,17 +69,8 @@ const MasterInformation = () => {
     setSelectedCategory(index);
   };
 
-  const makePhoneCall = (number: string) => {
-    const url = `tel:${number}`;
-    Linking.canOpenURL(url)
-      .then((supported) => {
-        if (supported) {
-          Linking.openURL(url);
-        } else {
-          Alert.alert('Error', 'Your device does not support this feature');
-        }
-      })
-      .catch((err) => console.error('Error making phone call:', err));
+  const makePhoneCall = (phone: string) => {
+    Linking.openURL(`tel${phone}`)
   };
 
   useEffect(() => {
@@ -118,8 +109,6 @@ const MasterInformation = () => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log(selectedClient, 'salom');
-
       if (selectedClient) {
         const masterId = selectedClient.id;
         getMAstersServeses(masterId);
@@ -127,7 +116,6 @@ const MasterInformation = () => {
       return () => null;
     }, [])
   );
-
   useFocusEffect(
     useCallback(() => {
       if (selectedClient) {
@@ -234,7 +222,6 @@ const MasterInformation = () => {
                     btntext={item.btntext}
                     services={item.services}
                     onPress={openModal}
-                    onPhonePress={() => makePhoneCall(phoneNumber)}
                     locationIcon={
                       <SimpleLineIcons name="location-pin" size={24} color="white"
                         onPress={() => {
@@ -249,7 +236,10 @@ const MasterInformation = () => {
                       <FontAwesome6 name="phone" size={24} color="white" />
                     }
                     phoneIcon={
-                      <Octicons name="bookmark" size={26} color="white" />
+                      <Octicons name="bookmark" size={26} color="white"
+                      onPress={() => 
+                      {console.log("Helllooooo",item.phone)
+                      makePhoneCall(item.phone)}} />
                     }
                   />
                 </View>

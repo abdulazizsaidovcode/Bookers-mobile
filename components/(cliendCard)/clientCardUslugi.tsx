@@ -20,10 +20,11 @@ type ClientCardProps = {
     btntext?: string | undefined;
     anotherIcon?: React.ReactNode
     phoneIcon?: React.ReactNode
+    phone?:string;
 };
 
 const ClientCardUslugi: React.FC<ClientCardProps> = ({
-    salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, locationIcon, btntext, anotherIcon, phoneIcon
+    salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, locationIcon, btntext, anotherIcon, phoneIcon,phone
 }) => {
     const { getme } = webPageStore();
 
@@ -80,6 +81,7 @@ const ClientCardUslugi: React.FC<ClientCardProps> = ({
                 )}
                 {phoneIcon && (
                     <TouchableOpacity
+                        onPress={onPress}
                         activeOpacity={0.7}
                         style={[tw`px-4 py-3 rounded-full mx-2`, { backgroundColor: '#9C0A35' }]} // Customize the style as needed
                     >

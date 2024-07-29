@@ -16,7 +16,7 @@ import { getConfig } from '@/app/(tabs)/(master)/main';
 
 const Expertise: React.FC = () => {
     const route = useRoute();
-    const { childCategoryData, categoryFatherId, setChildCategoryData, selectedCategory, setCompleted } = servicesStore();
+    const { childCategoryData, setChildCategoryData, selectedCategory, setCompleted } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [value, setValue] = useState('');
     const [validate, setValidate] = useState(false);
@@ -30,97 +30,76 @@ const Expertise: React.FC = () => {
             postCategory(selectedCategory, '');
         }
     }, [selectedCategory]);
-    
+
     useFocusEffect(
         React.useCallback(() => {
             setLoading(true);
-            if(selectedCategory)
+            if (selectedCategory) {
                 getChildCategory(selectedCategory).finally(() => setLoading(false));
+            }
             return () => { };
         }, [selectedCategory])
     );
 
     useEffect(() => {
-        if (value.trim() === "") {
-            setValidate(false);
-        } else {
-            setValidate(true);
-        }
+        setValidate(value.trim() !== '');
     }, [value]);
 
-    const getChildCategory = async (selectedCategory: string) => {
+    const getChildCategory = async (selectedCategory: string | null) => {
         try {
             const config = await getConfig();
-            const response = await axios.get(`${category_child}${selectedCategory}`, config ? config : {});
+            const response = await axios.get(`${category_child}${selectedCategory}`, config || {});
             if (response.data.success) {
-                const child =
-                    response.data.body &&
-                    response.data.body.map((item: any) => ({
-                        key: item.id,
-                        name: item.name,
-                    }));
-                if (child.length > 0) {
-                    setChildCategoryData(child);
-                } else {
-                    setChildCategoryData([]);
-                }
+                const child = response.data.body.map((item: any) => ({
+                    key: item.id,
+                    name: item.name,
+                }));
+                setChildCategoryData(child.length > 0 ? child : []);
+                setNoData(child.length === 0);
             } else {
                 setChildCategoryData([]);
+                setNoData(true);
             }
         } catch (error) {
             console.error("Error fetching child categories:", error);
+            setChildCategoryData([]);
+            setNoData(true);
         }
     };
-
-    useFocusEffect(
-        React.useCallback(() => {
-            setLoading(true);
-            if(selectedCategory)
-                getChildCategory(selectedCategory).finally(() => setLoading(false));
-            return () => { };
-        }, [selectedCategory])
-    );
-
-    const postCategory = async (selectedCategoryId: string, name: string) => {
+    const postCategory = async (selectedCategoryId: string | null, value: string) => {
         try {
             const config = await getConfig();
-            const response = await axios.post(`${masterAdd_category}/${selectedCategory}?name=${name}`, "", config ? config : {});
+            console.log("Posting category with config:", config);
+            console.log("Data being sent to backend:", { selectedCategoryId, value });
+            const response = await axios.post(`${masterAdd_category}/${selectedCategoryId}?name=${value}`, {}, config || {});
             if (response.data.success) {
-                await getChildCategory(selectedCategory);
-            } else {
-                setChildCategoryData([]);
+                getChildCategory(selectedCategory)
             }
         } catch (error) {
-            console.error(error);
+            console.error("Error adding category:", error);
         }
     };
-
     const openModal = () => setModalVisible(true);
     const closeModal = () => {
         setModalVisible(false);
         setValue('');
     };
     const handleAdd = () => {
-        if (value.trim() !== "") {
+        if (value.trim()) {
             postCategory(selectedCategory, value);
             closeModal();
-            setValue("");
+            setValue('');
         }
     };
-
     const handleCategorySelect = (item: any) => {
         setSelectedServices((prevSelected) => {
             const isSelected = prevSelected.find((service) => service.id === item.id);
-            if (isSelected) {
-                return prevSelected.filter((service) => service.id !== item.id);
-            } else {
-                return [...prevSelected, item];
-            }
+            const updatedSelectedServices = isSelected
+                ? prevSelected.filter((service) => service.id !== item.id)
+                : [...prevSelected, item];
+            setSelectedServices(updatedSelectedServices);
+            return updatedSelectedServices;
         });
-    };
-
-    const logSelectedServices = () => {
-        console.log("Selected Services:", selectedServices);
     };
 
     const renderItem = ({ item }: { item: any }) => {
@@ -129,15 +108,19 @@ const Expertise: React.FC = () => {
             <TouchableOpacity onPress={() => handleCategorySelect(item)}>
                 <ServicesCategory
                     title={item.name}
-                    // style={[backgroundColor: isSelected ? 'gray' : 'transparent']}
                 />
             </TouchableOpacity>
         );
     };
 
+    const handleSave = () => {
+        router.push('../(process)/process');
+        setCompleted([true, true, true, true]);
+    };
+
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
-            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
+            <StatusBar backgroundColor='#21212E' barStyle='light-content' />
             <NavigationMenu name="Специализация" />
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                 <ScrollView
@@ -152,7 +135,8 @@ const Expertise: React.FC = () => {
                             <FlatList
                                 data={childCategoryData}
                                 renderItem={renderItem}
-                                keyExtractor={(item, index) => index.toString()} />
+                                keyExtractor={(item) => item.key.toString()}
+                            />
                         )}
                     </View>
                     <View style={tw`content-end mb-3`}>
@@ -160,29 +144,25 @@ const Expertise: React.FC = () => {
                         <View style={tw`mt-2 content-end`}>
                             <Buttons
                                 title="Сохранить"
-                                onPress={() => {
-                                    router.push('../(process)/process')
-                                    setCompleted([true, true, true, true])
-
-                                }}
+                                onPress={handleSave}
                                 isDisebled={selectedServices.length === 0}
                             />
                         </View>
                         <CenteredModal
                             isModal={modalVisible}
                             btnWhiteText='Добавить'
-                            btnRedText='Закрыть '
+                            btnRedText='Закрыть'
                             isFullBtn={false}
                             toggleModal={closeModal}
                             onConfirm={handleAdd}
-                        // disabled={!validate}
                         >
                             <View style={tw`p-4 text-center`}>
-                                <Text style={tw`text-white text-xl mb-2 w-full`}>Добавьте свою специализацию</Text>
+                                <Text style={tw`text-white text-lg mb-2 w-full`}>Добавьте свою специализацию</Text>
                                 <Textarea
                                     placeholder=''
                                     onChangeText={(text) => setValue(text)}
-                                    value={value} />
+                                    value={value}
+                                />
                             </View>
                         </CenteredModal>
                     </View>

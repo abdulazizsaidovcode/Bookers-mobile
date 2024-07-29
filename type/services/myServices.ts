@@ -31,7 +31,7 @@ export interface Services {
     setSelectedServices: (data:[]) =>void
     prodseduraUslug: any,
     setProdseduraUslug: (data: any) => void
-    selectedCategory: string;
+    selectedCategory: string | null;
     setSelectedCategory: (val:string)=>void
     selectedCategoryId: string | null
     setSelectedCategoryId: (val: string | null) => void
