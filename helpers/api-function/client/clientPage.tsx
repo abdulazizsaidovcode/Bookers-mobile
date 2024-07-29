@@ -1,7 +1,7 @@
 import Toast from "react-native-simple-toast";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import axios from "axios";
-import { client_profile_delete_url, client_profile_edit_url, getNotification_url, getNotificationNotReady_url } from "@/helpers/api";
+import { client_profile_delete_url, client_profile_edit_url, clientReadNotification_url, getNotification_url, getNotificationNotReady_url } from "@/helpers/api";
 import { getClientNotififcations } from "@/type/client/editClient";
 
 export const updateClientProfile = async (datas: any, navigate?: () => void, getMe?: () => void, clearData?: () => void) => {
@@ -92,6 +92,26 @@ export const clientNotificationDelete = async (datas: any, getData: () => void) 
     catch {
         Toast.show('An error occurred on the server', Toast.LONG);
 
+    }
+}
+//client notification not ready or ready
+export const clientPostReadyORnotReady = async (datas: any, getData: () => void) => {
+    const config = await getConfig()
+    console.log('read -------------------------------',datas);  
+    
+    const res = await axios.post(clientReadNotification_url, datas, config ? config : {})
+    console.log(res.data);
+    
+    try{
+        if(res.data.success){
+            Toast.show('Successfully updated', Toast.LONG)
+            getData()
+        }else{
+            Toast.show('An error occurred on the server', Toast.LONG)
+        }
+    }
+    catch{
+        Toast.show('An error occurred on the server', Toast.LONG)
     }
 }
 // client notification not ready

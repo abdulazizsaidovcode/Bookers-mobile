@@ -5,7 +5,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import BottomModal from "@/components/(modals)/modal-bottom";
 import Buttons from "@/components/(buttons)/button";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import { clientNotification, clientNotificationDelete } from '@/helpers/api-function/client/clientPage';
+import { clientNotification, clientNotificationDelete, clientPostReadyORnotReady } from '@/helpers/api-function/client/clientPage';
 import { getClientNotififcations } from '@/type/client/editClient';
 import { useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,7 +14,8 @@ const NotificationClient: React.FC = () => {
     const [isBottomModalVisible, setBottomModalVisible] = useState<boolean>(false);
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [notification, setNotification] = useState<getClientNotififcations[]>([]);
-    const [notificationIds, setNotificationIds] = useState<string[] | []>([]);
+    const [notificationIds, setNotificationIds] = useState<string[]>([]);
+    const [idList, setIdList] = useState<string[]>([]);
     const [selectedNotification, setSelectedNotification] = useState<getClientNotififcations | null>(null);
 
     const deleteToggleModal = () => {
@@ -27,11 +28,10 @@ const NotificationClient: React.FC = () => {
     };
 
     const handleDeletePress = () => {
-        const ids: any = notification.map(notif => notif.id);
+        const ids: string[] = notification.map(notif => notif.id);
         if (ids.length > 0) {
             setNotificationIds(ids);
             deleteToggleModal();
-            
         } else {
             Alert.alert('No notifications', 'There are no notifications to delete.');
         }
@@ -56,13 +56,31 @@ const NotificationClient: React.FC = () => {
         }
     };
 
+    const handleReadAll = () => {
+        const ids = notification.map(notif => notif.id);
+        if (ids.length > 0) {
+            setIdList(ids);
+            clientPostReadyORnotReady({ idList: ids }, () => fetchNotifications());
+            setNotificationIds([]);
+        }
+    };
+
+    const handleReadSingle = (id: string) => {
+        clientPostReadyORnotReady({ idList: [id] }, () => fetchNotifications());
+    };
+
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor={'#21212E'} barStyle={'light-content'} />
             <View style={styles.headerContainer}>
                 <NavigationMenu name={"Уведомления"} />
                 <View style={styles.delete_read_Button} >
-                    <Ionicons name="checkmark-done-circle-outline" size={30} color="white" />
+                    <Ionicons 
+                        name="checkmark-done-circle-outline" 
+                        size={30} 
+                        color="white" 
+                        onPress={handleReadAll} // <--- Handle all read action
+                    />
                     <AntDesign name="delete" size={24} color="white" onPress={handleDeletePress} />
                 </View>
             </View>
@@ -71,10 +89,12 @@ const NotificationClient: React.FC = () => {
                     notification.map((notif, index) => (
                         <TouchableOpacity
                             key={index}
-                            style={[styles.card, notif.read === true ?
-                                [] : styles.unreadCard]}
+                            style={[styles.card, notif.read === true ? [] : styles.unreadCard]}
                             activeOpacity={0.9}
-                            onPress={() => toggleBottomModal(notif)}
+                            onPress={() => {
+                                toggleBottomModal(notif);
+                                handleReadSingle(notif.id);
+                            }}
                         >
                             <View style={styles.header}>
                                 <Image
@@ -128,7 +148,7 @@ const NotificationClient: React.FC = () => {
                 <>
                     <AntDesign name="delete" size={56} color="#9C0A35" />
                     <Text style={styles.deleteText}>
-                        Вы хотите очистить все уведомлении?
+                        Вы хотите очистить все уведомления?
                     </Text>
                 </>
             </CenteredModal>
