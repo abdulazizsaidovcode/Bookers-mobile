@@ -120,7 +120,7 @@ const Specialist = () => {
         id={item.id}
         masterId={item.masterId}
         salon={item.salonName}
-        imageUrl={item.imageUrl}
+        imageUrl={item.attachmentId}
         name={item.fullName}
         zaps={item.nextEntryDate}
         masterType={item.masterSpecialization}

@@ -23,7 +23,7 @@ const servicesStore = create<Services>((set) => ({
     setSelectedServices: (data) => set({ selectedServices: data }),
     prodseduraUslug: null,
     setProdseduraUslug: (data: any) => set({prodseduraUslug: data}),
-    selectedCategory:"",
+    selectedCategory:null,
     setSelectedCategory:(val:string) => set({selectedCategory:val}),
     selectedCategoryId: null,
     setSelectedCategoryId: (val: string | null) => set({selectedCategoryId : val}),

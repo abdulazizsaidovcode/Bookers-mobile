@@ -27,20 +27,25 @@ export const getAllCategory = async () => {
 };
 
 // Client post filter
-  export const postClientFilter = async (categoryId?: any, gender?: boolean | null, nextToMe?: number | null, rating?: number | null, lat?: number | null, lng?: number | null, inputValue?: string | null, toggleModal?: () => void) => {
-    try {
+export const postClientFilter = async (categoryId?: string[], gender?: boolean | null, nextToMe?: number | null, rating?: number | null, lat?: number | null, lng?: number | null, inputValue?: string | null, toggleModal?: () => void, page?: number, size?: number) => {
+  try {
       const config = await getConfig();
       const postData = { categoryId, gender, nextToMe, rating, lat, lng };
-      const { data } = await axios.post(`${getClient_filter}${inputValue ? `?nameOrPhone=${inputValue}`: ""}`, postData, config ? config : {});
+      console.log('Sending POST data:', postData);
+      const url = `${getClient_filter}?page=${page ? page : 0}&size=${size ? size : 10}${inputValue ? `?nameOrPhone=${inputValue}` : ""}`;
+      const { data } = await axios.post(url, postData, config ? config : {});
+      console.log(data.body.object);
       if (data.success) {
-        ClientStory.getState().setClientData(data.body)
-        toggleModal ? toggleModal() : null 
-      };
-      ClientStory.getState().setClientId(data.body.id)
-    } catch (error) {
+          ClientStory.getState().setClientData(data.body.object);
+          if (toggleModal) toggleModal();
+      }
+      ClientStory.getState().setClientId(data.body.id);
+  } catch (error) {
       console.log('Error:', error);
-    }
-  };
+  }
+};
+
+
 
 // Servuces Get
 export const ServicesClient = async (masterId?: string, categoryId?: string) => {

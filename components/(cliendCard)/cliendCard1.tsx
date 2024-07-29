@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import tw from 'tailwind-react-native-classnames';
 import { router } from 'expo-router';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
+import { getFile } from '@/helpers/api';
+
 
 type ClientCardProps = {
   salon: string;
@@ -16,38 +18,36 @@ type ClientCardProps = {
   address: string;
   feedbackCount: number;
   onPress?: () => void;
-  locationIcon?: React.ReactNode
-  btntext?:string;
+  locationIcon?: React.ReactNode;
+  btntext?: string;
 };
 
 const ClientCard1: React.FC<ClientCardProps> = ({
-  salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress,locationIcon,btntext
+  salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, locationIcon, btntext
 }) => {
   const { getme } = webPageStore();
+  const [imageUri, setImageUri] = useState<string | null>(null);
+
 
   const generateStars = (count: number) => {
-    const roundedCount = Math.round(count); // Yaqinlashtirilgan baho
-    const starsCount = Math.min(roundedCount, 5); // 5 tadan oshmaydigan yulduzlar soni
+    const roundedCount = Math.round(count);
+    const starsCount = Math.min(roundedCount, 5);
     let stars = '';
     for (let i = 0; i < starsCount; i++) {
-        stars += '★';
+      stars += '★';
     }
     for (let i = starsCount; i < 5; i++) {
-        stars += '☆';
+      stars += '☆';
     }
     return stars;
-};
-
+  };
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.6}
-      onPress={onPress}
-    >
+    <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
       <View style={tw`p-4 bg-gray-300 rounded-2xl shadow-lg`}>
         <View style={tw`flex-row items-center mb-4`}>
           <Image
-            source={getme && getme.attachmentId ? { uri: getme.attachmentId } : require('../../assets/avatar.png')}
+            source={imageUri ? { uri: getFile + imageUri } : require('../../assets/avatar.png')}
             style={tw`w-16 h-16 rounded-full mr-3`}
           />
           <View style={tw`flex-1`}>
@@ -67,16 +67,21 @@ const ClientCard1: React.FC<ClientCardProps> = ({
         <Text style={tw`text-gray-600 text-lg mb-2`}>{address || "Address is not found"}</Text>
         <Text style={tw`text-black text-lg font-bold mb-4`}>Ближайшая запись: {zaps}</Text>
         <View style={tw`flex-row`}>
-          <TouchableOpacity activeOpacity={0.8} style={[tw`px-16 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]}
-              onPress={onPress}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={[tw`px-16 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]}
+            onPress={onPress}
           >
             <Text style={tw`text-white text-xl`}>{btntext}</Text>
           </TouchableOpacity>
           {locationIcon && (
-                    <TouchableOpacity activeOpacity={0.7} style={[tw`px-3 py-3 rounded-full ml-3 `, { backgroundColor: '#9C0A35' }]}>
-                        {locationIcon}
-                    </TouchableOpacity>
-                )}
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={[tw`px-3 py-3 rounded-full ml-3`, { backgroundColor: '#9C0A35' }]}
+            >
+              {locationIcon}
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </TouchableOpacity>

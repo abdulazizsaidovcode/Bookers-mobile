@@ -22,7 +22,6 @@ const Category = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const [selectedCategories, setSelectedCategories] = useState();
 
     const getCategory = async () => {
         try {
@@ -37,9 +36,6 @@ const Category = () => {
             console.error("Error fetching services:", error);
         }
     };
-
-    console.log(selectedCategories);
-    
 
     const getChildCategory = async (id: string) => {
         setLoading(true);
@@ -65,8 +61,7 @@ const Category = () => {
             const response = await axios.post(`${getCategory_masterAdd}categoryIds=${selectedCategory}`, {}, config ? config : {});
             if (response.data.success) {
                 router.push('(standart)/(services)/(expertise)/expertise');
-                setCompleted([true, true, true, false])
-
+                setCompleted([true, true, true, false]);
             } else {
                 console.log();
             }
@@ -77,6 +72,7 @@ const Category = () => {
 
     useEffect(() => {
         getCategory();
+        setSelectedCategory(null)
     }, []);
 
     const openModal = (id: string) => {
@@ -91,18 +87,16 @@ const Category = () => {
 
     const handleCategoryPress = (id: string) => {
         if (selectedCategory === id) {
-            setSelectedCategory(id);
-            setModalVisible(false);
+            setSelectedCategory(null);
+            closeModal();
         } else {
             setSelectedCategory(id);
             openModal(id);
         }
     };
 
-    const handleCategorySelect = (category: string) => {
-        setSelectedCategories(prev => {
-        });
-    };
+    console.log(selectedCategory);
+    
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -124,14 +118,10 @@ const Category = () => {
                             keyExtractor={(item) => item.key}
                             renderItem={({ item }) => (
                                 <ServicesCategory
-                                title={item.value}
-                                items={item}
-                                onPress={() => {
-                                    handleCategoryPress(item.key);
-                                    handleCategorySelect(item.key);
-                                }}
-                               
-                            />
+                                    title={item.value}
+                                    items={item}
+                                    onPress={() => handleCategoryPress(item.key)}
+                                />
                             )}
                         />
                     </View>
@@ -140,6 +130,7 @@ const Category = () => {
                             <Buttons
                                 title="Сохранить"
                                 onPress={addCategory}
+                                isDisebled={selectedCategory !== null}
                             />
                         </View>
                         <CenteredModal
