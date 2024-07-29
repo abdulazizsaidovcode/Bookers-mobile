@@ -36,7 +36,7 @@ const genderMapping: any = {
 
 const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const { } = ClientStory()
+  const { setSelectedCategoryId } = ClientStory()
 
   const handleSelect = (id: string) => {
     setSelectedIds(prevSelectedIds => {
@@ -49,7 +49,7 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
   };
 
   useEffect(() => {
-
+    setSelectedCategoryId(selectedIds)
   }, [selectedIds])
 
   return (

@@ -6,6 +6,7 @@ export async function getFreeTime(date: string | null, setData: (val: any) => vo
     const config = await getConfig()
     console.log(config);
     console.log(date);
+    console.log(masterID);
     
 
     

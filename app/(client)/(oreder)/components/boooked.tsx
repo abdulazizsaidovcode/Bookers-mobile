@@ -42,8 +42,6 @@ const Booked: React.FC = () => {
     useFocusEffect(
         useCallback(() => {
             if (calendarDate && selectedClient && selectedClient.id) {
-                console.log(selectedClient.id);
-                
                 setDate(calendarDate)
                 getFreeTime(calendarDate, setFreeTime, selectedClient.id);
             }
@@ -54,7 +52,7 @@ const Booked: React.FC = () => {
         useCallback(() => {
             if (calendarDate && selectedClient && selectedClient.id) {
                 console.log(selectedClient.id);
-                
+
                 setDate(calendarDate)
                 getFreeTime(calendarDate, setFreeTime, selectedClient.id);
             }
@@ -81,11 +79,6 @@ const Booked: React.FC = () => {
         setActiveTime('');
     }, [calendarDate]);
 
-    const handleTabChange = (tab: any) => {
-        setActiveTab(tab);
-        setServiceId([tab])
-        setActiveTime(''); // Reset active time when tab changes
-    };
 
     const handleTimeSelect = (time: string) => {
         setActiveTime(time);
@@ -106,38 +99,20 @@ const Booked: React.FC = () => {
                 style={styles.accordionContainer}
                 theme={{ colors: { background: 'transparent' } }}
             >
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.tabContainer}>
-                    {services && services.length > 0 ? services.map((service: any) => (
-                        <TouchableOpacity
-                            key={service.id}
-                            style={[styles.tabButton, activeTab === service.id && styles.activeTab]}
-                            onPress={() => handleTabChange(service.id)}
-                        >
-                            <Text style={[styles.tabText, activeTab !== service.id && styles.inactiveText]}>
-                                {service.name.trim()}
-                            </Text>
-                        </TouchableOpacity>
-                    )) : <Text style={styles.placeholderText}>Нет услуг</Text>}
-                </ScrollView>
                 <View>
-                    {activeTab && (
-                        <View style={styles.timeContainer}>
-                            {FreeTime ? FreeTime.map((time: string, index) =>
-                                <TouchableOpacity
-                                    key={index}
-                                    style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
-                                    onPress={() => handleTimeSelect(time)}
-                                >
-                                    <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
-                                        {time.slice(0, 5)}
-                                    </Text>
-                                </TouchableOpacity>
-                            ) : <Text style={styles.placeholderText}>Нет свободного времени</Text>}
-                        </View>
-                    )}
+                    <View style={styles.timeContainer}>
+                        {FreeTime ? FreeTime.map((time: string, index) =>
+                            <TouchableOpacity
+                                key={index}
+                                style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
+                                onPress={() => handleTimeSelect(time)}
+                            >
+                                <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
+                                    {time.slice(0, 5)}
+                                </Text>
+                            </TouchableOpacity>
+                        ) : <Text style={styles.placeholderText}>Нет свободного времени</Text>}
+                    </View>
                 </View>
             </List.Accordion>
 

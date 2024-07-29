@@ -180,20 +180,6 @@ const MasterInformation = () => {
     return rows;
   };
 
-  function setOrder() {
-    let data: any = {
-      serviceIds: [services.id],
-      date: "2024-07-29",
-      timeHour: 0,
-      timeMin: 0,
-      clientId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      comment: "string"
-    }
-
-    postOrder(data)
-
-  }
-
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
@@ -315,9 +301,11 @@ const MasterInformation = () => {
               </View>
             )}
           />
-          <Buttons onPress={() => {
-            navigate.navigate('(client)/(oreder)/order');
-          }} title='Продолжить' />
+          <Buttons
+            isDisebled={masterServis.length > 0}
+            onPress={() => {
+              navigate.navigate('(client)/(oreder)/order');
+            }} title='Продолжить' />
 
         </ScrollView>
       )}
