@@ -11,6 +11,7 @@ import { useSheduleData } from '@/helpers/state_managment/schedule/schedule';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import { getUser } from '@/helpers/api-function/getMe/getMee';
 import { fetchServices } from '@/helpers/api-function/client/client';
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 const { width, height } = Dimensions.get('window');
 
 
@@ -26,6 +27,7 @@ const Booked: React.FC = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { setTime, setServiceId, setDate } = useSheduleData()
     const { getMee, setGetMee } = useGetMeeStore()
+    const { selectedClient } = ClientStory()
 
     useFocusEffect(
         useCallback(() => {
@@ -39,18 +41,22 @@ const Booked: React.FC = () => {
 
     useFocusEffect(
         useCallback(() => {
-            if (calendarDate && getMee.id) {
+            if (calendarDate && selectedClient && selectedClient.id) {
+                console.log(selectedClient.id);
+                
                 setDate(calendarDate)
-                getFreeTime(calendarDate, setFreeTime, getMee.id);
+                getFreeTime(calendarDate, setFreeTime, selectedClient.id);
             }
             getUser(setGetMee);
         }, [calendarDate, setFreeTime])
     );
     useFocusEffect(
         useCallback(() => {
-            if (calendarDate && getMee.id) {
+            if (calendarDate && selectedClient && selectedClient.id) {
+                console.log(selectedClient.id);
+                
                 setDate(calendarDate)
-                getFreeTime(calendarDate, setFreeTime, getMee.id);
+                getFreeTime(calendarDate, setFreeTime, selectedClient.id);
             }
             getUser(setGetMee);
         }, [])
