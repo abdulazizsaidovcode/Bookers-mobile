@@ -16,6 +16,7 @@ import { deviceInfo } from "@/helpers/api-function/register/registrFC";
 import { getFile } from '@/helpers/api';
 import tw from 'tailwind-react-native-classnames';
 import hasNotificationState from '@/helpers/state_managment/notifications/readORisReadNOtif';
+import { getNotificationNor_ReadyClient } from '@/helpers/api-function/client/clientPage';
 
 
 
@@ -31,7 +32,6 @@ type DashboardItemType = {
 
 
 const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
-
   return (
     <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={handlePress}>
       <View style={styles.item}>
@@ -51,6 +51,11 @@ const Navbar: React.FC = () => {
   const navigation = useNavigation();
   const {hasNotification,setHasNotification}=hasNotificationState()
 
+  useFocusEffect(
+    useCallback(() => {
+      getNotificationNor_ReadyClient(setHasNotification)
+    },[setHasNotification])
+  )
   return (
     <View style={styles.navbar}>
       <Text style={styles.title}>Главная</Text>
