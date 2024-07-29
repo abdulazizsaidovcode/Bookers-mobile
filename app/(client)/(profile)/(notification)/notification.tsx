@@ -62,10 +62,10 @@ const NotificationClient: React.FC = () => {
             <StatusBar backgroundColor={'#21212E'} barStyle={'light-content'} />
             <View style={styles.headerContainer}>
                 <NavigationMenu name={"Уведомления"} />
-                <TouchableOpacity style={styles.delete_read_Button} >
+                <View style={styles.delete_read_Button} >
                     <Ionicons name="checkmark-done-circle-outline" size={30} color="white" />
                     <AntDesign name="delete" size={24} color="white" onPress={handleDeletePress} />
-                </TouchableOpacity>
+                </View>
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 {notification.length !== 0 ? (

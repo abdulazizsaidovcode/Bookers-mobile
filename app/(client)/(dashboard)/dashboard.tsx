@@ -15,6 +15,7 @@ import * as Device from 'expo-device';
 import { deviceInfo } from "@/helpers/api-function/register/registrFC";
 import { getFile } from '@/helpers/api';
 import tw from 'tailwind-react-native-classnames';
+import hasNotificationState from '@/helpers/state_managment/notifications/readORisReadNOtif';
 
 
 
@@ -48,7 +49,7 @@ const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
 
 const Navbar: React.FC = () => {
   const navigation = useNavigation();
-  const [hasNotification, setHasNotification] = useState(true);
+  const {hasNotification,setHasNotification}=hasNotificationState()
 
   return (
     <View style={styles.navbar}>
