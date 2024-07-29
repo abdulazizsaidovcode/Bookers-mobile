@@ -1,27 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   ScrollView, View, StatusBar, Text, TouchableOpacity, FlatList, Linking, Alert, Image,
-  Dimensions, StyleSheet, TouchableWithoutFeedback, Modal
+  Dimensions, StyleSheet
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import ClientCardDetail from '@/components/(cliendCard)/clientCardDetail';
-import CenteredModal from '@/components/(modals)/modal-centered';
-import Textarea from '@/components/select/textarea';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { AntDesign, FontAwesome6, Octicons, SimpleLineIcons } from '@expo/vector-icons';
-import { getMasterGallery, getMasterOtzif, getMAstersServeses, postComment, ServicesClient } from '@/helpers/api-function/uslugi/uslugi';
+import { getMasterGallery, getMasterOtzif, getMAstersServeses, ServicesClient } from '@/helpers/api-function/uslugi/uslugi';
 import { useMapStore } from '@/helpers/state_managment/map/map';
 import { useFocusEffect, useNavigation } from 'expo-router';
 import ClientCardUslugi from '@/components/(cliendCard)/clientCardUslugi';
-import CustomButton from '@/components/(buttons)/custom';
-import { getFile } from '@/helpers/api';
-import ReviewCard from '@/components/(cliendCard)/riewCard';
-import BottomModal from '@/components/(modals)/modal-bottom';
-import CustomButton1 from './CustomButton';
 import Buttons from '@/components/(buttons)/button';
-import { postOrder } from '@/helpers/api-function/oreder/oreder';
+import { getFile } from '@/helpers/api';
+import CustomButton1 from './CustomButton';
 
 const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
@@ -29,49 +23,9 @@ const isSmallDevice = width < 375;
 const MasterInformation = () => {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const { selectedClient, masterServis, services, setServices, activeTab, setActiveTab, masterGallery, feedbackForMaster, clientData } = ClientStory();
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [value, setValue] = useState<string>('');
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [selectedId, setSelectedId] = useState<string | null>('services');
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>();
-  const [bottomModal, setBottomModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<any>(null);
-
-  const toggleBottomModal = () => setBottomModal(!bottomModal);
-  const openModal = () => setModalVisible(true);
-  const closeModal = () => {
-    setModalVisible(false);
-    setValue('');
-  };
-
-  const closeGaleryModal = () => setSelectedImage(null);
-
-  const handleAdd = () => {
-    if (selectedClient) {
-      if (value.trim() !== '') {
-        postComment({
-          clientId: null,
-          masterId: selectedClient.id,
-          adminId: null,
-          message: value,
-          messageStatus: 'CLIENT_MASTER_MESSAGE'
-        });
-        closeModal();
-        setValue('');
-      }
-    }
-  };
-
-  const handleImagePress = (attachment: any) => setSelectedImage(attachment);
-
-  const handleCategorySelect = (categoryId: string, index: number) => {
-    setSelectedCategory(index);
-  };
-
-  const makePhoneCall = (phone: string) => {
-    Linking.openURL(`tel${phone}`)
-  };
 
   useEffect(() => {
     setServices([
@@ -101,10 +55,9 @@ const MasterInformation = () => {
         const masterId = selectedClient.id;
         const categoryId = services.categoryId;
         ServicesClient(masterId, categoryId);
-
       }
       return () => null;
-    }, [])
+    }, [selectedClient])
   );
 
   useFocusEffect(
@@ -114,8 +67,9 @@ const MasterInformation = () => {
         getMAstersServeses(masterId);
       }
       return () => null;
-    }, [])
+    }, [selectedClient])
   );
+
   useFocusEffect(
     useCallback(() => {
       if (selectedClient) {
@@ -123,7 +77,7 @@ const MasterInformation = () => {
         getMasterOtzif(id);
       }
       return () => null;
-    }, [])
+    }, [selectedClient])
   );
 
   useEffect(() => {
@@ -151,7 +105,7 @@ const MasterInformation = () => {
       const rowItems = filteredAttachments
         .slice(i, i + 3)
         .map((attachment: any, index: number) => (
-          <TouchableOpacity key={index} onPress={() => handleImagePress(attachment)}>
+          <TouchableOpacity key={index} onPress={() => setSelectedImage(attachment)}>
             <Image
               key={index}
               source={{ uri: getFile + attachment.attachmentId }}
@@ -171,7 +125,7 @@ const MasterInformation = () => {
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
-      <NavigationMenu name="Подробнее о Натали" />
+      <NavigationMenu name={`Подробнее`} />
       <View style={tw`flex flex-row mb-5 p-3`}>
         <CustomButton1
           borderColor='#9E9E9E'
@@ -190,10 +144,7 @@ const MasterInformation = () => {
         <CustomButton1
           title="Отзывы"
           borderColor='#9E9E9E'
-          onPress={() => {
-            setActiveTab('pastStart');
-            // handleClick();
-          }}
+          onPress={() => setActiveTab('pastStart')}
           active={activeTab === 'pastStart'}
           textColor='#9E9E9E'
         />
@@ -203,8 +154,8 @@ const MasterInformation = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
           <View style={tw`mb-5`}>
-            {clientData && <FlatList
-              data={clientData}
+            {selectedClient && <FlatList
+              data={selectedClient}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
                 <View style={tw`mb-4`}>
@@ -221,7 +172,7 @@ const MasterInformation = () => {
                     feedbackCount={item.feedbackCount}
                     btntext={item.btntext}
                     services={item.services}
-                    onPress={openModal}
+                    onPress={() => {}}
                     locationIcon={
                       <SimpleLineIcons name="location-pin" size={24} color="white"
                         onPress={() => {
@@ -237,9 +188,7 @@ const MasterInformation = () => {
                     }
                     phoneIcon={
                       <Octicons name="bookmark" size={26} color="white"
-                      onPress={() => 
-                      {console.log("Helllooooo",item.phone)
-                      makePhoneCall(item.phone)}} />
+                      onPress={() => makePhoneCall(item.phone)} />
                     }
                   />
                 </View>
@@ -305,7 +254,7 @@ const MasterInformation = () => {
             data={renderRows(masterGallery)}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity key={item.id} onPress={() => handleImagePress(item)}>
+              <TouchableOpacity key={item.id} onPress={() => setSelectedImage(item)}>
                 <Image source={{ uri: getFile + item.attachmentId }} style={styles.image} />
               </TouchableOpacity>
             )}
@@ -321,20 +270,6 @@ const MasterInformation = () => {
           />
         </ScrollView>
       )}
-      {/* <CenteredModal
-        isVisible={modalVisible}
-        onClose={closeModal}
-        onAdd={handleAdd}
-        value={value}
-        setValue={setValue}
-        title="Сообщение"
-      />
-      <BottomModal
-        isVisible={bottomModal}
-        onClose={toggleBottomModal}
-        selectedImage={selectedImage}
-        onImagePress={closeGaleryModal}
-      /> */}
     </SafeAreaView>
   );
 };
@@ -358,11 +293,6 @@ const styles = StyleSheet.create({
   },
   activeCategoryCard: {
     backgroundColor: '#555',
-  },
-  categoryImage: {
-    width: 50,
-    height: 50,
-    marginBottom: 10,
   },
 });
 

@@ -124,7 +124,6 @@ export const getMAstersServeses = async (id: string) => {
     const config = await getConfig();
     const { data } = await axios.get(`${serviceMaster}${id}`, config ? config : {});
     if (data.success) {
-      
       ClientStory.getState().setmasterServis(data.body);
     }
   } catch (error) {
