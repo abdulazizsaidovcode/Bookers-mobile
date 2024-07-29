@@ -94,6 +94,8 @@ export interface ClientAllCategory {
   setFeedbackForMaster: (data: []) => void;
   masterServis: ServiceCategory[]
   setmasterServis: (data: []) => void;
+  selectedCategoryId: string[];
+  setSelectedCategoryId: (val: string[]) => void;
 }
 
 // Create the Zustand store
@@ -125,7 +127,9 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   feedbackForMaster: [],
   setFeedbackForMaster: (data: []) => set({ feedbackForMaster: [] }),
   masterServis: [],
-  setmasterServis: (data: any) => set({ masterServis: data })
+  setmasterServis: (data: any) => set({ masterServis: data }),
+  selectedCategoryId: [],
+  setSelectedCategoryId: (val: string[]) => set({ selectedCategoryId: val }),
 }));
 
 export default ClientStory;
