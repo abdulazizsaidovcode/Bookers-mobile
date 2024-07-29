@@ -1,12 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  View,
-  Text,
-  Switch,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, Switch, StyleSheet, ScrollView, TouchableOpacity, } from 'react-native';
 import { FontAwesome5, MaterialIcons, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -14,11 +7,12 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import { RootStackParamList } from '@/type/root';
 import { editMainDataStatus, fetchAllData, fetchAppoinmentActiveData, fetchMainData } from '@/helpers/api-function/notifications/notifications';
+import { getMasterTariff } from '@/constants/storage';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(notifications)/notification'>;
 
 const NotificationSettings: React.FC = () => {
-  const { isMainSwitch, appoinmentData, appoinmentActiveData, changingData, setAppoinmentActiveData, setAppoinmentData, setIsMainSwitch, setChangingData } = useNotificationsStore();
+  const { isMainSwitch, appoinmentData, appoinmentActiveData, changingData, tariff, setTariff, setAppoinmentActiveData, setAppoinmentData, setIsMainSwitch, setChangingData } = useNotificationsStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const toggleSwitch = (isMainSwitch: boolean) => {
@@ -27,19 +21,11 @@ const NotificationSettings: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchMainData(setIsMainSwitch)
-  }, [])
-
-  useEffect(() => {
-    fetchAppoinmentActiveData(setAppoinmentActiveData);
-  }, [setAppoinmentActiveData]);
-
-  useEffect(() => {
-    fetchAllData(setAppoinmentData, "APPOINTMENT");
-  }, [setAppoinmentData]);
-
-  useEffect(() => {
+    fetchMainData(setIsMainSwitch);
+    getMasterTariff(setTariff);
     fetchAllData(setChangingData, 'CHANGE_ORDER');
+    fetchAppoinmentActiveData(setAppoinmentActiveData);
+    fetchAllData(setAppoinmentData, "APPOINTMENT");
   }, []);
 
   return (
@@ -50,7 +36,7 @@ const NotificationSettings: React.FC = () => {
         </View>
         <View style={styles.switchContainer}>
           <Text style={styles.switchLabel}>Отключить все уведомления</Text>
-          <Switch value={isMainSwitch} onValueChange={() => toggleSwitch(isMainSwitch)} trackColor={{ false: "#767577", true: "#9C0A35" }} thumbColor={'#fff'}/>
+          <Switch value={isMainSwitch} onValueChange={() => toggleSwitch(isMainSwitch)} trackColor={{ false: "#767577", true: "#9C0A35" }} thumbColor={'#fff'} />
         </View>
         <Text style={styles.header}>Настройте уведомления приложения</Text>
         <NotificationOption
@@ -68,7 +54,7 @@ const NotificationSettings: React.FC = () => {
         <NotificationOption
           icon={<MaterialIcons name="cancel" size={30} color="#9C0A35" />}
           label="Отмена записи"
-          subLabel={appoinmentActiveData ? 'Включено' : "Не настроено"}
+          subLabel={appoinmentActiveData ? 'Включено0' : "Не настроено"}
           onPress={() => navigation.navigate('(notifications)/(pages)/cancel-recording')}
         />
         <NotificationOption
@@ -77,18 +63,22 @@ const NotificationSettings: React.FC = () => {
           subLabel={changingData.isActive ? 'Включено' : "Не настроено"}
           onPress={() => navigation.navigate('(notifications)/(pages)/changing-an-entry')}
         />
-        <NotificationOption
-          icon={<Feather name="message-circle" size={30} color="#9C0A35" />}
-          label="Запрос отзыва"
-          subLabel="Не настроено"
-          onPress={() => navigation.navigate('(notifications)/(pages)/request-feedback')}
-        />
-        <NotificationOption
-          icon={<Feather name="bell" size={30} color="#9C0A35" />}
-          label="Запрос окошка"
-          subLabel="Не настроено"
-          onPress={() => navigation.navigate('(notifications)/(pages)/request-window')}
-        />
+        {tariff === 'STANDARD' &&
+          <NotificationOption
+            icon={<Feather name="message-circle" size={30} color="#9C0A35" />}
+            label="Запрос отзыва"
+            subLabel="Не настроено"
+            onPress={() => navigation.navigate('(notifications)/(pages)/request-feedback')}
+          />
+        }
+        {tariff === 'STANDARD' &&
+          <NotificationOption
+            icon={<Feather name="bell" size={30} color="#9C0A35" />}
+            label="Запрос окошка"
+            subLabel="Не настроено"
+            onPress={() => navigation.navigate('(notifications)/(pages)/request-window')}
+          />
+        }
       </ScrollView>
     </SafeAreaView>
   );
