@@ -87,4 +87,8 @@ export type RootStackParamList = {
   '(client)/(profile)/(settings)/(settingPage)/settingPage' : undefined
   '(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit' : undefined
   "(free)/(work-grafic-edit)/workTimeDetail": undefined
+  '(standart)/(onlineBooking)/(booking)/timeSelect': undefined
+  '(standart)/(onlineBooking)/(booking)/requestWindow': undefined
+  '(standart)/(onlineBooking)/(booking)/confirmationRecor': undefined
+  '(standart)/(onlineBooking)/(booking)/breakBetweenSessions': undefined
 };

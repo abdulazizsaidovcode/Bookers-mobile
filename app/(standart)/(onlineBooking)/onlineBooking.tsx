@@ -20,11 +20,15 @@ import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting"
 import {
   OnlineBookingSettingsUrgentlyStory,
   OnlineBookingStory,
+  OnlineBookingStory2,
+  OnlineBookingStory3,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import {
   getOnlineBookingAllowClient,
+  getOnlineBookingHallWaiting,
   getOnlineBookingRecordDay,
   GetOnlineBookingSettingsUrgently,
+  getOnlineConfirmationServices,
   onlineBookingAllowClient,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import { useTranslation } from "react-i18next";
@@ -37,8 +41,19 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standar
 
 
 const OnlineBooking = () => {
+  
   const {tariff, setTariff} = clientStore()
-  const { Urgently, setUrgentlyt, salonId, setSalonId } = OnlineBookingSettingsUrgentlyStory();
+  const {setUrgentlyt, salonId, setSalonId } = OnlineBookingSettingsUrgentlyStory();
+  const {vipCount} = OnlineBookingStory3();
+  const {
+    data2,
+    setData2,
+  } = OnlineBookingStory2();
+  const {
+    setData,
+    data,
+  } = OnlineBookingStory();
+
   const { allowClient, setAllowClient } = OnlineBookingStory();
   const navigation = useNavigation<SettingsScreenNavigationProp>()
 
@@ -49,11 +64,13 @@ const OnlineBooking = () => {
       getMasterTariff(setTariff)
       GetOnlineBookingSettingsUrgently(setUrgentlyt);
       getOnlineBookingRecordDay(setSalonId)
+      getOnlineConfirmationServices(setData);
+      getOnlineBookingHallWaiting(setData2)
       return () => null
     }, [])
   )
-  
-  const data = [
+
+  const datas = [
     {
       id: "1",
       title: t("record_duration"),
@@ -73,16 +90,16 @@ const OnlineBooking = () => {
       subtitle: "Разные перерывы для каждой процедуры",
       IconComponent: <Ionicons name="wine" size={30} color="#9C0A35" />,
       onPress: () => {
-        router.push("(standart)/(onlineBooking)/(booking)/breakBetweenSessions");
+       navigation.navigate("(standart)/(onlineBooking)/(booking)/breakBetweenSessions");
       },
     },
     {
       id: "3",
       title: t("record_confirmation"),
-      subtitle: t("not_set"),
+      subtitle: data?.allClient ? "Подтверждать записи для всех клиентов" : data?.newClient ? "Подтверждать записи только для новых клиентов" : data?.notConfirm ? "Не подтверждать записи" : ("not_set"),
       IconComponent: <Feather name="check-circle" size={30} color="#9C0A35" />,
       onPress: () => {
-        router.push("(standart)/(onlineBooking)/(booking)/confirmationRecor");
+       navigation.navigate("(standart)/(onlineBooking)/(booking)/confirmationRecor");
       },
     },
   ];
@@ -91,31 +108,31 @@ const OnlineBooking = () => {
   
   
   if (tariff && tariff === "STANDARD") {
-    data.push({
+    datas.push({
       id: "4",
       title: t("request_slot"),
-      subtitle: t("not_set"),
+      subtitle: data2 && data2.allClient ? "" : data2 && data2.regularClient ? "" : ("not_set"),
       IconComponent: <Feather name="watch" size={30} color="#9C0A35" />,
       onPress: () => {
-        router.push("(standart)/(onlineBooking)/(booking)/requestWindow");
+       navigation.navigate("(standart)/(onlineBooking)/(booking)/requestWindow");
       },
     },
     {
       id: "5",
       title: t("time_for_vip_clients"),
-      subtitle: t("not_set"),
+      subtitle: vipCount ? `${vipCount.hour} час.  ${vipCount.minute} мин` :t("not_set"),
       IconComponent: <FontAwesome name="diamond" size={24} color="#9C0A35" />,
       onPress: () => {
-        router.push("(standart)/(onlineBooking)/(booking)/timeSelect");
+       navigation.navigate("(standart)/(onlineBooking)/(booking)/timeSelect");
       },
     });
   }
 
-  const [isEnabled, setIsEnabled] = useState(allowClient);
+  const [isEnabledBtn, setIsEnabledBtn] = useState(allowClient);
 
   const toggleSwitch = () => {
-    const newValue = !isEnabled;
-    setIsEnabled(newValue);
+    const newValue = !isEnabledBtn;
+    setIsEnabledBtn(newValue);
     setAllowClient(newValue); // Update the global state
     onlineBookingAllowClient(newValue);
   };
@@ -133,7 +150,7 @@ const OnlineBooking = () => {
   }, []);
 
   useEffect(() => {
-    setIsEnabled(allowClient);
+    setIsEnabledBtn(allowClient);
   }, [allowClient]);
 
   return (
@@ -154,7 +171,7 @@ const OnlineBooking = () => {
             <View style={tw`mb-5`}>
               <SwitchWithLabel
                 label={t("disable_all_notifications")}
-                value={isEnabled}
+                value={isEnabledBtn}
                 onToggle={toggleSwitch}
               />
               
@@ -165,7 +182,7 @@ const OnlineBooking = () => {
               </Text>
             </View>
             <FlatList
-              data={data}
+              data={datas}
               renderItem={renderItem}
               keyExtractor={(item) => item.id}
             />

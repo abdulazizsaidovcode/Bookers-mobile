@@ -12,9 +12,10 @@ import {
   getOnlineConfirmationServices,
   onlineConfirmationServices,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 
 const ConfirmationRecord = () => {
+  // const navigation = useNavigation<any>();
 
   const {
     isEnabled,
@@ -28,16 +29,17 @@ const ConfirmationRecord = () => {
   } = OnlineBookingStory();
 
 
-  useFocusEffect(
-    useCallback(() => {
-      getOnlineConfirmationServices(setData);
+  
 
-      if (data) {
-        setIsEnabled(data.allClient);
-        setIsEnabled2(data.newClient);
-        setIsEnabled3(data.notConfirm);
-      }
-    }, []));
+    useFocusEffect(
+      useCallback(() => {
+  
+        if (data) {
+          setIsEnabled(data.allClient);
+          setIsEnabled2(data.newClient);
+          setIsEnabled3(data.notConfirm);
+        }
+      }, [data]));
 
   const toggleSwitch = () => {
     const newValue = !isEnabled;
@@ -127,7 +129,6 @@ const ConfirmationRecord = () => {
         onPress={() => {
           onlineConfirmationServices(isEnabled, isEnabled2, isEnabled3);
           console.log(isEnabled, isEnabled2, isEnabled3);
-
           // router.push("(standart)/(onlineBooking)/onlineBooking");
         }}
       />

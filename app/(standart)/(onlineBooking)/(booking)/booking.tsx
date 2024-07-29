@@ -27,6 +27,7 @@ import Toast from "react-native-simple-toast";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 
 const Booking = () => {
+  
   const {tariff} = clientStore()
   const { Urgently, setUrgentlyt, salonId, setSalonId } = OnlineBookingSettingsUrgentlyStory();
   const [isEnabled, setIsEnabled] = useState(false);
@@ -61,9 +62,10 @@ const Booking = () => {
        salonId,
         config ? config : {}
       );
-
-      Toast.show(res.data.message, Toast.SHORT);
-      navigation.goBack();
+      if (res.data.success) {
+        Toast.show(res.data.message, Toast.SHORT);
+        navigation.goBack();
+      }
     } catch (error) {
     }
   };

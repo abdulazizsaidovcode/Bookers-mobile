@@ -1,3 +1,4 @@
+import { NotificationsAllData } from "@/type/notifications/notifications";
 import { create } from "zustand";
 
 export interface SalonIdObj {
@@ -21,12 +22,14 @@ export interface IState2 {
   setIsEnabled: (val: boolean) => void;
   isEnabled2: boolean;
   setIsEnabled2: (val: boolean) => void;
-  data: any;
-  setData: (val: any) => void;
+  data2: any;
+  setData2: (val: any) => void;
 }
 export interface IState3 {
   timeEnabled: boolean;
   setTimeEnabled: (val: boolean) => void;
+  vipCount: NotificationsAllData | null,
+  setVipCount: (data: NotificationsAllData | null) => void
 }
 
 
@@ -66,12 +69,14 @@ export const OnlineBookingStory2 = create<IState2>((set) => ({
   setIsEnabled: (val: boolean) => set({ isEnabled: val }),
   isEnabled2: false,
   setIsEnabled2: (val: boolean) => set({ isEnabled2: val }),
-  data: null,
-  setData: (val: any) => set({ data: val }),
+  data2: null,
+  setData2: (val: any) => set({ data2: val }),
 }));
 export const OnlineBookingStory3 = create<IState3>((set) => ({
   timeEnabled: false,
   setTimeEnabled: (val: boolean) => set({ timeEnabled: val }),
+  vipCount: null,
+  setVipCount: (data: NotificationsAllData | null) => set({vipCount: data})
 }));
 
 export const OnlineBookingSettingsUrgentlyStory = create<Urgently>((set) => ({

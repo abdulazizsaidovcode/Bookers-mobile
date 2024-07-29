@@ -21,14 +21,17 @@ import {
 } from "@/helpers/api-function/notifications/notifications";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import tw from "tailwind-react-native-classnames";
-import {router} from "expo-router";
+import {router, useNavigation} from "expo-router";
 import {getConfig} from "@/app/(tabs)/(master)/main";
+import { NotificationsAllData } from "@/type/notifications/notifications";
 
 const {width: screenWidth, height: screenHeight} = Dimensions.get("window");
 
 const TimeSelect = () => {
-    const {setTimeEnabled, timeEnabled} = OnlineBookingStory3();
-    const [vipCount, setVipCount] = useState({});
+  const navigation = useNavigation<any>();
+
+    const {setTimeEnabled, timeEnabled, vipCount, setVipCount} = OnlineBookingStory3();
+    
     const {
         isAppoinmentModal,
         appoinmentData,
@@ -104,7 +107,9 @@ const TimeSelect = () => {
         try {
             const config = await getConfig()
             const res = await axios.put(`${base_url}online-booking-settings/vip-client`, data, config ? config : {});
-            router.back();
+            if (res.data.success) {
+                navigation.goBack()
+            }
         } catch (error) {
             console.log(error);
         }

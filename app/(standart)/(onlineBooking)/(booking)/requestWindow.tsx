@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import React, { useCallback } from "react";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import SwitchWithLabelBlack from "@/components/switchWithLabel/switchWithLabelBlack";
@@ -11,34 +11,39 @@ import {
   getOnlineBookingHallWaiting,
   onlineBookingHallWaiting,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
-import { router } from "expo-router";
+import { useFocusEffect } from "expo-router";
 
-const RequestWindow = () => {
-  const { isEnabled, setIsEnabled, isEnabled2, setIsEnabled2, data, setData } =
-    OnlineBookingStory2();
+const RequestWindowBook = () => {
+  const {
+    isEnabled,
+    setIsEnabled,
+    data2,
+    setData2,
+  } = OnlineBookingStory2();
 
-  useEffect(() => {
-    // Ma'lumotlarni olish va setData funksiyasi orqali o'rnatish
-    getOnlineBookingHallWaiting(setData);
-  }, []);
-
-  useEffect(() => {
-    // Ma'lumotlar o'zgarganda switch tugmalarini yangilash
-    if (data) {
-      setIsEnabled(data.allClient);
-      setIsEnabled2(data.regularClient);
-    }
-  }, [data]);
+  useFocusEffect(
+    useCallback(() => {
+      // Ma'lumotlarni olish va setData funksiyasi orqali o'rnatish
+      getOnlineBookingHallWaiting(setData2);
+      return () => {}
+    }, [])
+  );
+  useFocusEffect(
+    useCallback(() => {
+      // Ma'lumotlar o'zgarganda switch tugmalarini yangilash
+      if (data2) {
+        setIsEnabled(data2.allClient);
+        return;
+      }
+      return () => {}
+    }, [data2])
+  );
 
   const requestSwitch = () => {
-    setIsEnabled(true);
-    setIsEnabled2(false);
+    setIsEnabled(!isEnabled);
   };
 
-  const requestSwitch2 = () => {
-    setIsEnabled(false);
-    setIsEnabled2(true);
-  };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -86,8 +91,8 @@ const RequestWindow = () => {
           }}
         >
           <SwitchWithLabelBlack
-            value={isEnabled2}
-            onToggle={requestSwitch2}
+            value={!isEnabled}
+            onToggle={requestSwitch}
             label="Активировать запрос окошка только для постоянных клиентов"
           />
         </View>
@@ -96,15 +101,14 @@ const RequestWindow = () => {
         title="Сохранить"
         backgroundColor="#9C0A35"
         onPress={() => {
-          onlineBookingHallWaiting(isEnabled, isEnabled2);
-          router.push("(standart)/(onlineBooking)/onlineBooking");
+          onlineBookingHallWaiting(isEnabled, !isEnabled);
         }}
       />
     </SafeAreaView>
   );
 };
 
-export default RequestWindow;
+export default RequestWindowBook;
 
 const styles = StyleSheet.create({
   container: {

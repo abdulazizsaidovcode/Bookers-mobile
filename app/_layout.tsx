@@ -112,7 +112,7 @@ import WebPageStandart from "./(profile)/(WebPage-standart)/WebPage";
 import GalleryDetailStandart from "./(profile)/(WebPage-standart)/components/galleryDetail";
 import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
 import MyServicesScreenEdit from "./(standart)/(servicesEdit)/test";
-import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow";
+import RequestWindowBook from "./(standart)/(onlineBooking)/(booking)/requestWindow";
 import TimeSelect from "./(standart)/(onlineBooking)/(booking)/timeSelect";
 import ChatScreen from "./(tabs)/(master)/chat";
 import CheckPinOnCome from "./(auth)/(checkPinCode)/checkPinCode";
@@ -701,7 +701,7 @@ function RootLayoutNav() {
             />
             <Stack.Screen
               name="(standart)/(onlineBooking)/(booking)/requestWindow"
-              component={requestWindow}
+              component={RequestWindowBook}
               options={{ headerShown: false }}
             />
             <Stack.Screen

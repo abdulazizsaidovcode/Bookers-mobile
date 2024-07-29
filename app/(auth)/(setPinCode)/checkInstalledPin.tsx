@@ -67,6 +67,7 @@ const CheckPin: React.FC = () => {
 
                     setNumbers(number)
                     setToken(token)
+                    
                     setStoredOtp(otp);
                 } catch (error) {
                     console.log('Failed to load OTP from storage', error);
