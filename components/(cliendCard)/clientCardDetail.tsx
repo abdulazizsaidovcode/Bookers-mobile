@@ -1,8 +1,8 @@
 import { getFile } from '@/helpers/api';
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
-
 export interface Service {
   id: string;
   name: string;
@@ -36,23 +36,21 @@ const genderMapping: any = {
 
 const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const { setSelectedCategoryId } = ClientStory()
 
   const handleSelect = (id: string) => {
     setSelectedIds(prevSelectedIds => {
-      const newSelectedIds = [...prevSelectedIds];
-      const index = newSelectedIds.indexOf(id);
-      if (index === -1) {
-        newSelectedIds.push(id);
+      if (!prevSelectedIds.includes(id)) {
+        return [...prevSelectedIds, id];
       } else {
-        newSelectedIds.splice(index, 1);
+        return prevSelectedIds.filter(selectedId => selectedId !== id);
       }
-      return newSelectedIds;
     });
   };
 
   useEffect(() => {
-    console.log(selectedIds);
-  },[selectedIds])
+    setSelectedCategoryId(selectedIds)
+  }, [selectedIds])
 
   return (
     <View style={[tw`p-4 rounded-2xl`, { backgroundColor: "#B9B9C9" }]}>

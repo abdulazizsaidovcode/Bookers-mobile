@@ -20,6 +20,8 @@ import { getFile } from '@/helpers/api';
 import ReviewCard from '@/components/(cliendCard)/riewCard';
 import BottomModal from '@/components/(modals)/modal-bottom';
 import CustomButton1 from './CustomButton';
+import Buttons from '@/components/(buttons)/button';
+import { postOrder } from '@/helpers/api-function/oreder/oreder';
 
 const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
@@ -255,7 +257,7 @@ const MasterInformation = () => {
             <View >
               <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => handleCategorySelect('',0)}
+                onPress={() => handleCategorySelect('', 0)}
                 style={[
                   styles.categoryCard,
                   styles.activeCategoryCard
@@ -279,6 +281,7 @@ const MasterInformation = () => {
               </View>
             ))}
           </ScrollView>
+
           <FlatList
             data={masterServis}
             keyExtractor={(item) => item.id}
@@ -288,6 +291,12 @@ const MasterInformation = () => {
               </View>
             )}
           />
+          <Buttons
+            isDisebled={masterServis.length > 0}
+            onPress={() => {
+              navigate.navigate('(client)/(oreder)/order');
+            }} title='Продолжить' />
+
         </ScrollView>
       )}
       {activeTab === 'past' && (

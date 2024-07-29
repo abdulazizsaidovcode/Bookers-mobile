@@ -37,8 +37,7 @@ const Schedule: React.FC = () => {
   const { scheduleBooked, setScheduleBooked } = useScheduleAvialableStore();
   const { FreeTime, setFreeTime } = useScheduleFreeTime();
 
-  const { serviceIds, date, timeHour, setServiceId, setDate, setTime } =
-    useSheduleData();
+  const { serviceIds, date, timeHour, setServiceId, setDate, setTime } = useSheduleData();
   const { setOrderData } = useOrderPosdData();
   const navigation = useNavigation<any>();
   const { calendarDate } = graficWorkStore();

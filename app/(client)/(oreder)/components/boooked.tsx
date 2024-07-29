@@ -11,6 +11,7 @@ import { useSheduleData } from '@/helpers/state_managment/schedule/schedule';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import { getUser } from '@/helpers/api-function/getMe/getMee';
 import { fetchServices } from '@/helpers/api-function/client/client';
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 const { width, height } = Dimensions.get('window');
 
 
@@ -26,6 +27,7 @@ const Booked: React.FC = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { setTime, setServiceId, setDate } = useSheduleData()
     const { getMee, setGetMee } = useGetMeeStore()
+    const { selectedClient } = ClientStory()
 
     useFocusEffect(
         useCallback(() => {
@@ -39,18 +41,20 @@ const Booked: React.FC = () => {
 
     useFocusEffect(
         useCallback(() => {
-            if (calendarDate && getMee.id) {
+            if (calendarDate && selectedClient && selectedClient.id) {
                 setDate(calendarDate)
-                getFreeTime(calendarDate, setFreeTime, getMee.id);
+                getFreeTime(calendarDate, setFreeTime, selectedClient.id);
             }
             getUser(setGetMee);
         }, [calendarDate, setFreeTime])
     );
     useFocusEffect(
         useCallback(() => {
-            if (calendarDate && getMee.id) {
+            if (calendarDate && selectedClient && selectedClient.id) {
+                console.log(selectedClient.id);
+
                 setDate(calendarDate)
-                getFreeTime(calendarDate, setFreeTime, getMee.id);
+                getFreeTime(calendarDate, setFreeTime, selectedClient.id);
             }
             getUser(setGetMee);
         }, [])
@@ -75,11 +79,6 @@ const Booked: React.FC = () => {
         setActiveTime('');
     }, [calendarDate]);
 
-    const handleTabChange = (tab: any) => {
-        setActiveTab(tab);
-        setServiceId([tab])
-        setActiveTime(''); // Reset active time when tab changes
-    };
 
     const handleTimeSelect = (time: string) => {
         setActiveTime(time);
@@ -100,38 +99,20 @@ const Booked: React.FC = () => {
                 style={styles.accordionContainer}
                 theme={{ colors: { background: 'transparent' } }}
             >
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.tabContainer}>
-                    {services && services.length > 0 ? services.map((service: any) => (
-                        <TouchableOpacity
-                            key={service.id}
-                            style={[styles.tabButton, activeTab === service.id && styles.activeTab]}
-                            onPress={() => handleTabChange(service.id)}
-                        >
-                            <Text style={[styles.tabText, activeTab !== service.id && styles.inactiveText]}>
-                                {service.name.trim()}
-                            </Text>
-                        </TouchableOpacity>
-                    )) : <Text style={styles.placeholderText}>Нет услуг</Text>}
-                </ScrollView>
                 <View>
-                    {activeTab && (
-                        <View style={styles.timeContainer}>
-                            {FreeTime ? FreeTime.map((time: string, index) =>
-                                <TouchableOpacity
-                                    key={index}
-                                    style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
-                                    onPress={() => handleTimeSelect(time)}
-                                >
-                                    <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
-                                        {time.slice(0, 5)}
-                                    </Text>
-                                </TouchableOpacity>
-                            ) : <Text style={styles.placeholderText}>Нет свободного времени</Text>}
-                        </View>
-                    )}
+                    <View style={styles.timeContainer}>
+                        {FreeTime ? FreeTime.map((time: string, index) =>
+                            <TouchableOpacity
+                                key={index}
+                                style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
+                                onPress={() => handleTimeSelect(time)}
+                            >
+                                <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
+                                    {time.slice(0, 5)}
+                                </Text>
+                            </TouchableOpacity>
+                        ) : <Text style={styles.placeholderText}>Нет свободного времени</Text>}
+                    </View>
                 </View>
             </List.Accordion>
 
@@ -185,7 +166,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         marginBottom: 20,
         // justifyContent: 'center',
-        gap: 8.830
+        gap: 8.0
     },
     timeButton: {
         backgroundColor: '#f0f0f0',

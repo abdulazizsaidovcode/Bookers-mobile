@@ -33,7 +33,7 @@ const OrderHistory = () => {
   const deleteToggleModal = () => {
     
     setModalDelete(!modalDelete);
-  };
+    };
 
   const handlePhonePress = (phoneNumber: string) => {
     Linking.openURL(`tel:${phoneNumber}`);
