@@ -126,7 +126,7 @@ const GalleryDetails: React.FC = () => {
             }
         });
     };
-
+    
     const handleDelete = () => {
         setIsDeleteMode(false);
         delPhoto(id, selectedImages, setFullData, setData, toggleAllModal);
@@ -328,7 +328,7 @@ const GalleryDetails: React.FC = () => {
                 </BottomModal>
             </ScrollView>
             <View style={{ position: 'absolute', width: '100%', bottom: 0, padding: 10 }}>
-                {images.length !== 0 && (isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title='Сохранить' onPress={showMainSwitch ? handleSaveMainPhotos : handleSave} />)}
+                {images.length !== 0 && (isLoading ? <LoadingButtons title='Сохраfнить' /> : <Buttons title='Сохранить' onPress={handleSave} />)}
                 {showMainSwitch && (isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title='Сохранить' onPress={handleSaveMainPhotos} />)}
             </View>
         </SafeAreaView>

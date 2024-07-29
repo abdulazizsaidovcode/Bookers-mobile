@@ -120,13 +120,6 @@ const SettingsGalleryMain = () => {
                                                         />
                                                     </View>
                                                 ))}
-                                                {!showAllAttachments && sortedAttachments.length > number &&
-                                                    <Pressable onPress={() => setShowAllAttachments(true)}
-                                                        style={[styles.imageContainer, selectedItemId === item.id && styles.selectedAlbum]}>
-                                                        <Text
-                                                            style={{ color: 'white' }}>+{sortedAttachments.length - number}</Text>
-                                                    </Pressable>
-                                                }
                                                 {sortedAttachments.length < 4 &&
                                                     Array.from({ length: number - sortedAttachments.length }).map((_, placeholderIndex) => (
                                                         <Pressable onPress={() => handlePress(item.id)}
