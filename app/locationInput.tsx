@@ -13,7 +13,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
       <View style={tw`w-full mt-1`}>
         <Text style={[tw`text-gray-500 mb-3 text-lg`]}>{label}</Text>
         <TextInput
-          style={tw`bg-gray-500 rounded-xl text-white p-3 w-full h-14 text-white text-xl`}
+          style={[tw`rounded-xl text-white p-3 w-full h-14 text-white text-xl` ,{backgroundColor:'#4B4B64'}]}
           placeholder={placeholder}
           onChangeText={onChangeText}
           value={value}

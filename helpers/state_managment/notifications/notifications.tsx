@@ -11,6 +11,8 @@ const useNotificationsStore = create<NotificationsStore>((set) => ({
         minute: 0,
         hour: 0,
     },
+    tariff: null,
+    setTariff: (val: null) => set({ tariff: val }),
     appoinmentActiveData: false,
     setAppoinmentActiveData: (val: boolean) => set({ appoinmentActiveData: val }),
     isAppoinmentModal: false,

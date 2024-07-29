@@ -146,6 +146,7 @@ import TimeWorkDetail from "./(free)/(work-grafic-edit)/workTimeDetail";
 import LocationEdit from "./(location)/LocationEdit";
 import InternetNotice from "@/components/InternetNotise/internetNotice";
 import LocationEditData from "./(location)/(location-data)/LocationEditData";
+import OrderClient from "./(client)/(oreder)/order";
 // import ResponseLocationEdit from "./(location)/(response-location)/responseLocationEdit";
 
 const Stack = createNativeStackNavigator();
@@ -888,11 +889,11 @@ function RootLayoutNav() {
               name="(location)/(location-data)/LocationEditData"
               component={LocationEditData}
             />
-            {/* <Stack.Screen
+            <Stack.Screen
               options={{ headerShown: false }}
-              name="(location)/(response-location)/ResponseLocationEdit"
-              component={ResponseLocationEdit}
-            /> */}
+              name="(client)/(oreder)/order"
+              component={OrderClient}
+            />
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>

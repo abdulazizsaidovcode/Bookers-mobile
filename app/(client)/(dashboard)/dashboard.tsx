@@ -11,12 +11,11 @@ import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
 import { getAllCategory } from '@/helpers/api-function/uslugi/uslugi';
 import Toast from "react-native-simple-toast";
 import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
 import * as Device from 'expo-device';
-import Constants from 'expo-constants';
 import { deviceInfo } from "@/helpers/api-function/register/registrFC";
 import { getFile } from '@/helpers/api';
 import tw from 'tailwind-react-native-classnames';
+import hasNotificationState from '@/helpers/state_managment/notifications/readORisReadNOtif';
 
 
 
@@ -50,6 +49,7 @@ const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
 
 const Navbar: React.FC = () => {
   const navigation = useNavigation();
+  const {hasNotification,setHasNotification}=hasNotificationState()
 
   return (
     <View style={styles.navbar}>
@@ -59,7 +59,10 @@ const Navbar: React.FC = () => {
           activeOpacity={0.7}
           onPress={() => navigation.navigate('(client)/(profile)/(notification)/notification')}
         >
-          <FontAwesome5 name="bell" size={28} color="white" />
+          <View style={styles.notificationIconContainer}>
+            <FontAwesome5 name="bell" size={28} color="white" />
+            {hasNotification && <View style={styles.notificationDot} />}
+          </View>
         </TouchableOpacity>
         <TouchableOpacity>
           <Feather name="bookmark" size={28} color="white" />
@@ -220,9 +223,9 @@ const Dashboard: React.FC = () => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={styles.touchableItem}
-          onPress={() => {
-            router.push('../(masters)/masters')
-          }}
+            onPress={() => {
+              router.push('../(masters)/masters')
+            }}
           >
             <View style={styles.itemTwo}>
               <View style={styles.textContainer}>
@@ -327,6 +330,18 @@ const styles = StyleSheet.create({
   subtitleText: {
     fontSize: 14,
     color: 'gray',
+  },
+  notificationIconContainer: {
+    position: 'relative',
+  },
+  notificationDot: {
+    position: 'absolute',
+    top: 1,
+    right: 0,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#9C0A35',
   },
 });
 
