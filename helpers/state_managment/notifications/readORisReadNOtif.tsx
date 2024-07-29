@@ -4,7 +4,7 @@ interface ISchecked {
     setHasNotification: (val: boolean) => void
 }
 const hasNotificationState=create<ISchecked>((set) => ({
-    hasNotification: true,
+    hasNotification: false,
     setHasNotification: (val) => set({hasNotification: val})
 }))
 export default hasNotificationState;
