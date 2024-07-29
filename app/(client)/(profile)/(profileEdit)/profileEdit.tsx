@@ -3,7 +3,6 @@ import React, { useCallback, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import ProfileImgUpload from "@/components/profile-img-upload";
 import { useFocusEffect, useNavigation } from "expo-router";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import SelectGender from "./selectGender";
@@ -14,6 +13,7 @@ import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import useProfileStore from "@/helpers/state_managment/client/clientEditStore";
 import { updateClientProfile } from "@/helpers/api-function/client/clientPage";
+import ProfileImgUploadProfile from "@/components/profile-img-upload";
 
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
@@ -151,7 +151,7 @@ const ProfileEdit = () => {
       </View>
       <ScrollView>
         <View style={{ marginBottom: 16, padding: 16 }}>
-          <ProfileImgUpload
+          <ProfileImgUploadProfile
             setAttachmentId={setAttachmentId}
             attachmentID={
               getMee && getMee.attachmentId ? getMee.attachmentId : null

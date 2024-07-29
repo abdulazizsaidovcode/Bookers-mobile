@@ -23,13 +23,17 @@ import {
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { fetchServices } from "@/helpers/api-function/client/client";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/(booking)/breakBetweenSessions'>;
+
 
 const BreakBetweenSession = () => {
   const { hour, setHour, minute, setMinute, servicesId, setServicesId } = OnlineBookingSettingsUrgentlyStory()
   const [selectedTime, setSelectedTime] = useState("");
   const [activeButton, setActiveButton] = useState("everyService");
   const [modalVisible, setModalVisible] = useState(false);
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
   const { services, setServices } = clientStore();
 
   const hours: any = [

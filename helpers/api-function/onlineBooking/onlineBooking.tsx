@@ -4,6 +4,7 @@ import { Alert } from "react-native"
 import Toast from "react-native-simple-toast"
 import { IsActive } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from '@/app/(tabs)/(master)/main'
+import { useNavigation } from "expo-router";
 
 
 export const onlineBookingAllowClient = async (isEnabled: boolean) => {
@@ -97,7 +98,8 @@ export const OnlineBookingUserviceTimeService = async (val: object) => {
     }
 };
 
-export const onlineConfirmationServices = async (isEnabled: boolean, isEnabled2: boolean, isEnabled3: boolean) => {
+export const onlineConfirmationServices = async (isEnabled: boolean, isEnabled2: boolean, isEnabled3: boolean, navigation: any) => {
+
     try {
         const data = {
             "allClient": isEnabled,
@@ -108,7 +110,10 @@ export const onlineConfirmationServices = async (isEnabled: boolean, isEnabled2:
 
         const config = await getConfig();
         const res = await axios.post(`${onlineConfirmationServices_url}`, data, config ? config : {});
-        Toast.show(res.data.message, Toast.SHORT);
+        if(res.data.success) {
+            Toast.show(res.data.message, Toast.SHORT);
+            navigation.goBack()
+        }
     } catch (error: any) {
         Toast.show(error.response.data.message, Toast.SHORT);
 
@@ -133,7 +138,7 @@ export const getOnlineConfirmationServices = async (setData: (val: IsActive | nu
 
 // hall waiting post API function 
 
-export const onlineBookingHallWaiting = async (isEnabled: boolean, isEnabled2: boolean) => {
+export const onlineBookingHallWaiting = async (isEnabled: boolean, isEnabled2: boolean, navigation: any) => {
     try {
         const data = {
             allClient: isEnabled,
@@ -142,26 +147,34 @@ export const onlineBookingHallWaiting = async (isEnabled: boolean, isEnabled2: b
         const config = await getConfig();
         const res = await axios.post(`${onlineBookingHallWaitin_url}`, data, config ? config : {});
 
-        Alert.alert("Success hall");
+        if (res.data.success) {
+           Toast.show("res.data.message", Toast.LONG);
+           navigation.goBack()
+           console.log(res);  
+        }
     } catch (error) {
         console.log(error);
-        Alert.alert("Not success hall");
+       Toast.show("Something is error?", Toast.LONG);
+    console.log(isEnabled, isEnabled2);
+
     }
 };
 
 
 //hall waiting get API function
 export const getOnlineBookingHallWaiting = async (setData: (val: any | null) => void) => {
+
     try {
         const config = await getConfig();
         const res = await axios.get(`${onlineBookingHallWaitin_url}`, config ? config : {});
-        if(res.data.success){
-            Toast.show(res.data.message, Toast.SHORT);
+        if(res.data.success){  
+            setData(res.data.body);
+            console.log(res.data.body);
+            
         }
-        setData(res.data.body);
     } catch (error: any) {
         console.log(error);
-        Toast.show(error.response.data.message, Toast.SHORT);
+      
     }
 };
 

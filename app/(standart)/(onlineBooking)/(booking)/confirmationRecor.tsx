@@ -12,9 +12,14 @@ import {
   getOnlineConfirmationServices,
   onlineConfirmationServices,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
+import { RootStackParamList } from "@/type/root";
+import { NavigationProp } from "@react-navigation/native";
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/(booking)/confirmationRecor'>;
+
 
 const ConfirmationRecord = () => {
+  const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const {
     isEnabled,
@@ -28,16 +33,17 @@ const ConfirmationRecord = () => {
   } = OnlineBookingStory();
 
 
-  useFocusEffect(
-    useCallback(() => {
-      getOnlineConfirmationServices(setData);
+  
 
-      if (data) {
-        setIsEnabled(data.allClient);
-        setIsEnabled2(data.newClient);
-        setIsEnabled3(data.notConfirm);
-      }
-    }, []));
+    useFocusEffect(
+      useCallback(() => {
+  
+        if (data) {
+          setIsEnabled(data.allClient);
+          setIsEnabled2(data.newClient);
+          setIsEnabled3(data.notConfirm);
+        }
+      }, [data]));
 
   const toggleSwitch = () => {
     const newValue = !isEnabled;
@@ -125,9 +131,8 @@ const ConfirmationRecord = () => {
         title="Сохранить"
         backgroundColor="#9C0A35"
         onPress={() => {
-          onlineConfirmationServices(isEnabled, isEnabled2, isEnabled3);
+          onlineConfirmationServices(isEnabled, isEnabled2, isEnabled3, navigation);
           console.log(isEnabled, isEnabled2, isEnabled3);
-
           // router.push("(standart)/(onlineBooking)/onlineBooking");
         }}
       />

@@ -185,6 +185,7 @@ export const address_url: string = `${base_url}address`
 export const client_profile_edit_url: string = `${base_url}client`
 // client notificaton API
 export const getNotification_url:string=`${base_url}notification`
+export const getNotificationNotReady_url:string =`${base_url}notification/not-ready`
 
 export const client_profile_delete_url: string = `${base_url}user`
 

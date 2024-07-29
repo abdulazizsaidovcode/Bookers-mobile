@@ -112,7 +112,7 @@ import WebPageStandart from "./(profile)/(WebPage-standart)/WebPage";
 import GalleryDetailStandart from "./(profile)/(WebPage-standart)/components/galleryDetail";
 import CategoryEdit from "./(standart)/(servicesEdit)/(categoryEdit)/category";
 import MyServicesScreenEdit from "./(standart)/(servicesEdit)/test";
-import requestWindow from "./(standart)/(onlineBooking)/(booking)/requestWindow";
+import RequestWindowBook from "./(standart)/(onlineBooking)/(booking)/requestWindow";
 import TimeSelect from "./(standart)/(onlineBooking)/(booking)/timeSelect";
 import ChatScreen from "./(tabs)/(master)/chat";
 import CheckPinOnCome from "./(auth)/(checkPinCode)/checkPinCode";
@@ -146,6 +146,7 @@ import TimeWorkDetail from "./(free)/(work-grafic-edit)/workTimeDetail";
 import LocationEdit from "./(location)/LocationEdit";
 import InternetNotice from "@/components/InternetNotise/internetNotice";
 import LocationEditData from "./(location)/(location-data)/LocationEditData";
+import OrderClient from "./(client)/(oreder)/order";
 // import ResponseLocationEdit from "./(location)/(response-location)/responseLocationEdit";
 
 const Stack = createNativeStackNavigator();
@@ -701,7 +702,7 @@ function RootLayoutNav() {
             />
             <Stack.Screen
               name="(standart)/(onlineBooking)/(booking)/requestWindow"
-              component={requestWindow}
+              component={RequestWindowBook}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -888,11 +889,11 @@ function RootLayoutNav() {
               name="(location)/(location-data)/LocationEditData"
               component={LocationEditData}
             />
-            {/* <Stack.Screen
+            <Stack.Screen
               options={{ headerShown: false }}
-              name="(location)/(response-location)/ResponseLocationEdit"
-              component={ResponseLocationEdit}
-            /> */}
+              name="(client)/(oreder)/order"
+              component={OrderClient}
+            />
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>
