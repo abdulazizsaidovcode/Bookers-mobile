@@ -8,6 +8,7 @@ const addfavorite = async (id: number | string) => {
   try {
     const { data } = await axios.post(`${base_url}favourite/save/${id}`);
     if (data.success) setData(data);
+    else throw new Error();
   } catch (error: any) {
     return new Error(error);
   }
