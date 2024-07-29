@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         marginBottom: 20,
         // justifyContent: 'center',
-        gap: 8.830
+        gap: 8.0
     },
     timeButton: {
         backgroundColor: '#f0f0f0',
