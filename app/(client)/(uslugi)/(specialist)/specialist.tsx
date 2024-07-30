@@ -105,7 +105,7 @@ const Specialist = () => {
       address: `${item.district}, ${item.street}, ${item.house}`,
     };
     setSelectedClient(client);
-    router.push('(client)/(uslugi)/(masterInformation)/masterInformation copy');
+    router.push('(client)/(uslugi)/(masterInformation)/masterInformation');
   };
 
   const renderClientCard = ({ item }) => (
