@@ -127,9 +127,6 @@ const MasterInformation = () => {
   const handleTabChange = (tab: any) => {
     setSelectedCategories(tab)
   };
-
-  console.log('a');
-
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
@@ -163,7 +160,7 @@ const MasterInformation = () => {
           contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
           <View style={tw`mb-5`}>
             {clientData && <FlatList
-              data={selectedClient}
+              data={clientData}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
                 <View style={tw`mb-4`}>

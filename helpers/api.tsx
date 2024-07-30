@@ -62,6 +62,10 @@ export const serviceMaster = `${base_url}service/` // comment client by master
 export const masterGalery = `${base_url}gallery/user/`//galery master 
 export const feedbackMasterForClient = `${base_url}feedback/for/master`// feedbackMasterForClient
 
+// Client dashboard
+export const ClientOrderHistory = `${base_url}order/client/history/upcoming` // get client history 
+
+
 // Register page 
 export const register_page = `${base_url}auth/`
 
