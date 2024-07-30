@@ -47,7 +47,7 @@ const OnlineBooking = () => {
   
   const {tariff, setTariff} = clientStore()
   const {setUrgentlyt, salonId, setSalonId, setSelectedHour, setSelectedMinute, selectedHour, selectedMinute } = OnlineBookingSettingsUrgentlyStory();
-  const {vipCount, setVipCount} = OnlineBookingStory3();
+  const {vipCount, setVipCount, setTimeEnabled} = OnlineBookingStory3();
   const {
     data2,
     setData2,
@@ -69,7 +69,7 @@ const OnlineBooking = () => {
       getOnlineBookingRecordDay(setSalonId)
       getOnlineConfirmationServices(setData);
       getOnlineBookingHallWaiting(setData2)
-      getVipCountS(setVipCount)
+      getVipCountS(setVipCount,setTimeEnabled)
       getOnlineBookingUserviceTimeAll(setSelectedHour, setSelectedMinute)
       return () => null
     }, [])
@@ -109,9 +109,6 @@ const OnlineBooking = () => {
     },
   ];
 
-  console.log(tariff);
-  
-  
   if (tariff && tariff === "STANDARD") {
     datas.push({
       id: "4",
