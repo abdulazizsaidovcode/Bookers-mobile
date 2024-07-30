@@ -33,16 +33,12 @@ const MasterInformation = () => {
       if (selectedClient) {
         const id = selectedClient.id;
 
-        setTimeout(() => {
-          console.log(selectedClient);
-        }, 1000)
-
         getMasterOtzif(id);
         getMAstersServeses(id);
         getMasterGallery(id);
       }
       return () => null;
-    }, [selectedClient])
+    }, [])
   );
   
   setTimeout(() => {

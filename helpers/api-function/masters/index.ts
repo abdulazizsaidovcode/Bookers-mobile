@@ -45,7 +45,7 @@ export const getTopMasters = async (page = 0, size = 10, name?: string): Promise
       : `${base_url}user/top/masters?page=${page}&size=${size}`;
     const { data } = await axios.get<ApiResponse>(url, config || {});
     if (data.success) {
-      setTopMasters([...masters, ...data.body.object]);
+      setTopMasters([...masters, ...data.body.object]);      
     } else {
       setTopMasters([]);
     }
