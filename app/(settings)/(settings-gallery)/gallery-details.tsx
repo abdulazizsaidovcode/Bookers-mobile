@@ -86,9 +86,8 @@ const GalleryDetails: React.FC = () => {
     };
 
     const handleDeleteMode = () => {
-        setBooleanState({ ...booleanState, isDeleteMode: !booleanState.isDeleteMode });
+        setBooleanState({ ...booleanState, isDeleteMode: !booleanState.isDeleteMode, selectAll: false });
         setSelectedImages([]);
-        setBooleanState({ ...booleanState, selectAll: false });
     };
 
     const handleImageSelect = (imageId: string) => {
@@ -97,7 +96,7 @@ const GalleryDetails: React.FC = () => {
             : [...prev, imageId]
         );
     };
-    
+
     // const handleSelectMainPhoto = (imageId: string) => {
     //     setSelectedImages(prev => {
     //         if (prev.includes(imageId)) {
@@ -109,10 +108,9 @@ const GalleryDetails: React.FC = () => {
     // };
 
     const handleDelete = () => {
-        setBooleanState({ ...booleanState, isDeleteMode: false });
+        setBooleanState({ ...booleanState, isDeleteMode: false, selectAll: false });
         delPhoto(id, selectedImages, setFullData, setData, toggleAllModal);
         setSelectedImages([]);
-        setBooleanState({ ...booleanState, selectAll: false });
     };
 
     const requestPermissions = async (type: 'camera' | 'gallery') => {
@@ -168,9 +166,9 @@ const GalleryDetails: React.FC = () => {
             editMainPhoto(setFullData, setData, id, selectedMainImages, toggleShowMain, setBooleanState, booleanState)
         }
     };
-    console.log(selectedImages);
+    console.log(booleanState.isDeleteMode);
     console.log(selectedMainImages);
-    
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -308,8 +306,8 @@ const GalleryDetails: React.FC = () => {
                 </BottomModal>
             </ScrollView>
             <View style={{ position: 'absolute', width: '100%', bottom: 0, padding: 10 }}>
-                {images.length !== 0 && (booleanState.isLoading ? <LoadingButtons title='Сохраfнить' /> : <Buttons title='Сохранить' onPress={() =>handleSave('photo')} />)}
-                {booleanState.showMainSwitch && (booleanState.isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title='Сохранить' onPress={() =>handleSave('mainPhoto')} />)}
+                {images.length !== 0 && (booleanState.isLoading ? <LoadingButtons title='Сохраfнить' /> : <Buttons title='Сохранить' onPress={() => handleSave('photo')} />)}
+                {booleanState.showMainSwitch && (booleanState.isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title='Сохранить' onPress={() => handleSave('mainPhoto')} />)}
             </View>
         </SafeAreaView>
     );

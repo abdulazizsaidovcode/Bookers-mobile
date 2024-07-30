@@ -23,9 +23,9 @@ export const editMainDataStatus = async (isActive: boolean) => {
         if (data.success) {
             Toast.show('Все ваши уведомления обновлены.', Toast.LONG)
         }
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
-        Toast.show('Произошла ошибка, попробуйте позже', Toast.LONG)
+        Toast.show(error.response.data.text, Toast.LONG)
     }
 }
 
@@ -38,7 +38,6 @@ export const fetchAllData = async (setOneData: (val: NotificationsAllData) => vo
         }
     } catch (error) {
         console.log(error)
-        Toast.show('Произошла ошибка, попробуйте позже', Toast.LONG)
     }
 }
 
@@ -54,7 +53,7 @@ export const fetchAppoinmentActiveData = async (setAppoinmentActiveData: (val: b
     }
 }
 
-export const editMessenger = async (isMessage: boolean, goBack: () => void, setHasChanges: (val: boolean) => void, setIsLoading: (val: boolean) => void) => {
+export const editMessenger = async (isMessage: boolean | undefined, goBack: () => void, setHasChanges: (val: boolean) => void, setIsLoading: (val: boolean) => void) => {
     setIsLoading(true)
     try {
         const config = await getConfig()
@@ -65,10 +64,10 @@ export const editMessenger = async (isMessage: boolean, goBack: () => void, setH
             setHasChanges(false);
             setIsLoading(false)
         } else setIsLoading(false);
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
         setIsLoading(false)
-        Toast.show('Произошла ошибка, попробуйте позже', Toast.LONG)
+        Toast.show(error.response.data.text, Toast.LONG)
     }
 }
 
@@ -84,10 +83,10 @@ export const editCancelOrder = async (isActive: boolean | undefined, text: strin
             setIsloading(false)
             Toast.show('Запись отмены успешно обновлена.', Toast.LONG)
         } else setIsloading(false)
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show('Произошла ошибка, попробуйте позже', Toast.LONG)
+        Toast.show(error.response.data.text, Toast.LONG)
     }
 }
 
@@ -127,10 +126,10 @@ export const editChangingOrder = async (isActive: boolean | undefined, text: str
             setIsloading(false)
             Toast.show('Изменение записи успешно обновлено.', Toast.LONG)
         } else setIsloading(false)
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show('Произошла ошибка, попробуйте позже', Toast.LONG)
+        Toast.show(error.response.data.text, Toast.LONG)
     }
 }
 
@@ -149,10 +148,10 @@ export const editFeedbeckOrder = async (text: string | undefined, setHasChanges:
             setIsloading(false)
             Toast.show('Запрос отзыва успешно обновлено.', Toast.LONG)
         } else setIsloading(false)
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show('Произошла ошибка, попробуйте позже', Toast.LONG)
+        Toast.show(error.response.data.text, Toast.LONG)
     }
 }
 
@@ -167,10 +166,10 @@ export const editAppoinmentOrder = async (text: string | undefined, hour: number
             setHasChanges(false)
             setIsLoading(false)
         } else setIsLoading(false)
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
         setIsLoading(false)
-        Toast.show('Произошла ошибка, попробуйте позже', Toast.LONG)
+        Toast.show(error.response.data.text, Toast.LONG)
     }
 }
 
@@ -201,9 +200,9 @@ export const editWindowOrder = async (text: string | undefined, setHasChanges: (
             setIsloading(false)
             setHasChanges(false)
         } else setIsloading(false)
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show('Произошла ошибка, попробуйте позже', Toast.LONG)
+        Toast.show(error.response.data.text, Toast.LONG)
     }
 }

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     StyleSheet,
     Text,
@@ -14,8 +14,8 @@ import {
     BackHandler,
     Platform,
 } from "react-native";
-import {Ionicons} from "@expo/vector-icons";
-import {SafeAreaView} from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 import PieChart from "react-native-pie-chart";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Toast from "react-native-simple-toast";
@@ -37,29 +37,29 @@ import {
     StatisticsProps,
     StatusContainerProps,
 } from "@/type/dashboard/dashboard";
-import {getFile} from "@/helpers/api";
+import { getFile } from "@/helpers/api";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
-import {getUser} from "@/helpers/api-function/getMe/getMee";
+import { getUser } from "@/helpers/api-function/getMe/getMee";
 import Buttons from "@/components/(buttons)/button";
-import {useFocusEffect, useNavigation} from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import {getData} from "@/helpers/token";
+import { getData } from "@/helpers/token";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
-import {getNumbers} from "@/helpers/api-function/numberSittings/numbersetting";
+import { getNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import {handleRefresh} from "@/constants/refresh";
+import { handleRefresh } from "@/constants/refresh";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 import InstallPin from "@/app/(auth)/(setPinCode)/installPin";
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
-import {deviceInfo} from "@/helpers/api-function/register/registrFC";
-import {getTariffMaster} from "@/app/(profile)/(tariff)/tariff";
-import {setMasterTariff} from "@/constants/storage";
-import {Loading} from "@/components/loading/loading";
+import { deviceInfo } from "@/helpers/api-function/register/registrFC";
+import { getTariffMaster } from "@/app/(profile)/(tariff)/tariff";
+import { setMasterTariff } from "@/constants/storage";
+import { Loading } from "@/components/loading/loading";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -121,10 +121,10 @@ const TabOneScreen: React.FC = () => {
             shouldSetBadge: false,
         }),
     });
-    const {number, setNumber} = numberSettingStore();
-    const {getMee, setGetMee} = useGetMeeStore();
+    const { number, setNumber } = numberSettingStore();
+    const { getMee, setGetMee } = useGetMeeStore();
     const navigation = useNavigation<any>();
-    const {isRegtered} = isRegister()
+    const { isRegtered } = isRegister()
     const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
     const [isPasswordSet, setIsPasswordSet] = useState<null | boolean>(null);
     const {
@@ -143,7 +143,7 @@ const TabOneScreen: React.FC = () => {
         setMainStatisticData,
         setWaitingData,
     } = useDashboardStore();
-    const {refreshing, setRefreshing} = clientStore();
+    const { refreshing, setRefreshing } = clientStore();
     const [masterTariff, setTariffMaster] = useState<null | string>(null)
     const [backPressCount, setBackPressCount] = useState(0);
     const [pending, setPending] = useState(true);
@@ -152,10 +152,10 @@ const TabOneScreen: React.FC = () => {
     const responseListener = useRef();
 
     const pushNotifications = async () => {
-        const {status: existingStatus} = await Notifications.getPermissionsAsync();
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
         if (existingStatus !== 'granted') {
-            const {status} = await Notifications.requestPermissionsAsync();
+            const { status } = await Notifications.requestPermissionsAsync();
             finalStatus = status;
         }
         if (finalStatus !== 'granted') {
@@ -275,7 +275,7 @@ const TabOneScreen: React.FC = () => {
     }, [hasAllNumbers]);
 
     if (isPasswordSet == false) {
-        return <InstallPin/>;
+        return <InstallPin />;
     }
 
     const onRefresh = useCallback(() => {
@@ -332,7 +332,7 @@ const TabOneScreen: React.FC = () => {
     const vipCientsCount =
         dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData.filter((item) => item.type === "VIP").length : 0;
     const newClientsCount =
-        dailyTimeData ? dailyTimeData.filter((item) => item.type === "NEW").length : 0;
+        dailyTimeData && dailyTimeData.length! == 0 ? dailyTimeData.filter((item) => item.type === "NEW").length : 0;
 
     const handleConfirm = () =>
         editOrderStatus(
@@ -356,10 +356,10 @@ const TabOneScreen: React.FC = () => {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
             >
-                <Header/>
+                <Header />
                 <ScheduleSection
                     todayGraficData={todayGraficData}
                     dailyTimeData={dailyTimeData}
@@ -375,7 +375,7 @@ const TabOneScreen: React.FC = () => {
                     statisticNumerator={statisticNumerator}
                     statisticDenominator={statisticDenominator}
                 />
-                <CardsSection mainStatisticData={mainStatisticData}/>
+                <CardsSection mainStatisticData={mainStatisticData} />
                 <BookingRequests
                     setWaitingData={setWaitingData}
                     waitingData={waitingData}
@@ -402,7 +402,7 @@ const TabOneScreen: React.FC = () => {
                 >
                     <View>
                         <Text
-                            style={{fontSize: 17, color: COLORS.white, textAlign: "center"}}
+                            style={{ fontSize: 17, color: COLORS.white, textAlign: "center" }}
                         >
                             Вы уверены, что хотите Одобрить этот заказ?
                         </Text>
@@ -426,17 +426,17 @@ const TabOneScreen: React.FC = () => {
         </CenteredModal> */}
                 {
                     pending ? (
-                        <View style={{marginTop: 20}}>
-                            <Loading/>
+                        <View style={{ marginTop: 20 }}>
+                            <Loading />
                         </View>
                     ) : !hasAllNumbers && (
-                        <View style={{margin: 10}}>
+                        <View style={{ margin: 10 }}>
                             <Buttons
                                 title="настройку"
                                 onPress={() => navigation.navigate("(profile)/(tariff)/tariff")}
                             />
-                            <View style={{marginTop: 10}}>
-                                <Buttons title="Выйти" onPress={() => handleSubmit()}/>
+                            <View style={{ marginTop: 10 }}>
+                                <Buttons title="Выйти" onPress={() => handleSubmit()} />
                             </View>
                         </View>)
                 }
@@ -473,7 +473,7 @@ const Header: React.FC = () => {
                     name="notifications"
                     size={24}
                     color={COLORS.white}
-                    style={{marginRight: 16}}
+                    style={{ marginRight: 16 }}
                     onPress={() => navigation.navigate("(tabs)/chat")}
                 />
                 <Ionicons
@@ -488,13 +488,13 @@ const Header: React.FC = () => {
 };
 
 const ScheduleSection: React.FC<ScheduleSectionProps> = ({
-                                                             dailyTimeData,
-                                                             todayGraficData,
-                                                             regularVisitCount,
-                                                             notVisitCount,
-                                                             vipCientsCount,
-                                                             newClientsCount,
-                                                         }) => (
+    dailyTimeData,
+    todayGraficData,
+    regularVisitCount,
+    notVisitCount,
+    vipCientsCount,
+    newClientsCount,
+}) => (
     <>
         <View style={styles.scheduleSection}>
             <Text style={styles.sectionTitle}>Расписание на сегодня</Text>
@@ -508,7 +508,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
                 renderItem={renderTimeSlot}
                 keyExtractor={(item) => item.time}
                 horizontal
-                style={{paddingVertical: 10}}
+                style={{ paddingVertical: 10 }}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.scheduleContainer}
             />
@@ -524,12 +524,12 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
 );
 
 const Statistics: React.FC<StatisticsProps> = ({
-                                                   mainStatisticData,
-                                                   chartNumerator,
-                                                   chartDenominator,
-                                                   statisticNumerator,
-                                                   statisticDenominator,
-                                               }) => (
+    mainStatisticData,
+    chartNumerator,
+    chartDenominator,
+    statisticNumerator,
+    statisticDenominator,
+}) => (
     <View style={styles.statsSection}>
         <View style={styles.statsContainer}>
             <Text style={styles.statsTitle}>Выполнено сеансов</Text>
@@ -554,30 +554,30 @@ const Statistics: React.FC<StatisticsProps> = ({
 );
 
 const CardsSection: React.FC<{ mainStatisticData: any }> = ({
-                                                                mainStatisticData,
-                                                            }) => (
+    mainStatisticData,
+}) => (
     <View style={styles.cardsSection}>
         <View style={styles.card}>
             <Text style={styles.cardTitle}>Отменённые сеансы</Text>
-            <Text style={{color: COLORS.mainRed, fontSize: 24, fontWeight: "bold"}}>
+            <Text style={{ color: COLORS.mainRed, fontSize: 24, fontWeight: "bold" }}>
                 {mainStatisticData.rejectedOrder}
             </Text>
         </View>
         <View style={[styles.card, styles.incomeCard]}>
-            <Text style={{color: COLORS.white}}>Доход в этом месяце</Text>
+            <Text style={{ color: COLORS.white }}>Доход в этом месяце</Text>
             <Text style={styles.cardValue}>{mainStatisticData.incomeThisMonth}</Text>
         </View>
     </View>
 );
 
 const BookingRequests: React.FC<BookingRequestsProps> = ({
-                                                             waitingData,
-                                                             toggleConfirmModal,
-                                                             toggleRejectedModal,
-                                                             isConfirmModal,
-                                                             isRejectedModal,
-                                                             setWaitingData,
-                                                         }) =>
+    waitingData,
+    toggleConfirmModal,
+    toggleRejectedModal,
+    isConfirmModal,
+    isRejectedModal,
+    setWaitingData,
+}) =>
     waitingData && waitingData.length > 0 ? (
         <View>
             <View
@@ -587,7 +587,7 @@ const BookingRequests: React.FC<BookingRequestsProps> = ({
                     padding: 10,
                 }}
             >
-                <Text style={{color: COLORS.white, fontSize: 20}}>
+                <Text style={{ color: COLORS.white, fontSize: 20 }}>
                     Запросы на бронь
                 </Text>
                 <View style={styles.headerRight}>
@@ -619,13 +619,13 @@ const BookingRequests: React.FC<BookingRequestsProps> = ({
     );
 
 const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
-                                                                     hallData,
-                                                                     toggleConfirmModal,
-                                                                     toggleRejectedModal,
-                                                                     isConfirmModal,
-                                                                     isRejectedModal,
-                                                                     setHallData,
-                                                                 }) =>
+    hallData,
+    toggleConfirmModal,
+    toggleRejectedModal,
+    isConfirmModal,
+    isRejectedModal,
+    setHallData,
+}) =>
     hallData && hallData.length > 0 ? (
         <View>
             <View
@@ -635,7 +635,7 @@ const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
                     padding: 10,
                 }}
             >
-                <Text style={{color: COLORS.white, fontSize: 20}}>
+                <Text style={{ color: COLORS.white, fontSize: 20 }}>
                     Запросы окошка
                 </Text>
                 <View style={styles.headerRight}>
@@ -667,8 +667,8 @@ const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
     );
 
 const renderTimeSlot: React.FC<{ item: DashboardDailyTimeOrders }> = ({
-                                                                          item,
-                                                                      }) => (
+    item,
+}) => (
     <View
         style={[
             styles.timeSlot,
@@ -681,33 +681,33 @@ const renderTimeSlot: React.FC<{ item: DashboardDailyTimeOrders }> = ({
                         : styles.newSlot,
         ]}
     >
-        <Text style={{color: COLORS.white}}>
+        <Text style={{ color: COLORS.white }}>
             {item.time === null ? "" : item.time.slice(0, 5) ?? ""}
         </Text>
     </View>
 );
 
 const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
-                                                                       item,
-                                                                       toggleConfirmModal,
-                                                                       toggleRejectedModal,
-                                                                   }) => {
+    item,
+    toggleConfirmModal,
+    toggleRejectedModal,
+}) => {
 
     return (
         <View style={styles.bookingCard}>
             <View style={styles.cardHeader}>
                 <Text style={styles.newRequestText}>
                     {" "}
-                    <FontAwesome name="star" size={12} color="#217355"/>
+                    <FontAwesome name="star" size={12} color="#217355" />
                     Новый Запрос
                 </Text>
             </View>
-            <View style={{flexDirection: "row", gap: 10, paddingVertical: 10}}>
+            <View style={{ flexDirection: "row", gap: 10, paddingVertical: 10 }}>
                 <View>
                     <Image
                         source={
                             item.clientAttachmentId
-                                ? {uri: getFile + item.clientAttachmentId}
+                                ? { uri: getFile + item.clientAttachmentId }
                                 : require("../../../assets/avatar.png")
                         }
                         style={styles.profileImage}
@@ -729,7 +729,7 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
                     alignItems: "center",
                 }}
             >
-                <Text style={{color: "#4F4F4F", fontSize: 12}}>
+                <Text style={{ color: "#4F4F4F", fontSize: 12 }}>
                     {item.serviceName}
                 </Text>
             </View>
@@ -745,7 +745,7 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
                     style={styles.rejectButton}
                     onPress={() => toggleRejectedModal(item.id)}
                 >
-                    <Text style={{color: COLORS.mainRed, fontWeight: "bold"}}>
+                    <Text style={{ color: COLORS.mainRed, fontWeight: "bold" }}>
                         Отклонить
                     </Text>
                 </TouchableOpacity>
@@ -756,11 +756,11 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
 };
 
 const StatusContainer: React.FC<StatusContainerProps> = ({
-                                                             regularVisitCount,
-                                                             notVisitCount,
-                                                             vipCientsCount,
-                                                             newClientsCount,
-                                                         }) => (
+    regularVisitCount,
+    notVisitCount,
+    vipCientsCount,
+    newClientsCount,
+}) => (
     <View style={styles.statusContainer}>
         <StatusIndicator
             color={COLORS.booked}
@@ -782,11 +782,11 @@ const StatusContainer: React.FC<StatusContainerProps> = ({
 );
 
 const StatusIndicator: React.FC<{ color: string; text: string }> = ({
-                                                                        color,
-                                                                        text,
-                                                                    }) => (
+    color,
+    text,
+}) => (
     <View style={styles.daylyStatus}>
-        <View style={[styles.statusColor, {backgroundColor: color}]}></View>
+        <View style={[styles.statusColor, { backgroundColor: color }]}></View>
         <Text style={styles.statusText}>{text}</Text>
     </View>
 );

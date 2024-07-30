@@ -24,7 +24,7 @@ const Messengers = () => {
   };
 
   const handleSave = () => {
-    editMessenger(!smsData.isActive, navigation.goBack, setHasChanges, setIsloading);
+    editMessenger(smsData.isActive, navigation.goBack, setHasChanges, setIsloading);
   };
 
   return (
