@@ -112,7 +112,7 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
       </View>
       {item.imageId && (
         <Image
-          source={{ uri: getFile + item.imageId }}
+          source={{ uri: getFile + item.attachmentId }}
           style={tw`w-full h-40 rounded-lg mb-4`}
         />
       )}

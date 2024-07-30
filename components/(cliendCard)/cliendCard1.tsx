@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import tw from 'tailwind-react-native-classnames';
-import { router } from 'expo-router';
-import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
 import { getFile } from '@/helpers/api';
 
 
 type ClientCardProps = {
+  id:string | null;
+  masterId:string | null;
   salon: string;
-  imageUrl: string;
+  attachmentId: string;
   name: string;
   zaps: string;
   masterType: string;
@@ -23,10 +23,9 @@ type ClientCardProps = {
 };
 
 const ClientCard1: React.FC<ClientCardProps> = ({
-  salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, locationIcon, btntext
+  id,
+  salon, attachmentId, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, locationIcon, btntext
 }) => {
-  const { getme } = webPageStore();
-  const [imageUri, setImageUri] = useState<string | null>(null);
 
 
   const generateStars = (count: number) => {
@@ -47,7 +46,7 @@ const ClientCard1: React.FC<ClientCardProps> = ({
       <View style={tw`p-4 bg-gray-300 rounded-2xl shadow-lg`}>
         <View style={tw`flex-row items-center mb-4`}>
           <Image
-            source={imageUri ? { uri: getFile + imageUri } : require('../../assets/avatar.png')}
+            source={attachmentId ? { uri: getFile + attachmentId  } : require('../../assets/avatar.png')}
             style={tw`w-16 h-16 rounded-full mr-3`}
           />
           <View style={tw`flex-1`}>

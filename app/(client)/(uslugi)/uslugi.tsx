@@ -16,11 +16,12 @@ const ServiceCard = React.memo(({ id, name, distanceMasterCount, onPress, attach
       <View style={[tw`rounded-full p-5`, { backgroundColor: '#9C0A35' }]}>
         <Image
           source={attachmentId ? { uri: `${getFile}${attachmentId}` } : require('../../../assets/avatar.png')}
-          style={tw`p-5 w-15 h-15`}
+          style={[tw`p-5`,{width:30, height:30}]}
         />
       </View>
-      <Text style={[tw`text-lg font-bold text-center`, { fontFamily: 'Montserrat_700Bold' }]}>{name}</Text>
-      <Text style={{ fontFamily: 'Montserrat_400Regular' }}>Рядом с тобой {distanceMasterCount}</Text>
+      <Text style={
+        tw`text-lg font-bold text-center`}>{name}</Text>
+      <Text>Рядом с тобой {distanceMasterCount}</Text>
     </View>
   </TouchableOpacity>
 ));
@@ -73,7 +74,7 @@ const Uslugi = () => {
             backgroundColor: '#21212E'
           }}>
           <View style={tw`flex flex-row items-center justify-between p-3`}>
-            <Text style={[tw`text-white text-3xl font-bold mb-4 px-4`, { fontFamily: 'Montserrat_700Bold' }]}>Услуги</Text>
+            <Text style={tw`text-white text-3xl font-bold mb-4 px-4`}>Услуги</Text>
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => navigation.navigate('(client)/(profile)/(notification)/notification')}
