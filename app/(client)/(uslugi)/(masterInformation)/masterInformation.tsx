@@ -8,7 +8,7 @@ import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import ClientCardDetail from '@/components/(cliendCard)/clientCardDetail';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
-import { AntDesign, FontAwesome6, Octicons, SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome6, Octicons, SimpleLineIcons } from '@expo/vector-icons';
 import { getMasterGallery, getMasterOtzif, getMAstersServeses, ServicesClient } from '@/helpers/api-function/uslugi/uslugi';
 import { useMapStore } from '@/helpers/state_managment/map/map';
 import { useFocusEffect, useNavigation } from 'expo-router';
