@@ -17,6 +17,12 @@ import { getFile } from '@/helpers/api';
 import tw from 'tailwind-react-native-classnames';
 import hasNotificationState from '@/helpers/state_managment/notifications/readORisReadNOtif';
 import { getNotificationNor_ReadyClient } from '@/helpers/api-function/client/clientPage';
+import AccardionHistory from '@/components/accordions/accardionHistory';
+import ProfileCard from '../(profile)/(orderHistory)/profileCard';
+import { SimpleLineIcons } from '@expo/vector-icons';
+import { useMapStore } from '@/helpers/state_managment/map/map';
+const { setMapData } = useMapStore();
+ const navigate = useNavigation<any>();
 
 
 
@@ -186,6 +192,37 @@ const Dashboard: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <Navbar />
       <ScrollView>
+      <AccardionHistory id={[]} key={1} title={"hello"} date={""} >
+                  <ProfileCard
+                    imageURL={""}
+                    masterName={""}
+                    salonName={""}
+                    masterGender={[]}
+                    ratingnumber={2}
+                    money={`${""} сум`}
+                    buttonName="Написать сообщение"
+                    Adress={""}
+                    titleTex={[]} // Stringni massivga aylantiramiz
+                    locationIcon={
+                      <SimpleLineIcons
+                        onPress={() => {
+                          navigate.navigate('(client)/(map)/(master-locations)/master-locations');
+                        }}
+                        name="location-pin"
+                        size={24}
+                        color="white"
+                      />
+                    }
+                    phoneIcon={
+                      <Feather
+                        name="phone"
+                        size={24}
+                        color="white"
+                        onPress={() => console.log(4)} // Telefon qilish funksiyasini qo'shamiz
+                      />
+                    }
+                  />
+                </AccardionHistory>
         <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
           {allCategory && allCategory.length > 0 ? (
             allCategory.map((item, index) => (
