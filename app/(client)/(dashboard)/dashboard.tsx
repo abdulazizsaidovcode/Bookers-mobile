@@ -17,6 +17,9 @@ import { getFile } from '@/helpers/api';
 import tw from 'tailwind-react-native-classnames';
 import hasNotificationState from '@/helpers/state_managment/notifications/readORisReadNOtif';
 import { getNotificationNor_ReadyClient } from '@/helpers/api-function/client/clientPage';
+import { getExpenceCategory } from '@/helpers/api-function/expence/expence';
+import { setExtraParamAsync } from 'expo-updates';
+import { getClientDashboard } from '@/helpers/api-function/dashboardClient/dashboardClient';
 
 
 
@@ -56,6 +59,12 @@ const Navbar: React.FC = () => {
       getNotificationNor_ReadyClient(setHasNotification)
     },[setHasNotification])
   )
+  useFocusEffect(
+    useCallback(() => {
+      getExpenceCategory;
+    }, [])
+  );
+
   return (
     <View style={styles.navbar}>
       <Text style={styles.title}>Главная</Text>
@@ -156,6 +165,15 @@ const Dashboard: React.FC = () => {
       getAllCategory().finally(() => setLoading(false));
       return () => { };
     }, [userLocation])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      getClientDashboard().then(response => {
+      }).catch(error => {
+        console.error("Error fetching expense data:", error); 
+      });
+    }, [])
   );
 
   // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi

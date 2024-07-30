@@ -22,69 +22,32 @@ const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
 
 const MasterInformation = () => {
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const { selectedClient, masterServis, services, setServices, activeTab, setActiveTab, masterGallery, feedbackForMaster, clientData } = ClientStory();
-  const [selectedId, setSelectedId] = useState<string | null>('services');
+  const { selectedClient, masterServis, masterGallery, feedbackForMaster, clientData } = ClientStory();
+  const [activeTab, setActiveTab] = useState<string | null>('upcoming');
+  const [selectedCategorys, setSelectedCategories] = useState<any>('vse');
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>();
-
-  useEffect(() => {
-    setServices([
-      {
-        active: services,
-        attachmentId: null,
-        category: { /* category data */ },
-        categoryId: 'b06ef8f4-05ee-4b11-b2b8-cca43137a590',
-        description: 'Dbbddk',
-        genderId: [1],
-        genderNames: ['MALE'],
-        id: 'a44ce922-e542-4afd-8ec4-1c0b64aaaeec',
-        message: null,
-        name: 'Kdkd',
-        paymentPercent: 0,
-        paymentPrice: 0,
-        price: 467697,
-        serviceStatus: 'APPROVED',
-        serviceTime: 90
-      }
-    ]);
-  }, []);
-  useFocusEffect(
-    useCallback(() => {
-      if (selectedClient) {
-        const masterId = selectedClient.id;
-        const categoryId = services.categoryId;
-        ServicesClient(masterId, categoryId);
-      }
-      return () => null;
-    }, [selectedClient])
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      if (selectedClient) {
-        const masterId = selectedClient.id;
-        getMAstersServeses(masterId);
-      }
-      return () => null;
-    }, [selectedClient])
-  );
 
   useFocusEffect(
     useCallback(() => {
       if (selectedClient) {
         const id = selectedClient.id;
+
+        setTimeout(() => {
+          console.log(selectedClient);
+        }, 1000)
+
         getMasterOtzif(id);
+        getMAstersServeses(id);
+        getMasterGallery(id);
       }
       return () => null;
     }, [selectedClient])
   );
-
-  useEffect(() => {
-    if (selectedClient?.id) {
-      getMasterGallery(selectedClient.id);
-    }
-  }, [selectedClient]);
+  
+  setTimeout(() => {
+    console.log(selectedClient);
+  }, 1000)
 
   const renderItem = ({ item }: any) => (
     <View style={tw`mb-4`}>
@@ -122,6 +85,12 @@ const MasterInformation = () => {
     return rows;
   };
 
+  const handleTabChange = (tab: any) => {
+    setSelectedCategories(tab)
+  };
+
+  console.log('a');
+
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
@@ -154,7 +123,7 @@ const MasterInformation = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
           <View style={tw`mb-5`}>
-            {selectedClient && <FlatList
+            {clientData && <FlatList
               data={selectedClient}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
@@ -172,7 +141,7 @@ const MasterInformation = () => {
                     feedbackCount={item.feedbackCount}
                     btntext={item.btntext}
                     services={item.services}
-                    onPress={() => {}}
+                    onPress={() => { }}
                     locationIcon={
                       <SimpleLineIcons name="location-pin" size={24} color="white"
                         onPress={() => {
@@ -188,7 +157,7 @@ const MasterInformation = () => {
                     }
                     phoneIcon={
                       <Octicons name="bookmark" size={26} color="white"
-                      onPress={() => makePhoneCall(item.phone)} />
+                        onPress={() => makePhoneCall(item.phone)} />
                     }
                   />
                 </View>
@@ -206,26 +175,26 @@ const MasterInformation = () => {
             <View >
               <TouchableOpacity
                 activeOpacity={0.9}
-                onPress={() => handleCategorySelect('', 0)}
+                onPress={() => handleTabChange('vse')}
                 style={[
                   styles.categoryCard,
-                  styles.activeCategoryCard
+                  selectedCategorys == 'vse' && { backgroundColor: '#B9B9C9' }
                 ]}
               >
-                <Text style={tw`text-white text-center`}>evse</Text>
+                <Text style={[tw`text-white text-center`, { color: selectedCategorys == 'vse' ? '#000' : '#828282' }]}>Все</Text>
               </TouchableOpacity>
             </View>
             {masterServis && masterServis.map((service: any) => (
               <View key={service.id}>
                 <TouchableOpacity
                   activeOpacity={0.9}
-                  onPress={() => handleCategorySelect(service.categoryId, service.id)}
+                  onPress={() => handleTabChange(service.id)}
                   style={[
                     styles.categoryCard,
-                    selectedCategory === service.id && styles.activeCategoryCard
+                    selectedCategorys === service.id ? { backgroundColor: '#B9B9C9' } : { borderColor: '#828282' }
                   ]}
                 >
-                  <Text style={tw`text-white text-center`}>{service.name}</Text>
+                  <Text style={[tw`text-white text-center`, { color: selectedCategorys == 'vse' ? '#000000' : '#828282' }]}>{service.name}</Text>
                 </TouchableOpacity>
               </View>
             ))}
@@ -240,12 +209,12 @@ const MasterInformation = () => {
               </View>
             )}
           />
-          <View style = {tw`mb-4 `}>
-          <Buttons
-            isDisebled={masterServis.length > 0}
-            onPress={() => {
-              navigate.navigate('(client)/(oreder)/order');
-            }} title='Продолжить' />
+          <View style={tw`mb-4 `}>
+            <Buttons
+              isDisebled={masterServis.length > 0}
+              onPress={() => {
+                navigate.navigate('(client)/(oreder)/order');
+              }} title='Продолжить' />
           </View>
         </ScrollView>
       )}
@@ -255,7 +224,7 @@ const MasterInformation = () => {
             data={renderRows(masterGallery)}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity key={item.id} onPress={() => setSelectedImage(item)}>
+              <TouchableOpacity>
                 <Image source={{ uri: getFile + item.attachmentId }} style={styles.image} />
               </TouchableOpacity>
             )}
@@ -269,7 +238,7 @@ const MasterInformation = () => {
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
           />
-          <ReviewCard/>
+          <ReviewCard />
         </ScrollView>
       )}
     </SafeAreaView>
@@ -290,12 +259,10 @@ const styles = StyleSheet.create({
   categoryCard: {
     padding: 10,
     borderRadius: 8,
-    backgroundColor: '#333',
     alignItems: 'center',
+    borderColor: '#828282'
   },
-  activeCategoryCard: {
-    backgroundColor: '#555',
-  },
+
 });
 
 export default MasterInformation;
