@@ -11,15 +11,17 @@ import UserProfileCard from "./serviseCard";
 import webPageStore from "@/helpers/state_managment/wepPage/wepPage";
 import { getServiseWith } from "@/helpers/api-function/wepPage/wepPage";
 import { getFile } from "@/helpers/api";
+import { Loading } from "@/components/loading/loading";
 
 const Services: React.FC = () => {
   const [activeTab, setActiveTab] = useState("");
 
-  const { servise, category, setServise, getme } = webPageStore();
+  const { servise, category, setServise, getme} = webPageStore();
+  const [ isLoading, setIsLoading ] = useState(false)
 
   const getServise = (id: any) => {
     if (id) {
-      getServiseWith(setServise, id);
+      getServiseWith(setServise, id, setIsLoading);
     }
   };
 
@@ -64,8 +66,7 @@ const Services: React.FC = () => {
           <Text style={styles.placeholderText}>Category not found</Text>
         )}
       </ScrollView>
-
-      {servise && servise.length !== 0 ? (
+      {isLoading ? <Loading /> : servise && servise.length !== 0 ? (
         servise.map((item: any, index: number) => (
           <View key={index} style={styles.serviceCard}>
             <Text style={styles.title}>{item.name}</Text>

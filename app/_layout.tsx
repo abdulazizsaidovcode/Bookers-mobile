@@ -71,7 +71,6 @@ import OnlineBooking from "./(standart)/(onlineBooking)/onlineBooking";
 import Booking from "./(standart)/(onlineBooking)/(booking)/booking";
 import InstallPin from "./(auth)/(setPinCode)/installPin";
 import CheckPin from "./(auth)/(setPinCode)/checkInstalledPin";
-import Help from "./(standart)/(help)/help";
 import AboutUs from "./(standart)/(help)/(aboutUs)/aboutUs";
 import UserCameraInfo from "./(auth)/(register)/(masterInformation)/getPhoto";
 import StoppedVisiting from "./(standart)/client/stopped-visiting";
@@ -658,11 +657,7 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             {/*Help start */}
-            <Stack.Screen
-              name="(standart)/(help)/help"
-              component={Help}
-              options={{ headerShown: false }}
-            />
+            
             <Stack.Screen
               name="(standart)/(help)/(aboutUs)/aboutUs"
               component={AboutUs}

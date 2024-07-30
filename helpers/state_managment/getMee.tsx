@@ -38,7 +38,9 @@ const useGetMeeStore = create<GetMeeStore>((set) => ({
     regionOption: [],
     setRegionOption: (val: any) => set({ regionOption: val }),
     districtOption: [],
-    setDistrictOption: (val: any) => set({ districtOption: val })
+    setDistrictOption: (val: any) => set({ districtOption: val }),
+    isLoading: false,
+    setIsLoading: (val: boolean) => set({isLoading: val})
 
 }));
 export default useGetMeeStore;
