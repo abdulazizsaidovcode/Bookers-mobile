@@ -1,3 +1,4 @@
+import { ServiceTime } from "@/app/(standart)/(onlineBooking)/(booking)/breakBetweenSessionIn";
 import { NotificationsAllData } from "@/type/notifications/notifications";
 import { create } from "zustand";
 
@@ -16,6 +17,8 @@ export interface IState {
   setIsEnabled3: (val: boolean) => void;
   data: IsActive | null;
   setData: (val: IsActive | null) => void;
+  isLoading: boolean
+  setIsLoading: (val: boolean) => void
 }
 export interface IState2 {
   isEnabled: boolean;
@@ -40,10 +43,12 @@ export interface Urgently {
   setSalonId: (val: SalonIdObj | null) => void
   servicesId: string | null
   setServicesId: (val: string | null) => void
-  minute: string | null
-  setMinute: (val: string | null) => void
-  hour: string | null
-  setHour: (val: string | null) => void
+  selectedMinute: number
+  setSelectedMinute: (val: number) => void
+  selectedHour: number
+  setSelectedHour: (val: number) => void
+  serviceTimes: ServiceTime[];
+  setServiceTime: (serviceId: string | null, hour: number, minute: number) => void;
 }
 
 export interface IsActive {
@@ -63,6 +68,9 @@ export const OnlineBookingStory = create<IState>((set) => ({
   setIsEnabled3: (val: boolean) => set({ isEnabled3: val }),
   data: null,
   setData: (val: IsActive | null) => set({ data: val }),
+  isLoading: false,
+  setIsLoading: (val: boolean) => set({isLoading: val})
+
 }));
 export const OnlineBookingStory2 = create<IState2>((set) => ({
   isEnabled: false,
@@ -86,10 +94,21 @@ export const OnlineBookingSettingsUrgentlyStory = create<Urgently>((set) => ({
   setSalonId: (val: SalonIdObj | null) => set({salonId: val}),
   servicesId: null,
   setServicesId: (val: string | null) => set({servicesId: val}),
-  minute: "0 мин.",
-  setMinute: (val: string | null) => set({minute: val}),
-  hour: "0 ч.",
-  setHour: (val: string | null) => set({hour: val}),
+  selectedMinute: 0,
+  setSelectedMinute: (val: number) => set({selectedMinute: val}),
+  selectedHour: 0,
+  setSelectedHour: (val: number) => set({selectedHour: val}),
+  serviceTimes: [],
+  setServiceTime: (serviceId, hour, minute) => set((state) => {
+    const existingIndex = state.serviceTimes.findIndex(time => time.serviceId === serviceId);
+    if (existingIndex > -1) {
+      const updatedServiceTimes = [...state.serviceTimes];
+      updatedServiceTimes[existingIndex] = { serviceId, hour, minute };
+      return { serviceTimes: updatedServiceTimes };
+    } else {
+      return { serviceTimes: [...state.serviceTimes, { serviceId, hour, minute }] };
+    }
+  })
   
 }));
 

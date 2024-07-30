@@ -28,6 +28,7 @@ import {
   getOnlineBookingHallWaiting,
   getOnlineBookingRecordDay,
   GetOnlineBookingSettingsUrgently,
+  getOnlineBookingUserviceTimeAll,
   getOnlineConfirmationServices,
   onlineBookingAllowClient,
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
@@ -44,7 +45,7 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standar
 const OnlineBooking = () => {
   
   const {tariff, setTariff} = clientStore()
-  const {setUrgentlyt, salonId, setSalonId } = OnlineBookingSettingsUrgentlyStory();
+  const {setUrgentlyt, salonId, setSalonId, setSelectedHour, setSelectedMinute, selectedHour, selectedMinute } = OnlineBookingSettingsUrgentlyStory();
   const {vipCount, setVipCount} = OnlineBookingStory3();
   const {
     data2,
@@ -55,7 +56,7 @@ const OnlineBooking = () => {
     data,
   } = OnlineBookingStory();
 
-  const { allowClient, setAllowClient } = OnlineBookingStory();
+  const { allowClient, setAllowClient, isLoading, setIsLoading } = OnlineBookingStory();
   const navigation = useNavigation<SettingsScreenNavigationProp>()
 
   const {t}=useTranslation()
@@ -68,6 +69,7 @@ const OnlineBooking = () => {
       getOnlineConfirmationServices(setData);
       getOnlineBookingHallWaiting(setData2)
       getVipCountS(setVipCount)
+      getOnlineBookingUserviceTimeAll(setSelectedHour, setSelectedMinute)
       return () => null
     }, [])
   )
@@ -89,7 +91,7 @@ const OnlineBooking = () => {
     {
       id: "2",
       title: t("break_between_sessions"),
-      subtitle: "Разные перерывы для каждой процедуры",
+      subtitle: selectedHour && selectedMinute ? `${selectedHour} час.  ${selectedMinute} мин.` : "Разные перерывы для каждой процедуры",
       IconComponent: <Ionicons name="wine" size={30} color="#9C0A35" />,
       onPress: () => {
        navigation.navigate("(standart)/(onlineBooking)/(booking)/breakBetweenSessions");
