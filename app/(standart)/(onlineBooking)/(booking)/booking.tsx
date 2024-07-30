@@ -52,8 +52,14 @@ const Booking = () => {
     try {
       const config = await getConfig();
       const { data } = await axios.get(`${base_url}order-days/master`, config ? config : {});
-      setData(data.body);
+      if (data.success) {
+        setData(data.body);
+      }
+      else {
+        setData([])
+      }
     } catch (error) {
+      setData([])
     }
   };
   

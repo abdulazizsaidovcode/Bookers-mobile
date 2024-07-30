@@ -8,7 +8,7 @@ interface MessageOptionProps {
   subtitle?: string;
   onPress?: () => void;
   IconComponent?: JSX.Element;
-  disebled?: boolean;
+  disabled?: boolean;
 }
 
 const MessageOption: React.FC<MessageOptionProps> = ({
@@ -16,11 +16,13 @@ const MessageOption: React.FC<MessageOptionProps> = ({
   subtitle,
   onPress,
   IconComponent,
+  disabled = false
 }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={ onPress}
+      disabled={disabled}
     >
       <View
         style={[
