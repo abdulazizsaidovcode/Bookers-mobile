@@ -16,6 +16,7 @@ import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { useFocusEffect } from '@react-navigation/native';
 import debounce from "lodash.debounce";
 import useTopMastersStore from '@/helpers/state_managment/masters';
+import { ActivityIndicator } from 'react-native-paper';
 
 const Hair = () => {
     const router = useRouter();
@@ -48,6 +49,14 @@ const Hair = () => {
         }, [loadMore])
       );
 
+      const renderFooter = () => {
+        return loadingMore ? (
+          <View style={{ padding: 10 }}>
+            <ActivityIndicator size="large" />
+          </View>
+        ) : null;
+      };
+
     useFocusEffect(
         useCallback(() => {
             const selected = selectedServiceId;
@@ -73,7 +82,7 @@ const Hair = () => {
         const latitude = userLocation?.coords?.latitude || null;
         const longitude = userLocation?.coords?.longitude || null;
         postClientFilter(
-            selectedServiceId ? [selectedServiceId] : [], // Wrap in an array if `postClientFilter` expects an array
+            selectedServiceId ? [selectedServiceId] : [], 
             genderIndex,
             value * 1000,
             rating,
@@ -104,7 +113,7 @@ const Hair = () => {
                         <Buttons
                             title="Подобрать мастера"
                             onPress={handleButtonPress}
-                            isDisebled={!isSelected} // Note: Ensure `isDisebled` is correctly spelled as `isDisabled` in the actual component
+                            isDisebled={!isSelected}
                         />
                     </View>
                 </View>

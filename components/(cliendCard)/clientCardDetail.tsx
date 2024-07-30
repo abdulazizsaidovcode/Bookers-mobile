@@ -36,20 +36,27 @@ const genderMapping: any = {
 
 const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const { setSelectedCategoryId } = ClientStory()
+  const { setSelectedCategoryId, selectedCategoryId } = ClientStory()
 
   const handleSelect = (id: string) => {
-    setSelectedIds(prevSelectedIds => {
-      if (!prevSelectedIds.includes(id)) {
-        return [...prevSelectedIds, id];
-      } else {
-        return prevSelectedIds.filter(selectedId => selectedId !== id);
+    let arr: any = []
+
+    if (selectedCategoryId && selectedCategoryId.includes(id)) {
+      arr = selectedCategoryId.filter((res: any, index: any) => res !== id)
+    } else {
+      if (selectedCategoryId) {
+        arr = [...selectedCategoryId, id]
       }
-    });
+    }
+    setSelectedIds(arr)
   };
 
   useEffect(() => {
     setSelectedCategoryId(selectedIds)
+    setTimeout(() => {
+      console.log(selectedIds);
+    }, 1000)
+
   }, [selectedIds])
 
   return (
@@ -112,7 +119,7 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
       </View>
       {item.imageId && (
         <Image
-          source={{ uri: getFile + item.imageId }}
+          source={{ uri: getFile + item.attachmentId }}
           style={tw`w-full h-40 rounded-lg mb-4`}
         />
       )}

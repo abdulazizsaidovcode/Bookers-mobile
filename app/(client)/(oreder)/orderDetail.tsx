@@ -7,7 +7,7 @@ import { RootStackParamList } from "@/type/root";
 import HistoryCard from "@/components/(cards)/history-card";
 import { AntDesign, Feather, Fontisto } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useState } from "react";
-import { orderGetOne } from "@/helpers/api-function/oreder/oreder";
+import { orderClientGetOne, orderGetOne } from "@/helpers/api-function/oreder/oreder";
 import { getFile } from "@/helpers/api";
 import moment from "moment";
 import CenteredModal from "@/components/(modals)/modal-centered";
@@ -62,7 +62,7 @@ const ClientOrderDetail = () => {
 
     useEffect(() => {
         if (successStatus === 'ACCEPTED') {
-            orderGetOne(id, setOrderOneData)
+            orderClientGetOne(id, setOrderOneData)
             toggleConfirm()
             setSuccessStatus('')
         }

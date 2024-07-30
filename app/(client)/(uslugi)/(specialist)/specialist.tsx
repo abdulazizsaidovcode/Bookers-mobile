@@ -59,6 +59,7 @@ const Specialist = () => {
   useEffect(() => {
     fetchClientData();
   }, [searchValue]);
+
   useFocusEffect(
     useCallback(() => {
       const latitude = userLocation?.coords?.latitude || null;
@@ -73,21 +74,13 @@ const Specialist = () => {
     const longitude = userLocation?.coords?.longitude || null;
     postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue).finally(() => { });
   }, [searchValue]);
+
   const handleFilterClick = async () => {
     setLoading(true);
     const latitude = userLocation?.coords?.latitude || null;
     const longitude = userLocation?.coords?.longitude || null;
     try {
       await postClientFilter([selectedServiceId], genderIndex, value, rating, latitude, longitude, searchValue, () => toggleBottomModal());
-      console.log('Posting filter data:', {
-        selectedServiceId,
-        genderIndex,
-        value,
-        rating,
-        latitude,
-        longitude,
-        searchValue,
-      });
     } catch (error) {
       console.error("Error during filter:", error);
     } finally {
@@ -101,7 +94,7 @@ const Specialist = () => {
       id: item.id,
       masterId: item.masterId,
       salon: item.salonName,
-      imageUrl: item.imageUrl,
+      imageUrl: item.attachmentId,
       name: item.fullName,
       zaps: item.nextEntryDate,
       masterType: item.masterSpecialization,
@@ -114,13 +107,14 @@ const Specialist = () => {
     setSelectedClient(client);
     router.push('(client)/(uslugi)/(masterInformation)/masterInformation');
   };
+
   const renderClientCard = ({ item }) => (
     <View style={tw`mb-3`}>
       <ClientCard1
         id={item.id}
         masterId={item.masterId}
         salon={item.salonName}
-        imageUrl={item.attachmentId}
+        attachmentId={item.attachmentId}
         name={item.fullName}
         zaps={item.nextEntryDate}
         masterType={item.masterSpecialization}
@@ -135,10 +129,7 @@ const Specialist = () => {
           onPress={() => {
             setMapData(item)
             navigate.navigate('(client)/(map)/(master-locations)/master-locations');
-          }  
-          }
-          
-          
+          }}
            />
       }
         />
@@ -189,9 +180,10 @@ const Specialist = () => {
                 contentContainerStyle={tw`pt-3`}
               />
             ) : (
-              <View style={tw`flex-1 justify-center items-center`}>
-                <Text style={tw`text-white`}>No Data Available</Text>
+              <View style = {tw`text-center mt-3 `}>
+                <Text style ={tw`text-white text-center font-bold mt-6 text-lg`}>Siz qidirgan ma'lumot topilmadi </Text>
               </View>
+              
             )
           )}
         </View>

@@ -8,7 +8,7 @@ import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import ClientCardDetail from '@/components/(cliendCard)/clientCardDetail';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
-import { AntDesign, FontAwesome6, Octicons, SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome6, Octicons, SimpleLineIcons } from '@expo/vector-icons';
 import { getMasterGallery, getMasterOtzif, getMAstersServeses, ServicesClient } from '@/helpers/api-function/uslugi/uslugi';
 import { useMapStore } from '@/helpers/state_managment/map/map';
 import { useFocusEffect, useNavigation } from 'expo-router';
@@ -16,6 +16,7 @@ import ClientCardUslugi from '@/components/(cliendCard)/clientCardUslugi';
 import Buttons from '@/components/(buttons)/button';
 import { getFile } from '@/helpers/api';
 import CustomButton1 from './CustomButton';
+import ReviewCard from '@/components/(cliendCard)/riewCard';
 
 const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
@@ -48,7 +49,6 @@ const MasterInformation = () => {
       }
     ]);
   }, []);
-
   useFocusEffect(
     useCallback(() => {
       if (selectedClient) {
@@ -125,7 +125,7 @@ const MasterInformation = () => {
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
-      <NavigationMenu name={`Подробнее`} />
+      <NavigationMenu name={`Подробнее OOOO`} />
       <View style={tw`flex flex-row mb-5 p-3`}>
         <CustomButton1
           borderColor='#9E9E9E'
@@ -240,12 +240,13 @@ const MasterInformation = () => {
               </View>
             )}
           />
+          <View style = {tw`mb-4 `}>
           <Buttons
             isDisebled={masterServis.length > 0}
             onPress={() => {
               navigate.navigate('(client)/(oreder)/order');
             }} title='Продолжить' />
-
+          </View>
         </ScrollView>
       )}
       {activeTab === 'past' && (
@@ -268,6 +269,7 @@ const MasterInformation = () => {
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
           />
+          <ReviewCard/>
         </ScrollView>
       )}
     </SafeAreaView>

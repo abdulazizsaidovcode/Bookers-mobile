@@ -95,7 +95,7 @@ const BookedAccordion: React.FC = () => {
     return (
         <>
             <List.Accordion
-                title="Свободное время"
+                tiAccordiontle="Свободное время"
                 titleStyle={styles.title}
                 style={styles.accordionContainer}
                 theme={{ colors: { background: 'transparent' } }}

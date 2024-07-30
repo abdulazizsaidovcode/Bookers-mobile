@@ -31,10 +31,8 @@ export const postClientFilter = async (categoryId?: string[], gender?: boolean |
   try {
       const config = await getConfig();
       const postData = { categoryId, gender, nextToMe, rating, lat, lng };
-      console.log('Sending POST data:', postData);
-      const url = `${getClient_filter}?page=${page ? page : 0}&size=${size ? size : 10}${inputValue ? `?nameOrPhone=${inputValue}` : ""}`;
+      const url = `${getClient_filter}?page=${page ? page : 0}&size=${size ? size : 10}${inputValue ? `&nameOrPhone=${inputValue}` : ""}`;
       const { data } = await axios.post(url, postData, config ? config : {});
-      console.log(data.body.object);
       if (data.success) {
           ClientStory.getState().setClientData(data.body.object);
           if (toggleModal) toggleModal();
@@ -108,11 +106,9 @@ export const getMasterOtzif = async (id:string) => {
   try{
     const config = await getConfig();
     const response = await axios.get(`${feedbackMasterForClient}/${id}`, config ? config : {});
-    console.log(response.data.body);
     if (response.data.success) {
       useReviewsStore.getState().setReviews(response.data.body);
-    }
-    
+    } 
   }catch(error){
     console.log(error);
     
