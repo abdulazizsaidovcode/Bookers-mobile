@@ -16,6 +16,7 @@ import { useFocusEffect, useNavigation } from "expo-router";
 import { RootStackParamList } from "@/type/root";
 import { NavigationProp } from "@react-navigation/native";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import { Loading } from "@/components/loading/loading";
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
   "(standart)/(onlineBooking)/(booking)/confirmationRecor"
@@ -23,7 +24,7 @@ type SettingsScreenNavigationProp = NavigationProp<
 
 const ConfirmationRecord = () => {
   const { tariff } = clientStore();
-
+  const {isLoading, setIsLoading} = OnlineBookingStory()
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const {
@@ -69,7 +70,8 @@ const ConfirmationRecord = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <>
+    {isLoading ? <Loading/> : <SafeAreaView style={styles.container}>
       <View>
         <Text style={{ marginBottom: 10 }}></Text>
         <NavigationMenu name={`Онлайн бронирование`} />
@@ -139,13 +141,15 @@ const ConfirmationRecord = () => {
             isEnabled,
             isEnabled2,
             isEnabled3,
-            navigation
+            navigation,
+            setIsLoading
           );
           console.log(isEnabled, isEnabled2, isEnabled3);
           // router.push("(standart)/(onlineBooking)/onlineBooking");
         }}
       />
-    </SafeAreaView>
+    </SafeAreaView>}
+    </>
   );
 };
 

@@ -43,6 +43,8 @@ export interface Urgently {
   setSalonId: (val: SalonIdObj | null) => void
   servicesId: string | null
   setServicesId: (val: string | null) => void
+  serviseData: any
+  setServiseData: (val: any) => void
   selectedMinute: number
   setSelectedMinute: (val: number) => void
   selectedHour: number
@@ -94,6 +96,8 @@ export const OnlineBookingSettingsUrgentlyStory = create<Urgently>((set) => ({
   setSalonId: (val: SalonIdObj | null) => set({salonId: val}),
   servicesId: null,
   setServicesId: (val: string | null) => set({servicesId: val}),
+  serviseData: [],
+  setServiseData: (val: any) => set({serviseData: val}),
   selectedMinute: 0,
   setSelectedMinute: (val: number) => set({selectedMinute: val}),
   selectedHour: 0,

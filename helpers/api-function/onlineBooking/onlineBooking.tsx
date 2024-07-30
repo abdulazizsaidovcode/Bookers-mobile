@@ -1,8 +1,10 @@
 import {
+    master_service_list,
   onlineBookingAllowClient_url,
   onlineBookingHallWaitin_url,
   onlineBookingRecordDay_url,
   onlineBookingUgly_url,
+  onlineBookingUserviceTime_url,
   onlineBookingUserviceTimeAll_url,
   onlineBookingUserviceTimeservice_url,
   onlineConfirmationServices_url,
@@ -28,11 +30,14 @@ export const onlineBookingAllowClient = async (
         config ? config : {}
       );
       if (res.data.success) {
+        setIsLoading && setIsLoading(false);
         Toast.show(res.data.message, Toast.SHORT);
-        setIsLoading && setIsLoading(true);
+      } else {
+        setIsLoading && setIsLoading(false);
       }
     }
   } catch (error: any) {
+    setIsLoading && setIsLoading(false);
     Toast.show(error.response.data.message, Toast.SHORT);
   }
 };
@@ -41,6 +46,8 @@ export const getOnlineBookingAllowClient = async (
   setData: (val: boolean) => void,
   setIsLoading?: (val: boolean) => void
 ) => {
+  setIsLoading && setIsLoading(true);
+
   try {
     const config = await getConfig();
     const res = await axios.get(
@@ -48,11 +55,14 @@ export const getOnlineBookingAllowClient = async (
       config ? config : {}
     );
     if (res.data.success) {
+      setIsLoading && setIsLoading(false);
       setData(res.data.body);
     } else {
+      setIsLoading && setIsLoading(false);
       setData(false);
     }
   } catch (error) {
+    setIsLoading && setIsLoading(false);
     setData(false);
   }
 };
@@ -62,6 +72,7 @@ export const onlineBookingSettingsUrgently = async (
   setIsEnabled: (data: boolean) => void,
   setIsLoading?: (val: boolean) => void
 ) => {
+  setIsLoading && setIsLoading(true);
   try {
     if (isEnabled === true || isEnabled === false) {
       const config = await getConfig();
@@ -72,14 +83,16 @@ export const onlineBookingSettingsUrgently = async (
       );
 
       if (res.data.success) {
+        setIsLoading && setIsLoading(false);
         Toast.show(res.data.message, Toast.SHORT);
         setIsEnabled(isEnabled);
       } else {
+        setIsLoading && setIsLoading(false);
         Toast.show(res.data.message, Toast.SHORT);
       }
     }
   } catch (error) {
-    Alert.alert(`${error}`);
+    setIsLoading && setIsLoading(false);
   }
 };
 
@@ -87,12 +100,19 @@ export const GetOnlineBookingSettingsUrgently = async (
   setStatus: any,
   setIsLoading?: (val: boolean) => void
 ) => {
+  setIsLoading && setIsLoading(true);
   try {
     const config = await getConfig();
     const res = await axios.get(onlineBookingUgly_url, config ? config : {});
-    setStatus(res.data.body);
+    if (res.data.success) {
+      setIsLoading && setIsLoading(false);
+      setStatus(res.data.body);
+    } else {
+      setIsLoading && setIsLoading(false);
+      setStatus(false);
+    }
   } catch (error) {
-    console.log(error);
+    setIsLoading && setIsLoading(false);
     setStatus(false);
   }
 };
@@ -102,6 +122,7 @@ export const postOnlineBookingUserviceTimeAll = async (
   navigation?: any,
   setIsLoading?: (val: boolean) => void
 ) => {
+  setIsLoading && setIsLoading(true);
   try {
     if (val) {
       const config = await getConfig();
@@ -111,13 +132,16 @@ export const postOnlineBookingUserviceTimeAll = async (
         config ? config : {}
       );
       if (res.data.success) {
+        setIsLoading && setIsLoading(false);
         Toast.show(res.data.message, Toast.SHORT);
         navigation ? navigation.goBack() : () => null;
       } else {
+        setIsLoading && setIsLoading(false);
         Toast.show(res.data.message, Toast.SHORT);
       }
     }
   } catch (error: any) {
+    setIsLoading && setIsLoading(false);
     Toast.show(error.response.data.message, Toast.SHORT);
   }
 };
@@ -127,6 +151,7 @@ export const getOnlineBookingUserviceTimeAll = async (
   setMinute: (val: number) => void,
   setIsLoading?: (val: boolean) => void
 ) => {
+  setIsLoading && setIsLoading(true);
   try {
     const config = await getConfig();
     const res: any = await axios.get(
@@ -135,15 +160,18 @@ export const getOnlineBookingUserviceTimeAll = async (
     );
 
     if (res.data.success) {
+      setIsLoading && setIsLoading(false);
       setHour(res.data.body.hour);
       setMinute(res.data.body.minute);
       console.log(res.data.body);
     } else {
+      setIsLoading && setIsLoading(false);
       Toast.show(res.data.message, Toast.SHORT);
       setHour(0);
       setMinute(0);
     }
   } catch (error: any) {
+    setIsLoading && setIsLoading(false);
     Toast.show(error.response.data.message, Toast.SHORT);
     setHour(0);
     setMinute(0);
@@ -155,6 +183,7 @@ export const postOnlineBookingserviceTime = async (
   navigation?: any,
   setIsLoading?: (val: boolean) => void
 ) => {
+  setIsLoading && setIsLoading(true);
   try {
     if (val) {
       const config = await getConfig();
@@ -164,16 +193,43 @@ export const postOnlineBookingserviceTime = async (
         config ? config : {}
       );
       if (res.data.success) {
+        setIsLoading && setIsLoading(false);
         Toast.show(res.message, Toast.SHORT);
         navigation ? navigation.goBack() : () => null;
       } else {
+        setIsLoading && setIsLoading(false);
         Toast.show(res.data.message, Toast.SHORT);
       }
     }
   } catch (error:any) {
+    setIsLoading && setIsLoading(false);
     Toast.show(error.response.data.message, Toast.SHORT);
   }
 };
+
+export const getOnlineBookingserviceTime = async (
+    setData: (data: any) => void,
+    setIsLoading?: (val: boolean) => void
+  ) => {
+    setIsLoading && setIsLoading(true);
+    try {
+        const config = await getConfig();
+        const res: any = await axios.get(
+          `${master_service_list}`,
+          config ? config : {}
+        );
+        if (res.data.success) {
+          setIsLoading && setIsLoading(false);
+          setData(res.data.body)
+        } else {
+          setIsLoading && setIsLoading(false);
+          setData([])
+        }
+    } catch (error:any) {
+      setIsLoading && setIsLoading(false);
+      setData([])
+    }
+  };
 
 export const onlineConfirmationServices = async (
   isEnabled: boolean,
@@ -182,6 +238,7 @@ export const onlineConfirmationServices = async (
   navigation: any,
   setIsLoading?: (val: boolean) => void
 ) => {
+  setIsLoading && setIsLoading(true);
   try {
     const data = {
       allClient: isEnabled,
@@ -197,10 +254,15 @@ export const onlineConfirmationServices = async (
       config ? config : {}
     );
     if (res.data.success) {
+      setIsLoading && setIsLoading(false);
       Toast.show(res.data.message, Toast.SHORT);
       navigation.goBack();
+    } else {
+      setIsLoading && setIsLoading(false);
+      Toast.show(res.data.message, Toast.SHORT);
     }
   } catch (error: any) {
+    setIsLoading && setIsLoading(false);
     Toast.show(error.response.data.message, Toast.SHORT);
   }
 };
@@ -209,6 +271,7 @@ export const getOnlineConfirmationServices = async (
   setData: (val: IsActive | null) => void,
   setIsLoading?: (val: boolean) => void
 ) => {
+  setIsLoading && setIsLoading(true);
   try {
     const config = await getConfig();
     const res = await axios.get(
@@ -217,12 +280,14 @@ export const getOnlineConfirmationServices = async (
     );
 
     if (res.data.success) {
+      setIsLoading && setIsLoading(false);
       setData(res.data.body);
     } else {
+      setIsLoading && setIsLoading(false);
       setData(null);
     }
   } catch (error) {
-    console.log(error);
+    setIsLoading && setIsLoading(false);
     setData(null);
   }
 };
@@ -235,6 +300,7 @@ export const onlineBookingHallWaiting = async (
   navigation: any,
   setIsLoading?: (val: boolean) => void
 ) => {
+  setIsLoading && setIsLoading(true);
   try {
     const data = {
       allClient: isEnabled,
@@ -248,14 +314,16 @@ export const onlineBookingHallWaiting = async (
     );
 
     if (res.data.success) {
-      Toast.show("res.data.message", Toast.LONG);
+      setIsLoading && setIsLoading(false);
+      Toast.show(res.data.message, Toast.LONG);
       navigation.goBack();
-      console.log(res);
+    } else {
+      setIsLoading && setIsLoading(false);
+      Toast.show(res.data.message, Toast.LONG);
     }
   } catch (error) {
-    console.log(error);
+    setIsLoading && setIsLoading(false);
     Toast.show("Something is error?", Toast.LONG);
-    console.log(isEnabled, isEnabled2);
   }
 };
 
@@ -264,6 +332,7 @@ export const getOnlineBookingHallWaiting = async (
   setData: (val: any | null) => void,
   setIsLoading?: (val: boolean) => void
 ) => {
+  setIsLoading && setIsLoading(true);
   try {
     const config = await getConfig();
     const res = await axios.get(
@@ -271,10 +340,13 @@ export const getOnlineBookingHallWaiting = async (
       config ? config : {}
     );
     if (res.data.success) {
+      setIsLoading && setIsLoading(false);
       setData(res.data.body);
-      console.log(res.data.body);
+    } else {
+      setIsLoading && setIsLoading(false);
     }
   } catch (error) {
+    setIsLoading && setIsLoading(false);
     console.log(error);
   }
 };
@@ -284,6 +356,7 @@ export const getOnlineBookingRecordDay = async (
   status?: "DAY" | "PERIOD",
   setIsLoading?: (val: boolean) => void
 ) => {
+  setIsLoading && setIsLoading(true);
   try {
     const config = await getConfig();
     const res = await axios.get(
@@ -291,10 +364,12 @@ export const getOnlineBookingRecordDay = async (
       config ? config : {}
     );
     if (res.data.success) {
-      console.log(res.data.body);
+      setIsLoading && setIsLoading(true);
+    } else {
+      setIsLoading && setIsLoading(false);
     }
     setData(res.data.body);
   } catch (error) {
-    console.log(error);
+    setIsLoading && setIsLoading(true);
   }
 };
