@@ -21,6 +21,7 @@ import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
 import { WorkMainCardEdit } from "../(work-grafic-edit)/workMain";
+import { Loading } from "@/components/loading/loading";
 
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
@@ -64,12 +65,14 @@ const WorkMain = () => {
     getme,
     timeData,
     calendarDate,
+    setIsLoading,
+    isLoading,
   } = graficWorkStore();
 
   useFocusEffect(
     useCallback(() => {
       getUser(setGetMee);
-      getWorkDay(setWeekData);
+      getWorkDay(setWeekData, setIsLoading);
       return () => {};
     }, [])
   );
@@ -81,72 +84,84 @@ const WorkMain = () => {
     }, [getme])
   );
 
-  const isDisabled = weekData.every((item: { dayName: string; active: boolean }) => !item.active);
+  const isDisabled = weekData.every(
+    (item: { dayName: string; active: boolean }) => !item.active
+  );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={{ height: "80%", paddingHorizontal: 15, marginTop: 20 }}>
-        <WorkMainCard
-          icon={<AntDesign name="calendar" size={24} color="#9C0A35" />}
-          title="График работы"
-          subTitle={`${
-            weekData.length !== 0
-              ? weekData
-                  .filter((item: any) => item.active) // faqat active elementlarni filter qilamiz
-                  .map((item: any) => item.dayName.substring(0, 3)) // har bir active elementning birinchi 3 harfini chiqaramiz
-                  .join(", ") // elementlarni vergul bilan ajratamiz
-              : "Рабочие дни недели не настроены!"
-          }`}
-          route={() => navigation.navigate("(free)/(work-grafic)/workGraffic")}
-        />
-        <Pressable
-          style={({ pressed }) => [
-            {
-              opacity: pressed ? 0.8 : isDisabled ? 0.5 : 1,
-            },
-          ]}
-          disabled={isDisabled}
-        >
-          <WorkMainCard
-            disabled={isDisabled}
-            icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
-            title="Время работы"
-            subTitle={
-              timeData && timeData.from && timeData.end
-                ? `From ${timeData.from ? timeData.from : "00:00"}  to ${
-                    timeData.end ? timeData.end : "00:00"
-                  }`
-                : "Рабочее время не настроено!"
-            }
-            route={() => navigation.navigate("(free)/(work-grafic)/workTime")}
-          />
-        </Pressable>
-      </View>
-      <View
-        style={{
-          paddingHorizontal: 15,
-          marginVertical: 20,
-          height: "20%",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Buttons
-          title="На главную"
-          onPress={() => {
-            if (
-              calendarDate &&
-              timeData.from !== undefined &&
-              timeData.end !== undefined &&
-              weekData.some((item) => item.active)
-            ) {
-              putNumbers(3);
-            }
-            navigation.navigate("(welcome)/Welcome");
-          }}
-        />
-      </View>
-    </SafeAreaView>
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <View style={{ height: "80%", paddingHorizontal: 15, marginTop: 20 }}>
+            <WorkMainCard
+              icon={<AntDesign name="calendar" size={24} color="#9C0A35" />}
+              title="График работы"
+              subTitle={`${
+                weekData.length !== 0
+                  ? weekData
+                      .filter((item: any) => item.active) // faqat active elementlarni filter qilamiz
+                      .map((item: any) => item.dayName.substring(0, 3)) // har bir active elementning birinchi 3 harfini chiqaramiz
+                      .join(", ") // elementlarni vergul bilan ajratamiz
+                  : "Рабочие дни недели не настроены!"
+              }`}
+              route={() =>
+                navigation.navigate("(free)/(work-grafic)/workGraffic")
+              }
+            />
+            <Pressable
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.8 : isDisabled ? 0.5 : 1,
+                },
+              ]}
+              disabled={isDisabled}
+            >
+              <WorkMainCard
+                disabled={isDisabled}
+                icon={<MaterialIcons name="timer" size={24} color="#9C0A35" />}
+                title="Время работы"
+                subTitle={
+                  timeData && timeData.from && timeData.end
+                    ? `From ${timeData.from ? timeData.from : "00:00"}  to ${
+                        timeData.end ? timeData.end : "00:00"
+                      }`
+                    : "Рабочее время не настроено!"
+                }
+                route={() =>
+                  navigation.navigate("(free)/(work-grafic)/workTime")
+                }
+              />
+            </Pressable>
+          </View>
+          <View
+            style={{
+              paddingHorizontal: 15,
+              marginVertical: 20,
+              height: "20%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Buttons
+              title="На главную"
+              onPress={() => {
+                if (
+                  calendarDate &&
+                  timeData.from !== undefined &&
+                  timeData.end !== undefined &&
+                  weekData.some((item) => item.active)
+                ) {
+                  putNumbers(3);
+                }
+                navigation.navigate("(welcome)/Welcome");
+              }}
+            />
+          </View>
+        </SafeAreaView>
+      )}
+    </>
   );
 };
 
