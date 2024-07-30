@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -13,15 +13,29 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import BreakBetweenSessionIn from "./breakBetweenSessionIn";
 import SingleBreakBetweenSession from "./breakBetweenSessionsIn1";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import { OnlineBookingSettingsUrgentlyStory, OnlineBookingStory } from "@/helpers/state_managment/onlinBooking/onlineBooking";
+import { Loading } from "@/components/loading/loading";
+import { useFocusEffect } from "expo-router";
+import { getOnlineBookingserviceTime } from "@/helpers/api-function/onlineBooking/onlineBooking";
 
 const { width, height } = Dimensions.get("window");
 
 const BreakBetweenSession = () => {
+  const {isLoading, setIsLoading } = OnlineBookingStory();
+  const {setServiceTime, setServiseData} = OnlineBookingSettingsUrgentlyStory()
   const [activeButton, setActiveButton] = useState("everyService");
   const { tariff } = clientStore(); // Ensure this is defined and imported
 
+  useFocusEffect(
+    useCallback(() => {
+      getOnlineBookingserviceTime(setServiseData, setIsLoading)
+      return () => null
+    }, [])
+  )
+
   return (
-    <SafeAreaView style={styles.container}>
+    <>
+    {isLoading ? <Loading/> : <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
       <NavigationMenu name="Онлайн бронирование" />
       
@@ -79,7 +93,8 @@ const BreakBetweenSession = () => {
           )}
         </View>
       </View>
-    </SafeAreaView>
+    </SafeAreaView>}
+    </>
   );
 };
 

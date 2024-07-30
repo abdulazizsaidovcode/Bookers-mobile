@@ -21,15 +21,18 @@ import {
 } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import {
   OnlineBookingSettingsUrgentlyStory,
+  OnlineBookingStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import Toast from "react-native-simple-toast";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
+import { Loading } from "@/components/loading/loading";
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/(booking)/booking'>;
 
 const Booking = () => {
+  const { isLoading, setIsLoading } = OnlineBookingStory();
   
   const {tariff} = clientStore()
   const { Urgently, setUrgentlyt, salonId, setSalonId } = OnlineBookingSettingsUrgentlyStory();
@@ -58,6 +61,7 @@ const Booking = () => {
 
 
   const addOnlineBook = async () => {
+    setIsLoading(true);
     try {
       const config = await getConfig();
       let res = await axios.post(
@@ -66,11 +70,17 @@ const Booking = () => {
         config ? config : {}
       );
       if (res.data.success) {
-        Toast.show(res.data.message, Toast.SHORT);
+    setIsLoading(false);
+    Toast.show(res.data.message, Toast.SHORT);
         navigation.goBack();
       }
+      else {
+      setIsLoading(false);
+      Toast.show(res.data.message, Toast.LONG);
+      }
     } catch (error) {
-    }
+    setIsLoading(false);
+  }
   };
 
   useEffect(() => {
@@ -90,7 +100,8 @@ const Booking = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <>
+    {isLoading ? <Loading/> : <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
       <View style={{ paddingLeft: 10, marginTop: 14 }}>
       <NavigationMenu name={`Онлайн бронирование`} />
@@ -152,7 +163,8 @@ const Booking = () => {
           </View>
         </ScrollView>
       </View>
-    </SafeAreaView>
+    </SafeAreaView>}
+    </>
   );
 };
 

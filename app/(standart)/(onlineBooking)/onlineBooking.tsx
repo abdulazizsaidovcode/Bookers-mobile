@@ -38,6 +38,7 @@ import { RootStackParamList } from "@/type/root";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { getMasterTariff } from "@/constants/storage";
 import { getVipCountS } from "./(booking)/timeSelect";
+import { Loading } from "@/components/loading/loading";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/(onlineBooking)/onlineBooking'>;
 
@@ -138,7 +139,7 @@ const OnlineBooking = () => {
     const newValue = !isEnabledBtn;
     setIsEnabledBtn(newValue);
     setAllowClient(newValue); // Update the global state
-    onlineBookingAllowClient(newValue);
+    onlineBookingAllowClient(newValue, setIsLoading);
   };
 
   const renderItem = ({ item }: { item: any }) => (
@@ -158,7 +159,8 @@ const OnlineBooking = () => {
   }, [allowClient]);
 
   return (
-    <SafeAreaView style={[tw`flex-1 mt-6`, { backgroundColor: "#21212E" }]}>
+    <>
+   {isLoading ? <Loading/> : <SafeAreaView style={[tw`flex-1 mt-6`, { backgroundColor: "#21212E" }]}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
       <NavigationMenu name={"Моё расписание"} />
       <View style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
@@ -202,7 +204,8 @@ const OnlineBooking = () => {
           </View>
         </ScrollView>
       </View>
-    </SafeAreaView>
+    </SafeAreaView>}
+    </>
   );
 };
 export default OnlineBooking;

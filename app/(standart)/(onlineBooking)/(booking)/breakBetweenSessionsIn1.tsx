@@ -11,7 +11,7 @@ import {
   Dimensions,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { OnlineBookingSettingsUrgentlyStory } from "@/helpers/state_managment/onlinBooking/onlineBooking";
+import { OnlineBookingSettingsUrgentlyStory, OnlineBookingStory } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { postOnlineBookingUserviceTimeAll } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import { useNavigation } from "expo-router";
 
@@ -21,6 +21,8 @@ const hoursData = [0, 1, 2];
 const minutesData = [0, 15, 30, 45];
 
 const SingleBreakBetweenSession = () => {
+  const {isLoading, setIsLoading } = OnlineBookingStory();
+
   const {selectedHour, setSelectedHour, selectedMinute, setSelectedMinute} = OnlineBookingSettingsUrgentlyStory()
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<any>();
@@ -57,14 +59,14 @@ const SingleBreakBetweenSession = () => {
             <Text style={styles.selectButtonText}>
               {selectedHour} ч. {selectedMinute} мин.
             </Text>
-            <MaterialIcons name="access-time" size={24} color="white" />
+            <MaterialIcons name="arrow-drop-down" size={30} color="white" />
           </View>
         </TouchableOpacity>
       </View>
       <TouchableOpacity
         style={styles.saveButton}
         onPress={() =>
-          postOnlineBookingUserviceTimeAll({serviceId: null, hour: selectedHour, minute: selectedMinute }, navigation)
+          postOnlineBookingUserviceTimeAll({serviceId: null, hour: selectedHour, minute: selectedMinute }, navigation, setIsLoading)
         }
       >
         <Text style={styles.saveButtonText}>Сохранить</Text>

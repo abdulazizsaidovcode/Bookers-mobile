@@ -4,23 +4,16 @@ import {
   Text,
   StatusBar,
   ScrollView,
-  SafeAreaView,
   TouchableOpacity,
   StyleSheet,
   Modal,
   FlatList,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { OnlineBookingSettingsUrgentlyStory } from "@/helpers/state_managment/onlinBooking/onlineBooking";
+import { OnlineBookingSettingsUrgentlyStory, OnlineBookingStory } from "@/helpers/state_managment/onlinBooking/onlineBooking";
+import { postOnlineBookingserviceTime } from "@/helpers/api-function/onlineBooking/onlineBooking";
 
-const servicesData = [
-  { id: "1", name: "Стрижка, укладка", price: "350 000 сум" },
-  { id: "2", name: "Стрижка, укладка, покраска", price: "500 000 сум" },
-  { id: "3", name: "Стрижка, укладка, покраска", price: "500 000 сум" },
-  { id: "4", name: "Стрижка, укладка, покраска", price: "500 000 сум" },
-  { id: "5", name: "Стрижка, укладка, покраска", price: "500 000 сум" },
-  { id: "6", name: "Стрижка, укладка, покраска", price: "500 000 сум" },
-];
+
 
 const hoursData = [0, 1, 2];
 const minutesData = [0, 15, 30, 45];
@@ -32,6 +25,9 @@ export interface ServiceTime {
 }
 
 const BreakBetweenSessionIn: React.FC = () => {
+  const {isLoading, setIsLoading } = OnlineBookingStory();
+  const { serviseData } = OnlineBookingSettingsUrgentlyStory();
+
   const [modalVisible, setModalVisible] = useState(false);
   const [currentServiceId, setCurrentServiceId] = useState<string | null>(null);
   const [selectedHour, setSelectedHour] = useState<number>(0);
@@ -81,10 +77,10 @@ const BreakBetweenSessionIn: React.FC = () => {
             Настройте перерывы между сеансами
           </Text>
         </View>
-        {servicesData.map((service) => (
+        {serviseData.map((service: any) => (
           <View key={service.id} style={styles.procedureContainer}>
-            <Text style={styles.procedureTitle}>{service.name}</Text>
-            <Text style={styles.procedurePrice}>{service.price}</Text>
+            <Text style={styles.procedureTitle}>{service && service.name ? service.name : "No data"}</Text>
+            <Text style={styles.procedurePrice}>{service && service.price ? `${service.price} сум` : "No data"}</Text>
             <TouchableOpacity
               style={styles.selectButton}
               onPress={() => handleSelectTime(service.id)}
@@ -93,9 +89,9 @@ const BreakBetweenSessionIn: React.FC = () => {
                 <Text style={styles.selectButtonText}>
                   {serviceTimes.find(time => time.serviceId === service.id)
                     ? `${serviceTimes.find(time => time.serviceId === service.id)!.hour} ч. ${serviceTimes.find(time => time.serviceId === service.id)!.minute} мин.`
-                    : "0 ч. 0 мин."}
+                    : service && service.serviceTime ? `${Math.floor(service.serviceTime / 60)} ч. ${service.serviceTime % 60} мин.` : "0 ч. 0 мин."}
                 </Text>
-                <MaterialIcons name="access-time" size={24} color="white" />
+                <MaterialIcons name="arrow-drop-down" size={30} color="white" />
               </View>
             </TouchableOpacity>
           </View>
@@ -103,7 +99,7 @@ const BreakBetweenSessionIn: React.FC = () => {
       </ScrollView>
       <TouchableOpacity
         style={[styles.saveButton, isSaveDisabled && styles.saveButtonDisabled]}
-        onPress={() => console.log(serviceTimes)}
+        onPress={() => postOnlineBookingserviceTime(serviceTimes, navigator, setIsLoading)}
         disabled={isSaveDisabled}
       >
         <Text style={styles.saveButtonText}>Сохранить</Text>
@@ -169,7 +165,6 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     paddingBottom: 50,
     flexGrow: 1,
-    justifyContent: "space-between",
     backgroundColor: "#21212E",
   },
   section: {
@@ -185,17 +180,20 @@ const styles = StyleSheet.create({
   },
   procedureContainer: {
     backgroundColor: "#B9B9C9",
-    padding: 10,
+    padding: 15,
     borderRadius: 8,
     marginBottom: 10,
   },
   procedureTitle: {
     color: "#000",
-    fontSize: 16,
+    fontSize: 22,
+    fontWeight: "500"
   },
   procedurePrice: {
     color: "#9C0A35",
+    fontSize: 19,
     marginBottom: 10,
+    fontWeight: "600"
   },
   selectButton: {
     backgroundColor: "#4B4B64",
