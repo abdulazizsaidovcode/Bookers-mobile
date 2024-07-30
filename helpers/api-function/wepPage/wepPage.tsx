@@ -10,9 +10,11 @@ import axios from "axios";
 
 export const getServiseWith = async (
   setData: (val: any[] | null) => void,
-  categoryId: any
+  categoryId: any, 
+  setIsLoading?: (val: boolean) => void
 ) => {
-  try {
+      setIsLoading ? setIsLoading(true) : () => {}
+      try {
     if (categoryId) {
       const config = await getConfig()
       const { data } = await axios.get(
@@ -20,35 +22,49 @@ export const getServiseWith = async (
         config ? config : {}
       );
 
-      if (data.success) setData(data.body);
-      else setData([]);
+      if (data.success) {
+      setIsLoading ? setIsLoading(false) : () => {}
+      setData(data.body);
+
+      }
+      else {
+      setIsLoading ? setIsLoading(false) : () => {}
+      setData([]);
+
+      }
     } else setData([]);
   } catch (err) {
-    setData([]);
+      setIsLoading ? setIsLoading(false) : () => {}
+      setData([]);
   }
 };
 
-export const getCategoryF = async (setData: (val: any[] | null) => void) => {
-  try {
+export const getCategoryF = async (setData: (val: any[] | null) => void, setIsLoading?: (val: boolean) => void) => {
+      setIsLoading ? setIsLoading(true) : () => {}
+      try {
     const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
     const response = await axios.get(`${getCategory_master}`, config ? config : {});
 
     if (response.data.success) {
+      setIsLoading ? setIsLoading(false) : () => {}
       setData(response.data.body);
     } else {
+      setIsLoading ? setIsLoading(false) : () => {}
       setData(null);
     }
   } catch (error) {
     console.error('Error fetching categories:', error);
-    setData(null);
+      setIsLoading ? setIsLoading(false) : () => {}
+      setData(null);
   }
 };
 
 export const getSpecialization = async (
   setData: (val: any[] | null) => void,
-  id: any
+  id: any, setIsLoading?: (val: boolean) => void
 ) => {
-  try {
+      setIsLoading ? setIsLoading(true) : () => {}
+      try {
     if (!id) {
       setData(null);
       return;
@@ -58,40 +74,53 @@ export const getSpecialization = async (
     const response = await axios.get(`${master_get_specialization}/${id}`, config ? config : {});
 
     if (response.data.success) {
+      setIsLoading ? setIsLoading(false) : () => {}
       setData(response.data.body);
     } else {
+      setIsLoading ? setIsLoading(false) : () => {}
       setData(null);
     }
   } catch (error) {
+      setIsLoading ? setIsLoading(false) : () => {}
     console.error('Error fetching specialization:', error);
     setData(null);
   }
 };
 
-export const getAddress = async (setData: (val: any | null) => void) => {
-  try {
+export const getAddress = async (setData: (val: any | null) => void, setIsLoading?: (val: boolean) => void) => {
+      setIsLoading ? setIsLoading(true) : () => {}
+      try {
     const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
     const response = await axios.get(address_url, config ? config : {});
 
     if (response.data.success) {
+      setIsLoading ? setIsLoading(false) : () => {}
       setData(response.data.body);
-      console.log(response.data.body);
     } else {
-      console.log(response.data.message);
+      setIsLoading ? setIsLoading(false) : () => {}
       setData(null)
     }
   } catch (error) {
+      setIsLoading ? setIsLoading(false) : () => {}
     console.error('Error fetching address:', error);
     setData(null);
   }
 };
-export const getGaleriya = async (setData: (data: any | null) => void) => {
+export const getGaleriya = async (setData: (data: any | null) => void, setIsLoading?: (val: boolean) => void) => {
+  setIsLoading ? setIsLoading(true) : () => {}
   try {
     const config = await getConfig(); // Ensure getConfig is awaited to handle async behavior
     const response = await axios.get(gallery_list, config ? config : {});
 
-    setData(response.data.body);
+    if (response.data.success) {
+      setIsLoading ? setIsLoading(false) : () => {}
+      setData(response.data.body);
+    } else {
+      setIsLoading ? setIsLoading(false) : () => {}
+      setData(null)
+    }
   } catch (error) {
+      setIsLoading ? setIsLoading(false) : () => {}
     console.error('Error fetching gallery:', error);
     setData([]);
   }

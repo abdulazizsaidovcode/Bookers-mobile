@@ -101,7 +101,7 @@ const OnlineBooking = () => {
       id: "2",
       title: t("break_between_sessions"),
       subtitle:
-        selectedHour && selectedMinute
+      selectedHour === 0 || selectedHour && selectedMinute === 0 || selectedMinute
           ? `${selectedHour} час.  ${selectedMinute} мин.`
           : "Разные перерывы для каждой процедуры",
       IconComponent: <Ionicons name="wine" size={30} color="#9C0A35" />,
@@ -128,7 +128,7 @@ const OnlineBooking = () => {
           "(standart)/(onlineBooking)/(booking)/confirmationRecor"
         );
       },
-      isDisabled: selectedHour && selectedMinute,
+      isDisabled: selectedHour === 0 || selectedHour && selectedMinute === 0 || selectedMinute,
     },
   ];
 
