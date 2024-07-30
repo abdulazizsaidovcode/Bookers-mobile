@@ -102,7 +102,7 @@ const Dashboard: React.FC = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
   const { dashboardData } = useDashboardClientStore();
-  const { dashboardMasterData} = useDashboardMasterStore();
+  const { dashboardMasterData } = useDashboardMasterStore();
 
 
   Notifications.setNotificationHandler({
@@ -179,7 +179,7 @@ const Dashboard: React.FC = () => {
     }, [userLocation])
   );
 
-  
+
   useFocusEffect(
     useCallback(() => {
       getDashboradMaster().finally(() => setLoading(false));
@@ -215,11 +215,11 @@ const Dashboard: React.FC = () => {
       <Navbar />
       <ScrollView>
         <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
-            {dashboardData && dashboardData.length > 0 ? (
-              dashboardData.map((item, index) => (
+          {dashboardData && dashboardData.length > 0 ? (
+            dashboardData.map((item, index) => (
+              <View key={index} style={tw`w-full flex`}>
                 <AccardionHistory
                   id={item.orderId}
-                  key={index}
                   title={item.specializations || 'Без специализации'}
                   date={item.orderDate || 'Дата не указана'}
                 >
@@ -232,13 +232,14 @@ const Dashboard: React.FC = () => {
                     masterName={item.firstName || 'Имя не указано'}
                     salonName={item.salonName || 'Салон не указан'}
                     locationIcon={<FontAwesome5 name="map-marker-alt" size={20} color="white" />}
-                    phoneIcon={
-                    <FontAwesome5 name="phone" size={20} color="white" />}
+                    phoneIcon={<FontAwesome5 name="phone" size={20} color="white" />}
                     orderId={item.orderId || 'Не указан'}
                   />
                 </AccardionHistory>
-              ))
-            ) : allCategory && allCategory.length > 0 ? (
+              </View>
+            ))
+          ) : (
+            allCategory && allCategory.length > 0 ? (
               allCategory.map((item, index) => (
                 <TouchableOpacity
                   activeOpacity={0.7}
@@ -262,37 +263,39 @@ const Dashboard: React.FC = () => {
                   </View>
                 </TouchableOpacity>
               ))
-            ) : null}
+            ) : null
+          )}
         </AccordionItem>
+
         <AccordionItem title="Мои мастера" titleThen="У вас пока нет своих мастеров" backgroundColor="#21212E">
-          {dashboardMasterData && dashboardMasterData.length > 0 ? 
-          <>
-            <ClientCard
-     
-            />
-          </> :
-           <>
-            <TouchableOpacity style={styles.touchableItem}>
-            <View style={styles.item}>
-              <View style={styles.textContainer}>
-                <Text style={styles.titleText1}>Пригласить своего мастера</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.touchableItem}
-            onPress={() => {
-              router.push('../(masters)/masters')
-            }}
-          >
-            <View style={styles.itemTwo}>
-              <View style={styles.textContainer}>
-                <Text style={styles.titleTextTwo}>Записаться к совему мастеру</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-           </>
-           }
-         
+          {dashboardMasterData && dashboardMasterData.length > 0 ?
+            <>
+              <ClientCard
+
+              />
+            </> :
+            <>
+              <TouchableOpacity style={styles.touchableItem}>
+                <View style={styles.item}>
+                  <View style={styles.textContainer}>
+                    <Text style={styles.titleText1}>Пригласить своего мастера</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.touchableItem}
+                onPress={() => {
+                  router.push('../(masters)/masters')
+                }}
+              >
+                <View style={styles.itemTwo}>
+                  <View style={styles.textContainer}>
+                    <Text style={styles.titleTextTwo}>Записаться к совему мастеру</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </>
+          }
+
         </AccordionItem>
       </ScrollView>
     </SafeAreaView>
