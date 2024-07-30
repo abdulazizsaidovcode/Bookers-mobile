@@ -17,9 +17,12 @@ import { getFile } from '@/helpers/api';
 import tw from 'tailwind-react-native-classnames';
 import hasNotificationState from '@/helpers/state_managment/notifications/readORisReadNOtif';
 import { getNotificationNor_ReadyClient } from '@/helpers/api-function/client/clientPage';
-import { getExpenceCategory } from '@/helpers/api-function/expence/expence';
-import { setExtraParamAsync } from 'expo-updates';
+import { getExpenceCategory } from '@/helpers/api-function/expence/expence';;
 import { getClientDashboard } from '@/helpers/api-function/dashboardClient/dashboardClient';
+import { useDashboardClientStore } from '@/helpers/state_managment/dashboardClient/dashboardClient';
+import AccardionHistory from '@/components/accordions/accardionHistory';
+import ProfileCard from '../(profile)/(orderHistory)/profileCard';
+
 
 
 
@@ -52,12 +55,12 @@ const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
 
 const Navbar: React.FC = () => {
   const navigation = useNavigation();
-  const {hasNotification,setHasNotification}=hasNotificationState()
+  const { hasNotification, setHasNotification } = hasNotificationState()
 
   useFocusEffect(
     useCallback(() => {
       getNotificationNor_ReadyClient(setHasNotification)
-    },[setHasNotification])
+    }, [setHasNotification])
   )
   useFocusEffect(
     useCallback(() => {
@@ -96,6 +99,7 @@ const Dashboard: React.FC = () => {
   const [backPressCount, setBackPressCount] = useState(0);
   const notificationListener = useRef();
   const responseListener = useRef();
+  const { dashboardData } = useDashboardClientStore();
 
 
   Notifications.setNotificationHandler({
@@ -120,7 +124,6 @@ const Dashboard: React.FC = () => {
     // const deviceId = Constants.deviceId;
     const deviceType = Device.modelName;
     deviceInfo(deviceType, Platform.OS, token);
-
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',
@@ -130,8 +133,8 @@ const Dashboard: React.FC = () => {
       });
     }
     return token;
-
   }
+
   useEffect(() => {
     pushNotifications()
     return () => {
@@ -169,13 +172,10 @@ const Dashboard: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getClientDashboard().then(response => {
-      }).catch(error => {
-        console.error("Error fetching expense data:", error); 
-      });
+      getClientDashboard().finally(() => setLoading(false));
+      return () => { };
     }, [])
   );
-
   // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
   useFocusEffect(
     useCallback(() => {
@@ -205,37 +205,54 @@ const Dashboard: React.FC = () => {
       <Navbar />
       <ScrollView>
         <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
-          {allCategory && allCategory.length > 0 ? (
-            allCategory.map((item, index) => (
-              <TouchableOpacity
-                activeOpacity={.7}
-                key={index}
-                style={styles.touchableItem}
-                onPress={() => {
-                  navigation.navigate('(client)/(uslugi)/(hairHealth)/hair')
-                }}
-              >
-                <View style={styles.item}>
-                  <View style={styles.imageContainer}>
-                    <Image
-                      source={{ uri: `${getFile}${item.attachmentId}` }}
-                      style={tw`p-3 w-1/2`}
-
-                    />
-                    {/* <Image source={item.attachmentId} style={styles.image} /> */}
+            {dashboardData && dashboardData.length > 0 ? (
+              dashboardData.map((item, index) => (
+                <AccardionHistory
+                 id={item.orderId}
+                  key={index}
+                  title={item.specializations || 'Без специализации'}
+                  date={item.orderDate || 'Дата не указана'}
+                >
+                  <ProfileCard
+                    Address={item.address || 'Адрес не указан'}
+                    buttonName="Написать сообщение"
+                    imageURL={item.userAttachmentId || 'https://example.com/default-image.jpg'}
+                    money={`${item.orderPrice || 'Не указано'} сум`}
+                    ratingnumber={item.feedbackCount || 0}
+                    masterName={item.firstName || 'Имя не указано'}
+                    salonName={item.salonName || 'Салон не указан'}
+                    locationIcon={<FontAwesome5 name="map-marker-alt" size={20} color="white" />}
+                    phoneIcon={
+                    <FontAwesome5 name="phone" size={20} color="white" />}
+                    orderId={item.orderId || 'Не указан'}
+                  />
+                </AccardionHistory>
+              ))
+            ) : allCategory && allCategory.length > 0 ? (
+              allCategory.map((item, index) => (
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  key={index}
+                  style={styles.touchableItem}
+                  onPress={() => {
+                    navigation.navigate('(client)/(uslugi)/(hairHealth)/hair');
+                  }}
+                >
+                  <View style={styles.item}>
+                    <View style={styles.imageContainer}>
+                      <Image
+                        source={{ uri: `${getFile}${item.attachmentId}` }}
+                        style={tw`p-3 w-1/2`}
+                      />
+                    </View>
+                    <View style={styles.textContainer}>
+                      <Text style={styles.titleText}>{item.name}</Text>
+                      <Text style={styles.subtitleText}>Рядом с тобой {item.distanceMasterCount}</Text>
+                    </View>
                   </View>
-                  <View style={styles.textContainer}>
-                    <Text style={styles.titleText}>{item.name}</Text>
-                    <Text style={styles.subtitleText}>Рядом с тобой {item.distanceMasterCount}</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))
-          ) : (
-            null
-          )}
-
-
+                </TouchableOpacity>
+              ))
+            ) : null}
         </AccordionItem>
         <AccordionItem title="Мои мастера" titleThen="У вас пока нет своих мастеров" backgroundColor="#21212E">
           <TouchableOpacity style={styles.touchableItem}>
@@ -268,7 +285,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#21212E',
     alignItems: 'center',
     padding: 18,
-    justifyContent: 'flex-start',
   },
   navbar: {
     flexDirection: 'row',

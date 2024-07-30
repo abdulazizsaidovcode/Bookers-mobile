@@ -22,6 +22,8 @@ interface IProps {
     deleteIcon?: React.ReactNode;
     imageURL: string | null;
     orderId?: string | null;
+    clientCount?: number | null;
+
 }
 
 const ProfileCard: React.FC<IProps> = ({
@@ -37,7 +39,7 @@ const ProfileCard: React.FC<IProps> = ({
     locationIcon,
     phoneIcon,
     deleteIcon,
-    orderId
+    orderId,
 }) => {
     const { activeTab, setActiveTab, pastComing, setPastComing } = useAccardionStoreId();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
