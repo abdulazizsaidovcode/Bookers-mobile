@@ -10,10 +10,12 @@ import {
   FlatList,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { OnlineBookingSettingsUrgentlyStory, OnlineBookingStory } from "@/helpers/state_managment/onlinBooking/onlineBooking";
+import {
+  OnlineBookingSettingsUrgentlyStory,
+  OnlineBookingStory,
+} from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { postOnlineBookingserviceTime } from "@/helpers/api-function/onlineBooking/onlineBooking";
-
-
+import { Loading } from "@/components/loading/loading";
 
 const hoursData = [0, 1, 2];
 const minutesData = [0, 15, 30, 45];
@@ -25,7 +27,7 @@ export interface ServiceTime {
 }
 
 const BreakBetweenSessionIn: React.FC = () => {
-  const {isLoading, setIsLoading } = OnlineBookingStory();
+  const { isLoading, setIsLoading } = OnlineBookingStory();
   const { serviseData } = OnlineBookingSettingsUrgentlyStory();
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -33,13 +35,19 @@ const BreakBetweenSessionIn: React.FC = () => {
   const [selectedHour, setSelectedHour] = useState<number>(0);
   const [selectedMinute, setSelectedMinute] = useState<number>(0);
 
-  const serviceTimes = OnlineBookingSettingsUrgentlyStory(state => state.serviceTimes);
-  const setServiceTime = OnlineBookingSettingsUrgentlyStory(state => state.setServiceTime);
+  const serviceTimes = OnlineBookingSettingsUrgentlyStory(
+    (state) => state.serviceTimes
+  );
+  const setServiceTime = OnlineBookingSettingsUrgentlyStory(
+    (state) => state.setServiceTime
+  );
 
   const handleSelectTime = (serviceId: string | null) => {
     setCurrentServiceId(serviceId);
     setModalVisible(true);
-    const currentServiceTime = serviceTimes.find((time: ServiceTime) => time.serviceId === serviceId) || { hour: 0, minute: 0 };
+    const currentServiceTime = serviceTimes.find(
+      (time: ServiceTime) => time.serviceId === serviceId
+    ) || { hour: 0, minute: 0 };
     setSelectedHour(currentServiceTime.hour);
     setSelectedMinute(currentServiceTime.minute);
   };
@@ -51,13 +59,23 @@ const BreakBetweenSessionIn: React.FC = () => {
     setModalVisible(false);
   };
 
-  const renderModalItem = ({ item, onPress, isActive }: { item: number, onPress: () => void, isActive: boolean }) => (
+  const renderModalItem = ({
+    item,
+    onPress,
+    isActive,
+    isHour,
+  }: {
+    item: number;
+    onPress: () => void;
+    isActive: boolean;
+    isHour: boolean
+  }) => (
     <TouchableOpacity
       onPress={onPress}
       style={[styles.modalItem, isActive && styles.activeItem]}
     >
       <Text style={[styles.modalItemText, isActive && styles.activeItemText]}>
-        {item}
+        {item} {isHour ? " ч." : " мин."}
       </Text>
     </TouchableOpacity>
   );
@@ -65,93 +83,137 @@ const BreakBetweenSessionIn: React.FC = () => {
   const isSaveDisabled = serviceTimes.length === 0;
 
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor="#21212E" barStyle="light-content" />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollViewContent}
-      >
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Перерывы между сеансами</Text>
-          <Text style={styles.sectionSubtitle}>
-            Настройте перерывы между сеансами
-          </Text>
-        </View>
-        {serviseData.map((service: any) => (
-          <View key={service.id} style={styles.procedureContainer}>
-            <Text style={styles.procedureTitle}>{service && service.name ? service.name : "No data"}</Text>
-            <Text style={styles.procedurePrice}>{service && service.price ? `${service.price} сум` : "No data"}</Text>
-            <TouchableOpacity
-              style={styles.selectButton}
-              onPress={() => handleSelectTime(service.id)}
-            >
-              <View style={styles.timeContainer}>
-                <Text style={styles.selectButtonText}>
-                  {serviceTimes.find(time => time.serviceId === service.id)
-                    ? `${serviceTimes.find(time => time.serviceId === service.id)!.hour} ч. ${serviceTimes.find(time => time.serviceId === service.id)!.minute} мин.`
-                    : service && service.serviceTime ? `${Math.floor(service.serviceTime / 60)} ч. ${service.serviceTime % 60} мин.` : "0 ч. 0 мин."}
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <View style={styles.container}>
+          <StatusBar backgroundColor="#21212E" barStyle="light-content" />
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollViewContent}
+          >
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Перерывы между сеансами</Text>
+              <Text style={styles.sectionSubtitle}>
+                Настройте перерывы между сеансами
+              </Text>
+            </View>
+            {serviseData.map((service: any) => (
+              <View key={service.id} style={styles.procedureContainer}>
+                <Text style={styles.procedureTitle}>
+                  {service && service.name ? service.name : "No data"}
                 </Text>
-                <MaterialIcons name="arrow-drop-down" size={30} color="white" />
+                <Text style={styles.procedurePrice}>
+                  {service && service.price
+                    ? `${service.price} сум`
+                    : "No data"}
+                </Text>
+                <TouchableOpacity
+                  style={styles.selectButton}
+                  onPress={() => handleSelectTime(service.id)}
+                >
+                  <View style={styles.timeContainer}>
+                    <Text style={styles.selectButtonText}>
+                      {serviceTimes.find(
+                        (time) => time.serviceId === service.id
+                      )
+                        ? `${
+                            serviceTimes.find(
+                              (time) => time.serviceId === service.id
+                            )!.hour
+                          } ч. ${
+                            serviceTimes.find(
+                              (time) => time.serviceId === service.id
+                            )!.minute
+                          } мин.`
+                        : service && service.serviceTime
+                        ? `${Math.floor(service.serviceTime / 60)} ч. ${
+                            service.serviceTime % 60
+                          } мин.`
+                        : "0 ч. 0 мин."}
+                    </Text>
+                    <MaterialIcons
+                      name="arrow-drop-down"
+                      size={30}
+                      color="white"
+                    />
+                  </View>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
-      <TouchableOpacity
-        style={[styles.saveButton, isSaveDisabled && styles.saveButtonDisabled]}
-        onPress={() => postOnlineBookingserviceTime(serviceTimes, navigator, setIsLoading)}
-        disabled={isSaveDisabled}
-      >
-        <Text style={styles.saveButtonText}>Сохранить</Text>
-      </TouchableOpacity>
+            ))}
+          </ScrollView>
+          <TouchableOpacity
+            style={[
+              styles.saveButton,
+              isSaveDisabled && styles.saveButtonDisabled,
+            ]}
+            onPress={() =>
+              postOnlineBookingserviceTime(
+                serviceTimes,
+                navigator,
+                setIsLoading
+              )
+            }
+            disabled={isSaveDisabled}
+          >
+            <Text style={styles.saveButtonText}>Сохранить</Text>
+          </TouchableOpacity>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalView}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalColumn}>
-              <FlatList
-                data={hoursData}
-                renderItem={({ item }) =>
-                  renderModalItem({
-                    item,
-                    onPress: () => setSelectedHour(item),
-                    isActive: item === selectedHour,
-                  })
-                }
-                keyExtractor={(item) => item.toString()}
-                showsVerticalScrollIndicator={false}
-                style={styles.flatList}
-              />
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <View style={styles.modalView}>
+              <View style={styles.modalContent}>
+                <View style={styles.modalColumn}>
+                  <FlatList
+                    data={hoursData}
+                    renderItem={({ item }) =>
+                      renderModalItem({
+                        item,
+                        onPress: () => setSelectedHour(item),
+                        isActive: item === selectedHour,
+                        isHour: true
+                      })
+                    }
+                    keyExtractor={(item) => item.toString()}
+                    showsVerticalScrollIndicator={false}
+                    style={styles.flatList}
+                  />
+                </View>
+                <View style={styles.modalColumn}>
+                  <FlatList
+                    data={minutesData}
+                    renderItem={({ item }) =>
+                      renderModalItem({
+                        item,
+                        onPress: () => setSelectedMinute(item),
+                        isActive: item === selectedMinute,
+                        isHour: false
+                      })
+                    }
+                    keyExtractor={(item) => item.toString()}
+                    showsVerticalScrollIndicator={false}
+                    style={styles.flatList}
+                  />
+                </View>
+              </View>
+              <View style={styles.buttonCont}>
+                <TouchableOpacity
+                  style={styles.selectButtonModal}
+                  onPress={handleSaveTime}
+                >
+                  <Text style={styles.selectButtonTextModal}>Выбрать</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.modalColumn}>
-              <FlatList
-                data={minutesData}
-                renderItem={({ item }) =>
-                  renderModalItem({
-                    item,
-                    onPress: () => setSelectedMinute(item),
-                    isActive: item === selectedMinute,
-                  })
-                }
-                keyExtractor={(item) => item.toString()}
-                showsVerticalScrollIndicator={false}
-                style={styles.flatList}
-              />
-            </View>
-          </View>
-          <View style={styles.buttonCont}>
-            <TouchableOpacity style={styles.selectButtonModal} onPress={handleSaveTime}>
-              <Text style={styles.selectButtonTextModal}>Выбрать</Text>
-            </TouchableOpacity>
-          </View>
+          </Modal>
         </View>
-      </Modal>
-    </View>
+      )}
+    </>
   );
 };
 
@@ -187,13 +249,13 @@ const styles = StyleSheet.create({
   procedureTitle: {
     color: "#000",
     fontSize: 22,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   procedurePrice: {
     color: "#9C0A35",
     fontSize: 19,
     marginBottom: 10,
-    fontWeight: "600"
+    fontWeight: "600",
   },
   selectButton: {
     backgroundColor: "#4B4B64",
@@ -226,7 +288,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     width: "100%",
-    padding: 20,
+    padding: 33,
     justifyContent: "space-around",
   },
   modalColumn: {
@@ -240,6 +302,7 @@ const styles = StyleSheet.create({
   },
   activeItem: {
     backgroundColor: "#9C0A35",
+    borderRadius: 10
   },
   modalItemText: {
     color: "white",
@@ -276,10 +339,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginTop: 10,
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
-    width: '100%',
-    alignSelf: 'center',
+    width: "100%",
+    alignSelf: "center",
   },
   saveButtonDisabled: {
     backgroundColor: "gray",
