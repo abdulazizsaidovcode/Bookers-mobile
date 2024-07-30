@@ -41,5 +41,7 @@ export interface GetMeeStore {
     setRegionOption: (val: []) => void
     districtOption: []
     setDistrictOption: (val: []) => void
+    isLoading: boolean
+    setIsLoading: (val: boolean) => void
 
 }

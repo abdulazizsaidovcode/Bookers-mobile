@@ -6,7 +6,7 @@ import React, { useCallback } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
 const UserProfileCard: React.FC = () => {
-  const { getme, specialization, setAddress, address } = webPageStore();
+  const { getme, specialization, setAddress, address, isLoading, setIsLoading } = webPageStore();
 
   useFocusEffect(
     useCallback(() => {
@@ -28,6 +28,7 @@ const UserProfileCard: React.FC = () => {
   };
 
   return (
+    
     <View style={styles.card}>
       <View style={styles.header}>
         <Image

@@ -11,9 +11,13 @@ import {
   Dimensions,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { OnlineBookingSettingsUrgentlyStory, OnlineBookingStory } from "@/helpers/state_managment/onlinBooking/onlineBooking";
+import {
+  OnlineBookingSettingsUrgentlyStory,
+  OnlineBookingStory,
+} from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { postOnlineBookingUserviceTimeAll } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import { useNavigation } from "expo-router";
+import { Loading } from "@/components/loading/loading";
 
 const { width, height } = Dimensions.get("window");
 
@@ -21,107 +25,139 @@ const hoursData = [0, 1, 2];
 const minutesData = [0, 15, 30, 45];
 
 const SingleBreakBetweenSession = () => {
-  const {isLoading, setIsLoading } = OnlineBookingStory();
+  const { isLoading, setIsLoading } = OnlineBookingStory();
 
-  const {selectedHour, setSelectedHour, selectedMinute, setSelectedMinute} = OnlineBookingSettingsUrgentlyStory()
+  const {
+    selectedHour,
+    setSelectedHour,
+    selectedMinute,
+    setSelectedMinute,
+  } = OnlineBookingSettingsUrgentlyStory();
+
   const [modalVisible, setModalVisible] = useState(false);
+  const [SelectHour, setSelectHour] = useState(0);
+  const [SelectMinute, setSelectMinute] = useState(0);
   const navigation = useNavigation<any>();
 
-
   const handleSaveTime = () => {
+    setSelectedHour(SelectHour)
+    setSelectedMinute(SelectMinute)
     // Add logic to save the time if needed
     setModalVisible(false);
   };
 
-  const renderModalItem = ({ item, onPress, isActive }: any) => (
+  const renderModalItem = ({
+    item,
+    onPress,
+    isActive,
+    isHour,
+  }: {
+    item: number;
+    onPress: () => void;
+    isActive: boolean;
+    isHour: boolean;
+  }) => (
     <TouchableOpacity
       onPress={onPress}
       style={[styles.modalItem, isActive && styles.activeItem]}
     >
       <Text style={[styles.modalItemText, isActive && styles.activeItemText]}>
-        {item}
+        {item} {isHour ? " ч." : " мин."}
       </Text>
     </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="#21212E" barStyle="light-content" />
-      <View>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Перерывы между сеансами</Text>
-        </View>
-        <TouchableOpacity
-          style={styles.selectButton}
-          onPress={() => setModalVisible(true)}
-        >
-          <View style={styles.timeContainer}>
-            <Text style={styles.selectButtonText}>
-              {selectedHour} ч. {selectedMinute} мин.
-            </Text>
-            <MaterialIcons name="arrow-drop-down" size={30} color="white" />
-          </View>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity
-        style={styles.saveButton}
-        onPress={() =>
-          postOnlineBookingUserviceTimeAll({serviceId: null, hour: selectedHour, minute: selectedMinute }, navigation, setIsLoading)
-        }
-      >
-        <Text style={styles.saveButtonText}>Сохранить</Text>
-      </TouchableOpacity>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalView}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalColumn}>
-              <FlatList
-                data={hoursData}
-                renderItem={({ item }) =>
-                  renderModalItem({
-                    item,
-                    onPress: () => setSelectedHour(item),
-                    isActive: item === selectedHour,
-                  })
-                }
-                keyExtractor={(item) => item.toString()}
-                showsVerticalScrollIndicator={false}
-                style={styles.flatList}
-              />
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <StatusBar backgroundColor="#21212E" barStyle="light-content" />
+          <View>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Перерывы между сеансами</Text>
             </View>
-            <View style={styles.modalColumn}>
-              <FlatList
-                data={minutesData}
-                renderItem={({ item }) =>
-                  renderModalItem({
-                    item,
-                    onPress: () => setSelectedMinute(item),
-                    isActive: item === selectedMinute,
-                  })
-                }
-                keyExtractor={(item) => item.toString()}
-                showsVerticalScrollIndicator={false}
-                style={styles.flatList}
-              />
-            </View>
-          </View>
-          <View style={styles.buttonCont}>
             <TouchableOpacity
-              style={styles.selectButtonModal}
-              onPress={handleSaveTime}
+              style={styles.selectButton}
+              onPress={() => setModalVisible(true)}
             >
-              <Text style={styles.selectButtonTextModal}>Выбрать</Text>
+              <View style={styles.timeContainer}>
+                <Text style={styles.selectButtonText}>
+                  {selectedHour} ч. {selectedMinute} мин.
+                </Text>
+                <MaterialIcons name="arrow-drop-down" size={30} color="white" />
+              </View>
             </TouchableOpacity>
           </View>
-        </View>
-      </Modal>
-    </SafeAreaView>
+          <TouchableOpacity
+            style={styles.saveButton}
+            onPress={() =>
+              postOnlineBookingUserviceTimeAll(
+                { serviceId: null, hour: selectedHour, minute: selectedMinute },
+                navigation,
+                setIsLoading
+              )
+            }
+          >
+            <Text style={styles.saveButtonText}>Сохранить</Text>
+          </TouchableOpacity>
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+            
+          >
+            <View style={styles.modalView}>
+              <View style={styles.modalContent}>
+                <View style={styles.modalColumn}>
+                  <FlatList
+                    data={hoursData}
+                    renderItem={({ item }) =>
+                      renderModalItem({
+                        item,
+                        onPress: () => setSelectHour(item),
+                        isActive: item === selectedHour,
+                        isHour: true,
+                      })
+                    }
+                    keyExtractor={(item) => item.toString()}
+                    showsVerticalScrollIndicator={false}
+                    style={styles.flatList}
+                  />
+                </View>
+                <View style={styles.modalColumn}>
+                  <FlatList
+                    data={minutesData}
+                    renderItem={({ item }) =>
+                      renderModalItem({
+                        item,
+                        onPress: () => setSelectMinute(item),
+                        isActive: item === selectedMinute,
+                        isHour: false,
+                      })
+                    }
+                    keyExtractor={(item) => item.toString()}
+                    showsVerticalScrollIndicator={false}
+                    style={styles.flatList}
+                  />
+                </View>
+              </View>
+              <View style={styles.buttonCont}>
+                <TouchableOpacity
+                  style={styles.selectButtonModal}
+                  onPress={handleSaveTime}
+                >
+                  <Text style={styles.selectButtonTextModal}>Выбрать</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        </SafeAreaView>
+      )}
+    </>
   );
 };
 
@@ -182,24 +218,24 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     width: "100%",
-    padding: width * 0.05, // Responsive padding
+    padding: 33,
     justifyContent: "space-around",
   },
   modalColumn: {
     flex: 1,
   },
   modalItem: {
-    margin: width * 0.01, // Responsive margin
-    paddingVertical: height * 0.015, // Responsive vertical padding
+    margin: 5,
+    paddingVertical: 10,
     alignItems: "center",
     justifyContent: "center",
   },
   activeItem: {
     backgroundColor: "#9C0A35",
+    borderRadius: 10,
   },
   modalItemText: {
     color: "white",
-    fontSize: width * 0.045, // Responsive font size
   },
   activeItemText: {
     color: "white",
@@ -207,25 +243,25 @@ const styles = StyleSheet.create({
   },
   selectButtonModal: {
     backgroundColor: "#9C0A35",
-    paddingVertical: height * 0.015, // Responsive vertical padding
+    padding: 10,
     borderRadius: 8,
-    marginTop: height * 0.01, // Responsive margin top
+    marginTop: 10,
     width: "80%",
     alignItems: "center",
-    marginBottom: height * 0.01, // Responsive margin bottom
+    marginBottom: 10,
   },
   selectButtonTextModal: {
     color: "white",
-    fontSize: width * 0.045, // Responsive font size
+    fontSize: 18,
   },
   buttonCont: {
     backgroundColor: "#21212E",
     width: "100%",
     alignItems: "center",
-    paddingBottom: height * 0.01, // Responsive padding bottom
+    paddingBottom: 10,
   },
   flatList: {
-    maxHeight: height * 0.25, // Responsive max height
+    maxHeight: 200,
   },
 });
 

@@ -7,16 +7,23 @@ import tw from "tailwind-react-native-classnames";
 import MyServicesCard from '@/components/services/myServicesCard';
 import { getHelpOne } from '@/helpers/api-function/help/help';
 import heplStore from '@/helpers/state_managment/help/helpStore';
+import { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '@/type/root';
+import { useNavigation } from 'expo-router';
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(profile)/(help)/help'>;
+
 
 
 const HelpPage = () => {
-    const { setNavigatName, setHelpDate} = heplStore()
+    const { setNavigatName, setHelpDate, isLoading, setIsLoading} = heplStore()
+    const navigation = useNavigation<SettingsScreenNavigationProp>()
+
 
     const services = [
         {
             title: "О сервисе",
             onPress: () => {
-                getHelpOne(setHelpDate, "ABOUT_SERVICE", "/aboutUs")
+                getHelpOne(setHelpDate, "ABOUT_SERVICE", "(standart)/(help)/(aboutUs)/aboutUs", navigation)
                 setNavigatName("О сервисе")
             }
         },
@@ -24,7 +31,7 @@ const HelpPage = () => {
             title: "Оферта",
             onPress: () => 
                 {
-                getHelpOne(setHelpDate, "OFFER", "/aboutUs")
+                getHelpOne(setHelpDate, "OFFER", "(standart)/(help)/(aboutUs)/aboutUs", navigation)
                 setNavigatName("Оферта")
             }
             // onPress: () => { router.push('/certificate') }
@@ -32,7 +39,7 @@ const HelpPage = () => {
         {
             title: "Политика конфиденциальности",
             onPress: () => {
-                getHelpOne(setHelpDate, "PRIVACY_POLICY", "/aboutUs")
+                getHelpOne(setHelpDate, "PRIVACY_POLICY", "(standart)/(help)/(aboutUs)/aboutUs", navigation)
                 setNavigatName("Политика конфиденциальности")
             }
             // onPress: () => { router.push('/offer') }
@@ -40,7 +47,7 @@ const HelpPage = () => {
         {
             title: "Лицензионное соглашение",
             onPress: () => {
-                getHelpOne(setHelpDate, "LICENSE_AGREEMENT", "/aboutUs")
+                getHelpOne(setHelpDate, "LICENSE_AGREEMENT", "(standart)/(help)/(aboutUs)/aboutUs", navigation)
                 setNavigatName("Лицензионное соглашение")
             }
             // onPress: () => { router.push('/certificate') }
@@ -48,7 +55,7 @@ const HelpPage = () => {
         {
             title: "Лицензии",
             onPress: () => {
-                getHelpOne(setHelpDate, "LICENSES", "/aboutUs")
+                getHelpOne(setHelpDate, "LICENSES", "(standart)/(help)/(aboutUs)/aboutUs", navigation)
                 setNavigatName("Лицензии")
             }
             // onPress: () => { router.push('/certificate') }
@@ -56,7 +63,7 @@ const HelpPage = () => {
         {
             title: "Сертификаты",
             onPress: () => {
-                getHelpOne(setHelpDate, "CERTIFICATES", "/aboutUs")
+                getHelpOne(setHelpDate, "CERTIFICATES", "(standart)/(help)/(aboutUs)/aboutUs", navigation)
                 setNavigatName("Сертификаты")
             }
             // onPress: () => { router.push('/certificate') }
@@ -64,7 +71,7 @@ const HelpPage = () => {
         // {
         //     title: "Использование приложения",
         //     onPress: () => {
-        //         getHelpOne(setHelpDate, "USING_APPLICATION", "/aboutUs")
+        //         getHelpOne(setHelpDate, "USING_APPLICATION", "(standart)/(help)/(aboutUs)/aboutUs")
         //         setNavigatName("Использование приложения")
         //     }
         //     // onPress: () => { router.push('/certificate') }
@@ -72,7 +79,7 @@ const HelpPage = () => {
         // {
         //     title: "Спецификация услуги",
         //     onPress: () => {
-        //         getHelpOne(setHelpDate, "SERVICE_SPECIFICATION", "/aboutUs")
+        //         getHelpOne(setHelpDate, "SERVICE_SPECIFICATION", "(standart)/(help)/(aboutUs)/aboutUs")
         //         setNavigatName("Спецификация услуги")
         //     }
         //     // onPress: () => { router.push('/certificate') }

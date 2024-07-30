@@ -11,9 +11,13 @@ import { getUser } from "@/helpers/api-function/getMe/getMee";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import useProfileStore from "@/helpers/state_managment/client/clientEditStore";
-import { updateClientProfile, updateMasterProfile } from "@/helpers/api-function/client/clientPage";
+import {
+  updateClientProfile,
+  updateMasterProfile,
+} from "@/helpers/api-function/client/clientPage";
 import SelectMasterGender from "./selectGender";
 import ProfileImgUploadProfile from "@/components/profile-img-upload";
+import { Loading } from "@/components/loading/loading";
 
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
@@ -22,7 +26,7 @@ type SettingsScreenNavigationProp = NavigationProp<
 
 const ProfileMasterEdit = () => {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
-  const { getMee, setGetMee } = useGetMeeStore();
+  const { getMee, setGetMee, isLoading, setIsLoading } = useGetMeeStore();
   const {
     birthDate,
     attachmentId,
@@ -44,12 +48,10 @@ const ProfileMasterEdit = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getUser(setGetMee);
+      getUser(setGetMee, setIsLoading);
       return () => {};
     }, [])
   );
-
-  console.log(getMee);
 
   useFocusEffect(
     useCallback(() => {
@@ -109,11 +111,7 @@ const ProfileMasterEdit = () => {
         : getMee && getMee.phoneNumber
         ? getMee.phoneNumber
         : null,
-      ageId: ageId
-        ? ageId
-        : getMee && getMee.ageId
-        ? getMee.ageId
-        : null,
+      ageId: ageId ? ageId : getMee && getMee.ageId ? getMee.ageId : null,
       gender: gender1 ? gender1 : "MALE",
       telegram: telegram
         ? telegram
@@ -146,40 +144,46 @@ const ProfileMasterEdit = () => {
       orderCount: 0,
       birthDate: null,
     };
-    console.log(data);
 
     updateMasterProfile(
       data,
       () => navigation.goBack(),
       () => getUser(setGetMee),
-      () => clearStore()
+      () => clearStore(),
+      setIsLoading
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="#21212E" />
-      <View style={{ paddingLeft: 10 }}>
-      <NavigationMenu name="Личные данные" />
-      </View>
-      <ScrollView>
-        <View style={{ marginBottom: 16, padding: 16 }}>
-          <ProfileImgUploadProfile
-            setAttachmentId={setAttachmentId}
-            attachmentID={
-              getMee && getMee.attachmentId ? getMee.attachmentId : null
-            }
-            editPin={true}
-          />
-          <ProfileScreen />
-          <Text style={styles.genderText}>Ваш пол</Text>
-          <SelectMasterGender />
-        </View>
-      </ScrollView>
-      <View style={{ margin: 16 }}>
-        <Buttons onPress={() => putPofile()} title="Сохранить" />
-      </View>
-    </SafeAreaView>
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <StatusBar backgroundColor="#21212E" />
+          <View style={{ paddingLeft: 10 }}>
+            <NavigationMenu name="Личные данные" />
+          </View>
+          <ScrollView>
+            <View style={{ marginBottom: 16, padding: 16 }}>
+              <ProfileImgUploadProfile
+                setAttachmentId={setAttachmentId}
+                attachmentID={
+                  getMee && getMee.attachmentId ? getMee.attachmentId : null
+                }
+                editPin={true}
+              />
+              <ProfileScreen />
+              <Text style={styles.genderText}>Ваш пол</Text>
+              <SelectMasterGender />
+            </View>
+          </ScrollView>
+          <View style={{ margin: 16 }}>
+            <Buttons onPress={() => putPofile()} title="Сохранить" />
+          </View>
+        </SafeAreaView>
+      )}
+    </>
   );
 };
 

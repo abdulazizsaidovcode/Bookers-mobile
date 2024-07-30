@@ -20,6 +20,8 @@ interface wepPage {
     setspecialization: (val: any) => void
     address: any
     setAddress: (val: any) => void
+    isLoading: boolean
+    setIsLoading: (val: boolean) => void
   }
 
   const webPageStore = create<wepPage>((set) => ({
@@ -40,7 +42,9 @@ interface wepPage {
     specialization: null,
     setspecialization: (val: any) => set({specialization: val}),
     address: null,
-    setAddress: (val: any) => set({address: val})
+    setAddress: (val: any) => set({address: val}),
+    isLoading: false,
+    setIsLoading: (val: boolean) => set({isLoading: val})
   }));
   
   export default webPageStore;
