@@ -121,6 +121,8 @@ export const getMAstersServeses = async (id: string) => {
     const { data } = await axios.get(`${serviceMaster}${id}`, config ? config : {});
     if (data.success) {
       ClientStory.getState().setmasterServis(data.body);
+      console.log(data.body,'tf');
+      
     }
   } catch (error) {
     console.log(error);

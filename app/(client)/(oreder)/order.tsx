@@ -35,6 +35,8 @@ const OrderClient = () => {
       comment: "",
       clientId: selectedClient && selectedClient.id,
     }
+    console.log(data);
+
 
     await postOrder({
       data,
