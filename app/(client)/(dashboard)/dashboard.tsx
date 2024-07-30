@@ -18,10 +18,12 @@ import tw from 'tailwind-react-native-classnames';
 import hasNotificationState from '@/helpers/state_managment/notifications/readORisReadNOtif';
 import { getNotificationNor_ReadyClient } from '@/helpers/api-function/client/clientPage';
 import { getExpenceCategory } from '@/helpers/api-function/expence/expence';;
-import { getClientDashboard } from '@/helpers/api-function/dashboardClient/dashboardClient';
+import { getClientDashboard, getDashboradMaster } from '@/helpers/api-function/dashboardClient/dashboardClient';
 import { useDashboardClientStore } from '@/helpers/state_managment/dashboardClient/dashboardClient';
 import AccardionHistory from '@/components/accordions/accardionHistory';
 import ProfileCard from '../(profile)/(orderHistory)/profileCard';
+import { useDashboardMasterStore } from '@/helpers/state_managment/dashboardClient/clientForMaster';
+import ClientCard from '@/components/(cliendCard)/cliendCard';
 
 
 
@@ -100,6 +102,7 @@ const Dashboard: React.FC = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
   const { dashboardData } = useDashboardClientStore();
+  const { dashboardMasterData} = useDashboardMasterStore();
 
 
   Notifications.setNotificationHandler({
@@ -162,6 +165,12 @@ const Dashboard: React.FC = () => {
       return () => { };
     }, [])
   );
+  useFocusEffect(
+    useCallback(() => {
+      getClientDashboard().finally(() => setLoading(false));
+      return () => { };
+    }, [])
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -170,9 +179,10 @@ const Dashboard: React.FC = () => {
     }, [userLocation])
   );
 
+  
   useFocusEffect(
     useCallback(() => {
-      getClientDashboard().finally(() => setLoading(false));
+      getDashboradMaster().finally(() => setLoading(false));
       return () => { };
     }, [])
   );
@@ -208,7 +218,7 @@ const Dashboard: React.FC = () => {
             {dashboardData && dashboardData.length > 0 ? (
               dashboardData.map((item, index) => (
                 <AccardionHistory
-                 id={item.orderId}
+                  id={item.orderId}
                   key={index}
                   title={item.specializations || 'Без специализации'}
                   date={item.orderDate || 'Дата не указана'}
@@ -255,7 +265,14 @@ const Dashboard: React.FC = () => {
             ) : null}
         </AccordionItem>
         <AccordionItem title="Мои мастера" titleThen="У вас пока нет своих мастеров" backgroundColor="#21212E">
-          <TouchableOpacity style={styles.touchableItem}>
+          {dashboardMasterData && dashboardMasterData.length > 0 ? 
+          <>
+            <ClientCard
+     
+            />
+          </> :
+           <>
+            <TouchableOpacity style={styles.touchableItem}>
             <View style={styles.item}>
               <View style={styles.textContainer}>
                 <Text style={styles.titleText1}>Пригласить своего мастера</Text>
@@ -273,6 +290,9 @@ const Dashboard: React.FC = () => {
               </View>
             </View>
           </TouchableOpacity>
+           </>
+           }
+         
         </AccordionItem>
       </ScrollView>
     </SafeAreaView>
