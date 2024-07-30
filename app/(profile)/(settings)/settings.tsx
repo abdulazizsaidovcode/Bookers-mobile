@@ -11,7 +11,7 @@ const data: { icon: any, label: string, screen: string }[] = [
     {
         icon: "image",
         label: "Галерея",
-        screen: "(settings)/(settings-gallery)/settings-gallery",
+        screen: "(settings)/(settings-gallery)/settings-gallery-main",
     },
     {
         icon: "check-square",

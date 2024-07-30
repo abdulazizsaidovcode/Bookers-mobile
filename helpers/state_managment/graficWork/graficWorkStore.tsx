@@ -20,6 +20,8 @@ interface graficWorkData {
     setSelectedTimeSlot: (data: string[]) => void;
     method: string
     setMethod: (val: string) => void
+    isLoading: boolean
+    setIsLoading: (val: boolean) => void
   }
 
   const graficWorkStore = create<graficWorkData>((set) => ({
@@ -40,7 +42,10 @@ interface graficWorkData {
     selectedTimeSlot: [],
     setSelectedTimeSlot: (data: string[]) => set({selectedTimeSlot: data}),
     method: "",
-    setMethod: (val: string) => set({method: val})
+    setMethod: (val: string) => set({method: val}),
+    isLoading: false,
+    setIsLoading: (val: boolean) => set({isLoading: val})
+
   }));
   
   export default graficWorkStore;

@@ -6,12 +6,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import Buttons from '@/components/(buttons)/button';
 import Description from '@/components/description/description';
-import { router } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import heplStore from '@/helpers/state_managment/help/helpStore';
+import { Loading } from '@/components/loading/loading';
+
 
 
 const AboutUs = () => {
-    const {helpData, navigatName} = heplStore()
+    const {helpData, navigatName, isLoading} = heplStore()
+    const navigation = useNavigation<any>()
+
     const descriptionData = {
         title: "Онлайн сервис для самостоятельного бронирования услуг специалистов в сфере красоты и ухода за внешностью",
         content: "На сервис уже на протяжении 2х лет дарит пользователям ...... Равным образом сложившаяся структура организации влечет за собой процесс внедрения и модернизации систем массового участия. Равным образом сложившаяся структура организации представляет собой интересный эксперимент проверки дальнейших направлений развития. Разнообразный и богатый опыт постоянный количественный рост и сфера нашей активности требуют от нас анализа позиций, занимаемых участниками в отношении поставленных задач. Равным образом сложившаяся структура организации представляет собой интересный эксперимент проверки дальнейших направлений развития. Разнообразный и богатый опыт постоянный количественный рост и сфера нашей активности требуют от нас анализа позиций, занимаемых участниками в отношении поставленных задач.",
@@ -20,7 +24,8 @@ const AboutUs = () => {
     };
 
     return (
-        <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
+        <>
+        {isLoading ? <Loading/> : <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
             <NavigationMenu name={navigatName} />
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -45,13 +50,14 @@ const AboutUs = () => {
                             />
                         </View>
                         <View style={tw`content-end mb-3 p-3`}>
-                        <Buttons title='На главную' onPress={() => router.push('/Welcome')} />
+                        <Buttons title='На главную' onPress={() => navigation.goBack()} />
                     </View>
                     </View>
                 </ScrollView>
 
             </View>
-        </SafeAreaView>
+        </SafeAreaView>}
+        </>
     );
 };
 

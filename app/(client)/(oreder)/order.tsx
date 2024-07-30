@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, ScrollView, } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Booked from './components/boooked'
 import CalendarGrafficEdit from '@/app/(free)/(work-grafic-edit)/calendar'
 import NavigationMenu from '@/components/navigation/navigation-menu'
@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Toast from 'react-native-simple-toast'
 import { useNavigation } from '@react-navigation/native'
 import { curentDay, curentMonthName, curentWeekName } from '@/helpers/date'
+import { useFocusEffect } from 'expo-router'
 
 const OrderClient = () => {
   const { selectedCategoryId, selectedClient } = ClientStory()
@@ -43,14 +44,15 @@ const OrderClient = () => {
       messageSatus: (message: string) => setOrderMessageStatus(message),
     })
   }
-  useEffect(() => {
+
+  useFocusEffect(useCallback(() => {
     if (state == "success") {
       navigation.navigate('(client)/(oreder)/orderDetail', { id: orderId })
     }
     if (orderMessageStatus) {
       Toast.show(orderMessageStatus, Toast.LONG);
     }
-  }, [orderMessageStatus, state])
+  }, [orderMessageStatus, state]))
 
   return (
     <SafeAreaView style={styles.container}>

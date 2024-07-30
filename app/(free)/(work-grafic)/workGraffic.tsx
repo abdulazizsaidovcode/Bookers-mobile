@@ -12,13 +12,21 @@ import Toast from "react-native-simple-toast";
 import { RootStackParamList } from "@/type/root";
 import { NavigationProp } from "@react-navigation/native";
 import { useFocusEffect, useNavigation } from "expo-router";
+import { Loading } from "@/components/loading/loading";
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
   "(free)/(work-grafic)/workGraffic"
 >;
 
 const GrafficWorkEdit: React.FC = () => {
-  const { calendarDate, setWeek, week, weekData } = graficWorkStore();
+  const {
+    calendarDate,
+    setWeek,
+    week,
+    weekData,
+    setIsLoading,
+    isLoading,
+  } = graficWorkStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const [items, setItems] = useState<Item[]>([
@@ -68,40 +76,49 @@ const GrafficWorkEdit: React.FC = () => {
       return;
     }
 
-    postWorkDay(week, calendarDate, () =>
-      navigation.navigate("(free)/(work-grafic)/workMain")
+    postWorkDay(
+      week,
+      calendarDate,
+      () => navigation.navigate("(free)/(work-grafic)/workMain"),
+      setIsLoading
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="#21212E" barStyle="light-content" />
-      <View style={{ paddingLeft: 10 }}>
-        <NavigationMenu name="График работы" />
-      </View>
-      <ScrollView>
-        <View style={styles.section}>
-          <Text style={styles.title}>График работы с</Text>
-          <CalendarGrafficEdit />
-        </View>
-        <View style={styles.fullHeightSection}>
-          <Text style={styles.title}>Выберите рабочие дни в неделю</Text>
-          <View style={styles.categoriesContainer}>
-            {items.map((item, index) => (
-              <ServicesCategory
-                key={index}
-                title={item.dayName}
-                isChecked={item.active}
-                onPress={() => handleCategoryPress(item.id)}
-              />
-            ))}
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <StatusBar backgroundColor="#21212E" barStyle="light-content" />
+          <View style={{ paddingLeft: 10 }}>
+            <NavigationMenu name="График работы" />
           </View>
-          <View style={{ padding: 10 }}>
-            <Buttons title="Продолжить" onPress={handleContinuePress} />
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          <ScrollView>
+            <View style={styles.section}>
+              <Text style={styles.title}>График работы с</Text>
+              <CalendarGrafficEdit />
+            </View>
+            <View style={styles.fullHeightSection}>
+              <Text style={styles.title}>Выберите рабочие дни в неделю</Text>
+              <View style={styles.categoriesContainer}>
+                {items.map((item, index) => (
+                  <ServicesCategory
+                    key={index}
+                    title={item.dayName}
+                    isChecked={item.active}
+                    onPress={() => handleCategoryPress(item.id)}
+                  />
+                ))}
+              </View>
+              <View style={{ padding: 10 }}>
+                <Buttons title="Продолжить" onPress={handleContinuePress} />
+              </View>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      )}
+    </>
   );
 };
 

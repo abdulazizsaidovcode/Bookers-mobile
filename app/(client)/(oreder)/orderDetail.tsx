@@ -17,29 +17,37 @@ import { handleRefresh } from "@/constants/refresh";
 import ContactInformation from "@/components/contact-information/contact-information";
 import { getMee } from "@/helpers/token";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
+import { useFocusEffect } from 'expo-router';
+import ContactInformationClient from '@/components/contact-information/contact-informationClient';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
 export interface OrderOne {
-    id: string
-    fullName: string
-    clientStatus: string[]
-    phone: string
-    serviceName: string
-    servicePrice: number
-    serviceHour: number
-    serviceMinute: number
-    orderDate: string
-    prePayment: number
-    paid: number
-    toPay: number
-    startTime: string
-    finishTime: string
-    notifyForHour: number
-    notifyForMinute: number
-    orderStatus: string
-    hallStatus: string
-    attachmentId: null | string
+    orderId: string,
+    serviceIds: string[],
+    serviceName: string,
+    orderDate: string,
+    firstName: string,
+    lastName: string,
+    specializations: string[],
+    salonName: string,
+    userAttachmentId: null,
+    feedbackCount: 0,
+    orderPrice: string,
+    address: string,
+    phoneNumber: string,
+    lng: string,
+    lat: string,
+    orderCount: number,
+    clientCount: number,
+    instagram: string,
+    telegram: string
+    startTime: string,
+    finishTime: string,
+    notifyForHour: string
+    notifyForMinute: string
+    status: "WAITING" | "ACCEPTED" | "REJECTED" | "COMPLETED",
+    time: string
 }
 
 const ClientOrderDetail = () => {
@@ -55,22 +63,51 @@ const ClientOrderDetail = () => {
     const [isConfirm, setIsConfirm] = useState(false);
     const [successStatus, setSuccessStatus] = useState('');
 
-    useEffect(() => {
-        if (id) orderGetOne(id, setOrderOneData)
+    useFocusEffect(useCallback(() => {
+        if (id) orderClientGetOne(id, setOrderOneData)
         getMee(setGetMee)
-    }, []);
+    }, []))
 
-    useEffect(() => {
+    console.log(id, 'blee');
+
+
+    useFocusEffect(useCallback(() => {
         if (successStatus === 'ACCEPTED') {
             orderClientGetOne(id, setOrderOneData)
             toggleConfirm()
             setSuccessStatus('')
         }
-    }, [successStatus]);
+    }, [successStatus]))
 
-    useEffect(() => {
+    setTimeout(() => {
+        console.log(orderOneData);
+    }, 1000)
+
+    let obg = {
+        "address": "Qashqadaryo 1, Qarshi, Wss, ßs",
+        "clientCount": 3, "feedbackCount": 0,
+        "firstName": "Pumpa", "instagram": null,
+        "lastName": "Polvon",
+        "lat": 38.846120694492946,
+        "lng": 65.79828898433686,
+        "orderCount": 0,
+        "orderDate": "2024-07-30",
+        "orderId": "0d0fb8bb-1c54-4978-9742-8c9db72ff9f7",
+        "orderPrice": 764646,
+        "orderStatus": "WAIT",
+        "phoneNumber": "+998919595599",
+        "salonName": "Salon 2",
+        "serviceIds": ["da5eb427-cb65-412f-9027-23d278c0e3fd", "4fe805ba-8074-4b1a-be1c-0e446a3e9357"],
+        "serviceName": "Znznzn, Nimadirda, ",
+        "specializations": [],
+        "telegram": null,
+        "time": "18:0 - 12:57",
+        "userAttachmentId": null
+    }
+
+    useFocusEffect(useCallback(() => {
         if (toast) setRating(0)
-    }, [toast]);
+    }, [toast]))
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);
@@ -92,14 +129,26 @@ const ClientOrderDetail = () => {
         else if (statusR === 'CLIENT_REJECTED' || statusR === 'MASTER_REJECTED') return '#EB5757'
         else if (statusR === 'WAIT') return '#F2C94C'
     }
+    const generateStars = (count: number) => {
+        const roundedCount = Math.round(count); // Yaqinlashtirilgan baho
+        const starsCount = Math.min(roundedCount, 5); // 5 tadan oshmaydigan yulduzlar soni
+        let stars = '';
+        for (let i = 0; i < starsCount; i++) {
+            stars += '★';
+        }
+        for (let i = starsCount; i < 5; i++) {
+            stars += '☆';
+        }
+        return stars;
+    };
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <NavigationMenu name={orderOneData ? orderOneData.fullName : ''} />
+            <NavigationMenu name={orderOneData ? orderOneData.firstName : ''} navigate={() => navigation.navigate('(client)/(dashboard)/dashboard')} />
             <View style={tw`flex-1`}>
                 <View style={[styles.head, { backgroundColor: orderOneData && orderOneData.orderStatus ? statusRegex(orderOneData.orderStatus) : '#9C0A35' }]}>
-                    <Text style={{textAlign: 'center', color: '#fff'}}>{orderOneData ? orderOneData.orderStatus : ''}</Text>
+                    <Text style={{ textAlign: 'center', color: '#fff' }}>{orderOneData ? orderOneData.orderStatus : ''}</Text>
                 </View>
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
@@ -114,26 +163,58 @@ const ClientOrderDetail = () => {
                     <View style={tw`mt-3`}>
                         <TouchableOpacity
                             style={[
-                                tw`flex-row items-start justify-start px-4 py-5 mb-3 rounded-2xl`,
+                                tw`items-start justify-start px-4 py-5 mb-3 rounded-2xl`,
                                 { backgroundColor: "#B9B9C9" },
                             ]}
                             activeOpacity={0.8}
                         >
-                            <Image
-                                source={(orderOneData && orderOneData.attachmentId !== null)
-                                    ? { uri: `${getFile}${orderOneData.attachmentId}` }
-                                    : require('../../../assets/avatar.png')
-                                }
-                                style={tw`w-12 h-12 rounded-full`}
-                            />
-                            <View style={tw`ml-4 flex-col`}>
-                                <Text style={[tw`text-black text-lg font-bold`, { lineHeight: 22 }]}>
-                                    {sliceTextFullName(orderOneData ? orderOneData.fullName : '')}
-                                </Text>
-                                <Text style={[tw`text-gray-500 text-base`, { lineHeight: 22 }]}>
-                                    {orderOneData && orderOneData.phone}
-                                </Text>
+                            <View
+                                style={[
+                                    tw`flex-row items-start justify-start rounded-2xl`,
+                                    { backgroundColor: "#B9B9C9" },
+                                ]}
+                            >
+                                <Image
+                                    source={(orderOneData && orderOneData.userAttachmentId !== null)
+                                        ? { uri: `${getFile}${orderOneData.userAttachmentId}` }
+                                        : require('../../../assets/avatar.png')
+                                    }
+                                    style={tw`w-12 h-12 rounded-full`}
+                                />
+                                <View style={[tw`flex-row`, { justifyContent: 'space-between', width: '86%' }]} >
+                                    <View style={tw`ml-4 flex-col`}>
+                                        <View style={tw` flex-row justify-center items-center`}>
+                                            <Text style={[tw`text-black text-lg font-bold mr-2`, { lineHeight: 22 }]}>
+                                                {orderOneData ? orderOneData.firstName : ''}
+                                            </Text>
+                                            <Text style={[tw` text-sm border rounded-md px-1 `, { lineHeight: 22, borderColor: '#4F4F4F', color: '#4F4F4F' }]}>
+                                                {orderOneData ? orderOneData.salonName : ''}
+                                            </Text>
+                                        </View>
+                                        <Text style={[tw`text-black text-lg font-bold`, { lineHeight: 22 }]}>
+                                            {orderOneData ? orderOneData.specializations[0] : ''}
+                                        </Text>
+                                    </View>
+
+                                    <View style={tw` flex-col`}>
+                                        <Text style={[tw`text-black text-lg font-bold`, { lineHeight: 22, color: '#9C0A35' }]}>
+                                            {orderOneData ? generateStars(orderOneData.feedbackCount) : ''}
+                                        </Text>
+                                        <View style={[tw`flex-row`, {}]}>
+                                            <Text style={[tw`text-sm mr-1`, { lineHeight: 22, color: '#4F4F4F' }]}>
+                                                {orderOneData ? `${orderOneData.orderCount} заказа` : ''}
+                                            </Text>
+                                            <Text style={[tw`text-sm`, { lineHeight: 22, color: '#4F4F4F' }]}>
+                                                {orderOneData ? `${orderOneData.clientCount} клинетов` : ''}
+                                            </Text>
+                                        </View>
+                                    </View>
+
+                                </View>
                             </View>
+                            <Text style={[tw` text-sm  mt-5`, { lineHeight: 22, color: '#4F4F4F' }]}>
+                                {orderOneData ? orderOneData.address : ''}
+                            </Text>
                         </TouchableOpacity>
                         <TouchableOpacity activeOpacity={.9} style={styles.button}>
                             <Text style={styles.text}>
@@ -144,15 +225,15 @@ const ClientOrderDetail = () => {
                             <HistoryCard
                                 name={orderOneData ? `${moment(orderOneData.orderDate).format('dddd, D MMMM')}` : ''}
                                 btnOrText
-                                statusName={orderOneData ? `${orderOneData.startTime.slice(0, 5)} - ${orderOneData.finishTime.slice(0, 5)}` : ''}
-                                description={`Длительность - ${orderOneData ? `${orderOneData.serviceHour}.${orderOneData.serviceMinute}` : 0} час`}
+                                statusName={orderOneData ? `${orderOneData.time}` : ''}
+                                description={`Длительность - ${orderOneData ? `${orderOneData.time}` : 0} час`}
                             />
                         </View>
                         <View style={tw`mt-3`}>
                             <HistoryCard
                                 name={`Стоимость:`}
                                 btnOrText
-                                statusName={orderOneData ? `${orderOneData.servicePrice} сум` : ''}
+                                statusName={orderOneData ? `${orderOneData.orderPrice} сум` : ''}
                             />
                         </View>
                         <View style={tw`mt-3 mb-4`}>
@@ -163,7 +244,7 @@ const ClientOrderDetail = () => {
                             />
                         </View>
 
-                        <ContactInformation />
+                        <ContactInformationClient data={orderOneData} />
                         {(orderOneData && (orderOneData.orderStatus === 'CLIENT_CONFIRMED' || orderOneData.orderStatus === 'MASTER_CONFIRMED')) && (
                             <>
                                 <Text style={styles.contactTitle}>Дополнительно</Text>
@@ -241,8 +322,8 @@ const ClientOrderDetail = () => {
                         </CenteredModal>
                     </View>
                 </ScrollView>
-            </View>
-        </SafeAreaView>
+            </View >
+        </SafeAreaView >
     );
 };
 

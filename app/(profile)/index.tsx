@@ -30,6 +30,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import registerStory from "@/helpers/state_managment/auth/register";
 import {getMasterTariff} from "@/constants/storage";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 
 const data: { name: any; color: string; label: string }[] = [
   { name: "facebook", color: "#3b5998", label: "Facebook" },
@@ -105,6 +106,8 @@ const ProfilePage: React.FC = () => {
       Alert.alert(error.message);
     }
   };
+
+  putNumbers(6)
 
   const navigationList =
     role === "ROLE_MASTER"

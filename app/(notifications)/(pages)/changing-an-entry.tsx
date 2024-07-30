@@ -2,6 +2,7 @@ import Buttons from '@/components/(buttons)/button';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editChangingOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
+import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
@@ -11,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const ChangingEnEntry = () => {
-  const { changingData, isLoading, setIsloading, setChangingData } = useNotificationsStore();
+  const { changingData, isLoading, tariff, setIsloading, setChangingData } = useNotificationsStore();
   const navigation = useNavigation();
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -30,6 +31,7 @@ const ChangingEnEntry = () => {
   };
 
   const handleSave = () => {
+    tariff === 'FREE' && putNumbers(7)
     editChangingOrder(changingData.isActive, changingData.text, setHasChanges, navigation.goBack, setIsloading);
   };
 
@@ -69,7 +71,7 @@ const ChangingEnEntry = () => {
         </View>
       </ScrollView>
       <View style={styles.buttonContainer}>
-        {isLoading ? <LoadingButtons title='Сохранить'/> : <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />}
+        {isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />}
       </View>
     </SafeAreaView>
   );

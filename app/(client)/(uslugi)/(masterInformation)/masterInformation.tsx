@@ -22,71 +22,28 @@ const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
 
 const MasterInformation = () => {
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const { selectedClient, masterServis, services, setServices, masterGallery, feedbackForMaster, clientData } = ClientStory();
-  const [selectedId, setSelectedId] = useState<string | null>('services');
+  const { selectedClient, masterServis, masterGallery, feedbackForMaster, clientData } = ClientStory();
   const [activeTab, setActiveTab] = useState<string | null>('upcoming');
   const [selectedCategorys, setSelectedCategories] = useState<any>('vse');
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>();
 
-  useEffect(() => {
-    setServices([
-      {
-        active: services,
-        attachmentId: null,
-        category: { /* category data */ },
-        categoryId: 'b06ef8f4-05ee-4b11-b2b8-cca43137a590',
-        description: 'Dbbddk',
-        genderId: [1],
-        genderNames: ['MALE'],
-        id: 'a44ce922-e542-4afd-8ec4-1c0b64aaaeec',
-        message: null,
-        name: 'Kdkd',
-        paymentPercent: 0,
-        paymentPrice: 0,
-        price: 467697,
-        serviceStatus: 'APPROVED',
-        serviceTime: 90
-      }
-    ]);
-  }, []);
-  useFocusEffect(
-    useCallback(() => {
-      if (selectedClient) {
-        const masterId = selectedClient.id;
-        const categoryId = services.categoryId;
-        ServicesClient(masterId, categoryId);
-      }
-      return () => null;
-    }, [selectedClient])
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      if (selectedClient) {
-        const masterId = selectedClient.id;
-        getMAstersServeses(masterId);
-      }
-      return () => null;
-    }, [selectedClient])
-  );
-
   useFocusEffect(
     useCallback(() => {
       if (selectedClient) {
         const id = selectedClient.id;
+
         getMasterOtzif(id);
+        getMAstersServeses(id);
+        getMasterGallery(id);
       }
       return () => null;
-    }, [selectedClient])
+    }, [])
   );
-
-  useEffect(() => {
-    if (selectedClient?.id) {
-      getMasterGallery(selectedClient.id);
-    }
-  }, [selectedClient]);
+  
+  setTimeout(() => {
+    console.log(selectedClient);
+  }, 1000)
 
   const renderItem = ({ item }: any) => (
     <View style={tw`mb-4`}>
@@ -127,6 +84,9 @@ const MasterInformation = () => {
   const handleTabChange = (tab: any) => {
     setSelectedCategories(tab)
   };
+
+  console.log('a');
+
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
@@ -160,7 +120,7 @@ const MasterInformation = () => {
           contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
           <View style={tw`mb-5`}>
             {clientData && <FlatList
-              data={clientData}
+              data={selectedClient}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
                 <View style={tw`mb-4`}>

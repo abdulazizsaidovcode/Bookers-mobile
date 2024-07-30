@@ -11,7 +11,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Entypo from "@expo/vector-icons/Entypo";
 import debounce from "lodash.debounce";
 import useTopMastersStore from "@/helpers/state_managment/masters";
-import { getTopMasters } from "@/helpers/api-function/masters";
+import { getCategory, getTopMasters } from "@/helpers/api-function/masters";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import AccardionSlider from "@/components/accordions/accardionSlider";
 import AccardionSliderTwo from "@/components/accordions/accardionSliderTwo";
@@ -29,11 +29,13 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import moment from "moment";
 import Buttons from "@/components/(buttons)/button";
 import { FontAwesome } from "@expo/vector-icons";
-import { getFile } from "@/helpers/api";
+import { getClient_filter, getFile } from "@/helpers/api";
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
+import axios from "axios";
+import { getConfig } from "@/app/(tabs)/(master)/main";
 
 const Masters = () => {
-  const { masters, isLoading, category } = useTopMastersStore();
+  const { masters, isLoading, category, setTopMasters } = useTopMastersStore();
   const [bottomModal, setBottomModal] = useState(false);
   const [pastEntries, setPastEntries] = useState<string[]>([]);
   const [search, setSearch] = useState<string>("");
@@ -44,7 +46,7 @@ const Masters = () => {
   const navigation = useNavigation<any>();
   const [page, setPage] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
-  const { selectedClient,setSelectedClient } = ClientStory()
+  const { selectedClient, setSelectedClient } = ClientStory()
 
   const toggleBottomModal = () => setBottomModal(!bottomModal);
 
@@ -53,9 +55,14 @@ const Masters = () => {
     setPastEntries(res);
   };
 
+
+
   useEffect(() => {
-    getTopMasters(page);
-  }, [page]);
+    getTopMasters(page, 10 , search);
+    getCategory()
+    console.log(masters);
+    
+  }, [page, search]);
 
   const loadMore = useCallback(
     debounce(() => {
@@ -182,10 +189,10 @@ const Masters = () => {
             />
             <TouchableOpacity
               onPress={() => {
-                // setMapData(item);
-                // navigation.navigate(
-                //   "(client)/(master-locations)/master-locations"
-                // );
+                setMapData(item);
+                navigation.navigate(
+                  "(client)/(master-locations)/master-locations"
+                );
               }}
               activeOpacity={0.8}
               style={[
@@ -207,16 +214,25 @@ const Masters = () => {
 
   const handleClick = async () => {
     try {
-      await postClientFilter(
-        pastEntries,
-        genderIndex,
-        value * 1000,
-        rating,
-        userLocation.coords.latitude,
-        userLocation?.coords.longitude
-      );
-      toggleBottomModal();
+      // await postClientFilter(
+      //   pastEntries,
+      //   genderIndex,
+      //   genderIndex,
+      //   rating,
+      //   userLocation.coords.latitude,
+      //   userLocation?.coords.longitude
+      // );
+      const config = await getConfig();
+
+      const postData = { categoryId: pastEntries, gender: genderIndex, nextToMe: value * 1000, lat: userLocation.coords.latitude, lng: userLocation?.coords.longitude };
+      const url = `${getClient_filter}?page=${page ? page : 0}&size=${10}${pastEntries ? `&nameOrPhone=""` : ""}`;
+      const { data } = await axios.post(url, postData, config ? config : {});
+      
+      setTopMasters(data.body.object)
+      console.log(data.body.object);
+      
       setPastEntries([]);
+      toggleBottomModal();
     } catch (error) {
       console.log(error);
     }
@@ -273,7 +289,7 @@ const Masters = () => {
 
 
         <FlatList
-          data={masters.filter((item) => item)} // Filter out undefined items
+          data={masters &&  masters} // Filter out undefined items
           keyExtractor={(item) => item.id}
           renderItem={TopMasterCard}
           ListFooterComponent={renderFooter}
@@ -295,10 +311,10 @@ const Masters = () => {
                 title="Направления услуг"
                 children={
                   <View>
-                    {category &&
+                    {category.length &&
                       category.map((item: any, i: any) => (
                         <View style={tw`flex-row mt-2`} key={i}>
-                          {pastEntries.includes(item.id) ? (
+                          {pastEntries && pastEntries.includes(item.id) ? (
                             <Pressable
                               onPress={() => deletePastEntries(item.id)}
                               key={`checked-${item.id}`}

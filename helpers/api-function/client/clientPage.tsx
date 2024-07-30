@@ -25,22 +25,29 @@ export const updateClientProfile = async (datas: any, navigate?: () => void, get
     }
 }
 
-export const updateMasterProfile = async (datas: any, navigate?: () => void, getMe?: () => void, clearData?: () => void) => {
+export const updateMasterProfile = async (datas: any, navigate?: () => void, getMe?: () => void, clearData?: () => void, setIsLoading?: (val: boolean) => void) => {
+    setIsLoading ? setIsLoading(true) : () => {}
     try {
         if (datas) {
             const config = await getConfig()
             const { data } = await axios.put(`${client_profile_delete_url}`, datas, config ? config : {})
             if (data.success) {
-                Toast.show(data.message, Toast.LONG)
+    setIsLoading ? setIsLoading(false) : () => {}
+    Toast.show(data.message, Toast.LONG)
                 navigate ? navigate() : null
                 getMe ? getMe() : null
                 clearData ? clearData() : null
             } else {
-                Toast.show(data.message, Toast.LONG)
+    setIsLoading ? setIsLoading(false) : () => {}
+    Toast.show(data.message, Toast.LONG)
             }
-        } else Toast.show('Something went wrong', Toast.LONG)
+        } else {
+    setIsLoading ? setIsLoading(false) : () => {}
+    Toast.show('Something went wrong', Toast.LONG)
+        }
     } catch (err) {
-        Toast.show('An error occurred on the server', Toast.LONG)
+    setIsLoading ? setIsLoading(false) : () => {}
+    Toast.show('An error occurred on the server', Toast.LONG)
         console.log(err);
 
     }
