@@ -5,6 +5,7 @@ import {
     master_order_wait,
     order_add,
     order_get_one,
+    order_get_one_client,
     order_update
 } from "@/helpers/api";
 import axios from "axios";
@@ -82,6 +83,24 @@ export const orderGetOne = async (orderID: string, setData: (val: any | null) =>
         if (orderID) {
             const config = await getConfig()
             const response = await axios.get(`${order_get_one}${orderID}`, config ? config : {});
+
+            if (response.data.success) setData(response.data.body)
+                
+            else setData(null)
+            console.log(response.data);
+
+        }
+    } catch (error) {
+        console.error(error);
+        setData(null);
+    }
+};
+
+export const orderClientGetOne = async (orderID: string, setData: (val: any | null) => void) => {
+    try {
+        if (orderID) {
+            const config = await getConfig()
+            const response = await axios.get(`${order_get_one_client}${orderID}`, config ? config : {});
 
             if (response.data.success) setData(response.data.body)
                 

@@ -12,6 +12,7 @@ import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStor
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Toast from 'react-native-simple-toast'
 import { useNavigation } from '@react-navigation/native'
+import { curentDay, curentMonthName, curentWeekName } from '@/helpers/date'
 
 const OrderClient = () => {
   const { selectedCategoryId, selectedClient } = ClientStory()
@@ -35,7 +36,6 @@ const OrderClient = () => {
       clientId: selectedClient && selectedClient.id,
     }
 
-    // console.log(data);
     await postOrder({
       data,
       setStatus: setState,
@@ -56,10 +56,10 @@ const OrderClient = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView >
         <NavigationMenu name='График' />
-        <Text>Сегодня четверг, 23 февраля</Text>
+        <Text style={{ marginVertical: 16, color: '#fff', fontSize: 20 }}>Сегодня {curentDay} {curentWeekName} , {curentMonthName}</Text>
         <CalendarGrafficEdit />
         <Booked />
-        <Buttons onPress={setOrder} title='Продолжить' isDisebled={!!FreeTime && !!timeHour} />
+        <Buttons onPress={setOrder} title='Продолжить' isDisebled={!!FreeTime && !!timeHour && !!selectedCategoryId} />
       </ScrollView>
     </SafeAreaView>
   )

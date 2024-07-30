@@ -136,6 +136,7 @@ export const help_url: string = `${base_url}help/one?HELP_STATUS=`
 export const order_list: string = `${base_url}order/today/orders/for/master`
 export const order_add: string = `${base_url}order/save`
 export const order_get_one: string = `${base_url}order/one?orderId=`
+export const order_get_one_client: string = `${base_url}order/one/client?orderId=`
 export const order_upcoming: string = `${base_url}order/client/upcoming-sessions`
 export const order_past: string = `${base_url}order/client/past-sessions`
 export const order_canceled: string = `${base_url}order/client/canceled-sessions`
