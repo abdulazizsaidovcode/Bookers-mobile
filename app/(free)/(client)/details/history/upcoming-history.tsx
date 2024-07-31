@@ -18,19 +18,10 @@ const UpcomingHistory = () => {
     const route = useRoute<any>();
     const {clientID} = route.params;
     const {upcomingData, setUpcomingData, refreshing, setRefreshing} = clientStore()
-    const [serviceName, setServiceName] = useState(null);
 
     useEffect(() => {
         getUpcomingClient(setUpcomingData, clientID)
     }, []);
-
-    useEffect(() => {
-        let list;
-        upcomingData && upcomingData.map(item => {
-            list = item.serviceName.split(', ')
-        })
-        setServiceName(list ? list : null)
-    }, [upcomingData])
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);
@@ -53,7 +44,7 @@ const UpcomingHistory = () => {
                                 <AppointmentCard
                                     userID={clientID}
                                     data={item}
-                                    serviceName={serviceName ? serviceName : ['']}
+                                    serviceName={item.serviceName.trim().split(', ')}
                                     isBtn={item.orderStatus === 'WAIT'}
                                     clicks={() => {
                                         navigation.navigate('(free)/(client)/details/history/history-details', {historyData: item})

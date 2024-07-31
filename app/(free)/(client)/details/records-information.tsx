@@ -25,7 +25,7 @@ export interface OrderOne {
     fullName: string
     clientStatus: string[]
     phone: string
-    serviceName: string
+    serviceName: string[]
     servicePrice: number
     serviceHour: number
     serviceMinute: number
@@ -63,10 +63,8 @@ const RecordsInformation = () => {
 
     useEffect(() => {
         let list;
-        orderOneData && orderOneData.serviceName.map((item: any) => {
-            list = item.serviceName.split(', ')
-        })
-        setServiceName(list ? list : null)
+        // if (orderOneData) list = orderOneData.serviceName.split(', ')
+        setServiceName(list ? list : [])
     }, [orderOneData]);
 
     useEffect(() => {
@@ -95,8 +93,8 @@ const RecordsInformation = () => {
         else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
         else if (statusN === 'WAIT') return 'Ждать'
     }
+    console.log(orderOneData?.serviceName)
 
-    console.log(orderOneData, 'order one')
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -136,8 +134,11 @@ const RecordsInformation = () => {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={.9} style={[styles.button, {gap: 10 }, tw`flex-row items-center`]}>
-                            {serviceName.length > 0 && (
+                        <TouchableOpacity
+                            activeOpacity={.9}
+                            style={[styles.button, {gap: 10}, tw`flex-row items-center`]}
+                        >
+                            {(serviceName && serviceName.length > 0) && (
                                 serviceName.map((item: any) => (
                                     <Text style={[styles.text]}>{item}</Text>
                                 ))
