@@ -108,7 +108,7 @@ const Dashboard: React.FC = () => {
   const { dashboardData } = useDashboardClientStore();
   const { dashboardMasterData } = useDashboardMasterStore();
   const [selectedCategory, setSelectedCategory] = useState('Bceni');
-  const { setMapData } = useMapStore();
+  const { setOrderData } = useMapStore();
   const navigate = useNavigation<any>();
 
 
@@ -240,7 +240,7 @@ const Dashboard: React.FC = () => {
                   <AccardionHistory
                     id={item.orderId}
                     title={item.serviceName}
-                    date={item.orderDate || 'Дата не указана'}
+                    date={`${item.orderDate} ${item.time}` || 'Дата не указана'}
                   >
                     <ProfileCard
                       onPress={() => {
@@ -259,6 +259,7 @@ const Dashboard: React.FC = () => {
                         <SimpleLineIcons
                           onPress={() => {
                             navigate.navigate('(client)/(map)/(salon-location)/salon-location');
+                            setOrderData(item)
                           }}
                           name="location-pin"
                           size={24}
@@ -316,7 +317,7 @@ const Dashboard: React.FC = () => {
         <>
           {dashboardMasterData && dashboardMasterData.length > 0 ?
             (
-              <>
+              <View style = {tw`p-1`}>
                 <View style={tw`mb-4 mt-5`}>
                   <Text style={tw`font-bold text-xl text-white`}>Мои мастера</Text>
                 </View>
@@ -385,7 +386,7 @@ const Dashboard: React.FC = () => {
                   )}
                 </View>
 
-              </>
+              </View>
             ) :
             (
               <>

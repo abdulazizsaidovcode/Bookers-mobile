@@ -234,7 +234,7 @@ const MasterInformation = () => {
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
           />
-          <ReviewCard />
+          {/* <ReviewCard /> */}
         </ScrollView>
       )}
     </SafeAreaView>

@@ -31,6 +31,7 @@ const OrderClient = () => {
   const [orderMessageStatus, setOrderMessageStatus] = useState<string>("");
   const [state, setState] = useState<any>()
   const [orderId, setOrderId] = useState<string>("")
+  const [response, setResponse] = useState<any>()
 
   async function setOrder() {
     let data: any = {
@@ -62,7 +63,8 @@ const OrderClient = () => {
     await orderTimeEdit({
       data,
       setOrderId: setOrderId,
-      setLoading: () => { }
+      setLoading: () => { },
+      setResponse
     })
   }
 
@@ -79,6 +81,16 @@ const OrderClient = () => {
       Toast.show(orderMessageStatus, Toast.LONG);
     }
   }, [orderMessageStatus, state]))
+  useFocusEffect(useCallback(() => {
+    if (response) {
+      navigation.goBack()
+      setState("")
+      setOrderMessageStatus("")
+      setOrderId("")
+      setFreeTime([])
+      setTime('')
+    }
+  }, [response, setResponse]))
 
   return (
     <SafeAreaView style={styles.container}>

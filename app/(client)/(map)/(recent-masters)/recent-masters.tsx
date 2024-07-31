@@ -20,7 +20,7 @@ import { fetchMetroStations } from '@/helpers/api-function/map/map';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)/(map)/(recent-masters)/recent-masters'>;
 
-const haversineDistance = (userLat: number, userLon: number, salonLat: number, salonLon: number) => {
+export const haversineDistance = (userLat: number, userLon: number, salonLat: number, salonLon: number) => {
     const R = 6371;
     const dLat = (salonLat - userLat) * (Math.PI / 180);
     const dLon = (salonLon - userLon) * (Math.PI / 180);
@@ -55,7 +55,7 @@ const RecentMasters = () => {
     const toggleShowByDistance = () => setShowByDistance(!showByDistance);
     const handleReset = () => {
         setValue(5.1)
-        setCircleValue(value)
+        setCircleValue(5.1)
     };
     const handleMarkerPress = (marker: Master) => {
         setSelectedMarker(marker);
