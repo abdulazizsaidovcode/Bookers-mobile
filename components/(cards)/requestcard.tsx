@@ -1,8 +1,11 @@
 import { getFile } from '@/helpers/api';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import { masterOrderConfirm } from '@/helpers/api-function/oreder/oreder';
+import { getMasterOrderWait, masterOrderConfirm } from '@/helpers/api-function/oreder/oreder';
 import tw from 'tailwind-react-native-classnames';
+import { useFocusEffect } from 'expo-router';
+import { masterOrderHWaitStore } from '@/helpers/state_managment/order/order';
+import { FontAwesome } from '@expo/vector-icons';
 interface RequestCardProps {
   item: RequestCardobjProps;
   onApprove: () => void;
@@ -22,23 +25,47 @@ interface RequestCardobjProps {
 }
 
 const RequestCard: React.FC<RequestCardProps> = ({ item, onApprove, onReject }) => {
-
+  const { waitData, setWaitData } = masterOrderHWaitStore();
   const [loadingAprove, setAproveLoading] = useState(false);
   const [loadingReject, setLoadingReject] = useState(false);
-  
+  const [response, setResponse] = useState<any>(null);
+
+
   const handleApprove = async (id: string) => {
-    await masterOrderConfirm(id, setAproveLoading, 'CONFIRMED');
-    onApprove();
+    await masterOrderConfirm(id, setAproveLoading, 'CONFIRMED', setResponse);
   };
 
   const handleReject = async (id: string) => {
-    await masterOrderConfirm(id, setLoadingReject, 'REJECTED');
-    onReject();
+    await masterOrderConfirm(id, setLoadingReject, 'REJECTED', setResponse);
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (response) {
+        onApprove();
+        onReject();
+        setResponse(null)
+      }
+    }, [response, setResponse])
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      getMasterOrderWait(setWaitData);
+      setResponse(null)
+    }, [loadingAprove, loadingReject, response])
+  )
+
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
-        {item.orderStatus == 'WAIT' && <Text style={[tw`px-2 py-0.5 text-xs  text-green-800 rounded-md mb-2`, { alignSelf: 'flex-start', fontSize: 10, borderColor: '#217355', borderWidth: 1 }]}>{item.clientStatus[0]}</Text>}
+        {
+          item.orderStatus == 'WAIT' &&
+          <View style={[tw`px-2 py-0.5 text-xs flex-row justify-center items-center  text-green-800 rounded-md mb-2`, { alignSelf: 'flex-start', fontSize: 10, borderColor: '#217355', borderWidth: 1 }]}>
+            <FontAwesome name="star" size={10} color="#217355" />
+            <Text style={[tw`px-2 py-0.5 text-xs  text-green-800 `, { alignSelf: 'flex-start', fontSize: 10 }]}>{item.clientStatus[0]}</Text>
+          </View>
+        }
         <View style={[tw`flex-row mb-3`]}>
           <Image source={item.clientAttachmentId ? { uri: getFile + item.clientAttachmentId } : require('@/assets/avatar.png')} style={styles.avatar} />
           <View>
