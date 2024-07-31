@@ -407,7 +407,7 @@ const Statistics: React.FC<StatisticsProps> = ({
             <Text style={styles.statsTitle}>Выполнено сеансов</Text>
             <PieChart
                 widthAndHeight={100}
-                series={[chartNumerator, chartDenominator]}
+                series={[chartNumerator | 1, chartDenominator | 1]}
                 sliceColor={[COLORS.mainRed, COLORS.background]}
                 coverRadius={0.6}
                 coverFill={COLORS.cardBackground}
