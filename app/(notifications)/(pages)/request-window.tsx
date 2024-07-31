@@ -1,5 +1,6 @@
 import Buttons from '@/components/(buttons)/button';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
+import { Loading } from '@/components/loading/loading';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editWindowOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
@@ -29,6 +30,16 @@ const RequestWindow = () => {
     editWindowOrder(windowData.text, setHasChanges, navigation.goBack, setIsloading);
     putNumbers(7);
   };
+
+  if (!windowData) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          <Loading />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
