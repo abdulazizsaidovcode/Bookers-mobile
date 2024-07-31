@@ -72,6 +72,22 @@ export const editMessenger = async (isMessage: boolean | undefined, goBack: () =
 }
 
 export const editCancelOrder = async (isActive: boolean | undefined, text: string | undefined, setHasChanges: (val: boolean) => void, goBack: () => void, setIsloading: (val: boolean) => void) => {
+    if (text && !text.includes('(дата сеанса)')) {
+        Toast.show('Поместите слово (дата сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(время сеанса)')) {
+        Toast.show('Поместите слово (время сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(адрес)')) {
+        Toast.show('Поместите слово (адреес) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(процедура)')) {
+        Toast.show('Поместите слово (процедура) куда-нибудь', Toast.LONG)
+        return
+    }
     setIsloading(true)
     const payload = { isActive, text }
     try {
@@ -156,6 +172,22 @@ export const editFeedbeckOrder = async (text: string | undefined, setHasChanges:
 }
 
 export const editAppoinmentOrder = async (text: string | undefined, hour: number | undefined, minute: number | undefined, isActive: boolean | undefined, goBack: () => void, setHasChanges: (val: boolean) => void, setIsLoading: (val: boolean) => void) => {
+    if (text && !text.includes('(дата сеанса)')) {
+        Toast.show('Поместите слово (дата сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(время сеанса)')) {
+        Toast.show('Поместите слово (время сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(адреес)')) {
+        Toast.show('Поместите слово (адреес) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(процедура)')) {
+        Toast.show('Поместите слово (процедура) куда-нибудь', Toast.LONG)
+        return
+    }
     setIsLoading(true)
     try {
         const config = await getConfig()
