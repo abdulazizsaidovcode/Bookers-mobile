@@ -23,9 +23,9 @@ import { useDashboardClientStore } from '@/helpers/state_managment/dashboardClie
 import AccardionHistory from '@/components/accordions/accardionHistory';
 import ProfileCard from '../(profile)/(orderHistory)/profileCard';
 import { useDashboardMasterStore } from '@/helpers/state_managment/dashboardClient/clientForMaster';
+import { useMapStore } from '@/helpers/state_managment/map/map';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import { SimpleLineIcons } from '@expo/vector-icons';
-import { useMapStore } from '@/helpers/state_managment/map/map';
 
 
 
@@ -109,6 +109,7 @@ const Dashboard: React.FC = () => {
   const { dashboardMasterData } = useDashboardMasterStore();
   const [selectedCategory, setSelectedCategory] = useState('Bceni');
   const { setMapData } = useMapStore();
+  const navigate = useNavigation<any>();
 
 
 
@@ -201,7 +202,6 @@ const Dashboard: React.FC = () => {
   const handlePhonePress = (phoneNumber: string) => {
     Linking.openURL(`tel:${phoneNumber}`);
   };
-
   // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
   useFocusEffect(
     useCallback(() => {
@@ -232,33 +232,54 @@ const Dashboard: React.FC = () => {
       <ScrollView>
         <>
           {dashboardData && dashboardData.length > 0 ? (
-            dashboardData.map((item, index) => (
-              <View key={index} style={tw`w-full flex`}>
-                <AccardionHistory
-                  id={item.orderId}
-                  title={item.serviceName || 'Без специализации'}
-                  date={item.orderDate || 'Дата не указана'}
-                >
-                  <ProfileCard
-                    onPress={() => {
-                      setSelectedClient(item)
-                      navigation.navigate('(client)/(oreder)/orderDetail', { id: item.orderId })
-                    }}
-                    Address={item.address || 'Адрес не указан'}
-                    buttonName="Написать сообщение"
-                    imageURL={item.userAttachmentId || 'https://example.com/default-image.jpg'}
-                    money={`${item.orderPrice || 'Не указано'} сум`}
-                    ratingnumber={item.feedbackCount || 0}
-                    titleTex={item.serviceName?.trim().split(`, `)}
-                    masterName={item.firstName || 'Имя не указано'}
-                    salonName={item.salonName || 'Салон не указан'}
-                    locationIcon={<FontAwesome5 name="map-marker-alt" size={20} color="white" />}
-                    phoneIcon={<FontAwesome5 name="phone" size={20} color="white" />}
-                    orderId={item.orderId || 'Не указан'}
-                  />
-                </AccardionHistory>
-              </View>
-            ))
+
+            <View>
+              <Text style={tw`text-lg font-bold text-white mb-4 `}>Мои записи</Text>
+              {dashboardData.map((item, index) => (
+                <View key={index} style={tw`w-full flex `}>
+                  <AccardionHistory
+                    id={item.orderId}
+                    title={item.serviceName}
+                    date={item.orderDate || 'Дата не указана'}
+                  >
+                    <ProfileCard
+                      onPress={() => {
+                        setSelectedClient(item);
+                        navigation.navigate('(client)/(oreder)/orderDetail', { id: item.orderId });
+                      }}
+                      Address={item.address}
+                      buttonName="Написать сообщение"
+                      imageURL={item.userAttachmentId || 'https://example.com/default-image.jpg'}
+                      money={`${item.orderPrice || 'Не указано'} сум`}
+                      ratingnumber={item.feedbackCount || 0}
+                      titleTex={item.serviceName?.trim().split(`, `)}
+                      masterName={item.firstName || 'Имя не указано'}
+                      salonName={item.salonName || 'Салон не указан'}
+                      locationIcon={
+                        <SimpleLineIcons
+                          onPress={() => {
+                            setMapData(item);
+                            navigate.navigate('(client)/(map)/(master-locations)/master-locations');
+                          }}
+                          name="location-pin"
+                          size={24}
+                          color="white"
+                        />
+                      }
+                      phoneIcon={
+                        <Feather
+                          name="phone"
+                          size={24}
+                          color="white"
+                          onPress={() => handlePhonePress(item.phoneNumber)}
+                        />
+                      }
+                      orderId={item.orderId || 'Не указан'}
+                    />
+                  </AccardionHistory>
+                </View>
+              ))}
+            </View>
           ) : (
             <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
               <View style={styles.container}>
@@ -297,14 +318,31 @@ const Dashboard: React.FC = () => {
           {dashboardMasterData && dashboardMasterData.length > 0 ?
             (
               <>
-                <View style={tw`mb-3 mt-5`}>
+                <View style={tw`mb-4 mt-5`}>
                   <Text style={tw`font-bold text-xl text-white`}>Мои мастера</Text>
                 </View>
                 <ScrollView
                   horizontal
-                  contentContainerStyle={{ paddingHorizontal: 10 }}
+                  contentContainerStyle={{ paddingHorizontal: 1 }}
                   showsHorizontalScrollIndicator={false}
                 >
+                  <View style={{ marginRight: 16, marginBottom: 20 }}>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={() => setSelectedCategory('Все')}
+                      style={{
+                        backgroundColor: selectedCategory === 'Все' ? 'white' : 'transparent',
+                        borderRadius: 10,
+                      }}
+                    >
+                      <Text
+                        style={tw`border border-gray-600 p-3 ${selectedCategory === 'Все' ? 'text-black border-white' : 'text-gray-600'
+                          } rounded-xl font-bold`}
+                      >
+                        Все
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                   {allCategory.map((item, index) => (
                     <View key={index} style={{ marginRight: 16, marginBottom: 20 }}>
                       <TouchableOpacity
@@ -315,13 +353,40 @@ const Dashboard: React.FC = () => {
                           borderRadius: 10,
                         }}
                       >
-                        <Text style={tw`border border-gray-600 p-3 ${selectedCategory === item.name ? 'text-black border-white' : 'text-gray-600'} rounded-xl font-bold`}>
+                        <Text
+                          style={tw`border border-gray-600 p-3 ${selectedCategory === item.name ? 'text-black border-white' : 'text-gray-600'
+                            } rounded-xl font-bold`}
+                        >
                           {item.name}
                         </Text>
                       </TouchableOpacity>
                     </View>
                   ))}
                 </ScrollView>
+                <View style={tw`mb-4`}>
+                  {dashboardMasterData.map((master, idx) => (
+                    <View style={tw`mb-3`}>
+                      <ClientCard
+                        key={idx} // Har bir element uchun noyob kalit kerak
+                        name={master.firstName}
+                        salon={master.salonName}
+                        imageUrl={master.attachmentId}
+                        masterType={master.gender}
+                        feedbackCount={master.favoriteCount}
+                        address={`${master.district}, ${master.street}, ${master.house}`}
+                        orders={master.orderCount}
+                        zaps={master.nextEntryDate}
+                        clients={master.clientCount}
+                        onPress={() => {
+                          setMapData(master);
+                          navigate.navigate('(client)/(map)/(master-locations)/master-locations');
+                        }}
+                      />
+                    </View>
+
+                  ))}
+                </View>
+
               </>
             ) :
             (
