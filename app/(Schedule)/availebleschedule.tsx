@@ -9,15 +9,17 @@ import CenteredModal from '@/components/(modals)/modal-centered';
 type ClientStatus = "REGULAR_VISIT" | string;
 
 export interface OrderItem {
-  categoryName: string;
+  serviceName: string;
   clientAttachmentId: string;
-  clientName: string;
+  fullName: string;
   clientStatus: ClientStatus[];
   hallStatus: string; // Assuming hallStatus is provided in the API response
-  orderDate: string;
+  finishTime: string;
   orderId: string;
   paid: number;
   request: string;
+  startTime: string;
+  orderDate: string;
 }
 
 interface GroupedOrders {
@@ -43,8 +45,7 @@ const RequestSchedule: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const data = await getMasterOrderWait(setWaitData);
-      setWaitData(data);
+      await getMasterOrderWait(setWaitData);
     } catch (error) {
       console.error('Error fetching wait data:', error);
     }
@@ -58,7 +59,7 @@ const RequestSchedule: React.FC = () => {
 
   return (
     <View>
-      { waitData && waitData.length > 0 ? Object.keys(groupedData).map((date) => (
+      {waitData && waitData.length > 0 ? Object.keys(groupedData).map((date) => (
         <List.Accordion
           key={date}
           title={`${date}`}
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
   },
   placeholderText: {
     color: 'gray',
-},
+  },
 });
 
 export default RequestSchedule;

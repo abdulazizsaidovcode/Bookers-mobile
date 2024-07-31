@@ -130,7 +130,7 @@ export const getMasterOrderWait = async (setWaitData: any) => {
     try {
         const config = await getConfig()
         const response = await axios.get(`${master_order_wait}`, config ? config : {});
-
+        
         if (response.data.success) setWaitData(response.data.body)
         else setWaitData([])
     } catch (error) {
