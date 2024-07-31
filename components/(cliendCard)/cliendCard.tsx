@@ -46,7 +46,7 @@ const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl, feedback
   };
 
   return (
-    <View style={tw`p-4 bg-gray-300 rounded-2xl shadow-lg`}>
+    <View style={[tw`p-4  rounded-2xl shadow-lg`, { backgroundColor: '#B9B9C9' }]}>
       <View style={tw`flex-row items-center mb-4`}>
         <Image
           source={imageUrl ? { uri: getFile + imageUrl } : require('../../assets/avatar.png')}
@@ -69,14 +69,17 @@ const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl, feedback
       </View>
       <Text style={tw`text-gray-600 text-lg mb-2`}>{address || "Address is not found"}</Text>
       <Text style={tw`text-black text-lg font-bold mb-4`}>Ближайшая запись: {zaps || "0"}</Text>
-      <View style={mapStyle ? tw`` : tw`flex-row justify-between`}>
+      <View style={[tw`flex-row justify-between items-center`, mapStyle ? tw`justify-center` : tw``]}>
         <TouchableOpacity activeOpacity={0.8} style={[tw`px-16 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]}>
           <Text style={tw`text-white text-xl text-center`}>Записаться</Text>
         </TouchableOpacity>
-        {!mapStyle && <TouchableOpacity activeOpacity={0.8} style={[tw`p-3 rounded-full`, { backgroundColor: '#9C0A35' }]}>
-          <SimpleLineIcons name="location-pin" size={30} color="white" onPress={onPress} />
-        </TouchableOpacity>}
+        {!mapStyle && (
+          <TouchableOpacity activeOpacity={0.8} style={[tw`p-3 rounded-full`, { backgroundColor: '#9C0A35' }]}>
+            <SimpleLineIcons name="location-pin" size={30} color="white" onPress={onPress} />
+          </TouchableOpacity>
+        )}
       </View>
+
     </View>
   );
 };

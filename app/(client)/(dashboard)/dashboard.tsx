@@ -240,7 +240,7 @@ const Dashboard: React.FC = () => {
                   <AccardionHistory
                     id={item.orderId}
                     title={item.serviceName}
-                    date={item.orderDate || 'Дата не указана'}
+                    date={`${item.orderDate} ${item.time}` || 'Дата не указана'}
                   >
                     <ProfileCard
                       onPress={() => {
@@ -316,7 +316,7 @@ const Dashboard: React.FC = () => {
         <>
           {dashboardMasterData && dashboardMasterData.length > 0 ?
             (
-              <>
+              <View style = {tw`p-1`}>
                 <View style={tw`mb-4 mt-5`}>
                   <Text style={tw`font-bold text-xl text-white`}>Мои мастера</Text>
                 </View>
@@ -385,7 +385,7 @@ const Dashboard: React.FC = () => {
                   )}
                 </View>
 
-              </>
+              </View>
             ) :
             (
               <>
