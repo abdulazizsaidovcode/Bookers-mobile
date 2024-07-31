@@ -241,6 +241,7 @@ const Dashboard: React.FC = () => {
                     money={`${item.orderPrice || 'Не указано'} сум`}
                     ratingnumber={item.feedbackCount || 0}
                     masterGender={item.specializations}
+                    titleTex={item.serviceName?.split('  ')}
                     specializations={item.serviceName}
                     masterName={item.firstName || 'Имя не указано'}
                     salonName={item.salonName || 'Салон не указан'}
