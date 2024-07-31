@@ -1,5 +1,8 @@
+import { ClientOrderHistory } from "@/helpers/state_managment/dashboardClient/dashboardClient";
 
 export interface MapStoreTypes {
+  orderData: ClientOrderHistory,
+  setOrderData: (data: ClientOrderHistory) => void;
   mapData: MasterLocation;
   setMapData: (data: MasterLocation) => void;
   categoryId: string | null;

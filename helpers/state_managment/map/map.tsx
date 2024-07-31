@@ -1,16 +1,13 @@
-import { ProductType } from "@/type/history";
-import { MapStoreTypes } from "@/type/map/map";
+import { MapStoreTypes, MasterLocation } from "@/type/map/map";
 import { create } from "zustand";
-import { Master } from "../masters";
+import { ClientOrderHistory } from "../dashboardClient/dashboardClient";
 
 export const useMapStore = create<MapStoreTypes>((set) => ({
     mapData: {
         id: '',
-        fullName: '',
-        phone: '',
+        firstName: '',
         salonName: '',
-        genderName: 'FEMALE',
-        feedbackCount: 0,
+        gender: '',
         orderCount: 0,
         clientCount: 0,
         lat: 0,
@@ -19,10 +16,36 @@ export const useMapStore = create<MapStoreTypes>((set) => ({
         street: '',
         house: '',
         attachmentId: '',
-        nextEntryDate: '',
-        mainPhoto: '',
+        nextEntryDate: null,
+        attachmentCount: 0,
+        servicePrice: 0,
+        favoriteCount: 0,
+        categoryNames: [],
+        nearestOrder: null
     },
-    setMapData: (data: Master) => set({ mapData: data }),
+    setOrderData: (data: ClientOrderHistory) => set({ orderData: data }),
+    orderData: {
+        address: '',
+        clientCount: 0,
+        feedbackCount: 0,
+        firstName: '',
+        instagram: '',
+        lastName: '',
+        lat: 0,
+        lng: 0,
+        orderCount: 0,
+        orderDate: '',
+        orderId: '',
+        orderPrice: 0,
+        phoneNumber: '',
+        salonName: '',
+        serviceIds: [],
+        serviceName: '',
+        specializations: [],
+        telegram: '',
+        userAttachmentId: ''
+    },
+    setMapData: (data: MasterLocation) => set({ mapData: data }),
     categoryId: null,
     setCategoryId: (id) =>
         set((state) => ({

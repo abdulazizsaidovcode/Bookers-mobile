@@ -108,7 +108,7 @@ const Dashboard: React.FC = () => {
   const { dashboardData } = useDashboardClientStore();
   const { dashboardMasterData } = useDashboardMasterStore();
   const [selectedCategory, setSelectedCategory] = useState('Bceni');
-  const { setMapData } = useMapStore();
+  const { setOrderData } = useMapStore();
   const navigate = useNavigation<any>();
 
 
@@ -259,6 +259,7 @@ const Dashboard: React.FC = () => {
                         <SimpleLineIcons
                           onPress={() => {
                             navigate.navigate('(client)/(map)/(salon-location)/salon-location');
+                            setOrderData(item)
                           }}
                           name="location-pin"
                           size={24}
