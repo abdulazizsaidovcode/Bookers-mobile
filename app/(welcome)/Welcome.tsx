@@ -1,5 +1,5 @@
-import {Text, View} from "@/components/Themed";
-import React, {useCallback, useEffect, useState} from "react";
+import { Text, View } from "@/components/Themed";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Image,
     ScrollView,
@@ -9,57 +9,64 @@ import {
     Dimensions,
     TouchableOpacity,
 } from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import {Feather} from "@expo/vector-icons";
-import {FontAwesome5} from "@expo/vector-icons";
-import {Entypo} from "@expo/vector-icons";
-import {FontAwesome6} from "@expo/vector-icons";
-import {Ionicons} from "@expo/vector-icons";
-import {Fontisto} from "@expo/vector-icons";
-import {AntDesign} from "@expo/vector-icons";
-import {router, useFocusEffect} from "expo-router";
+import { Feather } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { FontAwesome6 } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import { router, useFocusEffect } from "expo-router";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
-import {
-    getNumbers,
-    putNumbers,
-} from "@/helpers/api-function/numberSittings/numbersetting";
-import {NavigationProp, useNavigation} from "@react-navigation/native";
-import {RootStackParamList} from "@/type/root";
+import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
 import Buttons from "@/components/(buttons)/button";
 import * as SecureStore from "expo-secure-store";
-import {getUser} from "@/helpers/api-function/getMe/getMee";
+import { getUser } from "@/helpers/api-function/getMe/getMee";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
-import {getFile} from "@/helpers/api";
-import {getTariffMaster} from "@/app/(profile)/(tariff)/tariff";
-import {setMasterTariff} from "@/constants/storage";
+import { getFile } from "@/helpers/api";
+import { getTariffMaster } from "@/app/(profile)/(tariff)/tariff";
+import { setMasterTariff } from "@/constants/storage";
 
 const screenWidht = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
-type SettingsScreenNavigationProp = NavigationProp<
-    RootStackParamList,
-    "(welcome)/welcome"
->;
+type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, "(welcome)/welcome">;
 
 const Welcome = () => {
-    const {number, setNumber} = numberSettingStore();
-    const {getMee, setGetMee} = useGetMeeStore()
+    const { number, setNumber } = numberSettingStore();
+    const { getMee, setGetMee } = useGetMeeStore();
     const navigation = useNavigation<SettingsScreenNavigationProp | any>();
     const [getTariffStatus, setGetTariffStatus] = useState<string | null>(null);
 
-    useFocusEffect(useCallback(() => {
-        getNumbers(setNumber);
-        getUser(setGetMee)
-        getTariffMaster(setGetTariffStatus)
+    useFocusEffect(
+        useCallback(() => {
+            const fetchUserAndTariff = async () => {
+                await getUser(setGetMee);
+                const tariffStatus: any = await getTariffMaster(setGetTariffStatus);
+                setGetTariffStatus(tariffStatus);
+            };
 
-        if (number.length === 0) putNumbers(1);
+            fetchUserAndTariff();
 
-        return () => {
-        }
-    }, [number]))
+            if (number.length < 0 || number.length === 0) {
+                putNumbers(1);
+            }
+        }, [])
+    );
+
+    useFocusEffect(
+        useCallback(() => {
+            getNumbers(setNumber);
+        }, [])
+    );
 
     useEffect(() => {
-        getTariffStatus && setMasterTariff(getTariffStatus)
+        if (getTariffStatus) {
+            setMasterTariff(getTariffStatus);
+        }
     }, [getTariffStatus]);
 
     const removeDuplicates = (array: any) => {
@@ -73,35 +80,34 @@ const Welcome = () => {
         return requiredNumbers.every(num => array.includes(num));
     };
 
-    async function registered() {
-        await SecureStore.setItemAsync('isCreate', 'true')
+    const registered = async () => {
+        await SecureStore.setItemAsync('isCreate', 'true');
         await SecureStore.setItemAsync("tariff", 'all');
-    }
+    };
 
     const data = [
         {
             title: "Услуги",
             description: "Ваша специализация и услуги",
-            icon: <Feather name="check-circle" size={24} color="white"/>,
-            onPress: () =>
-                navigation.navigate("(standart)/(services)/(myServices)/myServices"),
+            icon: <Feather name="check-circle" size={24} color="white" />,
+            onPress: () => navigation.navigate("(standart)/(services)/(myServices)/myServices"),
         },
         {
             title: "График работы",
             description: "Планируйте своё рабочее время",
-            icon: <FontAwesome5 name="calendar" size={24} color="white"/>,
+            icon: <FontAwesome5 name="calendar" size={24} color="white" />,
             onPress: () => navigation.navigate("(free)/(work-grafic)/workMain"),
         },
         {
             title: "Локация",
             description: "Ваше мето работы",
-            icon: <Entypo name="location" size={24} color="white"/>,
+            icon: <Entypo name="location" size={24} color="white" />,
             onPress: () => router.push("../(location)/Location"),
         },
         {
             title: "Галерея",
             description: "Создавайте фото и видео галереи своих работ",
-            icon: <MaterialIcons name="photo" size={24} color="white"/>,
+            icon: <MaterialIcons name="photo" size={24} color="white" />,
             onPress: () =>
                 navigation.navigate(
                     "(settings)/(settings-gallery)/settings-gallery-main"
@@ -110,36 +116,36 @@ const Welcome = () => {
         {
             title: "Онлайн бронирование",
             description: "Настройте записи на Ваши услуги",
-            icon: <FontAwesome6 name="calendar-plus" size={24} color="white"/>,
+            icon: <FontAwesome6 name="calendar-plus" size={24} color="white" />,
             onPress: () =>
                 navigation.navigate("(standart)/(onlineBooking)/onlineBooking"),
         },
         {
             title: "Уведомления",
             description: "Настройте уведомления",
-            icon: <Ionicons name="notifications-outline" size={24} color="white"/>,
+            icon: <Ionicons name="notifications-outline" size={24} color="white" />,
             onPress: () => navigation.navigate("(notifications)/notifications"),
         },
         {
             title: "Клиенты",
-            description: "Добавьте своих клинетов",
-            icon: <Fontisto name="persons" size={24} color="white"/>,
+            description: "Добавьте своих клиентов",
+            icon: <Fontisto name="persons" size={24} color="white" />,
             onPress: () => navigation.navigate(`${getTariffStatus === 'FREE' ? `(free)/(client)/main` : '(standart)/client/standard-main'}`),
         },
         {
             title: "Помощь",
             description: "Ознакомьтесь с документацией сервиса",
-            icon: <AntDesign name="questioncircleo" size={24} color="white"/>,
+            icon: <AntDesign name="questioncircleo" size={24} color="white" />,
             onPress: () => navigation.navigate("(profile)/(help)/help"),
         },
     ];
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <StatusBar backgroundColor="#21212E" barStyle="light-content"/>
+            <StatusBar backgroundColor="#21212E" barStyle="light-content" />
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={[styles.scrollView, {paddingBottom: 16}]}
+                contentContainerStyle={[styles.scrollView, { paddingBottom: 16 }]}
             >
                 <View style={styles.progressBar}>
                     {[...Array(8)].map((_, index) => (
@@ -158,13 +164,13 @@ const Welcome = () => {
                     <View style={styles.imageContainer}>
                         <Image
                             style={styles.profileImage}
-                            source={getMee.attachmentId ? {uri: `${getFile}${getMee.attachmentId}`} : require("../../assets/images/866-536x354.jpg")}
+                            source={getMee.attachmentId ? { uri: `${getFile}${getMee.attachmentId}` } : require("../../assets/images/866-536x354.jpg")}
                         />
                         <View style={styles.editIconContainer}>
                             <TouchableOpacity activeOpacity={0.5} onPress={() => {
                                 navigation.navigate("(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit")
                             }}>
-                                <MaterialIcons name="edit" size={24} color="white"/>
+                                <MaterialIcons name="edit" size={24} color="white" />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -186,7 +192,7 @@ const Welcome = () => {
                                 onPress={item.onPress}
                                 key={index}
                                 disabled={!isEnabled}
-                                style={({pressed}) => [
+                                style={({ pressed }) => [
                                     styles.pressable,
                                     {
                                         opacity: pressed ? 0.8 : isEnabled ? 1 : 0.5,
@@ -208,9 +214,9 @@ const Welcome = () => {
                     {containsAllNumbers(uniqueNumbers) && (
                         <View style={styles.buttonContainer2}>
                             <Buttons title="Вперёд" onPress={() => {
-                                navigation.navigate('(tabs)/(master)')
-                                registered()
-                            }}/>
+                                navigation.navigate('(tabs)/(master)');
+                                registered();
+                            }} />
                         </View>
                     )}
                 </View>
