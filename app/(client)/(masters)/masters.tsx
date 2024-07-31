@@ -58,10 +58,10 @@ const Masters = () => {
 
 
   useEffect(() => {
-    getTopMasters(page, 10 , search);
+    getTopMasters(page, 10, search);
     getCategory()
     console.log(masters);
-    
+
   }, [page, search]);
 
   const loadMore = useCallback(
@@ -189,9 +189,9 @@ const Masters = () => {
             />
             <TouchableOpacity
               onPress={() => {
-                setMapData(item);
                 navigation.navigate(
-                  "(client)/(map)/(master-locations)/master-locations"
+                  "(client)/(map)/(master-locations)/master-locations",
+                  { id }
                 );
               }}
               activeOpacity={0.8}
@@ -227,10 +227,10 @@ const Masters = () => {
       const postData = { categoryId: pastEntries, gender: genderIndex, nextToMe: value * 1000, lat: userLocation.coords.latitude, lng: userLocation?.coords.longitude };
       const url = `${getClient_filter}?page=${page ? page : 0}&size=${10}${pastEntries ? `&nameOrPhone=""` : ""}`;
       const { data } = await axios.post(url, postData, config ? config : {});
-      
+
       setTopMasters(data.body.object)
       console.log(data.body.object);
-      
+
       setPastEntries([]);
       toggleBottomModal();
     } catch (error) {
@@ -260,7 +260,7 @@ const Masters = () => {
           <Text style={tw`text-white text-lg font-medium ml-2`}>Фильтр</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() =>navigation.navigate("(client)/(map)/(recent-masters)/recent-masters")}
+          onPress={() => navigation.navigate("(client)/(map)/(recent-masters)/recent-masters")}
           style={[
             tw`rounded-lg px-4 py-2 border justify-center items-center border flex-row`,
             { borderColor: "#fff" },
@@ -285,7 +285,7 @@ const Masters = () => {
 
 
         <FlatList
-          data={masters &&  masters} // Filter out undefined items
+          data={masters && masters} // Filter out undefined items
           keyExtractor={(item) => item.id}
           renderItem={TopMasterCard}
           ListFooterComponent={renderFooter}

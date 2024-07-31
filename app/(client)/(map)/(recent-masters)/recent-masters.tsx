@@ -10,7 +10,7 @@ import Slider from '@react-native-community/slider';
 import { mapCustomStyle } from '@/type/map/map';
 import Buttons from '@/components/(buttons)/button';
 import { AntDesign, Feather } from '@expo/vector-icons';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import { getTopMasters } from '@/helpers/api-function/masters';
 import useTopMastersStore, { Master } from '@/helpers/state_managment/masters';
@@ -21,7 +21,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)/(map)/(recent-masters)/recent-masters'>;
 
 const haversineDistance = (userLat: number, userLon: number, salonLat: number, salonLon: number) => {
-    const R = 6371; 
+    const R = 6371;
     const dLat = (salonLat - userLat) * (Math.PI / 180);
     const dLon = (salonLon - userLon) * (Math.PI / 180);
     const a = Math.sin(dLat / 2) ** 2 +
@@ -33,6 +33,7 @@ const haversineDistance = (userLat: number, userLon: number, salonLat: number, s
 
 
 const RecentMasters = () => {
+    
     const { userLocation, setUserLocation } = useGetMeeStore();
     const [value, setValue] = useState(5.1);
     const [circleValue, setCircleValue] = useState(0);
@@ -41,20 +42,21 @@ const RecentMasters = () => {
     const { masters } = useTopMastersStore();
     const [metroStations, setMetroStations] = useState<any>([]);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    
+
     useFocusEffect(
         useCallback(() => {
             getUserLocation(setUserLocation);
-            getTopMasters();
+            getTopMasters(0, 100);
             fetchMetroStations(userLocation.coords.latitude, userLocation.coords.longitude, setMetroStations);
             return () => { };
         }, [])
     );
 
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', metroStations);
-
     const toggleShowByDistance = () => setShowByDistance(!showByDistance);
-    const handleReset = () => setValue(5.1);
+    const handleReset = () => {
+        setValue(5.1)
+        setCircleValue(value)
+    };
     const handleMarkerPress = (marker: Master) => {
         setSelectedMarker(marker);
     };
@@ -62,8 +64,6 @@ const RecentMasters = () => {
     const handleValueChange = (newValue: number) => {
         setValue(newValue);
     };
-
-
 
     if (!userLocation.coords) {
         return (

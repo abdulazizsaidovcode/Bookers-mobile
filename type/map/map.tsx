@@ -1,12 +1,32 @@
-import { Master } from "@/helpers/state_managment/masters";
 
 export interface MapStoreTypes {
-  mapData: Master;
-  setMapData: (data: Master) => void;
+  mapData: MasterLocation;
+  setMapData: (data: MasterLocation) => void;
   categoryId: string | null;
   setCategoryId: (
     id: string | null | ((prev: string | null) => string | null)
   ) => void;
+}
+
+export interface MasterLocation {
+  id: string,
+  firstName: string,
+  salonName: string,
+  orderCount: number,
+  clientCount: number,
+  lat: number,
+  lng: number,
+  district: string,
+  street: string,
+  house: string,
+  attachmentId: string | null,
+  favoriteCount: number,
+  nearestOrder: null,
+  categoryNames: string[],
+  attachmentCount: number,
+  gender: string,
+  servicePrice: number,
+  nextEntryDate: null
 }
 
 export const mapCustomStyle = [

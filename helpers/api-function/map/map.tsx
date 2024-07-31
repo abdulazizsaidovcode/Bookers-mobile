@@ -1,3 +1,6 @@
+import { getConfig } from "@/app/(tabs)/(master)/main";
+import { base_url } from "@/helpers/api";
+import { MasterLocation } from "@/type/map/map";
 import axios from "axios";
 
 const GOOGLE_MAPS_API_KEY = "0ahUKEwiA1vuAqbOHAxUHExAIHRwOKdMQlqMCCAIoAA"
@@ -11,3 +14,15 @@ export const fetchMetroStations = async (latitude: number, longitude: number, se
         return ['dwqdq'];
     }
 };
+
+export const fetchMasterLocation = async (masterId: string | number, setMapData: (val: MasterLocation) => void) => {
+    const config = await getConfig()
+    try {
+        const { data } = await axios.get(`${base_url}user/client/get-one/${masterId}`, config ? config : {});
+        if (data.success) {
+            setMapData(data.body)
+        }
+    } catch (error) {
+
+    }
+}
