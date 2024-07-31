@@ -33,12 +33,7 @@ const RequestsAccordion: React.FC<RequestsAccordionProps> = ({ items, onActionSu
         items.map((request, index) => (
           <RequestCard
             key={request.orderId}
-            name={request.clientName}
-            service={request.categoryName}
-            clientAttachmentId={request.clientAttachmentId}
-            date={request.orderDate.split(' ')[0]} // Extracting just the date part for simplicity
-            time={extractTimeRange(request.orderDate)} // Extracting the time range
-            orderId={request.orderId} // Pass the orderId
+            item={request}
             onApprove={() => handleApprove(index)}
             onReject={() => handleReject(index)}
           />

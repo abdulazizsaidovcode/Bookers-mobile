@@ -1,9 +1,11 @@
 export interface NotificationsStore {
+  texts: EditedDataTexts;
+  setTexts: (val: EditedDataTexts) => void
   appoinmentData: NotificationsAllData;
   isLoading: boolean;
   setIsloading: (val: boolean) => void;
   appoinmentActiveData: boolean;
-  tariff: null,
+  tariff: null;
   setTariff: (val: null) => void;
   isMainSwitch: boolean;
   windowData: NotificationsAllData;
@@ -30,4 +32,10 @@ export interface NotificationsAllData {
   text?: string;
   content?: string;
   minute?: number,
+}
+
+export interface EditedDataTexts {
+  appoinmentText: string,
+  cancelText: string,
+  changingText: string,
 }

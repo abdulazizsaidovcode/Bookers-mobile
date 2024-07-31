@@ -1,5 +1,6 @@
 import Buttons from '@/components/(buttons)/button';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
+import { Loading } from '@/components/loading/loading';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editWindowOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
@@ -30,6 +31,16 @@ const RequestWindow = () => {
     putNumbers(7);
   };
 
+  if (!windowData) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          <Loading />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -49,10 +60,10 @@ const RequestWindow = () => {
             />
           </View>
         </View>
-        <View style={styles.buttonContainer}>
-          {isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />}
-        </View>
       </ScrollView>
+      <View style={styles.buttonContainer}>
+        {isLoading ? <LoadingButtons title='Сохранить' /> : <Buttons title="Сохранить" onPress={handleSave} isDisebled={hasChanges} />}
+      </View>
     </SafeAreaView>
   );
 };
@@ -63,6 +74,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#21212E',
+    position: 'relative'
   },
   navigationMenu: {
     padding: 16,
@@ -96,7 +108,10 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   buttonContainer: {
-    marginTop: 20,
     padding: 10,
+    position: 'absolute',
+    bottom: 0,
+    width: screenWidth,
+    backgroundColor: '#21212E',
   },
 });

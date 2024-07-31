@@ -31,6 +31,7 @@ import registerStory from "@/helpers/state_managment/auth/register";
 import {getMasterTariff} from "@/constants/storage";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { Loading } from "@/components/loading/loading";
 
 const data: { name: any; color: string; label: string }[] = [
   { name: "facebook", color: "#3b5998", label: "Facebook" },
@@ -46,7 +47,7 @@ const ProfilePage: React.FC = () => {
   const [isShareModalVisible, setShareModalVisible] = useState(false);
   const navigation = useNavigation<any>();
   const { getMee, setGetMee } = useGetMeeStore();
-  const {tariff, setTariff} = clientStore()
+  const {tariff, setTariff, isLoading, setIsLoading} = clientStore()
   const [toggle, setToggle] = useState(false);
   const { role } = registerStory();
 
@@ -81,11 +82,13 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true)
     await SecureStore.deleteItemAsync("number");
     await AsyncStorage.removeItem("registerToken");
     await SecureStore.deleteItemAsync("password");
     navigation.navigate("(auth)/auth");
     setToggle(false);
+    setIsLoading(false)
   };
 
   const onShare = async () => {
@@ -260,7 +263,8 @@ const ProfilePage: React.FC = () => {
         ];
 
   return (
-    <ScrollView style={[styles.container]}>
+    <>
+    {isLoading ? <Loading/> : <ScrollView style={[styles.container]}>
       <SafeAreaView style={{ paddingBottom: 24 }}>
         <StatusBar backgroundColor={`#21212E`} barStyle={`dark-content`} />
         <Text style={styles.title}>Профиль</Text>
@@ -392,7 +396,8 @@ const ProfilePage: React.FC = () => {
         onConfirm={handleSubmit}
         toggleModal={() => setToggle(false)}
       />
-    </ScrollView>
+    </ScrollView>}
+    </>
   );
 };
 

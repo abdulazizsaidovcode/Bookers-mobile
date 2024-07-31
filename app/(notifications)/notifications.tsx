@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View, Text, Switch, StyleSheet, ScrollView, TouchableOpacity, } from 'react-native';
 import { FontAwesome5, MaterialIcons, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,29 +8,34 @@ import useNotificationsStore from '@/helpers/state_managment/notifications/notif
 import { RootStackParamList } from '@/type/root';
 import { editMainDataStatus, fetchAllData, fetchAppoinmentActiveData, fetchMainData } from '@/helpers/api-function/notifications/notifications';
 import { getMasterTariff } from '@/constants/storage';
+import { useFocusEffect } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(notifications)/notification'>;
 
 const NotificationSettings: React.FC = () => {
-  const { isMainSwitch, appoinmentData, appoinmentActiveData, changingData, tariff, setTariff, setAppoinmentActiveData, setAppoinmentData, setIsMainSwitch, setChangingData } = useNotificationsStore();
+  const { isMainSwitch, appoinmentData, appoinmentActiveData, changingData, tariff, cancelData, setCancelData, setTariff, setAppoinmentActiveData, setAppoinmentData, setIsMainSwitch, setChangingData } = useNotificationsStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const toggleSwitch = (isMainSwitch: boolean) => {
     setIsMainSwitch(!isMainSwitch);
     editMainDataStatus(!isMainSwitch)
   };
-
-  useEffect(() => {
-    fetchMainData(setIsMainSwitch);
-    getMasterTariff(setTariff);
-    fetchAllData(setChangingData, 'CHANGE_ORDER');
-    fetchAppoinmentActiveData(setAppoinmentActiveData);
-    fetchAllData(setAppoinmentData, "APPOINTMENT");
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchMainData(setIsMainSwitch);
+      getMasterTariff(setTariff);
+      fetchAllData(setChangingData, 'CHANGE_ORDER');
+      fetchAppoinmentActiveData(setAppoinmentActiveData);
+      fetchAllData(setAppoinmentData, "APPOINTMENT");
+      fetchAllData(setCancelData, 'CANCEL_ORDER');
+    }, [])
+  )
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
+        <StatusBar style='light'/>
         <View>
           <NavigationMenu name='Настройка уведомлений' />
         </View>
@@ -48,13 +53,13 @@ const NotificationSettings: React.FC = () => {
         <NotificationOption
           icon={<MaterialIcons name="notifications" size={30} color="#9C0A35" />}
           label="Напоминать о записи"
-          subLabel={appoinmentData.hour === 0 && appoinmentData.minute === 0 ? 'Не настроено' : `За ${appoinmentData.hour ? `${appoinmentData.hour}` : ''}${appoinmentData.minute ? `:${appoinmentData.minute}` : ''} час до записи`}
+          subLabel={appoinmentData.hour === 0 && appoinmentData.minute === 0 ? 'Не настроено' : `За ${appoinmentData.hour ? `${appoinmentData.hour}` : ''}${`${appoinmentData.minute}` ? `:${appoinmentData.minute}` : ''} час до записи`}
           onPress={() => navigation.navigate('(notifications)/(pages)/remind-about-appointment')}
         />
         <NotificationOption
           icon={<MaterialIcons name="cancel" size={30} color="#9C0A35" />}
           label="Отмена записи"
-          subLabel={appoinmentActiveData ? 'Включено0' : "Не настроено"}
+          subLabel={cancelData.isActive ? 'Включено' : "Не настроено"}
           onPress={() => navigation.navigate('(notifications)/(pages)/cancel-recording')}
         />
         <NotificationOption

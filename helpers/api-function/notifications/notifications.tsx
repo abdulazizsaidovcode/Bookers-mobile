@@ -72,6 +72,22 @@ export const editMessenger = async (isMessage: boolean | undefined, goBack: () =
 }
 
 export const editCancelOrder = async (isActive: boolean | undefined, text: string | undefined, setHasChanges: (val: boolean) => void, goBack: () => void, setIsloading: (val: boolean) => void) => {
+    if (text && !text.includes('(дата сеанса)')) {
+        Toast.show('Поместите слово (дата сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(время сеанса)')) {
+        Toast.show('Поместите слово (время сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(адрес)')) {
+        Toast.show('Поместите слово (адреес) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(процедура)')) {
+        Toast.show('Поместите слово (процедура) куда-нибудь', Toast.LONG)
+        return
+    }
     setIsloading(true)
     const payload = { isActive, text }
     try {
@@ -155,11 +171,28 @@ export const editFeedbeckOrder = async (text: string | undefined, setHasChanges:
     }
 }
 
-export const editAppoinmentOrder = async (text: string | undefined, hour: number | undefined, minute: number | undefined, isActive: boolean | undefined, goBack: () => void, setHasChanges: (val: boolean) => void, setIsLoading: (val: boolean) => void) => {
+export const editAppoinmentOrder = async (text: string | undefined, hour: number | undefined, minute: number | undefined, active: boolean | undefined, goBack: () => void, setHasChanges: (val: boolean) => void, setIsLoading: (val: boolean) => void) => {
+    if (text && !text.includes('(дата сеанса)')) {
+        Toast.show('Поместите слово (дата сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(время сеанса)')) {
+        Toast.show('Поместите слово (время сеанса) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(адреес)')) {
+        Toast.show('Поместите слово (адреес) куда-нибудь', Toast.LONG)
+        return
+    }
+    if (text && !text.includes('(процедура)')) {
+        Toast.show('Поместите слово (процедура) куда-нибудь', Toast.LONG)
+        return
+    }
     setIsLoading(true)
+    const payload = { hour, minute, text, active }
     try {
         const config = await getConfig()
-        const { data } = await axios.put(`${notifications_appointment_edit}?hour=${hour}&minute=${minute}&text=${text}&active=${isActive}`, {}, config ? config : {});
+        const { data } = await axios.put(`${notifications_appointment_edit}`, payload, config ? config : {});
         if (data.success) {
             Toast.show('Ваш напоминание о встрече успешно обновлено.', Toast.LONG)
             goBack()

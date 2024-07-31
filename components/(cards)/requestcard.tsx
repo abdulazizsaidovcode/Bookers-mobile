@@ -2,48 +2,59 @@ import { getFile } from '@/helpers/api';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { masterOrderConfirm } from '@/helpers/api-function/oreder/oreder';
+import tw from 'tailwind-react-native-classnames';
 interface RequestCardProps {
-  name: string;
-  service: string;
-  date: string;
-  time: string;
-  orderId: string;
-  clientAttachmentId: string;
+  item: RequestCardobjProps;
   onApprove: () => void;
   onReject: () => void;
 }
 
-const RequestCard: React.FC<RequestCardProps> = ({ name, service, date, time,orderId, clientAttachmentId, onApprove, onReject }) => {
-  const [loading, setLoading] = useState(false);
-  const handleApprove = async () => {
-    setLoading(true);
-    await masterOrderConfirm(orderId, setLoading, 'CONFIRMED');
-    setLoading(false);
+interface RequestCardobjProps {
+  id: string
+  fullName: string;
+  serviceName: string;
+  startTime: string;
+  finishTime: string;
+  orderId: string;
+  clientAttachmentId: string;
+  orderStatus: string;
+  clientStatus: string[];
+}
+
+const RequestCard: React.FC<RequestCardProps> = ({ item, onApprove, onReject }) => {
+
+  const [loadingAprove, setAproveLoading] = useState(false);
+  const [loadingReject, setLoadingReject] = useState(false);
+  
+  const handleApprove = async (id: string) => {
+    await masterOrderConfirm(id, setAproveLoading, 'CONFIRMED');
     onApprove();
   };
 
-  const handleReject = async () => {
-    setLoading(true);
-    await masterOrderConfirm(orderId, setLoading, 'REJECTED');
-    setLoading(false);
+  const handleReject = async (id: string) => {
+    await masterOrderConfirm(id, setLoadingReject, 'REJECTED');
     onReject();
   };
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
-        <Image source={clientAttachmentId ? {uri: getFile + clientAttachmentId} : require('@/assets/avatar.png')} style={styles.avatar} />
-        <View>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.service}>{service}</Text>
-          <Text style={styles.dateTime}>{date} - {time}</Text>
+        {item.orderStatus == 'WAIT' && <Text style={[tw`px-2 py-0.5 text-xs  text-green-800 rounded-md mb-2`, { alignSelf: 'flex-start', fontSize: 10, borderColor: '#217355', borderWidth: 1 }]}>{item.clientStatus[0]}</Text>}
+        <View style={[tw`flex-row mb-3`]}>
+          <Image source={item.clientAttachmentId ? { uri: getFile + item.clientAttachmentId } : require('@/assets/avatar.png')} style={styles.avatar} />
+          <View>
+            <Text style={styles.name}>{item.fullName}</Text>
+            {item.clientStatus && <Text style={[tw`px-2 py-0.5 text-xs bg-green-800 text-white rounded-md`, { alignSelf: 'flex-start', fontSize: 10 }]}>{item.clientStatus}</Text>}
+          </View>
         </View>
+        <Text style={styles.service}>{item.serviceName}</Text>
+        <Text style={styles.dateTime}>{item.startTime.slice(0, 5)} - {item.finishTime.slice(0, 5)}</Text>
       </View>
       <View style={styles.cardFooter}>
-        <TouchableOpacity style={styles.approveButton} onPress={handleApprove} disabled={loading}>
-          {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Одобрить</Text>}
+        <TouchableOpacity style={styles.approveButton} onPress={() => handleApprove(item.id)} disabled={loadingAprove}>
+          {loadingAprove ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Одобрить</Text>}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.rejectButton} onPress={handleReject} disabled={loading}>
-          {loading ? <ActivityIndicator color="#9C0A35" /> : <Text style={styles.buttonTextR}>Отклонить</Text>}
+        <TouchableOpacity style={styles.rejectButton} onPress={() => handleReject(item.id)} disabled={loadingReject}>
+          {loadingReject ? <ActivityIndicator color="#9C0A35" /> : <Text style={styles.buttonTextR}>Отклонить</Text>}
         </TouchableOpacity>
       </View>
     </View>
@@ -60,12 +71,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 3,
-    marginBottom:10
+    marginBottom: 10
   },
   cardHeader: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginBottom: 10,
-    alignItems: 'center',
   },
   avatar: {
     width: 50,
