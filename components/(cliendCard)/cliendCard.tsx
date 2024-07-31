@@ -9,17 +9,17 @@ import { getFile } from '@/helpers/api';
 
 type ClientCardProps = {
   salon: string;
-  imageUrl: string;
+  imageUrl: string | null;
   name: string;
-  zaps: string;
-  masterType: string;
+  zaps: string | null;
+  masterType: string | null;
   orders: number;
   clients: number;
   address: string;
   mapStyle?: boolean;
   onPress?: () => void;
   feedbackCount: number;
-  locationIcon?: React.ReactNode; 
+  locationIcon?: React.ReactNode;
 };
 
 const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, mapStyle }) => {
@@ -37,19 +37,19 @@ const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl, feedback
     const starsCount = Math.min(roundedCount, 5); // 5 tadan oshmaydigan yulduzlar soni
     let stars = '';
     for (let i = 0; i < starsCount; i++) {
-        stars += '★';
+      stars += '★';
     }
     for (let i = starsCount; i < 5; i++) {
-        stars += '☆';
+      stars += '☆';
     }
     return stars;
-};
+  };
 
   return (
     <View style={tw`p-4 bg-gray-300 rounded-2xl shadow-lg`}>
       <View style={tw`flex-row items-center mb-4`}>
         <Image
-          source={imageUrl ? getFile + imageUrl : require('../../assets/avatar.png')}
+          source={imageUrl ? { uri: getFile + imageUrl } : require('../../assets/avatar.png')}
           style={tw`w-16 h-16 rounded-full mr-3`}
         />
         <View style={tw`flex-1`}>
@@ -68,7 +68,7 @@ const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl, feedback
         </View>
       </View>
       <Text style={tw`text-gray-600 text-lg mb-2`}>{address || "Address is not found"}</Text>
-      <Text style={tw`text-black text-lg font-bold mb-4`}>Ближайшая запись: {zaps}</Text>
+      <Text style={tw`text-black text-lg font-bold mb-4`}>Ближайшая запись: {zaps || "0"}</Text>
       <View style={mapStyle ? tw`` : tw`flex-row justify-between`}>
         <TouchableOpacity activeOpacity={0.8} style={[tw`px-16 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]}>
           <Text style={tw`text-white text-xl text-center`}>Записаться</Text>

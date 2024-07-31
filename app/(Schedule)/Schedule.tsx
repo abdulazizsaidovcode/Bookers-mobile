@@ -84,12 +84,14 @@ const Schedule: React.FC = () => {
   const handleClick = async () => {
     try {
       const config = await getConfig();
-      toggle();
+        
       if (schedule.length) {
-        await axios.post(
-          `${base_url}order/stop-recording?isActive=true`,
-          config
+        const {data} = await axios.post(
+          `${base_url}order/stop-recording?isActive=true`, {},
+          config ? config : {}
         );
+        
+        if(data.success) toggle();
       }
     } catch (error) {
       console.log(error);
@@ -139,7 +141,7 @@ const Schedule: React.FC = () => {
               onPress={setOrder}
             />
             {tariff === "STANDARD" && (
-              <Buttons title="Остановить запись" onPress={toggle} />
+              <Buttons isDisebled={!!schedule.length} title="Остановить запись" onPress={toggle} />
             )}
           </View>
         )}
@@ -155,7 +157,7 @@ const Schedule: React.FC = () => {
         <View>
           <Text style={tw`text-white text-base text-center`}>
             {schedule.length
-              ? "На выбранный день {schedule.length} забронированных сеанса"
+              ? `На выбранный день ${schedule.length} забронированных сеанса`
               : "У вас нет непогашенных ордеров"}
           </Text>
           <Text style={tw`text-white text-base text-center my-3 font-bold`}>

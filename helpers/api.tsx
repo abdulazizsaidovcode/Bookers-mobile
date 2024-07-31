@@ -64,7 +64,7 @@ export const feedbackMasterForClient = `${base_url}feedback/for/master`// feedba
 
 // Client dashboard
 export const ClientOrderHistory = `${base_url}order/client/history/upcoming` // get client history 
-export const ClientMasterByCategory = `${base_url}/user/masters/by/category` // get client history 
+export const ClientMasterByCategory = `${base_url}user/masters/by/category` // get client history 
 
 
 // Register page 

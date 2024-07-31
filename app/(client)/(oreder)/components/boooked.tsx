@@ -89,12 +89,10 @@ const Booked: React.FC = () => {
 
     useEffect(() => {
         setTimeout(() => {
-            console.log(selectedCategoryId);
+            console.log('');
         }, 1000)
     }, [selectedCategoryId])
 
-    console.log(FreeTime);
-    
     return (
         <>
             <View style={styles.accordionContainer}>
