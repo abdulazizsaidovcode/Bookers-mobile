@@ -6,13 +6,27 @@ import Toast from 'react-native-simple-toast'
 
 
 export const fetchDaylyOrderTimes = async (setDailyTimeData: (val: DashboardDailyTimeOrders[]) => void, masterId: string) => {
+    // if (!masterId) return
+    setTimeout(() => {
+
+        console.log('masterID', masterId);  
+    }, 2000)
     try {
         const config = await getConfig()
-        const { data } = await axios.get(`${dashboard_daily_time_orders}/${masterId}`, config ? config : {});
+        const { data } = await axios.get(`${dashboard_daily_time_orders}/654a8f76-ff71-45bc-b4ff-7843647387f1`, config ? config : {});
         if (data.success) {
-            setDailyTimeData(data.body);
-        }
-    } catch { }
+            setDailyTimeData(data.body.statusTimes);
+            console.log('keldi', data.body);
+
+        } else console.log('hato');
+
+    } catch (error) {
+        setTimeout(() => {
+
+            console.log('Qutabas', error);
+        }, 2000)
+
+    }
 }
 
 export const fetchMainStatistic = async (setMainStatisticData: (val: DashboardMainStatistic) => void) => {
@@ -25,7 +39,7 @@ export const fetchMainStatistic = async (setMainStatisticData: (val: DashboardMa
     } catch { }
 }
 
-export const fetchWaitingOrders = async (setWaitingData: (val: DashboardHallingOrder[]) => void) => {
+export const fetchWaitingOrders = async (setWaitingData: (val: DashboardWaitingOrder[]) => void) => {
     try {
         const config = await getConfig()
         const { data } = await axios.get(dashboard_wait_order, config ? config : {});

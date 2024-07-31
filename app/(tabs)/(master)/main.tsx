@@ -1,42 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-    StyleSheet,
-    Text,
-    View,
-    ScrollView,
-    FlatList,
-    Image,
-    TouchableOpacity,
-    Dimensions,
-    RefreshControl,
-    Share,
-    Alert,
-    BackHandler,
-    Platform,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity, Dimensions, RefreshControl, Share, Alert, BackHandler, } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PieChart from "react-native-pie-chart";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Toast from "react-native-simple-toast";
-import {
-    editOrderStatus,
-    fetchDaylyOrderTimes,
-    fetchHallingOrders,
-    fetchMainStatistic,
-    fetchTodayWorkGrafic,
-    fetchWaitingOrders,
-} from "@/helpers/api-function/dashboard/dashboard";
+import { editOrderStatus, fetchDaylyOrderTimes, fetchHallingOrders, fetchMainStatistic, fetchTodayWorkGrafic, fetchWaitingOrders, } from "@/helpers/api-function/dashboard/dashboard";
 import useDashboardStore from "@/helpers/state_managment/dashboard/dashboard";
-import {
-    BookingRequestsHallProps,
-    BookingRequestsProps,
-    DashboardDailyTimeOrders,
-    RenderBookingRequestProps,
-    ScheduleSectionProps,
-    StatisticsProps,
-    StatusContainerProps,
-} from "@/type/dashboard/dashboard";
+import { BookingRequestsHallProps, BookingRequestsProps, RenderBookingRequestProps, ScheduleSectionProps, StatisticsProps, StatusContainerProps, } from "@/type/dashboard/dashboard";
 import { getFile } from "@/helpers/api";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
@@ -52,14 +23,10 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import { handleRefresh } from "@/constants/refresh";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 import InstallPin from "@/app/(auth)/(setPinCode)/installPin";
-import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
-import * as Device from 'expo-device';
-import Constants from 'expo-constants';
-import { deviceInfo } from "@/helpers/api-function/register/registrFC";
 import { getTariffMaster } from "@/app/(profile)/(tariff)/tariff";
 import { setMasterTariff } from "@/constants/storage";
 import { Loading } from "@/components/loading/loading";
+import moment from "moment";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -114,82 +81,18 @@ export const getConfigImg = async () => {
 };
 
 const TabOneScreen: React.FC = () => {
-    Notifications.setNotificationHandler({
-        handleNotification: async () => ({
-            shouldShowAlert: true,
-            shouldPlaySound: false,
-            shouldSetBadge: false,
-        }),
-    });
     const { number, setNumber } = numberSettingStore();
     const { getMee, setGetMee } = useGetMeeStore();
     const navigation = useNavigation<any>();
     const { isRegtered } = isRegister()
     const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
     const [isPasswordSet, setIsPasswordSet] = useState<null | boolean>(null);
-    const {
-        mainStatisticData,
-        waitingData,
-        dailyTimeData,
-        isConfirmModal,
-        hallData,
-        isRejectedModal,
-        todayGraficData,
-        setTodayGraficData,
-        setRejectedIsModal,
-        setHallData,
-        setConfirmIsModal,
-        setDailyTimeData,
-        setMainStatisticData,
-        setWaitingData,
-    } = useDashboardStore();
+    const { mainStatisticData, waitingData, dailyTimeData, isConfirmModal, hallData, isRejectedModal, todayGraficData, setTodayGraficData, setRejectedIsModal, setHallData, setConfirmIsModal, setDailyTimeData, setMainStatisticData, setWaitingData, } = useDashboardStore();
     const { refreshing, setRefreshing } = clientStore();
     const [masterTariff, setTariffMaster] = useState<null | string>(null)
     const [backPressCount, setBackPressCount] = useState(0);
     const [pending, setPending] = useState(true);
     const [orderId, setOrderId] = useState('');
-    const notificationListener = useRef();
-    const responseListener = useRef();
-
-    const pushNotifications = async () => {
-        const { status: existingStatus } = await Notifications.getPermissionsAsync();
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync();
-            finalStatus = status;
-        }
-        if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
-            return;
-        }
-        const token = (await Notifications.getExpoPushTokenAsync()).data;
-        // const deviceId = Constants.deviceId;
-        const deviceType = Device.modelName;
-        deviceInfo(deviceType, Platform.OS, token);
-
-        if (Platform.OS === 'android') {
-            Notifications.setNotificationChannelAsync('default', {
-                name: 'default',
-                importance: Notifications.AndroidImportance.MAX,
-                vibrationPattern: [0, 250, 250, 250],
-                lightColor: '#FF231F7C',
-            });
-        }
-        return token;
-
-    }
-    useEffect(() => {
-        setPending(true)
-        pushNotifications()
-        return () => {
-            if (notificationListener.current) {
-                Notifications.removeNotificationSubscription(notificationListener.current);
-            }
-            if (responseListener.current) {
-                Notifications.removeNotificationSubscription(responseListener.current);
-            }
-        };
-    }, []);
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
@@ -205,13 +108,11 @@ const TabOneScreen: React.FC = () => {
 
     useFocusEffect(
         useCallback(() => {
-
-
-            fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
             fetchMainStatistic(setMainStatisticData);
             fetchWaitingOrders(setWaitingData);
             fetchHallingOrders(setHallData);
             getUser(setGetMee);
+            fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
             fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
             getData();
             getNumbers(setNumber);
@@ -224,6 +125,10 @@ const TabOneScreen: React.FC = () => {
                 setPending(false)
             }
         }, []))
+    setTimeout(() => {
+
+        console.log('Master id', getMee.id);
+    }, 2000)
 
 
     // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
@@ -257,7 +162,6 @@ const TabOneScreen: React.FC = () => {
                 setPending(false)
             }
         }, [number]))
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -324,26 +228,11 @@ const TabOneScreen: React.FC = () => {
     const statisticFraction = mainStatisticData.incomeToday;
     const [statisticNumerator, statisticDenominator] = statisticFraction.split("/");
     const regularVisitCount = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length : 0;
-    const notVisitCount = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "NOT_VISIT").length : 0;
+    const notVisitCount = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "STOPPED_VISIT").length : 0;
     const vipCientsCount = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "VIP").length : 0;
     const newClientsCount = dailyTimeData && dailyTimeData.length! == 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "NEW").length : 0;
 
-    const handleConfirm = () =>
-        editOrderStatus(
-            setWaitingData,
-            setHallData,
-            orderId,
-            "CONFIRMED",
-            toggleConfirmModal
-        );
-    const handleReject = () =>
-        editOrderStatus(
-            setWaitingData,
-            setHallData,
-            orderId,
-            "REJECTED",
-            toggleRejectModal
-        );
+    const handleConfirmOrReject = (status: string) => editOrderStatus(setWaitingData, setHallData, orderId, status, toggleConfirmModal);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -377,6 +266,7 @@ const TabOneScreen: React.FC = () => {
                     toggleRejectedModal={toggleRejectModal}
                     isRejectedModal={isRejectedModal}
                     isConfirmModal={isConfirmModal}
+                    status={true}
                 />
                 <BookingRequestsHall
                     setHallData={setHallData}
@@ -385,39 +275,24 @@ const TabOneScreen: React.FC = () => {
                     toggleRejectedModal={toggleRejectModal}
                     isRejectedModal={isRejectedModal}
                     isConfirmModal={isConfirmModal}
+                    status={false}
                 />
                 <CenteredModal
                     isModal={isConfirmModal ? isConfirmModal : isRejectedModal}
                     toggleModal={isConfirmModal ? toggleConfirmModal : toggleRejectModal}
                     isFullBtn
-                    btnRedText={"Одобрить"}
-                    onConfirm={isConfirmModal ? handleConfirm : handleReject}
+                    btnRedText={isConfirmModal ? "Одобрить" : "Отклонить"}
+                    onConfirm={() => handleConfirmOrReject(isConfirmModal ? "CONFIRMED" : "REJECTED")}
                     btnWhiteText="Назад"
                 >
                     <View>
                         <Text
                             style={{ fontSize: 17, color: COLORS.white, textAlign: "center" }}
                         >
-                            Вы уверены, что хотите Одобрить этот заказ?
+                            {isConfirmModal ? 'Вы уверены, что хотите Одобрить этот заказ?' : 'Вы уверены, что хотите Отклонить этот заказ?'}
                         </Text>
                     </View>
                 </CenteredModal>
-                {/* <CenteredModal
-          isModal={isRejectedModal}
-          toggleModal={toggleRejectModal}
-          isFullBtn
-          btnRedText={"Отклонить"}
-          onConfirm={handleReject}
-          btnWhiteText="Назад"
-        >
-          <View>
-            <Text
-              style={{ fontSize: 17, color: COLORS.white, textAlign: "center" }}
-            >
-              Вы уверены, что хотите Отклонить этот заказ?
-            </Text>
-          </View>
-        </CenteredModal> */}
                 {
                     pending ? (
                         <View style={{ marginTop: 20 }}>
@@ -529,7 +404,7 @@ const Statistics: React.FC<StatisticsProps> = ({
             <Text style={styles.statsTitle}>Выполнено сеансов</Text>
             <PieChart
                 widthAndHeight={100}
-                series={[chartNumerator | 1, chartDenominator | 1]}
+                series={[chartNumerator, chartDenominator]}
                 sliceColor={[COLORS.mainRed, COLORS.background]}
                 coverRadius={0.6}
                 coverFill={COLORS.cardBackground}
@@ -540,9 +415,9 @@ const Statistics: React.FC<StatisticsProps> = ({
         </View>
         <View style={styles.statsContainer}>
             <Text style={styles.statsTitle}>Доход сегодня</Text>
-            <Text style={styles.incomeText}>{statisticNumerator || 0}</Text>
+            <Text style={styles.incomeText}>{statisticNumerator || 0} сум</Text>
             <Text style={styles.incomeTextSmall}>из</Text>
-            <Text style={styles.incomeText}>{statisticDenominator || 0}</Text>
+            <Text style={styles.incomeText}>{statisticDenominator || 0} сум</Text>
         </View>
     </View>
 );
@@ -571,6 +446,7 @@ const BookingRequests: React.FC<BookingRequestsProps> = ({
     isConfirmModal,
     isRejectedModal,
     setWaitingData,
+    status
 }) =>
     waitingData && waitingData.length > 0 ? (
         <View>
@@ -592,16 +468,7 @@ const BookingRequests: React.FC<BookingRequestsProps> = ({
             </View>
             <FlatList
                 data={waitingData}
-                renderItem={(props: any) =>
-                    renderBookingRequest({
-                        ...props,
-                        toggleConfirmModal,
-                        toggleRejectedModal,
-                        isRejectedModal,
-                        isConfirmModal,
-                        setWaitingData,
-                    })
-                }
+                renderItem={(props: any) => renderBookingRequest({ ...props, toggleConfirmModal, toggleRejectedModal, isRejectedModal, isConfirmModal, setWaitingData, status })}
                 keyExtractor={(item) => item.id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -619,6 +486,7 @@ const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
     isConfirmModal,
     isRejectedModal,
     setHallData,
+    status
 }) =>
     hallData && hallData.length > 0 ? (
         <View>
@@ -640,16 +508,7 @@ const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
             </View>
             <FlatList
                 data={hallData}
-                renderItem={(props: any) =>
-                    renderBookingRequest({
-                        ...props,
-                        toggleConfirmModal,
-                        toggleRejectedModal,
-                        isConfirmModal,
-                        isRejectedModal,
-                        setHallData,
-                    })
-                }
+                renderItem={(props: any) => renderBookingRequest({ ...props, toggleConfirmModal, toggleRejectedModal, isConfirmModal, isRejectedModal, setHallData, status })}
                 keyExtractor={(item) => item.id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -660,19 +519,11 @@ const BookingRequestsHall: React.FC<BookingRequestsHallProps> = ({
         ""
     );
 
-const renderTimeSlot: React.FC<{ item: DashboardDailyTimeOrders }> = ({
-    item,
-}) => (
+const renderTimeSlot = ({ item }: any) => (
     <View
         style={[
             styles.timeSlot,
-            item.type === "REGULAR_VISIT"
-                ? styles.bookedSlot
-                : item.type === "NOT_VISIT"
-                    ? styles.freeSlot
-                    : item.type === "VIP"
-                        ? styles.vipSlot
-                        : styles.newSlot,
+            item.type === "REGULAR_VISIT" ? styles.bookedSlot : item.type === "STOPPED_VISIT" ? styles.freeSlot : item.type === "VIP" ? styles.vipSlot : styles.newSlot,
         ]}
     >
         <Text style={{ color: COLORS.white }}>
@@ -685,17 +536,19 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
     item,
     toggleConfirmModal,
     toggleRejectedModal,
+    status = false
 }) => {
 
     return (
         <View style={styles.bookingCard}>
-            <View style={styles.cardHeader}>
-                <Text style={styles.newRequestText}>
-                    {" "}
-                    <FontAwesome name="star" size={12} color="#217355" />
-                    Новый Запрос
-                </Text>
-            </View>
+            {status &&
+                <View style={styles.cardHeader}>
+                    <Text style={styles.newRequestText}>
+                        <FontAwesome name="star" size={10} color="#217355" />
+                        {" "}
+                        Новый Запрос
+                    </Text>
+                </View>}
             <View style={{ flexDirection: "row", gap: 10, paddingVertical: 10 }}>
                 <View>
                     <Image
@@ -708,16 +561,19 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
                     />
                 </View>
                 <View>
-                    <Text style={styles.userName}>{item.serviceName}</Text>
-                    <Text style={styles.serviceText}>{item.serviceName}</Text>
+                    <Text style={styles.userName}>{item.fullName}</Text>
+                    <View style={{ backgroundColor: item.clientStatus[0] === 'REGULAR_VISIT' ? '#217355' : '#00A1D3', padding: 5, borderRadius: 5, width: 120 }}>
+                        <Text style={{ fontSize: 10, color: '#fff', textAlign: 'center' }}>{item.clientStatus[0] === 'REGULAR_VISIT' ? 'Постоянный клиент' : 'Новый клиент'}</Text>
+                    </View>
                 </View>
             </View>
             <View
                 style={{
                     borderWidth: 1,
                     borderColor: "#4F4F4F",
-                    width: 150,
-                    padding: 3,
+                    // width: 'auto',
+                    alignSelf: 'flex-start',
+                    padding: 5,
                     borderRadius: 5,
                     justifyContent: "center",
                     alignItems: "center",
@@ -727,7 +583,7 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
                     {item.serviceName}
                 </Text>
             </View>
-            <Text style={styles.timeText}>{item.orderDate}</Text>
+            <Text style={styles.timeText}>{moment(item.orderDate).format('dddd')}: {item.startTime ? item.startTime.slice(0, 5) : item.startTime} - {item.finishTime ? item.finishTime.slice(0, 5) : item.finishTime}</Text>
             <View style={styles.actionButtons}>
                 <TouchableOpacity
                     style={styles.approveButton}
@@ -956,7 +812,7 @@ const styles = StyleSheet.create({
     },
     newRequestText: {
         color: "#217355",
-        fontSize: 12,
+        fontSize: 10,
         fontWeight: "bold",
     },
     profileImage: {
@@ -977,6 +833,7 @@ const styles = StyleSheet.create({
     timeText: {
         fontSize: 14,
         marginTop: 5,
+        fontFamily: 'bold'
     },
     actionButtons: {
         flexDirection: "row",
@@ -984,18 +841,22 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     approveButton: {
-        backgroundColor: COLORS.mainRed,
-        borderRadius: 7,
-        paddingVertical: 15,
-        paddingHorizontal: 30,
+        backgroundColor: '#9C0A35',
+        borderRadius: 10,
+        padding: 10,
+        alignItems: 'center',
+        flex: 1,
+        marginRight: 5,
     },
     rejectButton: {
-        backgroundColor: "transparent",
-        borderRadius: 7,
-        paddingVertical: 15,
-        paddingHorizontal: 30,
+        backgroundColor: 'transparent',
+        borderRadius: 10,
+        padding: 10,
+        alignItems: 'center',
+        flex: 1,
         borderWidth: 1,
-        borderColor: COLORS.mainRed,
+        borderColor: '#9C0A35',
+        marginLeft: 5,
     },
     buttonText: {
         color: COLORS.white,

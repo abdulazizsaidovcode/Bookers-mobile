@@ -35,7 +35,9 @@ export interface DashboardWaitingOrder {
     serviceName: string,
     clientAttachmentId: string,
     orderDate: string,
-    request: string
+    request: string,
+    startTime: string,
+    finishTime: string,
 }
 
 export interface TodayWorkGrafic {
@@ -77,6 +79,8 @@ export interface BookingRequestsProps {
     isConfirmModal: boolean;
     isRejectedModal: boolean;
     setWaitingData: (val: DashboardWaitingOrder[]) => void
+    status: boolean
+
 }
 
 export interface BookingRequestsHallProps {
@@ -86,16 +90,18 @@ export interface BookingRequestsHallProps {
     isConfirmModal: boolean;
     isRejectedModal: boolean;
     setHallData: (val: DashboardHallingOrder[]) => void
+    status: boolean
 }
 
 export interface RenderBookingRequestProps {
     item: DashboardWaitingOrder;
-    toggleConfirmModal: () => void;
-    toggleRejectedModal: () => void;
+    toggleConfirmModal: (id: string) => void;
+    toggleRejectedModal: (id: string) => void;
     setWaitingData: (val: DashboardWaitingOrder[]) => void
     setHallData: (val: DashboardHallingOrder[]) => void
     isRejectedModal: boolean;
     isConfirmModal: boolean;
+    status: boolean
 }
 
 export interface StatusContainerProps {
