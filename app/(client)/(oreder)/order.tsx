@@ -20,8 +20,8 @@ interface IOrderClientProps {
 
 const OrderClient = () => {
   const { selectedCategoryId, selectedClient } = ClientStory()
-  const { FreeTime } = useScheduleFreeTime()
-  const { timeHour } = useSheduleData()
+  const { FreeTime, setFreeTime } = useScheduleFreeTime()
+  const { timeHour, setTime } = useSheduleData()
   const { calendarDate } = graficWorkStore()
   const route = useRoute<any>();
   const { id } = route.params;
@@ -69,6 +69,11 @@ const OrderClient = () => {
   useFocusEffect(useCallback(() => {
     if (state == "success") {
       navigation.navigate('(client)/(oreder)/orderDetail', { id: orderId })
+      setState("")
+      setOrderMessageStatus("")
+      setOrderId("")
+      setFreeTime([])
+      setTime('')
     }
     if (orderMessageStatus) {
       Toast.show(orderMessageStatus, Toast.LONG);
@@ -84,7 +89,7 @@ const OrderClient = () => {
         <Booked />
         {id.requerment !== 'EDIT' ?
 
-          !!FreeTime && !!timeHour && <Buttons onPress={setOrder} title='Продолжить' isDisebled={!!FreeTime && !!timeHour && !!selectedCategoryId} />
+          !!FreeTime && <Buttons onPress={setOrder} title='Продолжить' isDisebled={!!FreeTime && !!timeHour && !!selectedCategoryId} />
           :
           <Buttons onPress={EditOrder} title='Сохранить' isDisebled={!!selectedCategoryId} />
         }

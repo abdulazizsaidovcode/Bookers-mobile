@@ -36,8 +36,10 @@ const Booked: React.FC = () => {
             };
         }, [setFreeTime])
     );
-
+    console.log(calendarDate,selectedClient?.id);
+    
     useFocusEffect(
+        
         useCallback(() => {
             if (calendarDate && selectedClient && selectedClient.id) {
                 setDate(calendarDate);
@@ -91,6 +93,8 @@ const Booked: React.FC = () => {
         }, 1000)
     }, [selectedCategoryId])
 
+    console.log(FreeTime);
+    
     return (
         <>
             <View style={styles.accordionContainer}>
@@ -119,7 +123,7 @@ const Booked: React.FC = () => {
                 </ScrollView>
                 <View>
                     <View style={styles.timeContainer}>
-                        {FreeTime ? (
+                        {!!FreeTime ? (
                             FreeTime.map((time: string, index) => (
                                 <TouchableOpacity
                                     key={`${time}-${index}`} // Ensure uniqueness by combining time and index
