@@ -126,7 +126,7 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   masterGallery: [],
   setMasterGallery: (data: any[]) => set({ masterGallery: data }),
   feedbackForMaster: [],
-  setFeedbackForMaster: (data: []) => set({ feedbackForMaster: [] }),
+  setFeedbackForMaster: (data: []) => set({ feedbackForMaster: data }),
   masterServis: [],
   setmasterServis: (data: any) => set({ masterServis: data }),
   selectedCategoryId: [],

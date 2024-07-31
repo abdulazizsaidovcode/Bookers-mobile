@@ -56,28 +56,31 @@ export const postOrder = async (
     }
 };
 
-export const orderTimeEdit = async ({ data, setOrderId, setLoading }: {
+export const orderTimeEdit = async ({ data, setOrderId, setLoading, setResponse }: {
     data: any,
     setOrderId: (val: string) => void,
     setLoading: (val: boolean) => void
+    setResponse?: (val: boolean) => void
 }) => {
     console.log(data);
-    
     try {
         setLoading(true);
         const config = await getConfig()
-        console.log(config);
-        
         const res = await axios.put(`${order_update}`, data, config ? config : {});
         setLoading(false);
         if (res.data.success) {
-            Toast.show('Successfully update order time', Toast.LONG);
+            Toast.show(res.data.message, Toast.LONG);
             setOrderId(data.orderId);
-        } else Toast.show('An error occurred on the server', Toast.LONG)
+            if (setResponse) setResponse(true)
+        } else {
+            Toast.show(res.data.message, Toast.LONG)
+            if (setResponse) setResponse(false)
+        }
+
     } catch (error: any) {
-        Toast.show('Error: ' + error.message, Toast.LONG);
-        console.log(error);
+        Toast.show(error.response.data.message, Toast.LONG);
         setLoading(false);
+        if (setResponse) setResponse(false)
     }
 };
 
