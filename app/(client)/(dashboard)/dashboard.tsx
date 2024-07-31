@@ -258,8 +258,7 @@ const Dashboard: React.FC = () => {
                       locationIcon={
                         <SimpleLineIcons
                           onPress={() => {
-                            setMapData(item);
-                            navigate.navigate('(client)/(map)/(master-locations)/master-locations');
+                            navigate.navigate('(client)/(map)/(salon-location)/salon-location');
                           }}
                           name="location-pin"
                           size={24}
@@ -378,13 +377,12 @@ const Dashboard: React.FC = () => {
                         zaps={master.nextEntryDate}
                         clients={master.clientCount}
                         onPress={() => {
-                          setMapData(master);
-                          navigate.navigate('(client)/(map)/(master-locations)/master-locations');
+                          navigate.navigate('(client)/(map)/(master-locations)/master-locations', {id :master.id});
                         }}
                       />
                     </View>
-
-                  ))}
+                  )
+                  )}
                 </View>
 
               </>
