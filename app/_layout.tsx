@@ -147,6 +147,8 @@ import InternetNotice from "@/components/InternetNotise/internetNotice";
 import LocationEditData from "./(location)/(location-data)/LocationEditData";
 import OrderClient from "./(client)/(oreder)/order";
 import ClientOrderDetail from "./(client)/(oreder)/orderDetail";
+import ResponseLocationEdit from "./(location)/(response-location)/ResponseLocationEdit";
+import ProfilePage from "./(profile)";
 // import ResponseLocationEdit from "./(location)/(response-location)/responseLocationEdit";
 
 const Stack = createNativeStackNavigator();
@@ -359,6 +361,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(client)/(map)/(master-locations)/master-locations"
               component={MasterLocations}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(location)/(response-location)/ResponseLocationEdit"
+              component={ResponseLocationEdit}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -657,7 +664,7 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             {/*Help start */}
-            
+
             <Stack.Screen
               name="(standart)/(help)/(aboutUs)/aboutUs"
               component={AboutUs}
@@ -747,6 +754,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(profile)/(settings)/settings"
               component={SettingsPage}
+              options={{ title: "Настройки ", headerShown: false }}
+            />
+            <Stack.Screen
+              name="(profile)/index"
+              component={ProfilePage}
               options={{ title: "Настройки ", headerShown: false }}
             />
             <Stack.Screen

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
@@ -12,7 +12,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const MasterLocations = () => {
     const { mapData } = useMapStore();
-    
+
     if (!mapData) {
         return (
             <SafeAreaView style={styles.container}>
@@ -29,7 +29,7 @@ const MasterLocations = () => {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View>
-                    <NavigationMenu name={mapData.salonName ? mapData.salonName: ''} />
+                    <NavigationMenu name={mapData.salonName ? mapData.salonName : ''} />
                 </View>
                 <View>
                     <MapView

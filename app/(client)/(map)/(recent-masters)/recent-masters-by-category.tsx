@@ -36,7 +36,7 @@ const RecentMastersByCategory = () => {
 
     const hadleSumbit = () => {
         try {
-            postClientFilter([categoryId])
+            postClientFilter([categoryId ? categoryId : ''])
             navigation.goBack()
         } catch (error) {
             console.log(error);
