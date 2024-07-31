@@ -5,6 +5,7 @@ import { getMasterOrderWait, masterOrderConfirm } from '@/helpers/api-function/o
 import tw from 'tailwind-react-native-classnames';
 import { useFocusEffect } from 'expo-router';
 import { masterOrderHWaitStore } from '@/helpers/state_managment/order/order';
+import { FontAwesome } from '@expo/vector-icons';
 interface RequestCardProps {
   item: RequestCardobjProps;
   onApprove: () => void;
@@ -58,7 +59,13 @@ const RequestCard: React.FC<RequestCardProps> = ({ item, onApprove, onReject }) 
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
-        {item.orderStatus == 'WAIT' && <Text style={[tw`px-2 py-0.5 text-xs  text-green-800 rounded-md mb-2`, { alignSelf: 'flex-start', fontSize: 10, borderColor: '#217355', borderWidth: 1 }]}>{item.clientStatus[0]}</Text>}
+        {
+          item.orderStatus == 'WAIT' &&
+          <View style={[tw`px-2 py-0.5 text-xs flex-row justify-center items-center  text-green-800 rounded-md mb-2`, { alignSelf: 'flex-start', fontSize: 10, borderColor: '#217355', borderWidth: 1 }]}>
+            <FontAwesome name="star" size={10} color="#217355" />
+            <Text style={[tw`px-2 py-0.5 text-xs  text-green-800 `, { alignSelf: 'flex-start', fontSize: 10 }]}>{item.clientStatus[0]}</Text>
+          </View>
+        }
         <View style={[tw`flex-row mb-3`]}>
           <Image source={item.clientAttachmentId ? { uri: getFile + item.clientAttachmentId } : require('@/assets/avatar.png')} style={styles.avatar} />
           <View>
