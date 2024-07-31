@@ -12,6 +12,7 @@ import { serviceMaster } from '@/helpers/api';
 import tw from 'tailwind-react-native-classnames';
 import Buttons from '@/components/(buttons)/button';
 import { FontAwesome } from '@expo/vector-icons';
+import { Loading } from '@/components/loading/loading';
 const { width } = Dimensions.get('window');
 
 const Booked: React.FC = () => {
@@ -19,13 +20,13 @@ const Booked: React.FC = () => {
     const [activeTime, setActiveTime] = useState('');
     const { FreeTime, setFreeTime } = useScheduleFreeTime();
     const { calendarDate } = graficWorkStore();
-    const { status, setStatus } = useOrderPosdData();
-    const navigation = useNavigation<any>();
+    const { setStatus } = useOrderPosdData();
     const [activeBtn, setActiveBtn] = useState<boolean>(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { setTime, setServiceId, setDate } = useSheduleData();
     const { selectedClient, masterServis, setSelectedCategoryId, selectedCategoryId } = ClientStory();
     const route = useRoute<any>();
+    const [loading, setLoading] = useState<boolean>(false);
     const { id } = route.params;
 
     useFocusEffect(
@@ -36,18 +37,19 @@ const Booked: React.FC = () => {
             };
         }, [setFreeTime])
     );
-    console.log(id, id.masterId,'edf');
 
     useFocusEffect(
-
         useCallback(() => {
             if (id.masterId) {
+                setLoading(true)
                 setDate(calendarDate);
-                getFreeTime(calendarDate, setFreeTime, id.masterId);
+                getFreeTime(calendarDate, setFreeTime, id.masterId, setLoading);
+
             } else {
                 if (calendarDate && selectedClient && selectedClient.id) {
+                    setLoading(true)
                     setDate(calendarDate);
-                    getFreeTime(calendarDate, setFreeTime, selectedClient.id);
+                    getFreeTime(calendarDate, setFreeTime, selectedClient.id,setLoading);
                 }
             }
 
@@ -127,32 +129,34 @@ const Booked: React.FC = () => {
                 </ScrollView>
                 <View>
                     <View style={styles.timeContainer}>
-                        {!!FreeTime ? (
-                            FreeTime.map((time: string, index) => (
-                                <TouchableOpacity
-                                    key={`${time}-${index}`} // Ensure uniqueness by combining time and index
-                                    style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
-                                    onPress={() => handleTimeSelect(time)}
-                                >
-                                    <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
-                                        {time.slice(0, 5)}
-                                    </Text>
-                                </TouchableOpacity>
-                            ))
-                        ) : (
-                            <View style={[tw`px-5`]}>
-                                <View style={[tw`px-8`]}>
-                                    <Text style={styles.placeholderText}>К сожалению в указанную дату у мастера нет свободного времени.</Text>
-                                    <Text style={styles.placeholderTextHall}>Но Вы можете оставить заявку в зал ожидания</Text>
+                        {loading ? <Loading /> : (
+                            FreeTime ? (
+                                FreeTime.map((time: string, index) => (
+                                    <TouchableOpacity
+                                        key={`${time}-${index}`} // Ensure uniqueness by combining time and index
+                                        style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
+                                        onPress={() => handleTimeSelect(time)}
+                                    >
+                                        <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
+                                            {time.slice(0, 5)}
+                                        </Text>
+                                    </TouchableOpacity>
+                                ))
+                            ) : (
+                                <View style={[tw`px-5`]}>
+                                    <View style={[tw`px-8`]}>
+                                        <Text style={styles.placeholderText}>К сожалению в указанную дату у мастера нет свободного времени.</Text>
+                                        <Text style={styles.placeholderTextHall}>Но Вы можете оставить заявку в зал ожидания</Text>
 
-                                    <View style={[tw`flex-row items-center mt-2 mb-5 px-6`, { gap: 10 }]}>
-                                        <FontAwesome style={[tw` `, { fontSize: 40, color: '#828282' }]} name='calendar' />
-                                        <Text style={[tw`text-white`, { color: '#828282' }]}>Если время Вашего мастера освободиться, то Ваш зарос может быть принят на этот день!</Text>
+                                        <View style={[tw`flex-row items-center mt-2 mb-5 px-6`, { gap: 10 }]}>
+                                            <FontAwesome style={[tw` `, { fontSize: 40, color: '#828282' }]} name='calendar' />
+                                            <Text style={[tw`text-white`, { color: '#828282' }]}>Если время Вашего мастера освободиться, то Ваш зарос может быть принят на этот день!</Text>
+                                        </View>
                                     </View>
+                                    <Buttons title='Оставить заявку' />
                                 </View>
-                                <Buttons title='Оставить заявку' />
-                            </View>
-                        )}
+                            ))
+                        }
                     </View>
                 </View>
             </View>
