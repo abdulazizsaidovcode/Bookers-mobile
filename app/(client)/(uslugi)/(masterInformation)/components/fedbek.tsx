@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from "react-native";
 import tw from "tailwind-react-native-classnames";
 import {AntDesign} from "@expo/vector-icons";
@@ -6,6 +6,8 @@ import ReviewCard from "@/components/(cliendCard)/riewCard";
 import axios from "axios";
 import {getConfig} from "@/app/(tabs)/(master)/main";
 import {client_feedback} from "@/helpers/api";
+import {useFocusEffect} from "expo-router";
+import clientStore from "@/helpers/state_managment/client/clientStore";
 
 export interface FeedBack {
     overallRating: number
@@ -67,16 +69,34 @@ export const getFeedbackClientList = async (setData: (val: FeedBack | null) => v
     }
 }
 
-const BreakdownItem = ({label, percentage}: { label: string, percentage: number }) => (
-    <View style={styles.breakdownItem}>
-        <Text style={styles.breakdownLabel}>{label}</Text>
-        <View style={styles.bar}>
-            <View style={[styles.filledBar, {width: `${percentage}%`}]}/>
+const BreakdownItem = ({ label, percentage }: { label: string, percentage: number }) => {
+    return (
+        <View style={styles.breakdownItem}>
+            <Text style={styles.breakdownLabel}>{label}</Text>
+            <View style={styles.bar}>
+                <View style={[styles.filledBar, { width: `${percentage}%` }]} />
+            </View>
         </View>
-    </View>
-);
+    );
+};
 
 const ClientFeedback = () => {
+    const {isLoading, setIsLoading} = clientStore()
+    const [feedback, setFeedback] = useState<FeedBack | null>(null)
+    const [page, setPage] = useState(0)
+    const maxStars = 5;
+    const fullStars = Math.floor(feedback ? feedback.overallRating : 0);
+    const halfStar = feedback ? feedback.overallRating : 0 - fullStars >= 0.5;
+    const emptyStars = maxStars - fullStars - (halfStar ? 1 : 0);
+
+    useFocusEffect(useCallback(() => {
+        getFeedbackClientList(setFeedback, 'accec2c2-a471-4da8-ad26-812b83d2b103', page, setIsLoading)
+    }, []))
+
+    useFocusEffect(useCallback(() => {
+        getFeedbackClientList(setFeedback, 'accec2c2-a471-4da8-ad26-812b83d2b103', page, setIsLoading)
+    }, [page]))
+
     return (
         <View style={tw`flex-1`}>
             <ScrollView
@@ -89,21 +109,24 @@ const ClientFeedback = () => {
                         <AntDesign name="star" color="#9C0A35" size={24}/>
                     </View>
                 </View>
-                <Text style={styles.rating}>3.9</Text>
+                <Text style={styles.rating}>{feedback ? feedback.overallRating : 0}</Text>
                 <View style={styles.stars}>
-                    {[...Array(4)].map((_, index) => (
+                    {[...Array(fullStars)].map((_, index) => (
                         <AntDesign name="star" color="white" size={36} key={index}/>
                     ))}
-                    <AntDesign name="staro" color="white" size={36}/>
+                    {halfStar && <AntDesign name="staro" color="white" size={36}/>}
+                    {[...Array(emptyStars)].map((_, index) => (
+                        <AntDesign name="staro" color="white" size={36} key={fullStars + index}/>
+                    ))}
                 </View>
-                <Text style={styles.reviewCount}>На основе 20 отзывов</Text>
+                <Text style={styles.reviewCount}>На основе {feedback?.reviewCount} отзывов</Text>
 
                 <View style={styles.reviewBreakdown}>
-                    <BreakdownItem label="Отлично" percentage={100}/>
-                    <BreakdownItem label="Хорошо" percentage={80}/>
-                    <BreakdownItem label="Средне" percentage={60}/>
-                    <BreakdownItem label="Плохо" percentage={40}/>
-                    <BreakdownItem label="Очень плохо" percentage={20}/>
+                    <BreakdownItem label="Отлично" percentage={feedback ? feedback.great : 0}/>
+                    <BreakdownItem label="Хорошо" percentage={feedback ? feedback.fine : 0}/>
+                    <BreakdownItem label="Средне" percentage={feedback ? feedback.average : 0}/>
+                    <BreakdownItem label="Плохо" percentage={feedback ? feedback.badly : 0}/>
+                    <BreakdownItem label="Очень плохо" percentage={feedback ? feedback.veryBadly : 0}/>
                 </View>
 
                 {/*<ReviewCard/>*/}
