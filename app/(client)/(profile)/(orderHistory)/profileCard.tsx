@@ -7,6 +7,7 @@ import { getFile } from '@/helpers/api';
 import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
 import { addFebbakFunction, deletePastComingFunction, getOrderClientPustComing } from '@/helpers/api-function/oreder/orderHistory';
 import { addfedbackmaster } from '@/type/client/editClient';
+import tw from 'tailwind-react-native-classnames';
 
 interface IProps {
     masterName: string;
@@ -44,12 +45,12 @@ const ProfileCard: React.FC<IProps> = ({
     const { activeTab, setActiveTab, pastComing, setPastComing } = useAccardionStoreId();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [ratingModal, setRatingModal] = useState<boolean>(false);
-    const [selectOrderID, setSelectOrderID] = useState<string | null|undefined>(null);
+    const [selectOrderID, setSelectOrderID] = useState<string | null | undefined>(null);
     const [textAreaValue, setTextAreaValue] = useState<string>('');
     const [rating, setRating] = useState<number>(0);
 
     const handleRating = (value: number) => setRating(value);
-    
+
     const datas: addfedbackmaster = {
         count: rating,
         orderId: selectOrderID,
@@ -59,7 +60,7 @@ const ProfileCard: React.FC<IProps> = ({
     const deleteToggleModal = () => {
         setDeleteModal(!deleteModal);
     };
-    
+
     const ratingToggleModal = () => {
         setRatingModal(!ratingModal);
     };
@@ -90,12 +91,8 @@ const ProfileCard: React.FC<IProps> = ({
             <View style={styles.profileContainer}>
                 <View style={styles.profileRow}>
                     <Image
-                        source={{
-                            uri: imageURL
-                                ? getFile + imageURL
-                                : 'https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg'
-                        }}
-                        style={styles.profileImage}
+                        source={imageURL ? { uri: getFile + imageURL } : require('../../../../assets/avatar.png')}
+                        style={tw`w-16 h-16 rounded-full mr-3`}
                     />
                     <View>
                         <View style={styles.profileDetails}>
@@ -174,7 +171,7 @@ const ProfileCard: React.FC<IProps> = ({
                     }
                 }}
             >
-                <> 
+                <>
                     <AntDesign name="delete" size={56} color="#9C0A35" />
                     <Text style={styles.deleteText}>Удалить прошедшую запись?</Text>
                 </>
