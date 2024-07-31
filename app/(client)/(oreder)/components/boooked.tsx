@@ -36,15 +36,21 @@ const Booked: React.FC = () => {
             };
         }, [setFreeTime])
     );
-    console.log(calendarDate,selectedClient?.id);
-    
+    console.log(id, id.masterId,'edf');
+
     useFocusEffect(
-        
+
         useCallback(() => {
-            if (calendarDate && selectedClient && selectedClient.id) {
+            if (id.masterId) {
                 setDate(calendarDate);
-                getFreeTime(calendarDate, setFreeTime, selectedClient.id);
+                getFreeTime(calendarDate, setFreeTime, id.masterId);
+            } else {
+                if (calendarDate && selectedClient && selectedClient.id) {
+                    setDate(calendarDate);
+                    getFreeTime(calendarDate, setFreeTime, selectedClient.id);
+                }
             }
+
         }, [calendarDate, setFreeTime])
     );
 

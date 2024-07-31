@@ -25,7 +25,7 @@ const MasterLocations = () => {
     )
     const categoryNames = mapData.categoryNames ? mapData.categoryNames.join(', ') : '';
 
-    if (!mapData) {
+    if (!mapData && !id) {
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView>
