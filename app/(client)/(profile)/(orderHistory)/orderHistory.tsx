@@ -98,7 +98,7 @@ const OrderHistory = () => {
           />
         </View>
         {activeTab === 'upcoming' && (
-          <ScrollView>
+          <ScrollView style={{marginBottom:160}}>
             {upcoming.length !== 0 ? (
               upcoming.map((upcoming: any, index: number) => (
                 <AccardionHistory id={upcoming.serviceIds} key={index} title={upcoming.serviceName} date={upcoming.orderDate} >

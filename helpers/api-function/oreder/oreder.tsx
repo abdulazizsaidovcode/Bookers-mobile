@@ -130,7 +130,7 @@ export const getMasterOrderWait = async (setWaitData: any) => {
     try {
         const config = await getConfig()
         const response = await axios.get(`${master_order_wait}`, config ? config : {});
-        
+
         if (response.data.success) setWaitData(response.data.body)
         else setWaitData([])
     } catch (error) {
@@ -155,17 +155,20 @@ export const getMasterOrderHall = async (setHallData: any) => {
 
 // master orderni confirm reject qilish
 // status == CONFIRMED, REJECTED, COMPLETED
-export const masterOrderConfirm = async (orderID: string, setLoading: any, status: string) => {
+export const masterOrderConfirm = async (orderID: string, setLoading: any, status: string, resPonse: (val: boolean) => void) => {
 
-    try {        
+    try {
         setLoading(true);
         const config = await getConfig()
         const response = await axios.put(`${master_order_confirm}?orderId=${orderID}&status=${status}`, {}, config ? config : {});
+        if (response.data.success) resPonse(true)
+        else resPonse(false)
         setLoading(false);
         if (response.data.success) console.log("Order set successfully", response.data)
     } catch (error) {
         setLoading(false);
-        console.error(error,'wedc');
+        resPonse(false)
+        console.error(error, 'wedc');
     }
 };
 

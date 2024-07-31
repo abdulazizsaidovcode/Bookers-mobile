@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { selectedExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
-import { postExpence } from '@/helpers/api-function/expence/expence';
+import { masterExpense, selectedExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
+import { getExpence, postExpence } from '@/helpers/api-function/expence/expence';
 import CalendarComponent from '@/components/calendar/calendar';
 import financeStore from '@/helpers/state_managment/finance/financeStore';
 import Buttons from '@/components/(buttons)/button';
@@ -15,9 +15,8 @@ const CreateExpense: React.FC = () => {
     const [description, setDescription] = useState('');
     const [response, setResponse] = useState(null);
     const navigation = useNavigation<any>();
-
     const [loading, setLoading] = useState(false);
-
+    const {setExpense} = masterExpense()
     const { expenseId } = selectedExpenseCategory();
     const { date } = financeStore();
 
@@ -48,7 +47,7 @@ const CreateExpense: React.FC = () => {
 
         if (amount.trim() && description.trim() && date) {
             setLoading(true);
-            postExpence(expenseData, setResponse);
+            postExpence(expenseData, setResponse, () => getExpence(expenseId, setExpense));
         } else {
             console.log(expenseData);
 

@@ -12,12 +12,10 @@ const ExpenseDetail: React.FC = () => {
     const navigation = useNavigation<any>();
     const { expense, setExpense } = masterExpense()
 
-    useEffect(() => {
-        console.log(expense);
-    }, [expense])
 
     useFocusEffect(
         useCallback(() => {
+        console.log(expense);
             const fetchData = async () => {
                 try {
                     setExpenses(expense)
@@ -27,6 +25,7 @@ const ExpenseDetail: React.FC = () => {
             };
 
             fetchData();
+            return;
         }, [setExpense, expense])
     );
 

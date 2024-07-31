@@ -33,13 +33,13 @@ export const getExpence = async (categoryid: string, setExpence: any) => {
     }
 };
 
-export const postExpence = async (data: any, setResponse: any) => {
+export const postExpence = async (data: any, setResponse: any, getExpense: () => void) => {
     try {
         if (data) {
             const config = await getConfig();
             const res = await axios.post(expene_list, data, config ? config : {});
             setResponse(res.data.success);
-            console.log(res.data);
+            getExpense()
         }
     } catch (error) {
         console.log(error);

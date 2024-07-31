@@ -66,7 +66,7 @@ const useProfileStore = create<ProfileState>((set) => ({
   regionIdData: [],
   setRegionIdData: (data: any) => set({regionIdData: data}),
   ageIdData: [],
-  setAgeIdData: (data: any) => set({regionIdData: data}),
+  setAgeIdData: (data: any) => set({ageIdData: data}),
   distiricyIdData: [],
   setDistirictIdData: (data: any) => set({distiricyIdData: data}),
   clientNotificationData: [],
