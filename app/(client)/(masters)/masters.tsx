@@ -191,7 +191,7 @@ const Masters = () => {
               onPress={() => {
                 setMapData(item);
                 navigation.navigate(
-                  "(client)/(master-locations)/master-locations"
+                  "(client)/(map)/(master-locations)/master-locations"
                 );
               }}
               activeOpacity={0.8}
@@ -260,11 +260,7 @@ const Masters = () => {
           <Text style={tw`text-white text-lg font-medium ml-2`}>Фильтр</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          // onPress={() =>
-          //   navigation.navigate(
-          //     "(client)/(map)/(recent-masters)/recent-masters"
-          //   )
-          // }
+          onPress={() =>navigation.navigate("(client)/(map)/(recent-masters)/recent-masters")}
           style={[
             tw`rounded-lg px-4 py-2 border justify-center items-center border flex-row`,
             { borderColor: "#fff" },

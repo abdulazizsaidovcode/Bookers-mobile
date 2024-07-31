@@ -1,11 +1,8 @@
 import React, { useCallback } from 'react';
-import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import useGetMeeStore from '@/helpers/state_managment/getMee';
-import { useFocusEffect } from 'expo-router';
-import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import { mapCustomStyle } from '@/type/map/map';
 import { useMapStore } from '@/helpers/state_managment/map/map';
@@ -15,10 +12,7 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const MasterLocations = () => {
     const { mapData } = useMapStore();
-
-    console.log(mapData);
-
-
+    
     if (!mapData) {
         return (
             <SafeAreaView style={styles.container}>
@@ -35,7 +29,7 @@ const MasterLocations = () => {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View>
-                    <NavigationMenu name='Beauty Wave' />
+                    <NavigationMenu name={mapData.salonName ? mapData.salonName: ''} />
                 </View>
                 <View>
                     <MapView
