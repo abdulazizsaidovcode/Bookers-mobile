@@ -18,19 +18,10 @@ const PastHistory = () => {
     const route = useRoute<any>();
     const {clientID} = route.params;
     const {pastData, setPastData, refreshing, setRefreshing} = clientStore()
-    const [serviceName, setServiceName] = useState(null);
 
     useEffect(() => {
         getPastClient(setPastData, clientID)
     }, []);
-
-    useEffect(() => {
-        let list;
-        pastData && pastData.map(item => {
-            list = item.serviceName.split(', ')
-        })
-        setServiceName(list ? list : null)
-    }, [pastData]);
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);
@@ -53,7 +44,7 @@ const PastHistory = () => {
                                 <AppointmentCard
                                     userID={clientID}
                                     data={item}
-                                    serviceName={serviceName ? serviceName : ['']}
+                                    serviceName={item.serviceName.trim().split(', ')}
                                     isBtn={item.orderStatus === 'WAIT'}
                                     clicks={() => {
                                         navigation.navigate('(free)/(client)/details/history/history-details', {historyData: item})

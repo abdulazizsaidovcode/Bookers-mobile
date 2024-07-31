@@ -3,13 +3,8 @@ import axios from "axios";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 
 export async function getFreeTime(date: string | null, setData: (val: any) => void, masterID?: string) {
+    
     const config = await getConfig()
-    console.log(config);
-    console.log(date);
-    console.log(masterID);
-    
-
-    
     await axios.get(`${free_time_list}?date=${date}&masterId=${masterID}`, config ? config : {})
         .then((res) => {
             setData(res.data.body);

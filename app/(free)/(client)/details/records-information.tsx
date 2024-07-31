@@ -54,20 +54,11 @@ const RecordsInformation = () => {
     const [rating, setRating] = useState(0);
     const [isConfirm, setIsConfirm] = useState(false);
     const [successStatus, setSuccessStatus] = useState('');
-    const [serviceName, setServiceName] = useState<any>([]);
 
     useEffect(() => {
         if (orderID) orderGetOne(orderID, setOrderOneData)
         getMee(setGetMee)
     }, []);
-
-    useEffect(() => {
-        let list;
-        orderOneData && orderOneData.serviceName.map((item: any) => {
-            list = item.serviceName.split(', ')
-        })
-        setServiceName(list ? list : null)
-    }, [orderOneData]);
 
     useEffect(() => {
         if (successStatus === 'ACCEPTED') {
@@ -96,7 +87,6 @@ const RecordsInformation = () => {
         else if (statusN === 'WAIT') return 'Ждать'
     }
 
-    console.log(orderOneData, 'order one')
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -136,13 +126,19 @@ const RecordsInformation = () => {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={.9} style={[styles.button, {gap: 10 }, tw`flex-row items-center`]}>
-                            {serviceName.length > 0 && (
-                                serviceName.map((item: any) => (
-                                    <Text style={[styles.text]}>{item}</Text>
-                                ))
-                            )}
-
+                        <TouchableOpacity
+                            activeOpacity={.9}
+                            style={[styles.button]}
+                        >
+                            <ScrollView
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={{gap: 10}}
+                                horizontal
+                            >
+                                {orderOneData ? orderOneData.serviceName.trim().split(', ').map((item: string, idx: number) => (
+                                    <Text style={[styles.text]} key={idx}>{item}</Text>
+                                )) : ''}
+                            </ScrollView>
                         </TouchableOpacity>
                         <View style={tw`mt-3`}>
                             <HistoryCard

@@ -18,19 +18,10 @@ const CanceledHistory = () => {
     const route = useRoute<any>();
     const {clientID} = route.params;
     const {canceledData, setCanceledData, refreshing, setRefreshing} = clientStore()
-    const [serviceName, setServiceName] = useState(null);
 
     useEffect(() => {
         getCanceledClient(setCanceledData, clientID)
     }, []);
-
-    useEffect(() => {
-        let list;
-        canceledData && canceledData.map(item => {
-            list = item.serviceName.split(', ')
-        })
-        setServiceName(list ? list : null)
-    }, [canceledData]);
 
     const onRefresh = useCallback(() => {
         handleRefresh(setRefreshing);
@@ -53,7 +44,7 @@ const CanceledHistory = () => {
                                 <AppointmentCard
                                     userID={clientID}
                                     data={item}
-                                    serviceName={serviceName ? serviceName : ['']}
+                                    serviceName={item.serviceName.trim().split(', ')}
                                     isBtn={item.orderStatus === 'WAIT'}
                                     clicks={() => {
                                         navigation.navigate('(free)/(client)/details/history/history-details', {historyData: item})

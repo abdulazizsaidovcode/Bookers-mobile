@@ -34,7 +34,16 @@ const HistoryDetailsInformation = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<any>();
     const {historyData} = route.params;
-    const {isLoading, setIsLoading, setUpcomingData, setPastData, setCanceledData, setHistoryCountData, refreshing, setRefreshing} = clientStore()
+    const {
+        isLoading,
+        setIsLoading,
+        setUpcomingData,
+        setPastData,
+        setCanceledData,
+        setHistoryCountData,
+        refreshing,
+        setRefreshing
+    } = clientStore()
     const {setGetMee} = useGetMeeStore()
     const [serviceName, setServiceName] = useState([]);
     const [confirmStatus, setConfirmStatus] = useState('');
@@ -60,8 +69,8 @@ const HistoryDetailsInformation = () => {
 
     useEffect(() => {
         let list;
-        if (historyData) list = historyData.serviceName.split(', ')
-        setServiceName(list ? list : null)
+        if (historyData) list = historyData.serviceName.trim().split(', ')
+        setServiceName(list ? list : [])
     }, [historyData]);
 
     useEffect(() => {
@@ -130,12 +139,16 @@ const HistoryDetailsInformation = () => {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <View style={[styles.button, {gap: 10 }, tw`flex-row items-center`]}>
-                            {serviceName.length > 0 ? serviceName.map((item, idx) => (
-                                <Text style={[styles.text]} key={idx}>
-                                    {item}
-                                </Text>
-                            )) : ''}
+                        <View style={[styles.button]}>
+                            <ScrollView
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={{gap: 10}}
+                                horizontal
+                            >
+                                {serviceName.length > 0 ? serviceName.map((item, idx) => (
+                                    <Text style={[styles.text]} key={idx}>{item}</Text>
+                                )) : ''}
+                            </ScrollView>
                         </View>
                         <View style={tw`mt-3`}>
                             <HistoryCard
@@ -202,14 +215,19 @@ const HistoryDetailsInformation = () => {
                             )}
                         </View>
 
-                        <ContactInformation />
+                        <ContactInformation/>
                         {historyData.orderStatus !== 'WAIT' && (
                             <Text style={styles.contactTitle}>Дополнительно</Text>
                         )}
                         {(historyData.orderStatus === 'CLIENT_CONFIRMED' || historyData.orderStatus === 'MASTER_CONFIRMED') && (
                             <>
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate('(free)/(client)/details/records', {record: {updateOrder: 'updateOrder', orderOneData: historyData}})}
+                                    onPress={() => navigation.navigate('(free)/(client)/details/records', {
+                                        record: {
+                                            updateOrder: 'updateOrder',
+                                            orderOneData: historyData
+                                        }
+                                    })}
                                     activeOpacity={.9}
                                     style={[styles.button, tw`mb-4 items-center flex-row`]}
                                 >
@@ -255,7 +273,8 @@ const HistoryDetailsInformation = () => {
                                 <Text style={styles.message}>Оцените клиента!</Text>
                                 <View style={styles.stars}>
                                     {Array(5).fill(0).map((_, index) => (
-                                        <TouchableOpacity activeOpacity={.7} key={index} onPress={() => handleRating(index + 1)}>
+                                        <TouchableOpacity activeOpacity={.7} key={index}
+                                                          onPress={() => handleRating(index + 1)}>
                                             <AntDesign
                                                 name={index < rating ? "star" : "staro"}
                                                 size={30}
