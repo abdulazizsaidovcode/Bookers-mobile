@@ -156,7 +156,8 @@ export const getMasterOrderHall = async (setHallData: any) => {
 // master orderni confirm reject qilish
 // status == CONFIRMED, REJECTED, COMPLETED
 export const masterOrderConfirm = async (orderID: string, setLoading: any, status: string) => {
-    try {
+
+    try {        
         setLoading(true);
         const config = await getConfig()
         const response = await axios.put(`${master_order_confirm}?orderId=${orderID}&status=${status}`, {}, config ? config : {});
@@ -164,7 +165,7 @@ export const masterOrderConfirm = async (orderID: string, setLoading: any, statu
         if (response.data.success) console.log("Order set successfully", response.data)
     } catch (error) {
         setLoading(false);
-        console.error(error);
+        console.error(error,'wedc');
     }
 };
 
