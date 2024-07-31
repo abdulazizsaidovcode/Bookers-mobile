@@ -8,12 +8,14 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 
 const UserInfo: React.FC = () => {
     const { firstName, setFirstName, lastName, setLastName, firstNameError, setFirstNameError, lastNameError, setLastNameError } = registerStory();
-    const { t } = useTranslation()
+    const { t } = useTranslation();
     const navigate = useNavigation<any>();
+
     const validateName = (name: string): boolean => {
-        const nameRegEx = /^[a-zA-Zа-яА-ЯёЁ]{2,30}$/;
+        const nameRegEx = /^[a-zA-Zа-яА-ЯёЁ\s]{2,30}$/;
         return nameRegEx.test(name);
     };
+
     const [pending, setPending] = React.useState(false);
 
     const handleFirstNameChange = (name: string): void => {
@@ -69,7 +71,7 @@ const UserInfo: React.FC = () => {
                         isDisebled={!!isButtonEnabled}
                         onPress={() => {
                             setPending(true);
-                            navigate.navigate('(auth)/(register)/(masterInformation)/getNickName')
+                            navigate.navigate('(auth)/(register)/(masterInformation)/getNickName');
                             setPending(false);
                         }}
                     /> :
