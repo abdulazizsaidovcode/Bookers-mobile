@@ -24,7 +24,7 @@ import { handleRefresh } from "@/constants/refresh";
 import isRegister from "@/helpers/state_managment/isRegister/isRegister";
 import InstallPin from "@/app/(auth)/(setPinCode)/installPin";
 import { getTariffMaster } from "@/app/(profile)/(tariff)/tariff";
-import { setMasterTariff } from "@/constants/storage";
+import { getMasterTariff, setMasterTariff } from "@/constants/storage";
 import { Loading } from "@/components/loading/loading";
 import moment from "moment";
 
@@ -93,6 +93,7 @@ const TabOneScreen: React.FC = () => {
     const [backPressCount, setBackPressCount] = useState(0);
     const [pending, setPending] = useState(true);
     const [orderId, setOrderId] = useState('');
+    const [tariff, setTariff] = useState(null)
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
@@ -117,6 +118,7 @@ const TabOneScreen: React.FC = () => {
             getData();
             getNumbers(setNumber);
             getTariffMaster(setTariffMaster)
+            getMasterTariff(setTariff)
 
             if (number && number.length > 0) {
                 const res = removeDuplicatesAndSort(number);
@@ -268,15 +270,16 @@ const TabOneScreen: React.FC = () => {
                     isConfirmModal={isConfirmModal}
                     status={true}
                 />
-                <BookingRequestsHall
-                    setHallData={setHallData}
-                    hallData={hallData}
-                    toggleConfirmModal={toggleConfirmModal}
-                    toggleRejectedModal={toggleRejectModal}
-                    isRejectedModal={isRejectedModal}
-                    isConfirmModal={isConfirmModal}
-                    status={false}
-                />
+                {tariff === 'STANDARD' &&
+                    <BookingRequestsHall
+                        setHallData={setHallData}
+                        hallData={hallData}
+                        toggleConfirmModal={toggleConfirmModal}
+                        toggleRejectedModal={toggleRejectModal}
+                        isRejectedModal={isRejectedModal}
+                        isConfirmModal={isConfirmModal}
+                        status={false}
+                    />}
                 <CenteredModal
                     isModal={isConfirmModal ? isConfirmModal : isRejectedModal}
                     toggleModal={isConfirmModal ? toggleConfirmModal : toggleRejectModal}
