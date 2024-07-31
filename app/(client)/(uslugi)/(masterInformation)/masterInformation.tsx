@@ -209,7 +209,7 @@ const MasterInformation = () => {
             <Buttons
               isDisebled={masterServis.length > 0}
               onPress={() => {
-                navigate.navigate('(client)/(oreder)/order');
+                navigate.navigate('(client)/(oreder)/order', {id: {}});
               }} title='Продолжить' />
           </View>
         </ScrollView>

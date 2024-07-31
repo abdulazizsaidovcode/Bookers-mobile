@@ -61,6 +61,8 @@ export const orderTimeEdit = async ({ data, setOrderId, setLoading }: {
     setOrderId: (val: string) => void,
     setLoading: (val: boolean) => void
 }) => {
+    console.log(data);
+    
     try {
         setLoading(true);
         const config = await getConfig()

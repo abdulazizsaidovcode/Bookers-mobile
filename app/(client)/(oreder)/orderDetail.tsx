@@ -36,6 +36,7 @@ export interface OrderOne {
     orderPrice: string,
     address: string,
     phoneNumber: string,
+    orderStatus: string
     lng: string,
     lat: string,
     orderCount: number,
@@ -51,7 +52,7 @@ export interface OrderOne {
 }
 
 const ClientOrderDetail = () => {
-    const navigation = useNavigation<SettingsScreenNavigationProp>();
+    const navigation = useNavigation<any>();
     const route = useRoute<any>();
     const { id } = route.params;
     const { isLoading, setIsLoading, refreshing, setRefreshing } = clientStore()
@@ -83,27 +84,6 @@ const ClientOrderDetail = () => {
         console.log(orderOneData);
     }, 1000)
 
-    let obg = {
-        "address": "Qashqadaryo 1, Qarshi, Wss, ßs",
-        "clientCount": 3, "feedbackCount": 0,
-        "firstName": "Pumpa", "instagram": null,
-        "lastName": "Polvon",
-        "lat": 38.846120694492946,
-        "lng": 65.79828898433686,
-        "orderCount": 0,
-        "orderDate": "2024-07-30",
-        "orderId": "0d0fb8bb-1c54-4978-9742-8c9db72ff9f7",
-        "orderPrice": 764646,
-        "orderStatus": "WAIT",
-        "phoneNumber": "+998919595599",
-        "salonName": "Salon 2",
-        "serviceIds": ["da5eb427-cb65-412f-9027-23d278c0e3fd", "4fe805ba-8074-4b1a-be1c-0e446a3e9357"],
-        "serviceName": "Znznzn, Nimadirda, ",
-        "specializations": [],
-        "telegram": null,
-        "time": "18:0 - 12:57",
-        "userAttachmentId": null
-    }
 
     useFocusEffect(useCallback(() => {
         if (toast) setRating(0)
@@ -245,14 +225,15 @@ const ClientOrderDetail = () => {
                         </View>
 
                         <ContactInformationClient data={orderOneData} />
+
                         {(orderOneData && (orderOneData.orderStatus === 'CLIENT_CONFIRMED' || orderOneData.orderStatus === 'MASTER_CONFIRMED')) && (
                             <>
                                 <Text style={styles.contactTitle}>Дополнительно</Text>
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate('(free)/(client)/details/records', {
-                                        record: {
-                                            updateOrder: 'updateOrder',
-                                            orderOneData
+                                    onPress={() => navigation.navigate('(client)/(oreder)/order', {
+                                        id: {
+                                            requerment: 'EDIT',
+                                            orderId: orderOneData.orderId,
                                         }
                                     })}
                                     activeOpacity={.9}
@@ -275,37 +256,6 @@ const ClientOrderDetail = () => {
                                 </TouchableOpacity>
                             </>
                         )}
-
-                        {/*fade back modal*/}
-                        <CenteredModal
-                            oneBtn
-                            isFullBtn
-                            isModal={isModal}
-                            btnWhiteText={``}
-                            btnRedText={`Закрыть`}
-                            onConfirm={() => {
-                                addFeedbackMaster(rating, setToast)
-                                toggleModal()
-                            }}
-                            toggleModal={() => console.log('toggle')}
-                        >
-                            <View style={styles.modalContainer}>
-                                <Feather name="check-circle" size={70} color="#9C0A35" />
-                                <Text style={styles.message}>Клиент записан на процедуру</Text>
-                                <View style={styles.stars}>
-                                    {Array(5).fill(0).map((_, index) => (
-                                        <TouchableOpacity activeOpacity={.7} key={index} onPress={() => handleRating(index + 1)}>
-                                            <AntDesign
-                                                name={index < rating ? "star" : "staro"}
-                                                size={30}
-                                                color="#B00000"
-                                                style={styles.star}
-                                            />
-                                        </TouchableOpacity>
-                                    ))}
-                                </View>
-                            </View>
-                        </CenteredModal>
 
                         {/*canceled order status*/}
                         <CenteredModal
