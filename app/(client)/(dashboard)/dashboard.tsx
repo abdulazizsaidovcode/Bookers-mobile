@@ -233,7 +233,7 @@ const Dashboard: React.FC = () => {
         <>
           {dashboardData && dashboardData.length > 0 ? (
 
-            <View>
+            <View style = {tw`p-1`}>
               <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
               {dashboardData.map((item, index) => (
                 <View key={index} style={tw`w-full flex `}>
