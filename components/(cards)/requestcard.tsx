@@ -1,8 +1,10 @@
 import { getFile } from '@/helpers/api';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import { masterOrderConfirm } from '@/helpers/api-function/oreder/oreder';
+import { getMasterOrderWait, masterOrderConfirm } from '@/helpers/api-function/oreder/oreder';
 import tw from 'tailwind-react-native-classnames';
+import { useFocusEffect } from 'expo-router';
+import { masterOrderHWaitStore } from '@/helpers/state_managment/order/order';
 interface RequestCardProps {
   item: RequestCardobjProps;
   onApprove: () => void;
@@ -22,19 +24,37 @@ interface RequestCardobjProps {
 }
 
 const RequestCard: React.FC<RequestCardProps> = ({ item, onApprove, onReject }) => {
-
+  const { waitData, setWaitData } = masterOrderHWaitStore();
   const [loadingAprove, setAproveLoading] = useState(false);
   const [loadingReject, setLoadingReject] = useState(false);
-  
+  const [response, setResponse] = useState<any>(null);
+
+
   const handleApprove = async (id: string) => {
-    await masterOrderConfirm(id, setAproveLoading, 'CONFIRMED');
-    onApprove();
+    await masterOrderConfirm(id, setAproveLoading, 'CONFIRMED', setResponse);
   };
 
   const handleReject = async (id: string) => {
-    await masterOrderConfirm(id, setLoadingReject, 'REJECTED');
-    onReject();
+    await masterOrderConfirm(id, setLoadingReject, 'REJECTED', setResponse);
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (response) {
+        onApprove();
+        onReject();
+        setResponse(null)
+      }
+    }, [response, setResponse])
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      getMasterOrderWait(setWaitData);
+      setResponse(null)
+    }, [loadingAprove, loadingReject, response])
+  )
+
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
