@@ -130,8 +130,8 @@ import NotificationClient from "./(client)/(profile)/(notification)/notification
 import ClientInfo from "./(auth)/(register)/(clientInformations)/getNameSurname";
 import getMasterNickName from "./(auth)/(register)/(masterInformation)/getNickName";
 import ClientCameraInfo from "./(auth)/(register)/(clientInformations)/getPhoto";
-import CardClient from "./(client)/(profile)/(card)/card";
-import PaymentClient from "./(client)/(profile)/(payment)/payment";
+// import CardClient from "./(client)/(profile)/(card)/card";
+// import PaymentClient from "./(client)/(profile)/(payment)/payment";
 import SalonLocation from "./(client)/(map)/(salon-location)/salon-location";
 import EditProfilePage from "./(client)/(profile)/(profileEdit)/(editPages)/editPage";
 import MasterInformation from "./(client)/(uslugi)/(masterInformation)/masterInformation";
@@ -857,7 +857,7 @@ function RootLayoutNav() {
               component={NotificationClient}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
               name="(client)/(profile)/(card)/card"
               component={CardClient}
               options={{ headerShown: false }}
@@ -866,7 +866,7 @@ function RootLayoutNav() {
               name="(client)/(profile)/(payment)/payment"
               component={PaymentClient}
               options={{ headerShown: false }}
-            />
+            /> */}
             <Stack.Screen
               name="(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit"
               component={ProfileMasterEdit}
