@@ -26,6 +26,8 @@ import { useDashboardMasterStore } from '@/helpers/state_managment/dashboardClie
 import { useMapStore } from '@/helpers/state_managment/map/map';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import { SimpleLineIcons } from '@expo/vector-icons';
+import { Loading } from '@/components/loading/loading';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 
@@ -157,7 +159,6 @@ const Dashboard: React.FC = () => {
       }
     };
   }, []);
-  // navigatsiyani login registratsiyadan o'tganda bloklash
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', (e: any) => {
       e.preventDefault();
@@ -175,12 +176,14 @@ const Dashboard: React.FC = () => {
   );
   useFocusEffect(
     useCallback(() => {
+      setLoading(true)
       getClientDashboard().finally(() => setLoading(false));
       return () => { };
     }, [])
   );
   useFocusEffect(
     React.useCallback(() => {
+      setLoading(true)
       getAllCategory().finally(() => setLoading(false));
       return () => { };
     }, [])
@@ -188,12 +191,14 @@ const Dashboard: React.FC = () => {
 
   useFocusEffect(
     React.useCallback(() => {
+      setLoading(true)
       getAllCategory().finally(() => setLoading(false));
       return () => { };
     }, [userLocation])
   );
   useFocusEffect(
     useCallback(() => {
+      setLoading(true)
       getDashboradMaster().finally(() => setLoading(false));
       return () => { };
     }, [])
@@ -202,7 +207,6 @@ const Dashboard: React.FC = () => {
   const handlePhonePress = (phoneNumber: string) => {
     Linking.openURL(`tel:${phoneNumber}`);
   };
-  // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
@@ -211,8 +215,8 @@ const Dashboard: React.FC = () => {
           Toast.show('Orqaga qaytish uchun yana bir marta bosing', Toast.SHORT);
           setTimeout(() => {
             setBackPressCount(0);
-          }, 2000); // 2 soniya ichida ikkinchi marta bosilmasa, holatni qayta boshlaydi
-          return true; // Orqaga qaytishni bloklaydi
+          }, 2000);
+          return true;
         } else {
           BackHandler.exitApp(); // Ilovadan chiqish
           return false;
@@ -225,99 +229,102 @@ const Dashboard: React.FC = () => {
     }, [backPressCount])
   );
 
+  if (!dashboardData && !dashboardMasterData && !allCategory) {
+    return <Loading />
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <Navbar />
       <ScrollView>
-        <>
-          {dashboardData && dashboardData.length > 0 ? (
 
-            <View style = {tw`p-1`}>
-              <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
-              {dashboardData.map((item, index) => (
-                <View key={index} style={tw`w-full flex `}>
-                  <AccardionHistory
-                    id={item.orderId}
-                    title={item.serviceName}
-                    date={`${item.orderDate} ${item.time}` || 'Дата не указана'}
-                  >
-                    <ProfileCard
-                      onPress={() => {
-                        setSelectedClient(item);
-                        navigation.navigate('(client)/(oreder)/orderDetail', { id: item.orderId });
-                      }}
-                      Address={item.address}
-                      buttonName="Написать сообщение"
-                      imageURL={item.userAttachmentId || 'https://example.com/default-image.jpg'}
-                      money={`${item.orderPrice || 'Не указано'} сум`}
-                      ratingnumber={item.feedbackCount || 0}
-                      titleTex={item.serviceName?.trim().split(`, `)}
-                      masterName={item.firstName || 'Имя не указано'}
-                      salonName={item.salonName || 'Салон не указан'}
-                      locationIcon={
-                        <SimpleLineIcons
-                          onPress={() => {
-                            navigate.navigate('(client)/(map)/(salon-location)/salon-location');
-                            setOrderData(item)
-                          }}
-                          name="location-pin"
-                          size={24}
-                          color="white"
-                        />
-                      }
-                      phoneIcon={
-                        <Feather
-                          name="phone"
-                          size={24}
-                          color="white"
-                          onPress={() => handlePhonePress(item.phoneNumber)}
-                        />
-                      }
-                      orderId={item.orderId || 'Не указан'}
-                    />
-                  </AccardionHistory>
-                </View>
-              ))}
-            </View>
-          ) : (
-            <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
-              <View style={styles.container}>
-                {allCategory && allCategory.length > 0 ? (
-                  allCategory.map((item, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      activeOpacity={0.7}
-                      onPress={() => {
-                        navigation.navigate('(client)/(uslugi)/(hairHealth)/hair');
-                      }}
-                      style={styles.touchableItem}
-                    >
-                      <View style={styles.item}>
-                        <View style={styles.imageContainer}>
-                          <Image
-                            source={{ uri: `${getFile}${item.attachmentId}` }}
-                            style={tw`p-3 w-1/2`}
-                          />
-                        </View>
-                        <View style={styles.textContainer}>
-                          <Text style={styles.titleText}>{item.name}</Text>
-                          <Text style={tw`text-gray-600`}>Рядом с тобой {item.distanceMasterCount}</Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  ))
-                ) : (
-                  <Text style={tw`text-white`}>Нет доступных категорий</Text>
-                )}
+
+
+        {dashboardData && dashboardData.length > 0 ? (
+          <View style={tw`p-1`}>
+            <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
+                {dashboardData.map((item, index) => (
+                 <View key={index} style={tw`w-full flex `}>
+                 <AccardionHistory
+                  id={item.orderId}
+                  title={item.serviceName}
+                  date={`${item.orderDate} ${item.time}` || 'Дата не указана'}
+                >
+                  <ProfileCard
+                    onPress={() => {
+                      setSelectedClient(item);
+                      navigation.navigate('(client)/(oreder)/orderDetail', { id: item.orderId });
+                    }}
+                    Address={item.address}
+                    buttonName="Написать сообщение"
+                    imageURL={item.userAttachmentId || 'https://example.com/default-image.jpg'}
+                    money={`${item.orderPrice || 'Не указано'} сум`}
+                    ratingnumber={item.feedbackCount || 0}
+                    titleTex={item.serviceName?.trim().split(`, `)}
+                    masterName={item.firstName || 'Имя не указано'}
+                    salonName={item.salonName || 'Салон не указан'}
+                    locationIcon={
+                      <SimpleLineIcons
+                        onPress={() => {
+                          navigate.navigate('(client)/(map)/(salon-location)/salon-location');
+                          setOrderData(item)
+                        }}
+                        name="location-pin"
+                        size={24}
+                        color="white"
+                      />
+                    }
+                    phoneIcon={
+                      <Feather
+                        name="phone"
+                        size={24}
+                        color="white"
+                        onPress={() => handlePhonePress(item.phoneNumber)}
+                      />
+                    }
+                    orderId={item.orderId || 'Не указан'}
+                  />
+                </AccardionHistory>
               </View>
-            </AccordionItem>
-          )}
-        </>
+            ))}
+          </View>
+        ) : (
+          <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
+            <View style={styles.container}>
+              {allCategory && allCategory.length > 0 ? (
+                allCategory.map((item, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    activeOpacity={0.7}
+                    onPress={() => {
+                      navigation.navigate('(client)/(uslugi)/(hairHealth)/hair');
+                    }}
+                    style={styles.touchableItem}
+                  >
+                    <View style={styles.item}>
+                      <View style={styles.imageContainer}>
+                        <Image
+                          source={{ uri: `${getFile}${item.attachmentId}` }}
+                          style={tw`p-3 w-1/2`}
+                        />
+                      </View>
+                      <View style={styles.textContainer}>
+                        <Text style={styles.titleText}>{item.name}</Text>
+                        <Text style={tw`text-gray-600`}>Рядом с тобой {item.distanceMasterCount}</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <Text style={tw`text-white`}>Нет доступных категорий</Text>
+              )}
+            </View>
+          </AccordionItem>
+        )}
         <>
           {dashboardMasterData && dashboardMasterData.length > 0 ?
             (
-              <View style = {tw`p-1`}>
+              <View style={tw`p-1`}>
                 <View style={tw`mb-4 mt-5`}>
                   <Text style={tw`font-bold text-xl text-white`}>Мои мастера</Text>
                 </View>
@@ -378,7 +385,7 @@ const Dashboard: React.FC = () => {
                         zaps={master.nextEntryDate}
                         clients={master.clientCount}
                         onPress={() => {
-                          navigate.navigate('(client)/(map)/(master-locations)/master-locations', {id :master.id});
+                          navigate.navigate('(client)/(map)/(master-locations)/master-locations', { id: master.id });
                         }}
                       />
                     </View>

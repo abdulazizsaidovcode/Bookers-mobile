@@ -87,7 +87,7 @@ const Uslugi = () => {
             <View style={[tw`flex-1 justify-center items-center`]}>
               <ActivityIndicator size="large" color="#9C0A35" />
             </View>
-          ) : (
+          ) : ( 
             <FlatList
               data={allCategory}
               renderItem={renderItem}
