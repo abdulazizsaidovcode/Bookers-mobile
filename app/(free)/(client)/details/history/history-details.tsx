@@ -130,9 +130,9 @@ const HistoryDetailsInformation = () => {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <View style={styles.button}>
+                        <View style={[styles.button, {gap: 10 }, tw`flex-row items-center`]}>
                             {serviceName.length > 0 ? serviceName.map((item, idx) => (
-                                <Text style={styles.text} key={idx}>
+                                <Text style={[styles.text]} key={idx}>
                                     {item}
                                 </Text>
                             )) : ''}
