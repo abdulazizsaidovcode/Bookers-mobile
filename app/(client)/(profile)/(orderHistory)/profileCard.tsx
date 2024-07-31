@@ -24,7 +24,6 @@ interface IProps {
     deleteIcon?: React.ReactNode;
     imageURL: string | null;
     orderId?: string | null;
-    specializations: string[] | null;
     clientCount?: number | null;
     onPress?: (() => void)
 
@@ -44,7 +43,6 @@ const ProfileCard: React.FC<IProps> = ({
     phoneIcon,
     deleteIcon,
     orderId,
-    specializations,
     onPress,
 }) => {
     const { activeTab, setActiveTab, pastComing, setPastComing } = useAccardionStoreId();
@@ -125,13 +123,6 @@ const ProfileCard: React.FC<IProps> = ({
                     </Text>
                 ))}
             </View>
-            <ScrollView
-                horizontal
-                contentContainerStyle={{ gap: 16, marginBottom: 5, paddingHorizontal: 10,marginTop:10 }}
-                showsHorizontalScrollIndicator={false}
-            >
-                <Text style={tw`border border-gray-600 px-2 py-1 rounded-lg text-gray-600`}>{specializations}</Text>
-            </ScrollView>
             <Text style={styles.address}>{Adress}</Text>
             <View
                 style={[
