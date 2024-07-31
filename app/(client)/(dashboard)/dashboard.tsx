@@ -275,7 +275,7 @@ const Dashboard: React.FC = () => {
               </View>
               <View style={styles.textContainer}>
                 <Text style={styles.titleText}>{item.name}</Text>
-                <Text style={tw`text-gray-400`}>Рядом с тобой {item.distanceMasterCount}</Text>
+                <Text style={tw`text-gray-600`}>Рядом с тобой {item.distanceMasterCount}</Text>
               </View>
             </View>
           </TouchableOpacity>
