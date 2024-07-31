@@ -63,9 +63,6 @@ const Booking = () => {
     }
   };
   
-
-
-
   const addOnlineBook = async () => {
     setIsLoading(true);
     try {
@@ -140,6 +137,7 @@ const Booking = () => {
               inputStyles={styles.selectListInput}
               dropdownStyles={styles.selectListDropdown}
               dropdownTextStyles={styles.selectListDropdownText}
+              placeholder="Select day"
               setSelected={(val: string) => {
                 setSalonId({
                   id: "", 
