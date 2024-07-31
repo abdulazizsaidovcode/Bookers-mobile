@@ -4,9 +4,10 @@ import { AntDesign } from '@expo/vector-icons';
 import { useAccardionStore, useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
 
 interface AccordionItemProps {
-  id: string[]|null;
+  id: string|null;
   title: string | null;
   date: string | null;
+  time?:string | null;
   children: React.ReactNode;
 }
 
@@ -14,7 +15,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const AccardionHistory: React.FC<AccordionItemProps> = ({ id, title, date, children }) => {
+const AccardionHistory: React.FC<AccordionItemProps> = ({ id, title,time, date, children }) => {
   const { expandedId, setExpandedId } = useAccardionStoreId();
 
   const toggleExpand = () => {
@@ -34,7 +35,7 @@ const AccardionHistory: React.FC<AccordionItemProps> = ({ id, title, date, child
       >
         <View style={styles.mainText}>
           <Text style={styles.titleText}>{title}</Text>
-          <Text style={styles.headerText}>{date}</Text>
+          <Text style={styles.headerText}>{date}  {time}</Text>
         </View>
         <AntDesign name={isExpanded ? 'down' : 'right'} size={20} color="#4F4F4F" />
       </TouchableOpacity>
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 15,
     backgroundColor: "#B9B9C9",
-    borderRadius: 8,
+    borderRadius: 13,
   },
   mainText: {
     flexDirection: 'column',

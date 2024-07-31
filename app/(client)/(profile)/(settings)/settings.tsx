@@ -11,7 +11,11 @@ import { StatusBar } from "expo-status-bar";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Buttons from "@/components/(buttons)/button";
 import { useNavigation } from "expo-router";
-import { FontAwesome5, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import {
+  FontAwesome5,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import useProfileStore, {
@@ -19,13 +23,15 @@ import useProfileStore, {
 } from "@/helpers/state_managment/client/clientEditStore";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import { deleteClientProfile } from "@/helpers/api-function/client/clientPage";
+import { Loading } from "@/components/loading/loading";
 
 const SettingsClient = () => {
   const navigation = useNavigation<any>();
   const { setRoute } = useProfileStore();
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const deleteModal = () => setShowModal(!showModal)
+  const deleteModal = () => setShowModal(!showModal);
 
   const navigationList = [
     {
@@ -54,47 +60,72 @@ const SettingsClient = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="#21212E" />
-      <View style={{ paddingLeft: 10 }}>
-      <NavigationMenu name="Настройки" />
-      </View>
-      <ScrollView>
-        <View style={{ padding: 16 }}>
-          {navigationList.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.menuItem}
-              onPress={() =>
-                handlePress({ id: item.id, value: item.label }, item.screen)
-              }
-              activeOpacity={0.7}
-            >
-              <View style={styles.menuItemContent}>
-                <FontAwesome5 name={item.icon} size={20} color="#9c0935" />
-                <Text style={styles.menuItemText}>{item.label}</Text>
-              </View>
-              <MaterialIcons name="navigate-next" size={36} color="#9c0935" />
-            </TouchableOpacity>
-          ))}
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => deleteModal()}
-            activeOpacity={0.7}
-          >
-            <View style={styles.menuItemContent}>
-              <Text style={styles.menuItemTextRed}>Удалить аккаунт</Text>
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <StatusBar backgroundColor="#21212E" />
+          <View style={{ paddingLeft: 10 }}>
+            <NavigationMenu name="Настройки" />
+          </View>
+          <ScrollView>
+            <View style={{ padding: 16 }}>
+              {navigationList.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.menuItem}
+                  onPress={() =>
+                    handlePress({ id: item.id, value: item.label }, item.screen)
+                  }
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.menuItemContent}>
+                    <FontAwesome5 name={item.icon} size={20} color="#9c0935" />
+                    <Text style={styles.menuItemText}>{item.label}</Text>
+                  </View>
+                  <MaterialIcons
+                    name="navigate-next"
+                    size={36}
+                    color="#9c0935"
+                  />
+                </TouchableOpacity>
+              ))}
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => deleteModal()}
+                activeOpacity={0.7}
+              >
+                <View style={styles.menuItemContent}>
+                  <Text style={styles.menuItemTextRed}>Удалить аккаунт</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-      <CenteredModal isFullBtn={true} btnRedText="Да" btnWhiteText="Отмена" isModal={showModal} onConfirm={() => deleteClientProfile()} toggleModal={() => deleteModal()} children={
-        <View style={styles.modalMain}>
-          <MaterialCommunityIcons name="delete-alert" size={80} color="#9C0A35" style={styles.modalImage} />
-          <Text style={styles.modalText}>Вы хотите удалить свой профиль?</Text>
-        </View>
-      }/>
-    </SafeAreaView>
+          </ScrollView>
+          <CenteredModal
+            isFullBtn={true}
+            btnRedText="Да"
+            btnWhiteText="Отмена"
+            isModal={showModal}
+            onConfirm={() => deleteClientProfile(setIsLoading)}
+            toggleModal={() => deleteModal()}
+            children={
+              <View style={styles.modalMain}>
+                <MaterialCommunityIcons
+                  name="delete-alert"
+                  size={80}
+                  color="#9C0A35"
+                  style={styles.modalImage}
+                />
+                <Text style={styles.modalText}>
+                  Вы хотите удалить свой профиль?
+                </Text>
+              </View>
+            }
+          />
+        </SafeAreaView>
+      )}
+    </>
   );
 };
 
@@ -129,15 +160,12 @@ const styles = StyleSheet.create({
   modalMain: {
     justifyContent: "center",
     alignItems: "center",
-    gap:10,
-    marginVertical: 10
+    gap: 10,
+    marginVertical: 10,
   },
-  modalImage: {
-
-  },
+  modalImage: {},
   modalText: {
     color: "#fff",
     fontSize: 16,
-
-  }
+  },
 });

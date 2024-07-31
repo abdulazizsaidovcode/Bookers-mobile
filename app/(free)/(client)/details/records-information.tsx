@@ -54,11 +54,20 @@ const RecordsInformation = () => {
     const [rating, setRating] = useState(0);
     const [isConfirm, setIsConfirm] = useState(false);
     const [successStatus, setSuccessStatus] = useState('');
+    const [serviceName, setServiceName] = useState<any>([]);
 
     useEffect(() => {
         if (orderID) orderGetOne(orderID, setOrderOneData)
         getMee(setGetMee)
     }, []);
+
+    useEffect(() => {
+        let list;
+        orderOneData && orderOneData.serviceName.map((item: any) => {
+            list = item.serviceName.split(', ')
+        })
+        setServiceName(list ? list : null)
+    }, [orderOneData]);
 
     useEffect(() => {
         if (successStatus === 'ACCEPTED') {
@@ -87,6 +96,7 @@ const RecordsInformation = () => {
         else if (statusN === 'WAIT') return 'Ждать'
     }
 
+    console.log(orderOneData, 'order one')
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
@@ -126,10 +136,13 @@ const RecordsInformation = () => {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={.9} style={styles.button}>
-                            <Text style={styles.text}>
-                                {orderOneData && orderOneData.serviceName}
-                            </Text>
+                        <TouchableOpacity activeOpacity={.9} style={[styles.button, {gap: 10 }, tw`flex-row items-center`]}>
+                            {serviceName.length > 0 && (
+                                serviceName.map((item: any) => (
+                                    <Text style={[styles.text]}>{item}</Text>
+                                ))
+                            )}
+
                         </TouchableOpacity>
                         <View style={tw`mt-3`}>
                             <HistoryCard
@@ -212,7 +225,8 @@ const RecordsInformation = () => {
                                 <Text style={styles.message}>Клиент записан на процедуру</Text>
                                 <View style={styles.stars}>
                                     {Array(5).fill(0).map((_, index) => (
-                                        <TouchableOpacity activeOpacity={.7} key={index} onPress={() => handleRating(index + 1)}>
+                                        <TouchableOpacity activeOpacity={.7} key={index}
+                                                          onPress={() => handleRating(index + 1)}>
                                             <AntDesign
                                                 name={index < rating ? "star" : "staro"}
                                                 size={30}

@@ -5,21 +5,24 @@ import { getMasterOrderWait } from '@/helpers/api-function/oreder/oreder';
 import RequestsAccordion from './components/accordion/RequestsAccordion';
 import { List } from 'react-native-paper';
 import CenteredModal from '@/components/(modals)/modal-centered';
+import { months } from '@/helpers/date';
 
 type ClientStatus = "REGULAR_VISIT" | string;
 
 export interface OrderItem {
+  id: string
   serviceName: string;
   clientAttachmentId: string;
   fullName: string;
   clientStatus: ClientStatus[];
-  hallStatus: string; // Assuming hallStatus is provided in the API response
+  hallStatus: string; 
   finishTime: string;
   orderId: string;
   paid: number;
   request: string;
   startTime: string;
   orderDate: string;
+  orderStatus: string;
 }
 
 interface GroupedOrders {
@@ -29,7 +32,8 @@ interface GroupedOrders {
 const groupByDate = (data: OrderItem[]): GroupedOrders => {
   if (!data) return {};
   return data.reduce((acc, item) => {
-    const datePart = item.orderDate.split(' ')[1]; // Assuming orderDate format is "16 JULY 19:30 - 20:40"
+    const [year, month, day] = item.orderDate.split('-');
+    const datePart = `${day} ${months[parseInt(month) - 1]}`;
     (acc[datePart] = acc[datePart] || []).push(item);
     return acc;
   }, {} as GroupedOrders);

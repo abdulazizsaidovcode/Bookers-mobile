@@ -1,4 +1,4 @@
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { AntDesign } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardi
 import { addFebbakFunction, deletePastComingFunction, getOrderClientPustComing } from '@/helpers/api-function/oreder/orderHistory';
 import { addfedbackmaster } from '@/type/client/editClient';
 import tw from 'tailwind-react-native-classnames';
+
 
 interface IProps {
     masterName: string;
@@ -24,6 +25,7 @@ interface IProps {
     imageURL: string | null;
     orderId?: string | null;
     clientCount?: number | null;
+    onPress?: (() => void)
 
 }
 
@@ -41,6 +43,7 @@ const ProfileCard: React.FC<IProps> = ({
     phoneIcon,
     deleteIcon,
     orderId,
+    onPress,
 }) => {
     const { activeTab, setActiveTab, pastComing, setPastComing } = useAccardionStoreId();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
@@ -88,6 +91,10 @@ const ProfileCard: React.FC<IProps> = ({
 
     return (
         <View style={styles.card}>
+            <TouchableOpacity
+            activeOpacity={.8}
+            onPress={onPress}
+            >
             <View style={styles.profileContainer}>
                 <View style={styles.profileRow}>
                     <Image
@@ -156,6 +163,7 @@ const ProfileCard: React.FC<IProps> = ({
                     </TouchableOpacity>
                 )}
             </View>
+            </TouchableOpacity>
             <CenteredModal
                 isFullBtn={true}
                 btnWhiteText={'Отмена'}
@@ -308,7 +316,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         paddingVertical: 16,
         backgroundColor: '#9C0A35',
-        borderRadius: 5
+        borderRadius: 12
     },
     messageButtonText: {
         color: 'white',
@@ -316,8 +324,8 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     iconButton: {
-        padding: 16,
-        borderRadius: 50,
+        padding: 19,
+        borderRadius: 100,
         backgroundColor: '#9C0A35'
     },
     deleteText: {

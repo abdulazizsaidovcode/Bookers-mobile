@@ -2,13 +2,16 @@ import { getFreeTime } from '@/helpers/api-function/freeTime/freeTime';
 import { useScheduleFreeTime } from '@/helpers/state_managment/freeTime/freeTime';
 import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStore';
 import { useOrderPosdData } from '@/helpers/state_managment/order/order';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { useSheduleData } from '@/helpers/state_managment/schedule/schedule';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { serviceMaster } from '@/helpers/api';
+import tw from 'tailwind-react-native-classnames';
+import Buttons from '@/components/(buttons)/button';
+import { FontAwesome } from '@expo/vector-icons';
 const { width } = Dimensions.get('window');
 
 const Booked: React.FC = () => {
@@ -22,6 +25,8 @@ const Booked: React.FC = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { setTime, setServiceId, setDate } = useSheduleData();
     const { selectedClient, masterServis, setSelectedCategoryId, selectedCategoryId } = ClientStory();
+    const route = useRoute<any>();
+    const { id } = route.params;
 
     useFocusEffect(
         useCallback(() => {
@@ -89,13 +94,13 @@ const Booked: React.FC = () => {
     return (
         <>
             <View style={styles.accordionContainer}>
-                <Text>Услуги Натали</Text>
+                {FreeTime && masterServis && <Text style={{ marginVertical: 16, color: '#fff', fontSize: 18 }}>Свободное время</Text>}
                 <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     style={styles.tabContainer}
                 >
-                    {masterServis && masterServis.length > 0 ? (
+                    {FreeTime && masterServis && masterServis.length > 0 ? (
                         masterServis.map((service: any) => (
                             <TouchableOpacity
                                 key={service.id}
@@ -108,7 +113,8 @@ const Booked: React.FC = () => {
                             </TouchableOpacity>
                         ))
                     ) : (
-                        <Text style={styles.placeholderText}>Нет услуг</Text>
+                        // <Text style={styles.placeholderText}>Нет услуг</Text>
+                        null
                     )}
                 </ScrollView>
                 <View>
@@ -126,7 +132,18 @@ const Booked: React.FC = () => {
                                 </TouchableOpacity>
                             ))
                         ) : (
-                            <Text style={styles.placeholderText}>Нет свободного времени</Text>
+                            <View style={[tw`px-5`]}>
+                                <View style={[tw`px-8`]}>
+                                    <Text style={styles.placeholderText}>К сожалению в указанную дату у мастера нет свободного времени.</Text>
+                                    <Text style={styles.placeholderTextHall}>Но Вы можете оставить заявку в зал ожидания</Text>
+
+                                    <View style={[tw`flex-row items-center mt-2 mb-5 px-6`, { gap: 10 }]}>
+                                        <FontAwesome style={[tw` `, { fontSize: 40, color: '#828282' }]} name='calendar' />
+                                        <Text style={[tw`text-white`, { color: '#828282' }]}>Если время Вашего мастера освободиться, то Ваш зарос может быть принят на этот день!</Text>
+                                    </View>
+                                </View>
+                                <Buttons title='Оставить заявку' />
+                            </View>
                         )}
                     </View>
                 </View>
@@ -202,6 +219,15 @@ const styles = StyleSheet.create({
     },
     placeholderText: {
         color: 'gray',
+        textAlign: 'center',
+        paddingHorizontal: 20,
+    },
+    placeholderTextHall: {
+        color: 'white',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        marginTop: 20,
+        fontSize: 18
     },
     buttonContainer: {
         alignItems: 'center',

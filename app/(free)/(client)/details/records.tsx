@@ -31,9 +31,9 @@ const Records = () => {
     const {getMee, setGetMee} = useGetMeeStore()
     const {FreeTime, setFreeTime} = useScheduleFreeTime();
     const {calendarDate} = graficWorkStore();
-    const [activeTab, setActiveTab] = useState('');
+    const [activeTab, setActiveTab] = useState<any>([]);
     const [activeTime, setActiveTime] = useState('');
-    const [categoryName, setCategoryName] = useState('');
+    const [categoryName, setCategoryName] = useState<any>([]);
     const [regex, setRegex] = useState(false);
     const [data, setData] = useState<any>('');
     const [updateData, setUpdateData] = useState<any>('');
@@ -49,7 +49,7 @@ const Records = () => {
     useEffect(() => {
         if (orderID) {
             navigation.navigate('(free)/(client)/details/records-information', {orderID})
-            setActiveTab('')
+            setActiveTab([])
             setActiveTime('')
             setOrderID('')
         }
@@ -61,10 +61,10 @@ const Records = () => {
     }, [calendarDate]);
 
     useEffect(() => {
-        if (calendarDate && activeTime && activeTab) setRegex(true)
+        if (calendarDate && activeTime && activeTab.length > 0) setRegex(true)
         else setRegex(false)
         const data = {
-            serviceId: activeTab,
+            serviceIds: activeTab,
             date: calendarDate,
             timeHour: activeTime && activeTime.slice(0, 2),
             timeMin: activeTime && activeTime.slice(3, 5),
@@ -90,10 +90,14 @@ const Records = () => {
     }, [setRefreshing]);
 
     const handleTimeSelect = (time: string) => setActiveTime(time)
-    const handleTabChange = (tab: string, name: string) => {
-        setActiveTab(tab);
+    const handleTabChange = (tab: any, name: string) => {
+        if (activeTab.length > 0 && activeTab.includes(tab)) setActiveTab(activeTab.filter((id: any) => id !== tab));
+        else setActiveTab([...activeTab, tab]);
+
+        if (categoryName.length > 0 && categoryName.includes(name)) setCategoryName(categoryName.filter((n: any) => n !== name));
+        else setCategoryName([...categoryName, name]);
+
         setActiveTime('')
-        setCategoryName(name)
     };
 
     return (
@@ -135,17 +139,22 @@ const Records = () => {
                         {record.updateOrder === 'updateOrder' ? <>
                             <TouchableOpacity activeOpacity={.9} style={styles.button}>
                                 <Text style={styles.text}>
+                                    {console.log(record.orderOneData, 'update order')}
                                     {categoryName ? categoryName : record.orderOneData?.serviceName}
                                 </Text>
                             </TouchableOpacity>
                         </> : <>
-                            {categoryName && (
-                                <TouchableOpacity activeOpacity={.9} style={styles.button}>
-                                    <Text style={styles.text}>{categoryName}</Text>
+                            {categoryName.length > 0 && (
+                                <TouchableOpacity activeOpacity={.9} style={[styles.button, {gap: 10 }, tw`flex-row items-center`]}>
+                                    {categoryName.map((item: any) => (
+                                        <Text style={[styles.text]}>{item}</Text>
+                                    ))}
                                 </TouchableOpacity>
                             )}
                         </>}
-                        <CalendarGrafficEdit/>
+                        <View style={tw`mt-5`}>
+                            <CalendarGrafficEdit/>
+                        </View>
                         <View style={styles.tabContainer}>
                             <ScrollView
                                 showsHorizontalScrollIndicator={false}
@@ -156,10 +165,11 @@ const Records = () => {
                                     <TouchableOpacity
                                         activeOpacity={.7}
                                         key={service.id}
-                                        style={[styles.tabButton, activeTab === service.id && styles.activeTab, {marginRight: 15}]}
+                                        style={[styles.tabButton, activeTab?.includes(service.id) && styles.activeTab, {marginRight: 15}]}
                                         onPress={() => handleTabChange(service.id, service.name.trim())}
                                     >
-                                        <Text style={[styles.tabText, activeTab !== service.id && styles.inactiveText]}>
+                                        <Text
+                                            style={[styles.tabText, !activeTab?.includes(service.id) && styles.inactiveText]}>
                                             {service.name.trim()}
                                         </Text>
                                     </TouchableOpacity>
@@ -167,11 +177,15 @@ const Records = () => {
                             </ScrollView>
                         </View>
                         <View>
-                            <Text style={[tw`text-center font-bold text-lg w-full my-4 text-white`, {textAlign: 'left'}]}>
+                            <Text
+                                style={[tw`text-center font-bold text-lg w-full my-4 text-white`, {textAlign: 'left'}]}>
                                 Свободное время
                             </Text>
-                            {activeTab && (
-                                <View style={[tw`flex-row flex-wrap items-center mb-10`, {justifyContent: 'center', gap: 10}]}>
+                            {activeTab.length > 0 && (
+                                <View style={[tw`flex-row flex-wrap items-center mb-10`, {
+                                    justifyContent: 'center',
+                                    gap: 10
+                                }]}>
                                     {FreeTime ? FreeTime.map((time: string, index: number) => (
                                         <TouchableOpacity
                                             activeOpacity={.7}
