@@ -323,16 +323,10 @@ const TabOneScreen: React.FC = () => {
     const [chartNumerator, chartDenominator] = chartFraction.split("/");
     const statisticFraction = mainStatisticData.incomeToday;
     const [statisticNumerator, statisticDenominator] = statisticFraction.split("/");
-    const regularVisitCount =
-        dailyTimeData && dailyTimeData.length !== 0 ?
-            dailyTimeData && dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length : 0;
-    const notVisitCount =
-        dailyTimeData && dailyTimeData.length !== 0 ?
-            dailyTimeData && dailyTimeData.filter((item) => item.type === "NOT_VISIT").length : 0;
-    const vipCientsCount =
-        dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData.filter((item) => item.type === "VIP").length : 0;
-    const newClientsCount =
-        dailyTimeData && dailyTimeData.length! == 0 ? dailyTimeData.filter((item) => item.type === "NEW").length : 0;
+    const regularVisitCount = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length : 0;
+    const notVisitCount = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "NOT_VISIT").length : 0;
+    const vipCientsCount = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "VIP").length : 0;
+    const newClientsCount = dailyTimeData && dailyTimeData.length! == 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "NEW").length : 0;
 
     const handleConfirm = () =>
         editOrderStatus(
