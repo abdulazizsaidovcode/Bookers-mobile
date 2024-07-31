@@ -28,7 +28,7 @@ const NotificationClient: React.FC = () => {
     };
 
     const handleDeletePress = () => {
-        const ids: string[] = notification.map(notif => notif.id);
+        const ids: any = notification.map(notif => notif.id);
         if (ids.length > 0) {
             setNotificationIds(ids);
             deleteToggleModal();
@@ -57,8 +57,8 @@ const NotificationClient: React.FC = () => {
     };
 
     const handleReadAll = () => {
-        const ids = notification.map(notif => notif.id);
-        if (ids.length > 0) {
+        const ids: any = notification.map(notif => notif.id);
+        if (ids && ids.length > 0) {
             setIdList(ids);
             clientPostReadyORnotReady({ idList: ids }, () => fetchNotifications());
             setNotificationIds([]);
@@ -86,7 +86,7 @@ const NotificationClient: React.FC = () => {
             </View>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 {notification.length !== 0 ? (
-                    notification.map((notif, index) => (
+                    notification.map((notif: any, index: any) => (
                         <TouchableOpacity
                             key={index}
                             style={[styles.card, notif.read === true ? [] : styles.unreadCard]}
