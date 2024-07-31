@@ -44,6 +44,7 @@ import {
 } from "@/type/client/client";
 import Toast from "react-native-simple-toast";
 import {getConfig} from "@/app/(tabs)/(master)/main";
+import {consoleClear} from "@/constants/consoleClear";
 
 // text kesish un
 export const sliceText = (firstName: string, lastName: string) => {
@@ -74,7 +75,7 @@ export const getMeClient = async (setData: (val: any | null) => void, clientID: 
             else setData(null)
         } else Toast.show('An error occurred, it will be fixed soon!', Toast.LONG)
     } catch (err) {
-        console.log(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -87,7 +88,7 @@ export const getAgeList = async (setData: (val: AgeData[] | null) => void) => {
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -100,7 +101,7 @@ export const getRegionList = async (setData: (val: RegionData[] | null) => void)
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -115,7 +116,7 @@ export const getDistrictList = async (setData: (val: DistrictData[] | null) => v
             else setData(null)
         } else console.log('region id yuq!!!')
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -128,7 +129,7 @@ export const getClientStatistics = async (setData: (val: ClientStatus | null) =>
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -141,7 +142,7 @@ export const getClientAll = async (setData: (val: AllClient[] | null) => void) =
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
-        console.log(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -156,7 +157,7 @@ export const getClientAllSearch = async (setData: (val: AllClient[] | null) => v
             else setData(null)
         } else await getClientAll(setData)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -177,7 +178,7 @@ export const createClient = async (createData: UpdateClient, setNavigate: (val: 
             setNavigate(false)
         }
     } catch (err) {
-        console.error(err)
+        consoleClear()
         Toast.show('Error saved client✔', Toast.LONG)
         setLoading(false)
         setNavigate(false)
@@ -192,7 +193,7 @@ export const getStoppedVisiting = async (setData: (val: null | ClientStoppedVisi
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
-        console.log(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -207,7 +208,7 @@ export const getClientStoppedVisitSearch = async (setData: (val: ClientStoppedVi
             else setData(null)
         } else await getStoppedVisiting(setData)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -228,7 +229,7 @@ export const addClientSMS = async (clientID: string, val: string, setTrue: (val:
             }
         } else setTrue(false)
     } catch (err) {
-        console.log(err)
+        consoleClear()
         setTrue(false)
     }
 }
@@ -241,7 +242,7 @@ export const getNotVisiting = async (setData: (val: null | ClientNotVisit[]) => 
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
-        console.log(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -256,7 +257,7 @@ export const getClientNotVisitSearch = async (setData: (val: ClientNotVisit[] | 
             else setData(null)
         } else await getNotVisiting(setData)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -269,7 +270,7 @@ export const getClientAddressBook = async (setData: (val: ClientAddressBook[] | 
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -284,7 +285,7 @@ export const getClientAddressBookSearch = async (setData: (val: ClientAddressBoo
             else setData(null)
         } else await getClientAddressBook(setData)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -305,7 +306,7 @@ export const updateClientData = async (updateData: UpdateClient, clientID: strin
             Toast.show('Error update client❌', Toast.LONG)
         }
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setLoading(false)
         setNavigate(false)
         Toast.show('Error update client❌', Toast.LONG)
@@ -320,7 +321,7 @@ export const getNewClient = async (setData: (val: NewClient[] | null) => void) =
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -335,7 +336,7 @@ export const getNewClientSearch = async (setData: (val: NewClient[] | null) => v
             else setData(null)
         } else await getNewClient(setData)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -348,7 +349,7 @@ export const getPermanentClient = async (setData: (val: PermanentClient[] | null
         if (data.success) setData(data.body)
         else setData(null)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -363,7 +364,7 @@ export const getPermanentClientSearch = async (setData: (val: PermanentClient[] 
             else setData(null)
         } else await getPermanentClient(setData)
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -397,7 +398,7 @@ export const addClientMessage = async (clientID: string, message: string, setLoa
             setLoading(false)
         }
     } catch (err) {
-        console.error(err)
+        consoleClear()
         setLoading(false)
         Toast.show('An error occurred on the server', Toast.LONG)
     }
@@ -413,7 +414,7 @@ export const getHistoryCount = async (setData: (val: HistoryCount | null) => voi
             else setData(null)
         } else setData(null)
     } catch (err) {
-        console.log(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -423,7 +424,7 @@ export const fetchServices = async (setData: (val: any[] | null) => void) => {
     const config = await getConfig()
     await axios.get(master_service_list, config ? config : {})
         .then((res) => setData(res.data.body))
-        .catch((err) => console.error(err));
+        .catch(() => consoleClear())
 };
 
 // feedback master post ilovaga baho berish
@@ -443,11 +444,11 @@ export const addFeedbackMaster = async (star: number | any, setIsLoading: (val: 
                 toggle && toggle()
                 if (res.data.success) Toast.show(`Вы оценили приложение на ${data.count}`, Toast.LONG)
             })
-            .catch(err => {
+            .catch(() => {
                 setIsLoading(false)
-                console.log(err)
                 toggle && toggle()
                 Toast.show(`An error occurred on the server`, Toast.LONG)
+                consoleClear()
             })
     }
 }
@@ -462,8 +463,8 @@ export const getUpcomingClient = async (setData: (val: any[] | null) => void, cl
             else setData(null)
         } else setData(null)
     } catch (err) {
-        console.log(err)
         setData(null)
+        consoleClear()
     }
 }
 
@@ -477,7 +478,7 @@ export const getPastClient = async (setData: (val: any[] | null) => void, client
             else setData(null)
         } else setData(null)
     } catch (err) {
-        console.log(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -492,7 +493,7 @@ export const getCanceledClient = async (setData: (val: any[] | null) => void, cl
             else setData(null)
         } else setData(null)
     } catch (err) {
-        console.log(err)
+        consoleClear()
         setData(null)
     }
 }
@@ -516,7 +517,7 @@ export const updateOrderStatus = async (orderID: string, status: string, setLoad
         } else Toast.show('Something went wrong', Toast.LONG)
     } catch (err) {
         setLoading(false)
-        console.log(err)
+        consoleClear()
         toggle && toggle()
         Toast.show('An error occurred on the server', Toast.LONG)
     }
@@ -537,6 +538,6 @@ export const clientDelete = async (clientID: string, setRes: (val: boolean) => v
     } catch (err) {
         setLoading(false)
         Toast.show('An error occurred on the server', Toast.LONG)
-        console.log(err)
+        consoleClear()
     }
 }

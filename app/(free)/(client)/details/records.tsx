@@ -5,7 +5,6 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import {NavigationProp, useNavigation, useRoute} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import Buttons from "@/components/(buttons)/button";
-import CalendarGraffic from "@/app/(free)/(work-grafic)/calendar";
 import {StandardNowAndConstClient} from "@/components/clients/client-items";
 import React, {useCallback, useEffect, useState} from "react";
 import {useScheduleFreeTime} from "@/helpers/state_managment/freeTime/freeTime";
@@ -52,6 +51,7 @@ const Records = () => {
             setActiveTab([])
             setActiveTime('')
             setOrderID('')
+            setCategoryName([])
         }
     }, [orderID]);
 
@@ -137,19 +137,32 @@ const Records = () => {
                             </TouchableOpacity>
                         ) : <StandardNowAndConstClient client={record}/>}
                         {record.updateOrder === 'updateOrder' ? <>
-                            <TouchableOpacity activeOpacity={.9} style={styles.button}>
-                                <Text style={styles.text}>
-                                    {console.log(record.orderOneData, 'update order')}
-                                    {categoryName ? categoryName : record.orderOneData?.serviceName}
-                                </Text>
-                            </TouchableOpacity>
+                            <View style={styles.button}>
+                                <ScrollView
+                                    showsHorizontalScrollIndicator={false}
+                                    horizontal
+                                    contentContainerStyle={{gap: 10}}
+                                >
+                                    {categoryName.length > 0 ? categoryName.map((item: string, idx: number) => (
+                                        <Text style={styles.text} key={idx}>{item}</Text>
+                                    )) : (record.orderOneData?.serviceName.trim().split(', ').map((item: string, idx: number) => (
+                                        <Text style={styles.text} key={idx}>{item}</Text>
+                                    )))}
+                                </ScrollView>
+                            </View>
                         </> : <>
                             {categoryName.length > 0 && (
-                                <TouchableOpacity activeOpacity={.9} style={[styles.button, {gap: 10 }, tw`flex-row items-center`]}>
-                                    {categoryName.map((item: any) => (
-                                        <Text style={[styles.text]}>{item}</Text>
-                                    ))}
-                                </TouchableOpacity>
+                                <View style={[styles.button]}>
+                                    <ScrollView
+                                        showsHorizontalScrollIndicator={false}
+                                        horizontal
+                                        contentContainerStyle={{gap: 10}}
+                                    >
+                                        {categoryName.map((item: any) => (
+                                            <Text style={[styles.text]}>{item}</Text>
+                                        ))}
+                                    </ScrollView>
+                                </View>
                             )}
                         </>}
                         <View style={tw`mt-5`}>

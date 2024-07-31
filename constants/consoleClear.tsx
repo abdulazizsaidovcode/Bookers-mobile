@@ -1,0 +1,1 @@
+export const consoleClear = () => console.clear()
