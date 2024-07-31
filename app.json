@@ -4,13 +4,13 @@
     "slug": "notification-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/mainLogo.png",
+    "icon": "./assets/images/splash.png",
     "scheme": "bookersapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#21212E",
-      "icon": "./assets/images/mainLogo.png"
+      "icon": "./assets/images/splash.png"
     },
     "ios": {
       "supportsTablet": true,
@@ -19,8 +19,8 @@
     "android": {
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/mainLogo.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/splash.png",
+        "backgroundColor": "#000"
       },
       "permissions": [
         "android.permission.RECORD_AUDIO",
@@ -31,7 +31,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/logo.png"
+      "favicon": "./assets/images/splash.png"
     },
     "plugins": [
       [
@@ -46,7 +46,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./local/assets/notification-icon.png",
+          "icon": "./local/assets/image/splash.png",
           "color": "#ffffff",
           "sounds": [
             "./local/assets/notification-sound.wav"
