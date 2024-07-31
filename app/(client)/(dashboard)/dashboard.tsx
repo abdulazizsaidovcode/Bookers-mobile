@@ -234,7 +234,7 @@ const Dashboard: React.FC = () => {
           {dashboardData && dashboardData.length > 0 ? (
 
             <View>
-              <Text style={tw`text-lg font-bold text-white mb-4 `}>Мои записи</Text>
+              <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
               {dashboardData.map((item, index) => (
                 <View key={index} style={tw`w-full flex `}>
                   <AccardionHistory
