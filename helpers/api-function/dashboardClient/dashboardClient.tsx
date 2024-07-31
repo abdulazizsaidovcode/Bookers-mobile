@@ -26,4 +26,15 @@ export const getDashboradMaster = async () => {
     }
   };
 
+  export const ClientAllCategory = async () =>{
+    try {
+      const config = await getConfig();
+      const response = await axios.get(ClientMasterByCategory, config || {});
+      const { setDashboardData } = useDashboardClientStore.getState();
+      setDashboardData(response.data.body);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
 

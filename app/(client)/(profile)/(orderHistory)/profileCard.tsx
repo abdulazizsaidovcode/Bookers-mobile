@@ -1,4 +1,4 @@
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { AntDesign } from '@expo/vector-icons';
@@ -8,6 +8,7 @@ import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardi
 import { addFebbakFunction, deletePastComingFunction, getOrderClientPustComing } from '@/helpers/api-function/oreder/orderHistory';
 import { addfedbackmaster } from '@/type/client/editClient';
 import tw from 'tailwind-react-native-classnames';
+
 
 interface IProps {
     masterName: string;
@@ -23,7 +24,9 @@ interface IProps {
     deleteIcon?: React.ReactNode;
     imageURL: string | null;
     orderId?: string | null;
+    specializations: string[] | null;
     clientCount?: number | null;
+    onPress?: (() => void)
 
 }
 
@@ -41,6 +44,8 @@ const ProfileCard: React.FC<IProps> = ({
     phoneIcon,
     deleteIcon,
     orderId,
+    specializations,
+    onPress,
 }) => {
     const { activeTab, setActiveTab, pastComing, setPastComing } = useAccardionStoreId();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
@@ -88,6 +93,10 @@ const ProfileCard: React.FC<IProps> = ({
 
     return (
         <View style={styles.card}>
+            <TouchableOpacity
+            activeOpacity={.8}
+            onPress={onPress}
+            >
             <View style={styles.profileContainer}>
                 <View style={styles.profileRow}>
                     <Image
@@ -116,6 +125,13 @@ const ProfileCard: React.FC<IProps> = ({
                     </Text>
                 ))}
             </View>
+            <ScrollView
+                horizontal
+                contentContainerStyle={{ gap: 16, marginBottom: 5, paddingHorizontal: 10,marginTop:10 }}
+                showsHorizontalScrollIndicator={false}
+            >
+                <Text style={tw`border border-gray-600 px-2 py-1 rounded-lg text-gray-600`}>{specializations}</Text>
+            </ScrollView>
             <Text style={styles.address}>{Adress}</Text>
             <View
                 style={[
@@ -156,6 +172,7 @@ const ProfileCard: React.FC<IProps> = ({
                     </TouchableOpacity>
                 )}
             </View>
+            </TouchableOpacity>
             <CenteredModal
                 isFullBtn={true}
                 btnWhiteText={'Отмена'}
@@ -308,7 +325,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         paddingVertical: 16,
         backgroundColor: '#9C0A35',
-        borderRadius: 5
+        borderRadius: 12
     },
     messageButtonText: {
         color: 'white',
@@ -316,8 +333,8 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     iconButton: {
-        padding: 16,
-        borderRadius: 50,
+        padding: 19,
+        borderRadius: 100,
         backgroundColor: '#9C0A35'
     },
     deleteText: {

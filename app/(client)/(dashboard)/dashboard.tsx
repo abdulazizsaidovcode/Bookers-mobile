@@ -28,6 +28,7 @@ import ClientCard from '@/components/(cliendCard)/cliendCard';
 
 
 
+
 // Bu bo'limga teginma
 type DashboardItemType = {
   id: string | null;
@@ -103,6 +104,7 @@ const Dashboard: React.FC = () => {
   const responseListener = useRef();
   const { dashboardData } = useDashboardClientStore();
   const { dashboardMasterData } = useDashboardMasterStore();
+  const [selectedCategory, setSelectedCategory] = useState('Bceni');
 
 
   Notifications.setNotificationHandler({
@@ -171,6 +173,12 @@ const Dashboard: React.FC = () => {
       return () => { };
     }, [])
   );
+  useFocusEffect(
+    React.useCallback(() => {
+      getAllCategory().finally(() => setLoading(false));
+      return () => { };
+    }, [])
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -178,8 +186,6 @@ const Dashboard: React.FC = () => {
       return () => { };
     }, [userLocation])
   );
-
-
   useFocusEffect(
     useCallback(() => {
       getDashboradMaster().finally(() => setLoading(false));
@@ -214,21 +220,28 @@ const Dashboard: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <Navbar />
       <ScrollView>
-        <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
+        <>
+          <View style={tw`mb-3 mt-3`}>
+            <Text style={tw`font-bold text-xl text-white`}>Мои записи</Text>
+          </View>
           {dashboardData && dashboardData.length > 0 ? (
             dashboardData.map((item, index) => (
               <View key={index} style={tw`w-full flex`}>
                 <AccardionHistory
                   id={item.orderId}
-                  title={item.specializations || 'Без специализации'}
-                  date={item.orderDate || 'Дата не указана'}
+                  title={item.serviceName || 'Без специализации'}
+                  date={`${item.orderDate}` || 'Дата не указана'}
+                  time={item.time}
                 >
                   <ProfileCard
-                    Address={item.address || 'Адрес не указан'}
+                    onPress={() => navigation.navigate('(client)/(oreder)/orderDetail', { id: item.orderId })}
+                    Address={`${item.serviceName}` || 'Адрес не указан'}
                     buttonName="Написать сообщение"
                     imageURL={item.userAttachmentId || 'https://example.com/default-image.jpg'}
                     money={`${item.orderPrice || 'Не указано'} сум`}
                     ratingnumber={item.feedbackCount || 0}
+                    masterGender={item.specializations}
+                    specializations={item.serviceName}
                     masterName={item.firstName || 'Имя не указано'}
                     salonName={item.salonName || 'Салон не указан'}
                     locationIcon={<FontAwesome5 name="map-marker-alt" size={20} color="white" />}
@@ -239,42 +252,85 @@ const Dashboard: React.FC = () => {
               </View>
             ))
           ) : (
-            allCategory && allCategory.length > 0 ? (
-              allCategory.map((item, index) => (
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  key={index}
-                  style={styles.touchableItem}
-                  onPress={() => {
-                    navigation.navigate('(client)/(uslugi)/(hairHealth)/hair');
-                  }}
+            <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
+              {allCategory && allCategory.length > 0 ? (
+                <ScrollView
+                  horizontal
+                  contentContainerStyle={{ gap: 16, marginBottom: 5, paddingHorizontal: 10 }}
+                  showsHorizontalScrollIndicator={false}
                 >
-                  <View style={styles.item}>
-                    <View style={styles.imageContainer}>
-                      <Image
-                        source={{ uri: `${getFile}${item.attachmentId}` }}
-                        style={tw`p-3 w-1/2`}
-                      />
-                    </View>
-                    <View style={styles.textContainer}>
-                      <Text style={styles.titleText}>{item.name}</Text>
-                      <Text style={styles.subtitleText}>Рядом с тобой {item.distanceMasterCount}</Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              ))
-            ) : null
+                  {allCategory.map((item, index) => (
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      key={index}
+                      style={tw`border border-gray-600 p-3 rounded-xl`}
+                      onPress={() => {
+                        navigation.navigate('(client)/(uslugi)/(hairHealth)/hair');
+                      }}
+                    >
+                      <View style={tw`flex flex-row items-center`}>
+                        <Image
+                          source={{ uri: `${getFile}${item.attachmentId}` }}
+                          style={tw`p-3 w-1/2`}
+                        />
+                        <View style={tw`flex flex-col pl-4`}>
+                          <Text style={tw`text-white font-bold`}>{item.name}</Text>
+                          <Text style={tw`text-gray-400`}>Рядом с тобой {item.distanceMasterCount}</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              ) : (
+                <Text style={tw`text-white`}>Нет доступных категорий</Text>
+              )}
+            </AccordionItem>
           )}
-        </AccordionItem>
+        </>
+
+        <View style={tw`mb-3 mt-5`}>
+          <Text style={tw`font-bold text-xl text-white`}>Мои мастера</Text>
+        </View>
+        <ScrollView
+          horizontal
+          contentContainerStyle={{ paddingHorizontal: 10 }}
+          showsHorizontalScrollIndicator={false}
+        >
+          {allCategory.map((item, index) => (
+            <View key={index} style={{ marginRight: 16, marginBottom: 20 }}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => setSelectedCategory(item.name)}
+                style={{
+                  backgroundColor: selectedCategory === item.name ? 'white' : 'transparent',
+                  borderRadius: 10,
+                }}
+              >
+                <Text style={tw`border border-gray-600 p-3 ${selectedCategory === item.name ? 'text-black border-white' : 'text-gray-600'} rounded-xl font-bold`}>
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </ScrollView>
 
         <AccordionItem title="Мои мастера" titleThen="У вас пока нет своих мастеров" backgroundColor="#21212E">
-          {dashboardMasterData && dashboardMasterData.length > 0 ?
+          {dashboardMasterData && dashboardMasterData.length > 0 ? (
             <>
-              <ClientCard
+              <ClientCard />
+              {allCategory && allCategory.length > 0 && (
+                <>
+                  {allCategory.map((item, index) => (
+                    <View key={index}>
+                      <Text>{item.name}</Text> {/* Misol uchun, `item` ichidagi `someField` ma'lumotini ko'rsatish */}
+                    </View>
+                  ))}
+                </>
+              )}
+            </>
+          ) : (
+            <>
 
-              />
-            </> :
-            <>
               <TouchableOpacity style={styles.touchableItem}>
                 <View style={styles.item}>
                   <View style={styles.textContainer}>
@@ -282,21 +338,17 @@ const Dashboard: React.FC = () => {
                   </View>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.touchableItem}
-                onPress={() => {
-                  router.push('../(masters)/masters')
-                }}
-              >
+              <TouchableOpacity style={styles.touchableItem} onPress={() => router.push('../(masters)/masters')}>
                 <View style={styles.itemTwo}>
                   <View style={styles.textContainer}>
-                    <Text style={styles.titleTextTwo}>Записаться к совему мастеру</Text>
+                    <Text style={styles.titleTextTwo}>Записаться к своему мастеру</Text>
                   </View>
                 </View>
               </TouchableOpacity>
             </>
-          }
-
+          )}
         </AccordionItem>
+
       </ScrollView>
     </SafeAreaView>
   );
