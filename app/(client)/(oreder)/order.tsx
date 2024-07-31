@@ -53,10 +53,10 @@ const OrderClient = () => {
   const EditOrder = async () => {
     let data: any = {
       orderId: id.orderId,
-      orderDate: calendarDate,
       orderTimeHour: parseInt(timeHour.split(":")[0], 10),
       orderTimeMinute: parseInt(timeHour.split(":")[1], 10),
-      clientId: selectedClient && selectedClient.id,
+      orderDate: calendarDate,
+      clientId: id && id.masterId,
     }
 
     await orderTimeEdit({

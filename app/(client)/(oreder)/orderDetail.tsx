@@ -23,6 +23,7 @@ import ContactInformationClient from '@/components/contact-information/contact-i
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
 export interface OrderOne {
+    masterId: string
     orderId: string,
     serviceIds: string[],
     serviceName: string,
@@ -234,6 +235,7 @@ const ClientOrderDetail = () => {
                                         id: {
                                             requerment: 'EDIT',
                                             orderId: orderOneData.orderId,
+                                            masterId: orderOneData.masterId,
                                         }
                                     })}
                                     activeOpacity={.9}

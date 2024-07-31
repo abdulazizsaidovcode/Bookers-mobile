@@ -66,6 +66,8 @@ export const orderTimeEdit = async ({ data, setOrderId, setLoading }: {
     try {
         setLoading(true);
         const config = await getConfig()
+        console.log(config);
+        
         const res = await axios.put(`${order_update}`, data, config ? config : {});
         setLoading(false);
         if (res.data.success) {
