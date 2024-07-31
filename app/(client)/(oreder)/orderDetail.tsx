@@ -145,7 +145,7 @@ const ClientOrderDetail = () => {
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <NavigationMenu name={orderOneData ? orderOneData.firstName : ''} navigate={() => navigation.navigate('(client)/(dashboard)/dashboard')} />
+            <NavigationMenu name={orderOneData ? orderOneData.firstName : ''} navigate={() => navigation.navigate('(tabs)/(client)')} />
             <View style={tw`flex-1`}>
                 <View style={[styles.head, { backgroundColor: orderOneData && orderOneData.orderStatus ? statusRegex(orderOneData.orderStatus) : '#9C0A35' }]}>
                     <Text style={{ textAlign: 'center', color: '#fff' }}>{orderOneData ? orderOneData.orderStatus : ''}</Text>

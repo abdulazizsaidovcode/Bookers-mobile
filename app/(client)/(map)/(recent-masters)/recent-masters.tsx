@@ -21,14 +21,14 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)/(map)/(recent-masters)/recent-masters'>;
 
 const haversineDistance = (userLat: number, userLon: number, salonLat: number, salonLon: number) => {
-    const R = 6371; // Radius of the Earth in kilometers
+    const R = 6371; 
     const dLat = (salonLat - userLat) * (Math.PI / 180);
     const dLon = (salonLon - userLon) * (Math.PI / 180);
     const a = Math.sin(dLat / 2) ** 2 +
         Math.cos(userLat * (Math.PI / 180)) * Math.cos(salonLat * (Math.PI / 180)) *
         Math.sin(dLon / 2) ** 2;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Distance in kilometers
+    return R * c;
 };
 
 
@@ -41,27 +41,15 @@ const RecentMasters = () => {
     const { masters } = useTopMastersStore();
     const [metroStations, setMetroStations] = useState<any>([]);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-
+    
     useFocusEffect(
         useCallback(() => {
             getUserLocation(setUserLocation);
-            return () => { };
-        }, [])
-    );
-
-    useFocusEffect(
-        useCallback(() => {
             getTopMasters();
-            return () => { };
-        }, [])
-    );
-
-    useFocusEffect(
-        useCallback(() => {
             fetchMetroStations(userLocation.coords.latitude, userLocation.coords.longitude, setMetroStations);
             return () => { };
-        }, [userLocation])
-    )
+        }, [])
+    );
 
     console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', metroStations);
 

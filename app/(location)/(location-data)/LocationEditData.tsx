@@ -22,6 +22,7 @@ import Modal from "react-native-modal";
 import { Feather } from "@expo/vector-icons";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
 interface ListData {
   key: string;
@@ -29,6 +30,7 @@ interface ListData {
 }
 
 const LocationEditData = () => {
+  const navigation = useNavigation<any>()
   const [salonId, setSalonId] = useState("");
   const [data, setData] = useState<ListData[]>([]);
   const [districtId, setDistrictId] = useState("");
@@ -64,8 +66,6 @@ const LocationEditData = () => {
         `${base_url}salon`,
         config ? config : {}
       );
-      console.log(data);
-
       const listData: ListData[] =
         data.body &&
         data.body.map((item: any) => ({
@@ -102,10 +102,9 @@ const LocationEditData = () => {
         data,
         config ? config : {}
       );
-      console.log(res);
 
       if (res.data.success) {
-        router.push("../(response-location)/ResponseLocationEdit");
+        navigation.navigate('(location)/(response-location)/ResponseLocationEdit')
       }
       else {
         resetForm();
@@ -159,8 +158,8 @@ const LocationEditData = () => {
             justifyContent: "space-between",
             backgroundColor: "#21212E",
           }}
-      
-    >
+
+        >
           <View style={tw``}>
             <Text style={tw`text-base my-2 text-gray-400`}>
               Название салона
