@@ -1,5 +1,6 @@
 import Buttons from '@/components/(buttons)/button';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
+import { Loading } from '@/components/loading/loading';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editFeedbeckOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
@@ -24,6 +25,16 @@ const RequestFeedback = () => {
     setFeedbackData({ ...feedbackData, text });
     setHasChanges(true);
   };
+
+  if (!feedbackData) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          <Loading />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>

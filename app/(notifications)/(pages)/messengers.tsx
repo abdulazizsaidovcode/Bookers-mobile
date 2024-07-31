@@ -8,6 +8,7 @@ import { editMessenger, fetchAllData } from '@/helpers/api-function/notification
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import { useNavigation } from '@react-navigation/native';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
+import { Loading } from '@/components/loading/loading';
 
 const Messengers = () => {
   const navigation = useNavigation();
@@ -26,6 +27,9 @@ const Messengers = () => {
   const handleSave = () => {
     editMessenger(smsData.isActive, navigation.goBack, setHasChanges, setIsloading);
   };
+  if (!smsData) {
+    return <Loading />
+  }
 
   return (
     <SafeAreaView style={styles.container}>

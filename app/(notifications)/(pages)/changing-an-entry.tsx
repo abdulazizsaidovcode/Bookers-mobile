@@ -1,5 +1,6 @@
 import Buttons from '@/components/(buttons)/button';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
+import { Loading } from '@/components/loading/loading';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editChangingOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
@@ -12,12 +13,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const ChangingEnEntry = () => {
-  const { changingData, isLoading, tariff, setIsloading, setChangingData } = useNotificationsStore();
+  const { changingData, isLoading, tariff, texts, setTexts, setIsloading, setChangingData } = useNotificationsStore();
   const navigation = useNavigation();
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
     fetchAllData(setChangingData, 'CHANGE_ORDER');
+    setTexts({ ...texts, changingText: changingData.text ? changingData.text : '' })
   }, []);
 
   const toggleSwitch = () => {
@@ -26,14 +28,24 @@ const ChangingEnEntry = () => {
   };
 
   const onMessageChange = (text: string) => {
-    setChangingData({ ...changingData, text });
+    setTexts({ ...texts, changingText: text });
     setHasChanges(true);
   };
 
   const handleSave = () => {
     tariff === 'FREE' && putNumbers(7)
-    editChangingOrder(changingData.isActive, changingData.text, setHasChanges, navigation.goBack, setIsloading);
+    editChangingOrder(changingData.isActive, changingData.isActive ? texts.changingText : changingData.text, setHasChanges, navigation.goBack, setIsloading);
   };
+
+  if (!changingData) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          <Loading />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>

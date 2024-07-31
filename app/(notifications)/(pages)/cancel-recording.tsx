@@ -1,5 +1,6 @@
 import Buttons from '@/components/(buttons)/button';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
+import { Loading } from '@/components/loading/loading';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editCancelOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
@@ -12,7 +13,7 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 const CancelRecording = () => {
-  const { cancelData, setCancelData, isLoading, setIsloading } = useNotificationsStore();
+  const { cancelData, setCancelData, isLoading, setIsloading, texts, setTexts } = useNotificationsStore();
   const navigation = useNavigation();
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -22,17 +23,28 @@ const CancelRecording = () => {
   };
 
   const onMessageChange = (text: string) => {
-    setCancelData({ ...cancelData, text });
+    setTexts({ ...texts, cancelText: text });
     setHasChanges(true);
   };
 
   useEffect(() => {
     fetchAllData(setCancelData, 'CANCEL_ORDER');
+    setTexts({ ...texts, cancelText: cancelData.text ? cancelData.text : '' });
   }, []);
 
   const handleSave = () => {
-    editCancelOrder(cancelData.isActive, cancelData.text, setHasChanges, navigation.goBack, setIsloading);
+    editCancelOrder(cancelData.isActive, cancelData.isActive ? texts.cancelText : cancelData.text, setHasChanges, navigation.goBack, setIsloading);
   };
+
+  if (!cancelData) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          <Loading />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>

@@ -1,7 +1,15 @@
-import { NotificationsAllData, NotificationsStore } from "@/type/notifications/notifications";
+import { EditedDataTexts, NotificationsAllData, NotificationsStore } from "@/type/notifications/notifications";
 import { create } from "zustand";
 
 const useNotificationsStore = create<NotificationsStore>((set) => ({
+    texts: {
+        cancelText: '',
+        changingText: '',
+        orderText: '',
+        appoinmentText: '',
+        windowText: ''
+    },
+    setTexts: (val: EditedDataTexts) => set({ texts: val }),
     isMainSwitch: false,
     isLoading: false,
     setIsloading: (val: boolean) => set({ isLoading: val }),

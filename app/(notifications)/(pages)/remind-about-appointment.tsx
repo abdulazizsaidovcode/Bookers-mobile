@@ -1,44 +1,29 @@
 import React, { useEffect, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Switch,
-  TouchableOpacity,
-  Dimensions,
-  Pressable,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View, Switch, TouchableOpacity, Dimensions, Pressable } from "react-native";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import useNotificationsStore from "@/helpers/state_managment/notifications/notifications";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import Buttons from "@/components/(buttons)/button";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { TextInput } from "react-native-paper";
-import {
-  editAppoinmentOrder,
-  fetchAllData,
-  fetchAppoinmentActiveData,
-} from "@/helpers/api-function/notifications/notifications";
+import { editAppoinmentOrder, fetchAllData, fetchAppoinmentActiveData } from "@/helpers/api-function/notifications/notifications";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import LoadingButtons from "@/components/(buttons)/loadingButton";
+import { Loading } from "@/components/loading/loading";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 const RemindAboutAppointment: React.FC = () => {
-  const { isAppoinmentModal, appoinmentData, appoinmentActiveData, isLoading, setIsloading, setAppoinmentActiveData, setAppoinmentData, setIsAppoinmentModal, } = useNotificationsStore();
+  const { isAppoinmentModal, appoinmentData, appoinmentActiveData, isLoading, texts, setTexts, setIsloading, setAppoinmentActiveData, setAppoinmentData, setIsAppoinmentModal, } = useNotificationsStore();
   const navigation = useNavigation();
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
     fetchAllData(setAppoinmentData, "APPOINTMENT");
-  }, [setAppoinmentData]);
-
-  useEffect(() => {
     fetchAppoinmentActiveData(setAppoinmentActiveData);
-  }, [setAppoinmentActiveData]);
-
+    setTexts({ ...texts, appoinmentText: appoinmentData.text ? appoinmentData.text : '' })
+  }, []);
 
   const toggleSwitch = () => {
     setAppoinmentActiveData(!appoinmentActiveData);
@@ -48,7 +33,7 @@ const RemindAboutAppointment: React.FC = () => {
   const toggleModal = () => setIsAppoinmentModal(!isAppoinmentModal);
 
   const onMessageChange = (text: string) => {
-    setAppoinmentData({ ...appoinmentData, content: text });
+    setTexts({ ...texts, appoinmentText: text });
     setHasChanges(true);
   };
 
@@ -61,6 +46,16 @@ const RemindAboutAppointment: React.FC = () => {
     setAppoinmentData({ ...appoinmentData, minute });
     setHasChanges(true);
   };
+
+  if (!appoinmentData && !appoinmentActiveData) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ScrollView>
+          <Loading />
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   const hours = [0, 1];
   const minutes = [0, 15., 45];
@@ -198,7 +193,7 @@ const RemindAboutAppointment: React.FC = () => {
             title="Сохранить"
             onPress={() =>
               editAppoinmentOrder(
-                appoinmentData.content,
+                appoinmentActiveData ? texts.appoinmentText : appoinmentData.content,
                 appoinmentData.hour,
                 appoinmentData.minute,
                 appoinmentActiveData,

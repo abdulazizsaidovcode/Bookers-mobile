@@ -9,7 +9,7 @@ const { height: screenHeight, width: screenWidth } = Dimensions.get('window');
 
 const InternetNotice = () => {
     const [isConnected, setIsConnected] = useState<boolean | null>(null);
-    const slideAnim = useRef(new Animated.Value(screenHeight)).current; // pastdan boshlang'ich holat
+    const slideAnim = useRef(new Animated.Value(screenHeight)).current;
 
     useEffect(() => {
         const unsubscribe = NetInfo.addEventListener(state => {
@@ -21,14 +21,12 @@ const InternetNotice = () => {
 
     useEffect(() => {
         if (!isConnected) {
-            // Ekranga chiqish animatsiyasi
             Animated.timing(slideAnim, {
                 toValue: 0,
                 duration: 500,
                 useNativeDriver: true,
             }).start();
         } else {
-            // Ekrandan ketish animatsiyasi
             Animated.timing(slideAnim, {
                 toValue: screenHeight,
                 duration: 300,
@@ -41,7 +39,6 @@ const InternetNotice = () => {
         NetInfo.fetch().then(async state => {
             setIsConnected(state.isConnected);
             if (state.isConnected) {
-                // Ilovani qayta yuklash
                 try {
                     await Updates.reloadAsync();
                 } catch (e) {
@@ -53,8 +50,8 @@ const InternetNotice = () => {
 
     return (
         <Animated.View style={[styles.offlineContainer, { transform: [{ translateY: slideAnim }] }]}>
-            <Text style={{ color: 'white', fontSize: 20, textAlign: 'center', marginBottom: 10 }}>Произошла ошибка при подключении к Интеру.</Text>
             <Image style={{ width: 200, height: 200, borderRadius: 50 }} source={require('../../assets/images/dinosaur.jpg')} />
+            <Text style={{ color: 'white', fontSize: 20, textAlign: 'center', marginTop: 10 }}>Произошла ошибка при подключении к Интеру.</Text>
             <View style={{ marginTop: 20, paddingHorizontal: 10, width: '100%' }}>
                 <Buttons onPress={handleRetry} backgroundColor='white' textColor='#9C0A35' title='Повторить попытку' />
             </View>
