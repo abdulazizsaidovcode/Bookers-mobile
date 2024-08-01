@@ -208,7 +208,8 @@ export const addFebdaback_Url:string=`${base_url}feedback/for/master/by/client`
 export const deletePastcoming_Url:string=`${base_url}order/`
 //delete all pastcoming API
 export const deleteAllpastcoming_Url:string=`${base_url}order/delete/all`
-
+//order hisotry upcoming message api
+export const addMessage_Url:string=`${base_url}message/for/master/by/client`
 // favourite urls
 export const favourite_list:string=`${base_url}favourite/list`
 export const favourite_add:string=`${base_url}favourite/save`

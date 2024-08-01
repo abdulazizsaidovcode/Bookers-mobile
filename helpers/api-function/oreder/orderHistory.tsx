@@ -108,7 +108,6 @@ export const deleteAllPastComingFunction = async (datas: string[],toggleModal: (
     } catch {
         Toast.show('All orders deleted errorrrrrrrrrrrr', Toast.LONG);
     }
-
-
-
 }
+
+export const AddMessageOrderUpcoming=async(datas:)
