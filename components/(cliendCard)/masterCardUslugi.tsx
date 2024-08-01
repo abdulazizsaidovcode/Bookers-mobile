@@ -5,16 +5,17 @@ import tw from 'tailwind-react-native-classnames';
 import { router, useNavigation } from 'expo-router';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
 import { ClientData } from '@/helpers/state_managment/uslugi/uslugiStore';
-import { addFavouriteOrder } from '@/helpers/api-function/favourite-orders/favourite-orders';
+import { addFavouriteOrder, haveOrNot } from '@/helpers/api-function/favourite-orders/favourite-orders';
+import { FavouriteOrdersType } from '@/type/favourite-orders/favourite-orders';
 
 
 type ClientCardItem = {
-    item: ClientData
+    item: ClientData | null
     onPress?: () => void;
-
+    favouriteOrders: FavouriteOrdersType[]
 };
 
-const MasterCardUslugi: React.FC<ClientCardItem> = ({ onPress, item }) => {
+const MasterCardUslugi: React.FC<ClientCardItem> = ({ onPress, item , favouriteOrders}) => {
     const { getme } = webPageStore();
     const navigate = useNavigation<any>();
 
@@ -69,14 +70,7 @@ const MasterCardUslugi: React.FC<ClientCardItem> = ({ onPress, item }) => {
                 >
                     <FontAwesome6 name="phone" size={24} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => addFavouriteOrder(item.id)}
-                    activeOpacity={0.7}
-                    style={[tw`px-4 py-3 rounded-full mx-2`, { backgroundColor: '#9C0A35' }]} // Customize the style as needed
-                >
-                    <Octicons name="bookmark" size={26} color="white"
-                        onPress={() => { }} />
-                </TouchableOpacity>
+                {haveOrNot(item.id, favouriteOrders)}
             </View>
 
 

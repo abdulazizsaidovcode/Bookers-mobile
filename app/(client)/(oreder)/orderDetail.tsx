@@ -27,6 +27,7 @@ import Textarea from '@/components/select/textarea';
 import { addMessageInterface } from '@/type/client/editClient';
 import { AddMessageOrderUpcoming } from '@/helpers/api-function/oreder/orderHistory';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
+import { fetchMasterLocation } from '@/helpers/api-function/map/map';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -79,6 +80,7 @@ const ClientOrderDetail = () => {
     const { userLocation, setUserLocation } = useGetMeeStore();
     const { orderData } = useMapStore();
     const [textAreaValue, setTextAreaValue] = useState<string>('');
+    const [masterData, setMasterData] = useState<any | null>(null);
 
     useFocusEffect(useCallback(() => {
         if (id) orderClientGetOne(id, setOrderOneData)
@@ -163,6 +165,17 @@ const ClientOrderDetail = () => {
 
         Linking.openURL(url).catch((err) => console.error('An error occurred', err));
     };
+
+    async function reOrder() {
+        if (orderOneData) {
+            await fetchMasterLocation(orderOneData.masterId, setMasterData)
+        }
+        navigation.navigate('(client)/(uslugi)/(masterInformation)/masterInformation')
+    }
+    useFocusEffect(
+        useCallback(() => {
+        setSelectedClient(masterData)
+    }, [masterData]))
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -283,7 +296,13 @@ const ClientOrderDetail = () => {
                                 </TouchableOpacity>
                                 <Text style={styles.contactTitle}>Дополнительно</Text>
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate('(client)/(oreder)/order', { id: {} })}
+                                    onPress={() => navigation.navigate('(client)/(oreder)/order', {
+                                        id: {
+                                            orderId: orderOneData.orderId,
+                                            requerment: 'EDIT',
+                                            masterId: orderOneData.masterId,
+                                        }
+                                    })}
                                     activeOpacity={.9}
                                     style={[styles.button, tw`mb-4 items-center flex-row`]}
                                 >
@@ -325,9 +344,9 @@ const ClientOrderDetail = () => {
                                     <View style={styles.buttonContainer}>
                                         <TouchableOpacity
                                             onPress={() => {
-                                                // setSelectedClient()
                                                 navigation.navigate('(client)/(oreder)/order', {
                                                     id: {
+                                                        orderId: orderOneData.orderId,
                                                         requerment: 'RE_ORDER',
                                                         masterId: orderOneData.masterId,
                                                     }
@@ -336,7 +355,11 @@ const ClientOrderDetail = () => {
                                             style={styles.repeatButton}>
                                             <Text style={styles.buttonText}>Повторить</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.bookButton}>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                reOrder()
+                                            }}
+                                            style={styles.bookButton}>
                                             <Text style={styles.buttonText2}>Записаться</Text>
                                         </TouchableOpacity>
                                     </View>

@@ -51,7 +51,6 @@ export const getFeedbackClientList = async (setData: (val: FeedBack | null) => v
     try {
         if (masterID) {
             const config = await getConfig();
-            console.log(config, 'tokennnn')
             const url: string = `${client_feedback}${masterID}?page=${page}&size=10`
 
             const {data} = await axios.get(url, config ? config : {});
@@ -154,28 +153,42 @@ const ClientFeedbackCard = ({onPress, data, oneStatus}: {
     </>
 }
 
-const BreakdownItem = ({label, percentage, oneStatus}: { label: string, percentage: number, oneStatus?: string }) => {
+const BreakdownItem = (
+    {
+        label,
+        percentage,
+        isSelected,
+        onPress,
+        oneStatus
+    }: {
+        label: string,
+        percentage: number,
+        isSelected?: boolean,
+        onPress?: () => void,
+        oneStatus?: string
+    }) => {
     return (
-        <View style={[tw`flex-row items-center justify-start w-full my-2`]}>
-            {!oneStatus && <CustomCheckbox/>}
+        <TouchableOpacity
+            onPress={onPress}
+            activeOpacity={!oneStatus ? .9 : 1}
+            style={[tw`flex-row items-center justify-start w-full my-2`]}
+        >
+            {!oneStatus && <CustomCheckbox checked={isSelected}/>}
             <Text style={[styles.breakdownLabel, {marginLeft: oneStatus ? 0 : 10}]}>{label}</Text>
             <View style={styles.bar}>
                 <View style={[styles.filledBar, {width: `${percentage}%`}]}/>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
-const CustomCheckbox = () => {
-    const [checked, setChecked] = useState(false);
-
-    const toggleCheckbox = () => setChecked(!checked);
+const CustomCheckbox = ({checked}: { checked?: boolean }) => {
     return (
-        <TouchableOpacity onPress={toggleCheckbox} style={styles.container} activeOpacity={.8}>
+        <View style={styles.container}>
             <View style={[styles.checkbox]}>
                 {checked && <View style={styles.innerCircle}/>}
             </View>
-        </TouchableOpacity>
+        </View>
     );
 };
 
@@ -184,6 +197,7 @@ const ClientFeedback = () => {
     const {selectedClient} = ClientStory()
     const [feedback, setFeedback] = useState<FeedBack | null>(null)
     const [page, setPage] = useState(0)
+    const [selectedItem, setSelectedItem] = useState<number | null>(null);
     const [oneData, setOneData] = useState<FeedbackList | null>(null)
     const [isModal, setIsModal] = useState(false)
     const maxStars = 5;
@@ -199,11 +213,17 @@ const ClientFeedback = () => {
         if (selectedClient) getFeedbackClientList(setFeedback, selectedClient?.id, page, setIsLoading)
     }, [page]))
 
+    useFocusEffect(useCallback(() => {
+        if (selectedItem === null && selectedClient) getFeedbackClientList(setFeedback, selectedClient?.id, page, setIsLoading)
+    }, [selectedItem]))
+
     const toggleModal = () => setIsModal(!isModal)
     const handleButtonPress = (buttonIndex: any) => {
         if (buttonIndex === 1) setPage(prevPage => prevPage + 1)
         else if (buttonIndex === 0) return setPage(prevPage => prevPage - 1)
     };
+
+    console.log(selectedItem)
 
     return (
         <View style={tw`flex-1`}>
@@ -230,11 +250,56 @@ const ClientFeedback = () => {
                 <Text style={styles.reviewCount}>На основе {feedback?.reviewCount} отзывов</Text>
 
                 <View style={styles.reviewBreakdown}>
-                    <BreakdownItem label="Отлично" percentage={feedback ? feedback.great : 0}/>
-                    <BreakdownItem label="Хорошо" percentage={feedback ? feedback.fine : 0}/>
-                    <BreakdownItem label="Средне" percentage={feedback ? feedback.average : 0}/>
-                    <BreakdownItem label="Плохо" percentage={feedback ? feedback.badly : 0}/>
-                    <BreakdownItem label="Очень плохо" percentage={feedback ? feedback.veryBadly : 0}/>
+                    <BreakdownItem
+                        label="Отлично"
+                        percentage={feedback ? feedback.great : 0}
+                        isSelected={selectedItem === 1}
+                        onPress={() => {
+                            setSelectedItem(1)
+                            if (selectedItem === 1) setSelectedItem(null)
+                            getFeedbackClientFilter(setFeedback, selectedClient?.id, 5, page, setIsLoading)
+                        }}
+                    />
+                    <BreakdownItem
+                        label="Хорошо"
+                        percentage={feedback ? feedback.fine : 0}
+                        isSelected={selectedItem === 2}
+                        onPress={() => {
+                            setSelectedItem(2)
+                            if (selectedItem === 2) setSelectedItem(null)
+                            getFeedbackClientFilter(setFeedback, selectedClient?.id, 4, page, setIsLoading)
+                        }}
+                    />
+                    <BreakdownItem
+                        label="Средне"
+                        percentage={feedback ? feedback.average : 0}
+                        isSelected={selectedItem === 3}
+                        onPress={() => {
+                            setSelectedItem(3)
+                            if (selectedItem === 3) setSelectedItem(null)
+                            getFeedbackClientFilter(setFeedback, selectedClient?.id, 3, page, setIsLoading)
+                        }}
+                    />
+                    <BreakdownItem
+                        label="Плохо"
+                        percentage={feedback ? feedback.badly : 0}
+                        isSelected={selectedItem === 4}
+                        onPress={() => {
+                            setSelectedItem(4)
+                            if (selectedItem === 4) setSelectedItem(null)
+                            getFeedbackClientFilter(setFeedback, selectedClient?.id, 2, page, setIsLoading)
+                        }}
+                    />
+                    <BreakdownItem
+                        label="Очень плохо"
+                        percentage={feedback ? feedback.veryBadly : 0}
+                        isSelected={selectedItem === 5}
+                        onPress={() => {
+                            setSelectedItem(5)
+                            if (selectedItem === 5) setSelectedItem(null)
+                            getFeedbackClientFilter(setFeedback, selectedClient?.id, 1, page, setIsLoading)
+                        }}
+                    />
                 </View>
 
                 <View style={tw`w-full mt-8`}>
