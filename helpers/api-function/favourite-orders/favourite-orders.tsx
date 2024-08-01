@@ -26,11 +26,12 @@ export const fetchFavouriteOrders = async (setFavouriteOrders: (val: FavouriteOr
     }
 }
 
-export const addFavouriteOrder = async (masterId: string) => {
+export const addFavouriteOrder = async (masterId: string, setFavouriteOrders: (val: FavouriteOrdersType[]) => void, setIsloading: (val: boolean) => void) => {
     const config = await getConfig();
     try {
         const { data } = await axios.post(`${favourite_add}/${masterId}`, {}, config ? config : {})
         if (data.success) {
+            fetchFavouriteOrders(setFavouriteOrders, setIsloading)
             Toast.show('Мастер успешно добавлен в список любимый мастеров.', Toast.LONG)
         }
     } catch (error) {
@@ -54,17 +55,17 @@ export const deleteFavouriteOrder = async (masterId: string, setFavouriteOrders:
     }
 }
 
-export const haveOrNot = (masterId: string, favouriteOrders: FavouriteOrdersType[]) => {
+export const haveOrNot = (masterId: string, favouriteOrders: FavouriteOrdersType[], setFavouriteOrders: (val: FavouriteOrdersType[]) => void) => {
     if (favouriteOrders.some(order => order.id === masterId)) {
         return (
-            <TouchableOpacity onPress={() => addFavouriteOrder(masterId)} activeOpacity={0.8} style={[tw`p-2 rounded-full`, { backgroundColor: '#9C0A35' }]}>
-                <MaterialIcons name="bookmark" size={27} color="white" />
+            <TouchableOpacity onPress={() => addFavouriteOrder(masterId, setFavouriteOrders)} activeOpacity={0.8} style={[tw`p-2 rounded-full`, { backgroundColor: '#9C0A35' }]}>
+                <Feather name="bookmark" size={27} color="white" />
             </TouchableOpacity>
         )
     } else {
         return (
             <TouchableOpacity activeOpacity={0.8} style={[tw`p-2 rounded-full`, { backgroundColor: '#9C0A35' }]}>
-                <Feather name="bookmark" size={27} color="white" />
+                <MaterialIcons name="bookmark" size={27} color="white" />
             </TouchableOpacity>
         )
     }
