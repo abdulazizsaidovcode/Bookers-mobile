@@ -24,6 +24,7 @@ import BottomModal from '@/components/(modals)/modal-bottom';
 import Buttons from '@/components/(buttons)/button';
 import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
 import Textarea from '@/components/select/textarea';
+import { addMessageInterface } from '@/type/client/editClient';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -62,7 +63,7 @@ const ClientOrderDetail = () => {
     const navigation = useNavigation<any>();
     const route = useRoute<any>();
     const { id } = route.params;
-    const { ratingModal, setRatingModal,orderRatingModal,setOrderRatingModal } = useAccardionStoreId()
+    const { ratingModal, setRatingModal, orderRatingModal, setOrderRatingModal } = useAccardionStoreId()
     const { isLoading, setIsLoading, refreshing, setRefreshing } = clientStore()
     const { setGetMee } = useGetMeeStore()
     const [orderOneData, setOrderOneData] = useState<OrderOne | null>(null)
@@ -80,7 +81,13 @@ const ClientOrderDetail = () => {
         if (id) orderClientGetOne(id, setOrderOneData)
         getMee(setGetMee)
     }, []))
-
+    const datas: addMessageInterface = {
+        clientId: null,
+        masterId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        adminId: null,
+        message: "string",
+        messageStatus: "string"
+    }
     const ratingToggleModal = () => {
         setOrderRatingModal(!orderRatingModal);
     };
