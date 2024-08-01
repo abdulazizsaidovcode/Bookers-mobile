@@ -46,7 +46,7 @@ const Masters = () => {
   const navigation = useNavigation<any>();
   const [page, setPage] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
-  const { selectedClient, setSelectedClient } = ClientStory()
+  const { selectedClient, setSelectedClient, clientData, setClientData } = ClientStory()
 
   const toggleBottomModal = () => setBottomModal(!bottomModal);
 
@@ -184,6 +184,7 @@ const Masters = () => {
             <Buttons title="Записаться"
               onPress={() => {
                 setSelectedClient(item)
+                setClientData(item)
                 navigation.navigate('(client)/(uslugi)/(masterInformation)/masterInformation')
               }}
             />
