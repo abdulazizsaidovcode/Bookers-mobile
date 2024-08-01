@@ -49,6 +49,8 @@ interface AccardionState {
   setActiveTab: (tab: 'upcoming' | 'past') => void;
   ratingModal: boolean;
   setRatingModal: (val: boolean) => void;
+  orderRatingModal: boolean;
+  setOrderRatingModal: (val: boolean) => void;
   pastComing: getOrderClientPastcomingInterface[];
   setPastComing: (data: getOrderClientPastcomingInterface[]) => void;
 }
@@ -58,6 +60,8 @@ export const useAccardionStoreId = create<AccardionState>((set) => ({
   setExpandedId: (id) => set({ expandedId: id }),
   ratingModal: false,
   setRatingModal: (val) => set({ ratingModal: val }),
+  orderRatingModal: false,
+  setOrderRatingModal: (val) => set({ orderRatingModal: val }),
   activeTab: 'upcoming',
   setActiveTab: (tab) => set({ activeTab: tab }),
   expandidIdTwo: null,

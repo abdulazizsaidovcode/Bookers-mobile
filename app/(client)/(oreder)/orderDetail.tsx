@@ -62,7 +62,7 @@ const ClientOrderDetail = () => {
     const navigation = useNavigation<any>();
     const route = useRoute<any>();
     const { id } = route.params;
-    const { ratingModal, setRatingModal } = useAccardionStoreId()
+    const { ratingModal, setRatingModal,orderRatingModal,setOrderRatingModal } = useAccardionStoreId()
     const { isLoading, setIsLoading, refreshing, setRefreshing } = clientStore()
     const { setGetMee } = useGetMeeStore()
     const [orderOneData, setOrderOneData] = useState<OrderOne | null>(null)
@@ -82,7 +82,7 @@ const ClientOrderDetail = () => {
     }, []))
 
     const ratingToggleModal = () => {
-        setRatingModal(!ratingModal);
+        setOrderRatingModal(!orderRatingModal);
     };
     const handleChange = (e: string) => {
         const trimmedValue = e.trim();
@@ -367,7 +367,7 @@ const ClientOrderDetail = () => {
                             isFullBtn={false}
                             btnWhiteText={'Отправить'}
                             btnRedText={'Закрыть'}
-                            isModal={ratingModal}
+                            isModal={orderRatingModal}
                             toggleModal={ratingToggleModal}
                         >
                             <>
