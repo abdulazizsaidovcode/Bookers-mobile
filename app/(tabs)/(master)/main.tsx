@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity, Dimensions, RefreshControl, Share, Alert, BackHandler, } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PieChart from "react-native-pie-chart";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -285,7 +285,8 @@ const TabOneScreen: React.FC = () => {
                     onConfirm={() => handleConfirmOrReject("REJECTED")}
                     btnWhiteText="Назад"
                 >
-                    <View>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+                        <MaterialCommunityIcons name="cancel" size={100} color="#9C0A35" />
                         <Text
                             style={{ fontSize: 17, color: COLORS.white, textAlign: "center" }}
                         >
@@ -301,7 +302,8 @@ const TabOneScreen: React.FC = () => {
                     onConfirm={() => handleConfirmOrReject("CONFIRMED")}
                     btnWhiteText="Назад"
                 >
-                    <View>
+                    <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+                        <Feather name="check-circle" size={100} color="#9C0A35" />
                         <Text
                             style={{ fontSize: 17, color: COLORS.white, textAlign: "center" }}
                         >
