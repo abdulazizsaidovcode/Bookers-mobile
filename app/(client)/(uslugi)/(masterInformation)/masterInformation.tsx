@@ -26,6 +26,7 @@ const MasterInformation = () => {
   const { selectedClient, masterServis, masterGallery, feedbackForMaster, clientData } = ClientStory();
   const [activeTab, setActiveTab] = useState<string | null>('upcoming');
   const [selectedCategorys, setSelectedCategories] = useState<any>('vse');
+  const [selectedService, setSelectedService] = useState<any>(null);
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>();
 
@@ -41,7 +42,12 @@ const MasterInformation = () => {
       return () => null;
     }, [])
   );
-  
+  useFocusEffect(
+    useCallback(() => {
+      setSelectedService(masterServis)
+    }, [masterServis])
+  )
+
   setTimeout(() => {
     console.log(selectedClient);
   }, 1000)
@@ -166,32 +172,33 @@ const MasterInformation = () => {
           </View>
           <ScrollView
             horizontal
-            contentContainerStyle={{ gap: 16, marginBottom: 10 }}
+            contentContainerStyle={{ gap: 10, marginBottom: 10 }}
             showsHorizontalScrollIndicator={false}
           >
-            <View >
+            {masterServis && <View >
               <TouchableOpacity
                 activeOpacity={0.9}
                 onPress={() => handleTabChange('vse')}
                 style={[
                   styles.categoryCard,
-                  selectedCategorys == 'vse' && { backgroundColor: '#B9B9C9' }
+                  selectedCategorys == 'vse' ? { backgroundColor: '#B9B9C9' } : { borderColor: '#828282', borderWidth: 1 }
                 ]}
               >
                 <Text style={[tw`text-white text-center`, { color: selectedCategorys == 'vse' ? '#000' : '#828282' }]}>Все</Text>
               </TouchableOpacity>
             </View>
-            {masterServis && masterServis.map((service: any) => (
+            }
+            {selectedService && selectedService.map((service: any) => (
               <View key={service.id}>
                 <TouchableOpacity
                   activeOpacity={0.9}
                   onPress={() => handleTabChange(service.id)}
                   style={[
                     styles.categoryCard,
-                    selectedCategorys === service.id ? { backgroundColor: '#B9B9C9' } : { borderColor: '#828282' }
+                    selectedCategorys == service.id ? { backgroundColor: '#B9B9C9' } : { borderColor: '#828282', borderWidth: 1 }
                   ]}
                 >
-                  <Text style={[tw`text-white text-center`, { color: selectedCategorys == 'vse' ? '#000000' : '#828282' }]}>{service.name}</Text>
+                  <Text style={[tw`text-white text-center`, { color: selectedCategorys !== service.id ? '#828282' : '#000' }]}>{service.name}</Text>
                 </TouchableOpacity>
               </View>
             ))}
@@ -210,7 +217,7 @@ const MasterInformation = () => {
             <Buttons
               isDisebled={masterServis.length > 0}
               onPress={() => {
-                navigate.navigate('(client)/(oreder)/order', {id: {}});
+                navigate.navigate('(client)/(oreder)/order', { id: {} });
               }} title='Продолжить' />
           </View>
         </ScrollView>
@@ -245,7 +252,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   categoryCard: {
-    padding: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
     borderRadius: 8,
     alignItems: 'center',
     borderColor: '#828282'
