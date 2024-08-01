@@ -10,6 +10,7 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 import moment from "moment";
 import BottomModal from "@/components/(modals)/modal-bottom";
+import {Loading} from "@/components/loading/loading";
 
 export interface FeedBack {
     overallRating: number
@@ -75,7 +76,7 @@ const BreakdownItem = ({label, percentage, oneStatus}: { label: string, percenta
     return (
         <View style={[tw`flex-row items-center justify-start w-full my-2`]}>
             {!oneStatus && <CustomCheckbox/>}
-            <Text style={[styles.breakdownLabel, {marginLeft: 10}]}>{label}</Text>
+            <Text style={[styles.breakdownLabel, {marginLeft: oneStatus ? 0 : 10}]}>{label}</Text>
             <View style={styles.bar}>
                 <View style={[styles.filledBar, {width: `${percentage}%`}]}/>
             </View>
@@ -101,7 +102,7 @@ const ClientFeedbackCard = ({onPress, data, oneStatus}: {
     }
 
     const sliceTextDescription = (text: string) => {
-        if (text.trim().length > 80) return `${text.slice(0, 80)}...`;
+        if (text.trim().length > 100) return `${text.slice(0, 100)}...`;
         else return text;
     }
 
@@ -158,6 +159,7 @@ const ClientFeedback = () => {
     const [page, setPage] = useState(0)
     const [oneData, setOneData] = useState<FeedbackList | null>(null)
     const [isModal, setIsModal] = useState(false)
+    const [selectedButton, setSelectedButton] = useState(null);
     const maxStars = 5;
     const fullStars = Math.floor(feedback ? feedback.overallRating : 0);
     const halfStar = feedback ? feedback.overallRating : 0 - fullStars >= 0.5;
@@ -172,6 +174,13 @@ const ClientFeedback = () => {
     }, [page]))
 
     const toggleModal = () => setIsModal(!isModal)
+    const handleButtonPress = (buttonIndex: any) => {
+        console.log(buttonIndex, 'index')
+        setSelectedButton(buttonIndex);
+        if (buttonIndex === 1) setPage(prevPage => prevPage + 1)
+        else if (buttonIndex === 0) return setPage(prevPage => prevPage - 1)
+    };
+    console.log(page, 'paginationFeedback')
 
     return (
         <View style={tw`flex-1`}>
@@ -206,23 +215,52 @@ const ClientFeedback = () => {
                 </View>
 
                 <View style={tw`w-full mt-8`}>
-                    {feedback ? (
-                        <FlatList
-                            data={feedback.feedback.object}
-                            renderItem={({item}) => (
-                                <ClientFeedbackCard
-                                    onPress={() => {
-                                        toggleModal()
-                                        setOneData(item)
-                                    }}
-                                    data={item}
-                                    oneStatus={`info`}
-                                />
-                            )}
-                        />
-                    ) : (
-                        <Text style={tw`mt-7 font-bold text-white text-center`}>Data not found</Text>
-                    )}
+                    {isLoading ? <Loading/> : feedback ? (
+                        <>
+                            <FlatList
+                                data={feedback.feedback.object}
+                                renderItem={({item}) => (
+                                    <ClientFeedbackCard
+                                        onPress={() => {
+                                            toggleModal()
+                                            setOneData(item)
+                                        }}
+                                        data={item}
+                                    />
+                                )}
+                            />
+                            <View style={[tw`flex-row`]}>
+                                <TouchableOpacity
+                                    disabled={page * 10 === 0}
+                                    activeOpacity={.8}
+                                    style={[styles.button, {
+                                        borderTopLeftRadius: 10,
+                                        borderBottomLeftRadius: 10,
+                                        opacity: page * 10 === 0 ? .7 : 1
+                                    }]}
+                                    onPress={() => handleButtonPress(0)}
+                                >
+                                    <Text style={tw`text-white font-bold text-base`}>
+                                        Назад {page * 10 > 0 ? `${(page * 10) - 10} - ${page * 10}` : ''}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    disabled={feedback.feedback.totalElements < 10 || feedback.feedback.totalElements < (page * 10) + 10}
+                                    activeOpacity={.8}
+                                    style={[styles.button, {
+                                        borderTopRightRadius: 10,
+                                        borderBottomRightRadius: 10,
+                                        opacity: (feedback.feedback.totalElements < 10 || feedback.feedback.totalElements < (page * 10) + 10) ? .7 : 1
+                                    }]}
+                                    onPress={() => handleButtonPress(1)}
+                                >
+                                    <Text style={tw`text-white font-bold text-base`}>
+                                        Следующий {`${(page * 10) + 10} - ${(page * 10) + 20}`}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </>
+                    ) : <Text style={tw`mt-7 font-bold text-white text-center`}>Data not found</Text>}
                 </View>
 
                 <BottomModal toggleBottomModal={toggleModal} isBottomModal={isModal}>
@@ -242,6 +280,7 @@ const ClientFeedback = () => {
                                                 : oneData.count === 3 ? 60
                                                     : oneData.count === 2 ? 40 : 20
                                     }
+                                    oneStatus={`info`}
                                 />
                                 <View style={tw`mt-5 w-full`}>
                                     <ClientFeedbackCard data={oneData} oneStatus={`info`}/>
@@ -256,6 +295,14 @@ const ClientFeedback = () => {
 };
 
 const styles = StyleSheet.create({
+    button: {
+        flex: 1,
+        padding: 10,
+        paddingVertical: 16,
+        marginVertical: 16,
+        backgroundColor: '#9C0A35',
+        alignItems: 'center',
+    },
     title: {
         color: '#fff',
         fontSize: 30,
