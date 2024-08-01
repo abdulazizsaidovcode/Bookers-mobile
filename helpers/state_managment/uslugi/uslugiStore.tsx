@@ -97,6 +97,8 @@ export interface ClientAllCategory {
   setmasterServis: (data: []) => void;
   selectedCategoryId: string[] | null;
   setSelectedCategoryId: (val: string[]) => void;
+  categoryId:string | null
+  setCategoryId:(val:string | null) => void;
 }
 
 // Create the Zustand store
@@ -131,6 +133,8 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   setmasterServis: (data: any) => set({ masterServis: data }),
   selectedCategoryId: [],
   setSelectedCategoryId: (val: string[]) => set({ selectedCategoryId: val }),
+  categoryId:'',
+  setCategoryId:(val:string | null) => set({categoryId:val}),
 }));
 
 export default ClientStory;

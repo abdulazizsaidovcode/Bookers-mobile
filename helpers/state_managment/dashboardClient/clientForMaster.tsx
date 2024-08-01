@@ -17,10 +17,12 @@ export interface ClientMasterByCategory {
     attachmentCount: number | null,
     gender:string | null,
     servicePrice: number | null,
-    nextEntryDate: number | null
+    nextEntryDate: number | null,
 }
 
 interface DashboardMasterStore {
+  dashboardMasterDataAll: ClientMasterByCategory[] | null;
+  setDashboardMasterDataAll: (data: ClientMasterByCategory[] | null) => void;
   dashboardMasterData: ClientMasterByCategory[] | null;
   setDashboardMasterData: (data: ClientMasterByCategory[] | null) => void;
 }
@@ -28,4 +30,6 @@ interface DashboardMasterStore {
 export const useDashboardMasterStore = create<DashboardMasterStore>((set) => ({
   dashboardMasterData: null,
   setDashboardMasterData: (data) => set({ dashboardMasterData: data }),
+  dashboardMasterDataAll: null,
+  setDashboardMasterDataAll: (data) => set({ dashboardMasterData: data }),
 }));
