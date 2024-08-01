@@ -76,4 +76,11 @@ export interface addfedbackmaster{
     count:number|null
     orderId:string|null|undefined
     text:string|null
-}   
+}  
+export interface addMessageInterface{
+    clientId:string|null
+    masterId:string|null
+    adminId:string|null
+    message:string|null
+    messageStatus:string|null
+} 
