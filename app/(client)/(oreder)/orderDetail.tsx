@@ -26,6 +26,7 @@ import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardi
 import Textarea from '@/components/select/textarea';
 import { addMessageInterface } from '@/type/client/editClient';
 import { AddMessageOrderUpcoming } from '@/helpers/api-function/oreder/orderHistory';
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -66,6 +67,7 @@ const ClientOrderDetail = () => {
     const { id } = route.params;
     const { ratingModal, setRatingModal, orderRatingModal, setOrderRatingModal } = useAccardionStoreId()
     const { isLoading, setIsLoading, refreshing, setRefreshing } = clientStore()
+    const { setSelectedClient } = ClientStory()
     const { setGetMee } = useGetMeeStore()
     const [orderOneData, setOrderOneData] = useState<OrderOne | null>(null)
     const [isModal, setIsModal] = useState<boolean>(true)
@@ -167,9 +169,9 @@ const ClientOrderDetail = () => {
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
             <NavigationMenu name={orderOneData ? orderOneData.firstName : ''} navigate={() => navigation.navigate('(tabs)/(client)')} />
             <View style={tw`flex-1`}>
-                <View style={[styles.head, { backgroundColor: orderOneData && orderOneData.orderStatus ? statusRegex(orderOneData.orderStatus) : '#9C0A35' }]}>
+                {orderOneData && orderOneData.orderStatus && <View style={[styles.head, { backgroundColor: orderOneData && orderOneData.orderStatus ? statusRegex(orderOneData.orderStatus) : '#9C0A35' }]}>
                     <Text style={{ textAlign: 'center', color: '#fff' }}>{orderOneData ? statusName(orderOneData.orderStatus) : ''}</Text>
-                </View>
+                </View>}
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{
@@ -276,18 +278,12 @@ const ClientOrderDetail = () => {
                                 >
                                     <Fontisto name="navigate" size={30} color="#9C0A35" />
                                     <Text style={[tw`font-bold text-lg ml-4`]}>
-                                        Передвинуть
+                                        Построить маршрут
                                     </Text>
                                 </TouchableOpacity>
                                 <Text style={styles.contactTitle}>Дополнительно</Text>
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate('(client)/(oreder)/order', {
-                                        id: {
-                                            requerment: 'EDIT',
-                                            orderId: orderOneData.orderId,
-                                            masterId: orderOneData.masterId,
-                                        }
-                                    })}
+                                    onPress={() => navigation.navigate('(client)/(oreder)/order', { id: {} })}
                                     activeOpacity={.9}
                                     style={[styles.button, tw`mb-4 items-center flex-row`]}
                                 >
@@ -327,7 +323,17 @@ const ClientOrderDetail = () => {
                                         «Повторить», либо «Записаться» если вам нужны другие услуги мастера.
                                     </Text>
                                     <View style={styles.buttonContainer}>
-                                        <TouchableOpacity style={styles.repeatButton}>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                // setSelectedClient()
+                                                navigation.navigate('(client)/(oreder)/order', {
+                                                    id: {
+                                                        requerment: 'RE_ORDER',
+                                                        masterId: orderOneData.masterId,
+                                                    }
+                                                })
+                                            }}
+                                            style={styles.repeatButton}>
                                             <Text style={styles.buttonText}>Повторить</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={styles.bookButton}>

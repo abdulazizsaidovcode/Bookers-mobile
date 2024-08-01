@@ -40,16 +40,28 @@ const Booked: React.FC = () => {
 
     useFocusEffect(
         useCallback(() => {
-            if (id.masterId) {
+            if (id.requirment === 'EDIT') {
                 setLoading(true)
                 setDate(calendarDate);
                 getFreeTime(calendarDate, setFreeTime, id.masterId, setLoading);
+                console.log('ishla');
 
-            } else {
+            } else if (id.requirment === 'RE_ORDER') {
+                setLoading(true)
+                setDate(calendarDate);
+                getFreeTime(calendarDate, setFreeTime, id.masterId, setLoading);
+            }
+            else {
                 if (calendarDate && selectedClient && selectedClient.id) {
                     setLoading(true)
                     setDate(calendarDate);
-                    getFreeTime(calendarDate, setFreeTime, selectedClient.id,setLoading);
+                    getFreeTime(calendarDate, setFreeTime, selectedClient.id, setLoading);
+                    console.log('ishla');
+                } else {
+                    console.log(calendarDate, selectedClient);
+                    console.log(masterServis);
+                    console.log(FreeTime,99);
+                    
                 }
             }
 
@@ -110,7 +122,7 @@ const Booked: React.FC = () => {
                     showsHorizontalScrollIndicator={false}
                     style={styles.tabContainer}
                 >
-                    {FreeTime && masterServis && masterServis.length > 0 ? (
+                    {masterServis && masterServis.length > 0 ? (
                         masterServis.map((service: any) => (
                             <TouchableOpacity
                                 key={service.id}
