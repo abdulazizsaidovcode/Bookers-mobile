@@ -12,9 +12,13 @@ export const fetchFavouriteOrders = async (setFavouriteOrders: (val: FavouriteOr
         if (data.success) {
             setFavouriteOrders(data.body)
             setIsloading(false)
-        } else setIsloading(false)
+        } else {
+            setFavouriteOrders([])
+            setIsloading(false)
+        }
     } catch (error) {
         console.error(error);
+        setFavouriteOrders([])
         setIsloading(false)
     }
 }
@@ -31,15 +35,22 @@ export const addFavouriteOrder = async (masterId: string) => {
     }
 }
 
-export const deleteFavouriteOrder = async (masterId: string, setFavouriteOrders: (val: FavouriteOrdersType[]) => void, setIsloading: (val: boolean) => void) => {
+export const deleteFavouriteOrder = async (masterId: string, setFavouriteOrders: (val: FavouriteOrdersType[]) => void, setIsloading: (val: boolean) => void, toggleModal: () => void) => {
+    console.log(masterId
+
+    );
+
     const config = await getConfig();
     try {
         const { data } = await axios.delete(`${favourite_delete}/${masterId}`, config ? config : {})
         if (data.success) {
-            fetchFavouriteOrders(setFavouriteOrders, setIsloading)
+            await fetchFavouriteOrders(setFavouriteOrders, setIsloading)
+            toggleModal()
             Toast.show('Мастер успешно удален из списка любимый мастеров.', Toast.LONG)
         }
     } catch (error: any) {
-        Toast.show(error.response.data.message, Toast.LONG)
+        // Toast.show(error.response.data.message, Toast.LONG)
+        console.log(error);
+
     }
 }
