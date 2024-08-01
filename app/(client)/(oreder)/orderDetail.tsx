@@ -293,7 +293,7 @@ const ClientOrderDetail = () => {
 
                             <View style={{marginTop: 20}}>
                                 <Buttons title='Оставить отзыв' backgroundColor='#fff' textColor='#9C0A35' onPress={() => navigation.navigate('(client)/(oreder)/order')}/>
-                                <Buttons title='Написать сообщение' backgroundColor='#fff' textColor='#9C0A35' onPress={() => navigation.navigate('(client)/(oreder)/order')}/>
+                                <Buttons title='Написать сообщение' backgroundColor='#9C0A35' textColor='#9C0A35' onPress={() => navigation.navigate('(client)/(oreder)/order')}/>
                             </View>
                         }
                         <BottomModal toggleBottomModal={toggleModal} isBottomModal={visible}>
