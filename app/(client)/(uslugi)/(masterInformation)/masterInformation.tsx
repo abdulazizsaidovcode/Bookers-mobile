@@ -29,7 +29,7 @@ const isSmallDevice = width < 375;
 
 const MasterInformation = () => {
   const { selectedClient, masterServis, masterGallery, feedbackForMaster, clientData } = ClientStory();
-  const {favouriteOrders, setFavouriteOrders, setIsLoading} = useFavoutiteOrders()
+  const { favouriteOrders, setFavouriteOrders, setIsLoading } = useFavoutiteOrders();
   const [activeTab, setActiveTab] = useState<string | null>('upcoming');
   const [selectedCategorys, setSelectedCategories] = useState<any>('vse');
   const [selectedService, setSelectedService] = useState<any>(null);
@@ -46,22 +46,20 @@ const MasterInformation = () => {
         getMasterGallery(id);
       }
       return () => null;
-    }, [])
+    }, [selectedClient])
   );
-  useFocusEffect(
-    useCallback(() => {
-      fetchFavouriteOrders(setFavouriteOrders, setIsLoading)
-    }, [])
-  )
-  useFocusEffect(
-    useCallback(() => {
-      setSelectedService(masterServis)
-    }, [masterServis])
-  )
 
-  setTimeout(() => {
-    console.log(selectedClient);
-  }, 1000)
+  useFocusEffect(
+    useCallback(() => {
+      fetchFavouriteOrders(setFavouriteOrders, setIsLoading);
+    }, [setFavouriteOrders, setIsLoading])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      setSelectedService(masterServis);
+    }, [masterServis])
+  );
 
   const renderItem = ({ item }: any) => (
     <View style={tw`mb-4`}>
@@ -71,10 +69,12 @@ const MasterInformation = () => {
   );
 
   const handleTabChange = (tab: any) => {
-    setSelectedCategories(tab)
+    setSelectedCategories(tab);
   };
 
-  console.log(clientData);
+  const filteredServices = selectedCategorys === 'vse'
+    ? masterServis
+    : masterServis.filter((service: any) => service.id === selectedCategorys);
 
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -109,14 +109,14 @@ const MasterInformation = () => {
           contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
           <View style={tw`mb-5`}>
             {clientData && 
-                <View style={tw`mb-4`}>
-                  <MasterCardUslugi
-                    item={clientData}
-                    favouriteOrders={favouriteOrders}
-                    onPress={() => { }}
-                  />
-                </View>
-              }
+              <View style={tw`mb-4`}>
+                <MasterCardUslugi
+                  item={clientData}
+                  favouriteOrders={favouriteOrders}
+                  onPress={() => { }}
+                />
+              </View>
+            }
           </View>
           <View style={tw`mb-4`}>
             <Text style={tw`text-2xl text-white font-bold`}>Услуги {selectedClient?.name}</Text>
@@ -126,19 +126,20 @@ const MasterInformation = () => {
             contentContainerStyle={{ gap: 10, marginBottom: 10 }}
             showsHorizontalScrollIndicator={false}
           >
-            {masterServis && <View >
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() => handleTabChange('vse')}
-                style={[
-                  styles.categoryCard,
-                  selectedCategorys == 'vse' ? { backgroundColor: '#B9B9C9' } : { borderColor: '#828282', borderWidth: 1 }
-                ]}
-              >
-                <Text style={[tw`text-white text-center`, { color: selectedCategorys == 'vse' ? '#000' : '#828282' }]}>Все</Text>
-              </TouchableOpacity>
-            </View>
-            }
+            {masterServis && (
+              <View>
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  onPress={() => handleTabChange('vse')}
+                  style={[
+                    styles.categoryCard,
+                    selectedCategorys == 'vse' ? { backgroundColor: '#B9B9C9' } : { borderColor: '#828282', borderWidth: 1 }
+                  ]}
+                >
+                  <Text style={[tw`text-white text-center`, { color: selectedCategorys == 'vse' ? '#000' : '#828282' }]}>Все</Text>
+                </TouchableOpacity>
+              </View>
+            )}
             {selectedService && selectedService.map((service: any) => (
               <View key={service.id}>
                 <TouchableOpacity
@@ -156,7 +157,7 @@ const MasterInformation = () => {
           </ScrollView>
 
           <FlatList
-            data={masterServis}
+            data={filteredServices}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={tw`mb-4`}>
@@ -173,7 +174,7 @@ const MasterInformation = () => {
           </View>
         </ScrollView>
       )}
-      {activeTab === 'past' && <MasterInformationGalery/>}
+      {activeTab === 'past' && <MasterInformationGalery />}
       {activeTab === 'pastStart' && <ClientFeedback />}
     </SafeAreaView>
   );

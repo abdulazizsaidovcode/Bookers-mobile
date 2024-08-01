@@ -10,7 +10,7 @@ import { FavouriteOrdersType } from '@/type/favourite-orders/favourite-orders';
 
 
 type ClientCardItem = {
-    item: ClientData
+    item: ClientData | null
     onPress?: () => void;
     favouriteOrders: FavouriteOrdersType[]
 };
