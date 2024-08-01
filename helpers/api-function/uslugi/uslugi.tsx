@@ -96,8 +96,12 @@ export const getMasterGallery = async (id: string) => {
     if (data.success) {
       ClientStory.getState().setMasterGallery(data.body);
     }
+    else {
+      ClientStory.getState().setMasterGallery([]);
+    }
   } catch (error) {
     console.log(error);
+    ClientStory.getState().setMasterGallery([]);
   }
 };
 

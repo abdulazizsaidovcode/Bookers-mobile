@@ -17,22 +17,19 @@ const { width } = Dimensions.get("window");
 const halfWidth = width / 2;
 const isSmallDevice = width < 375;
 const placeholderImage = "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg";
-const galll = [{"attachmentId": "08c63dec-7dce-49f8-a4a4-c132cedb6f6c", "attachmentStatus": "APPROVED", "main": true, "message": null, "newStatus": false}, {"attachmentId": "2ec36278-a1dc-4924-af57-8d4737fa3a7b", "attachmentStatus": "APPROVED", "main": true, 
-  "message": null, "newStatus": false}, {"attachmentId": "afad3f0a-9894-4a40-b8bd-53490bcabb80", "attachmentStatus": "APPROVED", "main": true, "message": null, "newStatus": false}, {"attachmentId": "afad3f0a-9894-4a40-b8bd-53490bcabb80", "attachmentStatus": "APPROVED", "main": true, "message": null, "newStatus": false},{"attachmentId": "afad3f0a-9894-4a40-b8bd-53490bcabb80", "attachmentStatus": "APPROVED", "main": true, "message": null, "newStatus": false},{"attachmentId": "afad3f0a-9894-4a40-b8bd-53490bcabb80", "attachmentStatus": "APPROVED", "main": false, "message": null, "newStatus": false}]
 
 const Gallery: React.FC = () => {
-  const { setGaleriyaDetail } = webPageStore();
-  const { masterGallery } = ClientStory();
+  const { galeriya, setGaleriyaDetail } = webPageStore();
   const navigation = useNavigation<any>();
 
   const renderRows = (attachments: any[]) => {
-    let filteredAttachments = galll.filter(
+    let filteredAttachments = attachments.filter(
       (attachment) => attachment.main
     );
 
     if (filteredAttachments.length !== 0) {
       // If there are no main attachments, use the first 4 attachments instead
-      filteredAttachments = galll.slice(0, 4);
+      filteredAttachments = attachments.slice(0, 4);
     } // Limit to 4 images
 
     const rows: any[] = [];
@@ -69,13 +66,12 @@ const Gallery: React.FC = () => {
 
   return (
     <ScrollView style={styles.contentContainer}>
-      {masterGallery && masterGallery.length > 0 ? (
+      {galeriya && galeriya.length > 0 ? (
         <View style={styles.galleryWrapper}>
-          {masterGallery.map(
+          {galeriya.map(
             (item: any) =>
               item.resGalleryAttachments &&
               item.resGalleryAttachments.length > 0 && (
-                <>
                 <TouchableOpacity
                   onPress={() => {
                     setGaleriyaDetail(item);
@@ -90,35 +86,7 @@ const Gallery: React.FC = () => {
                   {renderRows(item.resGalleryAttachments)}
                   <Text style={styles.caption}>{item.albumName}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    setGaleriyaDetail(item);
-                    navigation.navigate(
-                      "(profile)/(WebPage)/components/galleryDetail"
-                    );
-                  }}
-                  activeOpacity={0.7}
-                  key={item.id}
-                  style={styles.galleryContainer}
-                >
-                  {renderRows(item.resGalleryAttachments)}
-                  <Text style={styles.caption}>{item.albumName}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    setGaleriyaDetail(item);
-                    navigation.navigate(
-                      "(profile)/(WebPage)/components/galleryDetail"
-                    );
-                  }}
-                  activeOpacity={0.7}
-                  key={item.id}
-                  style={styles.galleryContainer}
-                >
-                  {renderRows(item.resGalleryAttachments)}
-                  <Text style={styles.caption}>{item.albumName}</Text>
-                </TouchableOpacity>
-                </>
+                
               )
           )}
         </View>
