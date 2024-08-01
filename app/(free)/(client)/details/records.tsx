@@ -57,7 +57,7 @@ const Records = () => {
 
     useEffect(() => {
         fetchServices(setServices);
-        if (calendarDate) getFreeTime(calendarDate, setFreeTime, getMee.id)
+        if (calendarDate) getFreeTime(calendarDate, setFreeTime, getMee.id, setIsLoading)
     }, [calendarDate]);
 
     useEffect(() => {

@@ -12,28 +12,32 @@ import { getOrderClientUpcomingInterface } from "@/type/client/editClient";
 import { deleteAllPastComingFunction, getOrderClientPustComing, getorderClientUpcoming } from "@/helpers/api-function/oreder/orderHistory";
 import { useFocusEffect } from "expo-router";
 import { useMapStore } from "@/helpers/state_managment/map/map";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+
 import AccardionHistoryTwo from "@/components/accordions/accardionHistoryTwo";
 import { useAccardionStoreId } from "@/helpers/state_managment/accardion/accardionStore";
+import clientStore from "@/helpers/state_managment/client/clientStore";
+import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 
 const OrderHistory = () => {
-  const {activeTab, setActiveTab,pastComing,setPastComing}=useAccardionStoreId();
+  const { activeTab, setActiveTab, pastComing, setPastComing } = useAccardionStoreId();
+  const {setSelectedClient}=ClientStory()
   const [modalDelete, setModalDelete] = useState<boolean>(false);
   const [upcoming, setUpcoming] = useState<getOrderClientUpcomingInterface[]>([]);
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>()
-  
+  const navigation = useNavigation<NavigationProp<any>>();
   const getUpcomingClient = async () => {
     await getorderClientUpcoming(setUpcoming);
   };
   const getPastcomingClient = async () => {
     await getOrderClientPustComing(setPastComing);
   }
-  
+
   const deleteToggleModal = () => {
-    
+
     setModalDelete(!modalDelete);
-    };
+  };
 
   const handlePhonePress = (phoneNumber: string) => {
     Linking.openURL(`tel:${phoneNumber}`);
@@ -42,7 +46,7 @@ const OrderHistory = () => {
     const ids: any = pastComing.map(past => past.orderId)
     if (ids.length > 0) {
       console.log("order ids", ids);
-      deleteAllPastComingFunction(ids,() => deleteToggleModal(),() => getOrderClientPustComing(setPastComing) )
+      deleteAllPastComingFunction(ids, () => deleteToggleModal(), () => getOrderClientPustComing(setPastComing))
     } else {
       Alert.alert("No pastComing", "There are no pastcoming to delete");
     }
@@ -55,12 +59,12 @@ const OrderHistory = () => {
     }, [])
   );
   useFocusEffect(
-    useCallback(()=>{
+    useCallback(() => {
       getPastcomingClient();
       return () => { };
-    },[])
+    }, [])
   )
-  
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -98,11 +102,15 @@ const OrderHistory = () => {
           />
         </View>
         {activeTab === 'upcoming' && (
-          <ScrollView style={{marginBottom:160}}>
+          <ScrollView style={{ marginBottom: 160 }}>
             {upcoming.length !== 0 ? (
               upcoming.map((upcoming: any, index: number) => (
                 <AccardionHistory id={upcoming.serviceIds} key={index} title={upcoming.serviceName} date={upcoming.orderDate} >
                   <ProfileCard
+                    onPress={()=>{
+                      setSelectedClient(upcoming)
+                      navigation.navigate('(client)/(oreder)/orderDetail', { id: upcoming.orderId });
+                    }}
                     imageURL={upcoming.userAttachmentId}
                     masterName={upcoming.firstName + " " + upcoming.lastName}
                     salonName={upcoming.salonName}

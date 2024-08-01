@@ -8,6 +8,7 @@ export async function getFreeTime(date: string | null, setData: (val: any) => vo
     await axios.get(`${free_time_list}?date=${date}&masterId=${masterID}`, config ? config : {})
         .then((res) => {
             setData(res.data.body);
+            
             if(res.data.success) setLoading(false)
             else setLoading(false)
         })

@@ -17,6 +17,7 @@ import Buttons from '@/components/(buttons)/button';
 import { getFile } from '@/helpers/api';
 import CustomButton1 from './CustomButton';
 import ReviewCard from '@/components/(cliendCard)/riewCard';
+import ClientFeedback from "@/app/(client)/(uslugi)/(masterInformation)/components/fedbek";
 
 const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
@@ -227,16 +228,7 @@ const MasterInformation = () => {
           />
         </View>
       )}
-      {activeTab === 'pastStart' && (
-        <ScrollView style={{ backgroundColor: '#21212E', padding: 16, flex: 1 }}>
-          <FlatList
-            data={feedbackForMaster}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-          />
-          {/* <ReviewCard /> */}
-        </ScrollView>
-      )}
+      {activeTab === 'pastStart' && <ClientFeedback />}
     </SafeAreaView>
   );
 };

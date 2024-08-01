@@ -1,16 +1,22 @@
 {
   "expo": {
     "name": "Bookers",
-    "slug": "notification-app",
+    "slug": "bookers",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/splash.png",
     "scheme": "bookersapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "resizeMode": "cover",
-      "backgroundColor": "#21212E",
-      "icon": "./assets/images/splash.png"
+      "image": "./assets/images/loading.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff",
+      "tabletImage": "./assets/images/loading.png",
+      "tabletBackgroundColor": "#000000",
+      "imageResizeMode": "native",
+      "loadingIndicator": "default",
+      "loadingIndicatorColor": "#0000ff",
+      "hideStatusBar": true
     },
     "ios": {
       "supportsTablet": true,
@@ -59,7 +65,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "9f50422d-d7e6-41fb-b97a-2b512201ab01",
+        "projectId": "962edbe5-b035-45d3-aee0-94c6d84f407c",
         "apiBaseUrl": "https://app.bookers.one/"
       }
     }

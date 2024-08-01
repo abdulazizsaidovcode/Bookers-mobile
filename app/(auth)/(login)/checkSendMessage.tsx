@@ -75,11 +75,18 @@ const OtpInputExample: React.FC = () => {
         setPending(true)
 
         if (isRegtered) {
-            checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
+            await checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
+            setTimeout(() => {
+                setPending(false)
+            }, 700)
         } else {
-            authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, setRoles)
+            await authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, setRoles)
+            setTimeout(() => {
+                setPending(false)
+            }, 700)
         }
     }
+
     useEffect(() => {
         setNumber(number)
     }, [phoneNumber])
@@ -88,8 +95,6 @@ const OtpInputExample: React.FC = () => {
         async function finishwork() {
             if (roles) setRole(roles)
             setPending(false)
-        
-            console.log(response);
 
             if (response) {
                 let parol = await SecureStore.getItemAsync('password')
@@ -97,21 +102,25 @@ const OtpInputExample: React.FC = () => {
 
                 if (isRegtered) {
                     navigation.navigate("(auth)/(register)/(greetings)/greetingFirst");
+                    setRespone(null);
                     setPending(false)
                     setOtpValue(['', '', '', ''])
                 } else {
                     if (parol !== null) {
                         if (roles == 'ROLE_MASTER') {
                             navigation.navigate('(tabs)/(master)');
+                            setRespone(null);
                             setPending(false)
                             setOtpValue(['', '', '', ''])
                         } else if (roles == 'ROLE_CLIENT') {
                             navigation.navigate('(tabs)/(client)');
+                            setRespone(null);
                             setPending(false)
                             setOtpValue(['', '', '', ''])
                         }
                     } else {
                         navigation.navigate("(auth)/(setPinCode)/installPin");
+                        setRespone(null);
                         setPending(false)
                         setOtpValue(['', '', '', ''])
                     }
