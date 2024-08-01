@@ -4,7 +4,7 @@ import tw from "tailwind-react-native-classnames";
 import {AntDesign, FontAwesome} from "@expo/vector-icons";
 import axios from "axios";
 import {getConfig} from "@/app/(tabs)/(master)/main";
-import {client_feedback, getFile} from "@/helpers/api";
+import {client_feedback, client_feedback_filter, getFile} from "@/helpers/api";
 import {useFocusEffect} from "expo-router";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
@@ -51,6 +51,7 @@ export const getFeedbackClientList = async (setData: (val: FeedBack | null) => v
     try {
         if (masterID) {
             const config = await getConfig();
+            console.log(config, 'tokennnn')
             const url: string = `${client_feedback}${masterID}?page=${page}&size=10`
 
             const {data} = await axios.get(url, config ? config : {});
@@ -72,17 +73,31 @@ export const getFeedbackClientList = async (setData: (val: FeedBack | null) => v
     }
 }
 
-const BreakdownItem = ({label, percentage, oneStatus}: { label: string, percentage: number, oneStatus?: string }) => {
-    return (
-        <View style={[tw`flex-row items-center justify-start w-full my-2`]}>
-            {!oneStatus && <CustomCheckbox/>}
-            <Text style={[styles.breakdownLabel, {marginLeft: oneStatus ? 0 : 10}]}>{label}</Text>
-            <View style={styles.bar}>
-                <View style={[styles.filledBar, {width: `${percentage}%`}]}/>
-            </View>
-        </View>
-    );
-};
+export const getFeedbackClientFilter = async (setData: (val: FeedBack | null) => void, masterID: string, count: number, page: number, setLoading: (val: boolean) => void) => {
+    setLoading(true)
+    try {
+        if (masterID) {
+            const config = await getConfig();
+            const url: string = `${client_feedback_filter}${masterID}?page=${page}&size=10&count=${count}`
+
+            const {data} = await axios.get(url, config ? config : {});
+            if (data.success) {
+                setData(data.body)
+                setLoading(false)
+            } else {
+                setLoading(false)
+                setData(null)
+            }
+        } else {
+            setLoading(false)
+            setData(null)
+        }
+    } catch (err) {
+        setLoading(false)
+        setData(null)
+        console.error(err)
+    }
+}
 
 const ClientFeedbackCard = ({onPress, data, oneStatus}: {
     onPress?: () => void,
@@ -138,6 +153,18 @@ const ClientFeedbackCard = ({onPress, data, oneStatus}: {
         </TouchableOpacity>
     </>
 }
+
+const BreakdownItem = ({label, percentage, oneStatus}: { label: string, percentage: number, oneStatus?: string }) => {
+    return (
+        <View style={[tw`flex-row items-center justify-start w-full my-2`]}>
+            {!oneStatus && <CustomCheckbox/>}
+            <Text style={[styles.breakdownLabel, {marginLeft: oneStatus ? 0 : 10}]}>{label}</Text>
+            <View style={styles.bar}>
+                <View style={[styles.filledBar, {width: `${percentage}%`}]}/>
+            </View>
+        </View>
+    );
+};
 
 const CustomCheckbox = () => {
     const [checked, setChecked] = useState(false);

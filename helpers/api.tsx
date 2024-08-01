@@ -165,6 +165,7 @@ export const master_order_confirm: string = `${base_url}order/confirm-order`
 // feedback url
 export const add_feedback: string = `${base_url}feedback/for/app/by/master`
 export const client_feedback: string = `${base_url}feedback/for/master/`
+export const client_feedback_filter: string = `${base_url}feedback/filter/`
 
 // number settings
 
