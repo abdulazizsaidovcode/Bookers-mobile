@@ -20,12 +20,16 @@ import ReviewCard from '@/components/(cliendCard)/riewCard';
 import ClientFeedback from "@/app/(client)/(uslugi)/(masterInformation)/components/fedbek";
 import MasterInformationGalery from './components/galery';
 import MasterCardUslugi from '@/components/(cliendCard)/masterCardUslugi';
+import { fetchFavouriteOrders } from '@/helpers/api-function/favourite-orders/favourite-orders';
+import useFavoutite from '@/helpers/state_managment/favourite';
+import useFavoutiteOrders from '@/helpers/state_managment/favourite-orders/favourite-orders';
 
 const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
 
 const MasterInformation = () => {
   const { selectedClient, masterServis, masterGallery, feedbackForMaster, clientData } = ClientStory();
+  const {favouriteOrders, setFavouriteOrders, setIsLoading} = useFavoutiteOrders()
   const [activeTab, setActiveTab] = useState<string | null>('upcoming');
   const [selectedCategorys, setSelectedCategories] = useState<any>('vse');
   const [selectedService, setSelectedService] = useState<any>(null);
@@ -44,6 +48,11 @@ const MasterInformation = () => {
       return () => null;
     }, [])
   );
+  useFocusEffect(
+    useCallback(() => {
+      fetchFavouriteOrders(setFavouriteOrders, setIsLoading)
+    }, [])
+  )
   useFocusEffect(
     useCallback(() => {
       setSelectedService(masterServis)
@@ -103,6 +112,7 @@ const MasterInformation = () => {
                 <View style={tw`mb-4`}>
                   <MasterCardUslugi
                     item={clientData}
+                    favouriteOrders={favouriteOrders}
                     onPress={() => { }}
                   />
                 </View>

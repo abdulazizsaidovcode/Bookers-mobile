@@ -34,13 +34,16 @@ const OrderClient = () => {
   const [response, setResponse] = useState<any>()
 
   async function setOrder() {
+    if (id.masterId) {
+
+    }
     let data: any = {
       serviceIds: selectedCategoryId,
       date: calendarDate,
       timeHour: parseInt(timeHour.split(":")[0], 10),
       timeMin: parseInt(timeHour.split(":")[1], 10),
       comment: "",
-      clientId: selectedClient && selectedClient.id,
+      clientId: id.requerment !== 'RE_ORDER' ? (selectedClient && selectedClient.id) : id.masterId,
     }
 
     await postOrder({
@@ -52,6 +55,7 @@ const OrderClient = () => {
   }
 
   const EditOrder = async () => {
+
     let data: any = {
       orderId: id.orderId,
       orderTimeHour: parseInt(timeHour.split(":")[0], 10),
@@ -60,12 +64,16 @@ const OrderClient = () => {
       clientId: id && id.masterId,
     }
 
-    await orderTimeEdit({
-      data,
-      setOrderId: setOrderId,
-      setLoading: () => { },
-      setResponse
-    })
+    if (data.orderId, data.clientId, data.orderTimeHour, data.orderTimeMinute, data.orderDate) {
+      await orderTimeEdit({
+        data,
+        setOrderId: setOrderId,
+        setLoading: () => { },
+        setResponse
+      })
+    } else {
+      console.log(data, 'data');
+    }
   }
 
   useFocusEffect(useCallback(() => {
@@ -81,7 +89,7 @@ const OrderClient = () => {
       Toast.show(orderMessageStatus, Toast.LONG);
     }
   }, [orderMessageStatus, state]))
-  
+
   useFocusEffect(useCallback(() => {
     if (response) {
       navigation.goBack()
@@ -100,7 +108,7 @@ const OrderClient = () => {
         <Text style={{ marginVertical: 16, color: '#fff', fontSize: 18 }}>Сегодня {curentDay} {curentWeekName} , {curentMonthName}</Text>
         <CalendarGrafficEdit />
         <Booked />
-        {id?.requerment !== 'EDIT' ?
+        {id.requerment !== 'EDIT' ?
 
           !!FreeTime && <Buttons onPress={setOrder} title='Продолжить' isDisebled={!!FreeTime && !!timeHour && !!selectedCategoryId} />
           :
