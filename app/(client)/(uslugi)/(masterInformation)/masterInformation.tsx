@@ -18,6 +18,7 @@ import { getFile } from '@/helpers/api';
 import CustomButton1 from './CustomButton';
 import ReviewCard from '@/components/(cliendCard)/riewCard';
 import ClientFeedback from "@/app/(client)/(uslugi)/(masterInformation)/components/fedbek";
+import MasterInformationGalery from './components/galery';
 
 const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
@@ -26,6 +27,7 @@ const MasterInformation = () => {
   const { selectedClient, masterServis, masterGallery, feedbackForMaster, clientData } = ClientStory();
   const [activeTab, setActiveTab] = useState<string | null>('upcoming');
   const [selectedCategorys, setSelectedCategories] = useState<any>('vse');
+  const [selectedService, setSelectedService] = useState<any>(null);
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>();
 
@@ -41,7 +43,12 @@ const MasterInformation = () => {
       return () => null;
     }, [])
   );
-  
+  useFocusEffect(
+    useCallback(() => {
+      setSelectedService(masterServis)
+    }, [masterServis])
+  )
+
   setTimeout(() => {
     console.log(selectedClient);
   }, 1000)
@@ -166,32 +173,33 @@ const MasterInformation = () => {
           </View>
           <ScrollView
             horizontal
-            contentContainerStyle={{ gap: 16, marginBottom: 10 }}
+            contentContainerStyle={{ gap: 10, marginBottom: 10 }}
             showsHorizontalScrollIndicator={false}
           >
-            <View >
+            {masterServis && <View >
               <TouchableOpacity
                 activeOpacity={0.9}
                 onPress={() => handleTabChange('vse')}
                 style={[
                   styles.categoryCard,
-                  selectedCategorys == 'vse' && { backgroundColor: '#B9B9C9' }
+                  selectedCategorys == 'vse' ? { backgroundColor: '#B9B9C9' } : { borderColor: '#828282', borderWidth: 1 }
                 ]}
               >
                 <Text style={[tw`text-white text-center`, { color: selectedCategorys == 'vse' ? '#000' : '#828282' }]}>Все</Text>
               </TouchableOpacity>
             </View>
-            {masterServis && masterServis.map((service: any) => (
+            }
+            {selectedService && selectedService.map((service: any) => (
               <View key={service.id}>
                 <TouchableOpacity
                   activeOpacity={0.9}
                   onPress={() => handleTabChange(service.id)}
                   style={[
                     styles.categoryCard,
-                    selectedCategorys === service.id ? { backgroundColor: '#B9B9C9' } : { borderColor: '#828282' }
+                    selectedCategorys == service.id ? { backgroundColor: '#B9B9C9' } : { borderColor: '#828282', borderWidth: 1 }
                   ]}
                 >
-                  <Text style={[tw`text-white text-center`, { color: selectedCategorys == 'vse' ? '#000000' : '#828282' }]}>{service.name}</Text>
+                  <Text style={[tw`text-white text-center`, { color: selectedCategorys !== service.id ? '#828282' : '#000' }]}>{service.name}</Text>
                 </TouchableOpacity>
               </View>
             ))}
@@ -210,24 +218,12 @@ const MasterInformation = () => {
             <Buttons
               isDisebled={masterServis.length > 0}
               onPress={() => {
-                navigate.navigate('(client)/(oreder)/order', {id: {}});
+                navigate.navigate('(client)/(oreder)/order', { id: {} });
               }} title='Продолжить' />
           </View>
         </ScrollView>
       )}
-      {activeTab === 'past' && (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#21212E' }}>
-          <FlatList
-            data={renderRows(masterGallery)}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity>
-                <Image source={{ uri: getFile + item.attachmentId }} style={styles.image} />
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      )}
+      {activeTab === 'past' && <MasterInformationGalery/>}
       {activeTab === 'pastStart' && <ClientFeedback />}
     </SafeAreaView>
   );
@@ -245,7 +241,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   categoryCard: {
-    padding: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
     borderRadius: 8,
     alignItems: 'center',
     borderColor: '#828282'

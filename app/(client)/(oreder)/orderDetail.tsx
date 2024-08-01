@@ -21,6 +21,7 @@ import { useFocusEffect } from 'expo-router';
 import ContactInformationClient from '@/components/contact-information/contact-informationClient';
 import { useMapStore } from '@/helpers/state_managment/map/map';
 import BottomModal from '@/components/(modals)/modal-bottom';
+import Buttons from '@/components/(buttons)/button';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -147,7 +148,7 @@ const ClientOrderDetail = () => {
             <NavigationMenu name={orderOneData ? orderOneData.firstName : ''} navigate={() => navigation.navigate('(tabs)/(client)')} />
             <View style={tw`flex-1`}>
                 <View style={[styles.head, { backgroundColor: orderOneData && orderOneData.orderStatus ? statusRegex(orderOneData.orderStatus) : '#9C0A35' }]}>
-                    <Text style={{ textAlign: 'center', color: '#fff' }}>{orderOneData ? orderOneData.orderStatus : ''}</Text>
+                    <Text style={{ textAlign: 'center', color: '#fff' }}>{orderOneData ? statusName(orderOneData.orderStatus) : ''}</Text>
                 </View>
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
@@ -287,8 +288,16 @@ const ClientOrderDetail = () => {
                                 </TouchableOpacity>
                             </>
                         )}
+                        {
+                            orderOneData && orderOneData.orderStatus === 'COMPLETED' &&
+
+                            <View style={{marginTop: 20}}>
+                                <Buttons title='Оставить отзыв' backgroundColor='#fff' textColor='#9C0A35' onPress={() => navigation.navigate('(client)/(oreder)/order')}/>
+                                <Buttons title='Написать сообщение' backgroundColor='#9C0A35' textColor='#fff' onPress={() => navigation.navigate('(client)/(oreder)/order')}/>
+                            </View>
+                        }
                         <BottomModal toggleBottomModal={toggleModal} isBottomModal={visible}>
-                            <View style={{width: '100%'}}>
+                            <View style={{ width: '100%' }}>
                                 <Text style={[styles.infoText]}>Построить маршрут через</Text>
                                 <View style={styles.optionContainer}>
                                     <Text style={styles.address}>2GIS</Text>

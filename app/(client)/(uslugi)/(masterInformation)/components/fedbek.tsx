@@ -106,16 +106,22 @@ const ClientFeedbackCard = ({onPress, data}: { onPress: () => void, data: Feedba
             style={tw`w-full mb-3`}
         >
             <View style={[tw`rounded-2xl p-3`, {backgroundColor: '#B9B9C9'}]}>
-                <View style={tw`flex-row items-center mb-2`}>
+                <View style={tw`flex-row items-center mb-2 w-full`}>
                     {data.clientPhoto ? (
-                        <Image source={{uri: `${getFile}${data.clientPhoto}`}} alt={`${data.clientName}`}/>
+                        <Image
+                            source={{uri: getFile + data.clientPhoto}}
+                            alt={data.clientName}
+                            style={tw`w-14 h-14 rounded-full`}
+                        />
                     ) : (
                         <FontAwesome name="user-circle" size={40} color="white"/>
                     )}
                     <View style={tw`ml-4`}>
-                        <View style={tw`flex-row items-start justify-between w-full`}>
-                            <Text style={[tw`text-lg font-bold`, {color: '#000000'}]}>{sliceText(data.clientName)}</Text>
-                            <Text style={tw`text-sm`}>{moment(data.date).format('DD/MM/YYYY')}</Text>
+                        <View style={tw`flex-row items-start`}>
+                            <Text style={[tw`text-lg font-bold`, {color: '#000000'}]}>
+                                {sliceText(data.clientName)}
+                            </Text>
+                            <Text style={[{fontSize: 12, marginRight: 0, marginLeft: 'auto'}]}>{moment(data.date).format('DD/MM/YYYY')}</Text>
                         </View>
                         <Text style={[tw`text-lg`, {color: '#9C0A35'}]}>{generateStars(data.count || 0)}</Text>
                     </View>
@@ -191,6 +197,7 @@ const ClientFeedback = () => {
                                     data={item}
                                 />
                             )}
+                            onEndReached={() => console.log('endReached')}
                         />
                     ) : (
                         <Text style={tw`mt-7 font-bold text-7xl text-white text-center`}>Data not found</Text>

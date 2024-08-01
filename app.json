@@ -8,9 +8,15 @@
     "scheme": "bookersapp",
     "userInterfaceStyle": "automatic",
     "splash": {
+      "image": "./assets/images/loading.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff",
-      "icon": "./assets/images/loading.jpeg"
+      "tabletImage": "./assets/images/loading.png",
+      "tabletBackgroundColor": "#000000",
+      "imageResizeMode": "native",
+      "loadingIndicator": "default",
+      "loadingIndicatorColor": "#0000ff",
+      "hideStatusBar": true
     },
     "ios": {
       "supportsTablet": true,
