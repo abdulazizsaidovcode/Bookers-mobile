@@ -86,7 +86,7 @@ const ClientOrderDetail = () => {
         masterId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
         adminId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
         message: "string",
-        "messageStatus": "string"
+        messageStatus: "string"
     }
     const ratingToggleModal = () => {
         setOrderRatingModal(!orderRatingModal);
