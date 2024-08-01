@@ -81,6 +81,7 @@ const OrderClient = () => {
       Toast.show(orderMessageStatus, Toast.LONG);
     }
   }, [orderMessageStatus, state]))
+  
   useFocusEffect(useCallback(() => {
     if (response) {
       navigation.goBack()
@@ -99,7 +100,7 @@ const OrderClient = () => {
         <Text style={{ marginVertical: 16, color: '#fff', fontSize: 18 }}>Сегодня {curentDay} {curentWeekName} , {curentMonthName}</Text>
         <CalendarGrafficEdit />
         <Booked />
-        {id.requerment !== 'EDIT' ?
+        {id?.requerment !== 'EDIT' ?
 
           !!FreeTime && <Buttons onPress={setOrder} title='Продолжить' isDisebled={!!FreeTime && !!timeHour && !!selectedCategoryId} />
           :
