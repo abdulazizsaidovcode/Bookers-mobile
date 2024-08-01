@@ -101,7 +101,7 @@ const Navbar: React.FC = () => {
 const Dashboard: React.FC = () => {
 
   const { userLocation, setUserLocation } = useGetMeeStore();
-  const { allCategory, setSelectedClient, setCategoryId, categoryId } = ClientStory();
+  const { allCategory, setSelectedClient, setCategoryId, categoryId ,setClientData} = ClientStory();
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation<NavigationProp<any>>();
   const [backPressCount, setBackPressCount] = useState(0);
@@ -192,7 +192,7 @@ const Dashboard: React.FC = () => {
       return () => { };
     }, [categoryId])
   );
-  
+
   const handlePhonePress = (phoneNumber: string) => {
     Linking.openURL(`tel:${phoneNumber}`);
   };
@@ -229,7 +229,7 @@ const Dashboard: React.FC = () => {
         {dashboardData && dashboardData.length > 0 ? (
           <View style={tw`p-1`}>
             <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
-            {dashboardData.map((item, index) => (
+            {dashboardData.map((item:any, index) => (
               <View key={index} style={tw`w-full flex `}>
                 <AccardionHistory
                   id={item.orderId}
@@ -241,7 +241,7 @@ const Dashboard: React.FC = () => {
                       setSelectedClient(item);
                       navigation.navigate('(client)/(oreder)/orderDetail', { id: item.orderId });
                     }}
-                    Address={item && item.address}
+                    Adress={item && item.address}
                     buttonName="Написать сообщение"
                     imageURL={item.userAttachmentId || 'https://example.com/default-image.jpg'}
                     money={`${item.orderPrice || 'Не указано'} сум`}
@@ -249,6 +249,7 @@ const Dashboard: React.FC = () => {
                     titleTex={item.serviceName?.trim().split(`, `)}
                     masterName={item.firstName || 'Имя не указано'}
                     salonName={item.salonName || 'Салон не указан'}
+                    masterGender={[]}
                     locationIcon={
                       <SimpleLineIcons
                         onPress={() => {
@@ -362,7 +363,7 @@ const Dashboard: React.FC = () => {
                         </Text>
                       </TouchableOpacity>
                     </View>
-                   )
+                  )
                   )
                     : <View>
                       <Text>notFound</Text>
@@ -374,7 +375,7 @@ const Dashboard: React.FC = () => {
                     <View style={tw`mb-3`}>
                       <ClientCard
                         key={idx} // Har bir element uchun noyob kalit kerak
-                        name={master.firstName}
+                        name={ master.firstName}
                         salon={master.salonName}
                         imageUrl={master.attachmentId}
                         masterType={master.gender}
@@ -384,15 +385,23 @@ const Dashboard: React.FC = () => {
                         zaps={master.nextEntryDate}
                         clients={master.clientCount}
                         onPress={() => {
-                          navigate.navigate('(client)/(map)/(master-locations)/master-locations', { id: master.id });
+                          setClientData(master)
+                          navigation.navigate('(client)/(uslugi)/(masterInformation)/masterInformation')
                         }}
+                        locationIcon={
+                          <SimpleLineIcons name="location-pin" size={29} color="white"
+                            onPress={() => {
+                              navigate.navigate('(client)/(map)/(master-locations)/master-locations', { id: master.id });
+                            }}
+                          />
+                        }
                       />
                     </View>
                   )
-                  ) : 
-                  <View>
-                    <Text>notFound</Text>
-                  </View>
+                  ) :
+                    <View>
+                      <Text>notFound</Text>
+                    </View>
                   }
                 </View>
 

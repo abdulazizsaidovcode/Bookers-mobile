@@ -25,7 +25,7 @@ interface IProps {
     imageURL: string | null;
     orderId?: string | null;
     clientCount?: number | null;
-    onPress?: (() => void)
+    onPress?: (data: any) => void
 
 }
 
