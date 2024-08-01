@@ -38,22 +38,22 @@ export const getDashboradMaster = async (setData:(data:any) =>void) => {
   }
 };
 
-export const getDashboradMasterAll = async (setData:(data:any) =>void) => {
+export const 
+getDashboradMasterAll = async (setData:(data:any) =>void) => {
   try {
     const config = await getConfig();
     const { data } = await axios.get(
       `${ClientMasterByCategory}`,config ? config : {}
     );
-    console.log('Response Data:', data.body);
     if (data.success) {
       setData(data.body);
     }
     else{
-      setData(null)
+      setData([])
     }
   } catch (error) {
     console.error('Error:', error);
-    setData(null)
+    setData([])
   }
 };
 
