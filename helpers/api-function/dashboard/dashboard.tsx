@@ -4,29 +4,14 @@ import { DashboardDailyTimeOrders, DashboardHallingOrder, DashboardMainStatistic
 import axios from "axios"
 import Toast from 'react-native-simple-toast'
 
-
 export const fetchDaylyOrderTimes = async (setDailyTimeData: (val: DashboardDailyTimeOrders[]) => void, masterId: string) => {
-    // if (!masterId) return
-    setTimeout(() => {
-
-        console.log('masterID', masterId);  
-    }, 2000)
     try {
         const config = await getConfig()
-        const { data } = await axios.get(`${dashboard_daily_time_orders}/654a8f76-ff71-45bc-b4ff-7843647387f1`, config ? config : {});
+        const { data } = await axios.get(`${dashboard_daily_time_orders}/${masterId}`, config ? config : {});
         if (data.success) {
             setDailyTimeData(data.body.statusTimes);
-            console.log('keldi', data.body);
-
-        } else console.log('hato');
-
-    } catch (error) {
-        setTimeout(() => {
-
-            console.log('Qutabas', error);
-        }, 2000)
-
-    }
+        }
+    } catch { }
 }
 
 export const fetchMainStatistic = async (setMainStatisticData: (val: DashboardMainStatistic) => void) => {
@@ -39,24 +24,32 @@ export const fetchMainStatistic = async (setMainStatisticData: (val: DashboardMa
     } catch { }
 }
 
-export const fetchWaitingOrders = async (setWaitingData: (val: DashboardWaitingOrder[]) => void) => {
+export const fetchWaitingOrders = async (setWaitingData: (val: DashboardWaitingOrder[]) => void, setIsLoading: (val: boolean) => void) => {
+    setIsLoading(true)
     try {
         const config = await getConfig()
         const { data } = await axios.get(dashboard_wait_order, config ? config : {});
         if (data.success) {
             setWaitingData(data.body);
-        }
-    } catch { }
+            setIsLoading(false)
+        } else setIsLoading(false)
+    } catch {
+        setIsLoading(false)
+    }
 }
 
-export const fetchHallingOrders = async (setHallData: (val: DashboardWaitingOrder[]) => void) => {
+export const fetchHallingOrders = async (setHallData: (val: DashboardWaitingOrder[]) => void, setIsLoading: (val: boolean) => void) => {
+    setIsLoading(true)
     try {
         const config = await getConfig()
         const { data } = await axios.get(dashboard_hall_order, config ? config : {});
         if (data.success) {
             setHallData(data.body);
-        }
-    } catch { }
+            setIsLoading(false)
+        } else setIsLoading(false)
+    } catch {
+        setIsLoading(false)
+    }
 }
 
 export const fetchTodayWorkGrafic = async (setTodayGrafic: (val: TodayWorkGrafic) => void, masterId: string) => {
@@ -69,16 +62,21 @@ export const fetchTodayWorkGrafic = async (setTodayGrafic: (val: TodayWorkGrafic
     } catch { }
 }
 
-export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrder[]) => void, setHallData: (val: DashboardHallingOrder[]) => void, orderId: string, status: string, toggleModal: () => void) => {
+export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrder[]) => void, setHallData: (val: DashboardHallingOrder[]) => void, orderId: string, status: string, toggleRejectModal: () => void, toggleConfirmModal: () => void) => {
     try {
         const config = await getConfig()
         const { data } = await axios.put(`${dashboard_edit_order_status}?orderId=${orderId}&status=${status}`, {}, config ? config : {});
         if (data.success) {
             await fetchWaitingOrders(setWaitingData);
-            await fetchHallingOrders(setWaitingData);
-            toggleModal();
-            if (status === 'CONFIRMED') Toast.show(`${data.message}`, Toast.LONG)
-            else if (status === 'REJECTED') Toast.show(`${data.message}`, Toast.LONG)
+            await fetchHallingOrders(setHallData);
+            if (status === 'CONFIRMED') {
+                Toast.show(`${data.message}`, Toast.LONG)
+                toggleConfirmModal();
+            }
+            else if (status === 'REJECTED') {
+                toggleRejectModal();
+                Toast.show(`${data.message}`, Toast.LONG)
+            }
         }
     } catch (error) {
         console.log(error)

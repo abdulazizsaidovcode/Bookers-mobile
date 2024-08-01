@@ -87,7 +87,7 @@ const TabOneScreen: React.FC = () => {
     const { isRegtered } = isRegister()
     const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
     const [isPasswordSet, setIsPasswordSet] = useState<null | boolean>(null);
-    const { mainStatisticData, waitingData, dailyTimeData, isConfirmModal, hallData, isRejectedModal, todayGraficData, setTodayGraficData, setRejectedIsModal, setHallData, setConfirmIsModal, setDailyTimeData, setMainStatisticData, setWaitingData, } = useDashboardStore();
+    const { mainStatisticData, waitingData, dailyTimeData, isConfirmModal, hallData, isRejectedModal, todayGraficData, isLoading, setIsLoading, setTodayGraficData, setRejectedIsModal, setHallData, setConfirmIsModal, setDailyTimeData, setMainStatisticData, setWaitingData, } = useDashboardStore();
     const { refreshing, setRefreshing } = clientStore();
     const [masterTariff, setTariffMaster] = useState<null | string>(null)
     const [backPressCount, setBackPressCount] = useState(0);
@@ -110,8 +110,8 @@ const TabOneScreen: React.FC = () => {
     useFocusEffect(
         useCallback(() => {
             fetchMainStatistic(setMainStatisticData);
-            fetchWaitingOrders(setWaitingData);
-            fetchHallingOrders(setHallData);
+            fetchWaitingOrders(setWaitingData, setIsLoading);
+            fetchHallingOrders(setHallData, setIsLoading);
             getUser(setGetMee);
             fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
             fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
@@ -126,12 +126,8 @@ const TabOneScreen: React.FC = () => {
                 setHasAllNumbers(result);
                 setPending(false)
             }
+            return () => { }
         }, []))
-    setTimeout(() => {
-
-        console.log('Master id', getMee.id);
-    }, 2000)
-
 
     // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
     useFocusEffect(
@@ -234,7 +230,7 @@ const TabOneScreen: React.FC = () => {
     const vipCientsCount = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "VIP").length : 0;
     const newClientsCount = dailyTimeData && dailyTimeData.length! == 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "NEW").length : 0;
 
-    const handleConfirmOrReject = (status: string) => editOrderStatus(setWaitingData, setHallData, orderId, status, toggleConfirmModal);
+    const handleConfirmOrReject = (status: string) => editOrderStatus(setWaitingData, setHallData, orderId, status, toggleRejectModal, toggleConfirmModal);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -261,17 +257,18 @@ const TabOneScreen: React.FC = () => {
                     statisticDenominator={statisticDenominator}
                 />
                 <CardsSection mainStatisticData={mainStatisticData} />
-                <BookingRequests
-                    setWaitingData={setWaitingData}
-                    waitingData={waitingData}
-                    toggleConfirmModal={toggleConfirmModal}
-                    toggleRejectedModal={toggleRejectModal}
-                    isRejectedModal={isRejectedModal}
-                    isConfirmModal={isConfirmModal}
-                    status={true}
-                />
+                {!isLoading ?
+                    <BookingRequests
+                        setWaitingData={setWaitingData}
+                        waitingData={waitingData}
+                        toggleConfirmModal={toggleConfirmModal}
+                        toggleRejectedModal={toggleRejectModal}
+                        isRejectedModal={isRejectedModal}
+                        isConfirmModal={isConfirmModal}
+                        status={true}
+                    /> : <Loading />}
                 {tariff === 'STANDARD' &&
-                    <BookingRequestsHall
+                    < BookingRequestsHall
                         setHallData={setHallData}
                         hallData={hallData}
                         toggleConfirmModal={toggleConfirmModal}
@@ -281,18 +278,34 @@ const TabOneScreen: React.FC = () => {
                         status={false}
                     />}
                 <CenteredModal
-                    isModal={isConfirmModal ? isConfirmModal : isRejectedModal}
-                    toggleModal={isConfirmModal ? toggleConfirmModal : toggleRejectModal}
+                    isModal={isRejectedModal}
+                    toggleModal={toggleRejectModal}
                     isFullBtn
-                    btnRedText={isConfirmModal ? "Одобрить" : "Отклонить"}
-                    onConfirm={() => handleConfirmOrReject(isConfirmModal ? "CONFIRMED" : "REJECTED")}
+                    btnRedText={"Отклонить"}
+                    onConfirm={() => handleConfirmOrReject("REJECTED")}
                     btnWhiteText="Назад"
                 >
                     <View>
                         <Text
                             style={{ fontSize: 17, color: COLORS.white, textAlign: "center" }}
                         >
-                            {isConfirmModal ? 'Вы уверены, что хотите Одобрить этот заказ?' : 'Вы уверены, что хотите Отклонить этот заказ?'}
+                            Вы уверены, что хотите Отклонить этот заказ?
+                        </Text>
+                    </View>
+                </CenteredModal>
+                <CenteredModal
+                    isModal={isConfirmModal}
+                    toggleModal={toggleConfirmModal}
+                    isFullBtn
+                    btnRedText={"Одобрить"}
+                    onConfirm={() => handleConfirmOrReject("CONFIRMED")}
+                    btnWhiteText="Назад"
+                >
+                    <View>
+                        <Text
+                            style={{ fontSize: 17, color: COLORS.white, textAlign: "center" }}
+                        >
+                            Вы уверены, что хотите Одобрить этот заказ?
                         </Text>
                     </View>
                 </CenteredModal>

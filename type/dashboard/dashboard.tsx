@@ -6,6 +6,8 @@ export interface DashboardState {
     isRejectedModal: boolean;
     dailyTimeData: DashboardDailyTimeOrders[],
     mainStatisticData: DashboardMainStatistic,
+    isLoading: boolean,
+    setIsLoading: (val: boolean) => void,
     setDailyTimeData: (data: DashboardDailyTimeOrders[]) => void;
     setWaitingData: (data: DashboardWaitingOrder[]) => void;
     setTodayGraficData: (data: TodayWorkGrafic) => void;
