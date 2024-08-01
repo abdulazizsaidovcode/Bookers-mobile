@@ -3,10 +3,12 @@ import { create } from 'zustand';
 
 const useDashboardStore = create<DashboardState>((set) => ({
     waitingData: [],
-    todayGraficData: {from: '', end: ''},
+    todayGraficData: { from: '', end: '' },
     hallData: [],
     dailyTimeData: [],
     isConfirmModal: false,
+    isLoading: false,
+    setIsLoading: (val: boolean) => set({ isLoading: val }),
     isRejectedModal: false,
     mainStatisticData: {
         completedSessions: '',
@@ -17,7 +19,7 @@ const useDashboardStore = create<DashboardState>((set) => ({
     setDailyTimeData: (val: DashboardDailyTimeOrders[]) => set({ dailyTimeData: val }),
     setWaitingData: (val: DashboardWaitingOrder[]) => set({ waitingData: val }),
     setTodayGraficData: (val: TodayWorkGrafic) => set({ todayGraficData: val }),
-    setHallData: (val: DashboardHallingOrder[]) => set({ waitingData: val }),
+    setHallData: (val: DashboardHallingOrder[]) => set({ hallData: val }),
     setMainStatisticData: (val: DashboardMainStatistic) => set({ mainStatisticData: val }),
     setConfirmIsModal: (val: boolean) => set({ isConfirmModal: val }),
     setRejectedIsModal: (val: boolean) => set({ isRejectedModal: val }),
