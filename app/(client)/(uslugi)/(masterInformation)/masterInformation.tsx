@@ -18,6 +18,7 @@ import { getFile } from '@/helpers/api';
 import CustomButton1 from './CustomButton';
 import ReviewCard from '@/components/(cliendCard)/riewCard';
 import ClientFeedback from "@/app/(client)/(uslugi)/(masterInformation)/components/fedbek";
+import MasterInformationGalery from './components/galery';
 
 const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
@@ -222,19 +223,7 @@ const MasterInformation = () => {
           </View>
         </ScrollView>
       )}
-      {activeTab === 'past' && (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#21212E' }}>
-          <FlatList
-            data={renderRows(masterGallery)}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity>
-                <Image source={{ uri: getFile + item.attachmentId }} style={styles.image} />
-              </TouchableOpacity>
-            )}
-          />
-        </View>
-      )}
+      {activeTab === 'past' && <MasterInformationGalery/>}
       {activeTab === 'pastStart' && <ClientFeedback />}
     </SafeAreaView>
   );
