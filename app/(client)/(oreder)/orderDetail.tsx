@@ -372,30 +372,12 @@ const ClientOrderDetail = () => {
                         >
                             <>
                                 <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold', marginBottom: 30 }}>
-                                    Оцените работу мастера!
+                                    Написать сообщение
                                 </Text>
                                 <View style={styles.modalContainer}>
-                                    <View style={styles.stars}>
-                                        {Array(5)
-                                            .fill(0)
-                                            .map((_, index) => (
-                                                <TouchableOpacity
-                                                    activeOpacity={0.7}
-                                                    key={index}
-                                                    onPress={() => handleRating(index + 1)}
-                                                >
-                                                    <AntDesign
-                                                        name={index < rating ? 'star' : 'staro'}
-                                                        size={30}
-                                                        color="#B00000"
-                                                        style={styles.star}
-                                                    />
-                                                </TouchableOpacity>
-                                            ))}
-                                    </View>
                                 </View>
                                 <Textarea
-                                    placeholder="Оставьте отзыв"
+                                    placeholder="Сообщение"
                                     value={textAreaValue}
                                     onChangeText={(e) => handleChange(e)}
                                 />
@@ -419,7 +401,6 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         borderRadius: 10,
-        padding: 20,
         alignItems: 'center'
     },
     message: {
