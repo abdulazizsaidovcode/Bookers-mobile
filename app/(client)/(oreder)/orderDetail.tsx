@@ -1,4 +1,4 @@
-import { View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image, RefreshControl } from 'react-native';
+import { View, ScrollView, StatusBar, TouchableOpacity, Text, StyleSheet, Image, RefreshControl, Pressable, Dimensions, Linking } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -19,6 +19,8 @@ import { getMee } from "@/helpers/token";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { useFocusEffect } from 'expo-router';
 import ContactInformationClient from '@/components/contact-information/contact-informationClient';
+import { useMapStore } from '@/helpers/state_managment/map/map';
+import BottomModal from '@/components/(modals)/modal-bottom';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -51,6 +53,7 @@ export interface OrderOne {
     status: "WAITING" | "ACCEPTED" | "REJECTED" | "COMPLETED",
     time: string
 }
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const ClientOrderDetail = () => {
     const navigation = useNavigation<any>();
@@ -64,14 +67,18 @@ const ClientOrderDetail = () => {
     const [rating, setRating] = useState(0);
     const [isConfirm, setIsConfirm] = useState(false);
     const [successStatus, setSuccessStatus] = useState('');
+    const [visible, setVisible] = useState(false);
+    const { userLocation, setUserLocation } = useGetMeeStore();
+    const { orderData } = useMapStore();
 
     useFocusEffect(useCallback(() => {
         if (id) orderClientGetOne(id, setOrderOneData)
         getMee(setGetMee)
     }, []))
 
-    console.log(id, 'blee');
 
+
+    const toggleVisible = () => setVisible(!visible);
 
     useFocusEffect(useCallback(() => {
         if (successStatus === 'ACCEPTED') {
@@ -121,6 +128,17 @@ const ClientOrderDetail = () => {
             stars += '☆';
         }
         return stars;
+    };
+
+    const openGoogleMaps = () => {
+        const userLat = userLocation.coords.latitude;
+        const userLng = userLocation.coords.longitude;
+        const destinationLat = orderData.lat ? orderData.lat : 0;
+        const destinationLng = orderData.lng ? orderData.lng : 0;
+
+        const url = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${destinationLat},${destinationLng}&travelmode=driving`;
+
+        Linking.openURL(url).catch((err) => console.error('An error occurred', err));
     };
 
     return (
@@ -229,6 +247,17 @@ const ClientOrderDetail = () => {
 
                         {(orderOneData && (orderOneData.orderStatus === 'CLIENT_CONFIRMED' || orderOneData.orderStatus === 'MASTER_CONFIRMED')) && (
                             <>
+                                <Text style={styles.contactTitle}>Как добраться</Text>
+                                <TouchableOpacity
+                                    onPress={toggleVisible}
+                                    activeOpacity={.9}
+                                    style={[styles.button, tw`mb-4 items-center flex-row`]}
+                                >
+                                    <Fontisto name="navigate" size={30} color="#9C0A35" />
+                                    <Text style={[tw`font-bold text-lg ml-4`]}>
+                                        Передвинуть
+                                    </Text>
+                                </TouchableOpacity>
                                 <Text style={styles.contactTitle}>Дополнительно</Text>
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('(client)/(oreder)/order', {
@@ -258,6 +287,24 @@ const ClientOrderDetail = () => {
                                 </TouchableOpacity>
                             </>
                         )}
+                        <BottomModal toggleBottomModal={toggleModal} isBottomModal={visible}>
+                            <View style={{width: '100%'}}>
+                                <Text style={[styles.infoText]}>Построить маршрут через</Text>
+                                <View style={styles.optionContainer}>
+                                    <Text style={styles.address}>2GIS</Text>
+                                    <TouchableOpacity activeOpacity={0.8} onPress={openGoogleMaps}>
+                                        <Text style={styles.address}>Google Maps</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity activeOpacity={0.8}>
+                                        <Text style={styles.address}>Yandex Maps</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={styles.separator} />
+                                <Pressable onPress={toggleVisible} style={styles.cancelButton}>
+                                    <Text style={styles.routeText}>Отмена</Text>
+                                </Pressable>
+                            </View>
+                        </BottomModal>
 
                         {/*canceled order status*/}
                         <CenteredModal
@@ -328,6 +375,78 @@ const styles = StyleSheet.create({
         marginTop: 26,
         marginBottom: 16,
         fontWeight: '700'
+    },
+    infoText: {
+        color: 'white',
+    },
+    metroIcon: {
+        color: '#9C0A35',
+        fontSize: 24,
+    },
+    metroText: {
+        color: 'white',
+        fontFamily: 'bold',
+        fontSize: 15,
+    },
+    metroDistance: {
+        color: '#828282',
+    },
+    separator: {
+        borderWidth: 0.5,
+        borderColor: 'white',
+        marginVertical: 5,
+    },
+    taxiText: {
+        color: '#9C0A35',
+        fontFamily: 'bold',
+        fontSize: 17,
+        paddingVertical: 3,
+    },
+    routeButton: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 5,
+    },
+    routeText: {
+        color: '#9C0A35',
+        fontFamily: 'bold',
+        fontSize: 17,
+    },
+    optionContainer: {
+        gap: 10,
+        marginTop: 10,
+    },
+    cancelButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 10,
+    },
+    infoWrapper: {
+        position: 'absolute',
+        bottom: 0,
+        padding: 20,
+    },
+    infoContainer: {
+        padding: 15,
+        backgroundColor: '#21212E',
+        width: screenWidth / 1.13,
+        height: screenHeight / 3.7,
+        borderRadius: 20,
+    },
+    address: {
+        fontFamily: 'bold',
+        fontSize: 18,
+        color: 'white',
+    },
+    infoDetails: {
+        marginTop: 10,
+        gap: 5,
+    },
+    infoRow: {
+        flexDirection: 'row',
+        gap: 10,
+        alignItems: 'center',
     },
 });
 
