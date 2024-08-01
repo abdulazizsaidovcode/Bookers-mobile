@@ -62,7 +62,7 @@ const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
 };
 
 const Navbar: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const { hasNotification, setHasNotification } = hasNotificationState()
 
   useFocusEffect(
@@ -89,7 +89,7 @@ const Navbar: React.FC = () => {
             {hasNotification && <View style={styles.notificationDot} />}
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('(client)/(favourite-orders)/favourite-orders')}>
           <Feather name="bookmark" size={28} color="white" />
         </TouchableOpacity>
       </View>
@@ -243,9 +243,9 @@ const Dashboard: React.FC = () => {
         {dashboardData && dashboardData.length > 0 ? (
           <View style={tw`p-1`}>
             <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
-                {dashboardData.map((item, index) => (
-                 <View key={index} style={tw`w-full flex `}>
-                 <AccardionHistory
+            {dashboardData.map((item, index) => (
+              <View key={index} style={tw`w-full flex `}>
+                <AccardionHistory
                   id={item.orderId}
                   title={item.serviceName}
                   date={`${item.orderDate} ${item.time}` || 'Дата не указана'}

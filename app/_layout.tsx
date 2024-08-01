@@ -149,6 +149,7 @@ import OrderClient from "./(client)/(oreder)/order";
 import ClientOrderDetail from "./(client)/(oreder)/orderDetail";
 import ResponseLocationEdit from "./(location)/(response-location)/ResponseLocationEdit";
 import ProfilePage from "./(profile)";
+import FavouriteOrders from "./(client)/(favourite-orders)/favourite-orders";
 // import ResponseLocationEdit from "./(location)/(response-location)/responseLocationEdit";
 
 const Stack = createNativeStackNavigator();
@@ -210,6 +211,11 @@ function RootLayoutNav() {
             <Stack.Screen
               name="(auth)/auth"
               component={Auth}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="(client)/(favourite-orders)/favourite-orders"
+              component={FavouriteOrders}
               options={{ headerShown: false }}
             />
             <Stack.Screen

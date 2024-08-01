@@ -11,7 +11,9 @@ export type RootStackParamList = {
   '(notifications)/(pages)/changing-an-entry': undefined;
   '(notifications)/(pages)/request-feedback': undefined;
   '(standart)/(services)/(myServices)/myServices': undefined;
+  '(client)/(favourite-orders)/favourite-orders': undefined;
   'settings-gallery': undefined;
+  '(client)/(map)/(master-locations)/master-locations': undefined;
   'settings-locations': undefined;
   '(free)/(help)/help': undefined;
   '(notifications)/notification': undefined;
