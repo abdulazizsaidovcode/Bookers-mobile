@@ -44,6 +44,8 @@ const OrderHistory = () => {
   };
   const DeleteAllPastComing = () => {
     const ids: any = pastComing.map(past => past.orderId)
+    console.log(ids);
+    
     if (ids.length > 0) {
       console.log("order ids", ids);
       deleteAllPastComingFunction(ids, () => deleteToggleModal(), () => getOrderClientPustComing(setPastComing))
@@ -157,6 +159,9 @@ const OrderHistory = () => {
               pastComing.map((pastComing: any, index: number) => (
                 <AccardionHistoryTwo key={index} id={pastComing.serviceIds} title={pastComing.serviceName} date={pastComing.orderDate} >
                   <ProfileCard
+                    onPress={()=>{
+                      
+                    }}
                     titleTex={pastComing.serviceName.split('  ')}
                     imageURL={pastComing.userAttachmentId}
                     masterName={pastComing.firstName + " " + pastComing.lastName}
