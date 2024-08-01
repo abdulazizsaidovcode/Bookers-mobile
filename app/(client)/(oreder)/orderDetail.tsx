@@ -293,6 +293,7 @@ const ClientOrderDetail = () => {
 
                             <View style={{marginTop: 20}}>
                                 <Buttons title='Оставить отзыв' backgroundColor='#fff' textColor='#9C0A35' onPress={() => navigation.navigate('(client)/(oreder)/order')}/>
+                                <View style={{marginTop: 20}}></View>
                                 <Buttons title='Написать сообщение' backgroundColor='#9C0A35' textColor='#fff' onPress={() => navigation.navigate('(client)/(oreder)/order')}/>
                             </View>
                         }
