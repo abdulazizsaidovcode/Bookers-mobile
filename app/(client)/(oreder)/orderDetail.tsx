@@ -23,6 +23,7 @@ import { useMapStore } from '@/helpers/state_managment/map/map';
 import BottomModal from '@/components/(modals)/modal-bottom';
 import Buttons from '@/components/(buttons)/button';
 import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
+import Textarea from '@/components/select/textarea';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -61,7 +62,7 @@ const ClientOrderDetail = () => {
     const navigation = useNavigation<any>();
     const route = useRoute<any>();
     const { id } = route.params;
-    const {ratingModal,setRatingModal}=useAccardionStoreId()
+    const { ratingModal, setRatingModal } = useAccardionStoreId()
     const { isLoading, setIsLoading, refreshing, setRefreshing } = clientStore()
     const { setGetMee } = useGetMeeStore()
     const [orderOneData, setOrderOneData] = useState<OrderOne | null>(null)
@@ -73,14 +74,23 @@ const ClientOrderDetail = () => {
     const [visible, setVisible] = useState(false);
     const { userLocation, setUserLocation } = useGetMeeStore();
     const { orderData } = useMapStore();
+    const [textAreaValue, setTextAreaValue] = useState<string>('');
 
     useFocusEffect(useCallback(() => {
         if (id) orderClientGetOne(id, setOrderOneData)
         getMee(setGetMee)
     }, []))
 
+    const ratingToggleModal = () => {
+        setRatingModal(!ratingModal);
+    };
+    const handleChange = (e: string) => {
+        const trimmedValue = e.trim();
+        const regex = /^[a-zA-Z0-9а-яА-ЯёЁ.,!?;:()\s]+$/;
 
-
+        if (regex.test(trimmedValue) && !/\s\s+/.test(e)) setTextAreaValue(e);
+        else if (e === '') setTextAreaValue('');
+    };
     const toggleVisible = () => setVisible(!visible);
 
     useFocusEffect(useCallback(() => {
@@ -299,7 +309,9 @@ const ClientOrderDetail = () => {
 
                                 }} />
                                 <View style={{ marginTop: 10 }}></View>
-                                <Buttons title='Написать сообщение' backgroundColor='#9C0A35' textColor='#fff' onPress={() => navigation.navigate('(client)/(oreder)/order')} />
+                                <Buttons title='Написать сообщение' backgroundColor='#9C0A35' textColor='#fff' onPress={() => {
+                                    ratingToggleModal()
+                                }} />
                                 <View style={styles.repeatSection}>
                                     <Text style={styles.title}>Вам снова нужна эта услуга?</Text>
                                     <Text style={styles.description}>
@@ -350,7 +362,46 @@ const ClientOrderDetail = () => {
                                 Reject the order?
                             </Text>
                         </CenteredModal>
-                        
+
+                        <CenteredModal
+                            isFullBtn={false}
+                            btnWhiteText={'Отправить'}
+                            btnRedText={'Закрыть'}
+                            isModal={ratingModal}
+                            toggleModal={ratingToggleModal}
+                        >
+                            <>
+                                <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold', marginBottom: 30 }}>
+                                    Оцените работу мастера!
+                                </Text>
+                                <View style={styles.modalContainer}>
+                                    <View style={styles.stars}>
+                                        {Array(5)
+                                            .fill(0)
+                                            .map((_, index) => (
+                                                <TouchableOpacity
+                                                    activeOpacity={0.7}
+                                                    key={index}
+                                                    onPress={() => handleRating(index + 1)}
+                                                >
+                                                    <AntDesign
+                                                        name={index < rating ? 'star' : 'staro'}
+                                                        size={30}
+                                                        color="#B00000"
+                                                        style={styles.star}
+                                                    />
+                                                </TouchableOpacity>
+                                            ))}
+                                    </View>
+                                </View>
+                                <Textarea
+                                    placeholder="Оставьте отзыв"
+                                    value={textAreaValue}
+                                    onChangeText={(e) => handleChange(e)}
+                                />
+                            </>
+                        </CenteredModal>
+
                     </View>
                 </ScrollView>
             </View >
