@@ -1,7 +1,7 @@
 import { getConfig } from "@/app/(tabs)/(master)/main"
 import Toast from "react-native-simple-toast";
-import { addFebdaback_Url, clientOrderaPastComing, clientOrderUpcoming, deleteAllpastcoming_Url, deletePastcoming_Url } from "@/helpers/api";
-import { addfedbackmaster, getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
+import { addFebdaback_Url, addMessage_Url, clientOrderaPastComing, clientOrderUpcoming, deleteAllpastcoming_Url, deletePastcoming_Url } from "@/helpers/api";
+import { addfedbackmaster, addMessageInterface, getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
 import axios from "axios";
 import { Alert } from "react-native";
 
@@ -110,4 +110,20 @@ export const deleteAllPastComingFunction = async (datas: string[],toggleModal: (
     }
 }
 
-export const AddMessageOrderUpcoming=async(datas:)
+export const AddMessageOrderUpcoming=async(datas:addMessageInterface,toggleModal: () => void)=>{
+    try{
+        if(datas){
+            const config=await getConfig();
+            const res=await axios.post(addMessage_Url,datas,config ? config : {});
+            if(res.data.success){
+                toggleModal();
+                Toast.show('✅Message sent successfully', Toast.LONG);
+            }else{
+                Toast.show('Message sent error', Toast.LONG);
+            }
+        }
+    }catch(err){
+        console.log("Upcomingda message yuborilmadi",err);
+        
+    }
+}
