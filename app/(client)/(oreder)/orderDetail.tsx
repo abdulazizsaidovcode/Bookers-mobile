@@ -291,10 +291,26 @@ const ClientOrderDetail = () => {
                         {
                             orderOneData && orderOneData.orderStatus === 'COMPLETED' &&
 
-                            <View style={{marginTop: 20}}>
-                                <Buttons title='Оставить отзыв' backgroundColor='#fff' textColor='#9C0A35' onPress={() => navigation.navigate('(client)/(oreder)/order')}/>
-                                <View style={{marginTop: 20}}></View>
-                                <Buttons title='Написать сообщение' backgroundColor='#9C0A35' textColor='#fff' onPress={() => navigation.navigate('(client)/(oreder)/order')}/>
+                            <View style={{ marginTop: 20 }}>
+                                <Buttons title='Оставить отзыв' backgroundColor='#fff' textColor='#9C0A35' onPress={() => navigation.navigate('(client)/(oreder)/order')} />
+                                <View style={{ marginTop: 10 }}></View>
+                                <Buttons title='Написать сообщение' backgroundColor='#9C0A35' textColor='#fff' onPress={() => navigation.navigate('(client)/(oreder)/order')} />
+                                <View style={styles.repeatSection}>
+                                    <Text style={styles.title}>Вам снова нужна эта услуга?</Text>
+                                    <Text style={styles.description}>
+                                        Если вы хотите воспользоваться этой услугой еще раз, нажмите кнопку
+                                        «Повторить», либо «Записаться» если вам нужны другие услуги мастера.
+                                    </Text>
+                                    <View style={styles.buttonContainer}>
+                                        <TouchableOpacity style={styles.repeatButton}>
+                                            <Text style={styles.buttonText}>Повторить</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.bookButton}>
+                                            <Text style={styles.buttonText2}>Записаться</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+
                             </View>
                         }
                         <BottomModal toggleBottomModal={toggleModal} isBottomModal={visible}>
@@ -329,6 +345,7 @@ const ClientOrderDetail = () => {
                                 Reject the order?
                             </Text>
                         </CenteredModal>
+                        
                     </View>
                 </ScrollView>
             </View >
@@ -457,6 +474,59 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 10,
         alignItems: 'center',
+    },
+    repeatSection: {
+        backgroundColor: "#B9B9C9",
+        marginTop: 20,
+        padding: 20,
+        borderRadius: 20,
+        alignItems: "center",
+    },
+    title: {
+        color: "#9C0A35",
+        fontSize: 18,
+        fontWeight: "600",
+        marginBottom: 10,
+        textAlign: "center",
+    },
+    description: {
+        color: "#5C5C5C",
+        fontSize: 14,
+        textAlign: "center",
+        marginBottom: 20,
+    },
+    buttonContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: "100%",
+    },
+    repeatButton: {
+        backgroundColor: "#B9B9C9",
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: "#9C0A35",
+        marginRight: 10,
+        flex: 1,
+        alignItems: "center",
+    },
+    bookButton: {
+        backgroundColor: "#9C0A35",
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        marginLeft: 10,
+        flex: 1,
+        alignItems: "center",
+    },
+    buttonText: {
+        color: "#9C0A35",
+        fontSize: 16,
+    },
+    buttonText2: {
+        color: "#FFFFFF",
+        fontSize: 16,
     },
 });
 
