@@ -26,7 +26,7 @@ const BookedAccordion: React.FC = () => {
     const navigation = useNavigation<any>();
     const [activeBtn, setActiveBtn] = useState<boolean>(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const { setTime, setServiceId, setDate } = useSheduleData();
+    const { setTime, serviceIds, setServiceId, setDate } = useSheduleData();
     const { getMee, setGetMee } = useGetMeeStore();
     const [loading, setLoading] = useState(true); // loading state
 
@@ -58,8 +58,17 @@ const BookedAccordion: React.FC = () => {
     }, [calendarDate]);
 
     const handleTabChange = (tab: any) => {
-        setActiveTab(tab);
-        setServiceId([tab]);
+        let arr: any = []
+
+        if (serviceIds && serviceIds.includes(tab)) {
+            arr = serviceIds.filter((res: any) => res !== tab)
+        } else {
+            if (serviceIds) {
+                arr = [...serviceIds, tab]
+            }
+        };
+        setActiveTab(arr);
+        setServiceId(arr);
         setActiveTime(''); // Reset active time when tab changes
     };
 
@@ -99,10 +108,10 @@ const BookedAccordion: React.FC = () => {
                     {services && services.length > 0 ? services.map((service: any) => (
                         <TouchableOpacity
                             key={service.id}
-                            style={[styles.tabButton, activeTab === service.id && styles.activeTab]}
+                            style={[styles.tabButton, activeTab.includes(service.id) && styles.activeTab]}
                             onPress={() => handleTabChange(service.id)}
                         >
-                            <Text style={[styles.tabText, activeTab !== service.id && styles.inactiveText]}>
+                            <Text style={[styles.tabText, !activeTab.includes(service.id) && styles.inactiveText]}>
                                 {service.name.trim()}
                             </Text>
                         </TouchableOpacity>
