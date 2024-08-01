@@ -1,7 +1,7 @@
 
 import React, { useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome, MaterialIcons, SimpleLineIcons } from '@expo/vector-icons';
 import tw from 'tailwind-react-native-classnames';
 import { useFocusEffect } from 'expo-router';
 import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
@@ -17,12 +17,14 @@ type ClientCardProps = {
   clients: number;
   address: string;
   mapStyle?: boolean;
+  favouriteStyle?: boolean;
   onPress?: () => void;
   feedbackCount: number;
   locationIcon?: React.ReactNode;
+  favouriteOnPress: () => void
 };
 
-const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, mapStyle }) => {
+const ClientCard: React.FC<ClientCardProps | any> = ({ salon, favouriteOnPress, imageUrl, favouriteStyle, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, mapStyle }) => {
   const { getme, } = webPageStore();
 
   //   useFocusEffect(
@@ -74,10 +76,14 @@ const ClientCard: React.FC<ClientCardProps | any> = ({ salon, imageUrl, feedback
           <Text style={tw`text-white text-xl text-center`}>Записаться</Text>
         </TouchableOpacity>
         {!mapStyle && (
-          <TouchableOpacity activeOpacity={0.8} style={[tw`p-3 rounded-full`, { backgroundColor: '#9C0A35' }]}>
-            <SimpleLineIcons name="location-pin" size={30} color="white" onPress={onPress} />
+          <TouchableOpacity activeOpacity={0.8} style={[tw`p-2 rounded-full`, { backgroundColor: '#9C0A35' }]}>
+            <SimpleLineIcons name="location-pin" size={27} color="white" onPress={onPress} />
           </TouchableOpacity>
         )}
+        {favouriteStyle &&
+          <TouchableOpacity onPress={favouriteOnPress}  activeOpacity={0.8} style={[tw`p-2 rounded-full`, { backgroundColor: '#9C0A35' }]}>
+            <MaterialIcons name="bookmark" size={27} color="white" />
+          </TouchableOpacity>}
       </View>
 
     </View>
