@@ -214,6 +214,7 @@ const ClientFeedback = () => {
     }, [page]))
 
     useFocusEffect(useCallback(() => {
+        setPage(0)
         if (selectedItem === null && selectedClient) getFeedbackClientList(setFeedback, selectedClient?.id, page, setIsLoading)
     }, [selectedItem]))
 
