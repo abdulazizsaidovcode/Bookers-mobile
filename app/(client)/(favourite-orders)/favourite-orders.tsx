@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import NavigationMenu from '@/components/navigation/navigation-menu'
 import { useFocusEffect } from 'expo-router'
@@ -16,19 +16,16 @@ const FavouriteOrders = () => {
     const navigation = useNavigation<any>()
     const { favouriteOrders, setFavouriteOrders, isModal, setIsModal, isLoading, setIsLoading, masterId, setMasterId } = useFavoutiteOrders();
 
-    useFocusEffect(
-        useCallback(() => {
-            fetchFavouriteOrders(setFavouriteOrders, setIsLoading);
-            return () => { }
-        }, [])
-    );
+    useEffect(() => {
+        fetchFavouriteOrders(setFavouriteOrders, setIsLoading);
+    }, [])
 
     // const masterCategories = favouriteOrders.map(item => item.categoryNames.join(', '));
     const toggleModal = (masterId?: string) => {
         setIsModal(!isModal)
         setMasterId(masterId ? masterId : '')
     };
-    const handleDelte = () => deleteFavouriteOrder(masterId, setFavouriteOrders, setIsLoading)
+    const handleDelte = () => deleteFavouriteOrder(masterId, setFavouriteOrders, setIsLoading, toggleModal)
 
     return (
         <SafeAreaView style={styles.container}>
@@ -97,7 +94,8 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     notFoundText: {
-        fontSize: 13,
-        color: '#fff'
+        fontSize: 16,
+        color: '#fff',
+        padding: 5
     }
 })

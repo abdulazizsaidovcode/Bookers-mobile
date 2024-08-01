@@ -212,4 +212,4 @@ export const deleteAllpastcoming_Url:string=`${base_url}order/delete/all`
 // favourite urls
 export const favourite_list:string=`${base_url}favourite/list`
 export const favourite_add:string=`${base_url}favourite/save`
-export const favourite_delete:string=`${base_url}favourite/delete/`
+export const favourite_delete:string=`${base_url}favourite/delete`
