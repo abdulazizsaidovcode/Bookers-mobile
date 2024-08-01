@@ -16,12 +16,13 @@ import {
   getWorkDay,
   getWorkTime,
 } from "@/helpers/api-function/graficWork/graficWorkFunctions";
-import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
 import { WorkMainCardEdit } from "../(work-grafic-edit)/workMain";
 import { Loading } from "@/components/loading/loading";
+import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
@@ -56,7 +57,8 @@ export const WorkMainCard: React.FC<{
 };
 
 const WorkMain = () => {
-  const navigation = useNavigation<SettingsScreenNavigationProp>();
+    const { setNumber } = numberSettingStore();
+    const navigation = useNavigation<SettingsScreenNavigationProp>();
   const {
     setWeekData,
     weekData,
@@ -153,7 +155,7 @@ const WorkMain = () => {
                   timeData.end !== undefined &&
                   weekData.some((item) => item.active)
                 ) {
-                  putNumbers(3);
+                  putNumbers(3, () => getNumbers(setNumber));
                 }
                 navigation.navigate("(welcome)/Welcome");
               }}

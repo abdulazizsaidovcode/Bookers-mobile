@@ -17,7 +17,7 @@ import MessageOption from "@/components/messageOption/messageOption";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import {
   OnlineBookingSettingsUrgentlyStory,
   OnlineBookingStory,
@@ -40,6 +40,7 @@ import clientStore from "@/helpers/state_managment/client/clientStore";
 import { getMasterTariff } from "@/constants/storage";
 import { getVipCountS } from "./(booking)/timeSelect";
 import { Loading } from "@/components/loading/loading";
+import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
@@ -47,7 +48,8 @@ type SettingsScreenNavigationProp = NavigationProp<
 >;
 
 const OnlineBooking = () => {
-  const { tariff, setTariff } = clientStore();
+    const { setNumber } = numberSettingStore();
+    const { tariff, setTariff } = clientStore();
   const {
     setUrgentlyt,
     salonId,
@@ -246,7 +248,7 @@ const OnlineBooking = () => {
                 <Buttons
                   title={t("to_home")}
                   onPress={() => {
-                    putNumbers(6);
+                    putNumbers(6, () => getNumbers(setNumber));
                     navigation.goBack();
                   }}
                 />

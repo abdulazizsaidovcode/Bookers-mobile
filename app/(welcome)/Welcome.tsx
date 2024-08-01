@@ -40,7 +40,12 @@ const Welcome = () => {
     const { getMee, setGetMee } = useGetMeeStore();
     const navigation = useNavigation<SettingsScreenNavigationProp | any>();
     const [getTariffStatus, setGetTariffStatus] = useState<string | null>(null);
-
+    
+    useFocusEffect(
+        useCallback(() => {
+            getNumbers(setNumber);
+        }, [])
+    );
     useFocusEffect(
         useCallback(() => {
             const fetchUserAndTariff = async () => {
@@ -52,16 +57,12 @@ const Welcome = () => {
             fetchUserAndTariff();
 
             if (number.length < 0 || number.length === 0) {
-                putNumbers(1);
+                putNumbers(1, () => getNumbers(setNumber));
             }
+            return;
         }, [])
     );
 
-    useFocusEffect(
-        useCallback(() => {
-            getNumbers(setNumber);
-        }, [])
-    );
 
     useEffect(() => {
         if (getTariffStatus) {

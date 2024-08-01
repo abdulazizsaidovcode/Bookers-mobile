@@ -3,7 +3,8 @@ import Buttons from "@/components/(buttons)/button";
 import { Text, View } from "@/components/Themed";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { base_url } from "@/helpers/api";
-import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -21,6 +22,7 @@ interface Types {
 }
 
 const ResponseLocation = () => {
+    const { setNumber } = numberSettingStore();
     const [data, setData] = useState<Types>();
     const navigation = useNavigation<any>()
 
@@ -93,7 +95,7 @@ const ResponseLocation = () => {
                     <Buttons
                         title="На главную"
                         onPress={() => {
-                            if (data) putNumbers(4)
+                            if (data) putNumbers(4, () => getNumbers(setNumber))
                             navigation.navigate("(welcome)/Welcome");
                         }}
                     />

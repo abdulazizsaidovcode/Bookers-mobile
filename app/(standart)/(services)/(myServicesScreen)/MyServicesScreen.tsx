@@ -11,11 +11,13 @@ import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import { getCategory_master, getGender_status, getSpecialization, master_get_Service } from '@/helpers/api';
 import { router } from 'expo-router';
-import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
+import { getNumbers, putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import { getConfig } from '@/app/(tabs)/(master)/main';
+import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSetting';
 
 const MyServicesScreen = () => {
     const route = useRoute();
+    const { setNumber } = numberSettingStore();
     const { setProdseduraUslug ,serviceSelectId} = servicesStore();
     const [gender, setGender] = useState([]);
     const [specialization, setSpecialization] = useState([]);
@@ -239,7 +241,7 @@ const MyServicesScreen = () => {
 
                     <View style={tw`mb-10`}>
                         <Buttons onPress={() => {
-                            putNumbers(2)
+                            putNumbers(2, () => getNumbers(setNumber))
                             router.push('(welcome)/Welcome')
                         }} title='На главную ' />
                     </View>

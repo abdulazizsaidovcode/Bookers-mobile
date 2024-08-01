@@ -17,15 +17,14 @@ export const getNumbers = async (setData: (data: any) => void) => {
     }
 };
 
-export const putNumbers = async (number: number) => {
+export const putNumbers = async (number: number, getData: () => void) => {
     try {
         if (!number) {
             return null // Return early if number is falsy
         }
-
         const config = await getConfig();
         await axios.put(`${master_put_number}?number=${number}`, '', config ? config : {});
-
+        getData()
         // Optionally handle success case if needed
     } catch (error) {
         console.error('Error updating number:', error);

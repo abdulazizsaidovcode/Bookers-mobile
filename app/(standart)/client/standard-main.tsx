@@ -20,8 +20,9 @@ import {RootStackParamList} from "@/type/root";
 import {View, Text, ScrollView, StatusBar, FlatList, RefreshControl} from 'react-native';
 import LocationInput from "@/components/(location)/locationInput";
 import {StandardNowAndConstClient} from "@/components/clients/client-items";
-import {putNumbers} from "@/helpers/api-function/numberSittings/numbersetting";
+import {getNumbers, putNumbers} from "@/helpers/api-function/numberSittings/numbersetting";
 import {handleRefresh} from "@/constants/refresh";
+import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standart)/client/standard-main'>;
 
@@ -38,6 +39,7 @@ const StandardMain = () => {
         refreshing,
         setRefreshing
     } = clientStore()
+    const { setNumber } = numberSettingStore();
     const [isFilter, setIsFilter] = useState<string>('all')
     const toggleClientModal = () => setIsClientModal(!isClientModal);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
@@ -208,7 +210,7 @@ const StandardMain = () => {
                             <Buttons
                                 title={`Настроить позже и перейти на главную`}
                                 onPress={() => {
-                                    putNumbers(2)
+                                    putNumbers(2, () => getNumbers(setNumber))
                                     navigation.goBack()
                                 }}
                             />

@@ -3,8 +3,9 @@ import LoadingButtons from '@/components/(buttons)/loadingButton';
 import { Loading } from '@/components/loading/loading';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editWindowOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
-import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
+import { getNumbers, putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
+import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSetting';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
@@ -13,7 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const RequestWindow = () => {
-  const { windowData, setWindowData, isLoading, setIsloading } = useNotificationsStore();
+    const { setNumber } = numberSettingStore();
+    const { windowData, setWindowData, isLoading, setIsloading } = useNotificationsStore();
   const [hasChanges, setHasChanges] = useState(false);
   const navigation = useNavigation();
 
@@ -28,7 +30,7 @@ const RequestWindow = () => {
 
   const handleSave = () => {
     editWindowOrder(windowData.text, setHasChanges, navigation.goBack, setIsloading);
-    putNumbers(7);
+    putNumbers(7, () => getNumbers(setNumber));
   };
 
   if (!windowData) {

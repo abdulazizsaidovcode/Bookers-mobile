@@ -9,16 +9,18 @@ import { RootStackParamList } from '@/type/root';
 import { getFile } from '@/helpers/api';
 import { delGallery, fetchData } from '@/helpers/api-function/gallery/settings-gallery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
-import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
+import { getNumbers, putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import Toast from 'react-native-simple-toast'
 import { useFocusEffect } from 'expo-router';
 import { getMasterTariff } from '@/constants/storage';
+import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSetting';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(settings)/(settings-gallery)/settings-gallery-main'>;
 const { width, height } = Dimensions.get('window');
 
 const SettingsGalleryMain = () => {
+    const { setNumber } = numberSettingStore();
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const { data, setData } = useGalleryStore();
     const [showCheckboxes, setShowCheckboxes] = useState(false);
@@ -169,7 +171,7 @@ const SettingsGalleryMain = () => {
                     : showCheckboxes ? <Buttons title='Удалить выбранную галерею' onPress={toggleModal} />
                         :
                         <Buttons onPress={() => {
-                            putNumbers(5);
+                            putNumbers(5, () => getNumbers(setNumber));
                             navigation.navigate("(welcome)/Welcome");
                         }} title='На главную' />}
             </View>

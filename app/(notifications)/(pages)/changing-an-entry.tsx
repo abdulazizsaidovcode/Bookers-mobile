@@ -3,8 +3,9 @@ import LoadingButtons from '@/components/(buttons)/loadingButton';
 import { Loading } from '@/components/loading/loading';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editChangingOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
-import { putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
+import { getNumbers, putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
+import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSetting';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Switch, TextInput, Dimensions } from 'react-native';
@@ -13,7 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const ChangingEnEntry = () => {
-  const { changingData, isLoading, tariff, texts, setTexts, setIsloading, setChangingData } = useNotificationsStore();
+    const { setNumber } = numberSettingStore();
+    const { changingData, isLoading, tariff, texts, setTexts, setIsloading, setChangingData } = useNotificationsStore();
   const navigation = useNavigation();
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -33,7 +35,7 @@ const ChangingEnEntry = () => {
   };
 
   const handleSave = () => {
-    tariff === 'FREE' && putNumbers(7)
+    tariff === 'FREE' && putNumbers(7, () => getNumbers(setNumber))
     editChangingOrder(changingData.isActive, changingData.isActive ? texts.changingText : changingData.text, setHasChanges, navigation.goBack, setIsloading);
   };
 

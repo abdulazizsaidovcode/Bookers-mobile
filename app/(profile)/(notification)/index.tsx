@@ -18,10 +18,12 @@ import BottomModal from "@/components/(modals)/modal-bottom";
 import NotificationSelect from "@/helpers/state_managment/notification";
 import Buttons from "@/components/(buttons)/button";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { getConfig } from "@/app/(tabs)/(master)/main";
+import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 
 const Notification: React.FC = () => {
+    const { setNumber } = numberSettingStore();
     const navigation = useNavigation<any>();
     const [notifications, setNotifications] = useState([]);
     const [isLoading, setisLoading] = useState(false);
@@ -82,7 +84,7 @@ const Notification: React.FC = () => {
                 <View style={styles.header}>
                     <TouchableOpacity
                         onPress={() => {
-                            putNumbers(7);
+                            putNumbers(7, () => getNumbers(setNumber));
                             navigation.goBack();
                         }}
                     >

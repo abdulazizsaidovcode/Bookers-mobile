@@ -4,6 +4,7 @@ import { Text, View } from "@/components/Themed";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { base_url } from "@/helpers/api";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -21,6 +22,7 @@ interface Types {
 }
 
 const ResponseLocationEdit = () => {
+    const { setNumber } = numberSettingStore();
     const [data, setData] = useState<Types>();
     const navigation = useNavigation<any>()
     useEffect(() => {

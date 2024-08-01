@@ -12,9 +12,10 @@ import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import {useCallback, useEffect} from "react";
 import {getClientAll, getClientStatistics} from "@/helpers/api-function/client/client";
-import {putNumbers} from '@/helpers/api-function/numberSittings/numbersetting';
+import {getNumbers, putNumbers} from '@/helpers/api-function/numberSittings/numbersetting';
 import {handleRefresh} from "@/constants/refresh";
 import {getMasterTariff} from "@/constants/storage";
+import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSetting';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/main'>;
 
@@ -30,6 +31,7 @@ const MainClient = () => {
         setTariff
     } = clientStore()
     const toggleClientModal = () => setIsClientModal(!isClientModal);
+    const { setNumber } = numberSettingStore();
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     useEffect(() => {
@@ -122,7 +124,7 @@ const MainClient = () => {
                     </View>
                     <View style={tw`pb-5`}>
                         <Buttons title={`Настроить позже и перейти на главную`} onPress={() => {
-                            putNumbers(8)
+                            putNumbers(8, () => getNumbers(setNumber))
                             navigation.goBack()
                         }}/>
                     </View>

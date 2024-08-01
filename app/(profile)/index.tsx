@@ -30,7 +30,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import registerStory from "@/helpers/state_managment/auth/register";
 import {getMasterTariff} from "@/constants/storage";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { Loading } from "@/components/loading/loading";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 
@@ -45,7 +45,8 @@ const data: { name: any; color: string; label: string }[] = [
 
 
 const ProfilePage: React.FC = () => {
-  const [isInviteModalVisible, setInviteModalVisible] = useState(false);
+    const { setNumber } = numberSettingStore();
+    const [isInviteModalVisible, setInviteModalVisible] = useState(false);
   const [isShareModalVisible, setShareModalVisible] = useState(false);
   const navigation = useNavigation<any>();
   const { getMee, setGetMee } = useGetMeeStore();
@@ -113,7 +114,7 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  putNumbers(6)
+  putNumbers(6, () => getNumbers(setNumber))
 
   const navigationList =
     role === "ROLE_MASTER"
