@@ -159,7 +159,6 @@ const ClientFeedback = () => {
     const [page, setPage] = useState(0)
     const [oneData, setOneData] = useState<FeedbackList | null>(null)
     const [isModal, setIsModal] = useState(false)
-    const [selectedButton, setSelectedButton] = useState(null);
     const maxStars = 5;
     const fullStars = Math.floor(feedback ? feedback.overallRating : 0);
     const halfStar = feedback ? feedback.overallRating : 0 - fullStars >= 0.5;
@@ -175,12 +174,9 @@ const ClientFeedback = () => {
 
     const toggleModal = () => setIsModal(!isModal)
     const handleButtonPress = (buttonIndex: any) => {
-        console.log(buttonIndex, 'index')
-        setSelectedButton(buttonIndex);
         if (buttonIndex === 1) setPage(prevPage => prevPage + 1)
         else if (buttonIndex === 0) return setPage(prevPage => prevPage - 1)
     };
-    console.log(page, 'paginationFeedback')
 
     return (
         <View style={tw`flex-1`}>
