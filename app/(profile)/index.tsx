@@ -32,6 +32,7 @@ import {getMasterTariff} from "@/constants/storage";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { Loading } from "@/components/loading/loading";
+import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 
 const data: { name: any; color: string; label: string }[] = [
   { name: "facebook", color: "#3b5998", label: "Facebook" },
@@ -49,6 +50,7 @@ const ProfilePage: React.FC = () => {
   const navigation = useNavigation<any>();
   const { getMee, setGetMee } = useGetMeeStore();
   const {tariff, setTariff, isLoading, setIsLoading} = clientStore()
+  const {isWaitModal, setIsWaitModal} = numberSettingStore()
   const [toggle, setToggle] = useState(false);
   const { role } = registerStory();
 
@@ -380,6 +382,53 @@ const ProfilePage: React.FC = () => {
             </View>
           </View>
         </Modal>
+      <CenteredModal
+        isFullBtn={false}
+        btnWhiteText=""
+        oneBtn={true}
+        btnRedText={"Закрыть"}
+        isModal={isWaitModal}
+        onConfirm={() => setIsWaitModal(false)}
+        toggleModal={() => setIsWaitModal(false)}
+      >
+        <>
+          <Text
+            style={{
+              color: "white",
+              fontSize: 22,
+              fontWeight: "700",
+              marginBottom: 20,
+              paddingTop: 10
+            }}
+          >
+            Ваша заявка принта!
+          </Text>
+          <Text
+            style={{
+              color: "white",
+              fontSize: 14,
+              fontWeight: "400",
+              marginBottom: 20,
+              letterSpacing: 1,
+              textAlign: "center"
+            }}
+          >
+            Администратор проверяет Ваши данные.
+          </Text>
+          <Text
+            style={{
+                color: "white",
+                fontSize: 14,
+                fontWeight: "400",
+                marginBottom: 30,
+                letterSpacing: 1,
+                textAlign: "center"
+            }}
+          >
+            Это займет не более 20 минут
+          </Text>
+        </>
+      </CenteredModal>
       </SafeAreaView>
       <CenteredModal
         btnWhiteText="Нет"

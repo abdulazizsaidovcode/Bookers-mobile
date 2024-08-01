@@ -36,7 +36,7 @@ const screenHeight = Dimensions.get("window").height;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, "(welcome)/welcome">;
 
 const Welcome = () => {
-    const { number, setNumber } = numberSettingStore();
+    const { number, setNumber, setIsWaitModal } = numberSettingStore();
     const { getMee, setGetMee } = useGetMeeStore();
     const navigation = useNavigation<SettingsScreenNavigationProp | any>();
     const [getTariffStatus, setGetTariffStatus] = useState<string | null>(null);
@@ -216,6 +216,7 @@ const Welcome = () => {
                             <Buttons title="Вперёд" onPress={() => {
                                 navigation.navigate('(tabs)/(master)');
                                 registered();
+                                setIsWaitModal(true)
                             }} />
                         </View>
                     )}
