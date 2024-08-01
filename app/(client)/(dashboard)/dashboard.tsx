@@ -18,7 +18,7 @@ import tw from 'tailwind-react-native-classnames';
 import hasNotificationState from '@/helpers/state_managment/notifications/readORisReadNOtif';
 import { getNotificationNor_ReadyClient } from '@/helpers/api-function/client/clientPage';
 import { getExpenceCategory } from '@/helpers/api-function/expence/expence';;
-import { getClientDashboard, getDashboradMaster, getDashboradMasterAll } from '@/helpers/api-function/dashboardClient/dashboardClient';
+import { getClientDashboard, getDashboradMaster } from '@/helpers/api-function/dashboardClient/dashboardClient';
 import { useDashboardClientStore } from '@/helpers/state_managment/dashboardClient/dashboardClient';
 import AccardionHistory from '@/components/accordions/accardionHistory';
 import ProfileCard from '../(profile)/(orderHistory)/profileCard';
@@ -101,14 +101,14 @@ const Navbar: React.FC = () => {
 const Dashboard: React.FC = () => {
 
   const { userLocation, setUserLocation } = useGetMeeStore();
-  const { allCategory,  setSelectedClient,setCategoryId,categoryId } = ClientStory();
+  const { allCategory, setSelectedServiceId, setSelectedClient } = ClientStory();
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation<NavigationProp<any>>();
   const [backPressCount, setBackPressCount] = useState(0);
   const notificationListener = useRef();
   const responseListener = useRef();
   const { dashboardData } = useDashboardClientStore();
-  const { dashboardMasterData,setDashboardMasterData,setDashboardMasterDataAll,dashboardMasterDataAll} = useDashboardMasterStore();
+  const { dashboardMasterData } = useDashboardMasterStore();
   const [selectedCategory, setSelectedCategory] = useState('Bceni');
   const { setOrderData } = useMapStore();
   const navigate = useNavigation<any>();
@@ -178,13 +178,16 @@ const Dashboard: React.FC = () => {
     useCallback(() => {
       setLoading(true)
       getClientDashboard().finally(() => setLoading(false));
-      getAllCategory().finally(() => setLoading(false));
-      getDashboradMasterAll(setDashboardMasterDataAll).finally(() => setLoading(false));
       return () => { };
     }, [])
   );
-  
-
+  useFocusEffect(
+    React.useCallback(() => {
+      setLoading(true)
+      getAllCategory().finally(() => setLoading(false));
+      return () => { };
+    }, [])
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -196,9 +199,9 @@ const Dashboard: React.FC = () => {
   useFocusEffect(
     useCallback(() => {
       setLoading(true)
-      getDashboradMaster(setDashboardMasterData).finally(() => setLoading(false));
+      getDashboradMaster().finally(() => setLoading(false));
       return () => { };
-    }, [categoryId])
+    }, [])
   );
 
   const handlePhonePress = (phoneNumber: string) => {
@@ -234,12 +237,15 @@ const Dashboard: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <Navbar />
       <ScrollView>
+
+
+
         {dashboardData && dashboardData.length > 0 ? (
           <View style={tw`p-1`}>
             <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
-            {dashboardData.map((item, index) => (
-              <View key={index} style={tw`w-full flex `}>
-                <AccardionHistory
+                {dashboardData.map((item, index) => (
+                 <View key={index} style={tw`w-full flex `}>
+                 <AccardionHistory
                   id={item.orderId}
                   title={item.serviceName}
                   date={`${item.orderDate} ${item.time}` || 'Дата не указана'}
@@ -330,10 +336,7 @@ const Dashboard: React.FC = () => {
                   <View style={{ marginRight: 16, marginBottom: 20 }}>
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      onPress={() => {
-                        setSelectedCategory('Все');
-                        console.log('Selected Category ID:', 'all'); // Use an appropriate ID for "Все"
-                      }}
+                      onPress={() => setSelectedCategory('Все')}
                       style={{
                         backgroundColor: selectedCategory === 'Все' ? 'white' : 'transparent',
                         borderRadius: 10,
@@ -351,12 +354,7 @@ const Dashboard: React.FC = () => {
                     <View key={index} style={{ marginRight: 16, marginBottom: 20 }}>
                       <TouchableOpacity
                         activeOpacity={0.7}
-                        onPress={() => {
-                          setSelectedCategory(item.name);
-                          setCategoryId(item.id)
-                          console.log("category",categoryId);
-                          
-                        }}
+                        onPress={() => setSelectedCategory(item.name)}
                         style={{
                           backgroundColor: selectedCategory === item.name ? 'white' : 'transparent',
                           borderRadius: 10,
@@ -373,7 +371,7 @@ const Dashboard: React.FC = () => {
                   ))}
                 </ScrollView>
                 <View style={tw`mb-4`}>
-                   {dashboardMasterData && dashboardMasterData.map((master, idx) => (
+                  {dashboardMasterData.map((master, idx) => (
                     <View style={tw`mb-3`}>
                       <ClientCard
                         key={idx} // Har bir element uchun noyob kalit kerak

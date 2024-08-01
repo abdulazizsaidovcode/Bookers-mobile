@@ -160,7 +160,8 @@ const OrderHistory = () => {
                 <AccardionHistoryTwo key={index} id={pastComing.serviceIds} title={pastComing.serviceName} date={pastComing.orderDate} >
                   <ProfileCard
                     onPress={()=>{
-                      
+                      setSelectedClient(pastComing)
+                      navigation.navigate('(client)/(oreder)/orderDetail', { id: pastComing.orderId });
                     }}
                     titleTex={pastComing.serviceName.split('  ')}
                     imageURL={pastComing.userAttachmentId}

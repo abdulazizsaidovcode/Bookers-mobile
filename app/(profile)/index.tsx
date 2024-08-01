@@ -42,6 +42,7 @@ const data: { name: any; color: string; label: string }[] = [
   { name: "copy", color: "#E74C3C", label: "Копировать ссылку" },
 ];
 
+
 const ProfilePage: React.FC = () => {
   const [isInviteModalVisible, setInviteModalVisible] = useState(false);
   const [isShareModalVisible, setShareModalVisible] = useState(false);
