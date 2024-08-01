@@ -23,6 +23,24 @@ export interface Client {
   clients: number;
   address: string;
 }
+export interface ClientData {
+  attachmentId:  string,
+  clientCount: number,
+  district: string,
+  feedbackCount: number,
+  fullName: string,
+  house: string,
+  id: string,
+  lat: string,
+  lng: string,
+  mainPhoto: string,
+  masterSpecialization: string,
+  nextEntryDate: string,
+  orderCount: number,
+  phone: string,
+  salonName: string,
+  street: string
+}
 
 export interface CommentData {
   clientId: string | null;
@@ -77,7 +95,7 @@ export interface ClientAllCategory {
   setAllCategory: (val: Service[]) => void;
   selectedServiceId: string | null;
   setSelectedServiceId: (id: string | null) => void;
-  clientData: ClientCardProps[];
+  clientData: ClientData | null;
   setClientData: (data: any) => void;
   clientId: string | null;
   setClientId: (val: string | null) => void;
@@ -97,8 +115,8 @@ export interface ClientAllCategory {
   setmasterServis: (data: []) => void;
   selectedCategoryId: string[] | null;
   setSelectedCategoryId: (val: string[]) => void;
-  categoryId:string | null
-  setCategoryId:(val:string | null) => void;
+  categoryId: string | null
+  setCategoryId: (val: string | null) => void;
 }
 
 // Create the Zustand store
@@ -113,7 +131,7 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   setAllCategory: (val: Service[]) => set({ allCategory: val }),
   selectedServiceId: null,
   setSelectedServiceId: (id: string | null) => set({ selectedServiceId: id }),
-  clientData: [],
+  clientData: {},
   setClientData: (data: any) => set({ clientData: data }),
   clientId: '',
   setClientId: (val: string | null) => set({ clientId: val }),
@@ -133,8 +151,8 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   setmasterServis: (data: any) => set({ masterServis: data }),
   selectedCategoryId: [],
   setSelectedCategoryId: (val: string[]) => set({ selectedCategoryId: val }),
-  categoryId:'',
-  setCategoryId:(val:string | null) => set({categoryId:val}),
+  categoryId: '',
+  setCategoryId: (val: string | null) => set({ categoryId: val }),
 }));
 
 export default ClientStory;

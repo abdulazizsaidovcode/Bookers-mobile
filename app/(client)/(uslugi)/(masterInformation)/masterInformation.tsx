@@ -19,6 +19,7 @@ import CustomButton1 from './CustomButton';
 import ReviewCard from '@/components/(cliendCard)/riewCard';
 import ClientFeedback from "@/app/(client)/(uslugi)/(masterInformation)/components/fedbek";
 import MasterInformationGalery from './components/galery';
+import MasterCardUslugi from '@/components/(cliendCard)/masterCardUslugi';
 
 const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
@@ -60,40 +61,11 @@ const MasterInformation = () => {
     </View>
   );
 
-  const renderRows = (attachments: any[]) => {
-    let filteredAttachments = attachments;
-
-    if (filteredAttachments.length === 0) {
-      filteredAttachments = attachments.slice(0, 4);
-    }
-
-    const rows: any[] = [];
-    for (let i = 0; i < filteredAttachments.length; i += 4) {
-      const rowItems = filteredAttachments
-        .slice(i, i + 3)
-        .map((attachment: any, index: number) => (
-          <TouchableOpacity key={index} onPress={() => setSelectedImage(attachment)}>
-            <Image
-              key={index}
-              source={{ uri: getFile + attachment.attachmentId }}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        ));
-      rows.push(
-        <View style={styles.imageRow} key={i}>
-          {rowItems}
-        </View>
-      );
-    }
-    return rows;
-  };
-
   const handleTabChange = (tab: any) => {
     setSelectedCategories(tab)
   };
 
-  console.log('a');
+  console.log(clientData);
 
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -127,46 +99,14 @@ const MasterInformation = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
           <View style={tw`mb-5`}>
-            {clientData && <FlatList
-              data={selectedClient}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
+            {clientData && 
                 <View style={tw`mb-4`}>
-                  <ClientCardUslugi
-                    salon={item.salon}
-                    imageUrl={item.imageUrl}
-                    name={item.name}
-                    zaps={item.zaps}
-                    masterType={item.masterType}
-                    orders={item.orders}
-                    clients={item.clients}
-                    address={item.address}
-                    spicalist={item.spicalist}
-                    feedbackCount={item.feedbackCount}
-                    btntext={item.btntext}
-                    services={item.services}
+                  <MasterCardUslugi
+                    item={clientData}
                     onPress={() => { }}
-                    locationIcon={
-                      <SimpleLineIcons name="location-pin" size={24} color="white"
-                        onPress={() => {
-                          if (selectedClient) {
-                            setMapData(selectedClient);
-                          }
-                          navigate.navigate('(client)/(map)/(master-locations)/master-locations');
-                        }}
-                      />
-                    }
-                    anotherIcon={
-                      <FontAwesome6 name="phone" size={24} color="white" />
-                    }
-                    phoneIcon={
-                      <Octicons name="bookmark" size={26} color="white"
-                        onPress={() => makePhoneCall(item.phone)} />
-                    }
                   />
                 </View>
-              )}
-            />}
+              }
           </View>
           <View style={tw`mb-4`}>
             <Text style={tw`text-2xl text-white font-bold`}>Услуги {selectedClient?.name}</Text>
