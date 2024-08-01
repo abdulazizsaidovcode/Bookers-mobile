@@ -9,6 +9,7 @@ import {useFocusEffect} from "expo-router";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 import moment from "moment";
+import BottomModal from "@/components/(modals)/modal-bottom";
 
 export interface FeedBack {
     overallRating: number
@@ -70,10 +71,11 @@ export const getFeedbackClientList = async (setData: (val: FeedBack | null) => v
     }
 }
 
-const BreakdownItem = ({label, percentage}: { label: string, percentage: number }) => {
+const BreakdownItem = ({label, percentage, oneStatus}: { label: string, percentage: number, oneStatus?: string }) => {
     return (
-        <View style={styles.breakdownItem}>
-            <Text style={styles.breakdownLabel}>{label}</Text>
+        <View style={[tw`flex-row items-center justify-start w-full my-2`]}>
+            {!oneStatus && <CustomCheckbox/>}
+            <Text style={[styles.breakdownLabel, {marginLeft: 10}]}>{label}</Text>
             <View style={styles.bar}>
                 <View style={[styles.filledBar, {width: `${percentage}%`}]}/>
             </View>
@@ -81,7 +83,11 @@ const BreakdownItem = ({label, percentage}: { label: string, percentage: number 
     );
 };
 
-const ClientFeedbackCard = ({onPress, data}: { onPress: () => void, data: FeedbackList }) => {
+const ClientFeedbackCard = ({onPress, data, oneStatus}: {
+    onPress?: () => void,
+    data: FeedbackList,
+    oneStatus?: string
+}) => {
     const generateStars = (count: number) => {
         let stars = '';
         for (let i = 1; i <= count; i++) stars += '★';
@@ -105,7 +111,10 @@ const ClientFeedbackCard = ({onPress, data}: { onPress: () => void, data: Feedba
             onPress={onPress}
             style={tw`w-full mb-3`}
         >
-            <View style={[tw`rounded-2xl p-3`, {backgroundColor: '#B9B9C9'}]}>
+            <View style={[tw`rounded-2xl p-3 relative`, {backgroundColor: '#B9B9C9'}]}>
+                <Text style={[{fontSize: 12}, tw`absolute top-2 right-2`]}>
+                    {moment(data.date).format('DD/MM/YYYY')}
+                </Text>
                 <View style={tw`flex-row items-center mb-2 w-full`}>
                     {data.clientPhoto ? (
                         <Image
@@ -117,28 +126,38 @@ const ClientFeedbackCard = ({onPress, data}: { onPress: () => void, data: Feedba
                         <FontAwesome name="user-circle" size={40} color="white"/>
                     )}
                     <View style={tw`ml-4`}>
-                        <View style={tw`flex-row items-start`}>
-                            <Text style={[tw`text-lg font-bold`, {color: '#000000'}]}>
-                                {sliceText(data.clientName)}
-                            </Text>
-                            <Text style={[{fontSize: 12, marginRight: 0, marginLeft: 'auto'}]}>{moment(data.date).format('DD/MM/YYYY')}</Text>
-                        </View>
+                        <Text style={[tw`text-lg font-bold`, {color: '#000000'}]}>{sliceText(data.clientName)}</Text>
                         <Text style={[tw`text-lg`, {color: '#9C0A35'}]}>{generateStars(data.count || 0)}</Text>
                     </View>
                 </View>
                 <Text style={tw`text-gray-600`}>
-                    {sliceTextDescription(data.text)}
+                    {oneStatus ? data.text : sliceTextDescription(data.text)}
                 </Text>
             </View>
         </TouchableOpacity>
     </>
 }
 
+const CustomCheckbox = () => {
+    const [checked, setChecked] = useState(false);
+
+    const toggleCheckbox = () => setChecked(!checked);
+    return (
+        <TouchableOpacity onPress={toggleCheckbox} style={styles.container} activeOpacity={.8}>
+            <View style={[styles.checkbox]}>
+                {checked && <View style={styles.innerCircle}/>}
+            </View>
+        </TouchableOpacity>
+    );
+};
+
 const ClientFeedback = () => {
     const {isLoading, setIsLoading} = clientStore()
     const {selectedClient} = ClientStory()
     const [feedback, setFeedback] = useState<FeedBack | null>(null)
     const [page, setPage] = useState(0)
+    const [oneData, setOneData] = useState<FeedbackList | null>(null)
+    const [isModal, setIsModal] = useState(false)
     const maxStars = 5;
     const fullStars = Math.floor(feedback ? feedback.overallRating : 0);
     const halfStar = feedback ? feedback.overallRating : 0 - fullStars >= 0.5;
@@ -152,7 +171,7 @@ const ClientFeedback = () => {
         if (selectedClient) getFeedbackClientList(setFeedback, selectedClient?.id, page, setIsLoading)
     }, [page]))
 
-    console.log(feedback, 'feedback')
+    const toggleModal = () => setIsModal(!isModal)
 
     return (
         <View style={tw`flex-1`}>
@@ -166,7 +185,7 @@ const ClientFeedback = () => {
                         <AntDesign name="star" color="#9C0A35" size={24}/>
                     </View>
                 </View>
-                <Text style={styles.rating}>{feedback ? feedback.overallRating : 0}</Text>
+                <Text style={styles.rating}>{feedback ? feedback.overallRating.toFixed(2) : 0}</Text>
                 <View style={styles.stars}>
                     {[...Array(fullStars)].map((_, index) => (
                         <AntDesign name="star" color="white" size={36} key={index}/>
@@ -193,16 +212,44 @@ const ClientFeedback = () => {
                             renderItem={({item}) => (
                                 <ClientFeedbackCard
                                     onPress={() => {
+                                        toggleModal()
+                                        setOneData(item)
                                     }}
                                     data={item}
+                                    oneStatus={`info`}
                                 />
                             )}
-                            onEndReached={() => console.log('endReached')}
                         />
                     ) : (
-                        <Text style={tw`mt-7 font-bold text-7xl text-white text-center`}>Data not found</Text>
+                        <Text style={tw`mt-7 font-bold text-white text-center`}>Data not found</Text>
                     )}
                 </View>
+
+                <BottomModal toggleBottomModal={toggleModal} isBottomModal={isModal}>
+                    <>
+                        {oneData && (
+                            <>
+                                <BreakdownItem
+                                    label={
+                                        oneData.count === 5 ? 'Отлично'
+                                            : oneData.count === 4 ? 'Хорошо'
+                                                : oneData.count === 3 ? 'Средне'
+                                                    : oneData.count === 2 ? 'Плохо' : 'Очень плохо'
+                                    }
+                                    percentage={
+                                        oneData.count === 5 ? 100
+                                            : oneData.count === 4 ? 80
+                                                : oneData.count === 3 ? 60
+                                                    : oneData.count === 2 ? 40 : 20
+                                    }
+                                />
+                                <View style={tw`mt-5 w-full`}>
+                                    <ClientFeedbackCard data={oneData} oneStatus={`info`}/>
+                                </View>
+                            </>
+                        )}
+                    </>
+                </BottomModal>
             </ScrollView>
         </View>
     );
@@ -233,11 +280,6 @@ const styles = StyleSheet.create({
         marginTop: 20,
         width: '100%',
     },
-    breakdownItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 5,
-    },
     breakdownLabel: {
         color: '#fff',
         fontSize: 14,
@@ -252,6 +294,26 @@ const styles = StyleSheet.create({
     },
     filledBar: {
         height: '100%',
+        backgroundColor: '#9C0A35',
+    },
+    container: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    checkbox: {
+        width: 24,
+        height: 24,
+        borderRadius: 12,
+        borderWidth: 2,
+        padding: 4,
+        borderColor: '#9C0A35',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    innerCircle: {
+        width: 14,
+        height: 14,
+        borderRadius: 7,
         backgroundColor: '#9C0A35',
     },
 });

@@ -45,15 +45,15 @@ const ProfileCard: React.FC<IProps> = ({
     orderId,
     onPress,
 }) => {
-    const { activeTab, setActiveTab, pastComing, setPastComing } = useAccardionStoreId();
+    const { activeTab, setActiveTab, pastComing, setPastComing,ratingModal,setRatingModal } = useAccardionStoreId();
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
-    const [ratingModal, setRatingModal] = useState<boolean>(false);
     const [selectOrderID, setSelectOrderID] = useState<string | null | undefined>(null);
     const [textAreaValue, setTextAreaValue] = useState<string>('');
     const [rating, setRating] = useState<number>(0);
 
     const handleRating = (value: number) => setRating(value);
-
+    console.log("--------------------------",ratingModal);
+    
     const datas: addfedbackmaster = {
         count: rating,
         orderId: selectOrderID,
