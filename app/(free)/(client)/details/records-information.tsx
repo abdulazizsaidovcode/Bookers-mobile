@@ -126,10 +126,7 @@ const RecordsInformation = () => {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity
-                            activeOpacity={.9}
-                            style={[styles.button]}
-                        >
+                        <View style={[styles.button]}>
                             <ScrollView
                                 showsHorizontalScrollIndicator={false}
                                 contentContainerStyle={{gap: 10}}
@@ -139,7 +136,7 @@ const RecordsInformation = () => {
                                     <Text style={[styles.text]} key={idx}>{item}</Text>
                                 )) : ''}
                             </ScrollView>
-                        </TouchableOpacity>
+                        </View>
                         <View style={tw`mt-3`}>
                             <HistoryCard
                                 name={orderOneData ? `${moment(orderOneData.orderDate).format('dddd, D MMMM')}` : ''}

@@ -1,13 +1,14 @@
 import React, {useCallback, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from "react-native";
+import {FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import tw from "tailwind-react-native-classnames";
-import {AntDesign} from "@expo/vector-icons";
-import ReviewCard from "@/components/(cliendCard)/riewCard";
+import {AntDesign, FontAwesome} from "@expo/vector-icons";
 import axios from "axios";
 import {getConfig} from "@/app/(tabs)/(master)/main";
-import {client_feedback} from "@/helpers/api";
+import {client_feedback, getFile} from "@/helpers/api";
 import {useFocusEffect} from "expo-router";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
+import moment from "moment";
 
 export interface FeedBack {
     overallRating: number
@@ -69,19 +70,67 @@ export const getFeedbackClientList = async (setData: (val: FeedBack | null) => v
     }
 }
 
-const BreakdownItem = ({ label, percentage }: { label: string, percentage: number }) => {
+const BreakdownItem = ({label, percentage}: { label: string, percentage: number }) => {
     return (
         <View style={styles.breakdownItem}>
             <Text style={styles.breakdownLabel}>{label}</Text>
             <View style={styles.bar}>
-                <View style={[styles.filledBar, { width: `${percentage}%` }]} />
+                <View style={[styles.filledBar, {width: `${percentage}%`}]}/>
             </View>
         </View>
     );
 };
 
+const ClientFeedbackCard = ({onPress, data}: { onPress: () => void, data: FeedbackList }) => {
+    const generateStars = (count: number) => {
+        let stars = '';
+        for (let i = 1; i <= count; i++) stars += '★';
+        for (let i = count; i < 5; i++) stars += '☆';
+        return stars;
+    };
+
+    const sliceText = (text: string) => {
+        if (text.trim().length > 23) return `${text.slice(0, 23)}...`;
+        else return text;
+    }
+
+    const sliceTextDescription = (text: string) => {
+        if (text.trim().length > 80) return `${text.slice(0, 80)}...`;
+        else return text;
+    }
+
+    return <>
+        <TouchableOpacity
+            activeOpacity={.9}
+            onPress={onPress}
+            style={tw`w-full mb-3`}
+        >
+            <View style={[tw`rounded-2xl p-3`, {backgroundColor: '#B9B9C9'}]}>
+                <View style={tw`flex-row items-center mb-2`}>
+                    {data.clientPhoto ? (
+                        <Image source={{uri: `${getFile}${data.clientPhoto}`}} alt={`${data.clientName}`}/>
+                    ) : (
+                        <FontAwesome name="user-circle" size={40} color="white"/>
+                    )}
+                    <View style={tw`ml-4`}>
+                        <View style={tw`flex-row items-start justify-between w-full`}>
+                            <Text style={[tw`text-lg font-bold`, {color: '#000000'}]}>{sliceText(data.clientName)}</Text>
+                            <Text style={tw`text-sm`}>{moment(data.date).format('DD/MM/YYYY')}</Text>
+                        </View>
+                        <Text style={[tw`text-lg`, {color: '#9C0A35'}]}>{generateStars(data.count || 0)}</Text>
+                    </View>
+                </View>
+                <Text style={tw`text-gray-600`}>
+                    {sliceTextDescription(data.text)}
+                </Text>
+            </View>
+        </TouchableOpacity>
+    </>
+}
+
 const ClientFeedback = () => {
     const {isLoading, setIsLoading} = clientStore()
+    const {selectedClient} = ClientStory()
     const [feedback, setFeedback] = useState<FeedBack | null>(null)
     const [page, setPage] = useState(0)
     const maxStars = 5;
@@ -90,12 +139,14 @@ const ClientFeedback = () => {
     const emptyStars = maxStars - fullStars - (halfStar ? 1 : 0);
 
     useFocusEffect(useCallback(() => {
-        getFeedbackClientList(setFeedback, 'accec2c2-a471-4da8-ad26-812b83d2b103', page, setIsLoading)
+        if (selectedClient) getFeedbackClientList(setFeedback, selectedClient?.id, page, setIsLoading)
     }, []))
 
     useFocusEffect(useCallback(() => {
-        getFeedbackClientList(setFeedback, 'accec2c2-a471-4da8-ad26-812b83d2b103', page, setIsLoading)
+        if (selectedClient) getFeedbackClientList(setFeedback, selectedClient?.id, page, setIsLoading)
     }, [page]))
+
+    console.log(feedback, 'feedback')
 
     return (
         <View style={tw`flex-1`}>
@@ -129,7 +180,22 @@ const ClientFeedback = () => {
                     <BreakdownItem label="Очень плохо" percentage={feedback ? feedback.veryBadly : 0}/>
                 </View>
 
-                {/*<ReviewCard/>*/}
+                <View style={tw`w-full mt-8`}>
+                    {feedback ? (
+                        <FlatList
+                            data={feedback.feedback.object}
+                            renderItem={({item}) => (
+                                <ClientFeedbackCard
+                                    onPress={() => {
+                                    }}
+                                    data={item}
+                                />
+                            )}
+                        />
+                    ) : (
+                        <Text style={tw`mt-7 font-bold text-7xl text-white text-center`}>Data not found</Text>
+                    )}
+                </View>
             </ScrollView>
         </View>
     );
