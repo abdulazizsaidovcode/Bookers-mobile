@@ -21,6 +21,7 @@ import { useFocusEffect } from 'expo-router';
 import ContactInformationClient from '@/components/contact-information/contact-informationClient';
 import { useMapStore } from '@/helpers/state_managment/map/map';
 import BottomModal from '@/components/(modals)/modal-bottom';
+import Buttons from '@/components/(buttons)/button';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -290,8 +291,9 @@ const ClientOrderDetail = () => {
                         {
                             orderOneData && orderOneData.orderStatus === 'COMPLETED' &&
 
-                            <View>
-                                <Text>salom</Text>
+                            <View style={{marginTop: 20}}>
+                                <Buttons title='Оставить отзыв' backgroundColor='#fff' textColor='#9C0A35' onPress={() => navigation.navigate('(client)/(oreder)/order')}/>
+                                <Buttons title='Написать сообщение' backgroundColor='#fff' textColor='#9C0A35' onPress={() => navigation.navigate('(client)/(oreder)/order')}/>
                             </View>
                         }
                         <BottomModal toggleBottomModal={toggleModal} isBottomModal={visible}>
