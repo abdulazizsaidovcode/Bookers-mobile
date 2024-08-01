@@ -22,6 +22,7 @@ import ContactInformationClient from '@/components/contact-information/contact-i
 import { useMapStore } from '@/helpers/state_managment/map/map';
 import BottomModal from '@/components/(modals)/modal-bottom';
 import Buttons from '@/components/(buttons)/button';
+import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -60,6 +61,7 @@ const ClientOrderDetail = () => {
     const navigation = useNavigation<any>();
     const route = useRoute<any>();
     const { id } = route.params;
+    const {ratingModal,setRatingModal}=useAccardionStoreId()
     const { isLoading, setIsLoading, refreshing, setRefreshing } = clientStore()
     const { setGetMee } = useGetMeeStore()
     const [orderOneData, setOrderOneData] = useState<OrderOne | null>(null)
@@ -292,7 +294,10 @@ const ClientOrderDetail = () => {
                             orderOneData && orderOneData.orderStatus === 'COMPLETED' &&
 
                             <View style={{ marginTop: 20 }}>
-                                <Buttons title='Оставить отзыв' backgroundColor='#fff' textColor='#9C0A35' onPress={() => navigation.navigate('(client)/(oreder)/order')} />
+                                <Buttons title='Оставить отзыв' backgroundColor='#fff' textColor='#9C0A35' onPress={() => {
+                                    navigation.navigate('(client)/(profile)/(orderHistory)/orderHistory')
+
+                                }} />
                                 <View style={{ marginTop: 10 }}></View>
                                 <Buttons title='Написать сообщение' backgroundColor='#9C0A35' textColor='#fff' onPress={() => navigation.navigate('(client)/(oreder)/order')} />
                                 <View style={styles.repeatSection}>
