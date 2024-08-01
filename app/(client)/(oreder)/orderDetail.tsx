@@ -25,6 +25,7 @@ import Buttons from '@/components/(buttons)/button';
 import { useAccardionStoreId } from '@/helpers/state_managment/accardion/accardionStore';
 import Textarea from '@/components/select/textarea';
 import { addMessageInterface } from '@/type/client/editClient';
+import { AddMessageOrderUpcoming } from '@/helpers/api-function/oreder/orderHistory';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -83,10 +84,10 @@ const ClientOrderDetail = () => {
     }, []))
     const datas: addMessageInterface = {
         clientId: null,
-        masterId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        masterId: orderOneData && orderOneData.masterId,
         adminId: null,
-        message: "string",
-        messageStatus: "string"
+        message: textAreaValue,
+        messageStatus: "CLIENT_MASTER_MESSAGE"
     }
     const ratingToggleModal = () => {
         setOrderRatingModal(!orderRatingModal);
@@ -371,6 +372,9 @@ const ClientOrderDetail = () => {
                         </CenteredModal>
 
                         <CenteredModal
+                            onConfirm={() => {
+                                AddMessageOrderUpcoming(datas, ratingToggleModal)
+                            }}
                             isFullBtn={false}
                             btnWhiteText={'Отправить'}
                             btnRedText={'Закрыть'}
