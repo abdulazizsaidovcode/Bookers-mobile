@@ -20,6 +20,7 @@ import AccardionSlider from '@/components/accordions/accardionSlider';
 import Buttons from '@/components/(buttons)/button';
 import { useMapStore } from '@/helpers/state_managment/map/map';
 import ClientCard1 from '@/components/(cliendCard)/cliendCard1';
+import MasterLocations from '../../(map)/(master-locations)/master-locations';
 
 const Specialist = () => {
   const { clientData, selectedServiceId, setClientData, setSelectedClient,} = ClientStory();
@@ -127,8 +128,7 @@ const Specialist = () => {
         locationIcon = {
           <SimpleLineIcons name="location-pin" size={24} color="white"
           onPress={() => {
-            setMapData(item)
-            navigate.navigate('(client)/(map)/(master-locations)/master-locations');
+            navigate.navigate('(client)/(map)/(master-locations)/master-locations', {id: item.id});
           }}
            />
       }

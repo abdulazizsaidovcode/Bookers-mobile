@@ -52,7 +52,7 @@ const ProfileCard: React.FC<IProps> = ({
     const [rating, setRating] = useState<number>(0);
 
     const handleRating = (value: number) => setRating(value);
-    console.log("--------------------------",ratingModal);
+
     
     const datas: addfedbackmaster = {
         count: rating,
@@ -300,7 +300,8 @@ const styles = StyleSheet.create({
         borderColor: '#828282',
         color: '#828282',
         borderRadius: 5,
-        borderWidth: 1
+        borderWidth: 1,
+
     },
     address: {
         fontSize: 12,
