@@ -20,7 +20,7 @@ import AccardionSlider from '@/components/accordions/accardionSlider';
 import Buttons from '@/components/(buttons)/button';
 import { useMapStore } from '@/helpers/state_managment/map/map';
 import ClientCard1 from '@/components/(cliendCard)/cliendCard1';
-import MasterLocations from '../../(map)/(master-locations)/master-locations';
+
 
 const Specialist = () => {
   const { clientData, selectedServiceId, setClientData, setSelectedClient,} = ClientStory();
@@ -180,10 +180,9 @@ const Specialist = () => {
                 contentContainerStyle={tw`pt-3`}
               />
             ) : (
-              <View style = {tw`text-center mt-3 `}>
-                <Text style ={tw`text-white text-center font-bold mt-6 text-lg`}>Siz qidirgan ma'lumot topilmadi </Text>
-              </View>
-              
+              <View style={tw`flex-1 justify-center items-center`}>
+              <ActivityIndicator size="large" color="#9C0A35" />
+            </View>  
             )
           )}
         </View>
