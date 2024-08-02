@@ -25,6 +25,7 @@ interface CategoryType {
   categoryFatherId: string | null;
   categoryFatherName: string | null;
   isNew: boolean;
+  attachmentId: string | null;
 }
 
 interface useTopMasters {
