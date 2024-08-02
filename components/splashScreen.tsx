@@ -10,7 +10,7 @@ interface SplashScreenComponentProps {
 const SplashScreenComponent: React.FC<SplashScreenComponentProps> = ({ onFinish }) => {
   useEffect(() => {
     const hideSplashScreen = async () => {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 6000));
       await SplashScreen.hideAsync();
       onFinish();
     };
