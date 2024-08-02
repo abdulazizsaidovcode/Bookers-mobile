@@ -8,6 +8,7 @@ import {
   Image,
   Pressable,
   Linking,
+  ActivityIndicator,
 } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { FontAwesome, FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
@@ -20,6 +21,9 @@ import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { ProductType } from "@/type/history";
+import Buttons from "@/components/(buttons)/button";
+import { editOrderStatus } from "@/helpers/api-function/dashboard/dashboard";
+import { updateOrderStatus } from "@/helpers/api-function/client/client";
 
 const Upcomingentries = () => {
   const navigation = useNavigation<any>();
@@ -27,6 +31,9 @@ const Upcomingentries = () => {
   const { getMee } = useGetMeeStore();
   const [bottomModalNetwork, setBottomModalNetwork] = useState(false);
   const [useDefault, setUseDefault] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [orderStatusLoading, setOrderStatusLoading] = useState(false);
+  const [successStatus, setSuccessStatus] = useState("");
 
   const toggleBottomModalNetwork = () =>
     setBottomModalNetwork(!bottomModalNetwork);
@@ -44,6 +51,7 @@ const Upcomingentries = () => {
     );
 
   const getUpcoming = async () => {
+    setLoading(true);
     try {
       const config = await getConfig();
       const { data } = await axios.get(
@@ -53,71 +61,144 @@ const Upcomingentries = () => {
       if (data.success) setData(data.body);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  console.log(loading);
+  
+
+  const handleEditOrderStatus = (orderId: string, status: string) => {
+    updateOrderStatus(orderId, status, setOrderStatusLoading, setSuccessStatus);
+    getUpcoming()
+  }
 
   useEffect(() => {
     getUpcoming();
   }, []);
 
   const renderItem = ({ item }: any) => (
-    <View style={[tw`p-4 rounded-lg mb-4`, { backgroundColor: "#B9B9C9" }]}>
-      <View style={tw`flex-row items-start mb-4`}>
-        <Image
-          source={item.attachmentId ? {
-            uri: `${getFile}${item.attachmentId}`,
-          } : require("../../../../../assets/avatar.png")}
-          style={tw`w-12 h-12 rounded-full mr-4`}
-        />
-        <View style={{ flexDirection: 'column' }}>
-          <View style={{ marginBottom: 10 }} >
-            <Text style={tw`text-black font-bold`}>{item.fullName}</Text>
-            <Text style={tw`text-gray-600`}>{item.phone}</Text>
+    <>
+      {item.orderStatus == "WAIT" ?
+        <View style={[tw`p-4 rounded-lg mb-4`, { backgroundColor: "#B9B9C9" }]}>
+          <View style={tw`flex-row items-start mb-4`}>
+            <Image
+              source={item.attachmentId ? {
+                uri: `${getFile}${item.attachmentId}`,
+              } : require("../../../../../assets/avatar.png")}
+              style={tw`w-14 h-14 rounded-full mr-4`}
+            />
+            <View style={{ flexDirection: 'column' }}>
+              <View style={{ marginBottom: 10 }} >
+                <Text style={[tw`text-black font-bold`, { fontSize: 18 }]}>{item.fullName}</Text>
+                <View style={[tw`rounded px-2 py-1`, { backgroundColor: "#217355", width: 142 }]}>
+                  <Text style={[tw`text-white`, { fontSize: 13 }]}>Постоянный клиент</Text>
+                </View>
+              </View>
+
+            </View>
           </View>
-          <Text style={[tw`mb-2 px-4 py-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>{item.serviceName}</Text>
-          <Text style={[tw` font-bold mb-2`, { color: "#9C0A35" }]}>{item.toPay} сум</Text>
-        </View>
-      </View>
-      <View style={tw`flex-row justify-between items-center mb-4`}>
-        <Text style={tw`text-gray-600`}>
-          {moment(item.orderDate).format("dddd D MMMM")}
-        </Text>
-        <View style={tw`flex-row items-center`}>
-          <Text
-            style={[tw`border rounded-lg py-1 px-2 `, { color: "#9C0A35", borderColor: "#9C0A35" }]}
-          >
-            {item.startTime.slice(0, 5)}
-          </Text>
-          <Text
-            style={[tw`border rounded-lg py-1 px-2 ml-2`, { color: "#9C0A35", borderColor: "#9C0A35" }]}
-          >
-            {item.finishTime.slice(0, 5)}
-          </Text>
-        </View>
-      </View>
-      <View style={tw`flex-row justify-between`}>
-        <TouchableOpacity
-          style={[tw`rounded-lg flex-row items-center py-3 text-center`, { backgroundColor: "#9C0A35" }]}
-        >
-          <Pressable
-            // onPress={() =>
-            //   navigation.navigate("(chat)/(communicatie)/chatDetails", {
-            //     id: item.id,
-            //   })
-            // }
-            style={tw`text-white mr-2 w-60`}
-          >
-            <Text style={tw`text-white text-center`}>Написать сообщение</Text>
-          </Pressable>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={toggleBottomModalNetwork}
-          style={[tw`w-14 h-14 ml-5 rounded-full justify-center items-center`, { backgroundColor: "#9C0A35" }]}
-        >
-          <FontAwesome name="phone" size={20} color="#fff" />
-        </TouchableOpacity>
-      </View>
-    </View>
+          <View style={[tw`mb-2 p-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>
+            <Text style={{ fontSize: 12 }}>{item.serviceName}</Text>
+          </View>
+          <View style={tw`flex-row`}>
+            <Text style={[tw`text-lg text-black font-bold`]}
+            >Сегодня</Text>
+            <View style={tw`flex-row items-center`}>
+              <Text
+                style={[tw`text-lg text-black font-bold`]}
+              >
+                {item.startTime.slice(0, 5)}
+              </Text>
+              <Text
+                style={[tw`text-lg text-black font-bold`]}
+              >
+                -{item.finishTime.slice(0, 5)}
+              </Text>
+            </View>
+          </View>
+          <View style={[tw`flex-row w-40 mt-3`, { gap: 5 }]}>
+            <Buttons onPress={() => handleEditOrderStatus(item.id, "CONFIRMED")} title="Одобрить" />
+            <TouchableOpacity
+              style={[
+                styles.button,
+              ]}
+              activeOpacity={.8}
+              onPress={() => handleEditOrderStatus(item.id, "REJECTED")}
+            >
+              <Text style={[styles.buttonText, { color: '#9C0A35', fontSize: 18 }]}>
+                Отклонить
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View> :
+        // 2
+        <View style={[tw`p-4 rounded-lg mb-4`, { backgroundColor: "#B9B9C9" }]}>
+          <View style={tw`flex-row items-start mb-4`}>
+            <Image
+              source={item.attachmentId ? {
+                uri: `${getFile}${item.attachmentId}`,
+              } : require("../../../../../assets/avatar.png")}
+              style={tw`w-14 h-14 rounded-full mr-4`}
+            />
+            <View style={{ flexDirection: 'column' }}>
+              <View style={{ marginBottom: 10 }} >
+                <Text style={[tw`text-black font-bold`, { fontSize: 18 }]}>{item.fullName}</Text>
+                <Text style={tw`text-gray-600`}>{item.phone}</Text>
+              </View>
+
+              <View style={[tw`flex-row`, { gap: 5 }]}>
+                {item.serviceName.split(",").map((service: string, index: number) => (
+                  <View key={index} style={[tw`mb-2 p-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>
+                    <Text style={{ fontSize: 12 }}>{service}</Text>
+                  </View>
+                ))}
+              </View>
+              <Text style={[tw`text-xl font-bold`, { color: "#9C0A35" }]}>{item.toPay} сум</Text>
+            </View>
+          </View>
+          <View style={tw`flex-row justify-between items-center mb-2`}>
+            <Text style={tw`text-gray-600`}>
+              {moment(item.orderDate).format("dddd D MMMM")}
+            </Text>
+            <View style={tw`flex-row items-center`}>
+              <Text
+                style={[tw`border rounded-lg py-1 px-2 `, { color: "#9C0A35", borderColor: "#9C0A35" }]}
+              >
+                {item.startTime.slice(0, 5)}
+              </Text>
+              <Text
+                style={[tw`border rounded-lg py-1 px-2 ml-2`, { color: "#9C0A35", borderColor: "#9C0A35" }]}
+              >
+                {item.finishTime.slice(0, 5)}
+              </Text>
+            </View>
+          </View>
+          <View style={tw`flex-row justify-between`}>
+            <TouchableOpacity
+              style={[tw`rounded-lg flex-row items-center py-3 text-center`, { backgroundColor: "#9C0A35" }]}
+            >
+              <Pressable
+                // onPress={() =>
+                //   navigation.navigate("(chat)/(communicatie)/chatDetails", {
+                //     id: item.id,
+                //   })
+                // }
+                style={tw`text-white mr-2 w-60`}
+              >
+                <Text style={tw`text-white text-center`}>Написать сообщение</Text>
+              </Pressable>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={toggleBottomModalNetwork}
+              style={[tw`w-14 h-14 ml-5 rounded-full justify-center items-center`, { backgroundColor: "#9C0A35" }]}
+            >
+              <FontAwesome name="phone" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
+        </View>}
+    </>
   );
 
   return (
@@ -125,6 +206,7 @@ const Upcomingentries = () => {
       style={[tw`flex-1 bg-gray-900 p-4 mt-5`, { backgroundColor: "#21212E" }]}
     >
       <NavigationMenu name="Предстоящие записи" />
+      {loading || orderStatusLoading && <ActivityIndicator size="large" color={"#888"} />}
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -230,6 +312,18 @@ const styles = StyleSheet.create({
   },
   defaultText: {
     color: "#FFF",
+  },
+  button: {
+    width: '100%',
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#9C0A35',
+  },
+  buttonText: {
+    fontWeight: '500',
   },
 });
 

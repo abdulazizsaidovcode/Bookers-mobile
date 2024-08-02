@@ -150,7 +150,7 @@ const Canceledentries = () => {
                 setProduct(item);
               }}
               key={item.id}
-              style={[tw`p-4 rounded-lg mb-4 flex-row items-start`, { backgroundColor: "#B9B9C9" }]}
+              style={[tw`p-4 mb-4 flex-row items-start`, { backgroundColor: "#B9B9C9", borderRadius: 20 }]}
             >
               {isChecked && (
                 <View>
@@ -195,9 +195,14 @@ const Canceledentries = () => {
               <View style={tw`flex-1`}>
                 <Text style={tw` font-bold`}>{item.fullName}</Text>
                 <Text style={tw`text-gray-600`}>{item.phone}</Text>
-                <Text style={[tw`mt-2 px-4 py-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>{item.serviceName}</Text>
-
-                <Text style={[tw` font-bold mt-2`, { color: '#9C0A35' }]}>
+                <View style={[tw`flex-row`, { gap: 5 }]}>
+                {item.serviceName.trim().split(", ").map((service: string, index: number) => (
+                  <View key={index} style={[tw`mb-2 p-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>
+                    <Text style={{ fontSize: 12 }}>{service}</Text>
+                  </View>
+                ))}
+              </View>
+                <Text style={[tw`text-lg font-bold mt-2`, { color: '#9C0A35' }]}>
                   {item.servicePrice} сум
                 </Text>
               </View>

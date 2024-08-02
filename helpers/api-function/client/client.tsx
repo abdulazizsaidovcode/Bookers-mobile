@@ -505,7 +505,7 @@ export const updateOrderStatus = async (orderID: string, status: string, setLoad
             const config = await getConfig()
             const {data} = await axios.put(`${order_status_update}?orderId=${orderID}&status=${status}`, '', config ? config : {})
             if (data.success) {
-                toggle && toggle()
+                toggle && toggle()                
                 setSuccessStatus('ACCEPTED')
                 Toast.show('Successfully update order status', Toast.LONG)
                 setLoading(false)
