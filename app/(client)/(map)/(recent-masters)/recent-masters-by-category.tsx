@@ -1,4 +1,4 @@
-import { Dimensions, ScrollView, StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, Text, View, TouchableOpacity, Pressable, Image } from 'react-native';
 import React, { useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
@@ -10,6 +10,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getCategory } from '@/helpers/api-function/masters';
 import useTopMastersStore from '@/helpers/state_managment/masters';
 import { postClientFilter } from '@/helpers/api-function/uslugi/uslugi';
+import { getFile } from '@/helpers/api';
+import tw from 'tailwind-react-native-classnames';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)/(map)/(recent-masters)/recent-masters'>;
@@ -33,7 +35,6 @@ const RecentMastersByCategory = () => {
             return () => { };
         }, [])
     );
-
     const hadleSumbit = () => {
         try {
             postClientFilter([categoryId ? categoryId : ''])
@@ -59,7 +60,19 @@ const RecentMastersByCategory = () => {
                 </View>
                 <View style={styles.servicesContainer}>
                     {category.map((item) => (
-                        <TouchableOpacity key={item.id} activeOpacity={0.7} style={styles.serviceItem}>
+                        <TouchableOpacity key={item.id} activeOpacity={0.7} style={styles.serviceItem}
+                            onPress={() =>
+                                handlePress(item.id)
+                            }
+                        >
+                            <Image
+                                source={
+                                    item.attachmentId
+                                        ? { uri: `${getFile}${item.attachmentId}` }
+                                        : require('../../../../assets/avatar.png')
+                                }
+                                style={tw`w-8 h-8`}
+                            />
                             <Text style={styles.serviceText}>{item.name}</Text>
                             <Pressable
                                 onPress={() => handlePress(item.id)}
