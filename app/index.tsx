@@ -23,8 +23,8 @@ const Index: React.FC = () => {
       try {
         const number = await SecureStore.getItemAsync("number");
         const password = await SecureStore.getItemAsync("password");
-        console.log(Number: ${number});
-        console.log(Password: ${password});
+        console.log(`Number: ${number}`);
+        console.log(`Password: ${password}`);
         
         // Agar number yoki password mavjud bo'lmasa, isFirstLaunch true bo'ladi
         setIsFirstLaunch(number === null && password === null);
