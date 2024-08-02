@@ -27,7 +27,8 @@ import { useMapStore } from '@/helpers/state_managment/map/map';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Loading } from '@/components/loading/loading';
-import { ActivityIndicator } from 'react-native-paper';
+import SkeletonContent from 'react-native-skeleton-content';
+import Skelaton from '@/components/skelaton/skelaton';
 
 
 
@@ -222,7 +223,7 @@ const Dashboard: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <Navbar />
       <ScrollView>
-        {isLoading ? <Loading/> : dashboardData && dashboardData.length > 0 ? (
+        {isLoading ? <Skelaton/> : dashboardData && dashboardData.length > 0 ? (
           <View style={tw`p-1`}>
             <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
             {dashboardData.map((item:any, index) => (
@@ -305,7 +306,7 @@ const Dashboard: React.FC = () => {
           </AccordionItem>
         )}
         <>
-          { isBottomLoading ? <Loading/> : dashboardMasterData && dashboardMasterData.length > 0 ?
+          { isBottomLoading ? <Skelaton/> : dashboardMasterData && dashboardMasterData.length > 0 ?
             (
               <View style={tw`p-1`}>
                 <View style={tw`mb-4 mt-5`}>
