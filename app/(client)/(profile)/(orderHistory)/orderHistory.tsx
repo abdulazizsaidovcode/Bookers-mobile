@@ -121,7 +121,7 @@ const OrderHistory = () => {
                     money={`${upcoming.orderPrice} сум`}
                     buttonName="Написать сообщение"
                     Adress={upcoming.address}
-                    titleTex={upcoming.serviceName.split('  ')} // Stringni massivga aylantiramiz
+                    titleTex={upcoming.serviceName.trim().split(', ')} // Stringni massivga aylantiramiz
                     locationIcon={
                       <SimpleLineIcons
                         onPress={() => {
