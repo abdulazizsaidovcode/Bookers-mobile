@@ -15,12 +15,13 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import axios from "axios";
 import { base_url, getFile } from "@/helpers/api";
 import moment from "moment";
-import { addFeedbackMaster } from "@/helpers/api-function/client/client";
+import { addFeedbackMaster, sliceTextFullName } from "@/helpers/api-function/client/client";
 import Textarea from "@/components/select/textarea";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import ContactInformation from "@/components/contact-information/contact-information";
+import HistoryCard from "@/components/(cards)/history-card";
 
 const CenseledSession = () => {
     const { product } = History();
@@ -142,7 +143,7 @@ const CenseledSession = () => {
                 <TouchableOpacity
                     onPress={toggleFeedback}
                     activeOpacity={0.8}
-                    style={[tw`py-2 rounded-lg `,{backgroundColor: '#B9B9C9'}]}
+                    style={[tw`py-2 rounded-lg `, { backgroundColor: '#B9B9C9' }]}
                 >
                     <Text
                         style={[
@@ -245,6 +246,13 @@ const CenseledSession = () => {
         }
     };
 
+    const statusName = (statusN: string) => {
+        if (statusN === 'CLIENT_CONFIRMED' || statusN === 'MASTER_CONFIRMED') return 'Одобрено'
+        else if (statusN === 'COMPLETED') return 'Выполнен'
+        else if (statusN === 'CLIENT_REJECTED' || statusN === 'MASTER_REJECTED') return 'Отменён'
+        else if (statusN === 'WAIT') return 'Ждать'
+    }
+
     useEffect(() => {
         getMe();
     }, []);
@@ -263,58 +271,51 @@ const CenseledSession = () => {
                 <NavigationMenu name="" />
             </View>
             <View
-                style={[styles.profileContainer, tw`mt-2 bg-gray-300 p-3 rounded-lg`]}
+                style={[styles.profileContainer, { borderRadius: 20 }, tw`mt-2 p-3`]}
             >
                 <Image
                     source={product.attachmentId ? { uri: `${getFile}${product.attachmentId}` } : require("../../assets/avatar.png")}
                     style={styles.profileImage}
                 />
                 <View style={styles.profileInfo}>
-                    <Text style={styles.profileName}>{product.fullName}</Text>
+                    <Text style={styles.profileName}>{sliceTextFullName(product.fullName)}</Text>
                     <Text style={styles.profilePhone}>{product.phone}</Text>
                 </View>
             </View>
-            <View style={[styles.buttonsContainer, tw`bg-gray-300 rounded-lg p-3`]}>
-                {product.serviceName.split(",").map((item) => (
-                    <TouchableOpacity style={styles.button}>
-                        <Text>{item}</Text>
-                    </TouchableOpacity>
-                ))}
+
+            <View style={[styles.buttonsContainer, tw`p-3`]}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    {product.serviceName.trim().split(", ").map((item: string) => (
+                        <TouchableOpacity style={styles.button} activeOpacity={0.8}>
+                            <Text>{item}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
             </View>
-            <View
-                style={[
-                    styles.detailsContainer,
-                    tw`bg-gray-300 rounded-lg p-3 flex-row items-center justify-between`,
-                ]}
-            >
-                <View>
-                    <Text style={styles.detailText}>
-                        {moment(product.orderDate).format(
-                            `dd, ${product.orderDate.slice(5, 7)}, MMMM`
-                        )}
-                    </Text>
-                    <Text style={[tw`text-gray-500`,]}>
-                        Длительность - {product.serviceHour} час
-                    </Text>
-                </View>
-                <Text style={styles.detailTime}>
-                    {product.startTime.slice(0, 5)} - {product.finishTime.slice(0, 5)}
-                </Text>
-            </View>
-            <View
-                style={[tw` rounded-lg p-3 flex-row items-center justify-between`, { backgroundColor: '#B9B9C9' }]}
-            >
-                <Text style={styles.detailCost}>Стоимость:</Text>
-                <Text style={[tw`text-lg font-bold`, { color: "#9c0935" }]}>
-                    {product.toPay} сум
-                </Text>
-            </View>
-            <View
-                style={[tw` rounded-lg p-3 mt-5 flex-row items-center justify-between`, { backgroundColor: '#B9B9C9' }]}
-            >
-                <Text style={styles.detailCost}>Статус:</Text>
-                {checkStatus()}
-            </View>
+            <HistoryCard
+                name={moment(product.orderDate).format(
+                    `dd, ${product.orderDate.slice(5, 7)}, MMMM`
+                )}
+                description={`Длительность - ${product.serviceHour} час`}
+                btnOrText
+                statusName={`${product.startTime.slice(0, 5)} - ${product.finishTime.slice(0, 5)}`}
+            />
+
+           <View style={tw`my-5`}>
+           <HistoryCard
+                name={"Стоимость:"}
+                btnOrText
+                statusName={`${product.toPay} сум`}
+            />
+           </View>
+
+            <HistoryCard
+                name={"Статус:"}
+                btnOrText={false}
+                statusName={statusName(product.orderStatus)}
+                orderStatus={product.orderStatus}
+            />
+
             <View style={{ marginTop: 16, marginBottom: 8 }}>
                 <ContactInformation />
             </View>
@@ -379,6 +380,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         marginBottom: 16,
+        backgroundColor: "#B9B9C9"
     },
     profileImage: {
         width: 50,
@@ -399,17 +401,18 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     buttonsContainer: {
-        flexDirection: "row",
         marginBottom: 16,
-        backgroundColor: 'B9B9C9'
-
+        backgroundColor: '#B9B9C9',
+        borderRadius: 20,
     },
     button: {
-        padding: 10,
-        paddingVertical: 5,
+        paddingHorizontal: 10,
+        paddingVertical: 7,
         borderColor: "#828282",
         borderWidth: 1,
         borderRadius: 5,
+        marginLeft: 10,
+        marginVertical: 10
     },
     detailsContainer: {
         marginBottom: 16,
