@@ -19,14 +19,14 @@ const Index: React.FC = () => {
     // Splash screen remains visible while we load our video
     SplashScreen.preventAutoHideAsync();
 
-    // Determine if the device is a tablet
-    const isTablet = () => {
-      const { height, width } = Dimensions.get('window');
-      return Math.min(height, width) >= 600;
+    const prepare = async () => {
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      await SplashScreen.hideAsync();
     };
 
-    const videoUri = isTablet() ? "path/to/tablet/video.mp4" : "path/to/mobile/video.mp4";
+    
 
+    
     // Check if it's the first launch
     const checkFirstLaunch = async () => {
       try {
@@ -48,7 +48,7 @@ const Index: React.FC = () => {
     prepare();
     checkFirstLaunch();
   }, []);
-
+  
   // Function to handle video load
   const handleVideoLoad = () => {
     setIsVideoReady(true);
@@ -58,6 +58,11 @@ const Index: React.FC = () => {
   const handleVideoEnd = async () => {
     await SplashScreen.hideAsync();
     setIsVideoReady(false);
+  };
+  // Determine if the device is a tablet
+  const isTablet = () => {
+    const { height, width } = Dimensions.get('window');
+    return Math.min(height, width) >= 600;
   };
 
   if (!isVideoReady) {
