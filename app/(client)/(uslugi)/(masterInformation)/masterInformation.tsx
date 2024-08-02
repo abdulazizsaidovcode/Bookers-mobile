@@ -108,10 +108,12 @@ const MasterInformation = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
           <View style={tw`mb-5`}>
-            {clientData && 
+            {clientData &&
               <View style={tw`mb-4`}>
                 <MasterCardUslugi
                   item={clientData}
+                  setFavouriteOrders={setFavouriteOrders}
+                  setIsLoading={setIsLoading}
                   favouriteOrders={favouriteOrders}
                   onPress={() => { }}
                 />

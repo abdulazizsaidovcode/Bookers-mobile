@@ -1,18 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import tw from 'tailwind-react-native-classnames';
+import axios from 'axios';
+import { base_url } from '@/helpers/api';
+import { getConfig } from '@/app/(tabs)/(master)/main';
 
-const sessionData = [
-    { id: '1', title: 'Предстоящие записи', icon: 'calendar', count: 2, screen: '(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries' },
-    { id: '2', title: 'Прошедшие записи', icon: 'history', count: 2, screen: '(profile)/(sessionhistory)/components/Pastentries/Pastentries' },
-    { id: '3', title: 'Отменённые записи', icon: 'times-circle', count: 1, screen: '(profile)/(sessionhistory)/components/Canceledentries/Canceledentries' },
-];
+
 
 const SessionHistory: React.FC = () => {
     const navigation = useNavigation<any>();
+    const [data, setData] = useState<any>([])
+
+    const sessionData = [
+        { id: '1', title: 'Предстоящие записи', icon: 'calendar', count: data.upcomingSessions, screen: '(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries' },
+        { id: '2', title: 'Прошедшие записи', icon: 'history', count: data.pastSessions, screen: '(profile)/(sessionhistory)/components/Pastentries/Pastentries' },
+        { id: '3', title: 'Отменённые записи', icon: 'times-circle', count: data.cancelledSessions, screen: '(profile)/(sessionhistory)/components/Canceledentries/Canceledentries' },
+    ];
+
+    const getSessionsHistory = async () => {
+        try {
+            const config = await getConfig()
+            const { data } = await axios.get(`${base_url}order/session-history`, config ? config : {});
+            setData(data.body)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        getSessionsHistory()
+    }, [])
 
     const renderItem = ({ item }: any) => (
         <TouchableOpacity
