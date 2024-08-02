@@ -12,10 +12,12 @@ import { FavouriteOrdersType } from '@/type/favourite-orders/favourite-orders';
 type ClientCardItem = {
     item: ClientData | null
     onPress?: () => void;
-    favouriteOrders: FavouriteOrdersType[]
+    favouriteOrders: FavouriteOrdersType[];
+    setFavouriteOrders: (val: FavouriteOrdersType[]) => void
+    setIsLoading: (val: boolean) => void
 };
 
-const MasterCardUslugi: React.FC<ClientCardItem> = ({ onPress, item , favouriteOrders}) => {
+const MasterCardUslugi: React.FC<ClientCardItem> = ({ onPress, item, setFavouriteOrders, setIsLoading, favouriteOrders }) => {
     const { getme } = webPageStore();
     const navigate = useNavigation<any>();
 
@@ -34,24 +36,24 @@ const MasterCardUslugi: React.FC<ClientCardItem> = ({ onPress, item , favouriteO
         <View style={[tw`p-4 rounded-2xl shadow-lg`, { backgroundColor: '#B9B9C9' }]}>
             <View style={tw`flex-row items-center mb-4`}>
                 <Image
-                    source={item.attachmentId && item.attachmentId ? {} : require('../../assets/avatar.png')}
+                    source={item && item.attachmentId && item && item.attachmentId ? {} : require('../../assets/avatar.png')}
                     style={tw`w-16 h-16 rounded-full mr-3`}
                 />
                 <View style={tw`flex-1`}>
                     <View style={tw`flex-row items-center mb-1`}>
-                        <Text style={tw`text-lg font-bold`}>{item.fullName || "No data"}</Text>
+                        <Text style={tw`text-lg font-bold`}>{item && item.fullName || "No data"}</Text>
                         <View style={tw`border border-gray-600 px-2 py-1 rounded-lg ml-2`}>
-                            <Text style={tw`text-xs text-gray-600`}>{item.salonName}</Text>
+                            <Text style={tw`text-xs text-gray-600`}>{item && item.salonName}</Text>
                         </View>
                     </View>
-                    <Text style={tw`text-sm text-gray-600`}>{item.masterSpecialization || "Не найдено"}</Text>
+                    <Text style={tw`text-sm text-gray-600`}>{item && item.masterSpecialization || "Не найдено"}</Text>
                 </View>
                 <View style={tw`flex items-end`}>
-                    <Text style={[tw`text-lg`, { color: '#9C0A35' }]}>{generateStars(item.feedbackCount || 0)}</Text>
-                    <Text style={tw`text-xs text-gray-600`}>{item.orderCount} заказа, {item.clientCount} клиентов</Text>
+                    <Text style={[tw`text-lg`, { color: '#9C0A35' }]}>{generateStars(item && item.feedbackCount || 0)}</Text>
+                    <Text style={tw`text-xs text-gray-600`}>{item && item.orderCount} заказа, {item && item.clientCount} клиентов</Text>
                 </View>
             </View>
-            <Text style={tw`text-gray-600 text-lg mb-2`}>{`${item.street}, ${item.house}` || "Address is not found"}</Text>
+            <Text style={tw`text-gray-600 text-lg mb-2`}>{`${item && item.street}, ${item && item.house}` || "Address is not found"}</Text>
             <View style={tw`flex mb-3 flex-row items-center justify-center`}>
                 <TouchableOpacity
                     activeOpacity={0.7}
@@ -59,18 +61,18 @@ const MasterCardUslugi: React.FC<ClientCardItem> = ({ onPress, item , favouriteO
                 >
                     <SimpleLineIcons name="location-pin" size={24} color="white"
                         onPress={() => {
-                            navigate.navigate('(client)/(map)/(master-locations)/master-locations', { id: item.id });
+                            navigate.navigate('(client)/(map)/(master-locations)/master-locations', { id: item && item.id });
                         }}
                     />
                 </TouchableOpacity>
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => Linking.openURL(`tel:${item.phone}`)}
+                    onPress={() => Linking.openURL(`tel:${item && item.phone}`)}
                     style={[tw`px-3 py-3 rounded-full mx-2`, { backgroundColor: '#9C0A35' }]} // Customize the style as needed
                 >
                     <FontAwesome6 name="phone" size={24} color="white" />
                 </TouchableOpacity>
-                {haveOrNot(item.id, favouriteOrders)}
+                {haveOrNot(item && item.id, favouriteOrders, setFavouriteOrders, setIsLoading)}
             </View>
 
 
