@@ -15,9 +15,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Toast from 'react-native-simple-toast';
 import clientStore from '@/helpers/state_managment/client/clientStore';
 import { getMasterTariff } from '@/constants/storage';
-import { launchImageLibrary } from 'react-native-image-picker';
 import { AntDesign } from '@expo/vector-icons';
-import ProfileImgUpload from '@/components/profile-img-upload';
 
 type GenderOption = {
     title: string;

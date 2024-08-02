@@ -161,7 +161,7 @@ const Welcome = () => {
                     <View style={styles.imageContainer}>
                         <Image
                             style={styles.profileImage}
-                            source={getMee.attachmentId ? { uri: `${getFile}${getMee.attachmentId}` } : require("../../assets/images/866-536x354.jpg")}
+                            source={getMee.attachmentId ? { uri: `${getFile}${getMee.attachmentId}` } : { uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&s` }}
                         />
                         <View style={styles.editIconContainer}>
                             <TouchableOpacity activeOpacity={0.5} onPress={() => {
