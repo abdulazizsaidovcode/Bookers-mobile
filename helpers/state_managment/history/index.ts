@@ -2,7 +2,7 @@ import { ProductType } from "@/type/history";
 import { create } from "zustand";
 
 interface Types {
-  product: ProductType;
+  product: ProductType | {};
   setProduct: (product: ProductType) => void;
 }
 
