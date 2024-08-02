@@ -66,12 +66,12 @@ const Index: React.FC = () => {
   };
 
   if (!isVideoReady) {
-    const videoUri = isTablet() ? "path/to/tablet/video.mp4" : "path/to/mobile/video.mp4";
+    const videoUri = isTablet() ? "../assets/onCome.mp4" : "../assets/onCome.mp4";
     return (
       <Video
         ref={videoRef}
         source={{ uri: videoUri }}
-        resizeMode="cover"
+        resizeMode={'contain'}
         shouldPlay
         onLoad={handleVideoLoad}
         onEnd={handleVideoEnd}
