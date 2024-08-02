@@ -23,6 +23,7 @@ import MasterCardUslugi from '@/components/(cliendCard)/masterCardUslugi';
 import { fetchFavouriteOrders } from '@/helpers/api-function/favourite-orders/favourite-orders';
 import useFavoutite from '@/helpers/state_managment/favourite';
 import useFavoutiteOrders from '@/helpers/state_managment/favourite-orders/favourite-orders';
+import { Loading } from '@/components/loading/loading';
 
 const { width } = Dimensions.get('window');
 const isSmallDevice = width < 375;
@@ -35,6 +36,7 @@ const MasterInformation = () => {
   const [selectedService, setSelectedService] = useState<any>(null);
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>();
+  const [isLoading, setLoading] = useState(false)
 
   useFocusEffect(
     useCallback(() => {
@@ -42,7 +44,7 @@ const MasterInformation = () => {
         const id = selectedClient.id;
 
         getMasterOtzif(id);
-        getMAstersServeses(id);
+        getMAstersServeses(id, setLoading);
         getMasterGallery(id);
       }
       return () => null;
@@ -157,8 +159,8 @@ const MasterInformation = () => {
               </View>
             ))}
           </ScrollView>
-
-          <FlatList
+          
+         {isLoading ? <Loading/> : <FlatList
             data={filteredServices}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
@@ -166,7 +168,7 @@ const MasterInformation = () => {
                 <ClientCardDetail item={item} />
               </View>
             )}
-          />
+          />}
           <View style={tw`mb-4 `}>
             <Buttons
               isDisebled={masterServis.length > 0}
