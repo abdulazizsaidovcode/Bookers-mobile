@@ -29,6 +29,7 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 import { Loading } from '@/components/loading/loading';
 import SkeletonContent from 'react-native-skeleton-content';
 import Skelaton from '@/components/skelaton/skelaton';
+import AccordionSkelaton from '@/components/skelaton/accordionSkelaton';
 
 
 
@@ -102,7 +103,7 @@ const Navbar: React.FC = () => {
 const Dashboard: React.FC = () => {
 
   const { userLocation, setUserLocation } = useGetMeeStore();
-  const { allCategory, setSelectedClient, setCategoryId, categoryId ,setClientData} = ClientStory();
+  const { allCategory, setSelectedClient, setCategoryId, categoryId, setClientData } = ClientStory();
   const navigation = useNavigation<NavigationProp<any>>();
   const [backPressCount, setBackPressCount] = useState(0);
   const notificationListener = useRef();
@@ -223,10 +224,10 @@ const Dashboard: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <Navbar />
       <ScrollView>
-        {isLoading ? <Skelaton/> : dashboardData && dashboardData.length > 0 ? (
+        {isLoading ? <AccordionSkelaton /> : dashboardData && dashboardData.length > 0 ? (
           <View style={tw`p-1`}>
             <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
-            {dashboardData.map((item:any, index) => (
+            {dashboardData.map((item: any, index) => (
               <View key={index} style={tw`w-full flex `}>
                 <AccardionHistory
                   id={item.orderId}
@@ -306,7 +307,7 @@ const Dashboard: React.FC = () => {
           </AccordionItem>
         )}
         <>
-          { isBottomLoading ? <Skelaton/> : dashboardMasterData && dashboardMasterData.length > 0 ?
+          { dashboardMasterData && dashboardMasterData.length > 0 ?
             (
               <View style={tw`p-1`}>
                 <View style={tw`mb-4 mt-5`}>
@@ -328,7 +329,7 @@ const Dashboard: React.FC = () => {
                     >
                     </TouchableOpacity>
                   </View>
-                  {  allCategory ? allCategory.map((item, index) => (
+                  {allCategory ? allCategory.map((item, index) => (
                     <View key={index} style={{ marginRight: 16, marginBottom: 20 }}>
                       <TouchableOpacity
                         activeOpacity={0.7}
@@ -357,11 +358,11 @@ const Dashboard: React.FC = () => {
                   }
                 </ScrollView>
                 <View style={tw`mb-4`}>
-                  {dashboardMasterData ? dashboardMasterData.map((master, idx) => (
+                  {isBottomLoading ? <Skelaton /> : dashboardMasterData ? dashboardMasterData.map((master, idx) => (
                     <View style={tw`mb-3`}>
                       <ClientCard
                         key={idx} // Har bir element uchun noyob kalit kerak
-                        name={ master.firstName}
+                        name={master.firstName}
                         salon={master.salonName}
                         imageUrl={master.attachmentId}
                         masterType={master.gender}
