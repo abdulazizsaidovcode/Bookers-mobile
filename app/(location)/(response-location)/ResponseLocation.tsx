@@ -3,7 +3,9 @@ import Buttons from "@/components/(buttons)/button";
 import { Text, View } from "@/components/Themed";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { base_url } from "@/helpers/api";
+import { getLocationData } from "@/helpers/api-function/location";
 import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { createLocation } from "@/helpers/state_managment/location";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -23,24 +25,27 @@ interface Types {
 
 const ResponseLocation = () => {
     const { setNumber } = numberSettingStore();
-    const [data, setData] = useState<Types>();
     const navigation = useNavigation<any>()
-
-    useEffect(() => {
-        getLocationData();
-    }, []);
+    const [data, setData] = useState<Types | null>();
 
     const getLocationData = async () => {
-        try {
-            const config = await getConfig();
-            const { data } = await axios.get(`${base_url}address`, config ? config : {});
-            setData(data.body);
-            const salonName = await axios.get(`${base_url}salon/${data.body.salonId}`, config ? config : {});
-            setData({ ...data.body, salonId: salonName.data.body.name });
-        } catch (error) {
-            console.log(error);
-        }
-    };
+      try {
+          const config = await getConfig();
+          const { data } = await axios.get(`${base_url}address`, config ? config : {});
+          console.log(data);
+          setData(data.body);
+  
+          const salonName = await axios.get(`${base_url}salon/${data.body.salonId}`, config ? config : {});
+          setData({ ...data.body, salonId: salonName.data.body.name });
+          return data;
+      } catch (error) {
+          console.log(error);
+      }
+  };
+    
+    useEffect(() => {
+      getLocationData()
+    }, [])
 
     return (
         <View style={[tw`flex-1  mt-4`, { backgroundColor: "#21212e" }]}>
