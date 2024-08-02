@@ -125,8 +125,7 @@ const OrderHistory = () => {
                     locationIcon={
                       <SimpleLineIcons
                         onPress={() => {
-                          setMapData(upcoming);
-                          navigate.navigate('(client)/(map)/(master-locations)/master-locations');
+                          navigate.navigate('(client)/(map)/(master-locations)/master-locations',{id: upcoming.id});
                         }}
                         name="location-pin"
                         size={24}
