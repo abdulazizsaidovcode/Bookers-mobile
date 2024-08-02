@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, ImageSourcePropType, BackHandler, Platform, Linking } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView, ImageSourcePropType, BackHandler, Platform, Linking, Share, Alert } from 'react-native';
 import AccordionItem from '../../../components/accordions/accardion';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
@@ -123,6 +123,25 @@ const Dashboard: React.FC = () => {
       shouldSetBadge: false,
     }),
   });
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: "https://t.me/senior_BX",
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
+
   const pushNotifications = async () => {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
@@ -398,7 +417,9 @@ const Dashboard: React.FC = () => {
             (
               <>
                 <AccordionItem title="Мои мастера" titleThen="У вас пока нет своих мастеров" backgroundColor="#21212E">
-                  <TouchableOpacity style={styles.touchableItem}>
+                  <TouchableOpacity style={styles.touchableItem}
+                  onPress={() =>onShare()}
+                  >
                     <View style={styles.item}>
                       <View style={styles.textContainer}>
                         <Text style={styles.titleText1}>Пригласить своего мастера</Text>
