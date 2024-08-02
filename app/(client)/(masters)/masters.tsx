@@ -6,6 +6,8 @@ import {
   ActivityIndicator,
   FlatList,
   Pressable,
+  ScrollView,
+  Dimensions
 } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -33,6 +35,8 @@ import { getClient_filter, getFile } from "@/helpers/api";
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
 import axios from "axios";
 import { getConfig } from "@/app/(tabs)/(master)/main";
+
+const { height } = Dimensions.get('window');
 
 const Masters = () => {
   const { masters, isLoading, category, setTopMasters } = useTopMastersStore();
@@ -302,7 +306,8 @@ const Masters = () => {
           isBottomModal={bottomModal}
           toggleBottomModal={toggleBottomModal}
           children={
-            <View style={tw`w-full mt-3`}>
+            <View style={[tw`w-full mt-3`, { maxHeight: height * 0.7 }]}>
+              <ScrollView style={[tw`w-full mt-3`, { maxHeight: 600 }]}>
               <Text style={tw`text-xl text-center mb-5 text-white font-bold`}>
                 Фильтр
               </Text>
@@ -357,11 +362,12 @@ const Masters = () => {
               <View style={tw`mt-7`}>
                 <Buttons onPress={handleClick} title="Сохранять" />
               </View>
+              </ScrollView>
             </View>
           }
         />
-      </View>
     </View>
+    </View >
   );
 };
 
