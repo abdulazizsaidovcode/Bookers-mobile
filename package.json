@@ -23,6 +23,7 @@
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
+    "@react-navigation/stack": "^6.4.1",
     "@stomp/stompjs": "^7.0.0",
     "@types/lodash": "^4.17.7",
     "@types/lodash.debounce": "^4.0.9",
