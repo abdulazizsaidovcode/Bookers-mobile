@@ -23,7 +23,7 @@ const RemindAboutAppointment: React.FC = () => {
   useEffect(() => {
     fetchAllData(setAppoinmentData, "APPOINTMENT");
     fetchAppoinmentActiveData(setAppoinmentActiveData);
-    setTexts({ ...texts, appoinmentText: appoinmentData.text ? appoinmentData.text : '' })
+    setTexts({ ...texts, appoinmentText: appoinmentData.content ? appoinmentData.content : '' })
   }, []);
 
   const toggleSwitch = () => {
