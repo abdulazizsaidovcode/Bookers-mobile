@@ -43,7 +43,7 @@ const ClientCard1: React.FC<ClientCardProps> = ({
 
   return (
     <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
-      <View style={tw`p-4 bg-gray-300 rounded-2xl shadow-lg`}>
+      <View style={[tw`p-4 rounded-2xl shadow-lg`, {backgroundColor:'#B9B9C9'}]}>
         <View style={tw`flex-row items-center mb-4`}>
           <Image
             source={attachmentId ? { uri: getFile + attachmentId  } : require('../../assets/avatar.png')}
