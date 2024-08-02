@@ -38,18 +38,14 @@ export const fetchWaitingOrders = async (setWaitingData: (val: DashboardWaitingO
     }
 }
 
-export const fetchHallingOrders = async (setHallData: (val: DashboardWaitingOrder[]) => void, setIsLoading: (val: boolean) => void) => {
-    setIsLoading(true)
+export const fetchHallingOrders = async (setHallData: (val: DashboardWaitingOrder[]) => void) => {
     try {
         const config = await getConfig()
         const { data } = await axios.get(dashboard_hall_order, config ? config : {});
         if (data.success) {
             setHallData(data.body);
-            setIsLoading(false)
-        } else setIsLoading(false)
-    } catch {
-        setIsLoading(false)
-    }
+        }
+    } catch { }
 }
 
 export const fetchTodayWorkGrafic = async (setTodayGrafic: (val: TodayWorkGrafic) => void, masterId: string) => {
@@ -62,12 +58,12 @@ export const fetchTodayWorkGrafic = async (setTodayGrafic: (val: TodayWorkGrafic
     } catch { }
 }
 
-export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrder[]) => void, setHallData: (val: DashboardHallingOrder[]) => void, orderId: string, status: string, toggleRejectModal: () => void, toggleConfirmModal: () => void) => {
+export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrder[]) => void, setHallData: (val: DashboardHallingOrder[]) => void, orderId: string, status: string, toggleRejectModal: () => void, toggleConfirmModal: () => void, setIsLoading: (val: boolean) => void) => {
     try {
         const config = await getConfig()
         const { data } = await axios.put(`${dashboard_edit_order_status}?orderId=${orderId}&status=${status}`, {}, config ? config : {});
         if (data.success) {
-            await fetchWaitingOrders(setWaitingData);
+            await fetchWaitingOrders(setWaitingData, setIsLoading);
             await fetchHallingOrders(setHallData);
             if (status === 'CONFIRMED') {
                 Toast.show(`${data.message}`, Toast.LONG)

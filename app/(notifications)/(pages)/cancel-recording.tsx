@@ -5,6 +5,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editCancelOrder, fetchAllData } from '@/helpers/api-function/notifications/notifications';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Switch, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -49,6 +50,7 @@ const CancelRecording = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
+        <StatusBar style="light" />
         <View style={styles.navigationMenu}>
           <NavigationMenu name='Напоминание об отмене' />
         </View>

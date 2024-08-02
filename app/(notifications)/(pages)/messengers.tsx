@@ -9,6 +9,7 @@ import useNotificationsStore from '@/helpers/state_managment/notifications/notif
 import { useNavigation } from '@react-navigation/native';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
 import { Loading } from '@/components/loading/loading';
+import { StatusBar } from 'expo-status-bar';
 
 const Messengers = () => {
   const navigation = useNavigation();
@@ -34,6 +35,7 @@ const Messengers = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <StatusBar style="light" />
         <View style={styles.mainContent}>
           <NavigationMenu name='Месенджеры' />
           <Text style={styles.description}>Настройте через какие мессенджеры отправлять уведомления</Text>

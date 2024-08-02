@@ -7,6 +7,8 @@ interface GalleryState {
   setData: (data: GalleryData[]) => void;
   setFullData: (data: GalleryData) => void;
   booleanState: BooleanState;
+  isLoading: boolean,
+  setIsLoading: (val: boolean) => void,
   setBooleanState: (val: BooleanState) => void;
 }
 
@@ -31,6 +33,8 @@ const useGalleryStore = create<GalleryState>((set) => ({
   },
   setData: (val: GalleryData[]) => set({ data: val }),
   setFullData: (val: GalleryData) => set({ fullData: val }),
+  setIsLoading: (val: boolean) => set({ isLoading: val }),
+  isLoading: false,
   booleanState: {
     isOpen: false,
     isAllOpen: false,

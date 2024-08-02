@@ -41,11 +41,7 @@ const Welcome = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp | any>();
     const [getTariffStatus, setGetTariffStatus] = useState<string | null>(null);
     
-    useFocusEffect(
-        useCallback(() => {
-            getNumbers(setNumber);
-        }, [])
-    );
+    
     useFocusEffect(
         useCallback(() => {
             const fetchUserAndTariff = async () => {

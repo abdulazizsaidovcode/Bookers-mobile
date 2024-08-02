@@ -54,6 +54,7 @@ import { getTariffMaster } from "@/app/(profile)/(tariff)/tariff";
 import { getMasterTariff, setMasterTariff } from "@/constants/storage";
 import { Loading } from "@/components/loading/loading";
 import moment from "moment";
+import { StatusBar } from "expo-status-bar";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -155,7 +156,7 @@ const TabOneScreen: React.FC = () => {
     useCallback(() => {
       fetchMainStatistic(setMainStatisticData);
       fetchWaitingOrders(setWaitingData, setIsLoading);
-      fetchHallingOrders(setHallData, setIsLoading);
+      fetchHallingOrders(setHallData);
       getUser(setGetMee);
       fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
       fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
@@ -170,7 +171,7 @@ const TabOneScreen: React.FC = () => {
         setHasAllNumbers(result);
         setPending(false);
       }
-      return () => {};
+      return () => { };
     }, [])
   );
 
@@ -277,22 +278,22 @@ const TabOneScreen: React.FC = () => {
   const regularVisitCount =
     dailyTimeData && dailyTimeData.length !== 0
       ? dailyTimeData &&
-        dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length
+      dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length
       : 0;
   const notVisitCount =
     dailyTimeData && dailyTimeData.length !== 0
       ? dailyTimeData &&
-        dailyTimeData.filter((item) => item.type === "STOPPED_VISIT").length
+      dailyTimeData.filter((item) => item.type === "STOPPED_VISIT").length
       : 0;
   const vipCientsCount =
     dailyTimeData && dailyTimeData.length !== 0
       ? dailyTimeData &&
-        dailyTimeData.filter((item) => item.type === "VIP").length
+      dailyTimeData.filter((item) => item.type === "VIP").length
       : 0;
   const newClientsCount =
     dailyTimeData && dailyTimeData.length! == 0
       ? dailyTimeData &&
-        dailyTimeData.filter((item) => item.type === "NEW").length
+      dailyTimeData.filter((item) => item.type === "NEW").length
       : 0;
 
   const handleConfirmOrReject = (status: string) =>
@@ -302,7 +303,8 @@ const TabOneScreen: React.FC = () => {
       orderId,
       status,
       toggleRejectModal,
-      toggleConfirmModal
+      toggleConfirmModal,
+      setIsLoading
     );
 
   return (
@@ -313,6 +315,7 @@ const TabOneScreen: React.FC = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
+        <StatusBar style="light" />
         <Header />
         <ScheduleSection
           todayGraficData={todayGraficData}
@@ -452,12 +455,12 @@ const TabOneScreen: React.FC = () => {
           </Text>
           <Text
             style={{
-                color: "white",
-                fontSize: 14,
-                fontWeight: "400",
-                marginBottom: 30,
-                letterSpacing: 1,
-                textAlign: "center"
+              color: "white",
+              fontSize: 14,
+              fontWeight: "400",
+              marginBottom: 30,
+              letterSpacing: 1,
+              textAlign: "center"
             }}
           >
             Это займет не более 20 минут
@@ -524,9 +527,9 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
       <Text style={styles.sectionSubtitle}>
         {todayGraficData.from && todayGraficData.end
           ? `Время работы: с ${todayGraficData.from.slice(
-              0,
-              5
-            )} до ${todayGraficData.end.slice(0, 5)}`
+            0,
+            5
+          )} до ${todayGraficData.end.slice(0, 5)}`
           : "Время работы: ваша графическая работа не настроена"}
       </Text>
     </View>
@@ -704,10 +707,10 @@ const renderTimeSlot = ({ item }: any) => (
       item.type === "REGULAR_VISIT"
         ? styles.bookedSlot
         : item.type === "STOPPED_VISIT"
-        ? styles.freeSlot
-        : item.type === "VIP"
-        ? styles.vipSlot
-        : styles.newSlot,
+          ? styles.freeSlot
+          : item.type === "VIP"
+            ? styles.vipSlot
+            : styles.newSlot,
     ]}
   >
     <Text style={{ color: COLORS.white }}>
