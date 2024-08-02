@@ -102,12 +102,11 @@ const Dashboard: React.FC = () => {
 
   const { userLocation, setUserLocation } = useGetMeeStore();
   const { allCategory, setSelectedClient, setCategoryId, categoryId ,setClientData} = ClientStory();
-  const [loading, setLoading] = useState(true);
   const navigation = useNavigation<NavigationProp<any>>();
   const [backPressCount, setBackPressCount] = useState(0);
   const notificationListener = useRef();
   const responseListener = useRef();
-  const { dashboardData } = useDashboardClientStore();
+  const { dashboardData, isLoading, setIsLoading, setDashboardData, isBottomLoading, setIsBottomLoading } = useDashboardClientStore();
   const { dashboardMasterData, setDashboardMasterData, setDashboardMasterDataAll, dashboardMasterDataAll } = useDashboardMasterStore();
   const [selectedCategory, setSelectedCategory] = useState('Bceni');
   const { setOrderData } = useMapStore();
@@ -151,11 +150,10 @@ const Dashboard: React.FC = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      setLoading(true);
-      getUserLocation(setUserLocation).finally(() => setLoading(false));
-      getClientDashboard().finally(() => setLoading(false));
-      getAllCategory().finally(() => setLoading(false));
-      getDashboradMasterAll(setDashboardMasterDataAll).finally(() => setLoading(false));
+      getUserLocation(setUserLocation);
+      getClientDashboard(setDashboardData, setIsLoading);
+      getAllCategory();
+      getDashboradMasterAll(setDashboardMasterDataAll, setIsBottomLoading);
       pushNotifications()
       return () => {
         if (notificationListener.current) {
@@ -180,15 +178,13 @@ const Dashboard: React.FC = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      setLoading(true)
-      getAllCategory().finally(() => setLoading(false));
+      getAllCategory();
       return () => { };
     }, [userLocation])
   );
   useFocusEffect(
     useCallback(() => {
-      setLoading(true)
-      getDashboradMaster(setDashboardMasterData).finally(() => setLoading(false));
+      getDashboradMaster(setDashboardMasterData, setIsBottomLoading);
       return () => { };
     }, [categoryId])
   );
@@ -226,7 +222,7 @@ const Dashboard: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <Navbar />
       <ScrollView>
-        {dashboardData && dashboardData.length > 0 ? (
+        {isLoading ? <Loading/> : dashboardData && dashboardData.length > 0 ? (
           <View style={tw`p-1`}>
             <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
             {dashboardData.map((item:any, index) => (
@@ -309,7 +305,7 @@ const Dashboard: React.FC = () => {
           </AccordionItem>
         )}
         <>
-          {dashboardMasterData && dashboardMasterData.length > 0 ?
+          { isBottomLoading ? <Loading/> : dashboardMasterData && dashboardMasterData.length > 0 ?
             (
               <View style={tw`p-1`}>
                 <View style={tw`mb-4 mt-5`}>
@@ -327,28 +323,17 @@ const Dashboard: React.FC = () => {
                         setSelectedCategory('Все');
                         console.log('Selected Category ID:', 'all'); // Use an appropriate ID for "Все"
                       }}
-                      style={{
-                        backgroundColor: selectedCategory === 'Все' ? 'white' : 'transparent',
-                        borderRadius: 10,
-                      }}
+
                     >
-                      <Text
-                        style={tw`border border-gray-600 p-3 ${selectedCategory === 'Все' ? 'text-black border-white' : 'text-gray-600'
-                          } rounded-xl font-bold`}
-                      >
-                        Все
-                      </Text>
                     </TouchableOpacity>
                   </View>
-                  {allCategory ? allCategory.map((item, index) => (
+                  {  allCategory ? allCategory.map((item, index) => (
                     <View key={index} style={{ marginRight: 16, marginBottom: 20 }}>
                       <TouchableOpacity
                         activeOpacity={0.7}
                         onPress={() => {
                           setSelectedCategory(item.name);
                           setCategoryId(item.id)
-                          console.log("category", categoryId);
-
                         }}
                         style={{
                           backgroundColor: selectedCategory === item.name ? 'white' : 'transparent',

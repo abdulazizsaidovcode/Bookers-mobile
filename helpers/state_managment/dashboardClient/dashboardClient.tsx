@@ -25,9 +25,17 @@ export interface ClientOrderHistory {
 interface DashboardStore {
   dashboardData: ClientOrderHistory[] | null;
   setDashboardData: (data: ClientOrderHistory[] | null) => void;
+  isLoading: boolean
+  setIsLoading: (val: boolean) => void
+  isBottomLoading: boolean
+  setIsBottomLoading: (val: boolean) => void
 }
 
 export const useDashboardClientStore = create<DashboardStore>((set) => ({
   dashboardData: null,
   setDashboardData: (data) => set({ dashboardData: data }),
+  isLoading: false,
+  setIsLoading: (val: boolean) => set({isLoading: val}),
+  isBottomLoading: false,
+  setIsBottomLoading: (val: boolean) => set({isBottomLoading: val})
 }));
