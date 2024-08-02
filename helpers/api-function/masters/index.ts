@@ -21,7 +21,6 @@ export interface Master {
   mainPhoto: string | null;
 }
 
-
 interface ApiResponse {
   body: {
     page: number;
@@ -35,19 +34,38 @@ interface ApiResponse {
   success: boolean;
 }
 
-export const getTopMasters = async (page = 0, size = 10, name?: string): Promise<void> => {
-  const { setTopMasters, setIsloading, masters } = useTopMastersStore.getState();
+export const getTopMasters = async (
+  page = 1,
+  size = 10,
+  name?: string
+): Promise<void> => {
+  const { setTopMasters, setIsloading, masters } =
+    useTopMastersStore.getState();
   setIsloading(true);
   try {
     const config = await getConfig();
+    console.log(config);
+    console.log(page);
+    
     const url = name
       ? `${base_url}user/top/masters?page=${page}&size=${size}&nameOrPhone=${name}`
       : `${base_url}user/top/masters?page=${page}&size=${size}`;
     const { data } = await axios.get<ApiResponse>(url, config || {});
     if (data.success) {
-      setTopMasters([...masters, ...data.body.object]);      
+      let arr = [...masters, ...data.body.object];
+      const seen: any = {};
+      const result: any = [];
+
+      arr.forEach((item) => {
+        if (!seen[item.id]) {
+          seen[item.id] = true;
+          result.push(item);
+        }
+      });
+
+      setTopMasters([...result]);
     } else {
-      setTopMasters([]);
+      setTopMasters([...masters]);
     }
   } catch (error) {
     console.error("Error fetching top masters:", error);
@@ -56,7 +74,6 @@ export const getTopMasters = async (page = 0, size = 10, name?: string): Promise
     setIsloading(false);
   }
 };
-
 
 export const getCategory = async () => {
   const { setCategory } = useTopMastersStore.getState();

@@ -44,7 +44,7 @@ const Masters = () => {
   const { userLocation } = useGetMeeStore();
   const { setMapData } = useMapStore();
   const navigation = useNavigation<any>();
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
   const { selectedClient, setSelectedClient, clientData, setClientData } = ClientStory()
 
@@ -60,8 +60,6 @@ const Masters = () => {
   useEffect(() => {
     getTopMasters(page, 10, search);
     getCategory()
-    console.log(masters);
-
   }, [page, search]);
 
   const loadMore = useCallback(
@@ -290,7 +288,11 @@ const Masters = () => {
           keyExtractor={(item) => item.id}
           renderItem={TopMasterCard}
           ListFooterComponent={renderFooter}
-          onEndReached={loadMore}
+          onEndReached={() => {
+            if (masters.length !== 100) {
+              loadMore()
+            }
+          }}
           onEndReachedThreshold={0.5}
         />
 
