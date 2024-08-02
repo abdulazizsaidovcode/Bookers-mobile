@@ -12,7 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff",
       "tabletImage": "./assets/images/loading.png",
-      "tabletBackgroundColor": "#000000",
+      "tabletBackgroundColor": "#ffffff",
       "imageResizeMode": "native",
       "loadingIndicator": "default",
       "loadingIndicatorColor": "#0000ff",
