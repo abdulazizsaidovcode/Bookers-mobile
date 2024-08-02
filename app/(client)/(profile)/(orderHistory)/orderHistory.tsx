@@ -163,7 +163,7 @@ const OrderHistory = () => {
                       setSelectedClient(pastComing)
                       navigation.navigate('(client)/(oreder)/orderDetail', { id: pastComing.orderId });
                     }}
-                    titleTex={pastComing.serviceName.split('  ')}
+                    titleTex={pastComing.serviceName.trim().split(', ')}
                     imageURL={pastComing.userAttachmentId}
                     masterName={pastComing.firstName + " " + pastComing.lastName}
                     salonName={pastComing.salonName}
