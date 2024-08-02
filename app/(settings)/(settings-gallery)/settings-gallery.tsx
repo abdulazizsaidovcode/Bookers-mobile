@@ -25,7 +25,7 @@ const SettingsGallery: React.FC = () => {
   const [albumName, setAlbumName] = useState<string>('');
   const navigation = useNavigation()
 
-  const { setData } = useGalleryStore();
+  const { setData, setIsLoading } = useGalleryStore();
 
   const mainPhotos = mainImageIndices.length > 0 ? mainImageIndices.map(index => images[index]).slice(0, 4) : [];
 
@@ -38,7 +38,6 @@ const SettingsGallery: React.FC = () => {
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
     });
 
@@ -131,7 +130,7 @@ const SettingsGallery: React.FC = () => {
         } as any);
       });
 
-      await addData(formData, albumName, setData, setImages, setAlbumName, setMainImageIndices, navigation.goBack());
+      await addData(formData, albumName, setData, setImages, setAlbumName, setMainImageIndices, navigation.goBack, setIsLoading);
     }
   };
 
