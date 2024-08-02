@@ -16,6 +16,7 @@ import { useFocusEffect } from 'expo-router';
 import { getMasterTariff } from '@/constants/storage';
 import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSetting';
 import { StatusBar } from 'expo-status-bar';
+import { Loading } from '@/components/loading/loading';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(settings)/(settings-gallery)/settings-gallery-main'>;
 const { width, height } = Dimensions.get('window');
@@ -23,7 +24,7 @@ const { width, height } = Dimensions.get('window');
 const SettingsGalleryMain = () => {
     const { setNumber } = numberSettingStore();
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const { data, setData } = useGalleryStore();
+    const { data, setData, isLoading, setIsLoading } = useGalleryStore();
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [tariff, setTariff] = useState(null)
@@ -32,7 +33,7 @@ const SettingsGalleryMain = () => {
 
     useFocusEffect(
         useCallback(() => {
-            fetchData(setData);
+            fetchData(setData, setIsLoading);
             getMasterTariff(setTariff);
             return () => { }
         }, [])
@@ -61,11 +62,15 @@ const SettingsGalleryMain = () => {
 
     const handleDelGallery = () => {
         if (selectedItemId) {
-            delGallery(selectedItemId, setData, toggleModal, toggleCheckboxes);
+            delGallery(selectedItemId, setData, toggleModal, toggleCheckboxes, setIsLoading);
         }
     }
 
     const number = tariff === 'STANDARD' ? 4 : 2
+
+    if (isLoading) {
+        return <Loading />
+    }
 
     return (
         <SafeAreaView style={styles.container}>
