@@ -156,7 +156,7 @@ const TabOneScreen: React.FC = () => {
     useCallback(() => {
       fetchMainStatistic(setMainStatisticData);
       fetchWaitingOrders(setWaitingData, setIsLoading);
-      fetchHallingOrders(setHallData, setIsLoading);
+      fetchHallingOrders(setHallData);
       getUser(setGetMee);
       fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
       fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
@@ -303,7 +303,8 @@ const TabOneScreen: React.FC = () => {
       orderId,
       status,
       toggleRejectModal,
-      toggleConfirmModal
+      toggleConfirmModal,
+      setIsLoading
     );
 
   return (
