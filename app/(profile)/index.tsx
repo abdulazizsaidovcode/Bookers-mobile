@@ -114,8 +114,6 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  putNumbers(6, () => getNumbers(setNumber))
-
   const navigationList =
     role === "ROLE_MASTER"
       ? [
