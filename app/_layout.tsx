@@ -289,7 +289,7 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="app/(client)/(masters)/masters"
+              name="(client)/(masters)/masters"
               component={Masters}
               options={{ headerShown: false }}
             />

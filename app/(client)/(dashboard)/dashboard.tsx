@@ -103,7 +103,7 @@ const Navbar: React.FC = () => {
 const Dashboard: React.FC = () => {
 
   const { userLocation, setUserLocation } = useGetMeeStore();
-  const { allCategory, setSelectedClient, setCategoryId, categoryId, setClientData } = ClientStory();
+  const { allCategory, setSelectedClient, setSelectedServiceId, setCategoryId, categoryId, setClientData } = ClientStory();
   const navigation = useNavigation<NavigationProp<any>>();
   const [backPressCount, setBackPressCount] = useState(0);
   const notificationListener = useRef();
@@ -282,6 +282,7 @@ const Dashboard: React.FC = () => {
                     key={index}
                     activeOpacity={0.7}
                     onPress={() => {
+                      setSelectedServiceId(item.id);
                       navigation.navigate('(client)/(uslugi)/(hairHealth)/hair');
                     }}
                     style={styles.touchableItem}
@@ -406,7 +407,7 @@ const Dashboard: React.FC = () => {
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.touchableItem}
                     onPress={() => {
-                      navigation.navigate('../(masters)/masters');
+                      navigate.navigate('(client)/(masters)/masters');
                     }}>
                     <View style={styles.itemTwo}>
                       <View style={styles.textContainer}>
