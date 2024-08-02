@@ -7,6 +7,7 @@ import { getNumbers, putNumbers } from '@/helpers/api-function/numberSittings/nu
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSetting';
 import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,8 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const RequestWindow = () => {
-    const { setNumber } = numberSettingStore();
-    const { windowData, setWindowData, isLoading, setIsloading } = useNotificationsStore();
+  const { setNumber } = numberSettingStore();
+  const { windowData, setWindowData, isLoading, setIsloading } = useNotificationsStore();
   const [hasChanges, setHasChanges] = useState(false);
   const navigation = useNavigation();
 
@@ -46,6 +47,7 @@ const RequestWindow = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
+        <StatusBar style="light" />
         <View style={styles.navigationMenu}>
           <NavigationMenu name='Запрс окошка' />
         </View>

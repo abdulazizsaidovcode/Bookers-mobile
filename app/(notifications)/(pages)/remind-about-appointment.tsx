@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import LoadingButtons from "@/components/(buttons)/loadingButton";
 import { Loading } from "@/components/loading/loading";
+import { StatusBar } from "expo-status-bar";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
@@ -91,6 +92,7 @@ const RemindAboutAppointment: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
+        <StatusBar style="light" />
         <NavigationMenu name="Напоминание о записи" />
         <View style={{ padding: 15 }}>
           <View>

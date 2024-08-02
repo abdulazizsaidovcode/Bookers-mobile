@@ -7,6 +7,7 @@ import { getNumbers, putNumbers } from '@/helpers/api-function/numberSittings/nu
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSetting';
 import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Switch, TextInput, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,8 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const ChangingEnEntry = () => {
-    const { setNumber } = numberSettingStore();
-    const { changingData, isLoading, tariff, texts, setTexts, setIsloading, setChangingData } = useNotificationsStore();
+  const { setNumber } = numberSettingStore();
+  const { changingData, isLoading, tariff, texts, setTexts, setIsloading, setChangingData } = useNotificationsStore();
   const navigation = useNavigation();
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -52,6 +53,7 @@ const ChangingEnEntry = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
+        <StatusBar style="light" />
         <View style={styles.navigationMenu}>
           <NavigationMenu name='Напонимание об изменении' />
         </View>

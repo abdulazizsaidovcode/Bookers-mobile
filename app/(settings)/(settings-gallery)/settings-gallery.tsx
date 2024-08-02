@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, TouchableWithoutFeedback,  Dimensions } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -12,6 +12,7 @@ import LocationInput from '@/components/(location)/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -138,6 +139,7 @@ const SettingsGallery: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
+        <StatusBar style="light" />
         <View>
           <NavigationMenu name='Создать альбом' deleteIcon toggleModal={toggleCheckboxes} />
         </View>

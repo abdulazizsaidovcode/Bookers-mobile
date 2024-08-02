@@ -15,6 +15,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Toast from 'react-native-simple-toast';
 import { EditMainPhoto } from '@/type/gallery/gallery';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
+import { StatusBar } from 'expo-status-bar';
 
 const { width, height } = Dimensions.get('window');
 
@@ -172,6 +173,7 @@ const GalleryDetails: React.FC = () => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
+                <StatusBar style="light" />
                 {booleanState.isDeleteMode ? (<View style={styles.deleteModeBar}>
                     <View style={styles.deleteModeLeft}>
                         <AntDesign onPress={handleDeleteMode} name="close" size={24} color="white" />

@@ -15,6 +15,7 @@ import Toast from 'react-native-simple-toast'
 import { useFocusEffect } from 'expo-router';
 import { getMasterTariff } from '@/constants/storage';
 import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSetting';
+import { StatusBar } from 'expo-status-bar';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(settings)/(settings-gallery)/settings-gallery-main'>;
 const { width, height } = Dimensions.get('window');
@@ -69,6 +70,7 @@ const SettingsGalleryMain = () => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <StatusBar style="light" />
                 <View>
                     <NavigationMenu name='Моя галерея' />
                 </View>
