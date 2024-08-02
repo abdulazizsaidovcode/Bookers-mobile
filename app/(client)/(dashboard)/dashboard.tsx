@@ -305,7 +305,7 @@ const Dashboard: React.FC = () => {
           </AccordionItem>
         )}
         <>
-          {dashboardMasterData && dashboardMasterData.length > 0 ?
+          { isBottomLoading ? <Loading/> : dashboardMasterData && dashboardMasterData.length > 0 ?
             (
               <View style={tw`p-1`}>
                 <View style={tw`mb-4 mt-5`}>
@@ -323,28 +323,17 @@ const Dashboard: React.FC = () => {
                         setSelectedCategory('Все');
                         console.log('Selected Category ID:', 'all'); // Use an appropriate ID for "Все"
                       }}
-                      style={{
-                        backgroundColor: selectedCategory === 'Все' ? 'white' : 'transparent',
-                        borderRadius: 10,
-                      }}
+
                     >
-                      <Text
-                        style={tw`border border-gray-600 p-3 ${selectedCategory === 'Все' ? 'text-black border-white' : 'text-gray-600'
-                          } rounded-xl font-bold`}
-                      >
-                        Все
-                      </Text>
                     </TouchableOpacity>
                   </View>
-                  {allCategory ? allCategory.map((item, index) => (
+                  {  allCategory ? allCategory.map((item, index) => (
                     <View key={index} style={{ marginRight: 16, marginBottom: 20 }}>
                       <TouchableOpacity
                         activeOpacity={0.7}
                         onPress={() => {
                           setSelectedCategory(item.name);
                           setCategoryId(item.id)
-                          console.log("category", categoryId);
-
                         }}
                         style={{
                           backgroundColor: selectedCategory === item.name ? 'white' : 'transparent',
@@ -367,7 +356,7 @@ const Dashboard: React.FC = () => {
                   }
                 </ScrollView>
                 <View style={tw`mb-4`}>
-                  {isBottomLoading ? <Loading/> : dashboardMasterData ? dashboardMasterData.map((master, idx) => (
+                  {dashboardMasterData ? dashboardMasterData.map((master, idx) => (
                     <View style={tw`mb-3`}>
                       <ClientCard
                         key={idx} // Har bir element uchun noyob kalit kerak
