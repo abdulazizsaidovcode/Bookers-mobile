@@ -1,3 +1,74 @@
+// import React, { createContext, useContext, useState, useEffect } from 'react';
+// import { Client } from '@stomp/stompjs';
+// import SockJS from 'sockjs-client';
+// import { sockjs_url } from '@/helpers/api';
+
+// // Create a context
+// export const StompContext = createContext();
+
+// // Create a provider component
+// export const StompProvider = ({ children }) => {
+//   const [stompClient, setStompClient] = useState(null);
+//   const [adminId, setAdminId] = useState("");
+
+//   useEffect(() => {
+//     // Initialize SockJS and STOMP client
+//     const socket = new WebSocket(sockjs_url);
+//     const stomp = new Client({
+//       webSocketFactory: () => socket,
+//       reconnectDelay: 5000,
+//       heartbeatIncoming: 10000,
+//       heartbeatOutgoing: 10000,
+//       connectHeaders: {
+//         // Add any headers required for the connection
+//       },
+//       debug: (str) => {
+//         console.log(str);
+//       },
+//     });
+
+//     stomp.onConnect = (frame) => {
+//       console.log('Connected: ' + frame);
+//       setStompClient(stomp);
+//     };
+
+//     stomp.onStompError = (frame) => {
+//       console.error('Broker reported error: ' + frame.headers['message']);
+//       console.error('Additional details: ' + frame.body);
+//     };
+
+//     stomp.onWebSocketClose = (event) => {
+//       console.log('WebSocket connection closed: ', event);
+//     };
+
+//     stomp.onWebSocketError = (error) => {
+//       console.error('WebSocket error: ', error);
+//     };
+
+//     // Activate the STOMP client
+//     stomp.activate();
+
+//     // Cleanup function
+//     return () => {
+//       if (stomp) {
+//         stomp.deactivate();
+//       }
+//     };
+//   }, []);
+
+//   return (
+//     <StompContext.Provider value={{ stompClient, adminId }}>
+//       {children}
+//     </StompContext.Provider>
+//   );
+// };
+
+// // Custom hook to use the Stomp context
+// export const useStomp = () => {
+//   return useContext(StompContext);
+// };
+
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
@@ -12,7 +83,7 @@ export const StompProvider = ({ children }) => {
   useEffect(() => {
     const socket = new SockJS(sockjs_url);
     const stomp = Stomp.over(socket);
-
+    console.log(1);
     stomp.connect({
       heartbeat_in: 100000, // Heartbeat interval (milliseconds)
       heartbeat_out: 100000,
@@ -21,12 +92,33 @@ export const StompProvider = ({ children }) => {
     }, (frame) => {
       console.log('Connected: ' + frame);
       setStompClient(stomp);
+      stomp.subscribe(`/user/${adminId}/queue/messages`, (response) => {
+        const receivedMessage = JSON.parse(response.body);
+        // setmessageData((prevMessages) => [...prevMessages, receivedMessage]);
+        console.log(receivedMessage);
+    });
     }, (error) => {
       console.error('Error connecting: ', error);
     });
 
     socket.onopen = (res) => {
             console.log("WebSocket connection opened.", res);
+            stomp.connect({
+              heartbeat_in: 100000, // Heartbeat interval (milliseconds)
+              heartbeat_out: 100000,
+              reconnect_delay: 5000,
+              timeout: 20000 // Connect timeout
+            }, (frame) => {
+              console.log('Connected: ' + frame);
+              
+              setStompClient(stomp);
+              stomp.subscribe(`/user/${adminId}/queue/messages`, (response) => {
+                const receivedMessage = JSON.parse(response.body);
+                console.log(receivedMessage);
+            });
+            }, (error) => {
+              console.error('Error connecting: ', error);
+            });
           };
           
     socket.onclose = (event) => {

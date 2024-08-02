@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import chatStore from '@/helpers/state_managment/chat/chatStore';
-import { useStomp } from '@/context/StompContext';
+import { StompContext, useStomp } from '@/context/StompContext';
 import fetchChatDataStore from '@/helpers/state_managment/chat/chatfetchStore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Buttons from '@/components/(buttons)/button';
@@ -23,12 +23,14 @@ const ChatSupport = () => {
                 console.log(receivedMessage);
             });
         }
+        console.log(stompClient, 'wd', adminId);
+
         getChatList({ setData: setChatData });
     }, []);
 
-    // const handlePress = () => {
-    //     alert('чат пока не работает');
-    // };
+    const handlePress = () => {
+        alert('чат пока не работает');
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -41,7 +43,7 @@ const ChatSupport = () => {
                 <Buttons
                     title="Написать в поддержку"
                     textColor="#FFFFFF"
-                    // onPress={handlePress}
+                    onPress={handlePress}
                 />
             </View>
             {/* ) :
