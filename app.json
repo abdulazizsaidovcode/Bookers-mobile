@@ -7,17 +7,6 @@
     "icon": "./assets/images/splash.png",
     "scheme": "bookersapp",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/loading.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff",
-      "tabletImage": "./assets/images/loading.png",
-      "tabletBackgroundColor": "#ffffff",
-      "imageResizeMode": "native",
-      "loadingIndicator": "default",
-      "loadingIndicatorColor": "#0000ff",
-      "hideStatusBar": true
-    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.alisher09.bookersapp"
