@@ -1,7 +1,7 @@
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import tw from "tailwind-react-native-classnames";
-import {RefreshControl, ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
+import {ScrollView, StatusBar, StyleSheet, Text, View} from "react-native";
 import React, {useCallback, useEffect, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import Buttons from "@/components/(buttons)/button";
@@ -20,8 +20,8 @@ import {
 import {useForm, Controller} from 'react-hook-form';
 import PhoneInput from 'react-native-phone-input';
 import Toast from "react-native-simple-toast";
-import {handleRefresh} from "@/constants/refresh";
 import {SelectList} from "react-native-dropdown-select-list";
+import {useFocusEffect} from "expo-router";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
@@ -46,9 +46,7 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
         isLoading,
         setIsLoading,
         setStatusData,
-        setAllClients,
-        refreshing,
-        setRefreshing
+        setAllClients
     } = clientStore()
     const {control, formState: {errors}} = useForm<FormData>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -91,6 +89,24 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
         }
     }, [newUpdateClient]);
 
+    useFocusEffect(useCallback(() => {
+        setRegex(validateObject(newUpdateClient))
+    }, []))
+
+    useFocusEffect(useCallback(() => {
+        setRegex(validateObject(newUpdateClient))
+    }, [newUpdateClient]))
+
+    useFocusEffect(useCallback(() => {
+        if (districtData) {
+            const transformedDistrict = districtData.map(item => ({
+                key: item.id,
+                value: item.name
+            }));
+            setDistricts(transformedDistrict)
+        }
+    }, [districtData]))
+
     useEffect(() => {
         newUpdateClient.attachmentId = attachmentID ? attachmentID : null
         newUpdateClient.phoneNumber = phoneNumber ? phoneNumber : newUpdateClient.phoneNumber;
@@ -98,6 +114,7 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
 
     useEffect(() => {
         newUpdateClient.districtId = ''
+        setDistricts(null)
     }, [newUpdateClient.regionId]);
 
     useEffect(() => {
@@ -114,10 +131,6 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
         }
     }, [navigate]);
 
-    const onRefresh = useCallback(() => {
-        handleRefresh(setRefreshing);
-    }, [setRefreshing]);
-
     const handleInputChange = (name: string, value: any) => {
         setNewUpdateClient({
             ...newUpdateClient,
@@ -132,7 +145,8 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
                 key !== 'comment' &&
                 key !== 'email' &&
                 key !== 'specialist' &&
-                key !== 'telegram'
+                key !== 'telegram' &&
+                key !== 'nickName'
             ) && !obj[key]) return false
         }
         return true;
@@ -152,7 +166,6 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}
-                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                 >
                     <View>
                         <ProfileImgUpload attachmentID={clientData.attachmentId}/>
