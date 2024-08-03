@@ -1,5 +1,5 @@
-import { Text, View } from "@/components/Themed";
-import React, { useCallback, useEffect, useState } from "react";
+import {Text, View} from "@/components/Themed";
+import React, {useCallback, useEffect, useState} from "react";
 import {
     Image,
     ScrollView,
@@ -7,41 +7,41 @@ import {
     Pressable,
     StyleSheet,
     Dimensions,
-    TouchableOpacity,
+    TouchableOpacity, FlatList,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {SafeAreaView} from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { Feather } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { FontAwesome6 } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { Fontisto } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
-import { router, useFocusEffect } from "expo-router";
+import {Feather} from "@expo/vector-icons";
+import {FontAwesome5} from "@expo/vector-icons";
+import {Entypo} from "@expo/vector-icons";
+import {FontAwesome6} from "@expo/vector-icons";
+import {Ionicons} from "@expo/vector-icons";
+import {Fontisto} from "@expo/vector-icons";
+import {AntDesign} from "@expo/vector-icons";
+import {router, useFocusEffect} from "expo-router";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
-import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "@/type/root";
+import {getNumbers, putNumbers} from "@/helpers/api-function/numberSittings/numbersetting";
+import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {RootStackParamList} from "@/type/root";
 import Buttons from "@/components/(buttons)/button";
 import * as SecureStore from "expo-secure-store";
-import { getUser } from "@/helpers/api-function/getMe/getMee";
+import {getUser} from "@/helpers/api-function/getMe/getMee";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
-import { getFile } from "@/helpers/api";
-import { getTariffMaster } from "@/app/(profile)/(tariff)/tariff";
-import { setMasterTariff } from "@/constants/storage";
+import {getFile} from "@/helpers/api";
+import {getTariffMaster} from "@/app/(profile)/(tariff)/tariff";
+import {setMasterTariff} from "@/constants/storage";
 
 const screenWidht = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, "(welcome)/welcome">;
 
 const Welcome = () => {
-    const { number, setNumber, setIsWaitModal } = numberSettingStore();
-    const { getMee, setGetMee } = useGetMeeStore();
+    const {number, setNumber, setIsWaitModal} = numberSettingStore();
+    const {getMee, setGetMee} = useGetMeeStore();
     const navigation = useNavigation<SettingsScreenNavigationProp | any>();
     const [getTariffStatus, setGetTariffStatus] = useState<string | null>(null);
-    
-    
+
+
     useFocusEffect(
         useCallback(() => {
             const fetchUserAndTariff = async () => {
@@ -86,25 +86,25 @@ const Welcome = () => {
         {
             title: "Услуги",
             description: "Ваша специализация и услуги",
-            icon: <Feather name="check-circle" size={24} color="white" />,
+            icon: <Feather name="check-circle" size={24} color="white"/>,
             onPress: () => navigation.navigate("(standart)/(services)/(myServices)/myServices"),
         },
         {
             title: "График работы",
             description: "Планируйте своё рабочее время",
-            icon: <FontAwesome5 name="calendar" size={24} color="white" />,
+            icon: <FontAwesome5 name="calendar" size={24} color="white"/>,
             onPress: () => navigation.navigate("(free)/(work-grafic)/workMain"),
         },
         {
             title: "Локация",
             description: "Ваше мето работы",
-            icon: <Entypo name="location" size={24} color="white" />,
+            icon: <Entypo name="location" size={24} color="white"/>,
             onPress: () => router.push("../(location)/Location"),
         },
         {
             title: "Галерея",
             description: "Создавайте фото и видео галереи своих работ",
-            icon: <MaterialIcons name="photo" size={24} color="white" />,
+            icon: <MaterialIcons name="photo" size={24} color="white"/>,
             onPress: () =>
                 navigation.navigate(
                     "(settings)/(settings-gallery)/settings-gallery-main"
@@ -113,36 +113,58 @@ const Welcome = () => {
         {
             title: "Онлайн бронирование",
             description: "Настройте записи на Ваши услуги",
-            icon: <FontAwesome6 name="calendar-plus" size={24} color="white" />,
+            icon: <FontAwesome6 name="calendar-plus" size={24} color="white"/>,
             onPress: () =>
                 navigation.navigate("(standart)/(onlineBooking)/onlineBooking"),
         },
         {
             title: "Уведомления",
             description: "Настройте уведомления",
-            icon: <Ionicons name="notifications-outline" size={24} color="white" />,
+            icon: <Ionicons name="notifications-outline" size={24} color="white"/>,
             onPress: () => navigation.navigate("(notifications)/notifications"),
         },
         {
             title: "Клиенты",
             description: "Добавьте своих клиентов",
-            icon: <Fontisto name="persons" size={24} color="white" />,
+            icon: <Fontisto name="persons" size={24} color="white"/>,
             onPress: () => navigation.navigate(`${getTariffStatus === 'FREE' ? `(free)/(client)/main` : '(standart)/client/standard-main'}`),
         },
         {
             title: "Помощь",
             description: "Ознакомьтесь с документацией сервиса",
-            icon: <AntDesign name="questioncircleo" size={24} color="white" />,
+            icon: <AntDesign name="questioncircleo" size={24} color="white"/>,
             onPress: () => navigation.navigate("(profile)/(help)/help"),
         },
     ];
 
+    const renderItem = ({item, index}: { item: any, index: number }) => {
+        const isEnabled = number.includes(index + 1);
+        return (
+            <Pressable
+                onPress={item.onPress}
+                key={index}
+                disabled={!isEnabled}
+                style={({pressed}) => [styles.pressable, {opacity: pressed ? 0.8 : isEnabled ? 1 : 0.5,},]}
+            >
+                <View style={styles.button}>
+                    <View style={styles.iconContainer}>
+                        <View style={styles.iconBackground}>{item.icon}</View>
+                    </View>
+                    <Text style={styles.buttonTitle}>{item.title}</Text>
+                    <Text style={isEnabled ? styles.buttonDescription : styles.buttonDescription2}>
+                        {item.description}
+                    </Text>
+                </View>
+            </Pressable>
+        );
+    };
+
     return (
         <SafeAreaView style={styles.safeArea}>
-            <StatusBar backgroundColor="#21212E" barStyle="light-content" />
+            <StatusBar backgroundColor="#21212E" barStyle="light-content"/>
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={[styles.scrollView, { paddingBottom: 16 }]}
+                contentContainerStyle={[styles.scrollView, {paddingBottom: 16}]}
             >
                 <View style={styles.progressBar}>
                     {[...Array(8)].map((_, index) => (
@@ -156,18 +178,18 @@ const Welcome = () => {
                         />
                     ))}
                 </View>
-                <View style={styles.centeredView}>
+                <View style={[styles.centeredView, {marginBottom: 20}]}>
                     <Text style={styles.welcomeText}>Добро пожаловать!</Text>
                     <View style={styles.imageContainer}>
                         <Image
                             style={styles.profileImage}
-                            source={getMee.attachmentId ? { uri: `${getFile}${getMee.attachmentId}` } : { uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&s` }}
+                            source={getMee.attachmentId ? {uri: `${getFile}${getMee.attachmentId}`} : {uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&s`}}
                         />
                         <View style={styles.editIconContainer}>
                             <TouchableOpacity activeOpacity={0.5} onPress={() => {
                                 navigation.navigate("(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit")
                             }}>
-                                <MaterialIcons name="edit" size={24} color="white" />
+                                <MaterialIcons name="edit" size={24} color="white"/>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -181,43 +203,21 @@ const Welcome = () => {
                         </Text>
                     </View>
                 </View>
-                <View style={styles.buttonContainer}>
-                    {data.map((item, index) => {
-                        const isEnabled = number.includes(index + 1);
-                        return (
-                            <Pressable
-                                onPress={item.onPress}
-                                key={index}
-                                disabled={!isEnabled}
-                                style={({ pressed }) => [
-                                    styles.pressable,
-                                    {
-                                        opacity: pressed ? 0.8 : isEnabled ? 1 : 0.5,
-                                    },
-                                ]}
-                            >
-                                <View style={styles.button}>
-                                    <View style={styles.iconContainer}>
-                                        <View style={styles.iconBackground}>{item.icon}</View>
-                                    </View>
-                                    <Text style={styles.buttonTitle}>{item.title}</Text>
-                                    <Text style={isEnabled ? styles.buttonDescription : styles.buttonDescription2}>
-                                        {item.description}
-                                    </Text>
-                                </View>
-                            </Pressable>
-                        );
-                    })}
-                    {containsAllNumbers(uniqueNumbers) && (
-                        <View style={styles.buttonContainer2}>
-                            <Buttons title="Вперёд" onPress={() => {
-                                navigation.navigate('(tabs)/(master)');
-                                registered();
-                                setIsWaitModal(true)
-                            }} />
-                        </View>
-                    )}
-                </View>
+                <FlatList
+                    data={data}
+                    renderItem={renderItem}
+                    keyExtractor={(_, index: any) => index.toString()}
+                    numColumns={2}
+                />
+                {containsAllNumbers(uniqueNumbers) && (
+                    <View style={styles.buttonContainer2}>
+                        <Buttons title="Вперёд" onPress={() => {
+                            navigation.navigate('(tabs)/(master)');
+                            registered();
+                            setIsWaitModal(true)
+                        }}/>
+                    </View>
+                )}
             </ScrollView>
         </SafeAreaView>
     );
@@ -308,15 +308,6 @@ const styles = StyleSheet.create({
         color: "#6e6e6e",
         padding: 8,
     },
-    buttonContainer: {
-        flex: 1,
-        width: "100%",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        alignItems: 'center',
-        marginTop: 24,
-        backgroundColor: "#21212e",
-    },
     buttonContainer2: {
         width: '100%',
         paddingHorizontal: 12,
@@ -324,7 +315,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#21212e",
     },
     pressable: {
-        width: screenWidht / 2.18,
+        width: screenWidht / 2.2,
         padding: 8,
     },
     button: {
