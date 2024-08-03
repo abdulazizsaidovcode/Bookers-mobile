@@ -33,12 +33,22 @@ export const getFinanceMonth = async (setData: (val: FinanceMonth[] | null) => v
     }
 }
 
-export const getTopClients = async (setData: (val: FinanceTopClients[] | null) => void) => {
+export const getTopClients = async (setData: (val: FinanceTopClients[] | null) => void, setLoading: (val:boolean) =>void) => {
     const config = await getConfig()
+    setLoading(true)
     await axios.get(`${finance_top_client}`, config ? config : {})
         .then(res => {
-            if (res.data.success) setData(res.data.body)
-            else setData(null)
+            if (res.data.success) {
+                setData(res.data.body)
+                setLoading(false)
+            }
+            else {
+                setData(null)
+                setLoading(false)
+            }
         })
-        .catch(() => setData(null));
+        .catch(() => {
+            setData(null)
+            setLoading(false)
+        });
 }
