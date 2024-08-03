@@ -30,7 +30,9 @@
       },
       "permissions": [
         "android.permission.RECORD_AUDIO",
-        "android.permission.SCHEDULE_EXACT_ALARM"
+        "android.permission.SCHEDULE_EXACT_ALARM",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
       ],
       "package": "com.alisher09.bookersapp",
       "config": {
@@ -70,7 +72,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "80edbc94-d84f-40f4-9324-591da17cd124",
+        "projectId": "bfefa8fb-c1c7-4cab-82b5-18d825b36582",
         "apiBaseUrl": "https://app.bookers.one/"
       }
     }
