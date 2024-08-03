@@ -31,6 +31,8 @@ const Canceledentries = () => {
   const navigation = useNavigation<any>();
   const { setProduct } = History();
   const [loading, setLoading] = useState(false)
+  const [cheked, setCheck] = useState(false)
+
 
   const getSessionDetails = async () => {
     setLoading(true)
@@ -55,8 +57,8 @@ const Canceledentries = () => {
   };
 
   const selectAll = () => {
+    setCheck(true)
     const selected = data.map((item) => item.id);
-    console.log(selected);
     setPastEntries(selected);
   };
 
@@ -122,16 +124,25 @@ const Canceledentries = () => {
                 {pastEntries.length}
               </Text>
             </View>
-            <TouchableOpacity
-              onPress={selectAll}
-              activeOpacity={0.8}
+            <View
               style={tw`flex-row items-center`}
             >
-              <Ionicons name={"checkbox"} size={24} color="white" />
+              {cheked ? 
+              <TouchableOpacity onPress={() => {
+                setPastEntries([])
+                setCheck(false)
+              }}>
+                <Ionicons name={"checkbox"} size={24} color="white" />
+              </TouchableOpacity>
+               :
+               <TouchableOpacity onPress={selectAll}>
+                <View style={tw`w-5 h-5 rounded border border-gray-500`}></View>
+              </TouchableOpacity>
+              }
               <Text style={tw`text-white ml-2 text-base font-medium`}>
                 выделить все
               </Text>
-            </TouchableOpacity>
+            </View>
           </View>
           <MaterialIcons
             onPress={() => pastEntries.length !== 0 && setToggle(!toggle)}
@@ -148,7 +159,7 @@ const Canceledentries = () => {
         />
       )}
       {loading && <ActivityIndicator size="large" color={"#888"} />}
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={tw`mt-5`} showsVerticalScrollIndicator={false}>
         {data &&
           data.map((item) => (
             <Pressable
@@ -201,8 +212,8 @@ const Canceledentries = () => {
               />
               <View style={tw`flex-1`}>
                 <Text style={tw` font-bold`}>{item.fullName}</Text>
-                <Text style={tw`text-gray-600`}>{item.phone}</Text>
-                <View style={[tw`flex-row`, { gap: 5 }]}>
+                <Text style={tw`text-gray-600 mt-1`}>{item.phone}</Text>
+                <View style={[tw`flex-row mt-1`, { gap: 5 }]}>
                 {item.serviceName.trim().split(", ").map((service: string, index: number) => (
                   <View key={index} style={[tw`mb-2 p-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>
                     <Text style={{ fontSize: 12 }}>{service}</Text>

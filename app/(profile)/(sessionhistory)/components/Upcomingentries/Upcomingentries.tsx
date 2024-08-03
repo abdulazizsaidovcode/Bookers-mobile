@@ -23,8 +23,9 @@ import NavigationMenu from "@/components/navigation/navigation-menu";
 import { ProductType } from "@/type/history";
 import Buttons from "@/components/(buttons)/button";
 import { editOrderStatus } from "@/helpers/api-function/dashboard/dashboard";
-import { updateOrderStatus } from "@/helpers/api-function/client/client";
-import {Loading} from "@/components/loading/loading";
+import { sliceTextFullName, updateOrderStatus } from "@/helpers/api-function/client/client";
+import { Loading } from "@/components/loading/loading";
+import LoadingButtons from "@/components/(buttons)/loadingButton";
 
 const Upcomingentries = () => {
   const navigation = useNavigation<any>();
@@ -93,10 +94,10 @@ const Upcomingentries = () => {
             />
             <View style={{ flexDirection: 'column' }}>
               <View style={{ marginBottom: 10 }} >
-                <Text style={[tw`text-black font-bold`, { fontSize: 18 }]}>{item.fullName}</Text>
-                <View style={[tw`rounded px-2 py-1`, { backgroundColor: "#217355", width: 142 }]}>
-                  <Text style={[tw`text-white`, { fontSize: 13 }]}>Постоянный клиент</Text>
-                </View>
+                <Text style={[tw`text-black font-bold`, { fontSize: 18 }]}>{sliceTextFullName(item.fullName)}</Text>
+              </View>
+              <View style={[tw`rounded px-2 py-1`, { backgroundColor: "#217355", alignSelf: 'flex-start' }]}>
+                <Text style={[tw`text-white `, { fontSize: 13 }]}>Постоянный клиент</Text>
               </View>
 
             </View>
@@ -121,7 +122,7 @@ const Upcomingentries = () => {
             </View>
           </View>
           <View style={[tw`flex-row w-40 mt-3`, { gap: 5 }]}>
-            <Buttons onPress={() => handleEditOrderStatus(item.id, "CONFIRMED")} title="Одобрить" />
+            {orderStatusLoading ? <LoadingButtons title="" /> : <Buttons title="Одобрить" onPress={() => handleEditOrderStatus(item.id, "CONFIRMED")} />}
             <TouchableOpacity
               style={[
                 styles.button,
@@ -130,7 +131,7 @@ const Upcomingentries = () => {
               onPress={() => handleEditOrderStatus(item.id, "REJECTED")}
             >
               <Text style={[styles.buttonText, { color: '#9C0A35', fontSize: 18 }]}>
-                Отклонить
+                {orderStatusLoading ? <ActivityIndicator size="large" color={"#888"} /> : "Отклонить"}
               </Text>
             </TouchableOpacity>
           </View>
@@ -146,7 +147,7 @@ const Upcomingentries = () => {
             />
             <View style={{ flexDirection: 'column' }}>
               <View style={{ marginBottom: 10 }} >
-                <Text style={[tw`text-black font-bold`, { fontSize: 18 }]}>{item.fullName}</Text>
+                <Text style={[tw`text-black font-bold`, { fontSize: 18 }]}>{sliceTextFullName(item.fullName)}</Text>
                 <Text style={tw`text-gray-600`}>{item.phone}</Text>
               </View>
 
@@ -177,9 +178,9 @@ const Upcomingentries = () => {
               </Text>
             </View>
           </View>
-          <View style={tw`flex-row justify-between`}>
+          <View style={tw`flex-row justify-between mt-2`}>
             <TouchableOpacity
-              style={[tw`rounded-lg flex-row items-center py-3 text-center`, { backgroundColor: "#9C0A35" }]}
+              style={[tw`rounded-xl flex-row items-center py-3 text-center`, { backgroundColor: "#9C0A35" }]}
             >
               <Pressable
                 // onPress={() =>
@@ -187,14 +188,14 @@ const Upcomingentries = () => {
                 //     id: item.id,
                 //   })
                 // }
-                style={tw`text-white mr-2 w-60`}
+                style={tw`text-white mr-2 w-72`}
               >
                 <Text style={tw`text-white text-center`}>Написать сообщение</Text>
               </Pressable>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={toggleBottomModalNetwork}
-              style={[tw`w-14 h-14 ml-5 rounded-full justify-center items-center`, { backgroundColor: "#9C0A35" }]}
+              style={[tw`w-14 h-14 ml-2 rounded-full justify-center items-center`, { backgroundColor: "#9C0A35" }]}
             >
               <FontAwesome name="phone" size={20} color="#fff" />
             </TouchableOpacity>
@@ -208,7 +209,7 @@ const Upcomingentries = () => {
       style={[tw`flex-1 bg-gray-900 p-4 mt-5`, { backgroundColor: "#21212E" }]}
     >
       <NavigationMenu name="Предстоящие записи" />
-      {(loading || orderStatusLoading) && <ActivityIndicator size="large" color={"#888"} />}
+      {(loading) && <ActivityIndicator size="large" color={"#888"} />}
       <FlatList
         data={data}
         renderItem={renderItem}

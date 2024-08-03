@@ -13,7 +13,7 @@ import {
 import axios from "axios";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import {View, Text, Image, TouchableOpacity, Pressable, ActivityIndicator, ScrollView} from "react-native";
+import { View, Text, Image, TouchableOpacity, Pressable, ActivityIndicator, ScrollView } from "react-native";
 import tw from "tailwind-react-native-classnames";
 
 const PastEntries = () => {
@@ -23,7 +23,7 @@ const PastEntries = () => {
   const { setProduct } = History();
   const navigation = useNavigation<any>();
   const [loading, setLoading] = useState(false)
-
+  const [cheked, setCheck] = useState(false)
 
   const getsessionDetails = async () => {
     setLoading(true)
@@ -46,10 +46,10 @@ const PastEntries = () => {
   const deletePastentries = (id: string) => {
     const res = pastentries.filter((state) => state !== id);
     setPastentries(res);
-    console.log(res);
   };
 
   const selectAll = () => {
+    setCheck(true)
     const selected = data.map((item) => item.id);
     setPastentries(selected);
   };
@@ -70,7 +70,7 @@ const PastEntries = () => {
       //   },
       //   body: JSON.stringify(pastData),
       // });
-      const {data} = await axios.post(`${base_url}order/delete/all`, pastData, config ? config : {})
+      const { data } = await axios.post(`${base_url}order/delete/all`, pastData, config ? config : {})
 
       if (data.success) setToggle(false);
       setChecked(false);
@@ -112,16 +112,25 @@ const PastEntries = () => {
                 {pastentries.length}
               </Text>
             </View>
-            <TouchableOpacity
-              onPress={selectAll}
-              activeOpacity={0.8}
+            <View
               style={tw`flex-row items-center`}
             >
-              <Ionicons name={"checkbox"} size={24} color="white" />
+              {cheked ? 
+              <TouchableOpacity onPress={() => {
+                setPastentries([])
+                setCheck(false)
+              }}>
+                <Ionicons name={"checkbox"} size={24} color="white" />
+              </TouchableOpacity>
+               :
+               <TouchableOpacity onPress={selectAll}>
+                <View style={tw`w-5 h-5 rounded border border-gray-500`}></View>
+              </TouchableOpacity>
+              }
               <Text style={tw`text-white ml-2 text-base font-medium`}>
                 выделить все
               </Text>
-            </TouchableOpacity>
+            </View>
           </View>
           <MaterialIcons
             onPress={() => pastentries.length !== 0 && setToggle(!toggle)}
@@ -138,74 +147,74 @@ const PastEntries = () => {
         />
       )}
       {loading && <ActivityIndicator size="large" color={"#888"} />}
-    <ScrollView showsVerticalScrollIndicator={false}>
-      {data &&
+      <ScrollView contentContainerStyle={tw`mt-5`} showsVerticalScrollIndicator={false}>
+        {data &&
           data.map((item: any) => (
-              <Pressable
-                  onPress={() => {
-                    !isChecked && navigation.navigate("(detail)/censeled-session"),
-                        setProduct(item);
-                  }}
-                  key={item.id}
-                  style={[tw`bg-gray-700 p-4 mb-4 flex-row items-start`, { backgroundColor: "#B9B9C9", borderRadius: 20 }]}
-              >
-                {isChecked && (
-                    <View>
-                      {pastentries.length > 0 && pastentries.includes(item.id) ? (
-                          <Pressable
-                              onPress={() => deletePastentries(item.id)}
-                              key={`checked-${item.id}`}
-                              style={[
-                                tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                                { backgroundColor: "#9C0A35" },
-                              ]}
-                          >
-                            <Ionicons
-                                name="checkmark"
-                                size={18}
-                                color="white"
-                                style={tw`font-bold`}
-                            />
-                          </Pressable>
-                      ) : (
-                          <Pressable
-                              onPress={() => setPastentries([...pastentries, item.id])}
-                              key={`unchecked-${item.id}`}
-                              style={[
-                                tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                                {
-                                  backgroundColor: "#B9B9C9",
-                                  borderWidth: 2,
-                                  borderColor: "gray",
-                                },
-                              ]}
-                          ></Pressable>
-                      )}
-                    </View>
-                )}
-                <Image
-                    source={item.attachmentId ? {
-                      uri: getFile + item.attachmentId,
-                    } : require("../../../../../assets/avatar.png")}
-                    style={tw`w-12 h-12 rounded-full mr-4`}
-                />
-                <View style={tw`flex-1`}>
-                  <Text style={tw` font-bold`}>{item.fullName}</Text>
-                  <Text style={tw`text-gray-700`}>{item.phone}</Text>
-                  <View style={[tw`flex-row`, { gap: 5 }]}>
-                    {item.serviceName.trim().split(", ").map((service: string, index: number) => (
-                        <View key={index} style={[tw`mb-2 p-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>
-                          <Text style={{ fontSize: 12 }}>{service}</Text>
-                        </View>
-                    ))}
-                  </View>
-                  <Text style={[tw`text-lg font-bold mt-2`, { color: '#9C0A35' }]}>
-                    {item.servicePrice} сум
-                  </Text>
+            <Pressable
+              onPress={() => {
+                !isChecked && navigation.navigate("(detail)/censeled-session"),
+                  setProduct(item);
+              }}
+              key={item.id}
+              style={[tw`bg-gray-700 p-4 mb-4 flex-row items-start`, { backgroundColor: "#B9B9C9", borderRadius: 20 }]}
+            >
+              {isChecked && (
+                <View>
+                  {pastentries.length > 0 && pastentries.includes(item.id) ? (
+                    <Pressable
+                      onPress={() => deletePastentries(item.id)}
+                      key={`checked-${item.id}`}
+                      style={[
+                        tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                        { backgroundColor: "#9C0A35" },
+                      ]}
+                    >
+                      <Ionicons
+                        name="checkmark"
+                        size={18}
+                        color="white"
+                        style={tw`font-bold`}
+                      />
+                    </Pressable>
+                  ) : (
+                    <Pressable
+                      onPress={() => setPastentries([...pastentries, item.id])}
+                      key={`unchecked-${item.id}`}
+                      style={[
+                        tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                        {
+                          backgroundColor: "#B9B9C9",
+                          borderWidth: 2,
+                          borderColor: "gray",
+                        },
+                      ]}
+                    ></Pressable>
+                  )}
                 </View>
-              </Pressable>
+              )}
+              <Image
+                source={item.attachmentId ? {
+                  uri: getFile + item.attachmentId,
+                } : require("../../../../../assets/avatar.png")}
+                style={tw`w-12 h-12 rounded-full mr-4`}
+              />
+              <View style={tw`flex-1`}>
+                <Text style={tw` font-bold`}>{item.fullName}</Text>
+                <Text style={tw`text-gray-700 mt-1`}>{item.phone}</Text>
+                <View style={[tw`flex-row mt-1`, { gap: 5 }]}>
+                  {item.serviceName.trim().split(", ").map((service: string, index: number) => (
+                    <View key={index} style={[tw`mb-2 p-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>
+                      <Text style={{ fontSize: 12 }}>{service}</Text>
+                    </View>
+                  ))}
+                </View>
+                <Text style={[tw`text-lg font-bold`, { color: '#9C0A35' }]}>
+                  {item.servicePrice} сум
+                </Text>
+              </View>
+            </Pressable>
           ))}
-    </ScrollView>
+      </ScrollView>
 
       <CenteredModal
         isModal={toggle}
