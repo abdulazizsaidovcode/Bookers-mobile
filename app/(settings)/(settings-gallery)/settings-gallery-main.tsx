@@ -179,7 +179,7 @@ const SettingsGalleryMain = () => {
                         :
                         <Buttons onPress={() => {
                             putNumbers(5, () => getNumbers(setNumber));
-                            navigation.navigate("(welcome)/Welcome");
+                            navigation.goBack();
                         }} title='На главную' />}
             </View>
         </SafeAreaView>

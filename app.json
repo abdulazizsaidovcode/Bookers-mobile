@@ -5,7 +5,7 @@
     "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/splash.png",
-    "scheme": "bookersapp",
+    "scheme": "bookers",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/loading.png",
@@ -57,11 +57,8 @@
       [
         "expo-notifications",
         {
-          "icon": "./local/assets/image/splash.png",
-          "color": "#ffffff",
-          "sounds": [
-            "./local/assets/notification-sound.wav"
-          ]
+          "icon": "./assets/images/splash.png",
+          "color": "#ffffff"
         }
       ]
     ],
@@ -70,7 +67,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "80edbc94-d84f-40f4-9324-591da17cd124",
+        "projectId": "85ba3c2f-e95e-4a2e-b070-3e9bceff2ca4",
         "apiBaseUrl": "https://app.bookers.one/"
       }
     }

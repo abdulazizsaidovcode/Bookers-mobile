@@ -13,7 +13,7 @@ import {
 import axios from "axios";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
+import {View, Text, Image, TouchableOpacity, Pressable, ActivityIndicator, ScrollView} from "react-native";
 import tw from "tailwind-react-native-classnames";
 
 const PastEntries = () => {
@@ -22,8 +22,11 @@ const PastEntries = () => {
   const [toggle, setToggle] = useState(false);
   const { setProduct } = History();
   const navigation = useNavigation<any>();
+  const [loading, setLoading] = useState(false)
+
 
   const getsessionDetails = async () => {
+    setLoading(true)
     try {
       const config = await getConfig();
       const response = await axios.get(
@@ -35,6 +38,8 @@ const PastEntries = () => {
       console.log(responseData);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -57,17 +62,19 @@ const PastEntries = () => {
 
     try {
       const config = await getConfig();
-      const response = await fetch(`${base_url}order/all`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: config ? config.headers.Authorization : "",
-        },
-        body: JSON.stringify(pastData),
-      });
-      const responseData = await response.json();
-      if (responseData.success) setToggle(false);
+      // const response = await fetch(`${base_url}order/delete/all`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: config ? config.headers.Authorization : {},
+      //   },
+      //   body: JSON.stringify(pastData),
+      // });
+      const {data} = await axios.post(`${base_url}order/delete/all`, pastData, config ? config : {})
+
+      if (data.success) setToggle(false);
       setChecked(false);
+      getsessionDetails();
     } catch (error) {
       console.error("Error deleting past entries:", error);
     }
@@ -130,73 +137,76 @@ const PastEntries = () => {
           toggleModal={() => setChecked(!isChecked)}
         />
       )}
-
+      {loading && <ActivityIndicator size="large" color={"#888"} />}
+    <ScrollView showsVerticalScrollIndicator={false}>
       {data &&
-        data.map((item: any) => (
-          <Pressable
-            onPress={() => {
-              !isChecked && navigation.navigate("(detail)/censeled-session"),
-                setProduct(item);
-            }}
-            key={item.id}
-            style={[tw`bg-gray-700 p-4 mb-4 flex-row items-start`, { backgroundColor: "#B9B9C9", borderRadius: 20 }]}
-          >
-            {isChecked && (
-              <View>
-                {pastentries.length > 0 && pastentries.includes(item.id) ? (
-                  <Pressable
-                    onPress={() => deletePastentries(item.id)}
-                    key={`checked-${item.id}`}
-                    style={[
-                      tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                      { backgroundColor: "#9C0A35" },
-                    ]}
-                  >
-                    <Ionicons
-                      name="checkmark"
-                      size={18}
-                      color="white"
-                      style={tw`font-bold`}
-                    />
-                  </Pressable>
-                ) : (
-                  <Pressable
-                    onPress={() => setPastentries([...pastentries, item.id])}
-                    key={`unchecked-${item.id}`}
-                    style={[
-                      tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                      {
-                        backgroundColor: "#B9B9C9",
-                        borderWidth: 2,
-                        borderColor: "gray",
-                      },
-                    ]}
-                  ></Pressable>
+          data.map((item: any) => (
+              <Pressable
+                  onPress={() => {
+                    !isChecked && navigation.navigate("(detail)/censeled-session"),
+                        setProduct(item);
+                  }}
+                  key={item.id}
+                  style={[tw`bg-gray-700 p-4 mb-4 flex-row items-start`, { backgroundColor: "#B9B9C9", borderRadius: 20 }]}
+              >
+                {isChecked && (
+                    <View>
+                      {pastentries.length > 0 && pastentries.includes(item.id) ? (
+                          <Pressable
+                              onPress={() => deletePastentries(item.id)}
+                              key={`checked-${item.id}`}
+                              style={[
+                                tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                                { backgroundColor: "#9C0A35" },
+                              ]}
+                          >
+                            <Ionicons
+                                name="checkmark"
+                                size={18}
+                                color="white"
+                                style={tw`font-bold`}
+                            />
+                          </Pressable>
+                      ) : (
+                          <Pressable
+                              onPress={() => setPastentries([...pastentries, item.id])}
+                              key={`unchecked-${item.id}`}
+                              style={[
+                                tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                                {
+                                  backgroundColor: "#B9B9C9",
+                                  borderWidth: 2,
+                                  borderColor: "gray",
+                                },
+                              ]}
+                          ></Pressable>
+                      )}
+                    </View>
                 )}
-              </View>
-            )}
-            <Image
-              source={item.attachmentId ? {
-                uri: getFile + item.attachmentId,
-              } : require("../../../../../assets/avatar.png")}
-              style={tw`w-12 h-12 rounded-full mr-4`}
-            />
-            <View style={tw`flex-1`}>
-              <Text style={tw` font-bold`}>{item.fullName}</Text>
-              <Text style={tw`text-gray-700`}>{item.phone}</Text>
-              <View style={[tw`flex-row`, { gap: 5 }]}>
-                {item.serviceName.trim().split(", ").map((service: string, index: number) => (
-                  <View key={index} style={[tw`mb-2 p-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>
-                    <Text style={{ fontSize: 12 }}>{service}</Text>
+                <Image
+                    source={item.attachmentId ? {
+                      uri: getFile + item.attachmentId,
+                    } : require("../../../../../assets/avatar.png")}
+                    style={tw`w-12 h-12 rounded-full mr-4`}
+                />
+                <View style={tw`flex-1`}>
+                  <Text style={tw` font-bold`}>{item.fullName}</Text>
+                  <Text style={tw`text-gray-700`}>{item.phone}</Text>
+                  <View style={[tw`flex-row`, { gap: 5 }]}>
+                    {item.serviceName.trim().split(", ").map((service: string, index: number) => (
+                        <View key={index} style={[tw`mb-2 p-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>
+                          <Text style={{ fontSize: 12 }}>{service}</Text>
+                        </View>
+                    ))}
                   </View>
-                ))}
-              </View>             
-               <Text style={[tw`text-lg font-bold mt-2`, { color: '#9C0A35' }]}>
-                {item.servicePrice} сум
-              </Text>
-            </View>
-          </Pressable>
-        ))}
+                  <Text style={[tw`text-lg font-bold mt-2`, { color: '#9C0A35' }]}>
+                    {item.servicePrice} сум
+                  </Text>
+                </View>
+              </Pressable>
+          ))}
+    </ScrollView>
+
       <CenteredModal
         isModal={toggle}
         onConfirm={deletePast}

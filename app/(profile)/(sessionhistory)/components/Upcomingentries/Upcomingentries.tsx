@@ -24,6 +24,7 @@ import { ProductType } from "@/type/history";
 import Buttons from "@/components/(buttons)/button";
 import { editOrderStatus } from "@/helpers/api-function/dashboard/dashboard";
 import { updateOrderStatus } from "@/helpers/api-function/client/client";
+import {Loading} from "@/components/loading/loading";
 
 const Upcomingentries = () => {
   const navigation = useNavigation<any>();
@@ -58,16 +59,17 @@ const Upcomingentries = () => {
         `${base_url}order/upcoming-sessions?status=UPCOMING_SESSIONS`,
         config ? config : {}
       );
-      if (data.success) setData(data.body);
+      if (data.success) {
+        setData(data.body);
+        setLoading(false);
+      }
     } catch (error) {
       console.log(error);
+      setLoading(false)
     } finally {
       setLoading(false);
     }
   };
-
-  console.log(loading);
-  
 
   const handleEditOrderStatus = (orderId: string, status: string) => {
     updateOrderStatus(orderId, status, setOrderStatusLoading, setSuccessStatus);
@@ -206,7 +208,7 @@ const Upcomingentries = () => {
       style={[tw`flex-1 bg-gray-900 p-4 mt-5`, { backgroundColor: "#21212E" }]}
     >
       <NavigationMenu name="Предстоящие записи" />
-      {loading || orderStatusLoading && <ActivityIndicator size="large" color={"#888"} />}
+      {(loading || orderStatusLoading) && <ActivityIndicator size="large" color={"#888"} />}
       <FlatList
         data={data}
         renderItem={renderItem}

@@ -28,6 +28,7 @@ const GalleryDetails: React.FC = () => {
     const [images, setImages] = useState<string[]>([]);
     const [text, setText] = useState<string | null>(null)
     const [selectedMainImages, setSelectedMainImages] = useState<EditMainPhoto[]>([]);
+    const { setIsLoading } = useGalleryStore()
 
     useEffect(() => {
         fetchFullData(id, setFullData);
@@ -78,12 +79,12 @@ const GalleryDetails: React.FC = () => {
         if (selectedImages.length === 0) {
             Toast.show('Сначала, выберите фотографии', Toast.LONG);
         } else {
-            setBooleanState({ ...booleanState, isOpen: !booleanState.isAllOpen });
+            setBooleanState({ ...booleanState, isAllOpen: !booleanState.isAllOpen });
         }
     };
 
     const handleConfirm = () => {
-        editName(id, setFullData, name, toggleModal, setData, setBooleanState, booleanState);
+        editName(id, setFullData, name, toggleModal, setData, setBooleanState, booleanState, setIsLoading);
     };
 
     const handleDeleteMode = () => {
@@ -110,7 +111,7 @@ const GalleryDetails: React.FC = () => {
 
     const handleDelete = () => {
         setBooleanState({ ...booleanState, isDeleteMode: false, selectAll: false });
-        delPhoto(id, selectedImages, setFullData, setData, toggleAllModal);
+        delPhoto(id, selectedImages, setFullData, setData, toggleAllModal, setIsLoading);
         setSelectedImages([]);
     };
 
@@ -164,12 +165,10 @@ const GalleryDetails: React.FC = () => {
             });
             addPhoto(id, formData, setFullData, setImages, setBooleanState, booleanState);
         } else {
-            editMainPhoto(setFullData, setData, id, selectedMainImages, toggleShowMain, setBooleanState, booleanState)
+            editMainPhoto(setFullData, setData, id, selectedMainImages, toggleShowMain, setBooleanState, booleanState, setIsLoading)
         }
     };
-    console.log(booleanState.isDeleteMode);
-    console.log(selectedMainImages);
-
+    console.log(booleanState.selectAll);
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -282,11 +281,14 @@ const GalleryDetails: React.FC = () => {
                     isFullBtn={true}
                     onConfirm={handleDelete}
                 >
-                    <Text style={styles.modalContentText}>
-                        {selectedImages.length === fullData.resGalleryAttachments.length
-                            ? 'Вы уверены, что хотите удалить все фото альбома?'
-                            : 'Вы уверены, что хотите удалить фото?'}
-                    </Text>
+                    <View style={{ marginBottom: 10, justifyContent: 'center', alignItems: 'center' }}>
+                        <MaterialIcons name="delete" size={100} color="#9C0A35" />
+                        <Text style={styles.modalContentText}>
+                            {selectedImages.length === fullData.resGalleryAttachments.length
+                                ? 'Вы уверены, что хотите удалить все фото альбома?'
+                                : 'Вы уверены, что хотите удалить фото?'}
+                        </Text>
+                    </View>
                 </CenteredModal>
                 <BottomModal isBottomModal={booleanState.isBottomModalOpen} toggleBottomModal={toggleBottomModal}>
                     <View style={styles.bottomModalContent}>
