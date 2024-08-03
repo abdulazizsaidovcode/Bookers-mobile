@@ -4,7 +4,7 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
-  ScrollView,
+  ScrollView, ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { base_url, getFile } from "@/helpers/api";
@@ -30,8 +30,10 @@ const Canceledentries = () => {
   const [toggle, setToggle] = useState(false);
   const navigation = useNavigation<any>();
   const { setProduct } = History();
+  const [loading, setLoading] = useState(false)
 
   const getSessionDetails = async () => {
+    setLoading(true)
     try {
       const config = await getConfig();
       const response = await axios.get(
@@ -42,6 +44,8 @@ const Canceledentries = () => {
       if (responseData.success) setData(responseData.body);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -143,8 +147,8 @@ const Canceledentries = () => {
           toggleModal={() => setChecked(!isChecked)}
         />
       )}
-
-      <ScrollView>
+      {loading && <ActivityIndicator size="large" color={"#888"} />}
+      <ScrollView showsVerticalScrollIndicator={false}>
         {data &&
           data.map((item) => (
             <Pressable

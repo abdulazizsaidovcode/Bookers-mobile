@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView } from 'react-native';
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import React, {useCallback, useState} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView} from 'react-native';
+import {FontAwesome, MaterialIcons} from '@expo/vector-icons';
+import {useNavigation} from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import tw from 'tailwind-react-native-classnames';
 import axios from 'axios';
-import { base_url } from '@/helpers/api';
-import { getConfig } from '@/app/(tabs)/(master)/main';
-
+import {base_url} from '@/helpers/api';
+import {getConfig} from '@/app/(tabs)/(master)/main';
+import {useFocusEffect} from "expo-router";
 
 
 const SessionHistory: React.FC = () => {
@@ -15,32 +15,50 @@ const SessionHistory: React.FC = () => {
     const [data, setData] = useState<any>([])
 
     const sessionData = [
-        { id: '1', title: 'Предстоящие записи', icon: 'calendar', count: data.upcomingSessions, screen: '(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries' },
-        { id: '2', title: 'Прошедшие записи', icon: 'history', count: data.pastSessions, screen: '(profile)/(sessionhistory)/components/Pastentries/Pastentries' },
-        { id: '3', title: 'Отменённые записи', icon: 'times-circle', count: data.cancelledSessions, screen: '(profile)/(sessionhistory)/components/Canceledentries/Canceledentries' },
+        {
+            id: '1',
+            title: 'Предстоящие записи',
+            icon: 'calendar',
+            count: data.upcomingSessions ? data.upcomingSessions : 0,
+            screen: '(profile)/(sessionhistory)/components/Upcomingentries/Upcomingentries'
+        },
+        {
+            id: '2',
+            title: 'Прошедшие записи',
+            icon: 'history',
+            count: data.pastSessions ? data.pastSessions : 0,
+            screen: '(profile)/(sessionhistory)/components/Pastentries/Pastentries'
+        },
+        {
+            id: '3',
+            title: 'Отменённые записи',
+            icon: 'times-circle',
+            count: data.cancelledSessions ? data.cancelledSessions : 0,
+            screen: '(profile)/(sessionhistory)/components/Canceledentries/Canceledentries'
+        },
     ];
 
     const getSessionsHistory = async () => {
         try {
             const config = await getConfig()
-            const { data } = await axios.get(`${base_url}order/session-history`, config ? config : {});
+            const {data} = await axios.get(`${base_url}order/session-history`, config ? config : {});
             setData(data.body)
         } catch (error) {
             console.log(error);
         }
     }
 
-    useEffect(() => {
-        getSessionsHistory()
-    }, [])
+    useFocusEffect(useCallback(() => {
+        getSessionsHistory();
+    }, []));
 
-    const renderItem = ({ item }: any) => (
+    const renderItem = ({item}: any) => (
         <TouchableOpacity
             style={styles.itemContainer}
             onPress={() => navigation.navigate(item.screen)}
         >
             <View style={styles.itemContent}>
-                <FontAwesome name={item.icon} size={24} color="#9c0935" style={styles.itemIcon} />
+                <FontAwesome name={item.icon} size={24} color="#9c0935" style={styles.itemIcon}/>
                 <Text style={styles.itemText}>{item.title}</Text>
             </View>
             <View style={styles.itemContent}>
@@ -48,7 +66,7 @@ const SessionHistory: React.FC = () => {
                     <Text style={tw`text-white`}>{item.count}</Text>
 
                 </View>
-                <MaterialIcons name="navigate-next" size={36} color='gray' />
+                <MaterialIcons name="navigate-next" size={36} color='gray'/>
             </View>
         </TouchableOpacity>
     );
@@ -56,7 +74,7 @@ const SessionHistory: React.FC = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={tw`mt-8`}>
-                <NavigationMenu name='История сеансов' />
+                <NavigationMenu name='История сеансов'/>
             </View>
             <View style={styles.padding}>
                 <FlatList
