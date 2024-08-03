@@ -1,5 +1,5 @@
 // Master TabLayout.tsx
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import {
     Ionicons,
@@ -13,14 +13,14 @@ import Finance from "./finance";
 import ProfileScreen from "./profile";
 import ScheduleScreen from "./schedule";
 import {TabBarIcon} from "@/components/navigation/TabBarIcon";
-import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import {StyleSheet, View} from "react-native";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
+import {useFocusEffect} from "expo-router";
+import {getMasterTariff} from "@/constants/storage";
 
 const Tab = createBottomTabNavigator();
 
 function MasterTabLayout() {
-    const {getme} = graficWorkStore();
     const [tariff, setTariff] = useState(null);
     const {number} = numberSettingStore();
     const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
@@ -30,8 +30,13 @@ function MasterTabLayout() {
             const res = removeDuplicatesAndSort(number)
             const result = containsAllNumbers(res)
             setHasAllNumbers(result)
+            getMasterTariff(setTariff)
         }
     }, [number]);
+
+    useFocusEffect(useCallback(() => {
+        getMasterTariff(setTariff)
+    }, []))
 
     const removeDuplicatesAndSort = (array: number[]): number[] => {
         const seen = new Map<number, boolean>();
@@ -52,12 +57,6 @@ function MasterTabLayout() {
         const requiredNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
         return requiredNumbers.every(num => array.includes(num));
     };
-
-    useEffect(() => {
-        if (getme) {
-            setTariff(getme.tariff);
-        }
-    }, [getme]);
 
     return (
         <>
@@ -119,7 +118,7 @@ function MasterTabLayout() {
                         ),
                     }}
                 />
-                {tariff === "standard" && (
+                {tariff === "STANDARD" && (
                     <Tab.Screen
                         name="finance"
                         component={Finance}
