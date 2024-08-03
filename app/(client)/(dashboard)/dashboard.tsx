@@ -382,7 +382,7 @@ const Dashboard: React.FC = () => {
                     <View style={tw`mb-3`}>
                       <ClientCard
                         key={idx} // Har bir element uchun noyob kalit kerak
-                        name={master.firstName}
+                        name={master.fullName}
                         salon={master.salonName}
                         imageUrl={master.attachmentId}
                         masterType={master.gender}
@@ -393,6 +393,7 @@ const Dashboard: React.FC = () => {
                         clients={master.clientCount}
                         onPress={() => {
                           setClientData(master)
+                          setSelectedClient(master)
                           navigation.navigate('(client)/(uslugi)/(masterInformation)/masterInformation')
                         }}
                         locationIcon={
