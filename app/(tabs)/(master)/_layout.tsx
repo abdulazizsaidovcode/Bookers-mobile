@@ -78,8 +78,6 @@ function MasterTabLayout() {
                             iconName = focused ? "home" : "home";
                         } else if (route.name === "Schedule") {
                             iconName = focused ? "calendar" : "calendar";
-                        } else if (route.name === "(location)/Location") {
-                            iconName = focused ? "map" : "map";
                         } else if (route.name === "finance") {
                             iconName = focused ? "finance" : "finance";
                         } else if (route.name === "chat") {
