@@ -57,17 +57,19 @@ const PastEntries = () => {
 
     try {
       const config = await getConfig();
-      const response = await fetch(`${base_url}order/all`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: config ? config.headers.Authorization : "",
-        },
-        body: JSON.stringify(pastData),
-      });
-      const responseData = await response.json();
-      if (responseData.success) setToggle(false);
+      // const response = await fetch(`${base_url}order/delete/all`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: config ? config.headers.Authorization : {},
+      //   },
+      //   body: JSON.stringify(pastData),
+      // });
+      const {data} = await axios.post(`${base_url}order/delete/all`, pastData, config ? config : {})
+
+      if (data.success) setToggle(false);
       setChecked(false);
+      getsessionDetails();
     } catch (error) {
       console.error("Error deleting past entries:", error);
     }

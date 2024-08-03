@@ -5,7 +5,7 @@
     "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/splash.png",
-    "scheme": "bookersapp",
+    "scheme": "bookers",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/loading.png",
@@ -30,9 +30,7 @@
       },
       "permissions": [
         "android.permission.RECORD_AUDIO",
-        "android.permission.SCHEDULE_EXACT_ALARM",
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
+        "android.permission.SCHEDULE_EXACT_ALARM"
       ],
       "package": "com.alisher09.bookersapp",
       "config": {
@@ -59,11 +57,8 @@
       [
         "expo-notifications",
         {
-          "icon": "./local/assets/image/splash.png",
-          "color": "#ffffff",
-          "sounds": [
-            "./local/assets/notification-sound.wav"
-          ]
+          "icon": "./assets/images/splash.png",
+          "color": "#ffffff"
         }
       ]
     ],
@@ -72,7 +67,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "bfefa8fb-c1c7-4cab-82b5-18d825b36582",
+        "projectId": "85ba3c2f-e95e-4a2e-b070-3e9bceff2ca4",
         "apiBaseUrl": "https://app.bookers.one/"
       }
     }

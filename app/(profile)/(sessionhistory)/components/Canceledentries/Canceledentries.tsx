@@ -64,19 +64,22 @@ const Canceledentries = () => {
 
     try {
       const config = await getConfig();
-      const response = await fetch(`${base_url}order/all`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: config ? config.headers.Authorization : "",
-        },
-        body: JSON.stringify(pastData),
-      });
-      const responseData = await response.json();
-      if (responseData.success) {
+      // const response = await fetch(`${base_url}order/delete/all`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: config ? config.headers.Authorization : {},
+      //   },
+      //   body: JSON.stringify(pastData),
+      // });
+      const {data} = await axios.post(`${base_url}order/delete/all`, pastData, config ? config : {})
+      console.log(data)
+
+      if (data.success) {
         setToggle(false);
         setChecked(false);
         setPastEntries([]);
+        getSessionDetails();
       }
     } catch (error) {
       console.error("Error deleting past entries:", error);
@@ -98,7 +101,7 @@ const Canceledentries = () => {
             { paddingHorizontal: 16 },
           ]}
         >
-          <View style={tw`flex-row items-center justify-center`}>
+          <View style={tw`flex-row items-center mb-5 justify-center`}>
             <View style={tw`flex-row items-center justify-center`}>
               <AntDesign
                 onPress={() => {
