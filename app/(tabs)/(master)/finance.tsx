@@ -13,6 +13,7 @@ import financeStore from '@/helpers/state_managment/finance/financeStore'
 import FinanceRevenuesMonth from "@/components/(cards)/finance-revenues-month";
 import {handleRefresh} from "@/constants/refresh";
 import clientStore from "@/helpers/state_managment/client/clientStore";
+import {Loading} from "@/components/loading/loading";
 
 const Finance = () => {
     const {
@@ -25,12 +26,12 @@ const Finance = () => {
         endDate,
         setMonthData
     } = financeStore()
-    const {refreshing, setRefreshing} = clientStore()
+    const {refreshing, setRefreshing, isLoading, setIsLoading} = clientStore()
     const [isFilters, setIsFilters] = useState('day')
     const [monthShowHide, setMonthShowHide] = useState<boolean>(false)
 
     useEffect(() => {
-        getTopClients(setTopClients)
+        getTopClients(setTopClients, setIsLoading)
         getFinanceDay(setDayData, date)
     }, [])
 
@@ -112,12 +113,18 @@ const Finance = () => {
 
             {/* clients cards */}
             {isFilters === 'top_clients' && (
-                <View style={{gap: 18}}>
-                    <FlatList
-                        data={topClients}
-                        renderItem={({item}) => <ClientCard items={item}/>}
-                    />
-                </View>
+                isLoading ? <Loading/> : (
+                    <View style={{gap: 18}}>
+                        {!topClients ? <View style={{height: 500, justifyContent: 'center', alignItems: 'center'}}>
+                            <Text style={tw`text-xl font-bold text-white text-center`}>Top client not found</Text>
+                        </View> : (
+                            <FlatList
+                                data={topClients}
+                                renderItem={({item}) => <ClientCard items={item}/>}
+                            />
+                        )}
+                    </View>
+                )
             )}
         </ScrollView>
     )
