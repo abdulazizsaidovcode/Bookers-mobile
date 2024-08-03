@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#21212e",
     },
     pressable: {
-        width: screenWidht / 2.18,
+        width: screenWidht / 2.2,
         padding: 8,
     },
     button: {
