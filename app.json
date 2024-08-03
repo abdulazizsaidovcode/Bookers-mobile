@@ -1,12 +1,23 @@
 {
   "expo": {
     "name": "Bookers",
-    "slug": "project",
-    "version": "1.0.1",
+    "slug": "bookers",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/splash.png",
     "scheme": "bookersapp",
     "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/loading.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff",
+      "tabletImage": "./assets/images/loading.png",
+      "tabletBackgroundColor": "#ffffff",
+      "imageResizeMode": "native",
+      "loadingIndicator": "default",
+      "loadingIndicatorColor": "#0000ff",
+      "hideStatusBar": true
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.alisher09.bookersapp"
@@ -54,7 +65,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "2845a562-824b-43cf-8353-815ce3b52fee",
+        "projectId": "80edbc94-d84f-40f4-9324-591da17cd124",
         "apiBaseUrl": "https://app.bookers.one/"
       }
     }
