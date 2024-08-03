@@ -230,7 +230,7 @@ const SettingsGallery: React.FC = () => {
           <Buttons
             title={`Сохранить`}
             onPress={saveAlbum}
-            isDisebled={!(images.length === 0 || !albumName || mainPhotos.length === 0)}
+            isDisebled={!(images.length === 0 || !albumName)}
           />
         </View>
       </ScrollView>
