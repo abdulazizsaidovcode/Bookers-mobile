@@ -81,7 +81,7 @@ const Upcomingentries = () => {
   const renderItem = ({ item }: any) => (
     <>
       {item.orderStatus == "WAIT" ?
-        <View style={[tw`p-4 rounded-lg mb-4`, { backgroundColor: "#B9B9C9" }]}>
+        <View style={[tw`p-4 mb-4`, { backgroundColor: "#B9B9C9", borderRadius: 20 }]}>
           <View style={tw`flex-row items-start mb-4`}>
             <Image
               source={item.attachmentId ? {
@@ -134,7 +134,7 @@ const Upcomingentries = () => {
           </View>
         </View> :
         // 2
-        <View style={[tw`p-4 rounded-lg mb-4`, { backgroundColor: "#B9B9C9" }]}>
+        <View style={[tw`p-4 mb-4`, { backgroundColor: "#B9B9C9", borderRadius: 20 }]}>
           <View style={tw`flex-row items-start mb-4`}>
             <Image
               source={item.attachmentId ? {
@@ -149,7 +149,7 @@ const Upcomingentries = () => {
               </View>
 
               <View style={[tw`flex-row`, { gap: 5 }]}>
-                {item.serviceName.split(",").map((service: string, index: number) => (
+                {item.serviceName.trim().split(", ").map((service: string, index: number) => (
                   <View key={index} style={[tw`mb-2 p-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>
                     <Text style={{ fontSize: 12 }}>{service}</Text>
                   </View>
