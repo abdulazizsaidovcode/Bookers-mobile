@@ -360,7 +360,7 @@ const Masters = () => {
               <AccardionSlider title="Рядом со мной" />
               <AccardionSliderTwo title="Рейтинг" />
               <View style={tw`mt-7`}>
-                <Buttons onPress={handleClick} title="Сохранять" />
+                <Buttons isDisebled={!!pastEntries.length} onPress={handleClick} title="Сохранять" />
               </View>
               </ScrollView>
             </View>
