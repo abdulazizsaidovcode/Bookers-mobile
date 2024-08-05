@@ -1,4 +1,4 @@
-import { MapStoreTypes, MasterLocation } from "@/type/map/map";
+import { MapStoreTypes, MasterLocation, TopMastersAdressType } from "@/type/map/map";
 import { create } from "zustand";
 import { ClientOrderHistory } from "../dashboardClient/dashboardClient";
 
@@ -51,4 +51,6 @@ export const useMapStore = create<MapStoreTypes>((set) => ({
         set((state) => ({
             categoryId: typeof id === "function" ? id(state.categoryId) : id,
         })),
+    masterData: [],
+    setMasterData: (data: TopMastersAdressType[]) => set({ masterData: data }),
 }));

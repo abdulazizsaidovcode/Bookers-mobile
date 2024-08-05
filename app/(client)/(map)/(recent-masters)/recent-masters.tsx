@@ -7,15 +7,14 @@ import useGetMeeStore from '@/helpers/state_managment/getMee';
 import { useFocusEffect } from 'expo-router';
 import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
 import Slider from '@react-native-community/slider';
-import { mapCustomStyle } from '@/type/map/map';
+import { mapCustomStyle, MasterLocation } from '@/type/map/map';
 import Buttons from '@/components/(buttons)/button';
 import { AntDesign, Feather } from '@expo/vector-icons';
-import { NavigationProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
-import { getTopMasters } from '@/helpers/api-function/masters';
-import useTopMastersStore, { Master } from '@/helpers/state_managment/masters';
 import { getFile } from '@/helpers/api';
-import { fetchMetroStations } from '@/helpers/api-function/map/map';
+import { fetchMasterLocation, fetchTopMastersAdress } from '@/helpers/api-function/map/map';
+import { useMapStore } from '@/helpers/state_managment/map/map';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)/(map)/(recent-masters)/recent-masters'>;
@@ -33,39 +32,48 @@ export const haversineDistance = (userLat: number, userLon: number, salonLat: nu
 
 
 const RecentMasters = () => {
-    
     const { userLocation, setUserLocation } = useGetMeeStore();
     const [value, setValue] = useState(5.1);
     const [circleValue, setCircleValue] = useState(0);
     const [showByDistance, setShowByDistance] = useState(false);
-    const [selectedMarker, setSelectedMarker] = useState<Master | null>(null);
-    const { masters } = useTopMastersStore();
-    const [metroStations, setMetroStations] = useState<any>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [masterId, setMasterId] = useState('')
+    const [selectedMarker, setSelectedMarker] = useState<MasterLocation | null>(null);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
+    const { masterData, setMasterData } = useMapStore()
 
     useFocusEffect(
         useCallback(() => {
             getUserLocation(setUserLocation);
-            getTopMasters(0, 100);
-            fetchMetroStations(userLocation.coords.latitude, userLocation.coords.longitude, setMetroStations);
+            fetchTopMastersAdress(setMasterData, setIsLoading)
             return () => { };
         }, [])
     );
 
-    const toggleShowByDistance = () => setShowByDistance(!showByDistance);
+    useFocusEffect(
+        useCallback(() => {
+            fetchMasterLocation(masterId, setSelectedMarker)
+            return () => { };
+        }, [masterId])
+    );
+
+    const toggleShowByDistance = () => {
+        setShowByDistance(!showByDistance);
+        selectedMarker && setSelectedMarker(null)
+    };
     const handleReset = () => {
         setValue(5.1)
         setCircleValue(5.1)
     };
-    const handleMarkerPress = (marker: Master) => {
-        setSelectedMarker(marker);
+    const handleMarkerPress = (masterId: string) => {
+        setMasterId(masterId);
     };
 
     const handleValueChange = (newValue: number) => {
         setValue(newValue);
     };
 
-    if (!userLocation.coords) {
+    if (isLoading && !userLocation.coords) {
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView>
@@ -125,16 +133,16 @@ const RecentMasters = () => {
                             longitudeDelta: 0.0421,
                         }}
                     >
-                        {masters.map((item, index) => (
+                        {masterData.map((item, index) => (
                             <Marker
                                 key={index}
                                 coordinate={{
                                     latitude: item.lat ? item.lat : 0,
                                     longitude: item.lng ? item.lng : 0,
                                 }}
-                                title={item.salonName ? item.salonName : ''}
-                                description={item.fullName ? item.fullName : ''}
-                                onPress={() => handleMarkerPress(item)}
+                                title={selectedMarker?.salonName}
+                                description={selectedMarker?.firstName}
+                                onPress={() => handleMarkerPress(item.masterId)}
                             />
                         ))}
                         {circleValue.toFixed(1).toString() !== '5.1' ? (
@@ -182,16 +190,16 @@ const RecentMasters = () => {
                     />
                 </View>
             )}
-            {selectedMarker && (
+            {!showByDistance && selectedMarker && (
                 <View style={{ padding: 10, position: 'absolute', bottom: 0, width: '100%' }}>
                     <View style={styles.detailView}>
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                             <View>
-                                <Image style={{ width: screenWidth / 6, height: screenHeight / 12.5, borderRadius: 50 }} source={selectedMarker.attachmentId === null ? require('../../../../assets/images/defaultImg.jpeg') : getFile + selectedMarker.attachmentId} />
+                                <Image style={{ width: screenWidth / 6, height: screenHeight / 12.5, borderRadius: 50 }} source={selectedMarker.attachmentId ? require('../../../../assets/images/defaultImg.jpeg') : getFile + selectedMarker.attachmentId} />
                             </View>
                             <View>
                                 <Text style={styles.detailTitle}>{selectedMarker.salonName}</Text>
-                                <Text style={styles.detailDescription}>{selectedMarker.fullName}</Text>
+                                <Text style={styles.detailDescription}>{selectedMarker.firstName}</Text>
                             </View>
                         </View>
                         <View style={{ marginTop: 10 }}>
@@ -282,7 +290,7 @@ const styles = StyleSheet.create({
     },
     map: {
         width: screenWidth,
-        height: screenHeight / 1.17,
+        height: screenHeight / 1.25,
     },
     loading: {
         flex: 1,
