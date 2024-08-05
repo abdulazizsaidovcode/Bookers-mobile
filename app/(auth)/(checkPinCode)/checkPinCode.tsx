@@ -78,7 +78,7 @@ const CheckPinOnCome: React.FC = () => {
         // await SecureStore.deleteItemAsync("password");
         // await AsyncStorage.removeItem("registerToken");
         console.log(code);
-        
+
 
         const enteredOtp = otp.join('');
         if (enteredOtp === code) {
@@ -108,7 +108,7 @@ const CheckPinOnCome: React.FC = () => {
                                     isCorrect === false && styles.inputError,
                                     isCorrect === true && styles.inputSuccess,
                                 ]}
-                                value={digit}
+                                value={digit ? "*" : ""}
                                 onChangeText={(text) => handleChangeText(text, index)}
                                 onKeyPress={(e) => handleKeyPress(e, index)}
                                 ref={(ref) => (inputs.current[index] = ref!)}

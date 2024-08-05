@@ -2,6 +2,7 @@
   "expo": {
     "name": "Bookers",
     "slug": "bookers",
+    "owner": "alisher2003",
     "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/splash.png",
@@ -67,7 +68,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "bfefa8fb-c1c7-4cab-82b5-18d825b36582",
+        "projectId": "f9cd101e-1afd-4691-8464-5f9adf9a2a56",
         "apiBaseUrl": "https://app.bookers.one/"
       }
     }

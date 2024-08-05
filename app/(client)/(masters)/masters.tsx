@@ -39,7 +39,7 @@ import { getConfig } from "@/app/(tabs)/(master)/main";
 const { height } = Dimensions.get('window');
 
 const Masters = () => {
-  const { masters, isLoading, category, setTopMasters, err } = useTopMastersStore();
+  const { masters, isLoading, category, mastersSearched, setSearchTopMasters, setTopMasters, err } = useTopMastersStore();
   const [bottomModal, setBottomModal] = useState(false);
   const [pastEntries, setPastEntries] = useState<string[]>([]);
   const { rating, value } = useCommunitySlider(); // value * 1000
@@ -48,8 +48,10 @@ const Masters = () => {
   const { setMapData } = useMapStore();
   const navigation = useNavigation<any>();
   const [page, setPage] = useState(1);
+  const [searchValue, setSearchValue] = useState('');
   const [loadingMore, setLoadingMore] = useState(false);
   const { selectedClient, setSelectedClient, clientData, setClientData } = ClientStory()
+  const [data, setData] = useState<any>([]);
 
   const toggleBottomModal = () => setBottomModal(!bottomModal);
 
@@ -59,10 +61,9 @@ const Masters = () => {
   };
 
   const mastersSearch = (e: any) => {
-    searchMasters(e)
-    if (!e.length) {
-      setPage(0)
-    }
+    setSearchValue(e)
+    setPage(0)
+    if (e) getTopMasters(1, 10, e)
   }
 
 
@@ -76,7 +77,7 @@ const Masters = () => {
   const loadMore = useCallback(
 
     debounce(() => {
-      if ((!loadingMore && !isLoading) && !err) {
+      if ((!loadingMore && !isLoading)) {
         setLoadingMore(true);
         setPage((prevPage) => prevPage + 1);
       }
@@ -239,7 +240,7 @@ const Masters = () => {
       const url = `${getClient_filter}?page=${page ? page : 0}&size=${10}${pastEntries ? `&nameOrPhone=""` : ""}`;
       const { data } = await axios.post(url, postData, config ? config : {});
       console.log(postData);
-      
+
       setTopMasters(data.body.object)
 
       setPastEntries([]);
@@ -248,6 +249,18 @@ const Masters = () => {
       console.log(error);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (searchValue) {
+        setData([...mastersSearched])
+      } else {
+        setData([...masters])
+      }
+    }, [masters, mastersSearched, searchValue])
+  )
+
+  console.log(data, '123');
 
   return (
     <View
@@ -290,17 +303,17 @@ const Masters = () => {
       </View>
       <View style={tw`flex-1`}>
         <Text style={tw`text-white text-lg font-medium mt-5`}>
-          Топ {masters.length} специалисты
+          Топ 100 специалисты {data.length}
         </Text>
 
 
         <FlatList
-          data={masters && masters} // Filter out undefined items
+          data={data && data} // Filter out undefined items
           keyExtractor={(item) => item.id}
           renderItem={TopMasterCard}
           ListFooterComponent={renderFooter}
           onEndReached={() => {
-            if (masters.length !== 100) {
+            if (masters.length !== 100 && !searchValue) {
               loadMore()
             }
           }}

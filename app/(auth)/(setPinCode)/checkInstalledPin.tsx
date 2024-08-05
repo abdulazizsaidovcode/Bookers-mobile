@@ -67,7 +67,7 @@ const CheckPin: React.FC = () => {
 
                     setNumbers(number)
                     setToken(token)
-                    
+
                     setStoredOtp(otp);
                 } catch (error) {
                     console.log('Failed to load OTP from storage', error);
@@ -215,7 +215,7 @@ const CheckPin: React.FC = () => {
                                     styles.input,
                                     isCorrect == true ? styles.inputSuccess : styles.inputError,
                                 ]}
-                                value={digit}
+                                value={digit ? "*" : ""}
                                 onChangeText={(text) => handleChangeText(text, index)}
                                 onKeyPress={(e) => handleKeyPress(e, index)}
                                 ref={(ref) => (inputs.current[index] = ref!)}

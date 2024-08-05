@@ -7,15 +7,18 @@ import ClientCard from '@/components/(cliendCard)/cliendCard';
 import { mapCustomStyle } from '@/type/map/map';
 import { useMapStore } from '@/helpers/state_managment/map/map';
 import moment from 'moment';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useFocusEffect } from 'expo-router';
 import { fetchMasterLocation } from '@/helpers/api-function/map/map';
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const MasterLocations = () => {
+    const navigation = useNavigation<any>()
     const { mapData, setMapData } = useMapStore();
     const route = useRoute();
+    const { setClientData } = ClientStory()
     const { id } = route.params as { id: string | number }
 
     useFocusEffect(
@@ -61,7 +64,7 @@ const MasterLocations = () => {
                                 longitude: mapData.lng ? mapData.lng : 0,
                             }}
                             title={mapData.salonName ? mapData.salonName : 'Не найдено'}
-                            description={categoryNames? categoryNames : 'Не найдено'}
+                            description={categoryNames ? categoryNames : 'Не найдено'}
                         />
                     </MapView>
                 </View>
@@ -77,6 +80,10 @@ const MasterLocations = () => {
                     clients={mapData.clientCount}
                     address={`${mapData.district}, ${mapData.street}`}
                     mapStyle={true}
+                    onPress={() => {
+                        setClientData(mapData)
+                        navigation.navigate('(client)/(uslugi)/(masterInformation)/masterInformation')
+                    }}
                 />
             </View>
         </SafeAreaView>

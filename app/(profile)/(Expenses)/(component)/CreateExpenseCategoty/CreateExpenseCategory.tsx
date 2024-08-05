@@ -36,7 +36,6 @@ const CreateExpenseCategory: React.FC = () => {
                 style={styles.input}
                 placeholder="Введите сумму"
                 placeholderTextColor="#aaa"
-                keyboardType="numeric"
                 value={amount}
                 onChangeText={setAmount}
             />
