@@ -252,9 +252,19 @@ const ClientOrderDetail = () => {
                             </Text>
                         </View>
                         <View style={styles.button}>
-                            <Text style={styles.text}>
-                                {orderOneData && orderOneData.serviceName}
-                            </Text>
+                            <ScrollView
+                                horizontal={true}
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={{ gap: 8 }}
+                            >
+                                {
+                                    orderOneData && orderOneData.serviceName.trim().split(', ').map((service) => (
+                                        <Text style={styles.text}>
+                                            {service}
+                                        </Text>
+                                    ))
+                                }
+                            </ScrollView>
                         </View>
                         <View style={tw`mt-3`}>
                             <HistoryCard
@@ -464,7 +474,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#B9B9C9',
         paddingVertical: 16,
         paddingHorizontal: 20,
-        borderRadius: 16
+        borderRadius: 16,
     },
     text: {
         color: '#696868',
@@ -474,7 +484,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         borderRadius: 8,
         paddingHorizontal: 16,
-        paddingVertical: 6
+        paddingTop: 6,
+        paddingBottom: 4
     },
     contactTitle: {
         color: '#FFF',

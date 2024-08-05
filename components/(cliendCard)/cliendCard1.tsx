@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { SimpleLineIcons } from '@expo/vector-icons';
 import tw from 'tailwind-react-native-classnames';
 import { getFile } from '@/helpers/api';
-
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
+import { useNavigation } from 'expo-router';
+import Buttons from '../(buttons)/button';
 
 type ClientCardProps = {
-  id:string | null;
-  masterId:string | null;
+  id: string | null;
+  masterId: string | null;
   salon: string;
   attachmentId: string;
   name: string;
@@ -20,6 +21,7 @@ type ClientCardProps = {
   onPress?: () => void;
   locationIcon?: React.ReactNode;
   btntext?: string;
+  InfoOnPress?: () => void;
 };
 
 const ClientCard1: React.FC<ClientCardProps> = ({
@@ -27,7 +29,8 @@ const ClientCard1: React.FC<ClientCardProps> = ({
   salon, attachmentId, feedbackCount, name, masterType, orders, clients, address, zaps, onPress, locationIcon, btntext
 }) => {
 
-
+  const { selectedClient, setSelectedClient, clientData, setClientData } = ClientStory()
+  const navigation = useNavigation<any>();
   const generateStars = (count: number) => {
     const roundedCount = Math.round(count);
     const starsCount = Math.min(roundedCount, 5);
@@ -43,10 +46,10 @@ const ClientCard1: React.FC<ClientCardProps> = ({
 
   return (
     <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
-      <View style={[tw`p-4 rounded-2xl shadow-lg`, {backgroundColor:'#B9B9C9'}]}>
+      <View style={[tw`p-4 rounded-2xl shadow-lg`, { backgroundColor: '#B9B9C9' }]}>
         <View style={tw`flex-row items-center mb-4`}>
           <Image
-            source={attachmentId ? { uri: getFile + attachmentId  } : require('../../assets/avatar.png')}
+            source={attachmentId ? { uri: getFile + attachmentId } : require('../../assets/avatar.png')}
             style={tw`w-16 h-16 rounded-full mr-3`}
           />
           <View style={tw`flex-1`}>
@@ -65,14 +68,13 @@ const ClientCard1: React.FC<ClientCardProps> = ({
         </View>
         <Text style={tw`text-gray-600 text-lg mb-2`}>{address || "Address is not found"}</Text>
         <Text style={tw`text-black text-lg font-bold mb-4`}>Ближайшая запись: {zaps}</Text>
-        <View style={tw`flex-row`}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            style={[tw`px-16 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]}
-            onPress={onPress}
-          >
-            <Text style={tw`text-white text-xl`}>{btntext}</Text>
-          </TouchableOpacity>
+        <View style={tw`flex-row items-center`}>
+          <View style={tw`flex-1`}>
+            <Buttons
+              title='Записаться'
+              onPress={onPress}
+            />
+          </View>
           {locationIcon && (
             <TouchableOpacity
               activeOpacity={0.7}

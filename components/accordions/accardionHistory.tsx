@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 8,
     paddingVertical: 10,
     paddingHorizontal: 10,
-    marginTop: -7,
+    marginTop: -12,
   },
   selectedGenderText: {
     marginTop: 10,

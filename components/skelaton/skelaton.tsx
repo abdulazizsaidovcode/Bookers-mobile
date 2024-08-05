@@ -3,51 +3,54 @@ import { StyleSheet, TouchableOpacity, View, Animated } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 
 const Skelaton = () => {
-  const animatedValue = useRef(new Animated.Value(0)).current;
+  const animatedOpacity = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    const startShimmer = () => {
-      animatedValue.setValue(0);
-      Animated.timing(animatedValue, {
-        toValue: 1,
-        duration: 600, // Faster animation
-        useNativeDriver: true,
-      }).start(() => startShimmer());
+    const startFade = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(animatedOpacity, {
+            toValue: 0.5, // Fade to half opacity
+            duration: 1000, // Duration of fade out
+            useNativeDriver: true,
+          }),
+          Animated.timing(animatedOpacity, {
+            toValue: 1, // Fade back to full opacity
+            duration: 1000, // Duration of fade in
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
     };
 
-    startShimmer();
-  }, [animatedValue]);
-
-  const shimmerOpacity = animatedValue.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0.7, 1, 0.7], // Adjusted for a lighter shimmer
-  });
+    startFade();
+  }, [animatedOpacity]);
 
   return (
     <View style={styles.card}>
       <TouchableOpacity activeOpacity={1}>
-        <View style={styles.profileContainer}>
+        <Animated.View style={[styles.profileContainer, { opacity: animatedOpacity }]}>
           <View style={styles.profileRow}>
-            <Animated.View style={[tw`w-16 h-16 rounded-full mr-3 bg-gray-400`, { opacity: shimmerOpacity, borderColor: 'gray', borderWidth: 1 }]} />
+            <Animated.View style={[tw`w-16 h-16 rounded-full mr-3 bg-gray-300`, { opacity: animatedOpacity, borderColor: 'gray' }]} />
             <View>
               <View style={styles.profileDetails}>
-                <Animated.View style={[tw`bg-gray-400 w-48 p-2 mb-2`, { opacity: shimmerOpacity, borderColor: 'gray', borderWidth: 1 }]} />
+                <Animated.View style={[tw`bg-gray-300 rounded-md w-48 p-2 mb-2`, { opacity: animatedOpacity, borderColor: 'gray' }]} />
               </View>
-              <Animated.View style={[tw`p-3 bg-gray-400 w-full`, { opacity: shimmerOpacity, borderColor: 'gray', borderWidth: 1 }]} />
+              <Animated.View style={[tw`p-3 bg-gray-300 rounded-md w-full`, { opacity: animatedOpacity, borderColor: 'gray' }]} />
             </View>
           </View>
           <View style={styles.feedbackContainer}>
-            <Animated.View style={[tw`h-4 bg-gray-400 w-12  mb-2`, { opacity: shimmerOpacity, borderColor: 'gray', borderWidth: 1 }]} />
-            <Animated.View style={[tw`h-4 bg-gray-400 w-12 `, { opacity: shimmerOpacity, borderColor: 'gray', borderWidth: 1 }]} />
+            <Animated.View style={[tw`h-4 bg-gray-300 rounded-md w-12 mb-2`, { opacity: animatedOpacity, borderColor: 'gray' }]} />
+            <Animated.View style={[tw`h-4 bg-gray-300 rounded-md w-12`, { opacity: animatedOpacity, borderColor: 'gray' }]} />
           </View>
-        </View>
-        <View style={styles.titleContainer}>
-          <Animated.View style={[tw`h-4 bg-gray-400 w-3/4 mb-1 `, { opacity: shimmerOpacity, borderColor: 'gray', borderWidth: 1 }]} />
-          <Animated.View style={[tw`h-4 bg-gray-400 w-3/4 mb-3 `, { opacity: shimmerOpacity, borderColor: 'gray', borderWidth: 1 }]} />
-        </View>
+        </Animated.View>
+        <Animated.View style={[styles.titleContainer, { opacity: animatedOpacity }]}>
+          <Animated.View style={[tw`h-4 bg-gray-300 rounded-md w-3/4 mb-1`, { opacity: animatedOpacity, borderColor: 'gray' }]} />
+          <Animated.View style={[tw`h-4 bg-gray-300 rounded-md w-3/4 mb-3`, { opacity: animatedOpacity, borderColor: 'gray' }]} />
+        </Animated.View>
         <View style={tw`flex flex-row mt-2`}>
-          <Animated.View style={[tw`p-3 bg-gray-400 w-3/4 mr-2`, { opacity: shimmerOpacity, borderColor: 'gray', borderWidth: 1 }]} />
-          <Animated.View style={[tw`bg-gray-400 w-10 h-10 rounded-full`, { opacity: shimmerOpacity, borderColor: 'gray', borderWidth: 1 }]} />
+          <Animated.View style={[tw`p-3 bg-gray-300 rounded-md w-3/4 mr-2`, { opacity: animatedOpacity, borderColor: 'gray' }]} />
+          <Animated.View style={[tw`bg-gray-300 rounded-md w-10 h-10 rounded-full`, { opacity: animatedOpacity, borderColor: 'gray' }]} />
         </View>
       </TouchableOpacity>
     </View>
@@ -73,6 +76,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     width: '50%',
     flexDirection: 'row',
+    marginBottom: 10
   },
   profileDetails: {
     display: 'flex',
