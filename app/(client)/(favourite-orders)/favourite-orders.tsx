@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import NavigationMenu from '@/components/navigation/navigation-menu'
 import { useFocusEffect } from 'expo-router'
@@ -9,18 +9,20 @@ import ClientCard from '@/components/(cliendCard)/cliendCard'
 import moment from 'moment'
 import { useNavigation } from '@react-navigation/native'
 import CenteredModal from '@/components/(modals)/modal-centered'
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Loading } from '@/components/loading/loading'
+import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore'
 
 const FavouriteOrders = () => {
     const navigation = useNavigation<any>()
     const { favouriteOrders, setFavouriteOrders, isModal, setIsModal, isLoading, setIsLoading, masterId, setMasterId } = useFavoutiteOrders();
+    const { setClientData } = ClientStory()
 
     useFocusEffect(
         useCallback(() => {
             fetchFavouriteOrders(setFavouriteOrders, setIsLoading);
             return () => { }
-        }, [favouriteOrders])
+        }, [])
     )
 
     // const masterCategories = favouriteOrders.map(item => item.categoryNames.join(', '));
@@ -48,10 +50,14 @@ const FavouriteOrders = () => {
                             imageUrl={item.attachmentId}
                             feedbackCount={item.favoriteCount}
                             salon={item.salonName}
-                            zaps={item.nextEntryDate ? moment(item.nextEntryDate).format('dddd') : 0}
+                            zaps={item.nextEntryDate ? moment(item.nextEntryDate).format('dddd') : '0'}
                             masterType={item.gender === 'MALE' ? 'Мужской мастер' : 'Женский мастер'}
-                            onPress={() => navigation.navigate('(client)/(map)/(master-locations)/master-locations', { id: item.id })}
+                            onMapPress={() => navigation.navigate('(client)/(map)/(master-locations)/master-locations', { id: item.id })}
                             favouriteOnPress={() => toggleModal(item.id)}
+                            onPress={() => {
+                                setClientData(item)
+                                navigation.navigate('(client)/(uslugi)/(masterInformation)/masterInformation')
+                            }}
                         />
                     ))}
                 </View>
@@ -64,7 +70,7 @@ const FavouriteOrders = () => {
                     onConfirm={handleDelte}
                 >
                     <View style={styles.deleteContainer}>
-                        <MaterialIcons name="delete" size={100} color="#9C0A35" />
+                        <MaterialCommunityIcons name="bookmark-off" size={100} color="#9C0A35" />
                         <Text style={styles.deleteText}>Вы уверены что удалите этот мастер из списка любимых мастеров.</Text>
                     </View>
                 </CenteredModal>

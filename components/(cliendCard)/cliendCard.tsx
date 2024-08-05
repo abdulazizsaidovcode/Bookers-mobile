@@ -10,7 +10,7 @@ type ClientCardProps = {
   salon?: string | null;
   imageUrl?: string | null;
   name?: string | null;
-  zaps?: number | null;
+  zaps?: string | null;
   masterType?: string | null;
   orders?: number | null;
   clients?: number | null;
@@ -18,6 +18,7 @@ type ClientCardProps = {
   mapStyle?: boolean | null;
   favouriteStyle?: boolean | null;
   onPress?: () => void;
+  onMapPress?: () => void;
   feedbackCount?: number | null;
   locationIcon?: React.ReactNode;
   favouriteOnPress?: () => void;
@@ -37,6 +38,7 @@ const ClientCard: React.FC<ClientCardProps> = ({
   zaps,
   onPress,
   mapStyle,
+  onMapPress,
   locationIcon,
 }) => {
   const { getme } = webPageStore();
@@ -81,13 +83,13 @@ const ClientCard: React.FC<ClientCardProps> = ({
       </View>
       <Text style={tw`text-gray-600 text-lg mb-2`}>{address || "Address is not found"}</Text>
       <Text style={tw`text-black text-lg font-bold mb-4`}>Ближайшая запись: {zaps || "0"}</Text>
-      <View style={[tw`flex-row justify-between items-center`, mapStyle && tw`justify-center`]}>
-        <TouchableOpacity activeOpacity={0.8} style={[tw`px-16 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]} onPress={onPress}>
+      <View style={[tw`flex-row justify-between items-center`, mapStyle && { width: '100%' }]}>
+        <TouchableOpacity activeOpacity={0.8} style={[mapStyle ? [tw`px-16 py-2 rounded-xl`, { width: '100%' }] : tw`px-16 py-2 rounded-xl`, { backgroundColor: '#9C0A35' }]} onPress={onPress}>
           <Text style={tw`text-white text-xl text-center`}>Записаться</Text>
         </TouchableOpacity>
         {!mapStyle && (
-          <TouchableOpacity activeOpacity={0.8} style={[tw`p-2 rounded-full`, { backgroundColor: '#9C0A35' }]}>
-            {locationIcon || <SimpleLineIcons name="location-pin" size={24} color="white" />}
+          <TouchableOpacity onPress={onMapPress} activeOpacity={0.8} style={[tw`p-2 rounded-full`, { backgroundColor: '#9C0A35' }]}>
+            {locationIcon || <SimpleLineIcons name="location-pin" size={27} color="white" />}
           </TouchableOpacity>
         )}
         {favouriteStyle && (
