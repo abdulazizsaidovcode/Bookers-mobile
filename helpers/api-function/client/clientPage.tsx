@@ -97,7 +97,7 @@ export const clientNotification = async (
   try {
     if (ClientNotification.data.success) {
       setIsLoading ? setIsLoading(false) : () => {};
-      setData(ClientNotification.data.body);
+      setData(ClientNotification.data.body.reverse());
     } else {
       setIsLoading ? setIsLoading(false) : () => {};
       setData([]);
@@ -136,7 +136,7 @@ export const deleteClientProfile = async (
 export const clientNotificationDelete = async (
   datas: any,
   getData: () => void, setIsLoading?: (val: boolean) => void
-  
+
 ) => {
     setIsLoading ? setIsLoading(true) : () => {}
   const config = await getConfig();
