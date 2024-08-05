@@ -1,5 +1,5 @@
-import { weekList } from "@/type/graficWork/graficWork";
-import { create } from "zustand";
+import {weekList} from "@/type/graficWork/graficWork";
+import {create} from "zustand";
 
 interface graficWorkData {
     getme: any;
@@ -16,19 +16,19 @@ interface graficWorkData {
     setStartTime: (val: string) => void;
     endTime: string,
     setEndTime: (val: string) => void;
-    selectedTimeSlot:string[];
+    selectedTimeSlot: string[];
     setSelectedTimeSlot: (data: string[]) => void;
     method: string
     setMethod: (val: string) => void
     isLoading: boolean
     setIsLoading: (val: boolean) => void
-  }
+}
 
-  const graficWorkStore = create<graficWorkData>((set) => ({
+const graficWorkStore = create<graficWorkData>((set) => ({
     getme: null,
     setGetMee: (val: any) => set({getme: val}),
     calendarDate: 'master',
-    setCalendarDate: (val: string) => set({ calendarDate: val }),
+    setCalendarDate: (val: string) => set({calendarDate: val}),
     startTime: "",
     setStartTime: (val: string) => set({startTime: val}),
     endTime: "",
@@ -46,6 +46,6 @@ interface graficWorkData {
     isLoading: false,
     setIsLoading: (val: boolean) => set({isLoading: val})
 
-  }));
-  
-  export default graficWorkStore;
+}));
+
+export default graficWorkStore;

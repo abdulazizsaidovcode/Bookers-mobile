@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, {useState, useCallback} from "react";
 import {
     SafeAreaView,
     ScrollView,
@@ -12,9 +12,9 @@ import WeeklCard from "@/components/grafic/weeklCard";
 import Buttons from "@/components/(buttons)/button";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import { NavigationProp } from "@react-navigation/native";
-import { RootStackParamList } from "@/type/root";
-import { useFocusEffect, useNavigation } from "expo-router";
+import {NavigationProp} from "@react-navigation/native";
+import {RootStackParamList} from "@/type/root";
+import {useFocusEffect, useNavigation} from "expo-router";
 
 // Type definition for navigation prop
 type SettingsScreenNavigationProp = NavigationProp<
@@ -32,7 +32,7 @@ const timeList = [
 
 const TimeWorkEdit: React.FC = () => {
     // State and store management
-    const { weekData, timeData, setSelectedTimeSlot, setMethod } = graficWorkStore();
+    const {weekData, timeData, setSelectedTimeSlot, setMethod} = graficWorkStore();
     const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
     const [isDisabled, setIsDisabled] = useState(true);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
@@ -47,7 +47,8 @@ const TimeWorkEdit: React.FC = () => {
                     setSelectedTimeSlots([fromTime, endTime]);
                 }
             }
-            return () => {};
+            return () => {
+            };
         }, [timeData])
     );
 
@@ -55,7 +56,8 @@ const TimeWorkEdit: React.FC = () => {
     useFocusEffect(
         useCallback(() => {
             setIsDisabled(selectedTimeSlots.length < 2);
-            return () => {};
+            return () => {
+            };
         }, [selectedTimeSlots])
     );
 
@@ -100,11 +102,11 @@ const TimeWorkEdit: React.FC = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <View style={{ paddingLeft: 10 }}>
-                <NavigationMenu name={`Время работы`} />
+            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
+            <View style={{paddingLeft: 10}}>
+                <NavigationMenu name={`Время работы`}/>
             </View>
-            <ScrollView style={{ marginTop: 15 }}>
+            <ScrollView style={{marginTop: 15}}>
                 <View>
                     <Text style={styles.title}>Рабочие дни</Text>
                 </View>
@@ -121,9 +123,9 @@ const TimeWorkEdit: React.FC = () => {
                         )}
                 </View>
                 <View>
-                    <Text style={[styles.title, { marginTop: 15 }]}>Время работы</Text>
+                    <Text style={[styles.title, {marginTop: 15}]}>Время работы</Text>
                     <>
-                        <Text style={{ color: "white", paddingHorizontal: 15, width: 340 }}>
+                        <Text style={{color: "white", paddingHorizontal: 15, width: 340}}>
                             Выберите рабочее время в которое запись будет доступна для ваших
                             клиентов
                         </Text>
@@ -146,8 +148,8 @@ const TimeWorkEdit: React.FC = () => {
                     </>
                 </View>
                 <View>
-                    <Text style={[styles.title, { marginTop: 15 }]}>Выходные дни</Text>
-                    <Text style={{ color: "white", paddingHorizontal: 15 }}>
+                    <Text style={[styles.title, {marginTop: 15}]}>Выходные дни</Text>
+                    <Text style={{color: "white", paddingHorizontal: 15}}>
                         {weekendDays.length === 0 ? "Без выходных" : weekendDays.join(", ")}
                     </Text>
                 </View>
