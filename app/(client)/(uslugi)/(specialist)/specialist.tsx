@@ -56,7 +56,7 @@ const Specialist = () => {
   }, [selectedServiceId, genderIndex, value, rating, userLocation, checked, searchValue]);
 
   useFocusEffect(fetchClientData);
-
+  
   useEffect(() => {
     fetchClientData();
   }, [searchValue]);
@@ -106,7 +106,6 @@ const Specialist = () => {
       address: `${item.district}, ${item.street}, ${item.house}`,
     };
     setSelectedClient(client);
-    router.push('(client)/(uslugi)/(masterInformation)/masterInformation');
   };
 
   const renderClientCard = ({ item }) => (
@@ -123,7 +122,12 @@ const Specialist = () => {
         feedbackCount={item.feedbackCount}
         clients={item.clientCount}
         address={`${item.district}, ${item.street}, ${item.house}`}
-        onPress={() => handleClientCardPress(item)}
+        onPress={() =>{
+          setSelectedClient(item)
+          setClientData(item)
+          navigate.navigate('(client)/(uslugi)/(masterInformation)/masterInformation')
+          handleClientCardPress(item)
+        }}
         btntext='Записаться'
         locationIcon = {
           <SimpleLineIcons name="location-pin" size={24} color="white"
