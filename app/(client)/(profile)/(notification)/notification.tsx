@@ -98,7 +98,7 @@ const NotificationClient: React.FC = () => {
   };
 
   const handleReadSingle = (id: string) => {
-    clientPostReadyORnotReady({ idList: [id] }, () => fetchNotifications(), setIsLoading);
+    clientPostReadyORnotReady({ idList: [id] }, () => fetchNotifications());
   };
 
   return (
