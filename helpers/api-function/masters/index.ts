@@ -39,20 +39,27 @@ export const getTopMasters = async (
   size = 10,
   name?: string
 ): Promise<void> => {
-  const { setTopMasters, setIsloading, masters, setErr } =
+  const { setTopMasters,setSearchTopMasters, setIsloading, masters, setErr } =
     useTopMastersStore.getState();
   setIsloading(true);
   try {
     const config = await getConfig();
     console.log(page);
+
     const url = name
-      ? `${base_url}user/top/masters?page=${page}&size=${size}&nameOrPhone=${name}`
+      ? `${base_url}user/top/masters?nameOrPhone=${name}`
       : `${base_url}user/top/masters?page=${page}&size=${size}`;
     const { data } = await axios.get<ApiResponse>(url, config || {});
+    setTimeout(() => {
+      console.log(page,'page');
+    }, 1000);
+    
     if (data.success) {
-      let arr = [...masters, ...data.body.object];
       const seen: any = {};
       const result: any = [];
+
+      let arr = [...masters, ...data.body.object];
+      let serchArr = [...data.body.object]
 
       arr.forEach((item) => {
         if (!seen[item.id]) {
@@ -61,9 +68,19 @@ export const getTopMasters = async (
         }
       });
 
-      setTopMasters([...result]);
+      if (name && name.trim()) {
+        setSearchTopMasters([...serchArr]);
+        console.log(serchArr);
+        
+      } else {
+        console.log(arr,'1234');
+        
+        setTopMasters([...result])
+        setSearchTopMasters([])
+      }
     } else {
       setTopMasters([...masters]);
+      setSearchTopMasters([])
       setErr(data);
     }
   } catch (error) {
