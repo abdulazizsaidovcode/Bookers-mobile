@@ -1,6 +1,8 @@
 import { ClientOrderHistory } from "@/helpers/state_managment/dashboardClient/dashboardClient";
 
 export interface MapStoreTypes {
+  masterData: TopMastersAdressType[],
+  setMasterData: (data: TopMastersAdressType[]) => void;
   orderData: ClientOrderHistory,
   setOrderData: (data: ClientOrderHistory) => void;
   mapData: MasterLocation;
@@ -9,6 +11,7 @@ export interface MapStoreTypes {
   setCategoryId: (
     id: string | null | ((prev: string | null) => string | null)
   ) => void;
+  
 }
 
 export interface MasterLocation {
@@ -30,6 +33,12 @@ export interface MasterLocation {
   gender: string,
   servicePrice: number,
   nextEntryDate: null
+}
+
+export interface TopMastersAdressType {
+  lat: number;
+  lng: number;
+  masterId: string;
 }
 
 export const mapCustomStyle = [
