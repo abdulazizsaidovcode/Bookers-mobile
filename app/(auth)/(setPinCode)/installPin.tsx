@@ -10,7 +10,7 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/(
 
 
 const InstallPin: React.FC = () => {
-    const [otp, setOtp] = useState<string[]>(['', '', '', '']);
+    const [otp, setOtp] = useState<string[]>(['1', '', '', '']);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const inputs = useRef<TextInput[]>([]);
     const [pending, setPending] = useState(false);
@@ -26,7 +26,7 @@ const InstallPin: React.FC = () => {
                 console.log('Failed to load OTP from storage', error);
             }
         };
-
+        setOtp(['', '', '', '']);
         getStoredOtp();
     }, []);
 
@@ -83,7 +83,7 @@ const InstallPin: React.FC = () => {
                             <TextInput
                                 key={index}
                                 style={styles.input}
-                                value={digit}
+                                value={digit ? "*" : ""}
                                 onChangeText={(text) => handleChangeText(text, index)}
                                 onKeyPress={(e) => handleKeyPress(e, index)}
                                 ref={(ref) => (inputs.current[index] = ref!)}
