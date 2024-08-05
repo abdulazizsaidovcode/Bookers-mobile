@@ -3,6 +3,7 @@ import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
+import BottomModal from "@/components/(modals)/modal-bottom";
 export interface Service {
   id: string;
   name: string;
@@ -35,8 +36,9 @@ const genderMapping: any = {
 };
 
 const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) => {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const { setSelectedCategoryId, selectedCategoryId } = ClientStory()
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [oneData, setOneData] = useState<any>(null);
 
   const handleSelect = (id: string) => {
     let arr: any = []
@@ -53,11 +55,9 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
 
   useEffect(() => {
     setSelectedCategoryId(selectedIds)
-    setTimeout(() => {
-      console.log(selectedIds);
-    }, 1000)
-
   }, [selectedIds])
+
+  console.log('one data items: ', oneData)
 
   return (
     <View style={[tw`p-4 rounded-2xl`, { backgroundColor: "#B9B9C9" }]}>
@@ -128,10 +128,19 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
       <TouchableOpacity
         activeOpacity={0.8}
         style={[tw`w-1/2 p-3 rounded-lg`, { backgroundColor: '#9C0A35' }]}
-        onPress={onPress}
+        onPress={() => {
+          onPress && onPress();
+          setOneData(item)
+        }}
       >
         <Text style={[tw`text-center text-xl`, { color: '#FFFFFF' }]}>Подробнее</Text>
       </TouchableOpacity>
+
+      <BottomModal isBottomModal={false} toggleBottomModal={() => {}}>
+        <>
+
+        </>
+      </BottomModal>
     </View>
   );
 };
