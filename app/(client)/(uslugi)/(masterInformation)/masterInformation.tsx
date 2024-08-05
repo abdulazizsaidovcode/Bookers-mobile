@@ -154,7 +154,7 @@ const MasterInformation = () => {
                     selectedCategorys == service.id ? { backgroundColor: '#B9B9C9' } : { borderColor: '#828282', borderWidth: 1 }
                   ]}
                 >
-                  <Text style={[tw`text-white text-center`, { color: selectedCategorys !== service.id ? '#828282' : '#000' }]}>{service.name}</Text>
+                  <Text style={[tw`text-white text-center`, { color: selectedCategorys !== service.id ? '#828282' : '#000' }]}>{clientData && clientData.fullName}</Text>
                 </TouchableOpacity>
               </View>
             ))}
