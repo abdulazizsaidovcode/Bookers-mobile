@@ -32,9 +32,13 @@ export const fetchWaitingOrders = async (setWaitingData: (val: DashboardWaitingO
         if (data.success) {
             setWaitingData(data.body);
             setIsLoading(false)
-        } else setIsLoading(false)
+        } else {
+            setIsLoading(false)
+            setWaitingData([])
+        }
     } catch {
         setIsLoading(false)
+        setWaitingData([])
     }
 }
 
@@ -44,8 +48,10 @@ export const fetchHallingOrders = async (setHallData: (val: DashboardWaitingOrde
         const { data } = await axios.get(dashboard_hall_order, config ? config : {});
         if (data.success) {
             setHallData(data.body);
-        }
-    } catch { }
+        } else setHallData([])
+    } catch {
+        setHallData([])
+    }
 }
 
 export const fetchTodayWorkGrafic = async (setTodayGrafic: (val: TodayWorkGrafic) => void, masterId: string) => {

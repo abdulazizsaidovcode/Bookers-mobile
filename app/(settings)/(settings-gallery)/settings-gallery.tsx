@@ -13,6 +13,7 @@ import Buttons from '@/components/(buttons)/button';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
+import { Loading } from '@/components/loading/loading';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -23,9 +24,10 @@ const SettingsGallery: React.FC = () => {
   const [showCheckboxes, setShowCheckboxes] = useState<boolean>(false);
   const [showMainSwitch, setShowMainSwitch] = useState<boolean>(false);
   const [albumName, setAlbumName] = useState<string>('');
+
   const navigation = useNavigation()
 
-  const { setData, setIsLoading } = useGalleryStore();
+  const { setData, setIsLoading, isLoading } = useGalleryStore();
 
   const mainPhotos = mainImageIndices.length > 0 ? mainImageIndices.map(index => images[index]).slice(0, 4) : [];
 
@@ -134,6 +136,9 @@ const SettingsGallery: React.FC = () => {
     }
   };
 
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -192,7 +197,7 @@ const SettingsGallery: React.FC = () => {
                     </TouchableWithoutFeedback>
                   ))}
                 </View>
-                {showCheckboxes && (
+                {images.length !== 0 && showCheckboxes && (
                   <View style={styles.switchContainer}>
                     <View style={{ width: "50%" }}>
                       <Buttons title="Удалить выбранные" textSize={15} onPress={deleteSelectedImages} />

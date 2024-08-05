@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, View, Image, Pressable, Dimensions } from
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import Buttons from '@/components/(buttons)/button';
-import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import { getFile } from '@/helpers/api';
@@ -164,7 +164,8 @@ const SettingsGalleryMain = () => {
                         isFullBtn={true}
                         onConfirm={handleDelGallery}
                     >
-                        <View>
+                        <View style={{justifyContent: 'center', alignItems: 'center', marginBottom: 10}}>
+                        <MaterialIcons name="delete" size={100} color="#9C0A35" />
                             <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}>Вы уверены, что хотите
                                 открыть эту галерею?</Text>
                         </View>

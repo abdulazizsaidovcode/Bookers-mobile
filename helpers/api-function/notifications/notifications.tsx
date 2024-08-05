@@ -25,7 +25,7 @@ export const editMainDataStatus = async (isActive: boolean) => {
         }
     } catch (error: any) {
         console.log(error)
-        Toast.show(error.response.data.text, Toast.LONG)
+        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
     }
 }
 
@@ -67,7 +67,7 @@ export const editMessenger = async (isMessage: boolean | undefined, goBack: () =
     } catch (error: any) {
         console.log(error)
         setIsLoading(false)
-        Toast.show(error.response.data.text, Toast.LONG)
+        Toast.show(error.response.data.message ? error.response.data.message: 'Пожалуйста, повторите попытку позже', Toast.LONG)
     }
 }
 
@@ -102,7 +102,7 @@ export const editCancelOrder = async (isActive: boolean | undefined, text: strin
     } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show(error.response.data.text, Toast.LONG)
+        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
     }
 }
 
@@ -145,7 +145,7 @@ export const editChangingOrder = async (isActive: boolean | undefined, text: str
     } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show(error.response.data.text, Toast.LONG)
+        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
     }
 }
 
@@ -167,7 +167,7 @@ export const editFeedbeckOrder = async (text: string | undefined, setHasChanges:
     } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show(error.response.data.text, Toast.LONG)
+        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
     }
 }
 
@@ -202,7 +202,7 @@ export const editAppoinmentOrder = async (text: string | undefined, hour: number
     } catch (error: any) {
         console.log(error)
         setIsLoading(false)
-        Toast.show(error.response.data.text, Toast.LONG)
+        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
     }
 }
 
@@ -236,6 +236,6 @@ export const editWindowOrder = async (text: string | undefined, setHasChanges: (
     } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show(error.response.data.text, Toast.LONG)
+        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
     }
 }

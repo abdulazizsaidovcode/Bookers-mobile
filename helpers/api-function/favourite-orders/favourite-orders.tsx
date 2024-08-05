@@ -40,10 +40,7 @@ export const addFavouriteOrder = async (masterId: string, setFavouriteOrders: (v
 }
 
 export const deleteFavouriteOrder = async (masterId: string, setFavouriteOrders: (val: FavouriteOrdersType[]) => void, setIsloading: (val: boolean) => void, toggleModal?: () => void) => {
-
-    
     const config = await getConfig();
-    console.log(config);
     
     try {
         const { data } = await axios.delete(`${favourite_delete}/${masterId}`, config ? config : {})

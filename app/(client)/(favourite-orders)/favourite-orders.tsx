@@ -9,16 +9,19 @@ import ClientCard from '@/components/(cliendCard)/cliendCard'
 import moment from 'moment'
 import { useNavigation } from '@react-navigation/native'
 import CenteredModal from '@/components/(modals)/modal-centered'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import { Loading } from '@/components/loading/loading'
 
 const FavouriteOrders = () => {
     const navigation = useNavigation<any>()
     const { favouriteOrders, setFavouriteOrders, isModal, setIsModal, isLoading, setIsLoading, masterId, setMasterId } = useFavoutiteOrders();
 
-    useEffect(() => {
-        fetchFavouriteOrders(setFavouriteOrders, setIsLoading);
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            fetchFavouriteOrders(setFavouriteOrders, setIsLoading);
+            return () => { }
+        }, [favouriteOrders])
+    )
 
     // const masterCategories = favouriteOrders.map(item => item.categoryNames.join(', '));
     const toggleModal = (masterId?: string) => {
@@ -61,7 +64,7 @@ const FavouriteOrders = () => {
                     onConfirm={handleDelte}
                 >
                     <View style={styles.deleteContainer}>
-                        <MaterialCommunityIcons name="bookmark-off" size={100} color="#9C0A35" />
+                        <MaterialIcons name="delete" size={100} color="#9C0A35" />
                         <Text style={styles.deleteText}>Вы уверены что удалите этот мастер из списка любимых мастеров.</Text>
                     </View>
                 </CenteredModal>
