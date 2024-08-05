@@ -307,6 +307,9 @@ const TabOneScreen: React.FC = () => {
       setIsLoading
     );
 
+  console.log(dailyTimeData);
+
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -565,7 +568,7 @@ const Statistics: React.FC<StatisticsProps> = ({
       <Text style={styles.statsTitle}>Выполнено сеансов</Text>
       <PieChart
         widthAndHeight={100}
-        series={[chartNumerator | 1, chartDenominator | 1]}
+        series={[chartNumerator && chartDenominator ? chartNumerator : 1, chartDenominator && chartNumerator ? chartDenominator : 1]}
         sliceColor={[COLORS.mainRed, COLORS.background]}
         coverRadius={0.6}
         coverFill={COLORS.cardBackground}
@@ -911,12 +914,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   statusColor: {
-    width: 10,
-    height: 10,
+    width: screenWidth / 50,
+    height: screenHeight / 100,
     borderRadius: 50,
   },
   statusText: {
-    fontSize: 8,
+    fontSize: screenWidth / 50,
     color: COLORS.white,
     marginLeft: 4,
   },
