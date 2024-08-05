@@ -11,34 +11,29 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 const AccordionSkelaton: React.FC = () => {
   const { expandedId, setExpandedId } = useAccardionStoreId();
   const [isExpanded, setIsExpanded] = useState(expandedId === "skelaton");
-  const animatedValue = useRef(new Animated.Value(0)).current;
+  const animatedOpacity = useRef(new Animated.Value(1)).current;
   const contentHeight = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const startShimmer = () => {
+    const startFade = () => {
       Animated.loop(
         Animated.sequence([
-          Animated.timing(animatedValue, {
-            toValue: 1,
-            duration: 800,
+          Animated.timing(animatedOpacity, {
+            toValue: 0.5,
+            duration: 500,
             useNativeDriver: true,
           }),
-          Animated.timing(animatedValue, {
-            toValue: 0,
-            duration: 800,
+          Animated.timing(animatedOpacity, {
+            toValue: 1,
+            duration: 500,
             useNativeDriver: true,
           }),
         ])
       ).start();
     };
 
-    startShimmer();
-  }, [animatedValue]);
-
-  const shimmerOpacity = animatedValue.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0.7, 1, 0.7],
-  });
+    startFade();
+  }, [animatedOpacity]);
 
   const toggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -68,16 +63,31 @@ const AccordionSkelaton: React.FC = () => {
   };
 
   return (
-    <View style={tw`mb-4 p-4 rounded-lg`}>
+    <View style={[tw`p-1 rounded-lg`, { width: '100%' }]}>
       <TouchableOpacity
         activeOpacity={1}
         onPress={toggleExpand}
         style={tw`flex flex-row justify-between items-center p-4 bg-gray-400 rounded-lg`}
       >
         <View style={tw`flex flex-col flex-grow`}>
-          <Animated.View style={[tw`h-4 bg-gray-300 w-3/4 mb-2`, { opacity: shimmerOpacity }]} />
-          <Animated.View style={[tw`h-4 bg-gray-300 w-3/4 mb-2`, { opacity: shimmerOpacity }]} />
-          <Animated.View style={[tw`h-4 bg-gray-300 w-3/4`, { opacity: shimmerOpacity }]} />
+          <Animated.View
+            style={[
+              tw`h-4 bg-gray-300 rounded-md w-3/4 mb-2`,
+              { opacity: animatedOpacity }
+            ]}
+          />
+          <Animated.View
+            style={[
+              tw`h-4 bg-gray-300 rounded-md w-3/4 mb-2`,
+              { opacity: animatedOpacity }
+            ]}
+          />
+          <Animated.View
+            style={[
+              tw`h-4 bg-gray-300 rounded-md w-3/4`,
+              { opacity: animatedOpacity }
+            ]}
+          />
         </View>
         <AntDesign name={isExpanded ? 'down' : 'right'} size={20} color="#4F4F4F" />
       </TouchableOpacity>

@@ -27,7 +27,6 @@ import { useMapStore } from '@/helpers/state_managment/map/map';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Loading } from '@/components/loading/loading';
-import SkeletonContent from 'react-native-skeleton-content';
 import Skelaton from '@/components/skelaton/skelaton';
 import AccordionSkelaton from '@/components/skelaton/accordionSkelaton';
 
