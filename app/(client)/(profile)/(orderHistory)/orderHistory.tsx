@@ -18,17 +18,19 @@ import AccardionHistoryTwo from "@/components/accordions/accardionHistoryTwo";
 import { useAccardionStoreId } from "@/helpers/state_managment/accardion/accardionStore";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import ClientStory from "@/helpers/state_managment/uslugi/uslugiStore";
+import { Loading } from "@/components/loading/loading";
 
 const OrderHistory = () => {
   const { activeTab, setActiveTab, pastComing, setPastComing } = useAccardionStoreId();
-  const {setSelectedClient}=ClientStory()
+  const { setSelectedClient } = ClientStory()
   const [modalDelete, setModalDelete] = useState<boolean>(false);
   const [upcoming, setUpcoming] = useState<getOrderClientUpcomingInterface[]>([]);
   const { setMapData } = useMapStore();
   const navigate = useNavigation<any>()
-  const navigation = useNavigation<NavigationProp<any>>();
+  const navigation = useNavigation<NavigationProp<any>>();;
+  const [isLoading, setIsLoading] = useState(false);
   const getUpcomingClient = async () => {
-    await getorderClientUpcoming(setUpcoming);
+    await getorderClientUpcoming(setUpcoming, setIsLoading);
   };
   const getPastcomingClient = async () => {
     await getOrderClientPustComing(setPastComing);
@@ -45,7 +47,7 @@ const OrderHistory = () => {
   const DeleteAllPastComing = () => {
     const ids: any = pastComing.map(past => past.orderId)
     console.log(ids);
-    
+
     if (ids.length > 0) {
       console.log("order ids", ids);
       deleteAllPastComingFunction(ids, () => deleteToggleModal(), () => getOrderClientPustComing(setPastComing))
@@ -105,11 +107,11 @@ const OrderHistory = () => {
         </View>
         {activeTab === 'upcoming' && (
           <ScrollView style={{ marginBottom: 160 }}>
-            {upcoming.length !== 0 ? (
+            {isLoading ? <Loading/> : upcoming.length !== 0 ? (
               upcoming.map((upcoming: any, index: number) => (
                 <AccardionHistory id={upcoming.serviceIds} key={index} title={upcoming.serviceName} date={upcoming.orderDate} >
                   <ProfileCard
-                    onPress={()=>{
+                    onPress={() => {
                       setSelectedClient(upcoming)
                       navigation.navigate('(client)/(oreder)/orderDetail', { id: upcoming.orderId });
                     }}
@@ -125,7 +127,7 @@ const OrderHistory = () => {
                     locationIcon={
                       <SimpleLineIcons
                         onPress={() => {
-                          navigate.navigate('(client)/(map)/(master-locations)/master-locations',{id: upcoming.id});
+                          navigate.navigate('(client)/(map)/(master-locations)/master-locations', { id: upcoming.id });
                         }}
                         name="location-pin"
                         size={24}
@@ -158,7 +160,7 @@ const OrderHistory = () => {
               pastComing.map((pastComing: any, index: number) => (
                 <AccardionHistoryTwo key={index} id={pastComing.serviceIds} title={pastComing.serviceName} date={pastComing.orderDate} >
                   <ProfileCard
-                    onPress={()=>{
+                    onPress={() => {
                       setSelectedClient(pastComing)
                       navigation.navigate('(client)/(oreder)/orderDetail', { id: pastComing.orderId });
                     }}

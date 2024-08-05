@@ -7,18 +7,31 @@ import { Alert } from "react-native";
 
 
 // Upcoming function
-export const getorderClientUpcoming = async (setData: (val: getOrderClientUpcomingInterface[]) => void) => {
+export const getorderClientUpcoming = async (
+    setData: (val: getOrderClientUpcomingInterface[]) => void,
+    setIsLoading?: (val: boolean) => void
+) => {
+
+    setIsLoading ? setIsLoading(true) : () => { }
     try {
         const config = await getConfig();
         const getclientOrderUpcoming = await axios.get(clientOrderUpcoming, config ? config : {});
-        if (getclientOrderUpcoming.data.success) setData(getclientOrderUpcoming.data.body)
-        else setData([])
+        if (getclientOrderUpcoming.data.success) {
+            setData(getclientOrderUpcoming.data.body)
+            setIsLoading ? setIsLoading(false) : () => { }
+        }
+        else {
+            setData([])
+            setIsLoading ? setIsLoading(false) : () => { }
+        }
     }
     catch {
+        setIsLoading ? setIsLoading(false) : () => { }
         Toast.show('Upcoming topilmadi afsuski', Toast.LONG)
         setData([])
     }
 }
+
 //Pastcoming function 
 
 export const getOrderClientPustComing = async (setData: (val: getOrderClientPastcomingInterface[]) => void) => {
@@ -63,7 +76,7 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
 }
 
 //Delete pastcoming order 
-export const deletePastComingFunction = async (orderId: string|null|undefined, getFunction: () => void) => {
+export const deletePastComingFunction = async (orderId: string | null | undefined, getFunction: () => void) => {
     try {
         if (!orderId) {
             Alert.alert('Delete qilishda xatolik', 'Xatolik yuz berdi')
@@ -83,7 +96,7 @@ export const deletePastComingFunction = async (orderId: string|null|undefined, g
     }
 };
 
-export const deleteAllPastComingFunction = async (datas: string[],toggleModal: () => void, getFunction: () => void) => {
+export const deleteAllPastComingFunction = async (datas: string[], toggleModal: () => void, getFunction: () => void) => {
     try {
         if (datas.length !== 0) {
             const data = {
@@ -110,20 +123,20 @@ export const deleteAllPastComingFunction = async (datas: string[],toggleModal: (
     }
 }
 
-export const AddMessageOrderUpcoming=async(datas:addMessageInterface,toggleModal: () => void)=>{
-    try{
-        if(datas){
-            const config=await getConfig();
-            const res=await axios.post(addMessage_Url,datas,config ? config : {});
-            if(res.data.success){
+export const AddMessageOrderUpcoming = async (datas: addMessageInterface, toggleModal: () => void) => {
+    try {
+        if (datas) {
+            const config = await getConfig();
+            const res = await axios.post(addMessage_Url, datas, config ? config : {});
+            if (res.data.success) {
                 toggleModal();
                 Toast.show('✅Message sent successfully', Toast.LONG);
-            }else{
+            } else {
                 Toast.show('Message sent error', Toast.LONG);
             }
         }
-    }catch(err){
-        console.log("Upcomingda message yuborilmadi",err);
-        
+    } catch (err) {
+        console.log("Upcomingda message yuborilmadi", err);
+
     }
 }

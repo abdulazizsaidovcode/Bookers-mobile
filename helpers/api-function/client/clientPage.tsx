@@ -136,7 +136,7 @@ export const deleteClientProfile = async (
 export const clientNotificationDelete = async (
   datas: any,
   getData: () => void, setIsLoading?: (val: boolean) => void
-
+  
 ) => {
     setIsLoading ? setIsLoading(true) : () => {}
   const config = await getConfig();
