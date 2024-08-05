@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from "react";
+import React, { useState, useCallback } from "react";
 import {
     SafeAreaView,
     ScrollView,
@@ -12,9 +12,9 @@ import WeeklCard from "@/components/grafic/weeklCard";
 import Buttons from "@/components/(buttons)/button";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import {NavigationProp} from "@react-navigation/native";
-import {RootStackParamList} from "@/type/root";
-import {useFocusEffect, useNavigation} from "expo-router";
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
+import { useFocusEffect, useNavigation } from "expo-router";
 
 // Type definition for navigation prop
 type SettingsScreenNavigationProp = NavigationProp<
@@ -31,13 +31,11 @@ const timeList = [
 ];
 
 const TimeWorkEdit: React.FC = () => {
-    // State and store management
-    const {weekData, timeData, setSelectedTimeSlot, setMethod} = graficWorkStore();
+    const { weekData, timeData, setSelectedTimeSlot, setMethod } = graficWorkStore();
     const [selectedTimeSlots, setSelectedTimeSlots] = useState<string[]>([]);
     const [isDisabled, setIsDisabled] = useState(true);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
-    // Use effect hook to set the selected time slots based on timeData
     useFocusEffect(
         useCallback(() => {
             if (timeData && timeData.from && timeData.end) {
@@ -47,41 +45,43 @@ const TimeWorkEdit: React.FC = () => {
                     setSelectedTimeSlots([fromTime, endTime]);
                 }
             }
-            return () => {
-            };
+            return () => { };
         }, [timeData])
     );
 
-    // Use effect hook to enable or disable the button based on selected time slots
     useFocusEffect(
         useCallback(() => {
             setIsDisabled(selectedTimeSlots.length < 2);
-            return () => {
-            };
+            return () => { };
         }, [selectedTimeSlots])
     );
 
-    // Function to toggle the selection of a time slot
-    const toggleTimeSlotSelection = (time: string) => {
-        if (selectedTimeSlots.includes(time)) {
-            setSelectedTimeSlots((prevSelectedTimeSlots) =>
-                prevSelectedTimeSlots.filter((slot) => slot !== time)
-            );
-        } else if (selectedTimeSlots.length === 1) {
-            const [firstSelected] = selectedTimeSlots;
-            const newSelectedTimeSlots = timeList.indexOf(time) < timeList.indexOf(firstSelected)
-                ? [time, firstSelected]
-                : [firstSelected, time];
-            setSelectedTimeSlots(newSelectedTimeSlots);
-        } else if (selectedTimeSlots.length < 2) {
-            setSelectedTimeSlots((prevSelectedTimeSlots) => [
-                ...prevSelectedTimeSlots,
-                time,
-            ]);
-        }
+    const sortSelectedTimeSlots = (slots: string[]): string[] => {
+        return slots.sort((a, b) => timeList.indexOf(a) - timeList.indexOf(b));
     };
 
-    // Function to get the range of selected time indices
+    const toggleTimeSlotSelection = (time: string) => {
+        setSelectedTimeSlots((prevSelectedTimeSlots) => {
+            if (prevSelectedTimeSlots.includes(time)) {
+                return prevSelectedTimeSlots.filter((slot) => slot !== time);
+            } else {
+                if (prevSelectedTimeSlots.length < 2) {
+                    return sortSelectedTimeSlots([...prevSelectedTimeSlots, time]);
+                } else {
+                    const closestIndex = prevSelectedTimeSlots.reduce((closest, slot) => {
+                        const currentIndex = timeList.indexOf(slot);
+                        const newIndex = timeList.indexOf(time);
+                        const closestIndex = timeList.indexOf(closest);
+                        return Math.abs(newIndex - currentIndex) < Math.abs(newIndex - closestIndex) ? slot : closest;
+                    }, prevSelectedTimeSlots[0]);
+                    return sortSelectedTimeSlots(prevSelectedTimeSlots.map((slot) =>
+                        slot === closestIndex ? time : slot
+                    ));
+                }
+            }
+        });
+    };
+
     const getRangeIndices = () => {
         if (selectedTimeSlots.length < 2) return [];
 
@@ -95,18 +95,19 @@ const TimeWorkEdit: React.FC = () => {
 
     const rangeIndices = getRangeIndices();
 
-    // Get the names of weekend days from weekData
     const weekendDays = weekData
         .filter((day) => !day.active)
         .map((day) => day.dayName);
 
+    console.log('data', selectedTimeSlots);
+
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
-            <View style={{paddingLeft: 10}}>
-                <NavigationMenu name={`Время работы`}/>
+            <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
+            <View style={{ paddingLeft: 10 }}>
+                <NavigationMenu name={`Время работы`} />
             </View>
-            <ScrollView style={{marginTop: 15}}>
+            <ScrollView style={{ marginTop: 15 }}>
                 <View>
                     <Text style={styles.title}>Рабочие дни</Text>
                 </View>
@@ -123,9 +124,9 @@ const TimeWorkEdit: React.FC = () => {
                         )}
                 </View>
                 <View>
-                    <Text style={[styles.title, {marginTop: 15}]}>Время работы</Text>
+                    <Text style={[styles.title, { marginTop: 15 }]}>Время работы</Text>
                     <>
-                        <Text style={{color: "white", paddingHorizontal: 15, width: 340}}>
+                        <Text style={{ color: "white", paddingHorizontal: 15, width: 340 }}>
                             Выберите рабочее время в которое запись будет доступна для ваших
                             клиентов
                         </Text>
@@ -137,19 +138,15 @@ const TimeWorkEdit: React.FC = () => {
                                     onSelect={() => toggleTimeSlotSelection(time)}
                                     isSelected={selectedTimeSlots.includes(time)}
                                     isInRange={rangeIndices.includes(time)}
-                                    disabled={
-                                        selectedTimeSlots.length === 2 &&
-                                        !selectedTimeSlots.includes(time) &&
-                                        !rangeIndices.includes(time)
-                                    }
+                                    disabled={false}
                                 />
                             ))}
                         </View>
                     </>
                 </View>
                 <View>
-                    <Text style={[styles.title, {marginTop: 15}]}>Выходные дни</Text>
-                    <Text style={{color: "white", paddingHorizontal: 15}}>
+                    <Text style={[styles.title, { marginTop: 15 }]}>Выходные дни</Text>
+                    <Text style={{ color: "white", paddingHorizontal: 15 }}>
                         {weekendDays.length === 0 ? "Без выходных" : weekendDays.join(", ")}
                     </Text>
                 </View>
@@ -183,7 +180,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#21212e",
-        marginTop: 35,
+        paddingTop: 35,
     },
     title: {
         fontSize: 20,
