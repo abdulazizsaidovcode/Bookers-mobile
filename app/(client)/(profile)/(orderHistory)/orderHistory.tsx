@@ -33,7 +33,7 @@ const OrderHistory = () => {
     await getorderClientUpcoming(setUpcoming, setIsLoading);
   };
   const getPastcomingClient = async () => {
-    await getOrderClientPustComing(setPastComing);
+    await getOrderClientPustComing(setPastComing,setIsLoading);
   }
 
   const deleteToggleModal = () => {
@@ -156,7 +156,7 @@ const OrderHistory = () => {
 
         {activeTab === 'past' && (
           <ScrollView>
-            {pastComing.length !== 0 ? (
+            {isLoading ? <Loading/> : pastComing.length !== 0 ? (
               pastComing.map((pastComing: any, index: number) => (
                 <AccardionHistoryTwo key={index} id={pastComing.serviceIds} title={pastComing.serviceName} date={pastComing.orderDate} >
                   <ProfileCard

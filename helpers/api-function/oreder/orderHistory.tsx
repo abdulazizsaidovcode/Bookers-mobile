@@ -34,14 +34,23 @@ export const getorderClientUpcoming = async (
 
 //Pastcoming function 
 
-export const getOrderClientPustComing = async (setData: (val: getOrderClientPastcomingInterface[]) => void) => {
+export const getOrderClientPustComing = async (setData: (val: getOrderClientPastcomingInterface[]) => void, setIsLoading?: (val: boolean) => void) => {
+
+    setIsLoading ? setIsLoading(true) : () => { }
     try {
         const config = await getConfig();
         const getclientOrderPastcoming = await axios.get(clientOrderaPastComing, config ? config : {});
-        if (getclientOrderPastcoming.data.success) setData(getclientOrderPastcoming.data.body)
-        else setData([])
+        if (getclientOrderPastcoming.data.success) {
+            setData(getclientOrderPastcoming.data.body)
+            setIsLoading ? setIsLoading(false) : () => { }
+        }
+        else {
+            setData([])
+            setIsLoading ? setIsLoading(false) : () => { }
+        }
     }
     catch {
+        setIsLoading ? setIsLoading(false) : () => { }
         Toast.show('Upcoming topilmadi afsuski', Toast.LONG)
         setData([])
     }
