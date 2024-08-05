@@ -10,18 +10,16 @@ import { checkNumberFunction } from '@/helpers/api-function/register/registrFC';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister'
 import LoadingButtons from '@/components/(buttons)/loadingButton';
 import { useFocusEffect } from 'expo-router';
+import {useRoute} from "@react-navigation/native";
 
 const PhoneNumberInput: React.FC = () => {
+    const route = useRoute()
     const { phoneNumber, setPhoneNumber, setIsValid, isValid, setCode } = registerStory()
     const phoneInput = useRef<PhoneInput>(null);
     const { setIsRegtered } = isRegister()
     const [status, setStatus] = useState<boolean>(false);
     const { t } = useTranslation();
     const [pending, setPending] = useState(false);
-
-    // useEffect(() => {
-    //     if (code) setPhoneNumber('')
-    // }, [code]);
 
     const handlePhoneNumberChange = (text: string) => {
         setPhoneNumber(text);
@@ -32,6 +30,12 @@ const PhoneNumberInput: React.FC = () => {
         useCallback(() => {
             setIsRegtered(status);
         }, [status])
+    )
+
+    useFocusEffect(
+        useCallback(() => {
+            if (route.name === '(auth)/(login)/number-create') setPhoneNumber('')
+        }, [])
     )
 
     return (

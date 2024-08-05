@@ -58,17 +58,16 @@ const BookedAccordion: React.FC = () => {
     }, [calendarDate]);
 
     const handleTabChange = (tab: any) => {
-        let arr: any = []
-
+        let updatedServiceIds: any = [];
+    
         if (serviceIds && serviceIds.includes(tab)) {
-            arr = serviceIds.filter((res: any) => res !== tab)
+            updatedServiceIds = serviceIds.filter((res: any) => res !== tab);
         } else {
-            if (serviceIds) {
-                arr = [...serviceIds, tab]
-            }
-        };
-        setActiveTab(arr);
-        setServiceId(arr);
+            updatedServiceIds = [...(serviceIds || []), tab];
+        }
+    
+        setActiveTab(updatedServiceIds); // Update activeTab
+        setServiceId(updatedServiceIds); // Update serviceIds
         setActiveTime(''); // Reset active time when tab changes
     };
 
@@ -118,7 +117,7 @@ const BookedAccordion: React.FC = () => {
                     )) : <Text style={styles.placeholderText}>Нет услуг</Text>}
                 </ScrollView>
                 <View>
-                    {activeTab && (
+                    {activeTab.length > 0 && (
                         <View style={styles.timeContainer}>
                             {loading ? (
                                 <Loading />

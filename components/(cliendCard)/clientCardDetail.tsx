@@ -39,6 +39,9 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
   const { setSelectedCategoryId, selectedCategoryId } = ClientStory()
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [oneData, setOneData] = useState<any>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOpenModal = async () => setModalVisible(!modalVisible);
 
   const handleSelect = (id: string) => {
     let arr: any = []
@@ -129,17 +132,40 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
         activeOpacity={0.8}
         style={[tw`w-1/2 p-3 rounded-lg`, { backgroundColor: '#9C0A35' }]}
         onPress={() => {
-          onPress && onPress();
+          handleOpenModal();
           setOneData(item)
         }}
       >
         <Text style={[tw`text-center text-xl`, { color: '#FFFFFF' }]}>Подробнее</Text>
       </TouchableOpacity>
 
-      <BottomModal isBottomModal={false} toggleBottomModal={() => {}}>
-        <>
-
-        </>
+      <BottomModal isBottomModal={modalVisible} toggleBottomModal={handleOpenModal}>
+        <View style={{ width: '100%' }}>
+          {oneData && oneData.genderId && oneData.genderId.length > 0 ? (
+            oneData.genderId.map((id: any) => (
+              <TouchableOpacity
+                key={id}
+                style={tw`flex-row  mb-2`}
+                onPress={() => handleSelect(item.id)}
+              >
+                <Text style={[tw`ml-2 text-xl font-bold`, { color: '#fff' }]}>
+                  {genderMapping[id] || 'Hamma uchun'}
+                </Text>
+              </TouchableOpacity>
+            ))
+          ) : null}
+          <View style={[tw`px-3 py-2 border rounded-lg`, { alignItems: 'flex-start', borderColor: '#828282' }]}>
+            <Text style={[tw` `, { color: '#828282' }]}>{oneData && oneData.name}</Text>
+          </View>
+          {oneData && oneData.imageId && (
+            <Image
+              source={{ uri: getFile + oneData.attachmentId }}
+              style={tw`w-full h-40 rounded-lg mb-4`}
+            />
+          )}
+          <Text style={tw`text-white mb-2 mt-3`}>{oneData && oneData.description.trim()}</Text>
+          {oneData && oneData.subDescription && <Text style={tw`text-white mb-4`}>{oneData.subDescription}</Text>}
+        </View>
       </BottomModal>
     </View>
   );
