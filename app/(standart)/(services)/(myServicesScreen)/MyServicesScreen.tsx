@@ -95,7 +95,6 @@ const MyServicesScreen = () => {
         setSelectedCategory(index);
         getSpecializationData(categoryId);
         getMasterData(categoryId);
-        console.log("Selected category ID:", categoryId);
     };
 
     return (

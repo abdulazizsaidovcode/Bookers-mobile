@@ -14,7 +14,7 @@ import servicesStore from '@/helpers/state_managment/services/servicesStore';
 
 const ServesGender = () => {
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-    const {setCompleted} = servicesStore()
+    const { setCompleted } = servicesStore()
     const [isLoading, setIsLoading] = useState(false)
 
     const categories = [
@@ -25,18 +25,21 @@ const ServesGender = () => {
         setIsLoading(true)
         try {
             const config = await getConfig()
-            const response = await axios.post(`${gender_status}genders=${selectedCategories}`,{},config ? config : {});
-            if(response.data.success){
-              router.push("/category")  
-              setCompleted([true, true, false, false])
+            console.log(selectedCategories);
+            console.log(config);
+            const response = await axios.post(`${gender_status}genders=${selectedCategories}`,{}, config ? config : {});
+            if (response.data.success) {
+                console.log(response.data);
+                router.push("/category")
+                setCompleted([true, true, false, false])
             }
-            } catch (error) {
-            console.error("Error fetching services: ", error);    
-        }finally {
+        } catch (error) {
+            console.error("Error fetching services: ", error);
+        } finally {
             setIsLoading(false)
         }
-    }; 
-    
+    };
+
     const handleCategorySelect = (id: number) => {
         setSelectedCategories((prevSelected) => {
             if (prevSelected.includes(id)) {
@@ -56,9 +59,9 @@ const ServesGender = () => {
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
                 >
-                    
+
                     <View style={[tw`flex w-full`, { backgroundColor: '#21212E' }]}>
-                        {categories.map((category:any) => (
+                        {categories.map((category: any) => (
                             <ServicesCategory
                                 key={category.id}
                                 title={category.title}
@@ -68,7 +71,7 @@ const ServesGender = () => {
                         ))}
                     </View>
                     <View style={[tw`content-end mb-5`, { backgroundColor: '#21212E' }]}>
-                    
+
                         <Buttons
                             title="Сохранить"
                             onPress={post}

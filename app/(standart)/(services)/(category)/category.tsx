@@ -94,8 +94,6 @@ const Category = () => {
             openModal(id);
         }
     };
-
-    console.log(selectedCategory);
     
 
     return (

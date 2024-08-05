@@ -13,10 +13,12 @@ import { category_child, masterAdd_category } from '@/helpers/api';
 import { useRoute } from '@react-navigation/native';
 import Textarea from '@/components/select/textarea';
 import { getConfig } from '@/app/(tabs)/(master)/main';
+import Skelaton from '@/components/skelaton/skelaton';
+import AccordionSkelaton from '@/components/skelaton/accordionSkelaton';
 
 const Expertise: React.FC = () => {
     const route = useRoute();
-    const { childCategoryData, setChildCategoryData, selectedCategory, setCompleted } = servicesStore();
+    const { childCategoryData, setChildCategoryData, selectedCategory, setCompleted, selectedCategoryId } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [value, setValue] = useState('');
     const [validate, setValidate] = useState(false);
@@ -48,7 +50,9 @@ const Expertise: React.FC = () => {
     const getChildCategory = async (selectedCategory: string | null) => {
         try {
             const config = await getConfig();
+            console.log('Fetching child categories with config:', config);
             const response = await axios.get(`${category_child}${selectedCategory}`, config || {});
+            console.log('Received response:', response.data);
             if (response.data.success) {
                 const child = response.data.body.map((item: any) => ({
                     key: item.id,
@@ -66,38 +70,41 @@ const Expertise: React.FC = () => {
             setNoData(true);
         }
     };
+
     const postCategory = async (selectedCategoryId: string | null, value: string) => {
         try {
             const config = await getConfig();
-            console.log("Posting category with config:", config);
-            console.log("Data being sent to backend:", { selectedCategoryId, value });
-            const response = await axios.post(`${masterAdd_category}/${selectedCategoryId}?name=${value}`, {}, config || {});
+            const response = await axios.post(`${masterAdd_category}${selectedCategoryId}?name=${value}`, {}, config || {});
             if (response.data.success) {
-                getChildCategory(selectedCategory)
+                getChildCategory(selectedCategoryId);
             }
         } catch (error) {
             console.error("Error adding category:", error);
         }
     };
+
     const openModal = () => setModalVisible(true);
+
     const closeModal = () => {
         setModalVisible(false);
         setValue('');
     };
+
     const handleAdd = () => {
         if (value.trim()) {
-            postCategory(selectedCategory, value);
+            postCategory(selectedCategoryId, value);
             closeModal();
             setValue('');
         }
     };
+
     const handleCategorySelect = (item: any) => {
+        console.log('Selected Service ID:', item.id);
         setSelectedServices((prevSelected) => {
             const isSelected = prevSelected.find((service) => service.id === item.id);
             const updatedSelectedServices = isSelected
                 ? prevSelected.filter((service) => service.id !== item.id)
                 : [...prevSelected, item];
-            setSelectedServices(updatedSelectedServices);
             return updatedSelectedServices;
         });
     };
@@ -116,6 +123,7 @@ const Expertise: React.FC = () => {
     const handleSave = () => {
         router.push('../(process)/process');
         setCompleted([true, true, true, true]);
+        console.log('Selected Services:', selectedServices);
     };
 
     return (
@@ -128,7 +136,9 @@ const Expertise: React.FC = () => {
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
                     <View style={tw`w-full`}>
                         {loading ? (
-                            <ActivityIndicator size="large" color="#9C0A35" />
+                            <View style={tw`mt-5`}>
+                                <ActivityIndicator size="large" color="#9C0A35" />
+                            </View>
                         ) : noData ? (
                             <Text style={tw`text-gray-600 text-3xl text-center mt-4`}>Маълумот мавжуд эмас</Text>
                         ) : (
