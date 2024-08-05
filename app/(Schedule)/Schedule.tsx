@@ -52,7 +52,7 @@ const Schedule: React.FC = () => {
   )
 
   useEffect(() => {
-    if (serviceIds && calendarDate && timeHour) {
+    if (serviceIds.length > 0 && calendarDate && timeHour) {
       setActive(false);
     } else {
       setActive(true);
