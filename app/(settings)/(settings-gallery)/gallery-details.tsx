@@ -145,7 +145,7 @@ const GalleryDetails: React.FC = () => {
         }
     };
 
-    const toggleShowMain = () => setBooleanState({ ...booleanState, showMainSwitch: !booleanState.showMainSwitch });
+    const toggleShowMain = () => setBooleanState({ ...booleanState, showMainSwitch: !booleanState.showMainSwitch, isLoading: false });
     const toggleBottomModal = () => setBooleanState({ ...booleanState, isBottomModalOpen: !booleanState.isBottomModalOpen });
 
     const pickFromImagePicker = (from: 'camera' | 'gallery') => {
@@ -168,7 +168,7 @@ const GalleryDetails: React.FC = () => {
             editMainPhoto(setFullData, setData, id, selectedMainImages, toggleShowMain, setBooleanState, booleanState, setIsLoading)
         }
     };
-    console.log(booleanState.selectAll);
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -215,7 +215,7 @@ const GalleryDetails: React.FC = () => {
                                         disabled={selectedMainImages.some(image => image.attachmentId === albumItem.attachmentId && image.main)}
                                     >
                                         <MaterialIcons
-                                            name={selectedMainImages.some(image => image.attachmentId === albumItem.attachmentId && image.main) ? "check-box" : 'check-box-outline-blank'}
+                                            name={selectedMainImages.some(image => image.attachmentId === albumItem.attachmentId && image.main === true) ? "check-box" : 'check-box-outline-blank'}
                                             size={26} color="#9C0A35" />
                                     </TouchableOpacity>
                                 )}

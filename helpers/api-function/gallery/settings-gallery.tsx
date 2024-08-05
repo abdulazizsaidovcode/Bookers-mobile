@@ -32,6 +32,10 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
 };
 
 export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void, setMainImageIndices: (val: number[]) => void, goBack: () => void, setIsloading: (val: boolean) => void) => {
+  if (!name.trim()) {
+    return Toast.show("Please enter a valid name", Toast.LONG);
+  }
+  setIsloading(true)
   try {
     const config = await getConfigImg()
     const { data } = await axios.post(`${main_gallery}?name=${name}`, formData, config ? config : {});
@@ -42,10 +46,11 @@ export const addData = async (formData: FormData, name: string, setData: (data: 
       setMainImageIndices([])
       goBack()
       Toast.show("Ваша галерея добавлена", Toast.LONG);
-    }
+    } else setIsloading(false)
   } catch (error: any) {
-    Toast.show(error.response.data.message, Toast.LONG);
+    setIsloading(false)
     console.log(error);
+    Toast.show(error.response.data.message, Toast.LONG);
   }
 };
 
@@ -94,7 +99,6 @@ export const editMainPhoto = async (setFullData: (data: GalleryData) => void, se
       fetchFullData(galleryId, setFullData);
       fetchData(setData, setIsloading);
       toggleShowMain()
-      setBooleanState({ ...booleanState, isLoading: false })
       Toast.show('Ваша основная фотография успешно обновлена.', Toast.LONG)
     } else setBooleanState({ ...booleanState, isLoading: false })
   } catch (error) {

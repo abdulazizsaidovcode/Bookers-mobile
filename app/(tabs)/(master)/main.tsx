@@ -588,7 +588,7 @@ const CardsSection: React.FC<{ mainStatisticData: any }> = ({
 }) => (
   <View style={styles.cardsSection}>
     <View style={styles.card}>
-      <Text style={styles.cardTitle}>Отменённые сеансы</Text>
+      <Text style={{ color: '#000' }}>Отменённые сеансы</Text>
       <Text style={{ color: COLORS.mainRed, fontSize: 24, fontWeight: "bold" }}>
         {mainStatisticData.rejectedOrder}
       </Text>
