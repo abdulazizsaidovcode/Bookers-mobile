@@ -31,19 +31,23 @@ interface CategoryType {
 interface useTopMasters {
   masters: Master[];
   isLoading: boolean;
+  err: any;
   category: CategoryType[];
   setCategory: (category: CategoryType[]) => void;
   setTopMasters: (data: Master[]) => void;
   setIsloading: (val: boolean) => void;
+  setErr: (res: any) => void;
 }
 
 const useTopMastersStore = create<useTopMasters>((set) => ({
   masters: [],
   isLoading: false,
   category: [],
+  err: null,
   setCategory: (category: CategoryType[]) => set({ category }),
   setTopMasters: (data: Master[]) => set({ masters: data }),
   setIsloading: (val: boolean) => set({ isLoading: val }),
+  setErr: (err: any) => set({ err }),
 }));
 
 export default useTopMastersStore;

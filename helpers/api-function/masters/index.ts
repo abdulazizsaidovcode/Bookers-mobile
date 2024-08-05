@@ -39,14 +39,12 @@ export const getTopMasters = async (
   size = 10,
   name?: string
 ): Promise<void> => {
-  const { setTopMasters, setIsloading, masters } =
+  const { setTopMasters, setIsloading, masters, setErr } =
     useTopMastersStore.getState();
   setIsloading(true);
   try {
     const config = await getConfig();
-    console.log(config);
     console.log(page);
-    
     const url = name
       ? `${base_url}user/top/masters?page=${page}&size=${size}&nameOrPhone=${name}`
       : `${base_url}user/top/masters?page=${page}&size=${size}`;
@@ -66,10 +64,12 @@ export const getTopMasters = async (
       setTopMasters([...result]);
     } else {
       setTopMasters([...masters]);
+      setErr(data);
     }
   } catch (error) {
     console.error("Error fetching top masters:", error);
     setTopMasters([]);
+    setErr(error);
   } finally {
     setIsloading(false);
   }
@@ -88,5 +88,25 @@ export const getCategory = async () => {
   } catch (error) {
     console.error("Error fetching categories:", error);
     setCategory([]);
+  }
+};
+
+export const searchMasters = async (name: string) => {
+  const { setTopMasters, setIsloading, masters } =
+    useTopMastersStore.getState();
+  setIsloading(true);
+  try {
+    const config = await getConfig();
+    const { data } = await axios.get(
+      `${base_url}user/top/masters?nameOrPhone=${name}`,
+      config ? config : {}
+    );
+    setTopMasters(data.body.object);
+    return data.body.object;
+  } catch (error) {
+    setTopMasters([]);
+    console.log(error);
+  } finally {
+    setIsloading(false);
   }
 };

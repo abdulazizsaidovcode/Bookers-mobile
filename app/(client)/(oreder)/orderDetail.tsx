@@ -28,6 +28,7 @@ import { addMessageInterface } from '@/type/client/editClient';
 import { AddMessageOrderUpcoming } from '@/helpers/api-function/oreder/orderHistory';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { fetchMasterLocation } from '@/helpers/api-function/map/map';
+import { Loading } from '@/components/loading/loading';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -174,14 +175,14 @@ const ClientOrderDetail = () => {
     }
     useFocusEffect(
         useCallback(() => {
-        setSelectedClient(masterData)
-    }, [masterData]))
+            setSelectedClient(masterData)
+        }, [masterData]))
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
             <NavigationMenu name={orderOneData ? orderOneData.firstName : ''} navigate={() => navigation.navigate('(tabs)/(client)')} />
-            <View style={tw`flex-1`}>
+            {orderOneData ? <View style={tw`flex-1`}>
                 {orderOneData && orderOneData.orderStatus && <View style={[styles.head, { backgroundColor: orderOneData && orderOneData.orderStatus ? statusRegex(orderOneData.orderStatus) : '#9C0A35' }]}>
                     <Text style={{ textAlign: 'center', color: '#fff' }}>{orderOneData ? statusName(orderOneData.orderStatus) : ''}</Text>
                 </View>}
@@ -196,12 +197,11 @@ const ClientOrderDetail = () => {
                     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 >
                     <View style={tw`mt-3`}>
-                        <TouchableOpacity
+                        <View
                             style={[
                                 tw`items-start justify-start px-4 py-5 mb-3 rounded-2xl`,
                                 { backgroundColor: "#B9B9C9" },
                             ]}
-                            activeOpacity={0.8}
                         >
                             <View
                                 style={[
@@ -250,12 +250,12 @@ const ClientOrderDetail = () => {
                             <Text style={[tw` text-sm  mt-5`, { lineHeight: 22, color: '#4F4F4F' }]}>
                                 {orderOneData ? orderOneData.address : ''}
                             </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={.9} style={styles.button}>
+                        </View>
+                        <View style={styles.button}>
                             <Text style={styles.text}>
                                 {orderOneData && orderOneData.serviceName}
                             </Text>
-                        </TouchableOpacity>
+                        </View>
                         <View style={tw`mt-3`}>
                             <HistoryCard
                                 name={orderOneData ? `${moment(orderOneData.orderDate).format('dddd, D MMMM')}` : ''}
@@ -427,6 +427,9 @@ const ClientOrderDetail = () => {
                     </View>
                 </ScrollView>
             </View >
+                :
+                <Loading />
+            }
         </SafeAreaView >
     );
 };

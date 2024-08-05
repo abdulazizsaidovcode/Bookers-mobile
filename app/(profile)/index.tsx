@@ -273,7 +273,7 @@ const ProfilePage: React.FC = () => {
         <View style={styles.profileHeader}>
           <Image
             source={
-              getMee.attachmentId
+              getMee && getMee.attachmentId
                 ? { uri: getFile + getMee.attachmentId }
                 : require("@/assets/avatar.png")
             }
@@ -282,7 +282,7 @@ const ProfilePage: React.FC = () => {
           <View>
             {/* <View style={{flexDirection: "row", justifyContent:"center", gap: 4}}> */}
             <Text style={styles.profileName}>
-              {getMee.firstName} {getMee.lastName}
+              {getMee && getMee.firstName ? getMee.firstName : "No data"} {getMee && getMee.lastName && getMee.lastName}
             </Text>
             {/* <Image
                 source={{
@@ -291,7 +291,7 @@ const ProfilePage: React.FC = () => {
                 style={{width:"12%"}}
               /> */}
             {/* </View> */}
-            <Text style={styles.profilePhone}>{getMee.phoneNumber}</Text>
+            <Text style={styles.profilePhone}>{getMee && getMee.phoneNumber ? getMee.phoneNumber : "No data"}</Text>
           </View>
         </View>
 

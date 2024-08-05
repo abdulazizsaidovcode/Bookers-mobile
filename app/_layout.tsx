@@ -192,7 +192,7 @@ function RootLayoutNav() {
       <InternetNotice />
       <StompProvider>
         <MenuProvider>
-          <Stack.Navigator initialRouteName="index">
+          <Stack.Navigator initialRouteName="index" screenOptions={{animation: 'none'}}>
             <Stack.Screen
               name="index"
               component={Index}

@@ -37,7 +37,7 @@ const Notification: React.FC = () => {
             const config = await getConfig();
             const { data } = await axios.get(`${base_url}notification`, config ? config : {});
             if (data.success) {
-                setNotifications(data.body);
+                setNotifications(data.body.reverse());
             }else {
                 setNotifications([]);
             }

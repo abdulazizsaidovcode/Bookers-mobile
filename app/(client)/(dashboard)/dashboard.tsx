@@ -64,7 +64,7 @@ const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
 };
 
 const Navbar: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>()
   const { hasNotification, setHasNotification } = hasNotificationState()
 
   useFocusEffect(
@@ -91,7 +91,9 @@ const Navbar: React.FC = () => {
             {hasNotification && <View style={styles.notificationDot} />}
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+        onPress={() => navigation.navigate('(client)/(favourite-orders)/favourite-orders')}
+        >
           <Feather name="bookmark" size={28} color="white" />
         </TouchableOpacity>
       </View>

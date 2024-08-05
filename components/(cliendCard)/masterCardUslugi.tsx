@@ -7,6 +7,7 @@ import webPageStore from '@/helpers/state_managment/wepPage/wepPage';
 import { ClientData } from '@/helpers/state_managment/uslugi/uslugiStore';
 import { addFavouriteOrder, haveOrNot } from '@/helpers/api-function/favourite-orders/favourite-orders';
 import { FavouriteOrdersType } from '@/type/favourite-orders/favourite-orders';
+import {getFile} from "@/helpers/api";
 
 
 type ClientCardItem = {
@@ -36,7 +37,7 @@ const MasterCardUslugi: React.FC<ClientCardItem> = ({ onPress, item, setFavourit
         <View style={[tw`p-4 rounded-2xl shadow-lg`, { backgroundColor: '#B9B9C9' }]}>
             <View style={tw`flex-row items-center mb-4`}>
                 <Image
-                    source={item && item.attachmentId && item && item.attachmentId ? {} : require('../../assets/avatar.png')}
+                    source={(item && item.attachmentId) ? {uri: getFile + item.attachmentId} : require('../../assets/avatar.png')}
                     style={tw`w-16 h-16 rounded-full mr-3`}
                 />
                 <View style={tw`flex-1`}>

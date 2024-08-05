@@ -13,7 +13,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Entypo from "@expo/vector-icons/Entypo";
 import debounce from "lodash.debounce";
 import useTopMastersStore from "@/helpers/state_managment/masters";
-import { getCategory, getTopMasters } from "@/helpers/api-function/masters";
+import { getCategory, getTopMasters, searchMasters } from "@/helpers/api-function/masters";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import AccardionSlider from "@/components/accordions/accardionSlider";
 import AccardionSliderTwo from "@/components/accordions/accardionSliderTwo";
@@ -39,10 +39,9 @@ import { getConfig } from "@/app/(tabs)/(master)/main";
 const { height } = Dimensions.get('window');
 
 const Masters = () => {
-  const { masters, isLoading, category, setTopMasters } = useTopMastersStore();
+  const { masters, isLoading, category, setTopMasters, err } = useTopMastersStore();
   const [bottomModal, setBottomModal] = useState(false);
   const [pastEntries, setPastEntries] = useState<string[]>([]);
-  const [search, setSearch] = useState<string>("");
   const { rating, value } = useCommunitySlider(); // value * 1000
   const { genderIndex } = useAccardionStore();
   const { userLocation } = useGetMeeStore();
@@ -59,16 +58,25 @@ const Masters = () => {
     setPastEntries(res);
   };
 
+  const mastersSearch = (e: any) => {
+    searchMasters(e)
+    if (!e.length) {
+      setPage(0)
+    }
+  }
+
 
 
   useEffect(() => {
-    getTopMasters(page, 10, search);
+    getTopMasters(page, 10);
     getCategory()
-  }, [page, search]);
+  }, [page]);
+
 
   const loadMore = useCallback(
+
     debounce(() => {
-      if (!loadingMore && !isLoading) {
+      if ((!loadingMore && !isLoading) && !err) {
         setLoadingMore(true);
         setPage((prevPage) => prevPage + 1);
       }
@@ -227,12 +235,12 @@ const Masters = () => {
       // );
       const config = await getConfig();
 
-      const postData = { categoryId: pastEntries, gender: genderIndex, nextToMe: value * 1000, lat: userLocation.coords.latitude, lng: userLocation?.coords.longitude };
+      const postData = { categoryId: pastEntries, gender: genderIndex, nextToMe: value * 1000, rating, lat: userLocation.coords.latitude, lng: userLocation?.coords.longitude };
       const url = `${getClient_filter}?page=${page ? page : 0}&size=${10}${pastEntries ? `&nameOrPhone=""` : ""}`;
       const { data } = await axios.post(url, postData, config ? config : {});
-
+      console.log(postData);
+      
       setTopMasters(data.body.object)
-      console.log(data.body.object);
 
       setPastEntries([]);
       toggleBottomModal();
@@ -276,8 +284,7 @@ const Masters = () => {
 
       <View style={tw`w-full`}>
         <LocationInput
-          onChangeText={(e) => setSearch(e)}
-          value={search}
+          onChangeText={mastersSearch}
           placeholder="Search"
         />
       </View>
@@ -308,65 +315,65 @@ const Masters = () => {
           children={
             <View style={[tw`w-full mt-3`, { maxHeight: height * 0.7 }]}>
               <ScrollView style={[tw`w-full mt-3`, { maxHeight: 600 }]}>
-              <Text style={tw`text-xl text-center mb-5 text-white font-bold`}>
-                Фильтр
-              </Text>
-              <AccordionCustom
-                title="Направления услуг"
-                children={
-                  <View>
-                    {category.length &&
-                      category.map((item: any, i: any) => (
-                        <View style={tw`flex-row mt-2`} key={i}>
-                          {pastEntries && pastEntries.includes(item.id) ? (
-                            <Pressable
-                              onPress={() => deletePastEntries(item.id)}
-                              key={`checked-${item.id}`}
-                              style={[
-                                tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                                { backgroundColor: "#9C0A35" },
-                              ]}
-                            >
-                              <Ionicons
-                                name="checkmark"
-                                size={18}
-                                color="white"
-                                style={tw`font-bold`}
-                              />
-                            </Pressable>
-                          ) : (
-                            <Pressable
-                              onPress={() =>
-                                setPastEntries([...pastEntries, item.id])
-                              }
-                              key={`unchecked-${item.id}`}
-                              style={[
-                                tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                                {
-                                  backgroundColor: "#B9B9C9",
-                                  borderWidth: 2,
-                                  borderColor: "gray",
-                                },
-                              ]}
-                            ></Pressable>
-                          )}
-                          <Text key={i}>{item.name}</Text>
-                        </View>
-                      ))}
-                  </View>
-                }
-              />
-              <AccordionFree title="Пол мастера" />
-              <AccardionSlider title="Рядом со мной" />
-              <AccardionSliderTwo title="Рейтинг" />
-              <View style={tw`mt-7`}>
-                <Buttons onPress={handleClick} title="Сохранять" />
-              </View>
+                <Text style={tw`text-xl text-center mb-5 text-white font-bold`}>
+                  Фильтр
+                </Text>
+                <AccordionCustom
+                  title="Направления услуг"
+                  children={
+                    <View>
+                      {category.length &&
+                        category.map((item: any, i: any) => (
+                          <View style={tw`flex-row mt-2`} key={i}>
+                            {pastEntries && pastEntries.includes(item.id) ? (
+                              <Pressable
+                                onPress={() => deletePastEntries(item.id)}
+                                key={`checked-${item.id}`}
+                                style={[
+                                  tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                                  { backgroundColor: "#9C0A35" },
+                                ]}
+                              >
+                                <Ionicons
+                                  name="checkmark"
+                                  size={18}
+                                  color="white"
+                                  style={tw`font-bold`}
+                                />
+                              </Pressable>
+                            ) : (
+                              <Pressable
+                                onPress={() =>
+                                  setPastEntries([...pastEntries, item.id])
+                                }
+                                key={`unchecked-${item.id}`}
+                                style={[
+                                  tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                                  {
+                                    backgroundColor: "#B9B9C9",
+                                    borderWidth: 2,
+                                    borderColor: "gray",
+                                  },
+                                ]}
+                              ></Pressable>
+                            )}
+                            <Text key={i}>{item.name}</Text>
+                          </View>
+                        ))}
+                    </View>
+                  }
+                />
+                <AccordionFree title="Пол мастера" />
+                <AccardionSlider title="Рядом со мной" />
+                <AccardionSliderTwo title="Рейтинг" />
+                <View style={tw`mt-7`}>
+                  <Buttons isDisebled={!!pastEntries.length} onPress={handleClick} title="Сохранять" />
+                </View>
               </ScrollView>
             </View>
           }
         />
-    </View>
+      </View>
     </View >
   );
 };

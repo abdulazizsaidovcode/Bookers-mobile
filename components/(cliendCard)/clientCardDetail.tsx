@@ -3,6 +3,7 @@ import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
+import BottomModal from "@/components/(modals)/modal-bottom";
 export interface Service {
   id: string;
   name: string;
@@ -35,8 +36,12 @@ const genderMapping: any = {
 };
 
 const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) => {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const { setSelectedCategoryId, selectedCategoryId } = ClientStory()
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [oneData, setOneData] = useState<any>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOpenModal = async () => setModalVisible(!modalVisible);
 
   const handleSelect = (id: string) => {
     let arr: any = []
@@ -53,11 +58,9 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
 
   useEffect(() => {
     setSelectedCategoryId(selectedIds)
-    setTimeout(() => {
-      console.log(selectedIds);
-    }, 1000)
-
   }, [selectedIds])
+
+  console.log('one data items: ', oneData)
 
   return (
     <View style={[tw`p-4 rounded-2xl`, { backgroundColor: "#B9B9C9" }]}>
@@ -128,10 +131,42 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
       <TouchableOpacity
         activeOpacity={0.8}
         style={[tw`w-1/2 p-3 rounded-lg`, { backgroundColor: '#9C0A35' }]}
-        onPress={onPress}
+        onPress={() => {
+          handleOpenModal();
+          setOneData(item)
+        }}
       >
         <Text style={[tw`text-center text-xl`, { color: '#FFFFFF' }]}>Подробнее</Text>
       </TouchableOpacity>
+
+      <BottomModal isBottomModal={modalVisible} toggleBottomModal={handleOpenModal}>
+        <View style={{ width: '100%' }}>
+          {oneData && oneData.genderId && oneData.genderId.length > 0 ? (
+            oneData.genderId.map((id: any) => (
+              <TouchableOpacity
+                key={id}
+                style={tw`flex-row  mb-2`}
+                onPress={() => handleSelect(item.id)}
+              >
+                <Text style={[tw`ml-2 text-xl font-bold`, { color: '#fff' }]}>
+                  {genderMapping[id] || 'Hamma uchun'}
+                </Text>
+              </TouchableOpacity>
+            ))
+          ) : null}
+          <View style={[tw`px-3 py-2 border rounded-lg`, { alignItems: 'flex-start', borderColor: '#828282' }]}>
+            <Text style={[tw` `, { color: '#828282' }]}>{oneData && oneData.name}</Text>
+          </View>
+          {oneData && oneData.imageId && (
+            <Image
+              source={{ uri: getFile + oneData.attachmentId }}
+              style={tw`w-full h-40 rounded-lg mb-4`}
+            />
+          )}
+          <Text style={tw`text-white mb-2 mt-3`}>{oneData && oneData.description.trim()}</Text>
+          {oneData && oneData.subDescription && <Text style={tw`text-white mb-4`}>{oneData.subDescription}</Text>}
+        </View>
+      </BottomModal>
     </View>
   );
 };
