@@ -119,7 +119,7 @@ const SingleBreakBetweenSession = () => {
                       renderModalItem({
                         item,
                         onPress: () => setSelectHour(item),
-                        isActive: item === selectedHour,
+                        isActive: item === SelectHour,
                         isHour: true,
                       })
                     }
@@ -135,7 +135,7 @@ const SingleBreakBetweenSession = () => {
                       renderModalItem({
                         item,
                         onPress: () => setSelectMinute(item),
-                        isActive: item === selectedMinute,
+                        isActive: item === SelectMinute,
                         isHour: false,
                       })
                     }
