@@ -58,6 +58,7 @@ const Process: React.FC = () => {
     const [service, setService] = useState<string>('');
     const { width } = Dimensions.get('window');
     const [image, setImage] = useState<string | null>(null);
+    const [images, setImages] = useState<string | null>(null)
     const [modalVisible, setModalVisible] = useState(false);
     const { setTariff, tariff } = clientStore();
     const [price, setPrice] = useState<string>('');
@@ -92,7 +93,7 @@ const Process: React.FC = () => {
 
         if (!result.canceled && result.assets && result.assets.length > 0) {
             setImage(result.assets[0].uri);
-            uploadImage(result.assets[0], setImage)
+            uploadImage(result.assets[0], setImages)
         }
         setModalVisible(false);
     };
@@ -111,7 +112,7 @@ const Process: React.FC = () => {
 
         if (!result.canceled && result.assets && result.assets.length > 0) {
             setImage(result.assets[0].uri);
-            uploadImage(result.assets[0], setImage)
+            uploadImage(result.assets[0], setImages)
         }
         setModalVisible(false);
     };
@@ -133,7 +134,7 @@ const Process: React.FC = () => {
                 name: service,
                 price: parseFloat(price),
                 description: description,
-                attachmentId: tariff && tariff === 'STANDARD' ? image : null,
+                attachmentId: tariff && tariff === 'STANDARD' ? images : null,
                 active: true,
                 serviceTime: convertTimeToMinutes(time)
             };
