@@ -2,7 +2,7 @@ import { getFreeTime } from '@/helpers/api-function/freeTime/freeTime';
 import { useScheduleFreeTime } from '@/helpers/state_managment/freeTime/freeTime';
 import graficWorkStore from '@/helpers/state_managment/graficWork/graficWorkStore';
 import { useOrderPosdData } from '@/helpers/state_managment/order/order';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, FlatList } from 'react-native';
 import { List } from 'react-native-paper';
@@ -11,14 +11,13 @@ import { useSheduleData } from '@/helpers/state_managment/schedule/schedule';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import { getUser } from '@/helpers/api-function/getMe/getMee';
 import { fetchServices } from '@/helpers/api-function/client/client';
-import { useFocusEffect } from 'expo-router';
 import { Loading } from '@/components/loading/loading';
 
 const { width } = Dimensions.get('window');
 
 const BookedAccordion: React.FC = () => {
-    const [services, setServices] = useState<any>([]);
-    const [activeTab, setActiveTab] = useState('');
+    const [services, setServices] = useState<any[]>([]);
+    const [activeTab, setActiveTab] = useState<any[]>([]);
     const [activeTime, setActiveTime] = useState('');
     const { FreeTime, setFreeTime } = useScheduleFreeTime();
     const { calendarDate } = graficWorkStore();
@@ -28,7 +27,7 @@ const BookedAccordion: React.FC = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const { setTime, serviceIds, setServiceId, setDate } = useSheduleData();
     const { getMee, setGetMee } = useGetMeeStore();
-    const [loading, setLoading] = useState(true); // loading state
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function getFreeTimeAndUser() {
@@ -42,18 +41,24 @@ const BookedAccordion: React.FC = () => {
 
         getFreeTimeAndUser();
     }, [calendarDate, getMee.id]);
-    console.log(FreeTime);
 
+    useFocusEffect(
+        useCallback(() => {
+            // Reset active tabs and time when the screen is focused
+            setActiveTab([]);
+            setActiveTime('');
+        }, [])
+    );
 
     useEffect(() => {
-        if (calendarDate && activeTime && activeTab) {
+        if (calendarDate && activeTime && activeTab.length > 0) {
             setActiveBtn(true);
         }
-    }, [calendarDate, activeTime, activeTab]);
+    }, [calendarDate, activeTime, activeTab.length > 0]);
 
     useEffect(() => {
         fetchServices(setServices);
-        setActiveTab('');
+        setActiveTab([]);
         setActiveTime('');
     }, [calendarDate]);
 
