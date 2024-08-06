@@ -150,7 +150,7 @@ const Category = () => {
                                         {childCategoryData.length > 0 ? (
                                             <ScrollView style={childCategoryData.length > 10 ? { maxHeight: 200 } : { maxHeight: 200 }}>
                                                 {childCategoryData.map((item: any, idx: any) => (
-                                                    <Text key={item.id} style={{ color: '#FFFFFF', fontSize: 16,fontWeight:'regular', fontFamily:'Montserrat' }}>
+                                                    <Text key={item.id} style={{ color: '#FFFFFF', fontSize: 15,fontWeight:'regular', fontFamily:'Montserrat',marginBottom:4 }}>
                                                         {idx + 1}. {item.name}
                                                     </Text>
                                                 ))}
