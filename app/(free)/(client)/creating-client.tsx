@@ -255,7 +255,7 @@ const CreatingClient = () => {
                                 dropdownStyles={styles.dropdown}
                                 dropdownTextStyles={tw`text-white text-lg`}
                                 setSelected={(e: string) => handleInputChange('ageId', e)}
-                                data={ages ? ages : [{key: 'Ma\'lumot yuq', value: ''}]}
+                                data={ages ? ages : [{key: '', value: 'Ma\'lumot yuq'}]}
                                 save='key'
                                 search={false}
                                 placeholder="Возраст"
@@ -341,9 +341,7 @@ const styles = StyleSheet.create({
     dropdown: {
         zIndex: 1000,
         width: '100%',
-        position: 'absolute',
         backgroundColor: '#4b4b63',
-        top: 55
     }
 });
 
