@@ -17,6 +17,8 @@ import {handleRefresh} from "@/constants/refresh";
 import ContactInformation from "@/components/contact-information/contact-information";
 import {getMee} from "@/helpers/token";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
+import {useFocusEffect} from "expo-router";
+import {getMasterTariff} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/records-information'>;
 
@@ -46,7 +48,7 @@ const RecordsInformation = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<any>();
     const {orderID} = route.params;
-    const {isLoading, setIsLoading, refreshing, setRefreshing} = clientStore()
+    const {isLoading, setIsLoading, refreshing, setRefreshing, tariff, setTariff} = clientStore()
     const {setGetMee} = useGetMeeStore()
     const [orderOneData, setOrderOneData] = useState<OrderOne | null>(null)
     const [isModal, setIsModal] = useState<boolean>(true)
@@ -54,6 +56,10 @@ const RecordsInformation = () => {
     const [rating, setRating] = useState(0);
     const [isConfirm, setIsConfirm] = useState(false);
     const [successStatus, setSuccessStatus] = useState('');
+
+    useFocusEffect(useCallback(() => {
+        getMasterTariff(setTariff)
+    }, []))
 
     useEffect(() => {
         if (orderID) orderGetOne(orderID, setOrderOneData)
@@ -90,7 +96,7 @@ const RecordsInformation = () => {
     return (
         <SafeAreaView style={[tw`flex-1`, {backgroundColor: '#21212E'}]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`}/>
-            <NavigationMenu name={``} navigate={() => navigation.navigate('(free)/(client)/main')}/>
+            <NavigationMenu name={``} navigate={() => tariff === 'FREE' ? navigation.navigate('(free)/(client)/main') : navigation.navigate('(standart)/(client)/standard-main')}/>
             <View style={tw`flex-1`}>
                 <ScrollView
                     showsHorizontalScrollIndicator={false}
