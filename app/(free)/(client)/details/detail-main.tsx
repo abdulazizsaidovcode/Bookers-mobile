@@ -10,13 +10,21 @@ import CenteredModal from "@/components/(modals)/modal-centered";
 import React, {useCallback, useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Textarea from "@/components/select/textarea";
-import {addClientMessage, getAgeList, getHistoryCount, getMeClient, getRegionList} from "@/helpers/api-function/client/client";
+import {
+    addClientMessage,
+    getAgeList,
+    getHistoryCount,
+    getMeClient,
+    getRegionList
+} from "@/helpers/api-function/client/client";
 import FiltersButton from "@/components/(buttons)/filters-button";
 import HistoryMain from "@/app/(free)/(client)/details/history/history-main";
 import ProfileUpdate from "@/app/(free)/(client)/details/history/profile-update";
 import {getMee} from "@/helpers/token";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import {handleRefresh} from "@/constants/refresh";
+import {useFocusEffect} from "expo-router";
+import {getMasterTariff} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
@@ -24,12 +32,27 @@ const DetailMain = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const route = useRoute<any>();
     const {infoClient} = route.params;
-    const {isLoading, setIsLoading, historyCountData, setHistoryCountData, setAgeData, setRegionData, refreshing, setRefreshing} = clientStore()
+    const {
+        isLoading,
+        setIsLoading,
+        historyCountData,
+        setHistoryCountData,
+        setAgeData,
+        setRegionData,
+        refreshing,
+        setRefreshing,
+        tariff,
+        setTariff
+    } = clientStore()
     const {setGetMee} = useGetMeeStore()
     const [bottomModalSMS, setBottomModalSMS] = useState(false)
     const [messageVal, setMessageVal] = useState('')
     const [role, setRole] = useState('basics')
     const [clientData, setClientData] = useState<any>(null);
+
+    useFocusEffect(useCallback(() => {
+        getMasterTariff(setTariff)
+    }, []))
 
     useEffect(() => {
         getHistoryCount(setHistoryCountData, infoClient.id)
@@ -106,7 +129,9 @@ const DetailMain = () => {
                             }}
                         >
                             <>
-                                <Text style={tw`text-center text-white text-lg font-semibold mb-5`}>Написать сообщение</Text>
+                                <Text style={tw`text-center text-white text-lg font-semibold mb-5`}>
+                                    Написать сообщение
+                                </Text>
                                 <Textarea
                                     placeholder={`Сообщение`}
                                     value={messageVal}

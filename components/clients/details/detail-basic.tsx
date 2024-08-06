@@ -1,29 +1,37 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, Switch, Text, TouchableOpacity, View} from "react-native";
 import tw from "tailwind-react-native-classnames";
-import {MaterialIcons} from '@expo/vector-icons';
+import {Feather, MaterialIcons} from '@expo/vector-icons';
 import {getFile} from "@/helpers/api";
 import CenteredModal from "@/components/(modals)/modal-centered";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import {clientDelete, getClientAll, getClientStatistics, sliceText} from "@/helpers/api-function/client/client";
 import ContactInformation from "@/components/contact-information/contact-information";
 import {useNavigation} from "@react-navigation/native";
+import {useFocusEffect} from "expo-router";
+import {getMasterTariff} from "@/constants/storage";
+import FiltersButton from "@/components/(buttons)/filters-button";
+import SwitchWithLabel from "@/components/switchWithLabel/switchWithLabel";
 
 const ClientDetailBasic = ({client}: { client?: any }) => {
     const navigation = useNavigation<any>()
-    const {setIsLoading, isLoading, setAllClients, setStatusData} = clientStore()
+    const {setIsLoading, isLoading, setAllClients, setStatusData, tariff} = clientStore()
     const [isClientModalDelete, setIsClientModalDelete] = useState(false)
     const [deleteData, setDeleteData] = useState(false)
+    const [isSwitch, setIsSwitch] = useState(true)
     const toggleModalDelete = () => setIsClientModalDelete(!isClientModalDelete)
 
     useEffect(() => {
         if (deleteData) {
+            if (tariff === 'FREE') navigation.navigate('(free)/(client)/main')
+            else navigation.navigate('(standart)/client/standard-main')
             getClientAll(setAllClients)
             getClientStatistics(setStatusData)
-            navigation.navigate('(free)/(client)/main')
             setDeleteData(false)
         }
     }, [deleteData]);
+
+    const toggleSwitch = () => setIsSwitch(!isSwitch)
 
     return (
         <>
@@ -32,11 +40,43 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                     source={(client && client.attachmentId) ? {uri: `${getFile}${client.attachmentId}`} : require('../../../assets/avatar.png')}
                     style={[tw`rounded-full`, styles.profileImage]}
                 />
-                <Text style={styles.profileName}>
-                    {sliceText(client.firstName, client.lastName)}
-                </Text>
+                <View style={tw`flex-column`}>
+                    <Text style={styles.profileName}>
+                        {sliceText(client.firstName, client.lastName)}
+                    </Text>
+
+                    {tariff === 'STANDARD' && (
+                        <View style={{alignSelf: 'flex-start', marginTop: 5}}>
+                            <FiltersButton
+                                title={`client`}
+                                isDisebled={false}
+                                backgroundColor={`#00A1D3`}
+                                textColor={`white`}
+                            />
+                        </View>
+                    )}
+                </View>
             </View>
 
+            {tariff === 'STANDARD' && (
+                <TouchableOpacity
+                    activeOpacity={.8}
+                    style={[styles.deleteButton, tw`items-center justify-between`]}
+                >
+                    <View style={tw`flex-row items-center justify-start`}>
+                        <Feather name="check-circle" size={30} color="#9C0A35"/>
+                        <Text style={[styles.deleteButtonText, {color: 'black', fontWeight: 900}]}>Сделать VIP</Text>
+                    </View>
+                    <Switch
+                        style={{transform: 'scale(1.3)'}}
+                        trackColor={{false: "#767577", true: "#9C0A35"}}
+                        thumbColor={isSwitch ? "#FFFFFF" : "#FFFFFF"}
+                        ios_backgroundColor="#3e3e3e"
+                        onValueChange={() => toggleSwitch()}
+                        value={isSwitch}
+                    />
+                </TouchableOpacity>
+            )}
             <TouchableOpacity
                 activeOpacity={.7}
                 style={styles.deleteButton}
@@ -45,7 +85,7 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                 }}
             >
                 <MaterialIcons name="delete" size={30} color="#9C0A35"/>
-                <Text style={styles.deleteButtonText}>Удалить клиента</Text>
+                <Text style={[styles.deleteButtonText, {color: '#9C0A35'}]}>Удалить клиента</Text>
             </TouchableOpacity>
 
             {/*contact info*/}
@@ -91,7 +131,6 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     deleteButtonText: {
-        color: '#9C0A35',
         fontSize: 18,
         fontWeight: '700',
         marginLeft: 10
