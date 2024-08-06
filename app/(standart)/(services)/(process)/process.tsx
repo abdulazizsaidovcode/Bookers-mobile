@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Text, View, TextInput, ScrollView, StatusBar, FlatList, TouchableOpacity, Dimensions, StyleSheet } from 'react-native';
+import { Text, View, TextInput, ScrollView, StatusBar, FlatList, TouchableOpacity, Dimensions, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import axios from 'axios';
 import { router, useFocusEffect } from 'expo-router';
-import { masterAdd_service } from '@/helpers/api';
+import { masterAdd_service, postFileId } from '@/helpers/api';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/app/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
-import { getConfig } from '@/app/(tabs)/(master)/main';
+import { getConfig, getConfigImg } from '@/app/(tabs)/(master)/main';
 import Toast from 'react-native-simple-toast';
 import clientStore from '@/helpers/state_managment/client/clientStore';
 import { getMasterTariff } from '@/constants/storage';
@@ -18,9 +18,36 @@ import BottomModal from '@/components/(modals)/modal-bottom';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import Textarea from '@/components/select/textarea';
 import { AntDesign } from '@expo/vector-icons';
-import PickImageTariff from './pickImage';
+import * as ImagePicker from 'expo-image-picker';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+
+const uploadImage = async (val: any, setImageId: (val: string | null) => void) => {
+    if (!val) return;
+
+    const formData = new FormData();
+    let files: any = {
+        uri: val.uri,
+        name: val.fileName,
+        type: val.mimeType,
+    };
+    formData.append("file", files);
+
+    try {
+        const config = await getConfigImg();
+        const response = await axios.post(postFileId, formData, config ? config : {});
+        if (response.data.success) {
+            Toast.show("Success", Toast.LONG);
+            setImageId(response.data.body)
+        } else {
+            Toast.show(response.data.message, Toast.LONG);
+            setImageId(null)
+        }
+    } catch (err: any) {
+        Toast.show(err.response.data.message, Toast.LONG);
+        setImageId(null)
+    }
+};
 
 interface GenderOption {
     title: string;
@@ -29,6 +56,9 @@ interface GenderOption {
 
 const Process: React.FC = () => {
     const [service, setService] = useState<string>('');
+    const { width } = Dimensions.get('window');
+    const [image, setImage] = useState<string | null>(null);
+    const [modalVisible, setModalVisible] = useState(false);
     const { setTariff, tariff } = clientStore();
     const [price, setPrice] = useState<string>('');
     const [time, setTime] = useState<string>('');
@@ -48,6 +78,44 @@ const Process: React.FC = () => {
         { title: 'Женское для детей', id: 4 }
     ];
 
+    const pickImageFromCamera = async () => {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Kamera ruxsati kerak!');
+            return;
+        }
+        const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            quality: 1,
+        });
+
+        if (!result.canceled && result.assets && result.assets.length > 0) {
+            setImage(result.assets[0].uri);
+            uploadImage(result.assets[0], setImage)
+        }
+        setModalVisible(false);
+    };
+
+    const pickImageFromGallery = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Media kutubxonasiga ruxsat kerak!');
+            return;
+        }
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsMultipleSelection: false,
+            quality: 1,
+        });
+
+        if (!result.canceled && result.assets && result.assets.length > 0) {
+            setImage(result.assets[0].uri);
+            uploadImage(result.assets[0], setImage)
+        }
+        setModalVisible(false);
+    };
+
     const uslugi = [{ label: 'Услуга', value: service, onPress: setService }];
 
     useFocusEffect(
@@ -65,13 +133,12 @@ const Process: React.FC = () => {
                 name: service,
                 price: parseFloat(price),
                 description: description,
-                attachmentId: tariff && tariff === 'STANDARD' ? 'attachmentId' : null,
+                attachmentId: tariff && tariff === 'STANDARD' ? image : null,
                 active: true,
                 serviceTime: convertTimeToMinutes(time)
             };
-
             const response = await axios.post(masterAdd_service, data, config ? config : {});
-
+            console.log(response);
             if (response.data.success) router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
             else Toast.show(response.data.message, Toast.LONG);
         } catch (error) {
@@ -125,12 +192,12 @@ const Process: React.FC = () => {
     };
 
     useEffect(() => {
-        if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0) {
+        if (service.length === 0 || price.length === 0 || time.length === 0 || description.length === 0 || image?.length === 0) {
             setValidate(true);
         } else {
             setValidate(false);
         }
-    }, [service, price, time, description]);
+    }, [service, price, time, description, image]);
 
     const handleGenderPress = (gender: GenderOption) => {
         setSelectedGender(selectedGender?.id === gender.id ? null : gender);
@@ -203,7 +270,7 @@ const Process: React.FC = () => {
                         <View style={[tw`p-3 mb-2`, { backgroundColor: '#21212E' }]}>
                             <Text style={tw`text-gray-500 text-xl mb-2`}>Описание</Text>
                             <TextInput
-                                style={[tw`bg-gray-500 p-2 rounded-xl text-lg text-white`, { height: 100,backgroundColor:'#4B4B64' }]}
+                                style={[tw`bg-gray-500 p-2 rounded-xl text-lg text-white`, { height: 100, backgroundColor: '#4B4B64' }]}
                                 multiline
                                 numberOfLines={2}
                                 value={description}
@@ -212,7 +279,48 @@ const Process: React.FC = () => {
                             />
                         </View>
                         {tariff && tariff === 'STANDARD' &&
-                         <PickImageTariff/>
+                            <View style={tw`p-3`}>
+                                <Text style={tw`text-gray-500 text-xl mb-2`}>Фото услуги</Text>
+                                <TouchableOpacity
+                                    activeOpacity={0.9}
+                                    onPress={() => setModalVisible(true)}
+                                >
+                                    <View style={[tw` bg-gray-500 rounded-xl`, { backgroundColor: '#4B4B64', width: 338, height: (width - 32) * 0.65 }]}>
+                                        {image ? (
+                                            <Image
+                                                source={{ uri: image }}
+                                                style={[tw`rounded-xl`, { width: '100%', height: '100%' }]}
+                                                resizeMode="cover"
+                                            />
+                                        ) : (
+                                            <View style={tw`flex flex-row justify-center items-center h-full`}>
+                                                <AntDesign name="pluscircleo" size={24} color="black" />
+                                                <Text style={tw`ml-2`}>Добавить фото</Text>
+                                            </View>
+                                        )}
+                                    </View>
+                                </TouchableOpacity>
+
+                                <BottomModal
+                                    isBottomModal={modalVisible}
+                                    toggleBottomModal={() => setModalVisible(false)}
+                                    children={
+                                        <View style={[tw`w-full mt-3`, { maxHeight: 400 }]}>
+                                            <View>
+                                                <TouchableOpacity onPress={pickImageFromCamera}>
+                                                    <Text style={tw`text-xl text-white mb-3`}>Сделать фото</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={pickImageFromGallery}>
+                                                    <Text style={tw`text-xl text-white mb-3`}>Выбрать из галереи</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                                                    <Text style={tw`text-xl text-white mb-3`}>Отмена</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    }
+                                />
+                            </View>
                         }
                         <View style={tw`flex flex-row justify-center mb-10`}>
                             <Buttons
@@ -264,7 +372,7 @@ const styles = StyleSheet.create({
     },
     pickerItemText: {
         fontSize: 18,
-        color:'gray'
+        color: 'gray'
     },
     selectedPickerItem: {
         backgroundColor: '#9C0A35',
