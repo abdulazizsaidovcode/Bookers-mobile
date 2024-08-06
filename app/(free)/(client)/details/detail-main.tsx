@@ -41,7 +41,6 @@ const DetailMain = () => {
         setRegionData,
         refreshing,
         setRefreshing,
-        tariff,
         setTariff
     } = clientStore()
     const {setGetMee} = useGetMeeStore()

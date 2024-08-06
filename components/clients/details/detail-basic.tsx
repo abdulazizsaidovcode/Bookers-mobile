@@ -5,13 +5,17 @@ import {getFile} from "@/helpers/api";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import React, {useCallback, useEffect, useState} from "react";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import {clientDelete, getClientAll, getClientStatistics, sliceText} from "@/helpers/api-function/client/client";
+import {
+    clientDelete,
+    clientIsVip,
+    getClientAll,
+    getClientStatistics,
+    sliceText
+} from "@/helpers/api-function/client/client";
 import ContactInformation from "@/components/contact-information/contact-information";
 import {useNavigation} from "@react-navigation/native";
-import {useFocusEffect} from "expo-router";
-import {getMasterTariff} from "@/constants/storage";
 import FiltersButton from "@/components/(buttons)/filters-button";
-import SwitchWithLabel from "@/components/switchWithLabel/switchWithLabel";
+import {useFocusEffect} from "expo-router";
 
 const ClientDetailBasic = ({client}: { client?: any }) => {
     const navigation = useNavigation<any>()
@@ -19,6 +23,8 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
     const [isClientModalDelete, setIsClientModalDelete] = useState(false)
     const [deleteData, setDeleteData] = useState(false)
     const [isSwitch, setIsSwitch] = useState(true)
+    const [isStatus, setIsStatus] = useState('')
+    const [isColor, setIsColor] = useState('')
     const toggleModalDelete = () => setIsClientModalDelete(!isClientModalDelete)
 
     useEffect(() => {
@@ -31,7 +37,30 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
         }
     }, [deleteData]);
 
-    const toggleSwitch = () => setIsSwitch(!isSwitch)
+    useFocusEffect(useCallback(() => {
+        if (client.clientStatus) clientStatus(client.clientStatus)
+    }, [client.clientStatus]))
+
+    const clientStatus = (status: string[]) => {
+        status.map(item => {
+            if (item === 'NEW') setIsStatus('Новый клиент')
+            else if (item === 'STOPPED_VISIT') setIsStatus('Перестал посещать')
+            else if (item === 'REGULAR_VISIT') setIsStatus('Постоянный клиент')
+            else if (item === 'NOT_VISIT') setIsStatus('Не посещал')
+        })
+
+        status.map(item => {
+            if (item === 'NEW') setIsColor('#00A1D3')
+            else if (item === 'STOPPED_VISIT') setIsColor('#828282')
+            else if (item === 'REGULAR_VISIT') setIsColor('#217355')
+            else if (item === 'NOT_VISIT') setIsColor('#3c3c50')
+        })
+
+        status.map(item => {
+            if (item === 'VIP') setIsSwitch(true)
+            else setIsSwitch(false)
+        })
+    }
 
     return (
         <>
@@ -40,7 +69,7 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                     source={(client && client.attachmentId) ? {uri: `${getFile}${client.attachmentId}`} : require('../../../assets/avatar.png')}
                     style={[tw`rounded-full`, styles.profileImage]}
                 />
-                <View style={tw`flex-column`}>
+                <View style={tw``}>
                     <Text style={styles.profileName}>
                         {sliceText(client.firstName, client.lastName)}
                     </Text>
@@ -48,9 +77,9 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                     {tariff === 'STANDARD' && (
                         <View style={{alignSelf: 'flex-start', marginTop: 5}}>
                             <FiltersButton
-                                title={`client`}
+                                title={isStatus}
                                 isDisebled={false}
-                                backgroundColor={`#00A1D3`}
+                                backgroundColor={isColor}
                                 textColor={`white`}
                             />
                         </View>
@@ -72,7 +101,7 @@ const ClientDetailBasic = ({client}: { client?: any }) => {
                         trackColor={{false: "#767577", true: "#9C0A35"}}
                         thumbColor={isSwitch ? "#FFFFFF" : "#FFFFFF"}
                         ios_backgroundColor="#3e3e3e"
-                        onValueChange={() => toggleSwitch()}
+                        onValueChange={() => clientIsVip(client.id, !isSwitch, setIsSwitch)}
                         value={isSwitch}
                     />
                 </TouchableOpacity>

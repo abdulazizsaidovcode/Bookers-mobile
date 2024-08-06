@@ -111,6 +111,7 @@ export const new_client: string = `${base_url}user/master/client-new`
 export const new_client_search: string = `${base_url}client/search/for/new?name=`
 export const history_count: string = `${base_url}order/client/session-history?clientId=`
 export const client_delete: string = `${base_url}client/`
+export const client_isVep: string = `${base_url}client/set-status-vip`
 
 // age url
 export const age_list: string = `${base_url}age`
