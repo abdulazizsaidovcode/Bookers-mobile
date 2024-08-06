@@ -18,6 +18,7 @@ import BottomModal from '@/components/(modals)/modal-bottom';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
 import Textarea from '@/components/select/textarea';
 import { AntDesign } from '@expo/vector-icons';
+import PickImageTariff from './pickImage';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
@@ -211,19 +212,7 @@ const Process: React.FC = () => {
                             />
                         </View>
                         {tariff && tariff === 'STANDARD' &&
-                        <TouchableOpacity
-                        activeOpacity={.9} 
-                        >
-                           <View style={tw`p-3`}>
-                            <Text style={tw`text-gray-500 text-xl mb-2`}>Фото услуги</Text>
-                            <View style={[tw`p-4 h-50 border  bg-gray-500 rounded-xl`,{backgroundColor:'#4B4B64'}]}>
-                                <View style={tw`flex flex-row justify-center items-center p-6 h-40`}>
-                                    <AntDesign name="pluscircleo" size={24} color="black" />
-                                    <Text style={tw`ml-2`}>Добавить фото</Text>
-                                </View>
-                            </View>
-                        </View>
-                        </TouchableOpacity>    
+                         <PickImageTariff/>
                         }
                         <View style={tw`flex flex-row justify-center mb-10`}>
                             <Buttons

@@ -11,32 +11,35 @@ import axios from 'axios';
 import { gender_status } from '@/helpers/api';
 import { getConfig } from '@/app/(tabs)/(master)/main';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
+import Toast from "react-native-simple-toast";
 
 const ServesGender = () => {
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-    const { setCompleted } = servicesStore()
-    const [isLoading, setIsLoading] = useState(false)
+    const { setCompleted } = servicesStore();
+    const [isLoading, setIsLoading] = useState(false);
 
     const categories = [
         { title: 'Мужское направление', id: 1 },
         { title: 'Женское направление', id: 2 },
     ];
+
     const post = async () => {
-        setIsLoading(true)
+        setIsLoading(true);
         try {
-            const config = await getConfig()
-            console.log(selectedCategories);
-            console.log(config);
-            const response = await axios.post(`${gender_status}genders=${selectedCategories}`,{}, config ? config : {});
+            const config = await getConfig();
+            const queryString = selectedCategories.map(id => `?genders=${id}`).join('&');
+            const response = await axios.post(`${gender_status}${queryString}`, {}, config ? config : {});
+            console.log("Selected Categories: ", selectedCategories);
             if (response.data.success) {
-                console.log(response.data);
-                router.push("/category")
-                setCompleted([true, true, false, false])
+                Toast.show('✅ Пол успешно добавлен', Toast.LONG);
+                router.push("/category");
+                setCompleted([true, true, false, false]);
             }
         } catch (error) {
+            Toast.show('⚠️ Пол не был успешно введен', Toast.LONG);
             console.error("Error fetching services: ", error);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     };
 
@@ -59,7 +62,6 @@ const ServesGender = () => {
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
                 >
-
                     <View style={[tw`flex w-full`, { backgroundColor: '#21212E' }]}>
                         {categories.map((category: any) => (
                             <ServicesCategory
@@ -71,7 +73,6 @@ const ServesGender = () => {
                         ))}
                     </View>
                     <View style={[tw`content-end mb-5`, { backgroundColor: '#21212E' }]}>
-
                         <Buttons
                             title="Сохранить"
                             onPress={post}
