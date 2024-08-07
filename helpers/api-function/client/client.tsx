@@ -5,7 +5,7 @@ import {
     client_address_book,
     client_address_book_search,
     client_address_book_update,
-    client_delete,
+    client_delete, client_isVep,
     client_not_visit,
     client_not_visit_search,
     client_permanent,
@@ -505,7 +505,7 @@ export const updateOrderStatus = async (orderID: string, status: string, setLoad
             const config = await getConfig()
             const {data} = await axios.put(`${order_status_update}?orderId=${orderID}&status=${status}`, '', config ? config : {})
             if (data.success) {
-                toggle && toggle()                
+                toggle && toggle()
                 setSuccessStatus('ACCEPTED')
                 Toast.show('Successfully update order status', Toast.LONG)
                 setLoading(false)
@@ -539,5 +539,21 @@ export const clientDelete = async (clientID: string, setRes: (val: boolean) => v
         setLoading(false)
         Toast.show('An error occurred on the server', Toast.LONG)
         consoleClear()
+    }
+}
+
+export const clientIsVip = async (clientID: string, isStatus: boolean, setSwitch: (val: boolean) => void) => {
+    try {
+        if (clientID) {
+            const config = await getConfig()
+            const {data} = await axios.put(`${client_isVep}?isVip=${isStatus}&clientId=${clientID}`, '', config ? config : {})
+            if (data.success) {
+                setSwitch(isStatus)
+                Toast.show(`${isStatus ? 'You have made the client a vep client' : 'You have converted a vep client to a normal client'}`, Toast.LONG)
+            } else Toast.show('Something went wrong', Toast.LONG)
+        }
+    } catch (err) {
+        consoleClear()
+        Toast.show('Something went wrong', Toast.LONG)
     }
 }

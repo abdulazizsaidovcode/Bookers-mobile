@@ -94,8 +94,6 @@ const Category = () => {
             openModal(id);
         }
     };
-
-    console.log(selectedCategory);
     
 
     return (
@@ -142,17 +140,17 @@ const Category = () => {
                             toggleModal={closeModal}
                             onConfirm={closeModal}
                         >
-                            <View style={tw`p-4 text-center`}>
+                            <View style={tw`p-4 text-center mb-3`}>
                                 {loading ? (
                                     <ActivityIndicator size="large" color="#9C0A35" />
                                 ) : (
                                     <>
-                                        <Text style={tw`text-white text-xl w-full text-2xl`}>Здоровье и красота волос</Text>
-                                        <Text style={tw`text-center text-white text-xl`}>В эту категорию входят услуги таких специализаций как:</Text>
+                                        <Text style={[tw`w-full text-center `,{color:'#FFFFFF', fontSize:22, fontWeight:'semibold'}]}>Здоровье и красота волос</Text>
+                                        <Text style={[tw`text-center mb-4`,{color:'#FFFFFF', fontSize:16, fontWeight:'medium'}]}>В эту категорию входят услуги таких специализаций как:</Text>
                                         {childCategoryData.length > 0 ? (
-                                            <ScrollView style={childCategoryData.length > 10 ? { maxHeight: 300 } : { maxHeight: 300 }}>
+                                            <ScrollView style={childCategoryData.length > 10 ? { maxHeight: 200 } : { maxHeight: 200 }}>
                                                 {childCategoryData.map((item: any, idx: any) => (
-                                                    <Text key={item.id} style={{ color: 'white', fontSize: 20 }}>
+                                                    <Text key={item.id} style={{ color: '#FFFFFF', fontSize: 15,fontWeight:'regular', fontFamily:'Montserrat',marginBottom:4 }}>
                                                         {idx + 1}. {item.name}
                                                     </Text>
                                                 ))}

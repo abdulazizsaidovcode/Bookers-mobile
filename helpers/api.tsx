@@ -39,9 +39,9 @@ export const gallery_edit_main_photo = `${base_url}gallery/update/main/photo`; /
 // My services
 export const category_Father = `${base_url}category`;// get all category
 export const category_child = `${base_url}category/byCategory/`;// get child category {fatherid}
-export const masterAdd_category = `${base_url}category`; // master add category
+export const masterAdd_category = `${base_url}category/`; // master add category
 export const masterEdit_category = `${base_url}categoty/master`; //master edit category 
-export const gender_status = `${base_url}master-service/gender?`; // master add gender
+export const gender_status = `${base_url}master-service/gender`; // master add gender
 export const getGender_status = `${base_url}master-service/gender`;// master get gender
 export const getCategory_master = `${base_url}master-service/category`;// master get service
 export const getCategory_masterAdd = `${base_url}master-service/category?`;// master add service
@@ -112,6 +112,7 @@ export const new_client: string = `${base_url}user/master/client-new`
 export const new_client_search: string = `${base_url}client/search/for/new?name=`
 export const history_count: string = `${base_url}order/client/session-history?clientId=`
 export const client_delete: string = `${base_url}client/`
+export const client_isVep: string = `${base_url}client/set-status-vip`
 
 // age url
 export const age_list: string = `${base_url}age`

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StatusBar, Image } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import { MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,7 +9,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import HomeCards from '@/components/(cards)/homeCard';
 import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
-import { getCategory_master, getGender_status, getSpecialization, master_get_Service } from '@/helpers/api';
+import { getCategory_master, getFile, getGender_status, getSpecialization, master_get_Service } from '@/helpers/api';
 import { router } from 'expo-router';
 import { getNumbers, putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import { getConfig } from '@/app/(tabs)/(master)/main';
@@ -18,7 +18,7 @@ import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSe
 const MyServicesScreen = () => {
     const route = useRoute();
     const { setNumber } = numberSettingStore();
-    const { setProdseduraUslug ,serviceSelectId} = servicesStore();
+    const { setProdseduraUslug, serviceSelectId } = servicesStore();
     const [gender, setGender] = useState([]);
     const [specialization, setSpecialization] = useState([]);
     const [category, setCategory] = useState([]);
@@ -53,25 +53,25 @@ const MyServicesScreen = () => {
         }
     };
 
-    const getSpecializationData = async (selectedCategoryId:any) => {
+    const getSpecializationData = async (selectedCategoryId: any) => {
         try {
             const config = await getConfig()
             const { data } = await axios.get(`${getSpecialization}?categoryId=${selectedCategoryId}`, config ? config : {});
             if (data.success) setSpecialization(data.body);
             else setSpecialization([]);
-        } catch (error:any) {
+        } catch (error: any) {
             if (error.response?.status) setSpecialization([]);
             console.error("Error fetching specializations:", error);
         }
     };
 
-    const getMasterData = async (categoryId:any) => {
+    const getMasterData = async (categoryId: any) => {
         try {
             const config = await getConfig()
             const { data } = await axios.get(`${master_get_Service}${categoryId}`, config ? config : {});
             if (data.success) setCategoryMaster(data.body);
             else setCategoryMaster([]);
-        } catch (error:any) {
+        } catch (error: any) {
             if (error.response?.status === 404) setCategoryMaster([]);
             console.error("Error fetching master services:", error);
         }
@@ -85,6 +85,7 @@ const MyServicesScreen = () => {
             else return item;
         });
     };
+    console.log(categoryMaster);
 
     useEffect(() => {
         getGender();
@@ -95,7 +96,6 @@ const MyServicesScreen = () => {
         setSelectedCategory(index);
         getSpecializationData(categoryId);
         getMasterData(categoryId);
-        console.log("Selected category ID:", categoryId);
     };
 
     return (
@@ -121,7 +121,7 @@ const MyServicesScreen = () => {
                             contentContainerStyle={{ gap: 10, marginBottom: 5 }}
                             showsHorizontalScrollIndicator={false}
                         >
-                            {gender.map((card:any) => (
+                            {gender.map((card: any) => (
                                 <HomeCards
                                     key={card.gender}
                                     title={card.gender === 'MALE' ? 'Мужское' : 'Женское'}
@@ -145,7 +145,7 @@ const MyServicesScreen = () => {
                         contentContainerStyle={{ gap: 16, marginBottom: 10 }}
                         showsHorizontalScrollIndicator={false}
                     >
-                        {category.map((categoryItem:any, index) => (
+                        {category.map((categoryItem: any, index) => (
                             <View key={categoryItem.id}>
                                 <TouchableOpacity
                                     activeOpacity={0.7}
@@ -165,7 +165,7 @@ const MyServicesScreen = () => {
                     <View style={tw`flex flex-row justify-between mb-2 p-4`}>
                         <Text style={tw`text-white mb-2 text-xl`}>Специализация услуг</Text>
                         <TouchableOpacity
-                             onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit`)}
+                            onPress={() => router.push(`(standart)/(servicesEdit)/(expertiseEdit)/expertiseEdit`)}
                             activeOpacity={0.6}
                             style={{ padding: 10 }}
                         >
@@ -178,10 +178,10 @@ const MyServicesScreen = () => {
                             contentContainerStyle={{ gap: 16, marginBottom: 5 }}
                             showsHorizontalScrollIndicator={false}
                         >
-                            {specialization.map((item:any) => (
+                            {specialization.map((item: any) => (
                                 <View key={item.id}>
                                     <TouchableOpacity
-                                    onPress={getCategory}>
+                                        onPress={getCategory}>
                                         <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -200,7 +200,7 @@ const MyServicesScreen = () => {
                         </TouchableOpacity>
                     </View>
                     {categoryMaster.length > 0 ? (
-                        categoryMaster.map((item:any) => (
+                        categoryMaster.map((item: any) => (
                             <TouchableOpacity
                                 key={item.id}
                                 onPress={() => {
@@ -225,6 +225,12 @@ const MyServicesScreen = () => {
                                             <Text style={tw`rounded-lg border border-gray-600 p-2 text-gray-600 text-[#828282]`}>{item.name}</Text>
                                         </TouchableOpacity>
                                     </ScrollView>
+                                    {item && item.attachmentId &&  
+                                    <Image
+                                        source={{ uri: getFile + item.attachmentId }}
+                                        style={tw`w-full h-40 rounded-lg mb-4`}
+                                    />
+                                    }
                                     <Text style={[tw`font-bold text-xl mb-3`, { color: '#9C0A35' }]}>
                                         {item.price !== 0 ? `${item.price} сум` : '0'}
                                     </Text>

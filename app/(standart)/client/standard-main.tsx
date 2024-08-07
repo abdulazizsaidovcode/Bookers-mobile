@@ -39,7 +39,7 @@ const StandardMain = () => {
         refreshing,
         setRefreshing
     } = clientStore()
-    const { setNumber } = numberSettingStore();
+    const {setNumber} = numberSettingStore();
     const [isFilter, setIsFilter] = useState<string>('all')
     const toggleClientModal = () => setIsClientModal(!isClientModal);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
@@ -168,8 +168,13 @@ const StandardMain = () => {
                                 {newClient ? (
                                     <FlatList
                                         data={newClient}
-                                        renderItem={({item}) => <StandardNowAndConstClient client={item}
-                                                                                           key={item.id}/>}
+                                        renderItem={({item}) =>
+                                            <StandardNowAndConstClient
+                                                client={item}
+                                                key={item.id}
+                                                clicks={() => navigation.navigate('(free)/(client)/details/detail-main', {infoClient: item})}
+                                            />
+                                        }
                                     />
                                 ) : (
                                     <View style={tw`flex-1 justify-center items-center`}>
@@ -192,8 +197,13 @@ const StandardMain = () => {
                                 {permanentClient ? (
                                     <FlatList
                                         data={permanentClient}
-                                        renderItem={({item}) => <StandardNowAndConstClient client={item}
-                                                                                           key={item.id}/>}
+                                        renderItem={({item}) =>
+                                            <StandardNowAndConstClient
+                                                client={item}
+                                                key={item.id}
+                                                clicks={() => navigation.navigate('(free)/(client)/details/detail-main', {infoClient: item})}
+                                            />
+                                        }
                                     />
                                 ) : (
                                     <View style={tw`flex-1 justify-center items-center`}>

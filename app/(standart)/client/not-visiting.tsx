@@ -50,7 +50,7 @@ const NotVisiting = () => {
                                     <FromAddressBookList
                                         key={item.id}
                                         client={item}
-                                        // clicks={() => navigation.navigate('(free)/(client)/updating-address-book', { client: item })}
+                                        clicks={() => navigation.navigate('(free)/(client)/details/detail-main', {infoClient: item})}
                                     />
                                 )}
                             />

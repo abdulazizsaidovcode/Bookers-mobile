@@ -22,6 +22,7 @@ import PhoneInput from 'react-native-phone-input';
 import Toast from "react-native-simple-toast";
 import {SelectList} from "react-native-dropdown-select-list";
 import {useFocusEffect} from "expo-router";
+import {getMasterTariff} from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/details/detail-main'>;
 
@@ -46,7 +47,9 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
         isLoading,
         setIsLoading,
         setStatusData,
-        setAllClients
+        setAllClients,
+        tariff,
+        setTariff
     } = clientStore()
     const {control, formState: {errors}} = useForm<FormData>();
     const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -91,6 +94,7 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
 
     useFocusEffect(useCallback(() => {
         setRegex(validateObject(newUpdateClient))
+        getMasterTariff(setTariff)
     }, []))
 
     useFocusEffect(useCallback(() => {
@@ -123,7 +127,8 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
 
     useEffect(() => {
         if (navigate) {
-            navigation.navigate('(free)/(client)/main')
+            if(tariff === 'FREE') navigation.navigate('(free)/(client)/main')
+            else navigation.navigate('(standart)/client/standard-main')
             getClientStatistics(setStatusData)
             getClientAll(setAllClients)
             setNavigate(false)
@@ -349,9 +354,7 @@ const styles = StyleSheet.create({
     dropdown: {
         zIndex: 1000,
         width: '100%',
-        position: 'absolute',
         backgroundColor: '#4b4b63',
-        top: 55
     }
 });
 

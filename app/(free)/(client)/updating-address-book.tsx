@@ -340,9 +340,7 @@ const styles = StyleSheet.create({
     dropdown: {
         zIndex: 1000,
         width: '100%',
-        position: 'absolute',
         backgroundColor: '#4b4b63',
-        top: 55
     }
 });
 

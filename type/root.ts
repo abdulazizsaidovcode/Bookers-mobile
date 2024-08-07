@@ -43,7 +43,7 @@ export type RootStackParamList = {
   'app/(client)/(masters)/masters': undefined | string;
   '(client)/(map)/(recent-masters)/recent-masters-by-category': undefined;
   '(client)/(map)/(recent-masters)/recent-masters': undefined;
-  '(free)/(client)/details/detail-main': { infoClient: AllClient };
+  '(free)/(client)/details/detail-main': { infoClient: AllClient|any };
   '(free)/(client)/details/records': { record: AllClient | any };
   '(free)/(client)/details/history/history-details': { historyData: any };
   '(free)/(client)/details/records-information': { orderID: string };
