@@ -224,8 +224,6 @@ const ClientFeedback = () => {
         else if (buttonIndex === 0) return setPage(prevPage => prevPage - 1)
     };
 
-    console.log(selectedItem)
-
     return (
         <View style={tw`flex-1`}>
             <ScrollView
@@ -304,7 +302,7 @@ const ClientFeedback = () => {
                 </View>
 
                 <View style={tw`w-full mt-8`}>
-                    {isLoading ? <Loading/> : feedback ? (
+                    {isLoading ? <Loading/> : feedback && (
                         <>
                             <FlatList
                                 data={feedback.feedback.object}
@@ -349,7 +347,7 @@ const ClientFeedback = () => {
                                 </TouchableOpacity>
                             </View>
                         </>
-                    ) : <Text style={tw`mt-7 font-bold text-white text-center`}>Data not found</Text>}
+                    )}
                 </View>
 
                 <BottomModal toggleBottomModal={toggleModal} isBottomModal={isModal}>
