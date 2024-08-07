@@ -24,9 +24,7 @@ const MasterInformationGalery: React.FC = () => {
   const navigation = useNavigation<any>();
 
   const renderRows = (attachments: any[]) => {
-    let filteredAttachments = attachments.filter(
-      (attachment) => attachment.main
-    );
+    let filteredAttachments = attachments
 
     if (filteredAttachments.length !== 0) {
       // If there are no main attachments, use the first 4 attachments instead
