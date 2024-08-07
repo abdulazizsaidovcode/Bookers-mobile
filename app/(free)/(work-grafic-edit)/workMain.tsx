@@ -126,8 +126,8 @@ const WorkMainEdit = () => {
                 title="Время работы"
                 subTitle={
                   timeData && timeData.from && timeData.end
-                    ? `From ${timeData.from ? timeData.from : "00:00"}  to ${
-                        timeData.end ? timeData.end : "00:00"
+                    ? `From ${timeData.from ? timeData.from.slice(0, 5) : "00:00"}  to ${
+                        timeData.end ? timeData.end.slice(0, 5) : "00:00"
                       }`
                     : "Рабочее время не настроено!"
                 }
