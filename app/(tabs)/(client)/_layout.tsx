@@ -12,7 +12,7 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import Uslugi from "@/app/(client)/(uslugi)/uslugi";
 import ProfileScreen from "./profile";
-import Masters from "@/app/(client)/(masters)/masters";
+import MastersScreen from "./masters-screen";
 
 const Tab = createBottomTabNavigator();
 
@@ -70,8 +70,18 @@ function ClientTabLayout() {
           }}
         />
         <Tab.Screen
-          name="master"
-          component={Masters}
+          name="uslugi"
+          component={Uslugi}
+          options={{
+            title: "Услуги",
+            tabBarIcon: ({ color }) => (
+              <FontAwesome5 name="user" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Мастера"
+          component={MastersScreen}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons
@@ -79,16 +89,6 @@ function ClientTabLayout() {
                 size={24}
                 color={color}
               />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="uslugi"
-          component={Uslugi}
-          options={{
-            title: "Услуги",
-            tabBarIcon: ({ color }) => (
-              <FontAwesome5 name="user" size={24} color={color} />
             ),
           }}
         />

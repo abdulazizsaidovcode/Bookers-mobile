@@ -15,7 +15,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const AccordionFree: React.FC<AccordionItemProps> = ({title}) => {
-    const {genderIndex, setGenderIndex, isSelected, setSelection, isSelected1, setSelected1, expanded2, setExpended2} = useAccardionStore();
+    const {genderIndex, setGenderIndex, isSelected1, setSelected1, expanded2, setExpended2} = useAccardionStore();
 
     const toggleExpand = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);

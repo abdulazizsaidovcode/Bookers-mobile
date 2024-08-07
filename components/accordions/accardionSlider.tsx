@@ -17,10 +17,10 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 
 const AccordionSlider: React.FC<AccordionItemProps> = ({ title }) => {
     const handleCheckboxChange = (newValue: boolean) => {
-        setSelection(newValue);
+        setIsSelected2(newValue);
         onValueChange:(newValue);
     };
-    const {expanded,setExpanded,setSelection,isSelected}=useAccardionStore()
+    const {expanded,setExpanded,isSelected2,setIsSelected2}=useAccardionStore()
 
     const toggleExpand = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -41,7 +41,7 @@ const AccordionSlider: React.FC<AccordionItemProps> = ({ title }) => {
                     <Text style={tw`p-3 mt-4`}>
                         <CustomCheckbox
                             title='не важно'
-                            value={isSelected}
+                            value={isSelected2}
                             onValueChange={handleCheckboxChange}
                         />
                     </Text>

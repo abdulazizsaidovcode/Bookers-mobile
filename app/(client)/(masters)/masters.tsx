@@ -13,7 +13,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Entypo from "@expo/vector-icons/Entypo";
 import debounce from "lodash.debounce";
 import useTopMastersStore from "@/helpers/state_managment/masters";
-import { getCategory, getTopMasters, searchMasters } from "@/helpers/api-function/masters";
+import { getCategory, getTopMasters } from "@/helpers/api-function/masters";
 import BottomModal from "@/components/(modals)/modal-bottom";
 import AccardionSlider from "@/components/accordions/accardionSlider";
 import AccardionSliderTwo from "@/components/accordions/accardionSliderTwo";
@@ -22,9 +22,7 @@ import AccordionCustom from "@/components/accordions/accardionCustom";
 import LocationInput from "@/app/locationInput";
 import { useCommunitySlider } from "@/helpers/state_managment/communitySlider/communitySliderStore";
 import { useAccardionStore } from "@/helpers/state_managment/accardion/accardionStore";
-import { postClientFilter } from "@/helpers/api-function/uslugi/uslugi";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
-import { useMapStore } from "@/helpers/state_managment/map/map";
 import { Image } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -43,14 +41,13 @@ const Masters = () => {
   const [bottomModal, setBottomModal] = useState(false);
   const [pastEntries, setPastEntries] = useState<string[]>([]);
   const { rating, value } = useCommunitySlider(); // value * 1000
-  const { genderIndex } = useAccardionStore();
+  const { genderIndex, isSelected2, isSelected1, isSelected } = useAccardionStore();
   const { userLocation } = useGetMeeStore();
-  const { setMapData } = useMapStore();
   const navigation = useNavigation<any>();
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState('');
   const [loadingMore, setLoadingMore] = useState(false);
-  const { selectedClient, setSelectedClient, clientData, setClientData } = ClientStory()
+  const { setSelectedClient, setClientData } = ClientStory()
   const [data, setData] = useState<any>([]);
 
   const toggleBottomModal = () => setBottomModal(!bottomModal);
@@ -67,12 +64,10 @@ const Masters = () => {
   }
 
 
-
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     getTopMasters(page, 10);
     getCategory()
-  }, [page]);
-
+  }, [page]))
 
   const loadMore = useCallback(
 
@@ -188,9 +183,10 @@ const Masters = () => {
               <FontAwesome name="photo" size={70} color="#fff" />
             </View>
           )}
-          <Text style={tw`ml-3 mt-3 text-base font-medium`}>
-            Ближайшая запись: {nextBookingDate}
-          </Text>
+          {nextBookingDate !== "Invalid date" &&
+            <Text style={tw`ml-3 mt-3 text-base font-medium`}>
+              Ближайшая запись: {nextBookingDate}
+            </Text>}
           <View style={tw`mt-2 flex-row px-9 justify-center`}>
             <Buttons title="Записаться"
               onPress={() => {
@@ -236,7 +232,7 @@ const Masters = () => {
       // );
       const config = await getConfig();
 
-      const postData = { categoryId: pastEntries, gender: genderIndex, nextToMe: value * 1000, rating, lat: userLocation.coords.latitude, lng: userLocation?.coords.longitude };
+      const postData = { categoryId: pastEntries, gender: isSelected1 ? true : genderIndex, nextToMe: !isSelected2 ? +(value * 1000).toFixed() : 0, rating: isSelected ? 0 : rating, lat: userLocation.coords.latitude, lng: userLocation?.coords.longitude };
       const url = `${getClient_filter}?page=${page ? page : 0}&size=${10}${pastEntries ? `&nameOrPhone=""` : ""}`;
       const { data } = await axios.post(url, postData, config ? config : {});
       console.log(postData);
