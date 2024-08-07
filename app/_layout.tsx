@@ -136,7 +136,6 @@ import SalonLocation from "./(client)/(map)/(salon-location)/salon-location";
 import EditProfilePage from "./(client)/(profile)/(profileEdit)/(editPages)/editPage";
 import MasterInformation from "./(client)/(uslugi)/(masterInformation)/masterInformation";
 import RecentMastersByCategory from "./(client)/(map)/(recent-masters)/recent-masters-by-category";
-import Masters from "./(client)/(masters)/masters";
 import SettingPage from "./(client)/(profile)/(settings)/(settingPage)/settingPage";
 import ProfileMasterEdit from "./(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit";
 import ProfileMasterScreen from "./(profile)/(settings)/(childSettings)/(profileEdit)/profileScreen";
@@ -150,6 +149,7 @@ import ClientOrderDetail from "./(client)/(oreder)/orderDetail";
 import ResponseLocationEdit from "./(location)/(response-location)/ResponseLocationEdit";
 import ProfilePage from "./(profile)";
 import FavouriteOrders from "./(client)/(favourite-orders)/favourite-orders";
+import MastersScreen from "./(tabs)/(client)/masters-screen";
 // import ResponseLocationEdit from "./(location)/(response-location)/responseLocationEdit";
 
 const Stack = createNativeStackNavigator();
@@ -289,8 +289,8 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="(client)/(masters)/masters"
-              component={Masters}
+              name="(tabs)/(client)/masters-screen"
+              component={MastersScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

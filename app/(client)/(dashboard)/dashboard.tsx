@@ -430,7 +430,7 @@ const Dashboard: React.FC = () => {
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.touchableItem}
                     onPress={() => {
-                      navigate.navigate('(client)/(masters)/masters' );
+                      navigate.navigate('(tabs)/(client)/masters-screen' );
                     }}>
                     <View style={styles.itemTwo}>
                       <View style={styles.textContainer}>
