@@ -8,8 +8,7 @@ import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery'
 import { getFile } from '@/helpers/api';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import Buttons from '@/components/(buttons)/button';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import BottomModal from '@/components/(modals)/modal-bottom';
 import * as ImagePicker from 'expo-image-picker';
 import Toast from 'react-native-simple-toast';
@@ -98,22 +97,18 @@ const GalleryDetails: React.FC = () => {
             : [...prev, imageId]
         );
     };
-
-    // const handleSelectMainPhoto = (imageId: string) => {
-    //     setSelectedImages(prev => {
-    //         if (prev.includes(imageId)) {
-    //             return prev.filter(id => id !== imageId);
-    //         } else {
-    //             return [...prev, imageId];
-    //         }
-    //     });
-    // };
+    console.log('isDeleteMode', booleanState.isDeleteMode);
+    console.log('selectAll', booleanState.selectAll);
 
     const handleDelete = () => {
         setBooleanState({ ...booleanState, isDeleteMode: false, selectAll: false });
-        delPhoto(id, selectedImages, setFullData, setData, toggleAllModal, setIsLoading);
+        delPhoto(id, selectedImages, setFullData, setData, () => {
+            toggleAllModal();
+            setBooleanState({ ...booleanState, isDeleteMode: false, selectAll: false, isAllOpen: false }); // Ensure isDeleteMode is set to false
+        }, setIsLoading);
         setSelectedImages([]);
     };
+
 
     const requestPermissions = async (type: 'camera' | 'gallery') => {
         const { status } = type === 'camera'
@@ -130,7 +125,6 @@ const GalleryDetails: React.FC = () => {
             ? await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
-                aspect: [4, 3],
                 quality: 1
             })
             : await ImagePicker.launchImageLibraryAsync({
@@ -196,7 +190,7 @@ const GalleryDetails: React.FC = () => {
                 <View style={styles.content}>
                     <Text style={styles.title}>{fullData.albumName}</Text>
                     <View style={styles.imagesContainer}>
-                        {fullData.resGalleryAttachments.length <= 0 ? (
+                        {images.length === 0 && fullData.resGalleryAttachments.length <= 0 ? (
                             <Text style={styles.noImagesText}>В этой галерее нет фотографий</Text>
                         ) : fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
                             <View key={albumIndex} style={styles.imageWrapper}>
