@@ -10,7 +10,13 @@ import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { getFile } from '@/helpers/api';
 import { useNavigation } from '@react-navigation/native';
 
-const ServiceCard = React.memo(({ id, name, distanceMasterCount, onPress, attachmentId }) => (
+const ServiceCard = React.memo(({ id, name, distanceMasterCount, onPress, attachmentId }: {
+  id: any
+  name: any
+  distanceMasterCount: any
+  onPress: any
+  attachmentId: any
+}) => (
   <TouchableOpacity style={tw`w-1/2 px-2 py-2`} activeOpacity={0.8} onPress={onPress}>
     <View style={[tw`flex flex-col items-center rounded-xl p-4 h-56`, { backgroundColor: '#B9B9C9' }]}>
       <View style={[tw`rounded-full p-5`, { backgroundColor: '#9C0A35' }]}>
@@ -31,7 +37,7 @@ const Uslugi = () => {
   const { userLocation, setUserLocation } = useGetMeeStore();
   const { allCategory, setAllCategory, setSelectedServiceId } = ClientStory();
   const router = useRouter();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   useFocusEffect(
     useCallback(() => {
@@ -48,14 +54,14 @@ const Uslugi = () => {
     }, [userLocation])
   );
 
-  const renderItem = useCallback(({ item }) => (
+  const renderItem = useCallback(({ item }: {item: any}) => (
     <ServiceCard
-      id={item.id}
-      name={item.name}
-      attachmentId={item.attachmentId}
-      distanceMasterCount={item.distanceMasterCount}
+      id={item && item.id ? item.id : ""}
+      name={item && item.name ? item.name : "No data"}
+      attachmentId={item && item.attachmentId ? item.attachmentId : ""}
+      distanceMasterCount={item && item.distanceMasterCount ? item.distanceMasterCount : ""}
       onPress={() => {
-        setSelectedServiceId(item.id);
+        setSelectedServiceId(item && item.id ? item.id : "");
         router.push(`/(hairHealth)/hair`);
       }}
     />

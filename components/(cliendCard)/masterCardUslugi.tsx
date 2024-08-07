@@ -54,7 +54,7 @@ const MasterCardUslugi: React.FC<ClientCardItem> = ({ onPress, item, setFavourit
                     <Text style={tw`text-xs text-gray-600`}>{item && item.orderCount} заказа, {item && item.clientCount} клиентов</Text>
                 </View>
             </View>
-            <Text style={tw`text-gray-600 text-lg mb-2`}>{`${item && item.street}, ${item && item.house}` || "Address is not found"}</Text>
+            <Text style={tw`text-gray-600 text-lg mb-2`}>{`${item && item.street ? `${item.street},` : "Address is not found"} ${item && item.house ? item.house : ""}` || "Address is not found"}</Text>
             <View style={tw`flex mb-3 flex-row items-center justify-center`}>
                 <TouchableOpacity
                     activeOpacity={0.7}

@@ -21,6 +21,7 @@ type ClientCardDetailProps = {
   description: string;
   subDescription?: string;
   genderId: number[];
+  attachmentId: string | null
 };
 
 type MasterCardDetailProps = {
@@ -36,7 +37,7 @@ const genderMapping: any = {
 };
 
 const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) => {
-  const { setSelectedCategoryId, selectedCategoryId } = ClientStory()
+  const { setSelectedCategoryId, selectedCategoryId } = ClientStory();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [oneData, setOneData] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -44,49 +45,53 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
   const handleOpenModal = async () => setModalVisible(!modalVisible);
 
   const handleSelect = (id: string) => {
-    let arr: any = []
+    let arr: any = [];
 
     if (selectedCategoryId && selectedCategoryId.includes(id)) {
-      arr = selectedCategoryId.filter((res: any, index: any) => res !== id)
+      arr = selectedCategoryId.filter((res: any, index: any) => res !== id);
     } else {
       if (selectedCategoryId) {
-        arr = [...selectedCategoryId, id]
+        arr = [...selectedCategoryId, id];
       }
     }
-    setSelectedIds(arr)
+    setSelectedIds(arr);
   };
 
   useEffect(() => {
-    setSelectedCategoryId(selectedIds)
-  }, [selectedIds])
+    setSelectedCategoryId(selectedIds);
+  }, [selectedIds]);
 
-  console.log('one data items: ', oneData)
+  console.log('one data items: ', oneData);
 
   return (
     <View style={[tw`p-4 rounded-2xl`, { backgroundColor: "#B9B9C9" }]}>
       <View style={tw`mb-4`}>
         {item.genderId && item.genderId.length > 0 ? (
-          item.genderId.map(id => (
+          item.genderId.map((id, index) => (
             <TouchableOpacity
               key={id}
               style={tw`flex-row items-center mb-2`}
               onPress={() => handleSelect(item.id)}
             >
-              <View
-                style={[
-                  tw`w-5 h-5 rounded-full border`,
-                  {
-                    borderColor: selectedIds.includes(item.id) ? '#9C0A35' : '#000',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }
-                ]}
-              >
-                {selectedIds.includes(item.id) && (
-                  <View style={[tw`w-3 h-3 rounded-full`, { backgroundColor: '#9C0A35' }]} />
-                )}
-              </View>
-              <Text style={[tw`ml-2 text-xl font-bold`, { color: '#000' }]}>
+              {index === 0 ? (
+                <View
+                  style={[
+                    tw`w-5 h-5 rounded-full border`,
+                    {
+                      borderColor: selectedIds.includes(item.id) ? '#9C0A35' : '#000',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginRight: 8, // Qo'shimcha joylashni ta'minlash uchun
+                    }
+                  ]}
+                >
+                  {selectedIds.includes(item.id) && (
+                    <View style={[tw`w-3 h-3 rounded-full`, { backgroundColor: '#9C0A35' }]} />
+                  )}
+                </View>
+              ) : <View style={{paddingHorizontal: 14}}>
+                </View>}
+              <Text style={[tw`text-xl font-bold`, { color: '#000' }]}>
                 {genderMapping[id] || 'Hamma uchun'}
               </Text>
             </TouchableOpacity>
@@ -103,6 +108,7 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
                   borderColor: selectedIds.length === 0 ? '#9C0A35' : '#000',
                   justifyContent: 'center',
                   alignItems: 'center',
+                  marginRight: 8,
                 }
               ]}
             >
@@ -110,7 +116,7 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
                 <View style={[tw`w-3 h-3 rounded-full`, { backgroundColor: '#9C0A35' }]} />
               )}
             </View>
-            <Text style={[tw`ml-2 text-xl font-bold`, { color: '#000' }]}>
+            <Text style={[tw`text-xl font-bold`, { color: '#000' }]}>
               Hamma uchun
             </Text>
           </TouchableOpacity>
@@ -133,7 +139,7 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
         style={[tw`w-1/2 p-3 rounded-lg`, { backgroundColor: '#9C0A35' }]}
         onPress={() => {
           handleOpenModal();
-          setOneData(item)
+          setOneData(item);
         }}
       >
         <Text style={[tw`text-center text-xl`, { color: '#FFFFFF' }]}>Подробнее</Text>
@@ -145,7 +151,7 @@ const ClientCardDetail: React.FC<MasterCardDetailProps> = ({ item, onPress }) =>
             oneData.genderId.map((id: any) => (
               <TouchableOpacity
                 key={id}
-                style={tw`flex-row  mb-2`}
+                style={tw`flex-row mb-2`}
                 onPress={() => handleSelect(item.id)}
               >
                 <Text style={[tw`ml-2 text-xl font-bold`, { color: '#fff' }]}>
