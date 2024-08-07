@@ -110,7 +110,7 @@ const OrderClient = () => {
         <Booked />
         {id.requerment !== 'EDIT' ?
 
-          !!FreeTime && <Buttons onPress={setOrder} title='Продолжить' isDisebled={!!FreeTime && !!timeHour && !!selectedCategoryId} />
+          selectedCategoryId && selectedCategoryId.length > 0 && !!FreeTime && <Buttons onPress={setOrder} title='Продолжить' isDisebled={!!FreeTime && !!timeHour && !!selectedCategoryId} />
           :
           <Buttons onPress={EditOrder} title='Сохранить' isDisebled={!!selectedCategoryId} />
         }

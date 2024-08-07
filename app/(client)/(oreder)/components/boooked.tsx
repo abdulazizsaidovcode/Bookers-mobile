@@ -40,7 +40,7 @@ const Booked: React.FC = () => {
 
     useFocusEffect(
         useCallback(() => {
-            
+
             if (id.requerment === 'EDIT') {
                 setLoading(true)
                 setDate(calendarDate);
@@ -56,7 +56,7 @@ const Booked: React.FC = () => {
             }
             else {
                 console.log('2');
-                
+
                 if (calendarDate && selectedClient && selectedClient.id) {
                     setLoading(true)
                     setDate(calendarDate);
@@ -143,17 +143,18 @@ const Booked: React.FC = () => {
                     <View style={styles.timeContainer}>
                         {loading ? <Loading /> : (
                             FreeTime ? (
-                                FreeTime.map((time: string, index) => (
-                                    <TouchableOpacity
-                                        key={`${time}-${index}`} // Ensure uniqueness by combining time and index
-                                        style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
-                                        onPress={() => handleTimeSelect(time)}
-                                    >
-                                        <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
-                                            {time.slice(0, 5)}
-                                        </Text>
-                                    </TouchableOpacity>
-                                ))
+                                selectedCategoryId && selectedCategoryId.length > 0 &&
+                                    FreeTime.map((time: string, index) => (
+                                        <TouchableOpacity
+                                            key={`${time}-${index}`} // Ensure uniqueness by combining time and index
+                                            style={[styles.timeButton, activeTime === time && styles.activeTimeButton]}
+                                            onPress={() => handleTimeSelect(time)}
+                                        >
+                                            <Text style={[styles.timeText, activeTime === time && styles.activeTimeText]}>
+                                                {time.slice(0, 5)}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    ))
                             ) : (
                                 <View style={[tw`px-5`]}>
                                     <View style={[tw`px-8`]}>
