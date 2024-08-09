@@ -28,11 +28,13 @@ import tw from "tailwind-react-native-classnames";
 import * as SecureStore from "expo-secure-store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import registerStory from "@/helpers/state_managment/auth/register";
-import {getMasterTariff} from "@/constants/storage";
+import { getMasterTariff } from "@/constants/storage";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { Loading } from "@/components/loading/loading";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
+import { usePinCode } from "@/context/PinContext";
+import CheckPinCode from "../(auth)/(checkPinCode)/checkPinCodeAbsolute";
 
 const data: { name: any; color: string; label: string }[] = [
   { name: "facebook", color: "#3b5998", label: "Facebook" },
@@ -45,15 +47,16 @@ const data: { name: any; color: string; label: string }[] = [
 
 
 const ProfilePage: React.FC = () => {
-    const { setNumber } = numberSettingStore();
-    const [isInviteModalVisible, setInviteModalVisible] = useState(false);
+  const { setNumber } = numberSettingStore();
+  const [isInviteModalVisible, setInviteModalVisible] = useState(false);
   const [isShareModalVisible, setShareModalVisible] = useState(false);
   const navigation = useNavigation<any>();
   const { getMee, setGetMee } = useGetMeeStore();
-  const {tariff, setTariff, isLoading, setIsLoading} = clientStore()
-  const {isWaitModal, setIsWaitModal} = numberSettingStore()
+  const { tariff, setTariff, isLoading, setIsLoading } = clientStore()
+  const { isWaitModal, setIsWaitModal } = numberSettingStore()
   const [toggle, setToggle] = useState(false);
   const { role } = registerStory();
+
 
   useFocusEffect(
     useCallback(() => {
@@ -266,186 +269,191 @@ const ProfilePage: React.FC = () => {
 
   return (
     <>
-    {isLoading ? <Loading/> : <ScrollView style={[styles.container]}>
-      <SafeAreaView style={{ paddingBottom: 24 }}>
-        <StatusBar backgroundColor={`#21212E`} barStyle={`dark-content`} />
-        <Text style={styles.title}>Профиль</Text>
-        <View style={styles.profileHeader}>
-          <Image
-            source={
-              getMee && getMee.attachmentId
-                ? { uri: getFile + getMee.attachmentId }
-                : require("@/assets/avatar.png")
-            }
-            style={styles.avatar}
-          />
-          <View>
-            {/* <View style={{flexDirection: "row", justifyContent:"center", gap: 4}}> */}
-            <Text style={styles.profileName}>
-              {getMee && getMee.firstName ? getMee.firstName : "No data"} {getMee && getMee.lastName && getMee.lastName}
-            </Text>
-            {/* <Image
+
+
+      {isLoading ?
+        <Loading />
+        :
+        <ScrollView style={[styles.container]}>
+          <SafeAreaView style={{ paddingBottom: 24 }}>
+            <StatusBar backgroundColor={`#21212E`} barStyle={`dark-content`} />
+            <Text style={styles.title}>Профиль</Text>
+            <View style={styles.profileHeader}>
+              <Image
+                source={
+                  getMee && getMee.attachmentId
+                    ? { uri: getFile + getMee.attachmentId }
+                    : require("@/assets/avatar.png")
+                }
+                style={styles.avatar}
+              />
+              <View>
+                {/* <View style={{flexDirection: "row", justifyContent:"center", gap: 4}}> */}
+                <Text style={styles.profileName}>
+                  {getMee && getMee.firstName ? getMee.firstName : "No data"} {getMee && getMee.lastName && getMee.lastName}
+                </Text>
+                {/* <Image
                 source={{
                   uri: "https://img.icons8.com/?size=100&id=yXOHowNYbgM5&format=png&color=2568EF",
                 }}
                 style={{width:"12%"}}
               /> */}
-            {/* </View> */}
-            <Text style={styles.profilePhone}>{getMee && getMee.phoneNumber ? getMee.phoneNumber : "No data"}</Text>
-          </View>
-        </View>
-
-        {navigationList.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.menuItem}
-            onPress={() =>
-              item.icon === "share-alt"
-                ? onShare()
-                : item.modal
-                  ? setToggle(true)
-                  : navigateTo(item.screen)
-            }
-            activeOpacity={0.7}
-          >
-            <View style={styles.menuItemContent}>
-              <FontAwesome5 name={item.icon} size={20} color="#9c0935" />
-              <Text style={styles.menuItemText}>{item.label}</Text>
-            </View>
-            <MaterialIcons name="navigate-next" size={36} color="#9c0935" />
-          </TouchableOpacity>
-        ))}
-
-        <Modal
-          transparent={true}
-          visible={isInviteModalVisible}
-          onRequestClose={closeInviteModal}
-        >
-          <View style={styles.modalBackground}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>
-                Кому вы хотите отправить ссылку?
-              </Text>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => {
-                  closeInviteModal();
-                  openShareModal();
-                }}
-              >
-                <Text style={styles.modalButtonText}>Пригласить мастеров</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => {
-                  closeInviteModal();
-                  openShareModal();
-                }}
-              >
-                <Text style={styles.modalButtonText}>Пригласить друзей</Text>
-              </TouchableOpacity>
-              <Button
-                title="Закрыть"
-                onPress={closeInviteModal}
-                color="#E74C3C"
-              />
-            </View>
-          </View>
-        </Modal>
-
-        <Modal
-          transparent={true}
-          visible={isShareModalVisible}
-          onRequestClose={closeShareModal}
-        >
-          <View style={styles.modalBackground}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>Поделиться</Text>
-              <View style={styles.iconContainer}>
-                {data.map((item, index): any => (
-                  <TouchableOpacity key={index} style={styles.iconButton}>
-                    <FontAwesome
-                      name={item.name}
-                      size={40}
-                      color={item.color}
-                    />
-                    <Text style={styles.iconLabel}>{item.label}</Text>
-                  </TouchableOpacity>
-                ))}
+                {/* </View> */}
+                <Text style={styles.profilePhone}>{getMee && getMee.phoneNumber ? getMee.phoneNumber : "No data"}</Text>
               </View>
-              <Button
-                title="Закрыть"
-                onPress={closeShareModal}
-                color="#E74C3C"
-              />
             </View>
-          </View>
-        </Modal>
-      <CenteredModal
-        isFullBtn={false}
-        btnWhiteText=""
-        oneBtn={true}
-        btnRedText={"Закрыть"}
-        isModal={isWaitModal}
-        onConfirm={() => setIsWaitModal(false)}
-        toggleModal={() => setIsWaitModal(false)}
-      >
-        <>
-          <Text
-            style={{
-              color: "white",
-              fontSize: 22,
-              fontWeight: "700",
-              marginBottom: 20,
-              paddingTop: 10
-            }}
-          >
-            Ваша заявка принта!
-          </Text>
-          <Text
-            style={{
-              color: "white",
-              fontSize: 14,
-              fontWeight: "400",
-              marginBottom: 20,
-              letterSpacing: 1,
-              textAlign: "center"
-            }}
-          >
-            Администратор проверяет Ваши данные.
-          </Text>
-          <Text
-            style={{
-                color: "white",
-                fontSize: 14,
-                fontWeight: "400",
-                marginBottom: 30,
-                letterSpacing: 1,
-                textAlign: "center"
-            }}
-          >
-            Это займет не более 20 минут
-          </Text>
-        </>
-      </CenteredModal>
-      </SafeAreaView>
-      <CenteredModal
-        btnWhiteText="Нет"
-        isFullBtn
-        btnRedText="Да"
-        children={
-          <View style={tw`items-center`}>
-            <AntDesign name="questioncircleo" size={50} color="#9C0A35" />
-            <Text style={tw`text-2xl font-bold text-white my-3`}>
-              Вы уверены?
-            </Text>
-          </View>
-        }
-        isModal={toggle}
-        onConfirm={handleSubmit}
-        toggleModal={() => setToggle(false)}
-      />
-    </ScrollView>}
+
+            {navigationList.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.menuItem}
+                onPress={() =>
+                  item.icon === "share-alt"
+                    ? onShare()
+                    : item.modal
+                      ? setToggle(true)
+                      : navigateTo(item.screen)
+                }
+                activeOpacity={0.7}
+              >
+                <View style={styles.menuItemContent}>
+                  <FontAwesome5 name={item.icon} size={20} color="#9c0935" />
+                  <Text style={styles.menuItemText}>{item.label}</Text>
+                </View>
+                <MaterialIcons name="navigate-next" size={36} color="#9c0935" />
+              </TouchableOpacity>
+            ))}
+
+            <Modal
+              transparent={true}
+              visible={isInviteModalVisible}
+              onRequestClose={closeInviteModal}
+            >
+              <View style={styles.modalBackground}>
+                <View style={styles.modalContainer}>
+                  <Text style={styles.modalTitle}>
+                    Кому вы хотите отправить ссылку?
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.modalButton}
+                    onPress={() => {
+                      closeInviteModal();
+                      openShareModal();
+                    }}
+                  >
+                    <Text style={styles.modalButtonText}>Пригласить мастеров</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.modalButton}
+                    onPress={() => {
+                      closeInviteModal();
+                      openShareModal();
+                    }}
+                  >
+                    <Text style={styles.modalButtonText}>Пригласить друзей</Text>
+                  </TouchableOpacity>
+                  <Button
+                    title="Закрыть"
+                    onPress={closeInviteModal}
+                    color="#E74C3C"
+                  />
+                </View>
+              </View>
+            </Modal>
+
+            <Modal
+              transparent={true}
+              visible={isShareModalVisible}
+              onRequestClose={closeShareModal}
+            >
+              <View style={styles.modalBackground}>
+                <View style={styles.modalContainer}>
+                  <Text style={styles.modalTitle}>Поделиться</Text>
+                  <View style={styles.iconContainer}>
+                    {data.map((item, index): any => (
+                      <TouchableOpacity key={index} style={styles.iconButton}>
+                        <FontAwesome
+                          name={item.name}
+                          size={40}
+                          color={item.color}
+                        />
+                        <Text style={styles.iconLabel}>{item.label}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                  <Button
+                    title="Закрыть"
+                    onPress={closeShareModal}
+                    color="#E74C3C"
+                  />
+                </View>
+              </View>
+            </Modal>
+            <CenteredModal
+              isFullBtn={false}
+              btnWhiteText=""
+              oneBtn={true}
+              btnRedText={"Закрыть"}
+              isModal={isWaitModal}
+              onConfirm={() => setIsWaitModal(false)}
+              toggleModal={() => setIsWaitModal(false)}
+            >
+              <>
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 22,
+                    fontWeight: "700",
+                    marginBottom: 20,
+                    paddingTop: 10
+                  }}
+                >
+                  Ваша заявка принта!
+                </Text>
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 14,
+                    fontWeight: "400",
+                    marginBottom: 20,
+                    letterSpacing: 1,
+                    textAlign: "center"
+                  }}
+                >
+                  Администратор проверяет Ваши данные.
+                </Text>
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 14,
+                    fontWeight: "400",
+                    marginBottom: 30,
+                    letterSpacing: 1,
+                    textAlign: "center"
+                  }}
+                >
+                  Это займет не более 20 минут
+                </Text>
+              </>
+            </CenteredModal>
+          </SafeAreaView>
+          <CenteredModal
+            btnWhiteText="Нет"
+            isFullBtn
+            btnRedText="Да"
+            children={
+              <View style={tw`items-center`}>
+                <AntDesign name="questioncircleo" size={50} color="#9C0A35" />
+                <Text style={tw`text-2xl font-bold text-white my-3`}>
+                  Вы уверены?
+                </Text>
+              </View>
+            }
+            isModal={toggle}
+            onConfirm={handleSubmit}
+            toggleModal={() => setToggle(false)}
+          />
+        </ScrollView>}
     </>
   );
 };

@@ -7,6 +7,8 @@ import fetchChatDataStore from '@/helpers/state_managment/chat/chatfetchStore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Buttons from '@/components/(buttons)/button';
 import { getChatList } from '@/helpers/api-function/chat/chat';
+import { usePinCode } from '@/context/PinContext';
+import CheckPinCode from '../(auth)/(checkPinCode)/checkPinCodeAbsolute';
 
 const ChatSupport = () => {
     const { stompClient, adminId } = useStomp();

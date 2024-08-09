@@ -18,6 +18,7 @@ import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSe
 import {useFocusEffect} from "expo-router";
 import {getMasterTariff} from "@/constants/storage";
 
+
 const Tab = createBottomTabNavigator();
 
 function MasterTabLayout() {
@@ -25,6 +26,7 @@ function MasterTabLayout() {
     const {number} = numberSettingStore();
     const [hasAllNumbers, setHasAllNumbers] = useState<boolean>(false);
 
+    
     useEffect(() => {
         if (number && number.length > 1) {
             const res = removeDuplicatesAndSort(number)
@@ -154,7 +156,7 @@ function MasterTabLayout() {
             }
         </>
     );
-}
+}  
 
 const styles = StyleSheet.create({
     container: {

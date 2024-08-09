@@ -27,6 +27,8 @@ import { base_url } from "@/helpers/api";
 import { getConfig } from "../(tabs)/(master)/main";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import { getMasterTariff } from "@/constants/storage";
+import { usePinCode } from "@/context/PinContext";
+import CheckPinCode from "../(auth)/(checkPinCode)/checkPinCodeAbsolute";
 
 const Schedule: React.FC = () => {
   const [activeTab, setActiveTab] = useState("booked");
@@ -84,14 +86,14 @@ const Schedule: React.FC = () => {
   const handleClick = async () => {
     try {
       const config = await getConfig();
-        
+
       if (schedule.length) {
-        const {data} = await axios.post(
+        const { data } = await axios.post(
           `${base_url}order/stop-recording?isActive=true`, {},
           config ? config : {}
         );
-        
-        if(data.success) toggle();
+
+        if (data.success) toggle();
       }
     } catch (error) {
       console.log(error);

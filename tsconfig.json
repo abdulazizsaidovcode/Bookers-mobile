@@ -19,7 +19,7 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "app/(chat)/index.tsx"
-  ],
+, "context/PinContext.js"  ],
   "exclude": [
     "node_modules",
     "babel.config.js",

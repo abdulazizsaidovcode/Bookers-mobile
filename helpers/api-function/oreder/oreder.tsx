@@ -37,7 +37,7 @@ export const postOrder = async (
 
         if (setLoading) setLoading(true);
         const config = await getConfig()
-        const response = await axios.post(`${order_add}?status=${status}`, {}, config ? config : {});
+        const response = await axios.post(`${order_add}?status=${status}`, data, config ? config : {});
         if (setLoading) setLoading(false);
 
         if (response.data.success) {
