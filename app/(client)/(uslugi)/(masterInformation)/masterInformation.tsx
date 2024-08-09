@@ -157,6 +157,7 @@ const MasterInformation = () => {
                   <Text style={[tw`text-white text-center`, { color: selectedCategorys !== service.id ? '#828282' : '#000' }]}>{clientData && clientData.fullName}</Text>
                 </TouchableOpacity>
               </View>
+              
             ))}
           </ScrollView>
           
