@@ -256,7 +256,7 @@ const ClientFeedback = () => {
                         onPress={() => {
                             setSelectedItem(1)
                             if (selectedItem === 1) setSelectedItem(null)
-                            getFeedbackClientFilter(setFeedback, selectedClient?.id, 5, page, setIsLoading)
+                            getFeedbackClientFilter(setFeedback, `${selectedClient?.id}`, 5, page, setIsLoading)
                         }}
                     />
                     <BreakdownItem
@@ -266,7 +266,7 @@ const ClientFeedback = () => {
                         onPress={() => {
                             setSelectedItem(2)
                             if (selectedItem === 2) setSelectedItem(null)
-                            getFeedbackClientFilter(setFeedback, selectedClient?.id, 4, page, setIsLoading)
+                            getFeedbackClientFilter(setFeedback, `${selectedClient?.id}`, 4, page, setIsLoading)
                         }}
                     />
                     <BreakdownItem
@@ -276,7 +276,7 @@ const ClientFeedback = () => {
                         onPress={() => {
                             setSelectedItem(3)
                             if (selectedItem === 3) setSelectedItem(null)
-                            getFeedbackClientFilter(setFeedback, selectedClient?.id, 3, page, setIsLoading)
+                            getFeedbackClientFilter(setFeedback, `${selectedClient?.id}`, 3, page, setIsLoading)
                         }}
                     />
                     <BreakdownItem
@@ -286,7 +286,7 @@ const ClientFeedback = () => {
                         onPress={() => {
                             setSelectedItem(4)
                             if (selectedItem === 4) setSelectedItem(null)
-                            getFeedbackClientFilter(setFeedback, selectedClient?.id, 2, page, setIsLoading)
+                            getFeedbackClientFilter(setFeedback, `${selectedClient?.id}`, 2, page, setIsLoading)
                         }}
                     />
                     <BreakdownItem
@@ -296,7 +296,7 @@ const ClientFeedback = () => {
                         onPress={() => {
                             setSelectedItem(5)
                             if (selectedItem === 5) setSelectedItem(null)
-                            getFeedbackClientFilter(setFeedback, selectedClient?.id, 1, page, setIsLoading)
+                            getFeedbackClientFilter(setFeedback, `${selectedClient?.id}`, 1, page, setIsLoading)
                         }}
                     />
                 </View>

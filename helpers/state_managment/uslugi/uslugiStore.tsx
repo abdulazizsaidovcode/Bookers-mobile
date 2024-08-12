@@ -131,7 +131,7 @@ const ClientStory = create<ClientAllCategory>((set) => ({
   setAllCategory: (val: Service[]) => set({ allCategory: val }),
   selectedServiceId: null,
   setSelectedServiceId: (id: string | null) => set({ selectedServiceId: id }),
-  clientData: {},
+  clientData: null,
   setClientData: (data: any) => set({ clientData: data }),
   clientId: '',
   setClientId: (val: string | null) => set({ clientId: val }),
