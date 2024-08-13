@@ -79,7 +79,7 @@ const InstallPin: React.FC = () => {
                 <View style={styles.topSection}>
                     <Text style={styles.label}>{t("set_pin_code")}</Text>
                     <View style={styles.inputContainer}>
-                        {otp.map((digit, index) => (
+                        {otp.map((digit, index) => ( 
                             <TextInput
                                 key={index}
                                 style={styles.input}

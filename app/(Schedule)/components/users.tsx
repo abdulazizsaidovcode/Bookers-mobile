@@ -9,7 +9,7 @@ import { getClientAll } from '@/helpers/api-function/client/client';
 import { useEffect, useState } from 'react';
 import { useOrderPosdData } from '@/helpers/state_managment/order/order';
 import { postOrder } from '@/helpers/api-function/oreder/oreder';
-import Toast from 'react-native-simple-toast';
+   
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 
 const ScheuleAllClient = () => {
@@ -47,7 +47,7 @@ const ScheuleAllClient = () => {
         console.log(orderMessageStatus);
         
         if (orderMessageStatus) {
-            Toast.show(orderMessageStatus, Toast.LONG);
+            alert(orderMessageStatus,  );
         }
     }, [orderMessageStatus]);
 

@@ -24,7 +24,7 @@ import {
   OnlineBookingStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from "@/app/(tabs)/(master)/main";
-import Toast from "react-native-simple-toast";
+    
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
@@ -74,12 +74,12 @@ const Booking = () => {
       );
       if (res.data.success) {
     setIsLoading(false);
-    Toast.show(res.data.message, Toast.SHORT);
+     alert(res.data.message     );
         navigation.goBack();
       }
       else {
       setIsLoading(false);
-      Toast.show(res.data.message, Toast.LONG);
+       alert(res.data.message,   );
       }
     } catch (error) {
     setIsLoading(false);

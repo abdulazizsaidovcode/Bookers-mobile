@@ -11,7 +11,7 @@ import axios from 'axios';
 import { gender_status } from '@/helpers/api';
 import { getConfig } from '@/app/(tabs)/(master)/main';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
-import Toast from "react-native-simple-toast";
+    
 
 const ServesGender = () => {
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
@@ -31,12 +31,12 @@ const ServesGender = () => {
             const response = await axios.post(`${gender_status}${queryString}`, {}, config ? config : {});
             console.log("Selected Categories: ", selectedCategories);
             if (response.data.success) {
-                Toast.show('✅ Пол успешно добавлен', Toast.LONG);
+                 alert('✅ Пол успешно добавлен',   );
                 router.push("/category");
                 setCompleted([true, true, false, false]);
             }
         } catch (error) {
-            Toast.show('⚠️ Пол не был успешно введен', Toast.LONG);
+             alert('⚠️ Пол не был успешно введен',   );
             console.error("Error fetching services: ", error);
         } finally {
             setIsLoading(false);

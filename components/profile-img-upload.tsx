@@ -15,7 +15,7 @@ import {MaterialIcons} from "@expo/vector-icons";
 import axios from "axios";
 import {getFile, postFileId} from "@/helpers/api";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import Toast from "react-native-simple-toast";
+    
 import {getConfigImg} from "@/app/(tabs)/(master)/main";
 import {useFocusEffect} from "expo-router";
 
@@ -129,14 +129,14 @@ const ProfileImgUploadProfile = (
                 config ? config : {}
             );
             if (response.data.success) {
-                Toast.show("Success", Toast.LONG);
+                 alert("Success",   );
                 setAttachmentId ? (
                     setAttachmentId(response.data.body),
                     setAttachmentID(response.data.body)
                  ) : setAttachmentID(response.data.body);
-            } else Toast.show(response.data.message, Toast.LONG);
+            } else  alert(response.data.message,   );
         } catch (err: any) {
-            Toast.show(err.response.data.message, Toast.LONG);
+             alert(err.response.data.message,   );
         }
     };
 

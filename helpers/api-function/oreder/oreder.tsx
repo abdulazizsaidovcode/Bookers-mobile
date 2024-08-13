@@ -9,7 +9,7 @@ import {
     order_update
 } from "@/helpers/api";
 import axios from "axios";
-import Toast from "react-native-simple-toast";
+    
 import { getConfig } from "@/app/(tabs)/(master)/main";
 
 interface OrderPost {
@@ -41,7 +41,7 @@ export const postOrder = async (
         if (setLoading) setLoading(false);
 
         if (response.data.success) {
-            Toast.show('Заказ на выбранное вами время успешно размещен.', Toast.LONG);
+             alert('Заказ на выбранное вами время успешно размещен.',   );
             if (setOrderId) setOrderId(response.data.body);
             if (setStatus) setStatus("success");
             if (navigation) navigation.goBack();
@@ -50,16 +50,16 @@ export const postOrder = async (
             console.log(response.data);
 
 
-            if (response.data.message == "Usta bugunga buyurtma qabul qilishni to'xtatdi") Toast.show("Мастер на сегодня прекратил принимать заказы", Toast.SHORT);
+            if (response.data.message == "Usta bugunga buyurtma qabul qilishni to'xtatdi")  alert("Мастер на сегодня прекратил принимать заказы"     );
             if (messageSatus) messageSatus(response.data.message);
             if (setStatus) setStatus("error");
         }
     } catch (error: any) {
         if (setStatus) setStatus("error");
         console.log(error);
-        if (error.response.data.date == "Date bo'sh bo'lmasligi kerak" || error.response.data.serviceIds == "Service ID bo'sh bo'lmasligi kerak") Toast.show('При заказе произошла ошибка во времени.', Toast.SHORT);
-        if (error.response.status == "Date bo'sh bo'lmasligi kerak" || error.response.data.serviceIds == "Service ID bo'sh bo'lmasligi kerak") Toast.show('При заказе произошла ошибка во времени.', Toast.SHORT);
-        if (error.response.status == 403 || error.response.status == 500) Toast.show('Во время заказа произошла ошибка.', Toast.SHORT);
+        if (error.response.data.date == "Date bo'sh bo'lmasligi kerak" || error.response.data.serviceIds == "Service ID bo'sh bo'lmasligi kerak")  alert('При заказе произошла ошибка во времени.'     );
+        if (error.response.status == "Date bo'sh bo'lmasligi kerak" || error.response.data.serviceIds == "Service ID bo'sh bo'lmasligi kerak")  alert('При заказе произошла ошибка во времени.'     );
+        if (error.response.status == 403 || error.response.status == 500)  alert('Во время заказа произошла ошибка.'     );
 
         if (setLoading) setLoading(false);
     }
@@ -78,16 +78,16 @@ export const orderTimeEdit = async ({ data, setOrderId, setLoading, setResponse 
         const res = await axios.put(`${order_update}`, data, config ? config : {});
         setLoading(false);
         if (res.data.success) {
-            Toast.show(res.data.message, Toast.LONG);
+             alert(res.data.message,   );
             setOrderId(data.orderId);
             if (setResponse) setResponse(true)
         } else {
-            Toast.show(res.data.message, Toast.LONG)
+             alert(res.data.message,   )
             if (setResponse) setResponse(false)
         }
 
     } catch (error: any) {
-        Toast.show(error.response.data.message, Toast.LONG);
+         alert(error.response.data.message,   );
         setLoading(false);
         if (setResponse) setResponse(false)
     }

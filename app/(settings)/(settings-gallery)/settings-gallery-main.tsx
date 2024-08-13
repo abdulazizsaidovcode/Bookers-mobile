@@ -51,7 +51,7 @@ const SettingsGalleryMain = () => {
         if (selectedItemId !== null) {
             setIsOpen(!isOpen)
         } else {
-            Toast.show('Please select a gallery', Toast.LONG)
+            alert('Please select a gallery',  )
         }
     }
 

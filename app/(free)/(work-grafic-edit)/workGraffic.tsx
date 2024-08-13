@@ -8,7 +8,7 @@ import { Item } from "@/type/graficWork/graficWork";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { putWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import CalendarGrafficEdit from "./calendar";
-import Toast from "react-native-simple-toast";
+    
 import { RootStackParamList } from "@/type/root";
 import { NavigationProp } from "@react-navigation/native";
 import { useFocusEffect, useNavigation } from "expo-router";
@@ -68,9 +68,9 @@ const GrafficWorkEdit: React.FC = () => {
 
   const handleContinuePress = () => {
     if (!calendarDate || !week.some((day) => day.active)) {
-      Toast.show(
+      alert(
         "Пожалуйста, выберите дату начала работы и хотя бы один рабочий день.",
-        Toast.LONG
+         
       );
       return;
     }

@@ -19,7 +19,7 @@ import {
 } from "@/helpers/api-function/client/client";
 import {useForm, Controller} from 'react-hook-form';
 import PhoneInput from 'react-native-phone-input';
-import Toast from "react-native-simple-toast";
+    
 import {SelectList} from "react-native-dropdown-select-list";
 import {useFocusEffect} from "expo-router";
 import {getMasterTariff} from "@/constants/storage";
@@ -306,7 +306,7 @@ const ProfileUpdate = ({clientData}: { clientData: any }) => {
                                     attachmentId: attachmentID ? attachmentID : null,
                                     clientPreferences: newUpdateClient.clientPreferences
                                 }, newUpdateClient.id, setNavigate, setIsLoading)
-                                else Toast.show('Ma\'lumotlar yuklanmoqda.....', Toast.LONG)
+                                else alert('Ma\'lumotlar yuklanmoqda.....',  )
                             }}
                             isDisebled={regex}
                         />

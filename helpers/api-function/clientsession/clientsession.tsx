@@ -15,11 +15,11 @@ export const getSeesions = async (setSessions: any) => {
             setSessions(res.data.body)
         } else {
             setSessions([])
-            Toast.show(res.data.message, Toast.SHORT)
+             alert(res.data.message     )
         }
 
     } catch (error: any) {
-        Toast.show(error.response.data.message, Toast.SHORT)
+         alert(error.response.data.message     )
         setSessions([])
     }
 
