@@ -6,6 +6,16 @@
 	<array>
 		<dict>
 			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>C617.1</string>
+				<string>0A2A.1</string>
+				<string>3B52.1</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
 			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>
 			<array>
@@ -14,12 +24,10 @@
 		</dict>
 		<dict>
 			<key>NSPrivacyAccessedAPIType</key>
-			<string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+			<string>NSPrivacyAccessedAPICategorySystemBootTime</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>
 			<array>
-				<string>0A2A.1</string>
-				<string>3B52.1</string>
-				<string>C617.1</string>
+				<string>35F9.1</string>
 			</array>
 		</dict>
 		<dict>
@@ -31,22 +39,10 @@
 				<string>85F4.1</string>
 			</array>
 		</dict>
-		<dict>
-			<key>NSPrivacyAccessedAPIType</key>
-			<string>NSPrivacyAccessedAPICategorySystemBootTime</string>
-			<key>NSPrivacyAccessedAPITypeReasons</key>
-			<array>
-				<string>35F9.1</string>
-			</array>
-		</dict>
 	</array>
 	<key>NSPrivacyCollectedDataTypes</key>
 	<array/>
 	<key>NSPrivacyTracking</key>
-	<key>NSLocationUsageDescription</key>
-    <string>Нам нужен доступ к вашему местоположению для отображения ближайших точек интереса, маршрутов и других функций приложения.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Наше приложение использует ваше местоположение, чтобы постоянно предоставлять информацию о местоположении и уведомлять вас о ближайших поставщиках услуг.</string>
 	<false/>
 </dict>
 </plist>
