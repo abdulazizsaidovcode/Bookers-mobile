@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import registerStory from '@/helpers/state_managment/auth/register';
@@ -76,12 +76,12 @@ const CheckPinOnCome: React.FC = () => {
         // await SecureStore.deleteItemAsync("number");
         // await SecureStore.deleteItemAsync("password");
         // await AsyncStorage.removeItem("registerToken");
-        console.log(code);
-
-
+        console.log(code)
         const enteredOtp = otp.join('');
+
         if (enteredOtp === code) {
             setIsCorrect(true);
+
             if (role === 'ROLE_CLIENT') {
                 navigation.navigate('(tabs)/(client)')
             } else if (role === 'ROLE_MASTER') {
@@ -94,50 +94,53 @@ const CheckPinOnCome: React.FC = () => {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
-            <View style={styles.container}>
-                <View style={styles.topSection}>
-                    <Text style={styles.label}>{'введите свой PIN-код'}</Text>
-                    <View style={styles.inputContainer}>
-                        {otp.map((digit, index) => (
-                            <TextInput
-                                key={index}
-                                style={[
-                                    styles.input,
-                                    isCorrect === false && styles.inputError,
-                                    isCorrect === true && styles.inputSuccess,
-                                ]}
-                                value={digit ? "*" : ""}
-                                onChangeText={(text) => handleChangeText(text, index)}
-                                onKeyPress={(e) => handleKeyPress(e, index)}
-                                ref={(ref) => (inputs.current[index] = ref!)}
-                                maxLength={1}
-                                keyboardType="numeric"
-                            />
-                        ))}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
+            <SafeAreaView style={styles.safeArea}>
+                <View style={styles.container}>
+                    <View style={styles.topSection}>
+                        <Text style={styles.label}>{'введите свой PIN-код'}</Text>
+                        <View style={styles.inputContainer}>
+                            {otp.map((digit, index) => (
+                                <TextInput
+                                    key={index}
+                                    style={[
+                                        styles.input,
+                                        isCorrect === false && styles.inputError,
+                                        isCorrect === true && styles.inputSuccess,
+                                    ]}
+                                    value={digit ? "*" : ""}
+                                    onChangeText={(text) => handleChangeText(text, index)}
+                                    onKeyPress={(e) => handleKeyPress(e, index)}
+                                    ref={(ref) => (inputs.current[index] = ref!)}
+                                    maxLength={1}
+                                    keyboardType="numeric"
+                                />
+                            ))}
+                        </View>
+                    </View>
+                    <View style={styles.bottomSection}>
+                        <TouchableOpacity
+                            style={[
+                                styles.button,
+                                { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
+                            ]}
+                            onPress={() => {
+                                handleContinue()
+                            }}
+                            disabled={!isButtonEnabled}
+                        >
+                            <Text style={[
+                                styles.buttonText,
+                                { color: isButtonEnabled ? '#FFF' : '#FFF' }
+                            ]}>
+                                {t("Continue")}
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.bottomSection}>
-                    <TouchableOpacity
-                        style={[
-                            styles.button,
-                            { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
-                        ]}
-                        onPress={() => {
-                            handleContinue()
-                        }}
-                        disabled={!isButtonEnabled}
-                    >
-                        <Text style={[
-                            styles.buttonText,
-                            { color: isButtonEnabled ? '#FFF' : '#FFF' }
-                        ]}>
-                            {t("Continue")}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
     );
 };
 

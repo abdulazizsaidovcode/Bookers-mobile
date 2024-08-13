@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, StyleSheet, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, TextInput, StyleSheet, Text, TouchableOpacity, SafeAreaView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { useTranslation } from 'react-i18next';
 
@@ -52,6 +52,7 @@ const CheckPinCode: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
     };
 
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <Text style={styles.label}>PIN kodni kiriting</Text>
@@ -93,6 +94,7 @@ const CheckPinCode: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
                 </View>
             </View>
         </SafeAreaView>
+        </TouchableWithoutFeedback>
     );
 };
 

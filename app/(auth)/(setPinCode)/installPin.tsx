@@ -1,7 +1,7 @@
 import { useNavigation } from 'expo-router';
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
+import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
@@ -74,6 +74,8 @@ const InstallPin: React.FC = () => {
     const { t } = useTranslation();
 
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <View style={styles.topSection}>
@@ -120,6 +122,7 @@ const InstallPin: React.FC = () => {
                 </View>
             </View>
         </SafeAreaView>
+        </TouchableWithoutFeedback>
     );
 };
 

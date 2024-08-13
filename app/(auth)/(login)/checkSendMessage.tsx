@@ -7,7 +7,7 @@ import { useFocusEffect, useNavigation } from 'expo-router';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as SecureStore from 'expo-secure-store';
-   
+
 
 import {
     View,
@@ -17,7 +17,9 @@ import {
     TextInputKeyPressEventData,
     NativeSyntheticEvent,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    Keyboard,
+    TouchableWithoutFeedback
 } from 'react-native';
 import { langstore } from '@/helpers/state_managment/lang/lang';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
@@ -134,51 +136,54 @@ const OtpInputExample: React.FC = () => {
 
     useFocusEffect(useCallback(() => {
         if (code) {
-            alert(`${code}`,  )
+            alert(`${code}`,)
         }
     }, [code]))
 
 
     return (
-        <View style={styles.container}>
-            <View style={styles.textContainer}>
-                <Text style={styles.title}>{t("Confirmation_Number")}</Text>
-                <Text style={styles.phoneNumber}>{number}</Text>
-                <Text style={styles.instruction}>{t("we_sent_you_sms_with_code")}</Text>
-            </View>
-            <View style={styles.otpContainer}>
-                {otpValue.map((digit, index) => (
-                    <TextInput
-                        key={index}
-                        style={!response ? styles.inputFocused : styles.input}
-                        value={digit}
-                        onChangeText={(text) => handleChangeText(text, index)}
-                        onKeyPress={(e) => handleKeyPress(e, index)}
-                        ref={(ref) => (inputs.current[index] = ref!)}
-                        maxLength={1}
-                        keyboardType="numeric"
-                        onPaste={handlePaste}
-                    />
-                ))}
-            </View>
-            <View style={styles.buttonContainer}>
-                {!pending ?
-                    <TouchableOpacity
-                        style={[styles.button, isDisabled && styles.disabledButton]}
-                        disabled={isDisabled}
-                        onPress={handlePress}
-                    >
-                        <Text style={styles.buttonText}>{t("Confirm")}</Text>
-                    </TouchableOpacity>
-                    :
-                    <LoadingButtons
-                        title={t("Confirm")}
-                        backgroundColor={'#9C0A35'}
-                    />
-                }
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.container}>
+                <View style={styles.textContainer}>
+                    <Text style={styles.title}>{t("Confirmation_Number")}</Text>
+                    <Text style={styles.phoneNumber}>{number}</Text>
+                    <Text style={styles.instruction}>{t("we_sent_you_sms_with_code")}</Text>
+                </View>
+                <View style={styles.otpContainer}>
+                    {otpValue.map((digit, index) => (
+                        <TextInput
+                            key={index}
+                            style={!response ? styles.inputFocused : styles.input}
+                            value={digit}
+                            onChangeText={(text) => handleChangeText(text, index)}
+                            onKeyPress={(e) => handleKeyPress(e, index)}
+                            ref={(ref) => (inputs.current[index] = ref!)}
+                            maxLength={1}
+                            keyboardType="numeric"
+                            onPaste={handlePaste}
+                        />
+                    ))}
+                </View>
+                <View style={styles.buttonContainer}>
+                    {!pending ?
+                        <TouchableOpacity
+                            style={[styles.button, isDisabled && styles.disabledButton]}
+                            disabled={isDisabled}
+                            onPress={handlePress}
+                        >
+                            <Text style={styles.buttonText}>{t("Confirm")}</Text>
+                        </TouchableOpacity>
+                        :
+                        <LoadingButtons
+                            title={t("Confirm")}
+                            backgroundColor={'#9C0A35'}
+                        />
+                    }
 
+                </View>
             </View>
-        </View>
+        </TouchableWithoutFeedback>
+
     );
 };
 

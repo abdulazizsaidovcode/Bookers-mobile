@@ -76,6 +76,10 @@
     <key>UIUserInterfaceStyle</key>
     <string>Light</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
+    <key>NSLocationUsageDescription</key>
+    <string>Нам нужен доступ к вашему местоположению для отображения ближайших точек интереса, маршрутов и других функций приложения.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Наше приложение использует ваше местоположение, чтобы постоянно предоставлять информацию о местоположении и уведомлять вас о ближайших поставщиках услуг.</string>
     <false/>
   </dict>
 </plist>
