@@ -10,16 +10,16 @@ interface TabsProps {
 
 const Tabs: React.FC<TabsProps> = ({ activeTab, onTabChange }) => {
   const [tariff, setTariff] = React.useState<string | null>(null);
-  
+
   useFocusEffect(
     useCallback(() => {
       getMasterTariff(setTariff)
-    },[tariff, setTariff])
+    }, [tariff, setTariff])
   )
 
   return (
     <ScrollView
-      contentContainerStyle={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 20, gap: 10, marginBottom: 10 }}
+      contentContainerStyle={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10 }}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
     >
@@ -64,17 +64,12 @@ const Tabs: React.FC<TabsProps> = ({ activeTab, onTabChange }) => {
 };
 
 const styles = StyleSheet.create({
-  tabs: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    marginVertical: 10,
-    gap: 10,
-  },
   tabButton: {
     padding: 10,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "#9C0A35",
+    marginRight: 10,
   },
   activeTab: {
     backgroundColor: '#9C0A35',

@@ -269,14 +269,14 @@ const ProfilePage: React.FC = () => {
 
   return (
     <>
-
-
       {isLoading ?
         <Loading />
         :
-        <ScrollView style={[styles.container]}>
-          <SafeAreaView style={{ paddingBottom: 24 }}>
-            <StatusBar backgroundColor={`#21212E`} barStyle={`dark-content`} />
+        <SafeAreaView style={[{ marginBottom: -50, flex: 1 }, styles.container]}>
+          <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+          >
             <Text style={styles.title}>Профиль</Text>
             <View style={styles.profileHeader}>
               <Image
@@ -436,24 +436,25 @@ const ProfilePage: React.FC = () => {
                 </Text>
               </>
             </CenteredModal>
-          </SafeAreaView>
-          <CenteredModal
-            btnWhiteText="Нет"
-            isFullBtn
-            btnRedText="Да"
-            children={
-              <View style={tw`items-center`}>
-                <AntDesign name="questioncircleo" size={50} color="#9C0A35" />
-                <Text style={tw`text-2xl font-bold text-white my-3`}>
-                  Вы уверены?
-                </Text>
-              </View>
-            }
-            isModal={toggle}
-            onConfirm={handleSubmit}
-            toggleModal={() => setToggle(false)}
-          />
-        </ScrollView>}
+            <CenteredModal
+              btnWhiteText="Нет"
+              isFullBtn
+              btnRedText="Да"
+              children={
+                <View style={tw`items-center`}>
+                  <AntDesign name="questioncircleo" size={50} color="#9C0A35" />
+                  <Text style={tw`text-2xl font-bold text-white my-3`}>
+                    Вы уверены?
+                  </Text>
+                </View>
+              }
+              isModal={toggle}
+              onConfirm={handleSubmit}
+              toggleModal={() => setToggle(false)}
+            />
+          </ScrollView>
+        </SafeAreaView>
+      }
     </>
   );
 };
@@ -463,6 +464,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#21212E",
     padding: 16,
+    paddingTop: 0,
   },
   title: {
     color: "#ffffff",

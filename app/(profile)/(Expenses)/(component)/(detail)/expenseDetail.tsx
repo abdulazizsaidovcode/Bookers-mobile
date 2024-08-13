@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useFocusEffect, useNavigation } from 'expo-router';
 import { masterExpense } from '@/helpers/state_managment/expence/ecpense';
 import ExpenseArendaCard from '../card/ExpenseArenda';
+import Buttons from '@/components/(buttons)/button';
 
 const ExpenseDetail: React.FC = () => {
     const [showCreateExpense, setShowCreateExpense] = useState(false);
@@ -15,7 +16,7 @@ const ExpenseDetail: React.FC = () => {
 
     useFocusEffect(
         useCallback(() => {
-        console.log(expense);
+            console.log(expense);
             const fetchData = async () => {
                 try {
                     setExpenses(expense)
@@ -34,31 +35,33 @@ const ExpenseDetail: React.FC = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <NavigationMenu name='Expense' />
             <View style={styles.container}>
                 {
-                    expenses && expenses.length > 0 ? <FlatList
-                        data={expenses}
-                        renderItem={({ item }) => <ExpenseArendaCard item={item} />}
-                        keyExtractor={(item) => item.id}
-                    /> : <Text style={styles.infoText}>Расходы по аренде</Text>
+                    expenses && expenses.length > 0 ?
+                        <FlatList
+                            data={expenses}
+                            renderItem={({ item }) => <ExpenseArendaCard item={item} />}
+                            keyExtractor={(item) => item.id}
+                        /> :
+                        <Text style={styles.infoText}>Расходы по аренде</Text>
                 }
             </View>
-            <TouchableOpacity
-                style={styles.addButton}
-                onPress={() => navigation.navigate('(profile)/(Expenses)/(component)/CreateExpense/CreateExpense')}
-            >
-                <FontAwesome name="plus-circle" size={24} color="#fff" style={styles.addButtonIcon} />
-                <Text style={styles.addButtonText}>Добавить расход по аренде</Text>
-            </TouchableOpacity>
-        </View>
+            <View style={{ paddingHorizontal: 16 }}>
+                <Buttons
+                    title='Добавить расход по аренде'
+                    icon={<FontAwesome name="plus-circle" size={24} color="#fff" style={styles.addButtonIcon} />}
+                    onPress={() => navigation.navigate('(profile)/(Expenses)/(component)/CreateExpense/CreateExpense')}
+                />
+            </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        padding: 8,
+        paddingHorizontal: 16,
         flex: 1,
         width: '100%',
         backgroundColor: '#21212E',

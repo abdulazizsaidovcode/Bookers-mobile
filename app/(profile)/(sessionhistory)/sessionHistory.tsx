@@ -1,13 +1,13 @@
-import React, {useCallback, useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView} from 'react-native';
-import {FontAwesome, MaterialIcons} from '@expo/vector-icons';
-import {useNavigation} from '@react-navigation/native';
+import React, { useCallback, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, SafeAreaView } from 'react-native';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import tw from 'tailwind-react-native-classnames';
 import axios from 'axios';
-import {base_url} from '@/helpers/api';
-import {getConfig} from '@/app/(tabs)/(master)/main';
-import {useFocusEffect} from "expo-router";
+import { base_url } from '@/helpers/api';
+import { getConfig } from '@/app/(tabs)/(master)/main';
+import { useFocusEffect } from "expo-router";
 
 
 const SessionHistory: React.FC = () => {
@@ -41,7 +41,7 @@ const SessionHistory: React.FC = () => {
     const getSessionsHistory = async () => {
         try {
             const config = await getConfig()
-            const {data} = await axios.get(`${base_url}order/session-history`, config ? config : {});
+            const { data } = await axios.get(`${base_url}order/session-history`, config ? config : {});
             setData(data.body)
         } catch (error) {
             console.log(error);
@@ -52,13 +52,13 @@ const SessionHistory: React.FC = () => {
         getSessionsHistory();
     }, []));
 
-    const renderItem = ({item}: any) => (
+    const renderItem = ({ item }: any) => (
         <TouchableOpacity
             style={styles.itemContainer}
             onPress={() => navigation.navigate(item.screen)}
         >
             <View style={styles.itemContent}>
-                <FontAwesome name={item.icon} size={24} color="#9c0935" style={styles.itemIcon}/>
+                <FontAwesome name={item.icon} size={24} color="#9c0935" style={styles.itemIcon} />
                 <Text style={styles.itemText}>{item.title}</Text>
             </View>
             <View style={styles.itemContent}>
@@ -66,16 +66,14 @@ const SessionHistory: React.FC = () => {
                     <Text style={tw`text-white`}>{item.count}</Text>
 
                 </View>
-                <MaterialIcons name="navigate-next" size={36} color='gray'/>
+                <MaterialIcons name="navigate-next" size={36} color='gray' />
             </View>
         </TouchableOpacity>
     );
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={tw`mt-8`}>
-                <NavigationMenu name='История сеансов'/>
-            </View>
+            <NavigationMenu name='История сеансов' />
             <View style={styles.padding}>
                 <FlatList
                     data={sessionData}
@@ -93,7 +91,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#21212E',
     },
     padding: {
-        padding: 16
+        paddingHorizontal: 16,
+        flex:1
     },
     title: {
         color: '#ffffff',

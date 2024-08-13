@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 
 import Tabs from "./components/tabs";
@@ -117,36 +117,40 @@ const Schedule: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <View style={{ flex: 1, marginBottom: 35 }}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ padding: 16 }}>
           <View>
-            <Text
-              style={[
-                tw`text-white text-3xl my-7 font-bold`,
-                { letterSpacing: 2 },
-              ]}
-            >
-              Расписание
-            </Text>
-            <Tabs activeTab={activeTab} onTabChange={handleTabChange} />
+            <View>
+              <Text
+                style={[
+                  tw`text-white text-3xl mb-7 font-bold`,
+                  { letterSpacing: 2 },
+                ]}
+              >
+                Расписание
+              </Text>
+              <Tabs activeTab={activeTab} onTabChange={handleTabChange} />
+            </View>
+            {activeTab === "booked" && <Bookedschedule />}
+            {activeTab === "requests" && <RequestSchedule />}
+            {activeTab === "hall" && <HallSchedule />}
           </View>
-          {activeTab === "booked" && <Bookedschedule />}
-          {activeTab === "requests" && <RequestSchedule />}
-          {activeTab === "hall" && <HallSchedule />}
+          {activeTab == "booked" && (
+            <View style={styles.button}>
+              <Buttons
+                title="Записать клиента"
+                isDisebled={!active}
+                onPress={setOrder}
+              />
+              {tariff === "STANDARD" && (
+                <Buttons isDisebled={!!schedule.length} title="Остановить запись" onPress={toggle} />
+              )}
+            </View>
+          )}
         </View>
-        {activeTab == "booked" && (
-          <View style={styles.button}>
-            <Buttons
-              title="Записать клиента"
-              isDisebled={!active}
-              onPress={setOrder}
-            />
-            {tariff === "STANDARD" && (
-              <Buttons isDisebled={!!schedule.length} title="Остановить запись" onPress={toggle} />
-            )}
-          </View>
-        )}
       </ScrollView>
       <CenteredModal
         isModal={toggleModal}
@@ -167,14 +171,14 @@ const Schedule: React.FC = () => {
           </Text>
         </View>
       </CenteredModal>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    // paddingHorizontal: 16,
     backgroundColor: "#21212E",
   },
   button: {
@@ -182,6 +186,7 @@ const styles = StyleSheet.create({
     // bottom: 1,
     // left: 16,
     // right: 16,
+    marginBottom: 120,
     borderRadius: 8,
     paddingBottom: 16,
     paddingTop: 16,

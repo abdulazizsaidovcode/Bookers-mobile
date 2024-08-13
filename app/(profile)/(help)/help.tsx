@@ -1,8 +1,7 @@
 import React from 'react';
 import { View } from "@/components/Themed";
 import NavigationMenu from "@/components/navigation/navigation-menu";
-import { ScrollView, StatusBar } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, ScrollView, StatusBar } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import MyServicesCard from '@/components/services/myServicesCard';
 import { getHelpOne } from '@/helpers/api-function/help/help';
@@ -15,7 +14,7 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(profile
 
 
 const HelpPage = () => {
-    const { setNavigatName, setHelpDate, isLoading, setIsLoading} = heplStore()
+    const { setNavigatName, setHelpDate, isLoading, setIsLoading } = heplStore()
     const navigation = useNavigation<SettingsScreenNavigationProp>()
 
 
@@ -29,8 +28,7 @@ const HelpPage = () => {
         },
         {
             title: "Оферта",
-            onPress: () => 
-                {
+            onPress: () => {
                 getHelpOne(setHelpDate, "OFFER", "(standart)/(help)/(aboutUs)/aboutUs", navigation)
                 setNavigatName("Оферта")
             }
@@ -97,17 +95,15 @@ const HelpPage = () => {
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <View style={{ paddingLeft: 10, backgroundColor: "#21212E" }}>
-                <NavigationMenu name={`Помощь`} />
-            </View>
+            <NavigationMenu name={`Помощь`} />
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
                 >
-                    <View style = {[tw``, {backgroundColor:'#21212E'}]}>
-                        <View style={[tw`mb-5`,{backgroundColor:'#21212E'}]}>
-                            {services.map((service, index) => (   
+                    <View style={[tw``, { backgroundColor: '#21212E' }]}>
+                        <View style={[tw`mb-5`, { backgroundColor: '#21212E' }]}>
+                            {services.map((service, index) => (
                                 <MyServicesCard key={index}
                                     title={service.title}
                                     onPress={service.onPress}

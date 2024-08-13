@@ -9,6 +9,7 @@ import {
   Pressable,
   Linking,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { FontAwesome, FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
@@ -205,65 +206,67 @@ const Upcomingentries = () => {
   );
 
   return (
-    <View
-      style={[tw`flex-1 bg-gray-900 p-4 mt-5`, { backgroundColor: "#21212E" }]}
+    <SafeAreaView
+      style={[tw`flex-1 bg-gray-900`, { backgroundColor: "#21212E" }]}
     >
-      <NavigationMenu name="Предстоящие записи" />
-      {(loading) && <ActivityIndicator size="large" color={"#888"} />}
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-      />
-      <BottomModal
-        isBottomModal={bottomModalNetwork}
-        toggleBottomModal={() => {
-          toggleBottomModalNetwork();
-        }}
-      >
-        <View style={tw`w-full`}>
-          <Text style={styles.modalTitle}>Позвонить через</Text>
-          <View
-            style={[tw`flex-row justify-start items-center mb-6`, { gap: 25 }]}
-          >
-            <TouchableOpacity onPress={callPhone} activeOpacity={0.7}>
-              <FontAwesome name="phone-square" size={45} color="#45E760" />
-              <Text style={styles.modalOptionText}>Телефон</Text>
-            </TouchableOpacity>
-            {getMee.instagram && (
-              <TouchableOpacity onPress={goInstagram} activeOpacity={0.7}>
-                <FontAwesome5
-                  name="instagram-square"
-                  size={44}
-                  color="#9C0A35"
-                />
-                <Text style={styles.modalOptionText}>Инстаграм</Text>
-              </TouchableOpacity>
-            )}
-            {getMee.telegram && (
-              <TouchableOpacity onPress={goTelegram} activeOpacity={0.7}>
-                <FontAwesome name="telegram" size={42} color="#06BCEE" />
-                <Text style={styles.modalOptionText}>Телеграм</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          <View style={styles.defaultOption}>
-            <TouchableOpacity
-              onPress={() => setUseDefault(!useDefault)}
-              activeOpacity={0.7}
-              style={!useDefault && styles.checkbox}
+      <View style={[tw`px-4 mb-14`, { backgroundColor: "#21212E" }]}>
+        <NavigationMenu name="Предстоящие записи" />
+        {(loading) && <ActivityIndicator size="large" color={"#888"} />}
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+        />
+        <BottomModal
+          isBottomModal={bottomModalNetwork}
+          toggleBottomModal={() => {
+            toggleBottomModalNetwork();
+          }}
+        >
+          <View style={tw`w-full`}>
+            <Text style={styles.modalTitle}>Позвонить через</Text>
+            <View
+              style={[tw`flex-row justify-start items-center mb-6`, { gap: 25 }]}
             >
-              {useDefault && (
-                <FontAwesome6 name="square-check" size={27} color="white" />
+              <TouchableOpacity onPress={callPhone} activeOpacity={0.7}>
+                <FontAwesome name="phone-square" size={45} color="#45E760" />
+                <Text style={styles.modalOptionText}>Телефон</Text>
+              </TouchableOpacity>
+              {getMee.instagram && (
+                <TouchableOpacity onPress={goInstagram} activeOpacity={0.7}>
+                  <FontAwesome5
+                    name="instagram-square"
+                    size={44}
+                    color="#9C0A35"
+                  />
+                  <Text style={styles.modalOptionText}>Инстаграм</Text>
+                </TouchableOpacity>
               )}
-            </TouchableOpacity>
-            <Text style={[styles.defaultText, tw`${useDefault ? "ml-2" : ""}`]}>
-              Используй по умолчанию
-            </Text>
+              {getMee.telegram && (
+                <TouchableOpacity onPress={goTelegram} activeOpacity={0.7}>
+                  <FontAwesome name="telegram" size={42} color="#06BCEE" />
+                  <Text style={styles.modalOptionText}>Телеграм</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={styles.defaultOption}>
+              <TouchableOpacity
+                onPress={() => setUseDefault(!useDefault)}
+                activeOpacity={0.7}
+                style={!useDefault && styles.checkbox}
+              >
+                {useDefault && (
+                  <FontAwesome6 name="square-check" size={27} color="white" />
+                )}
+              </TouchableOpacity>
+              <Text style={[styles.defaultText, tw`${useDefault ? "ml-2" : ""}`]}>
+                Используй по умолчанию
+              </Text>
+            </View>
           </View>
-        </View>
-      </BottomModal>
-    </View>
+        </BottomModal>
+      </View>
+    </SafeAreaView>
   );
 };
 
