@@ -17,7 +17,7 @@ import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PieChart from "react-native-pie-chart";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-    
+
 import {
   editOrderStatus,
   fetchDaylyOrderTimes,
@@ -181,7 +181,7 @@ const TabOneScreen: React.FC = () => {
       const onBackPress = () => {
         if (backPressCount === 0) {
           setBackPressCount(backPressCount + 1);
-           alert("Orqaga qaytish uchun yana bir marta bosing"     );
+          alert("Orqaga qaytish uchun yana bir marta bosing");
           setTimeout(() => {
             setBackPressCount(0);
           }, 2000); // 2 soniya ichida ikkinchi marta bosilmasa, holatni qayta boshlaydi
@@ -503,7 +503,7 @@ const Header: React.FC = () => {
           size={24}
           color={COLORS.white}
           style={{ marginRight: 16 }}
-          onPress={() => navigation.navigate("(tabs)/chat")}
+          onPress={() => navigation.navigate("(profile)/(notification)/index")}
         />
         <Ionicons
           name="share-social-outline"
@@ -851,6 +851,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
+    marginBottom: -60
   },
   header: {
     flexDirection: "row",
