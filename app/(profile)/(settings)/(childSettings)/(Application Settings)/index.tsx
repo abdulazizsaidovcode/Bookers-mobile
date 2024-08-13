@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-   
+
 
 const data: { icon: string | any, label: string, screen: string }[] = [
     { icon: 'globe', label: 'Сменить язык', screen: '(profile)/(settings)/(childSettings)/(Application Settings)/components/language' },
@@ -19,14 +19,14 @@ const ApplicationSettings: React.FC = () => {
         if (screen.trim() !== '') {
             navigation.navigate(screen)
         } else {
-            alert('Страница не найдена'     );
+            alert('Страница не найдена');
         }
     }
 
     return (
         <SafeAreaView style={styles.container}>
+            <NavigationMenu name='Настройки' />
             <ScrollView>
-                <NavigationMenu name='Настройки' />
                 {data.map((item, index) => (
                     <TouchableOpacity
                         key={index}

@@ -15,7 +15,7 @@ const ClientCard = ({ items }: any) => {
                 />
                 <View>
                     <Text style={[tw`text-2xl font-bold`]}>{items.firstName} {items.lastName}</Text>
-                    <Text style={[tw`mb-4 mt-1 text-base`, { color: '#4F4F4F' }]}>
+                    <Text style={[tw`mb-2 mt-1 text-base`, { color: '#4F4F4F' }]}>
                         {items.phoneNumber}
                     </Text>
                     {items.status.map((status: string) => (
@@ -29,7 +29,7 @@ const ClientCard = ({ items }: any) => {
                             </Text>
                         </View>
                     ))}
-                    <Text style={[tw`text-2xl font-bold`, { color: '#9C0A35' }]}>{items.price} сум</Text>
+                    <Text style={[tw`text-xl font-bold`, { color: '#9C0A35' }]}>{items.price} сум</Text>
                 </View>
             </View>
         </View>

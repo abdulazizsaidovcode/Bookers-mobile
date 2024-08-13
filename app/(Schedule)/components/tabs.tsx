@@ -55,7 +55,7 @@ const Tabs: React.FC<TabsProps> = ({ activeTab, onTabChange }) => {
         ]}
         onPress={() => onTabChange('hall')}
       >
-        <Text style={[styles.tabText, activeTab !== 'requests' && styles.inactiveText]}>
+        <Text style={[styles.tabText, activeTab !== 'hall' && styles.inactiveText]}>
           Запрос окошка
         </Text>
       </TouchableOpacity>}
