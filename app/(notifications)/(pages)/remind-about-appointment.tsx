@@ -91,9 +91,9 @@ const RemindAboutAppointment: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <NavigationMenu name="Напоминание о записи" />
       <ScrollView>
         <StatusBar style="light" />
-        <NavigationMenu name="Напоминание о записи" />
         <View style={{ padding: 15 }}>
           <View>
             <Text style={styles.title}>
@@ -189,7 +189,7 @@ const RemindAboutAppointment: React.FC = () => {
           </View>
         </BottomModal>
       </ScrollView>
-      <View style={{ padding: 15, position: 'absolute', bottom: 0, width: '100%', backgroundColor: "#21212E" }}>
+      <View style={{ padding: 15, position: 'absolute', bottom: 0, width: '100%', backgroundColor: "#21212E",marginBottom: 10 }}>
         {isLoading ? <LoadingButtons title="Сохранить" /> :
           <Buttons
             title="Сохранить"

@@ -18,6 +18,7 @@ import {
 import { postOnlineBookingUserviceTimeAll } from "@/helpers/api-function/onlineBooking/onlineBooking";
 import { useNavigation } from "expo-router";
 import { Loading } from "@/components/loading/loading";
+import Buttons from "@/components/(buttons)/button";
 
 const { width, height } = Dimensions.get("window");
 
@@ -90,8 +91,8 @@ const SingleBreakBetweenSession = () => {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.saveButton}
+          <Buttons
+            title="Сохранить"
             onPress={() =>
               postOnlineBookingUserviceTimeAll(
                 { serviceId: null, hour: selectedHour, minute: selectedMinute },
@@ -99,16 +100,14 @@ const SingleBreakBetweenSession = () => {
                 setIsLoading
               )
             }
-          >
-            <Text style={styles.saveButtonText}>Сохранить</Text>
-          </TouchableOpacity>
+          />
 
           <Modal
             animationType="slide"
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => setModalVisible(false)}
-            
+
           >
             <View style={styles.modalView}>
               <View style={styles.modalContent}>

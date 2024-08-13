@@ -46,11 +46,9 @@ const RequestWindow = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <NavigationMenu name='Запрс окошка' />
       <ScrollView>
         <StatusBar style="light" />
-        <View style={styles.navigationMenu}>
-          <NavigationMenu name='Запрс окошка' />
-        </View>
         <View style={styles.content}>
           <Text style={{ color: 'white', fontSize: 20 }}>Уведомление о попадании клиента в свободное окошко</Text>
           <View style={styles.messageContainer}>

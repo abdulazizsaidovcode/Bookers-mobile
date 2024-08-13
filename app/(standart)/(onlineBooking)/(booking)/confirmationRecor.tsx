@@ -24,7 +24,7 @@ type SettingsScreenNavigationProp = NavigationProp<
 
 const ConfirmationRecord = () => {
   const { tariff } = clientStore();
-  const {isLoading, setIsLoading} = OnlineBookingStory()
+  const { isLoading, setIsLoading } = OnlineBookingStory()
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
   const {
@@ -71,27 +71,11 @@ const ConfirmationRecord = () => {
 
   return (
     <>
-    {isLoading ? <Loading/> : <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={{ marginBottom: 10 }}></Text>
-        <NavigationMenu name={`Онлайн бронирование`} />
-        <StatusBar style="auto" />
-        <View
-          style={{
-            paddingHorizontal: 16,
-            marginBottom: 10,
-            backgroundColor: "#B9B9C9",
-            borderRadius: 15,
-          }}
-        >
-          <SwitchWithLabelBlack
-            label="Подтверждать записи для всех клиентов"
-            value={isEnabled}
-            onToggle={toggleSwitch}
-          />
-        </View>
-        {tariff === "STANDARD" && (
-          <View>
+      {isLoading ?
+        <Loading /> :
+        <SafeAreaView style={styles.container}>
+          <NavigationMenu name={`Онлайн бронирование`} />
+          <View style={{ flex: 1, paddingHorizontal: 16 }}>
             <View
               style={{
                 paddingHorizontal: 16,
@@ -101,54 +85,72 @@ const ConfirmationRecord = () => {
               }}
             >
               <SwitchWithLabelBlack
-                label="Подтверждать записи только 
+                label="Подтверждать записи для всех клиентов"
+                value={isEnabled}
+                onToggle={toggleSwitch}
+              />
+            </View>
+            {tariff === "STANDARD" && (
+              <View>
+                <View
+                  style={{
+                    paddingHorizontal: 16,
+                    marginBottom: 10,
+                    backgroundColor: "#B9B9C9",
+                    borderRadius: 15,
+                  }}
+                >
+                  <SwitchWithLabelBlack
+                    label="Подтверждать записи только 
                     для новых клиентов"
-                value={isEnabled2}
-                onToggle={toggleSwitch2}
-              />
-            </View>
-            <View
-              style={{
-                paddingHorizontal: 16,
-                marginBottom: 20,
-                backgroundColor: "#B9B9C9",
-                borderRadius: 15,
-              }}
-            >
-              <SwitchWithLabelBlack
-                label="Не подтверждать записи"
-                value={isEnabled3}
-                onToggle={toggleSwitch3}
-              />
-            </View>
-          </View>
-        )}
+                    value={isEnabled2}
+                    onToggle={toggleSwitch2}
+                  />
+                </View>
+                <View
+                  style={{
+                    paddingHorizontal: 16,
+                    marginBottom: 20,
+                    backgroundColor: "#B9B9C9",
+                    borderRadius: 15,
+                  }}
+                >
+                  <SwitchWithLabelBlack
+                    label="Не подтверждать записи"
+                    value={isEnabled3}
+                    onToggle={toggleSwitch3}
+                  />
+                </View>
+              </View>
+            )}
 
-        <Text style={{ marginBottom: 10, color: "white" }}>
-          Настройте подтверждение записи Вы можете подтверждать каждую запись и
-          приложение будет отправлять увеедомления клиентам
-        </Text>
-        <Text style={{ marginBottom: 10, color: "white" }}>
-          Или клиенты будут бронировать Ваши услуги без Вашего подтверждения и
-          Вы будете видеть всех записанных клиентов
-        </Text>
-      </View>
-      <Buttons
-        title="Сохранить"
-        backgroundColor="#9C0A35"
-        onPress={() => {
-          onlineConfirmationServices(
-            isEnabled,
-            isEnabled2,
-            isEnabled3,
-            navigation,
-            setIsLoading
-          );
-          console.log(isEnabled, isEnabled2, isEnabled3);
-          // router.push("(standart)/(onlineBooking)/onlineBooking");
-        }}
-      />
-    </SafeAreaView>}
+            <Text style={{ marginBottom: 10, color: "white" }}>
+              Настройте подтверждение записи Вы можете подтверждать каждую запись и
+              приложение будет отправлять увеедомления клиентам
+            </Text>
+            <Text style={{ marginBottom: 10, color: "white" }}>
+              Или клиенты будут бронировать Ваши услуги без Вашего подтверждения и
+              Вы будете видеть всех записанных клиентов
+            </Text>
+          </View>
+          <View style={{ paddingHorizontal: 16 }}>
+            <Buttons
+              title="Сохранить"
+              backgroundColor="#9C0A35"
+              onPress={() => {
+                onlineConfirmationServices(
+                  isEnabled,
+                  isEnabled2,
+                  isEnabled3,
+                  navigation,
+                  setIsLoading
+                );
+                console.log(isEnabled, isEnabled2, isEnabled3);
+                // router.push("(standart)/(onlineBooking)/onlineBooking");
+              }}
+            />
+          </View>
+        </SafeAreaView>}
     </>
   );
 };
@@ -160,6 +162,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     backgroundColor: "#21212E",
-    padding: 16,
   },
 });

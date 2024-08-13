@@ -24,7 +24,7 @@ import {
   OnlineBookingStory,
 } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from "@/app/(tabs)/(master)/main";
-    
+
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
@@ -33,13 +33,13 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(standar
 
 const Booking = () => {
   const { isLoading, setIsLoading } = OnlineBookingStory();
-  
-  const {tariff} = clientStore()
+
+  const { tariff } = clientStore()
   const { Urgently, setUrgentlyt, salonId, setSalonId } = OnlineBookingSettingsUrgentlyStory();
   const [isEnabled, setIsEnabled] = useState(false);
   const [data, setData] = useState([]);
   const navigation = useNavigation<SettingsScreenNavigationProp>();
-  
+
 
   useFocusEffect(
     useCallback(() => {
@@ -62,28 +62,28 @@ const Booking = () => {
       setData([])
     }
   };
-  
+
   const addOnlineBook = async () => {
     setIsLoading(true);
     try {
       const config = await getConfig();
       let res = await axios.post(
         `${base_url}online-booking-settings/record-duration/day`,
-       salonId,
+        salonId,
         config ? config : {}
       );
       if (res.data.success) {
-    setIsLoading(false);
-     alert(res.data.message     );
+        setIsLoading(false);
+        alert(res.data.message);
         navigation.goBack();
       }
       else {
-      setIsLoading(false);
-       alert(res.data.message,   );
+        setIsLoading(false);
+        alert(res.data.message,);
       }
     } catch (error) {
-    setIsLoading(false);
-  }
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -104,70 +104,70 @@ const Booking = () => {
 
   return (
     <>
-    {isLoading ? <Loading/> : <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-      <View style={{ paddingLeft: 10, marginTop: 14 }}>
-      <NavigationMenu name={`Онлайн бронирование`} />
-      </View>
-      <View style={styles.innerContainer}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollViewContent}
-        >
-          <View>
-            <ScrollView
-              horizontal
-              contentContainerStyle={styles.horizontalScrollContent}
-              showsHorizontalScrollIndicator={false}
+      {isLoading ?
+        <Loading /> :
+        <SafeAreaView style={styles.container}>
+          <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
+          <NavigationMenu name={`Онлайн бронирование`} />
+          <View style={styles.innerContainer}>
+            <View
+              style={styles.scrollViewContent}
             >
-              <TouchableOpacity activeOpacity={0.8}>
-                <Text style={styles.activeTab}>По дням</Text>
-              </TouchableOpacity>
-            </ScrollView>
-            <View style={styles.labelContainer}>
-              <Text style={styles.labelText}>Длительность записи</Text>
+              <View>
+                <ScrollView
+                  horizontal
+                  contentContainerStyle={styles.horizontalScrollContent}
+                  showsHorizontalScrollIndicator={false}
+                >
+                  <TouchableOpacity activeOpacity={0.8}>
+                    <Text style={styles.activeTab}>По дням</Text>
+                  </TouchableOpacity>
+                </ScrollView>
+                <View style={styles.labelContainer}>
+                  <Text style={styles.labelText}>Длительность записи</Text>
+                </View>
+                <View style={styles.descriptionContainer}>
+                  <Text style={styles.descriptionText}>
+                    Настройте период в который запись к вам будет доступна заранее
+                  </Text>
+                </View>
+                <SelectList
+                  boxStyles={styles.selectListBox}
+                  inputStyles={styles.selectListInput}
+                  dropdownStyles={styles.selectListDropdown}
+                  dropdownTextStyles={styles.selectListDropdownText}
+                  placeholder="Select day"
+                  setSelected={(val: string) => {
+                    setSalonId({
+                      id: "",
+                      day: val
+                    })
+                  }}
+                  defaultOption={data.find((item) => item === salonId?.day) ? { key: salonId?.day, value: `${salonId?.day} day` } : { key: 0, value: 0 }}
+                  data={data.map((item) => ({ key: item, value: `${item} day` }))}
+                  save="key"
+                  search={false}
+                />
+                {
+                  tariff && tariff === "STANDARD" &&
+                  <SwitchWithLabel
+                    label="Без срочно"
+                    value={isEnabled}
+                    onToggle={toggleSwitch}
+                  />
+                }
+              </View>
             </View>
-            <View style={styles.descriptionContainer}>
-              <Text style={styles.descriptionText}>
-                Настройте период в который запись к вам будет доступна заранее
-              </Text>
-            </View>
-            <SelectList
-              boxStyles={styles.selectListBox}
-              inputStyles={styles.selectListInput}
-              dropdownStyles={styles.selectListDropdown}
-              dropdownTextStyles={styles.selectListDropdownText}
-              placeholder="Select day"
-              setSelected={(val: string) => {
-                setSalonId({
-                  id: "", 
-                  day: val
-                })
-              }}
-              defaultOption={data.find((item) => item === salonId?.day) ? { key: salonId?.day, value: `${salonId?.day} day` } : { key: 0, value: 0 }}
-              data={data.map((item) => ({ key: item, value: `${item} day` }))}
-              save="key"
-              search={false}
-            />
-            {
-              tariff && tariff === "STANDARD" && 
-              <SwitchWithLabel
-                label="Без срочно"
-                value={isEnabled}
-                onToggle={toggleSwitch}
+            <View style={styles.buttonContainer}>
+              <Buttons
+                isDisebled={!!salonId}
+                title="Сохранить"
+                onPress={addOnlineBook}
               />
-            }
+            </View>
           </View>
-          <View style={styles.buttonContainer}>
-            <Buttons
-              isDisebled={!!salonId}
-              title="Сохранить"
-              onPress={addOnlineBook}
-            />
-          </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>}
+        </SafeAreaView>
+      }
     </>
   );
 };
@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     justifyContent: "flex-end",
     backgroundColor: "#21212E",
+    paddingHorizontal: 16
   },
 });
 

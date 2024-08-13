@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Image, Pressable, Dimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, StyleSheet, Text, View, Image, Pressable, Dimensions, SafeAreaView } from 'react-native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import Buttons from '@/components/(buttons)/button';
 import { AntDesign, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
@@ -11,7 +10,6 @@ import { delGallery, fetchData } from '@/helpers/api-function/gallery/settings-g
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import { getNumbers, putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import CenteredModal from '@/components/(modals)/modal-centered';
-import Toast from 'react-native-simple-toast'
 import { useFocusEffect } from 'expo-router';
 import { getMasterTariff } from '@/constants/storage';
 import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSetting';
@@ -51,7 +49,7 @@ const SettingsGalleryMain = () => {
         if (selectedItemId !== null) {
             setIsOpen(!isOpen)
         } else {
-            alert('Please select a gallery',  )
+            alert('Please select a gallery',)
         }
     }
 
@@ -74,11 +72,9 @@ const SettingsGalleryMain = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <NavigationMenu name='Моя галерея' />
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <StatusBar style="light" />
-                <View>
-                    <NavigationMenu name='Моя галерея' />
-                </View>
                 <View style={styles.content}>
                     <View>
                         <View style={{
@@ -164,15 +160,15 @@ const SettingsGalleryMain = () => {
                         isFullBtn={true}
                         onConfirm={handleDelGallery}
                     >
-                        <View style={{justifyContent: 'center', alignItems: 'center', marginBottom: 10}}>
-                        <MaterialIcons name="delete" size={100} color="#9C0A35" />
+                        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+                            <MaterialIcons name="delete" size={100} color="#9C0A35" />
                             <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}>Вы уверены, что хотите
                                 открыть эту галерею?</Text>
                         </View>
                     </CenteredModal>
                 </View>
             </ScrollView>
-            <View style={{ position: 'absolute', bottom: 0, padding: 10, width: '100%', justifyContent: 'center' }}>
+            <View style={{ position: 'absolute', bottom: 0, paddingHorizontal: 16, marginBottom: 20, width: '100%', justifyContent: 'center' }}>
                 {data.length === 0 ?
                     <Buttons onPress={() => navigation.navigate('(settings)/(settings-gallery)/settings-gallery')}
                         icon={<AntDesign name="pluscircleo" size={20} color="white" />} title='Создать альбом' />
@@ -199,7 +195,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     content: {
-        padding: 10,
+        paddingHorizontal: 16,
     },
     title: {
         color: 'white',

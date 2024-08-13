@@ -48,8 +48,8 @@ type SettingsScreenNavigationProp = NavigationProp<
 >;
 
 const OnlineBooking = () => {
-    const { setNumber } = numberSettingStore();
-    const { tariff, setTariff } = clientStore();
+  const { setNumber } = numberSettingStore();
+  const { tariff, setTariff } = clientStore();
   const {
     setUrgentlyt,
     salonId,
@@ -103,7 +103,7 @@ const OnlineBooking = () => {
       id: "2",
       title: t("break_between_sessions"),
       subtitle:
-      selectedHour === 0 || selectedHour && selectedMinute === 0 || selectedMinute
+        selectedHour === 0 || selectedHour && selectedMinute === 0 || selectedMinute
           ? `${selectedHour} час.  ${selectedMinute} мин.`
           : "Разные перерывы для каждой процедуры",
       IconComponent: <Ionicons name="wine" size={30} color="#9C0A35" />,
@@ -120,10 +120,10 @@ const OnlineBooking = () => {
       subtitle: data?.allClient
         ? "Подтверждать записи для всех клиентов"
         : data?.newClient
-        ? "Подтверждать записи только для новых клиентов"
-        : data?.notConfirm
-        ? "Не подтверждать записи"
-        : "not_set",
+          ? "Подтверждать записи только для новых клиентов"
+          : data?.notConfirm
+            ? "Не подтверждать записи"
+            : "not_set",
       IconComponent: <Feather name="check-circle" size={30} color="#9C0A35" />,
       onPress: () => {
         navigation.navigate(
@@ -143,8 +143,8 @@ const OnlineBooking = () => {
           data2 && data2.allClient
             ? "для всех клиентов"
             : data2 && data2.regularClient
-            ? "для постоянных клиентов"
-            : "not_set",
+              ? "для постоянных клиентов"
+              : "not_set",
         IconComponent: <Feather name="watch" size={30} color="#9C0A35" />,
         onPress: () => {
           navigation.navigate(
@@ -210,13 +210,12 @@ const OnlineBooking = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        <SafeAreaView style={[tw`flex-1 mt-6`, { backgroundColor: "#21212E" }]}>
+        <SafeAreaView style={[tw`flex-1 `, { backgroundColor: "#21212E" }]}>
           <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
           <NavigationMenu name={"Моё расписание"} />
           <View style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
+            <View
+              style={{
                 paddingHorizontal: 16,
                 flexGrow: 1,
                 justifyContent: "space-between",
@@ -242,18 +241,18 @@ const OnlineBooking = () => {
                   keyExtractor={(item) => item.id}
                 />
               </View>
-              <View
-                style={[tw` content-end mb-5`, { backgroundColor: "#21212E" }]}
-              >
-                <Buttons
-                  title={t("to_home")}
-                  onPress={() => {
-                    putNumbers(6, () => getNumbers(setNumber));
-                    navigation.goBack();
-                  }}
-                />
-              </View>
-            </ScrollView>
+            </View>
+            <View
+              style={[tw` content-end mb-5`, { paddingHorizontal: 16, backgroundColor: "#21212E" }]}
+            >
+              <Buttons
+                title={t("to_home")}
+                onPress={() => {
+                  putNumbers(6, () => getNumbers(setNumber));
+                  navigation.goBack();
+                }}
+              />
+            </View>
           </View>
         </SafeAreaView>
       )}

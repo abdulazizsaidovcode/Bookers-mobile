@@ -52,11 +52,9 @@ const ChangingEnEntry = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <NavigationMenu name='Напонимание об изменении' />
       <ScrollView>
         <StatusBar style="light" />
-        <View style={styles.navigationMenu}>
-          <NavigationMenu name='Напонимание об изменении' />
-        </View>
         <View style={styles.content}>
           <Text style={{ color: 'white', fontSize: 20 }}>Отправка сообщений клиенту об изменении времени сеанса</Text>
           <View style={styles.switchContainer}>
@@ -149,6 +147,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    backgroundColor: '#21212E'
+    backgroundColor: '#21212E',
+    marginBottom: 15
   },
 });

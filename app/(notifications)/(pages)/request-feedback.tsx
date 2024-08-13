@@ -39,11 +39,9 @@ const RequestFeedback = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <NavigationMenu name='Напоминание о отзыве' />
       <ScrollView>
         <StatusBar style="light" />
-        <View style={styles.navigationMenu}>
-          <NavigationMenu name='Напоминание о отзыве' />
-        </View>
         <View style={styles.content}>
           <Text style={{ color: 'white', fontSize: 20 }}>Уведомление с просьбой оставить отзыв о мастере и об оказанных услугах</Text>
           <View style={styles.messageContainer}>

@@ -104,10 +104,8 @@ const TimeWorkEdit: React.FC = () => {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <View style={{ paddingLeft: 10 }}>
-                <NavigationMenu name={`Время работы`} />
-            </View>
-            <ScrollView style={{ marginTop: 15 }}>
+            <NavigationMenu name={`Время работы`} />
+            <ScrollView style={{ paddingTop: 15 }}>
                 <View>
                     <Text style={styles.title}>Рабочие дни</Text>
                 </View>
@@ -153,8 +151,7 @@ const TimeWorkEdit: React.FC = () => {
             </ScrollView>
             <View
                 style={{
-                    paddingHorizontal: 5,
-                    marginVertical: 20,
+                    paddingHorizontal: 16,
                     height: "10%",
                     alignItems: "center",
                     justifyContent: "center",
@@ -180,19 +177,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#21212e",
-        paddingTop: 35,
     },
     title: {
         fontSize: 20,
         color: "white",
         marginBottom: 10,
-        paddingHorizontal: 15,
+        paddingHorizontal: 16,
     },
     weekListContainer: {
         width: "100%",
         flexDirection: "row",
         flexWrap: "wrap",
-        paddingHorizontal: 10,
+        paddingHorizontal: 11,
         alignItems: "center",
     },
     timeListContainer: {

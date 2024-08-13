@@ -4,7 +4,7 @@ import { createLocation } from "@/helpers/state_managment/location";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Pressable, StatusBar, Text, View } from "react-native";
+import { Pressable, SafeAreaView, StatusBar, Text, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 import { getConfig } from "../(tabs)/(master)/main";
 import axios from "axios";
@@ -42,11 +42,9 @@ const Location = () => {
   }, [])
 
   return (
-    <View style={[tw`flex-1 px-4 mt-5`, { backgroundColor: "#21212E" }]}>
+    <SafeAreaView style={[tw`flex-1 px-4 `, { backgroundColor: "#21212E" }]}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-      <View style={tw`mt-2`}>
-        <NavigationMenu name="Мой адрес работы" />
-      </View>
+      <NavigationMenu name="Мой адрес работы" />
       <Pressable
         onPress={() => router.push("/(location-data)/LocationData")}
         style={[
@@ -78,11 +76,11 @@ const Location = () => {
               </Text>
               <Text style={[tw`text-lg`, { color: "#4F4F4F" }]}>{data?.target}</Text>
             </View>
-          </View> : <Text style={[tw`text-lg mt-2`, {color: "#4F4F4F"}]}>Адрес работы не настроен!</Text>}
+          </View> : <Text style={[tw`text-lg mt-2`, { color: "#4F4F4F" }]}>Адрес работы не настроен!</Text>}
         </View>
         <MaterialIcons name="keyboard-arrow-right" size={30} color="#4f4f4f" />
       </Pressable>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -1,6 +1,5 @@
-import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 import React, { useState, useCallback } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import ServicesCategory from "@/components/services/servicesCatgegory";
 import Buttons from "@/components/(buttons)/button";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -8,7 +7,7 @@ import { Item } from "@/type/graficWork/graficWork";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
 import { putWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import CalendarGrafficEdit from "./calendar";
-    
+
 import { RootStackParamList } from "@/type/root";
 import { NavigationProp } from "@react-navigation/native";
 import { useFocusEffect, useNavigation } from "expo-router";
@@ -49,7 +48,7 @@ const GrafficWorkEdit: React.FC = () => {
         return { ...item, active: isWeekDataActive || item.active };
       });
       setItems(updatedItems);
-      return () => {};
+      return () => { };
     }, [weekData])
   );
 
@@ -70,7 +69,7 @@ const GrafficWorkEdit: React.FC = () => {
     if (!calendarDate || !week.some((day) => day.active)) {
       alert(
         "Пожалуйста, выберите дату начала работы и хотя бы один рабочий день.",
-         
+
       );
       return;
     }
@@ -129,6 +128,7 @@ const styles = StyleSheet.create({
     height: 430,
     display: "flex",
     gap: 20,
+    paddingHorizontal: 16,
   },
   fullHeightSection: {
     flex: 1,
@@ -137,12 +137,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     color: "white",
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
   },
   categoriesContainer: {
     flexDirection: "column",
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     gap: 5,
-    paddingVertical: 10,
+    paddingVertical: 12,
   },
 });

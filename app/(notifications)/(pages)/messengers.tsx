@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Switch, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { View, Text, Switch, StyleSheet, Dimensions, ScrollView, SafeAreaView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { editMessenger, fetchAllData } from '@/helpers/api-function/notifications/notifications';
@@ -34,10 +33,10 @@ const Messengers = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <NavigationMenu name='Месенджеры' />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <StatusBar style="light" />
         <View style={styles.mainContent}>
-          <NavigationMenu name='Месенджеры' />
           <Text style={styles.description}>Настройте через какие мессенджеры отправлять уведомления</Text>
           <View style={styles.switchContainer}>
             <View style={styles.optionContent}>
@@ -103,6 +102,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     padding: 10,
     backgroundColor: '#21212E',
+    marginBottom: 16
   },
 });
 

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { View, Text, Switch, StyleSheet, ScrollView, TouchableOpacity, } from 'react-native';
+import { View, Text, Switch, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, } from 'react-native';
 import { FontAwesome5, MaterialIcons, Feather } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import useNotificationsStore from '@/helpers/state_managment/notifications/notifications';
@@ -34,11 +33,9 @@ const NotificationSettings: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <StatusBar style='light'/>
-        <View>
-          <NavigationMenu name='Настройка уведомлений' />
-        </View>
+      <NavigationMenu name='Настройка уведомлений' />
+      <View style={{ paddingHorizontal: 16 }}>
+        <StatusBar style='light' />
         <View style={styles.switchContainer}>
           <Text style={styles.switchLabel}>Отключить все уведомления</Text>
           <Switch value={isMainSwitch} onValueChange={() => toggleSwitch(isMainSwitch)} trackColor={{ false: "#767577", true: "#9C0A35" }} thumbColor={'#fff'} />
@@ -84,7 +81,7 @@ const NotificationSettings: React.FC = () => {
             onPress={() => navigation.navigate('(notifications)/(pages)/request-window')}
           />
         }
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

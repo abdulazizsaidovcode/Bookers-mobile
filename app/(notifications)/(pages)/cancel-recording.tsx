@@ -49,11 +49,9 @@ const CancelRecording = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <NavigationMenu name='Напоминание об отмене' />
       <ScrollView>
         <StatusBar style="light" />
-        <View style={styles.navigationMenu}>
-          <NavigationMenu name='Напоминание об отмене' />
-        </View>
         <View style={styles.content}>
           <View style={styles.switchContainer}>
             <View style={{ width: 250 }}>
@@ -145,5 +143,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     backgroundColor: '#21212E'
+    , marginBottom: 15
   },
 });
