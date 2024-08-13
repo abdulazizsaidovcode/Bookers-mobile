@@ -7,7 +7,8 @@ podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties
 ENV['RCT_NEW_ARCH_ENABLED'] = podfile_properties['newArchEnabled'] == 'true' ? '1' : '0'
 ENV['EX_DEV_CLIENT_NETWORK_INSPECTOR'] = podfile_properties['EX_DEV_CLIENT_NETWORK_INSPECTOR']
 
-platform :ios, podfile_properties['ios.deploymentTarget'] || '13.4'
+# platform :ios, podfile_properties['ios.deploymentTarget'] || '13.4'
+platform :ios, '13.4'
 install! 'cocoapods',
   :deterministic_uuids => false
 
@@ -19,9 +20,12 @@ target 'Bookers' do
 
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
   use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
-  rn_maps_path = '../node_modules/react-native-maps'
-  pod 'GoogleMaps'
-  pod 'react-native-google-maps', :path => rn_maps_path
+  # rn_maps_path = '../node_modules/react-native-maps'
+  # pod 'GoogleMaps'
+  # pod 'react-native-google-maps', :path => rn_maps_path
+    # React Native Maps dependencies
+    rn_maps_path = '../node_modules/react-native-maps'
+    pod 'react-native-google-maps', :path => rn_maps_path
 
   use_react_native!(
     :path => config[:reactNativePath],

@@ -48,7 +48,7 @@ const MasterLocations = () => {
                 </View>
                 <View>
                     <MapView
-                        provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
+                        provider={PROVIDER_GOOGLE}
                         customMapStyle={mapCustomStyle}
                         style={styles.map}
                         initialRegion={{

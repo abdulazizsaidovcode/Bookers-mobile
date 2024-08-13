@@ -7,6 +7,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [GMSServices provideAPIKey:@"AIzaSyASHe17wejGpq0ytfaf8zYaJtYRV9BnNcw"];
   self.moduleName = @"main";
 
   // You can add your custom initial props in the dictionary below.
@@ -14,7 +15,6 @@
   self.initialProps = @{};
   
   // Initialize Google Maps SDK with your API key
-  [GMSServices provideAPIKey:@"AIzaSyASHe17wejGpq0ytfaf8zYaJtYRV9BnNcw"];
   
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
