@@ -7,7 +7,7 @@ import { useFocusEffect, useNavigation } from 'expo-router';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as SecureStore from 'expo-secure-store';
-import Toast from 'react-native-simple-toast';
+   
 
 import {
     View,
@@ -134,7 +134,7 @@ const OtpInputExample: React.FC = () => {
 
     useFocusEffect(useCallback(() => {
         if (code) {
-            Toast.show(`${code}`, Toast.LONG)
+            alert(`${code}`,  )
         }
     }, [code]))
 

@@ -12,7 +12,7 @@ import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import CenteredModal from '@/components/(modals)/modal-centered';
 import { AntDesign } from '@expo/vector-icons';
-import Toast from "react-native-simple-toast";
+    
 import { getConfig } from '@/app/(tabs)/(master)/main';
 
 
@@ -80,7 +80,7 @@ const ProcessEdit: React.FC = () => {
                 .then((res) => {
                     if (res.data.success) {
                         router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
-                        Toast.show("Service successfully edited", Toast.LONG);
+                         alert("Service successfully edited",   );
                     } else {
                         console.error('Failed to edit service:', res.data.message);
                     }
@@ -89,7 +89,7 @@ const ProcessEdit: React.FC = () => {
                     console.error('Error editing service:', error);
                 });
         } catch (error:any) {
-            Toast.show(error.message, Toast.LONG);
+             alert(error.message,   );
         }
     };
 
@@ -99,14 +99,14 @@ const ProcessEdit: React.FC = () => {
                 const config = await getConfig()
                 const response = await axios.put(`${service_delete}/${serviceId.id}`,'', config ? config : {});
                 if (response.data.success) {
-                    Toast.show("Service successfully deleted", Toast.LONG);
+                     alert("Service successfully deleted",   );
                     router.push('(standart)/(servicesEdit)/test');
                 } else {
-                    Toast.show("Failed to delete service", Toast.LONG);
+                     alert("Failed to delete service",   );
                 }
             }
         } catch (error) {
-            Toast.show(`${error}`, Toast.LONG);
+             alert(`${error}`,   );
             console.log("Error deleting service:", error);
         }
     };

@@ -21,11 +21,11 @@ export const editMainDataStatus = async (isActive: boolean) => {
         const config = await getConfig()
         const { data } = await axios.post(`${notifications_main_data_edit}?isActive=${isActive}`, {}, config ? config : {});
         if (data.success) {
-            Toast.show('Все ваши уведомления обновлены.', Toast.LONG)
+             alert('Все ваши уведомления обновлены.',   )
         }
     } catch (error: any) {
         console.log(error)
-        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
+         alert(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже',   )
     }
 }
 
@@ -59,7 +59,7 @@ export const editMessenger = async (isMessage: boolean | undefined, goBack: () =
         const config = await getConfig()
         const { data } = await axios.put(`${notifications_messengers_edit}?isMessage=${isMessage}`, {}, config ? config : {});
         if (data.success) {
-            Toast.show('Ваш мессенджер успешно обновлен', Toast.LONG)
+             alert('Ваш мессенджер успешно обновлен',   )
             goBack()
             setHasChanges(false);
             setIsLoading(false)
@@ -67,25 +67,25 @@ export const editMessenger = async (isMessage: boolean | undefined, goBack: () =
     } catch (error: any) {
         console.log(error)
         setIsLoading(false)
-        Toast.show(error.response.data.message ? error.response.data.message: 'Пожалуйста, повторите попытку позже', Toast.LONG)
+         alert(error.response.data.message ? error.response.data.message: 'Пожалуйста, повторите попытку позже',   )
     }
 }
 
 export const editCancelOrder = async (isActive: boolean | undefined, text: string | undefined, setHasChanges: (val: boolean) => void, goBack: () => void, setIsloading: (val: boolean) => void) => {
     if (text && !text.includes('(дата сеанса)')) {
-        Toast.show('Поместите слово (дата сеанса) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (дата сеанса) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(время сеанса)')) {
-        Toast.show('Поместите слово (время сеанса) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (время сеанса) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(адрес)')) {
-        Toast.show('Поместите слово (адреес) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (адреес) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(процедура)')) {
-        Toast.show('Поместите слово (процедура) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (процедура) куда-нибудь',   )
         return
     }
     setIsloading(true)
@@ -97,38 +97,38 @@ export const editCancelOrder = async (isActive: boolean | undefined, text: strin
             setHasChanges(false);
             goBack()
             setIsloading(false)
-            Toast.show('Запись отмены успешно обновлена.', Toast.LONG)
+             alert('Запись отмены успешно обновлена.',   )
         } else setIsloading(false)
     } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
+         alert(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже',   )
     }
 }
 
 export const editChangingOrder = async (isActive: boolean | undefined, text: string | undefined, setHasChanges: (val: boolean) => void, goBack: () => void, setIsloading: (val: boolean) => void) => {
     if (text && !text.includes('(дата сеанса)')) {
-        Toast.show('Поместите слово (дата сеанса) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (дата сеанса) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(время сеанса)')) {
-        Toast.show('Поместите слово (время сеанса) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (время сеанса) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(процедура)')) {
-        Toast.show('Поместите слово (процедура) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (процедура) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(адреес)')) {
-        Toast.show('Поместите слово (адреес) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (адреес) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(дата новый сеанса)')) {
-        Toast.show('Поместите слово (дата новый сеанса) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (дата новый сеанса) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(время новый сеанса)')) {
-        Toast.show('Поместите слово (время новый сеанса) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (время новый сеанса) куда-нибудь',   )
         return
     }
     setIsloading(true)
@@ -140,18 +140,18 @@ export const editChangingOrder = async (isActive: boolean | undefined, text: str
             setHasChanges(false);
             goBack()
             setIsloading(false)
-            Toast.show('Изменение записи успешно обновлено.', Toast.LONG)
+             alert('Изменение записи успешно обновлено.',   )
         } else setIsloading(false)
     } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
+         alert(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже',   )
     }
 }
 
 export const editFeedbeckOrder = async (text: string | undefined, setHasChanges: (val: boolean) => void, goBack: () => void, setIsloading: (val: boolean) => void) => {
     if (text && !text.includes('(линк на отзыв)')) {
-        Toast.show('Поместите слово (линк на отзыв) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (линк на отзыв) куда-нибудь',   )
         return
     }
     setIsloading(true)
@@ -162,30 +162,30 @@ export const editFeedbeckOrder = async (text: string | undefined, setHasChanges:
             setHasChanges(false);
             goBack()
             setIsloading(false)
-            Toast.show('Запрос отзыва успешно обновлено.', Toast.LONG)
+             alert('Запрос отзыва успешно обновлено.',   )
         } else setIsloading(false)
     } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
+         alert(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже',   )
     }
 }
 
 export const editAppoinmentOrder = async (text: string | undefined, hour: number | undefined, minute: number | undefined, active: boolean | undefined, goBack: () => void, setHasChanges: (val: boolean) => void, setIsLoading: (val: boolean) => void) => {
     if (text && !text.includes('(дата сеанса)')) {
-        Toast.show('Поместите слово (дата сеанса) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (дата сеанса) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(время сеанса)')) {
-        Toast.show('Поместите слово (время сеанса) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (время сеанса) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(адреес)')) {
-        Toast.show('Поместите слово (адреес) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (адреес) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(процедура)')) {
-        Toast.show('Поместите слово (процедура) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (процедура) куда-нибудь',   )
         return
     }
     setIsLoading(true)
@@ -194,7 +194,7 @@ export const editAppoinmentOrder = async (text: string | undefined, hour: number
         const config = await getConfig()
         const { data } = await axios.put(`${notifications_appointment_edit}`, payload, config ? config : {});
         if (data.success) {
-            Toast.show('Ваш напоминание о встрече успешно обновлено.', Toast.LONG)
+             alert('Ваш напоминание о встрече успешно обновлено.',   )
             goBack()
             setHasChanges(false)
             setIsLoading(false)
@@ -202,25 +202,25 @@ export const editAppoinmentOrder = async (text: string | undefined, hour: number
     } catch (error: any) {
         console.log(error)
         setIsLoading(false)
-        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
+         alert(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже',   )
     }
 }
 
 export const editWindowOrder = async (text: string | undefined, setHasChanges: (val: boolean) => void, goBack: () => void, setIsloading: (val: boolean) => void) => {
     if (text && !text.includes('(дата сеанса)')) {
-        Toast.show('Поместите слово (дата сеанса) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (дата сеанса) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(время сеанса)')) {
-        Toast.show('Поместите слово (время сеанса) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (время сеанса) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(адреес)')) {
-        Toast.show('Поместите слово (адреес) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (адреес) куда-нибудь',   )
         return
     }
     if (text && !text.includes('(процедура)')) {
-        Toast.show('Поместите слово (процедура) куда-нибудь', Toast.LONG)
+         alert('Поместите слово (процедура) куда-нибудь',   )
         return
     }
     setIsloading(true)
@@ -228,7 +228,7 @@ export const editWindowOrder = async (text: string | undefined, setHasChanges: (
         const config = await getConfig()
         const { data } = await axios.put(notifications_window_edit, { text }, config ? config : {});
         if (data.success) {
-            Toast.show('Ваш запрос окошка успешно обновлено.', Toast.LONG)
+             alert('Ваш запрос окошка успешно обновлено.',   )
             goBack()
             setIsloading(false)
             setHasChanges(false)
@@ -236,6 +236,6 @@ export const editWindowOrder = async (text: string | undefined, setHasChanges: (
     } catch (error: any) {
         console.log(error)
         setIsloading(false)
-        Toast.show(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже', Toast.LONG)
+         alert(error.response.data.text ? error.response.data.text: 'Пожалуйста, повторите попытку позже',   )
     }
 }

@@ -18,7 +18,7 @@ import {
 import axios from "axios";
 import { base_url } from "@/helpers/api";
 import useNotificationsStore from "@/helpers/state_managment/notifications/notifications";
-import Toast from "react-native-simple-toast";
+    
 import {
   fetchAllData,
   fetchAppoinmentActiveData,
@@ -137,15 +137,15 @@ const TimeSelect = () => {
 
       if (res.data.success) {
         setIsLoading ? setIsLoading(false) : () => {};
-        Toast.show(res.data.message, Toast.LONG);
+         alert(res.data.message,   );
         navigation.goBack()
       } else {
         setIsLoading ? setIsLoading(false) : () => {};
-        Toast.show(res.data.message, Toast.LONG);
+         alert(res.data.message,   );
       }
     } catch (error: any) {
       setIsLoading ? setIsLoading(false) : () => {};
-      Toast.show(error.data.message, Toast.LONG);
+       alert(error.data.message,   );
     }
   };
 

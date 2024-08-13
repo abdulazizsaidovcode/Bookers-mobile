@@ -3,7 +3,7 @@ import { ScrollView, View, StatusBar, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import axios from 'axios';
-import Toast from "react-native-simple-toast";
+    
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import ServicesCategory from '@/components/services/servicesCatgegory';
@@ -44,10 +44,10 @@ const CategoryEdit = () => {
             const queryParams = selectedCategories.map(item => `categoryIds=${item}`).join('&');
             const response = await axios.post(`${getCategory_masterAdd}${queryParams}`, '', config ? config : {});
             if (response.data.success) {
-                Toast.show('✅ Вы изменили категории', Toast.LONG);
+                 alert('✅ Вы изменили категории',   );
                router.push('../test');
             } else {
-                Toast.show('⚠️ Вы не меняли категории', Toast.LONG);
+                 alert('⚠️ Вы не меняли категории',   );
             }
         } catch (error) {
             console.log("Error", error);

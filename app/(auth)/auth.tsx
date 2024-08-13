@@ -7,7 +7,7 @@ import "../../i18next";
 import {NavigationProp} from "@react-navigation/native";
 import {RootStackParamList} from "@/type/root";
 import {langstore} from "@/helpers/state_managment/lang/lang";
-import Toast from "react-native-simple-toast";
+    
 import * as SecureStore from "expo-secure-store";
 
 type SettingsScreenNavigationProp = NavigationProp<
@@ -33,7 +33,7 @@ const Auth: React.FC = () => {
             const onBackPress = () => {
                 if (backPressCount === 0) {
                     setBackPressCount(backPressCount + 1);
-                    Toast.show('Orqaga qaytish uchun yana bir marta bosing', Toast.SHORT);
+                    alert('Orqaga qaytish uchun yana bir marta bosing'     );
                     setTimeout(() => {
                         setBackPressCount(0);
                     }, 2000); // 2 soniya ichida ikkinchi marta bosilmasa, holatni qayta boshlaydi

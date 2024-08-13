@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { authStorage, getClientOrMaster } from "@/constants/storage";
 import { useFocusEffect } from 'expo-router';
 import { langstore } from '@/helpers/state_managment/lang/lang';
-import Toast from "react-native-simple-toast";
+    
 import * as SecureStore from 'expo-secure-store';
 import { getConfig } from '@/app/(tabs)/(master)/main';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
@@ -143,12 +143,12 @@ const CheckPin: React.FC = () => {
     // ----------- PIN install ----------------- //
     const installPinCode = () => {
         if (enteredOtp === storedOtp) {
-            Toast.show("пин-код установлен", Toast.SHORT);
+            alert("пин-код установлен"     );
             SecureStore.setItemAsync('password', enteredOtp)
             if (phoneNumber) {
                 SecureStore.setItemAsync('number', phoneNumber)
             } else {
-                Toast.show("телефон не найден", Toast.SHORT);
+                alert("телефон не найден"     );
             }
 
             if (role === 'ROLE_MASTER') {
@@ -159,11 +159,11 @@ const CheckPin: React.FC = () => {
                 navigation.navigate('(tabs)/(client)')
                 setPending(false)
             } else {
-                Toast.show("karioche role yuq", Toast.SHORT);
+                alert("karioche role yuq"     );
             }
         } else {
             setIsCorrect(false);
-            Toast.show("неверный пин-код", Toast.SHORT);
+            alert("неверный пин-код"     );
             setPending(false)
         }
     }
@@ -197,7 +197,7 @@ const CheckPin: React.FC = () => {
         } else {
             setIsCorrect(false);
             setPending(false)
-            Toast.show("неверный пин-код", Toast.SHORT);
+            alert("неверный пин-код"     );
         }
 
     }
@@ -207,25 +207,7 @@ const CheckPin: React.FC = () => {
             <View style={styles.container}>
                 <View style={styles.topSection}>
                     <Text style={styles.label}>{t('Подтвердите ПИН код')}</Text>
-                    <View style={styles.inputContainer}>
-                        {otp.map((digit, index) => (
-                            <TextInput
-                                key={index}
-                                style={[
-                                    styles.input,
-                                    isCorrect == true ? styles.inputSuccess : styles.inputError,
-                                ]}
-                                value={digit ? "*" : ""}
-                                onChangeText={(text) => handleChangeText(text, index)}
-                                onKeyPress={(e) => handleKeyPress(e, index)}
-                                ref={(ref) => (inputs.current[index] = ref!)}
-                                maxLength={1}
-                                keyboardType="numeric"
-                            />
-                        ))}
-                    </View>
-                </View>
-                <View style={styles.bottomSection}>
+                    <View style={styles.bottomSection}>
                     {!pending ?
                         <TouchableOpacity
                             style={[
@@ -253,6 +235,25 @@ const CheckPin: React.FC = () => {
                     }
 
                 </View>
+                    <View style={styles.inputContainer}>
+                        {otp.map((digit, index) => (
+                            <TextInput
+                                key={index}
+                                style={[
+                                    styles.input,
+                                    isCorrect == true ? styles.inputSuccess : styles.inputError,
+                                ]}
+                                value={digit ? "*" : ""}
+                                onChangeText={(text) => handleChangeText(text, index)}
+                                onKeyPress={(e) => handleKeyPress(e, index)}
+                                ref={(ref) => (inputs.current[index] = ref!)}
+                                maxLength={1}
+                                keyboardType="numeric"
+                            />
+                        ))}
+                    </View>
+                </View>
+                
             </View>
         </SafeAreaView>
     );

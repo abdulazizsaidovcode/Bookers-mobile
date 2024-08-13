@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import Toast from 'react-native-simple-toast';
+   
 
 const data: { icon: string | any, label: string, screen: string }[] = [
     { icon: 'globe', label: 'Сменить язык', screen: '(profile)/(settings)/(childSettings)/(Application Settings)/components/language' },
@@ -19,7 +19,7 @@ const ApplicationSettings: React.FC = () => {
         if (screen.trim() !== '') {
             navigation.navigate(screen)
         } else {
-            Toast.show('Страница не найдена', Toast.SHORT);
+            alert('Страница не найдена'     );
         }
     }
 

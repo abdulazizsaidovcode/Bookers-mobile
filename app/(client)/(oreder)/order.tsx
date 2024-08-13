@@ -86,7 +86,7 @@ const OrderClient = () => {
       setTime('')
     }
     if (orderMessageStatus) {
-      Toast.show(orderMessageStatus, Toast.LONG);
+      alert(orderMessageStatus,  );
     }
   }, [orderMessageStatus, state]))
 
