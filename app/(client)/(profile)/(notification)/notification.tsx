@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Alert,
+  SafeAreaView,
 } from "react-native";
 import React, { useCallback, useState } from "react";
 import NavigationMenu from "@/components/navigation/navigation-menu";
@@ -43,7 +44,7 @@ const NotificationClient: React.FC = () => {
   useFocusEffect(
     useCallback(() => {
       fetchNotifications();
-      return () => {};
+      return () => { };
     }, [])
   );
 
@@ -102,104 +103,106 @@ const NotificationClient: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor={"#21212E"} barStyle={"light-content"} />
-          <View style={styles.headerContainer}>
-            <NavigationMenu name={"Уведомления"} />
-            <View style={styles.delete_read_Button}>
-              <Ionicons
-                name="checkmark-done-circle-outline"
-                size={30}
-                color="white"
-                onPress={handleReadAll} // <--- Handle all read action
-              />
-              <AntDesign
-                name="delete"
-                size={24}
-                color="white"
-                onPress={handleDeletePress}
-              />
-            </View>
+    <SafeAreaView style={styles.container}>
+      <View style={{ paddingHorizontal: 16 }}>
+        <StatusBar backgroundColor={"#21212E"} barStyle={"light-content"} />
+        <View style={styles.headerContainer}>
+          <NavigationMenu name={"Уведомления"} />
+          <View style={styles.delete_read_Button}>
+            <Ionicons
+              name="checkmark-done-circle-outline"
+              size={30}
+              color="white"
+              onPress={handleReadAll} // <--- Handle all read action
+            />
+            <AntDesign
+              name="delete"
+              size={24}
+              color="white"
+              onPress={handleDeletePress}
+            />
           </View>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <>
-          <ScrollView contentContainerStyle={styles.scrollViewContent}>
-            {notification.length !== 0 ? (
-              notification.map((notif: any, index: any) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.card,
-                    notif.read === true ? [] : styles.unreadCard,
-                  ]}
-                  activeOpacity={0.9}
-                  onPress={() => {
-                    toggleBottomModal(notif);
-                    handleReadSingle(notif.id);
-                  }}
-                >
-                  <View style={styles.header}>
-                    <Image
-                      source={require("@/assets/avatar.png")}
-                      style={styles.avatar}
-                    />
-                    <Text style={styles.title}>{notif.title}</Text>
-                  </View>
-                  <Text style={styles.description}>{notif.content}</Text>
-                  <View style={styles.footer}>
-                    <Text style={styles.date}>{notif.createAt}</Text>
-                    <AntDesign name="right" size={24} color="#4F4F4F" />
-                  </View>
-                </TouchableOpacity>
-              ))
-            ) : (
-              <View style={styles.notFound}>
-                <Text style={styles.notFoundText}>No notifications!</Text>
-              </View>
+        </View>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <ScrollView >
+              {notification.length !== 0 ? (
+                notification.map((notif: any, index: any) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.card,
+                      notif.read === true ? [] : styles.unreadCard,
+                    ]}
+                    activeOpacity={0.9}
+                    onPress={() => {
+                      toggleBottomModal(notif);
+                      handleReadSingle(notif.id);
+                    }}
+                  >
+                    <View style={styles.header}>
+                      <Image
+                        source={require("@/assets/avatar.png")}
+                        style={styles.avatar}
+                      />
+                      <Text style={styles.title}>{notif.title}</Text>
+                    </View>
+                    <Text style={styles.description}>{notif.content}</Text>
+                    <View style={styles.footer}>
+                      <Text style={styles.date}>{notif.createAt}</Text>
+                      <AntDesign name="right" size={24} color="#4F4F4F" />
+                    </View>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <View style={styles.notFound}>
+                  <Text style={styles.notFoundText}>No notifications!</Text>
+                </View>
+              )}
+            </ScrollView>
+            {selectedNotification && (
+              <BottomModal
+                toggleBottomModal={() => toggleBottomModal(null)}
+                isBottomModal={isBottomModalVisible}
+              >
+                <View style={styles.modalContent}>
+                  <Text style={styles.modalTitle}>
+                    {selectedNotification.title || "No title"}
+                  </Text>
+                  <Text style={styles.modalDate}>
+                    {selectedNotification.createAt || "Not found"}
+                  </Text>
+                  <Text style={styles.modalDescription}>
+                    {selectedNotification.content}
+                  </Text>
+                  <Buttons
+                    onPress={() => toggleBottomModal()}
+                    title={"Закрыть"}
+                  />
+                </View>
+              </BottomModal>
             )}
-          </ScrollView>
-          {selectedNotification && (
-            <BottomModal
-              toggleBottomModal={() => toggleBottomModal(null)}
-              isBottomModal={isBottomModalVisible}
+            <CenteredModal
+              isFullBtn={true}
+              btnWhiteText={"Отмена"}
+              btnRedText={"Да"}
+              onConfirm={() => handleDeleteAll()}
+              isModal={deleteModal}
+              toggleModal={deleteToggleModal}
             >
-              <View style={styles.modalContent}>
-                <Text style={styles.modalTitle}>
-                  {selectedNotification.title || "No title"}
+              <>
+                <AntDesign name="delete" size={56} color="#9C0A35" />
+                <Text style={styles.deleteText}>
+                  Вы хотите очистить все уведомления?
                 </Text>
-                <Text style={styles.modalDate}>
-                  {selectedNotification.createAt || "Not found"}
-                </Text>
-                <Text style={styles.modalDescription}>
-                  {selectedNotification.content}
-                </Text>
-                <Buttons
-                  onPress={() => toggleBottomModal()}
-                  title={"Закрыть"}
-                />
-              </View>
-            </BottomModal>
-          )}
-          <CenteredModal
-            isFullBtn={true}
-            btnWhiteText={"Отмена"}
-            btnRedText={"Да"}
-            onConfirm={() => handleDeleteAll()}
-            isModal={deleteModal}
-            toggleModal={deleteToggleModal}
-          >
-            <>
-              <AntDesign name="delete" size={56} color="#9C0A35" />
-              <Text style={styles.deleteText}>
-                Вы хотите очистить все уведомления?
-              </Text>
-            </>
-          </CenteredModal>
-        </>
-      )}
-    </View>
+              </>
+            </CenteredModal>
+          </>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -209,17 +212,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#21212E",
     flex: 1,
-    padding: 10,
   },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  scrollViewContent: {
-    paddingBottom: 10,
   },
   delete_read_Button: {
     flexDirection: "row",
@@ -230,7 +227,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#B9B9C9",
     borderRadius: 10,
     padding: 15,
-    margin: 10,
+    marginBottom: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,

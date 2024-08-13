@@ -7,7 +7,8 @@ import {
   FlatList,
   Pressable,
   ScrollView,
-  Dimensions
+  Dimensions,
+  SafeAreaView
 } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -259,131 +260,132 @@ const Masters = () => {
   console.log(data, '123');
 
   return (
-    <View
+    <SafeAreaView
       style={[
-        tw`px-5`,
         {
           flex: 1,
           backgroundColor: "#21212E",
         },
       ]}
     >
-      <View style={tw`mt-10 w-full flex-row justify-between`}>
-        <TouchableOpacity
-          onPress={toggleBottomModal}
-          style={[
-            tw`rounded-lg px-4 py-2 justify-center items-center flex-row`,
-            { backgroundColor: "#9c0935" },
-          ]}
-        >
-          <Ionicons name="filter-sharp" size={24} color="#fff" />
-          <Text style={tw`text-white text-lg font-medium ml-2`}>Фильтр</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("(client)/(map)/(recent-masters)/recent-masters")}
-          style={[
-            tw`rounded-lg px-4 py-2 border justify-center items-center border flex-row`,
-            { borderColor: "#fff" },
-          ]}
-        >
-          <Entypo name="compass" size={24} color="#fff" />
-          <Text style={tw`text-white text-lg font-medium ml-2`}>На карте</Text>
-        </TouchableOpacity>
-      </View>
+      <View style={{ paddingHorizontal: 16, flex: 1, }}>
+        <View style={[tw`mt-10 w-full flex-row justify-between`]}>
+          <TouchableOpacity
+            onPress={toggleBottomModal}
+            style={[
+              tw`rounded-lg px-4 py-2 justify-center items-center flex-row`,
+              { backgroundColor: "#9c0935" },
+            ]}
+          >
+            <Ionicons name="filter-sharp" size={24} color="#fff" />
+            <Text style={tw`text-white text-lg font-medium ml-2`}>Фильтр</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("(client)/(map)/(recent-masters)/recent-masters")}
+            style={[
+              tw`rounded-lg px-4 py-2 border justify-center items-center border flex-row`,
+              { borderColor: "#fff" },
+            ]}
+          >
+            <Entypo name="compass" size={24} color="#fff" />
+            <Text style={tw`text-white text-lg font-medium ml-2`}>На карте</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={tw`w-full`}>
-        <LocationInput
-          onChangeText={mastersSearch}
-          placeholder="Search"
-        />
-      </View>
-      <View style={tw`flex-1`}>
-        <Text style={tw`text-white text-lg font-medium mt-5`}>
-          Топ 100 специалисты {data.length}
-        </Text>
+        <View style={tw`w-full`}>
+          <LocationInput
+            onChangeText={mastersSearch}
+            placeholder="Search"
+          />
+        </View>
+        <View style={tw`flex-1`}>
+          <Text style={tw`text-white text-lg font-medium mt-5`}>
+            Топ 100 специалисты {data.length}
+          </Text>
 
 
-        <FlatList
-          data={data && data} // Filter out undefined items
-          keyExtractor={(item) => item.id}
-          renderItem={TopMasterCard}
-          ListFooterComponent={renderFooter}
-          onEndReached={() => {
-            if (masters.length !== 100 && !searchValue) {
-              loadMore()
+          <FlatList
+            data={data && data} // Filter out undefined items
+            keyExtractor={(item) => item.id}
+            renderItem={TopMasterCard}
+            ListFooterComponent={renderFooter}
+            onEndReached={() => {
+              if (masters.length !== 100 && !searchValue) {
+                loadMore()
+              }
+            }}
+            onEndReachedThreshold={0.5}
+          />
+
+          {isLoading && <ActivityIndicator size="large" color={"#888"} />}
+
+          <BottomModal
+            isBottomModal={bottomModal}
+            toggleBottomModal={toggleBottomModal}
+            children={
+              <View style={[tw`w-full mt-3`, { maxHeight: height * 0.7 }]}>
+                <ScrollView style={[tw`w-full mt-3`, { maxHeight: 600 }]}>
+                  <Text style={tw`text-xl text-center mb-5 text-white font-bold`}>
+                    Фильтр
+                  </Text>
+                  <AccordionCustom
+                    title="Направления услуг"
+                    children={
+                      <View>
+                        {category.length &&
+                          category.map((item: any, i: any) => (
+                            <View style={tw`flex-row mt-2`} key={i}>
+                              {pastEntries && pastEntries.includes(item.id) ? (
+                                <Pressable
+                                  onPress={() => deletePastEntries(item.id)}
+                                  key={`checked-${item.id}`}
+                                  style={[
+                                    tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                                    { backgroundColor: "#9C0A35" },
+                                  ]}
+                                >
+                                  <Ionicons
+                                    name="checkmark"
+                                    size={18}
+                                    color="white"
+                                    style={tw`font-bold`}
+                                  />
+                                </Pressable>
+                              ) : (
+                                <Pressable
+                                  onPress={() =>
+                                    setPastEntries([...pastEntries, item.id])
+                                  }
+                                  key={`unchecked-${item.id}`}
+                                  style={[
+                                    tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                                    {
+                                      backgroundColor: "#B9B9C9",
+                                      borderWidth: 2,
+                                      borderColor: "gray",
+                                    },
+                                  ]}
+                                ></Pressable>
+                              )}
+                              <Text key={i}>{item.name}</Text>
+                            </View>
+                          ))}
+                      </View>
+                    }
+                  />
+                  <AccordionFree title="Пол мастера" />
+                  <AccardionSlider title="Рядом со мной" />
+                  <AccardionSliderTwo title="Рейтинг" />
+                  <View style={tw`mt-7`}>
+                    <Buttons isDisebled={!!pastEntries.length} onPress={handleClick} title="Сохранять" />
+                  </View>
+                </ScrollView>
+              </View>
             }
-          }}
-          onEndReachedThreshold={0.5}
-        />
-
-        {isLoading && <ActivityIndicator size="large" color={"#888"} />}
-
-        <BottomModal
-          isBottomModal={bottomModal}
-          toggleBottomModal={toggleBottomModal}
-          children={
-            <View style={[tw`w-full mt-3`, { maxHeight: height * 0.7 }]}>
-              <ScrollView style={[tw`w-full mt-3`, { maxHeight: 600 }]}>
-                <Text style={tw`text-xl text-center mb-5 text-white font-bold`}>
-                  Фильтр
-                </Text>
-                <AccordionCustom
-                  title="Направления услуг"
-                  children={
-                    <View>
-                      {category.length &&
-                        category.map((item: any, i: any) => (
-                          <View style={tw`flex-row mt-2`} key={i}>
-                            {pastEntries && pastEntries.includes(item.id) ? (
-                              <Pressable
-                                onPress={() => deletePastEntries(item.id)}
-                                key={`checked-${item.id}`}
-                                style={[
-                                  tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                                  { backgroundColor: "#9C0A35" },
-                                ]}
-                              >
-                                <Ionicons
-                                  name="checkmark"
-                                  size={18}
-                                  color="white"
-                                  style={tw`font-bold`}
-                                />
-                              </Pressable>
-                            ) : (
-                              <Pressable
-                                onPress={() =>
-                                  setPastEntries([...pastEntries, item.id])
-                                }
-                                key={`unchecked-${item.id}`}
-                                style={[
-                                  tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                                  {
-                                    backgroundColor: "#B9B9C9",
-                                    borderWidth: 2,
-                                    borderColor: "gray",
-                                  },
-                                ]}
-                              ></Pressable>
-                            )}
-                            <Text key={i}>{item.name}</Text>
-                          </View>
-                        ))}
-                    </View>
-                  }
-                />
-                <AccordionFree title="Пол мастера" />
-                <AccardionSlider title="Рядом со мной" />
-                <AccardionSliderTwo title="Рейтинг" />
-                <View style={tw`mt-7`}>
-                  <Buttons isDisebled={!!pastEntries.length} onPress={handleClick} title="Сохранять" />
-                </View>
-              </ScrollView>
-            </View>
-          }
-        />
+          />
+        </View>
       </View>
-    </View >
+    </SafeAreaView >
   );
 };
 

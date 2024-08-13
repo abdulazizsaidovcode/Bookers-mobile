@@ -33,7 +33,7 @@ const OrderHistory = () => {
     await getorderClientUpcoming(setUpcoming, setIsLoading);
   };
   const getPastcomingClient = async () => {
-    await getOrderClientPustComing(setPastComing,setIsLoading);
+    await getOrderClientPustComing(setPastComing, setIsLoading);
   }
 
   const deleteToggleModal = () => {
@@ -72,11 +72,8 @@ const OrderHistory = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor="#21212E" />
       {activeTab === 'upcoming' && (
-        <View style={styles.header}>
-          <NavigationMenu name="Записи" />
-        </View>
+        <NavigationMenu name="Записи" />
       )}
       {activeTab === 'past' && (
         <View style={styles.header}>
@@ -107,7 +104,7 @@ const OrderHistory = () => {
         </View>
         {activeTab === 'upcoming' && (
           <ScrollView style={{ marginBottom: 160 }}>
-            {isLoading ? <Loading/> : upcoming.length !== 0 ? (
+            {isLoading ? <Loading /> : upcoming.length !== 0 ? (
               upcoming.map((upcoming: any, index: number) => (
                 <AccardionHistory id={upcoming.serviceIds} key={index} title={upcoming.serviceName} date={upcoming.orderDate} >
                   <ProfileCard
@@ -156,7 +153,7 @@ const OrderHistory = () => {
 
         {activeTab === 'past' && (
           <ScrollView>
-            {isLoading ? <Loading/> : pastComing.length !== 0 ? (
+            {isLoading ? <Loading /> : pastComing.length !== 0 ? (
               pastComing.map((pastComing: any, index: number) => (
                 <AccardionHistoryTwo key={index} id={pastComing.serviceIds} title={pastComing.serviceName} date={pastComing.orderDate} >
                   <ProfileCard

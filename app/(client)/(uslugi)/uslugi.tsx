@@ -79,8 +79,8 @@ const Uslugi = () => {
             justifyContent: 'space-between',
             backgroundColor: '#21212E'
           }}>
-          <View style={tw`flex flex-row items-center justify-between p-3`}>
-            <Text style={tw`text-white text-3xl font-bold mb-4 px-4`}>Услуги</Text>
+          <View style={tw`flex flex-row items-center justify-between`}>
+            <Text style={tw`text-white text-3xl font-bold mb-4 `}>Услуги</Text>
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => navigation.navigate('(client)/(profile)/(notification)/notification')}
