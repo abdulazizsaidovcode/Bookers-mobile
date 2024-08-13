@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, SafeAreaView } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { masterExpense, selectedExpenseCategory } from '@/helpers/state_managment/expence/ecpense';
@@ -8,6 +8,8 @@ import CalendarComponent from '@/components/calendar/calendar';
 import financeStore from '@/helpers/state_managment/finance/financeStore';
 import Buttons from '@/components/(buttons)/button';
 import { useNavigation } from 'expo-router';
+import LoadingButtons from '@/components/(buttons)/loadingButton';
+import tw from 'tailwind-react-native-classnames';
 
 const CreateExpense: React.FC = () => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -16,7 +18,7 @@ const CreateExpense: React.FC = () => {
     const [response, setResponse] = useState(null);
     const navigation = useNavigation<any>();
     const [loading, setLoading] = useState(false);
-    const {setExpense} = masterExpense()
+    const { setExpense } = masterExpense()
     const { expenseId } = selectedExpenseCategory();
     const { date } = financeStore();
 
@@ -30,12 +32,12 @@ const CreateExpense: React.FC = () => {
 
     useEffect(() => {
         console.log(response);
-        
+
         if (response) {
             setLoading(false);
             navigation.goBack()
         }
-    }, [response,setResponse])
+    }, [response, setResponse])
 
     const handleSave = () => {
         const expenseData = {
@@ -56,42 +58,41 @@ const CreateExpense: React.FC = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <NavigationMenu name='Expense' />
-            <Text style={styles.label}>Дата оплаты</Text>
-            <CalendarComponent color='#4B4B64' />
-            <Text style={styles.label}>Сумма</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Введите сумму"
-                placeholderTextColor="#aaa"
-                keyboardType="numeric"
-                value={amount}
-                onChangeText={setAmount}
-            />
-            <Text style={styles.label}>Описание</Text>
-            <TextInput
-                style={styles.textarea}
-                placeholder="Введите описание"
-                placeholderTextColor="#aaa"
-                multiline
-                numberOfLines={4}
-                value={description}
-                onChangeText={setDescription}
-            />
-            {loading ?
-                <View style={styles.saveButton}>
-                    <View style={styles.loading}>
-                        <ActivityIndicator size="small" color="#fff" />
-                    </View>
-                </View>
-                :
-                <View style={styles.saveButton}>
-                    <Buttons title='Сохранить' isDisebled={!!amount.trim() && !!description.trim() || loading} onPress={handleSave} />
-                </View>
+            <View style={{ padding: 16 }}>
+                <Text style={styles.label}>Дата оплаты</Text>
+                <CalendarComponent color='#4B4B64' />
+                <Text style={[tw`mt-3`, styles.label]}>Сумма</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Введите сумму"
+                    placeholderTextColor="#aaa"
+                    keyboardType="numeric"
+                    value={amount}
+                    onChangeText={setAmount}
+                />
+                <Text style={styles.label}>Описание</Text>
+                <TextInput
+                    style={styles.textarea}
+                    placeholder="Введите описание"
+                    placeholderTextColor="#aaa"
+                    multiline
+                    numberOfLines={4}
+                    value={description}
+                    onChangeText={setDescription}
+                />
+            </View>
+            <View style={styles.saveButton}>
+                {
+                    loading ?
+                        <LoadingButtons title='Сохранить' />
+                        :
+                        <Buttons title='Сохранить' isDisebled={!!amount.trim() && !!description.trim() || loading} onPress={handleSave} />
+                }
+            </View>
 
-            }
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -99,7 +100,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#21212E',
-        padding: 16,
         width: '100%',
     },
     label: {
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 16,
+        marginBottom: 20,
     },
     dateText: {
         color: '#fff',
@@ -131,10 +131,10 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     saveButton: {
-        backgroundColor: '#9C0A35',
         borderRadius: 8,
         alignItems: 'center',
         marginTop: 'auto',
+        paddingHorizontal: 16
     },
     saveButtonText: {
         color: '#fff',

@@ -1,9 +1,8 @@
 import React from "react";
-import {View, Text, TouchableOpacity, StyleSheet} from "react-native";
-import {FontAwesome, MaterialIcons} from "@expo/vector-icons";
-import {useNavigation} from "@react-navigation/native";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {ScrollView} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { ScrollView } from "react-native";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import Location from "@/app/(location)/Location";
 
@@ -61,12 +60,14 @@ const SettingsPage: React.FC = () => {
     };
 
     // bu nima ga bunday yozilganini tushunmadim? component bu yerga chaqirilgan...
-    <Location/>;
+    <Location />;
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <NavigationMenu name="Настройки"/>
+            <NavigationMenu name="Настройки" />
+            <ScrollView
+                style={{ paddingHorizontal: 16 }}
+            >
                 {data.map((item, index) => (
                     <TouchableOpacity
                         key={index}
@@ -74,10 +75,10 @@ const SettingsPage: React.FC = () => {
                         onPress={() => navigateTo(item.screen)}
                     >
                         <View style={styles.menuItemContent}>
-                            <FontAwesome name={item.icon} size={20} color="#9C0A35"/>
+                            <FontAwesome name={item.icon} size={20} color="#9C0A35" />
                             <Text style={styles.menuItemText}>{item.label}</Text>
                         </View>
-                        <MaterialIcons name="navigate-next" size={36} color="#9c0935"/>
+                        <MaterialIcons name="navigate-next" size={36} color="#9c0935" />
                     </TouchableOpacity>
                 ))}
             </ScrollView>

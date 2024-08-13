@@ -1,12 +1,14 @@
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   Image,
   Pressable,
   TouchableOpacity,
-  ScrollView, ActivityIndicator,
+  FlatList,
+  ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
-import React, { useEffect, useState } from "react";
 import { base_url, getFile } from "@/helpers/api";
 import axios from "axios";
 import {
@@ -30,12 +32,11 @@ const Canceledentries = () => {
   const [toggle, setToggle] = useState(false);
   const navigation = useNavigation<any>();
   const { setProduct } = History();
-  const [loading, setLoading] = useState(false)
-  const [cheked, setCheck] = useState(false)
-
+  const [loading, setLoading] = useState(false);
+  const [cheked, setCheck] = useState(false);
 
   const getSessionDetails = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const config = await getConfig();
       const response = await axios.get(
@@ -47,7 +48,7 @@ const Canceledentries = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -57,7 +58,7 @@ const Canceledentries = () => {
   };
 
   const selectAll = () => {
-    setCheck(true)
+    setCheck(true);
     const selected = data.map((item) => item.id);
     setPastEntries(selected);
   };
@@ -70,16 +71,8 @@ const Canceledentries = () => {
 
     try {
       const config = await getConfig();
-      // const response = await fetch(`${base_url}order/delete/all`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: config ? config.headers.Authorization : {},
-      //   },
-      //   body: JSON.stringify(pastData),
-      // });
-      const {data} = await axios.post(`${base_url}order/delete/all`, pastData, config ? config : {})
-      console.log(data)
+      const { data } = await axios.post(`${base_url}order/delete/all`, pastData, config ? config : {});
+      console.log(data);
 
       if (data.success) {
         setToggle(false);
@@ -96,137 +89,136 @@ const Canceledentries = () => {
     getSessionDetails();
   }, []);
 
-  return (
-    <View
-      style={[tw`flex-1 p-4 mt-5`, { backgroundColor: "#21212E" }]}
+  const renderItem = ({ item }: { item: ProductType }) => (
+    <Pressable
+      onPress={() => {
+        !isChecked && navigation.navigate("(detail)/censeled-session");
+        setProduct(item);
+      }}
+      style={[tw`p-4 mb-4 flex-row items-start`, { backgroundColor: "#B9B9C9", borderRadius: 20 }]}
     >
-      {isChecked ? (
-        <View
-          style={[
-            tw`flex-row items-center justify-between mt-7`,
-            { paddingHorizontal: 16 },
-          ]}
-        >
-          <View style={tw`flex-row items-center mb-5 justify-center`}>
-            <View style={tw`flex-row items-center justify-center`}>
-              <AntDesign
-                onPress={() => {
-                  setChecked(!isChecked);
-                  setPastEntries([]);
-                }}
-                name="close"
-                size={20}
-                color="#828282"
-              />
-              <Text
-                style={[tw`text-lg font-bold mr-4 ml-1`, { color: "#828282" }]}
-              >
-                {pastEntries.length}
-              </Text>
-            </View>
-            <View
-              style={tw`flex-row items-center`}
-            >
-              {cheked ? 
-              <TouchableOpacity onPress={() => {
-                setPastEntries([])
-                setCheck(false)
-              }}>
-                <Ionicons name={"checkbox"} size={24} color="white" />
-              </TouchableOpacity>
-               :
-               <TouchableOpacity onPress={selectAll}>
-                <View style={tw`w-5 h-5 rounded border border-gray-500`}></View>
-              </TouchableOpacity>
-              }
-              <Text style={tw`text-white ml-2 text-base font-medium`}>
-                выделить все
-              </Text>
-            </View>
-          </View>
-          <MaterialIcons
-            onPress={() => pastEntries.length !== 0 && setToggle(!toggle)}
-            name="delete"
-            size={30}
-            color="white"
-          />
-        </View>
-      ) : (
-        <NavigationMenu
-          name="Отменены сеансы"
-          deleteIcon
-          toggleModal={() => setChecked(!isChecked)}
-        />
-      )}
-      {loading && <ActivityIndicator size="large" color={"#888"} />}
-      <ScrollView contentContainerStyle={tw`mt-5`} showsVerticalScrollIndicator={false}>
-        {data &&
-          data.map((item) => (
+      {isChecked && (
+        <View>
+          {pastEntries.includes(item.id) ? (
             <Pressable
-              onPress={() => {
-                !isChecked && navigation.navigate("(detail)/censeled-session")
-                setProduct(item);
-              }}
-              key={item.id}
-              style={[tw`p-4 mb-4 flex-row items-start`, { backgroundColor: "#B9B9C9", borderRadius: 20 }]}
+              onPress={() => deletePastEntries(item.id)}
+              style={[
+                tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                { backgroundColor: "#9C0A35" },
+              ]}
             >
-              {isChecked && (
-                <View>
-                  {pastEntries.includes(item.id) ? (
-                    <Pressable
-                      onPress={() => deletePastEntries(item.id)}
-                      key={`checked-${item.id}`}
-                      style={[
-                        tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                        { backgroundColor: "#9C0A35" },
-                      ]}
-                    >
-                      <Ionicons
-                        name="checkmark"
-                        size={18}
-                        color="white"
-                        style={tw`font-bold`}
-                      />
-                    </Pressable>
-                  ) : (
-                    <Pressable
-                      onPress={() => setPastEntries([...pastEntries, item.id])}
-                      key={`unchecked-${item.id}`}
-                      style={[
-                        tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
-                        {
-                          backgroundColor: "#B9B9C9",
-                          borderWidth: 2,
-                          borderColor: "gray",
-                        },
-                      ]}
-                    ></Pressable>
-                  )}
-                </View>
-              )}
-              <Image
-                source={item.attachmentId ? {
-                  uri: getFile + item.attachmentId,
-                } : require("../../../../../assets/avatar.png")}
-                style={tw`w-12 h-12 rounded-full mr-4`}
+              <Ionicons
+                name="checkmark"
+                size={18}
+                color="white"
+                style={tw`font-bold`}
               />
-              <View style={tw`flex-1`}>
-                <Text style={tw` font-bold`}>{item.fullName}</Text>
-                <Text style={tw`text-gray-600 mt-1`}>{item.phone}</Text>
-                <View style={[tw`flex-row mt-1`, { gap: 5 }]}>
-                {item.serviceName.trim().split(", ").map((service: string, index: number) => (
-                  <View key={index} style={[tw`mb-2 p-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>
-                    <Text style={{ fontSize: 12 }}>{service}</Text>
-                  </View>
-                ))}
-              </View>
-                <Text style={[tw`text-lg font-bold mt-2`, { color: '#9C0A35' }]}>
-                  {item.servicePrice} сум
+            </Pressable>
+          ) : (
+            <Pressable
+              onPress={() => setPastEntries([...pastEntries, item.id])}
+              style={[
+                tw`w-6 h-6 items-center justify-center rounded-md mr-3`,
+                {
+                  backgroundColor: "#B9B9C9",
+                  borderWidth: 2,
+                  borderColor: "gray",
+                },
+              ]}
+            ></Pressable>
+          )}
+        </View>
+      )}
+      <Image
+        source={item.attachmentId ? { uri: getFile + item.attachmentId } : require("../../../../../assets/avatar.png")}
+        style={tw`w-12 h-12 rounded-full mr-4`}
+      />
+      <View style={tw`flex-1`}>
+        <Text style={tw` font-bold`}>{item.fullName}</Text>
+        <Text style={tw`text-gray-600 mt-1`}>{item.phone}</Text>
+        <View style={[tw`flex-row mt-1`, { gap: 5 }]}>
+          {item.serviceName.trim().split(", ").map((service, index) => (
+            <View key={index} style={[tw`mb-2 p-1 rounded-lg`, { borderWidth: 1, borderColor: '#828282', alignSelf: 'flex-start' }]}>
+              <Text style={{ fontSize: 12 }}>{service}</Text>
+            </View>
+          ))}
+        </View>
+        <Text style={[tw`text-lg font-bold mt-2`, { color: '#9C0A35' }]}>
+          {item.servicePrice} сум
+        </Text>
+      </View>
+    </Pressable>
+  );
+
+  return (
+    <SafeAreaView style={[tw`flex-1 px-4`, { backgroundColor: "#21212E" }]}>
+      <View style={{ paddingHorizontal: 18, marginBottom: 35 }}>
+        {isChecked ? (
+          <View
+            style={[
+              tw`flex-row items-center justify-between mt-7`,
+              { paddingHorizontal: 19 },
+            ]}
+          >
+            <View style={tw`flex-row items-center mb-5 justify-center`}>
+              <View style={tw`flex-row items-center justify-center`}>
+                <AntDesign
+                  onPress={() => {
+                    setChecked(!isChecked);
+                    setPastEntries([]);
+                  }}
+                  name="close"
+                  size={20}
+                  color="#828282"
+                />
+                <Text
+                  style={[tw`text-lg font-bold mr-4 ml-1`, { color: "#828282" }]}
+                >
+                  {pastEntries.length}
                 </Text>
               </View>
-            </Pressable>
-          ))}
-      </ScrollView>
+              <View style={tw`flex-row items-center`}>
+                {cheked ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setPastEntries([]);
+                      setCheck(false);
+                    }}
+                  >
+                    <Ionicons name={"checkbox"} size={24} color="white" />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={selectAll}>
+                    <View style={tw`w-5 h-5 rounded border border-gray-500`}></View>
+                  </TouchableOpacity>
+                )}
+                <Text style={tw`text-white ml-2 text-base font-medium`}>
+                  выделить все
+                </Text>
+              </View>
+            </View>
+            <MaterialIcons
+              onPress={() => pastEntries.length !== 0 && setToggle(!toggle)}
+              name="delete"
+              size={30}
+              color="white"
+            />
+          </View>
+        ) : (
+          <NavigationMenu
+            name="Отменены сеансы"
+            deleteIcon
+            toggleModal={() => setChecked(!isChecked)}
+          />
+        )}
+        {loading && <ActivityIndicator size="large" color={"#888"} />}
+
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+        />
+      </View>
 
       <CenteredModal
         isModal={toggle}
@@ -244,7 +236,7 @@ const Canceledentries = () => {
         }
         isFullBtn={true}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

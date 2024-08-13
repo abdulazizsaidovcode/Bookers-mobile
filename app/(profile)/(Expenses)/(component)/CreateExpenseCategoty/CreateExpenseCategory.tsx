@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, SafeAreaView } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { postExpenceCategory } from '@/helpers/api-function/expence/expence';
 import Buttons from '@/components/(buttons)/button';
 import { useNavigation } from '@react-navigation/native';
+import LoadingButtons from '@/components/(buttons)/loadingButton';
 
 const CreateExpenseCategory: React.FC = () => {
     const [amount, setAmount] = useState('');
@@ -30,29 +31,26 @@ const CreateExpenseCategory: React.FC = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <NavigationMenu name='Расходы' />
-            <TextInput
-                style={styles.input}
-                placeholder="Введите сумму"
-                placeholderTextColor="#aaa"
-                value={amount}
-                onChangeText={setAmount}
-            />
-            <Text style={styles.label}>Название категории расхода</Text>
-            {loading ?
-                <View style={styles.saveButton}>
-                    <View style={styles.loading}>
-                        <ActivityIndicator size="small" color="#fff" />
-                    </View>
-                </View>
-                :
-                <View style={styles.saveButton}>
+            <View style={{ flex: 1, paddingHorizontal: 16 }}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Введите сумму"
+                    placeholderTextColor="#aaa"
+                    value={amount}
+                    onChangeText={setAmount}
+                />
+                <Text style={styles.label}>Название категории расхода</Text>
+            </View>
+            <View style={styles.saveButton}>
+                {loading ?
+                    <LoadingButtons title='Сохранить' />
+                    :
                     <Buttons title='Сохранить' isDisebled={!!amount.trim() || loading} onPress={handleSave} />
-                </View>
-
-            }
-        </View>
+                }
+            </View>
+        </SafeAreaView>
     );
 };
 
@@ -73,10 +71,10 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     saveButton: {
-        backgroundColor: '#9C0A35',
         borderRadius: 8,
         alignItems: 'center',
         marginTop: 'auto',
+        paddingHorizontal: 16,
     },
     saveButtonText: {
         color: '#fff',

@@ -1,17 +1,17 @@
 // TariffsPage.tsx
-import React, {useCallback, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import React, { useCallback, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import {SafeAreaView} from 'react-native-safe-area-context'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import * as SecureStore from "expo-secure-store";
-import {base_url} from "@/helpers/api";
+import { base_url } from "@/helpers/api";
 import axios from "axios";
-import {getConfig} from "@/app/(tabs)/(master)/main";
-import {useFocusEffect} from 'expo-router';
+import { getConfig } from "@/app/(tabs)/(master)/main";
+import { useFocusEffect } from 'expo-router';
 import clientStore from '@/helpers/state_managment/client/clientStore';
-import {Loading} from '@/components/loading/loading';
-import {getMasterTariff} from "@/constants/storage";
+import { Loading } from '@/components/loading/loading';
+import { getMasterTariff } from "@/constants/storage";
 
 export const postTariff = async (id: string | number) => {
     let config = await getConfig()
@@ -26,7 +26,7 @@ export const postTariff = async (id: string | number) => {
     }
 }
 
-export const getTariffMaster = async (setTariffStatus: (val: any|null) => void) => {
+export const getTariffMaster = async (setTariffStatus: (val: any | null) => void) => {
     let config = await getConfig()
     axios.get(`${base_url}tariff/master`, config ? config : {})
         .then(res => {
@@ -43,7 +43,7 @@ export const getAllTariff = async (setData: (val: any[] | null) => void, setLoad
     setLoading(true)
     try {
         const config = await getConfig()
-        const {data} = await axios.get(`${base_url}tariff/list`, config ? config : {})
+        const { data } = await axios.get(`${base_url}tariff/list`, config ? config : {})
         if (data.success) {
             setLoading(false)
             setData(data.body.reverse());
@@ -60,7 +60,7 @@ export const getAllTariff = async (setData: (val: any[] | null) => void, setLoad
 
 const TariffsPage: React.FC = () => {
     const navigation = useNavigation<any>();
-    const {isLoading, setIsLoading} = clientStore()
+    const { isLoading, setIsLoading } = clientStore()
     const [tariffStatus, setTariffStatus] = useState<string | null>(null);
     const [tariffList, setTariffList] = useState<any[] | null>(null);
 
@@ -71,10 +71,10 @@ const TariffsPage: React.FC = () => {
 
     return (
         <>
-            {isLoading ? <Loading/> : (
+            {isLoading ? <Loading /> : (
                 <SafeAreaView style={styles.container}>
+                    <NavigationMenu name='Tariff' />
                     <ScrollView>
-                        <NavigationMenu name='Tariff'/>
                         <View>
                             {tariffList && tariffList.map((tariff, index) => (
                                 <TouchableOpacity
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         shadowColor: '#000',
         shadowOpacity: 0.1,
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowRadius: 5,
         elevation: 3,
     },
