@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Keyboard, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from 'expo-router';
 import ProfileImgUpload from '@/components/profile-img-upload';
@@ -41,41 +41,44 @@ const UserCameraInfo = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.topSection}>
-                <View style={styles.progressBar}>
-                    <View style={styles.progressIndicator} />
-                    <View style={styles.progressSegment} />
-                    <View style={styles.progressSegment1} />
-                    <View style={styles.progressSegment2} />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
+            <View style={styles.container}>
+                <View style={styles.topSection}>
+                    <View style={styles.progressBar}>
+                        <View style={styles.progressIndicator} />
+                        <View style={styles.progressSegment} />
+                        <View style={styles.progressSegment1} />
+                        <View style={styles.progressSegment2} />
+                    </View>
+                    <Text style={styles.label}>{t("add_your_photo")}</Text>
+                    <Text style={styles.description}>{t("do_not_wish_to_add_photo")}</Text>
+                    <ProfileImgUpload registerProfileImg={`registerProfileImg`} />
                 </View>
-                <Text style={styles.label}>{t("add_your_photo")}</Text>
-                <Text style={styles.description}>{t("do_not_wish_to_add_photo")}</Text>
-                <ProfileImgUpload registerProfileImg={`registerProfileImg`} />
+
+                <View style={styles.bottomSection}>
+                    <TouchableOpacity
+                        style={styles.skipButton}
+                        onPress={handleSkip}
+                    >
+                        <Text style={styles.skipButtonText}>{t("skip")}</Text>
+                    </TouchableOpacity>
+
+                    {!pending ?
+                        <Buttons
+                            isDisebled={checkUpload}
+                            title={t("Continue")}
+                            onPress={handleContinue}
+                        />
+                        :
+                        <LoadingButtons
+                            title={t('Continue')}
+                        />
+                    }
+                </View>
             </View>
+        </TouchableWithoutFeedback>
 
-            <View style={styles.bottomSection}>
-                <TouchableOpacity
-                    style={styles.skipButton}
-                    onPress={handleSkip}
-                >
-                    <Text style={styles.skipButtonText}>{t("skip")}</Text>
-                </TouchableOpacity>
-
-                {!pending ?
-                    <Buttons
-                        isDisebled={checkUpload}
-                        title={t("Continue")}
-                        onPress={handleContinue}
-                    />
-                    :
-                    <LoadingButtons
-                        title={t('Continue')}
-                    />
-                }
-            </View>
-
-        </View>
     )
 }
 

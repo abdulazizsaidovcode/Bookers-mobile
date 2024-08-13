@@ -4,7 +4,7 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import { useNavigation } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 const UserInfo: React.FC = () => {
     const { firstName, setFirstName, lastName, setLastName, firstNameError, setFirstNameError, lastNameError, setLastNameError } = registerStory();
@@ -39,48 +39,51 @@ const UserInfo: React.FC = () => {
     const isButtonEnabled = firstName.length > 0 && lastName.length > 0 && firstNameError === '' && lastNameError === '';
 
     return (
-        <View style={styles.container}>
-            <View style={styles.topSection}>
-                <View style={styles.progressBar}>
-                    <View style={styles.progressIndicator} />
-                    <View style={styles.progressSegment} />
-                    <View style={styles.progressSegment} />
-                    <View style={styles.progressSegment} />
-                </View>
-                <Text style={styles.label}>{t("your_first_and_last_name")}</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder={t("first_name")}
-                    placeholderTextColor="#8A8A8A"
-                    value={firstName}
-                    onChangeText={handleFirstNameChange}
-                />
-                {firstNameError ? <Text style={styles.errorText}>{firstNameError}</Text> : null}
-                <TextInput
-                    style={styles.input}
-                    placeholder={t("last_name")}
-                    placeholderTextColor="#8A8A8A"
-                    value={lastName}
-                    onChangeText={handleLastNameChange}
-                />
-                {lastNameError ? <Text style={styles.errorText}>{lastNameError}</Text> : null}
-            </View>
-            <View style={styles.bottomSection}>
-                {!pending ?
-                    <Buttons title={t("Continue")}
-                        isDisebled={!!isButtonEnabled}
-                        onPress={() => {
-                            setPending(true);
-                            navigate.navigate('(auth)/(register)/(masterInformation)/getNickName');
-                            setPending(false);
-                        }}
-                    /> :
-                    <LoadingButtons
-                        title={t("Continue")}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
+            <View style={styles.container}>
+                <View style={styles.topSection}>
+                    <View style={styles.progressBar}>
+                        <View style={styles.progressIndicator} />
+                        <View style={styles.progressSegment} />
+                        <View style={styles.progressSegment} />
+                        <View style={styles.progressSegment} />
+                    </View>
+                    <Text style={styles.label}>{t("your_first_and_last_name")}</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder={t("first_name")}
+                        placeholderTextColor="#8A8A8A"
+                        value={firstName}
+                        onChangeText={handleFirstNameChange}
                     />
-                }
+                    {firstNameError ? <Text style={styles.errorText}>{firstNameError}</Text> : null}
+                    <TextInput
+                        style={styles.input}
+                        placeholder={t("last_name")}
+                        placeholderTextColor="#8A8A8A"
+                        value={lastName}
+                        onChangeText={handleLastNameChange}
+                    />
+                    {lastNameError ? <Text style={styles.errorText}>{lastNameError}</Text> : null}
+                </View>
+                <View style={styles.bottomSection}>
+                    {!pending ?
+                        <Buttons title={t("Continue")}
+                            isDisebled={!!isButtonEnabled}
+                            onPress={() => {
+                                setPending(true);
+                                navigate.navigate('(auth)/(register)/(masterInformation)/getNickName');
+                                setPending(false);
+                            }}
+                        /> :
+                        <LoadingButtons
+                            title={t("Continue")}
+                        />
+                    }
+                </View>
             </View>
-        </View>
+        </TouchableWithoutFeedback>
     );
 };
 
