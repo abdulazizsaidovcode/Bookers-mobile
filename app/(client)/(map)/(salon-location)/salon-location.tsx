@@ -9,10 +9,11 @@ import {
   TouchableOpacity,
   View,
   Linking,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import { useFocusEffect } from 'expo-router';
 import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
@@ -81,7 +82,7 @@ const SalonLocation = () => {
       <ScrollView>
         <NavigationMenu name={orderData.salonName ? orderData.salonName : 'dwefewerwfew'} />
         <MapView
-          provider={PROVIDER_GOOGLE}
+          provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
           customMapStyle={mapCustomStyle}
           style={styles.map}
           initialRegion={{

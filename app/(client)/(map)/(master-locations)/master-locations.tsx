@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Dimensions, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import ClientCard from '@/components/(cliendCard)/cliendCard';
 import { mapCustomStyle } from '@/type/map/map';
 import { useMapStore } from '@/helpers/state_managment/map/map';
@@ -48,7 +48,7 @@ const MasterLocations = () => {
                 </View>
                 <View>
                     <MapView
-                        provider={PROVIDER_GOOGLE}
+                        provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
                         customMapStyle={mapCustomStyle}
                         style={styles.map}
                         initialRegion={{

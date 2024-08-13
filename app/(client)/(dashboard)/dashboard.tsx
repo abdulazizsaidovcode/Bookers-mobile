@@ -9,7 +9,7 @@ import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
 import { getAllCategory } from '@/helpers/api-function/uslugi/uslugi';
-    
+
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { deviceInfo } from "@/helpers/api-function/register/registrFC";
@@ -46,21 +46,21 @@ type DashboardItemType = {
 
 
 
-const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
-  return (
-    <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={handlePress}>
-      <View style={styles.item}>
-        <View style={styles.imageContainer}>
-          <Image source={item.image} style={styles.image} />
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.titleText}>{item.title}</Text>
-          <Text style={styles.subtitleText}>{item.titleThen}</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
+// const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
+//   return (
+//     <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={handlePress}>
+//       <View style={styles.item}>
+//         <View style={styles.imageContainer}>
+//           <Image source={item.image} style={styles.image} />
+//         </View>
+//         <View style={styles.textContainer}>
+//           <Text style={styles.titleText}>{item.title}</Text>
+//           <Text style={styles.subtitleText}>{item.titleThen}</Text>
+//         </View>
+//       </View>
+//     </TouchableOpacity>
+//   );
+// };
 
 const Navbar: React.FC = () => {
   const navigation = useNavigation<any>()
@@ -91,7 +91,7 @@ const Navbar: React.FC = () => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-        onPress={() => navigation.navigate('(client)/(favourite-orders)/favourite-orders')}
+          onPress={() => navigation.navigate('(client)/(favourite-orders)/favourite-orders')}
         >
           <Feather name="bookmark" size={28} color="white" />
         </TouchableOpacity>
@@ -219,7 +219,7 @@ const Dashboard: React.FC = () => {
       const onBackPress = () => {
         if (backPressCount === 0) {
           setBackPressCount(backPressCount + 1);
-          alert('Orqaga qaytish uchun yana bir marta bosing'     );
+          alert('Orqaga qaytish uchun yana bir marta bosing');
           setTimeout(() => {
             setBackPressCount(0);
           }, 2000);
@@ -243,206 +243,211 @@ const Dashboard: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Navbar />
-      <ScrollView>
-        {isLoading ? <AccordionSkelaton /> : dashboardData && dashboardData.length > 0 ? (
-          <View style={tw`p-1`}>
-            <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
-            {dashboardData.map((item: any, index) => (
-              <View key={index} style={tw`w-full flex `}>
-                <AccardionHistory
-                  id={item.orderId}
-                  title={item.serviceName}
-                  date={`${item.orderDate} ${item && item.time}` || 'Дата не указана'}
-                >
-                  <ProfileCard
-                    onPress={() => {
-                      setSelectedClient(item);
-                      navigation.navigate('(client)/(oreder)/orderDetail', { id: item.orderId });
-                    }}
-                    Adress={item && item.address}
-                    buttonName="Написать сообщение"
-                    imageURL={item.userAttachmentId || 'https://example.com/default-image.jpg'}
-                    money={`${item.orderPrice || 'Не указано'} сум`}
-                    ratingnumber={item.feedbackCount || 0}
-                    titleTex={item.serviceName?.trim().split(`, `)}
-                    masterName={item.firstName || 'Имя не указано'}
-                    salonName={item.salonName || 'Салон не указан'}
-                    masterGender={[]}
-                    locationIcon={
-                      <SimpleLineIcons
-                        onPress={() => {
-                          navigate.navigate('(client)/(map)/(salon-location)/salon-location');
-                          setOrderData(item)
-                        }}
-                        name="location-pin"
-                        size={24}
-                        color="white"
-                      />
-                    }
-                    phoneIcon={
-                      <Feather
-                        name="phone"
-                        size={24}
-                        color="white"
-                        onPress={() => handlePhonePress(item.phoneNumber)}
-                      />
-                    }
-                    orderId={item.orderId || 'Не указан'}
-                  />
-                </AccardionHistory>
-              </View>
-            ))}
-          </View>
-        ) : (
-          <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
-            <View style={styles.container}>
-              {allCategory && allCategory.length > 0 ? (
-                allCategory.map((item, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    activeOpacity={0.7}
-                    onPress={() => {
-                      setSelectedServiceId(item.id);
-                      navigation.navigate('(client)/(uslugi)/(hairHealth)/hair');
-                    }}
-                    style={styles.touchableItem}
+      <ScrollView
+
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ paddingHorizontal: 16 }}>
+          {isLoading ? <AccordionSkelaton /> : dashboardData && dashboardData.length > 0 ? (
+            <View>
+              <Text style={tw`font-bold text-xl text-white mb-4 `}>Мои записи</Text>
+              {dashboardData.map((item: any, index) => (
+                <View key={index} style={tw`w-full flex `}>
+                  <AccardionHistory
+                    id={item.orderId}
+                    title={item.serviceName}
+                    date={`${item.orderDate} ${item && item.time}` || 'Дата не указана'}
                   >
-                    <View style={styles.item}>
-                      <View style={styles.imageContainer}>
-                        <Image
-                          source={{ uri: `${getFile}${item.attachmentId}` }}
-                          style={tw`p-3 w-1/2`}
+                    <ProfileCard
+                      onPress={() => {
+                        setSelectedClient(item);
+                        navigation.navigate('(client)/(oreder)/orderDetail', { id: item.orderId });
+                      }}
+                      Adress={item && item.address}
+                      buttonName="Написать сообщение"
+                      imageURL={item.userAttachmentId || 'https://example.com/default-image.jpg'}
+                      money={`${item.orderPrice || 'Не указано'} сум`}
+                      ratingnumber={item.feedbackCount || 0}
+                      titleTex={item.serviceName?.trim().split(`, `)}
+                      masterName={item.firstName || 'Имя не указано'}
+                      salonName={item.salonName || 'Салон не указан'}
+                      masterGender={[]}
+                      locationIcon={
+                        <SimpleLineIcons
+                          onPress={() => {
+                            navigate.navigate('(client)/(map)/(salon-location)/salon-location');
+                            setOrderData(item)
+                          }}
+                          name="location-pin"
+                          size={24}
+                          color="white"
                         />
-                      </View>
-                      <View style={styles.textContainer}>
-                        <Text style={styles.titleText}>{item.name}</Text>
-                        <Text style={tw`text-gray-600`}>Рядом с тобой {item.distanceMasterCount}</Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                ))
-              ) : (
-                <Text style={tw`text-white`}>Нет доступных категорий</Text>
-              )}
-            </View>
-          </AccordionItem>
-        )}
-        <>
-          { dashboardMasterData && dashboardMasterData.length > 0 ?
-            (
-              <View style={tw`p-1`}>
-                <View style={tw`mb-4 mt-5`}>
-                  <Text style={tw`font-bold text-xl text-white`}>Мои мастера</Text>
+                      }
+                      phoneIcon={
+                        <Feather
+                          name="phone"
+                          size={24}
+                          color="white"
+                          onPress={() => handlePhonePress(item.phoneNumber)}
+                        />
+                      }
+                      orderId={item.orderId || 'Не указан'}
+                    />
+                  </AccardionHistory>
                 </View>
-                <ScrollView
-                  horizontal
-                  contentContainerStyle={{ paddingHorizontal: 1 }}
-                  showsHorizontalScrollIndicator={false}
-                >
-                  <View style={{ marginRight: 16, marginBottom: 20 }}>
+              ))}
+            </View>
+          ) : (
+            <AccordionItem title="Мои записи" titleThen="У вас пока нет записей, выберите услугу." backgroundColor="#21212E">
+              <View style={styles.container}>
+                {allCategory && allCategory.length > 0 ? (
+                  allCategory.map((item, index) => (
                     <TouchableOpacity
+                      key={index}
                       activeOpacity={0.7}
                       onPress={() => {
-                        setSelectedCategory('Все');
-                        console.log('Selected Category ID:', 'all'); // Use an appropriate ID for "Все"
+                        setSelectedServiceId(item.id);
+                        navigation.navigate('(client)/(uslugi)/(hairHealth)/hair');
                       }}
-
+                      style={styles.touchableItem}
                     >
+                      <View style={styles.item}>
+                        <View style={styles.imageContainer}>
+                          <Image
+                            source={{ uri: `${getFile}${item.attachmentId}` }}
+                            style={tw`p-3 w-1/2`}
+                          />
+                        </View>
+                        <View style={styles.textContainer}>
+                          <Text style={styles.titleText}>{item.name}</Text>
+                          <Text style={tw`text-gray-600`}>Рядом с тобой {item.distanceMasterCount}</Text>
+                        </View>
+                      </View>
                     </TouchableOpacity>
+                  ))
+                ) : (
+                  <Text style={tw`text-white`}>Нет доступных категорий</Text>
+                )}
+              </View>
+            </AccordionItem>
+          )}
+          <>
+            {dashboardMasterData && dashboardMasterData.length > 0 ?
+              (
+                <View style={tw`p-1`}>
+                  <View style={tw`mb-4 mt-5`}>
+                    <Text style={tw`font-bold text-xl text-white`}>Мои мастера</Text>
                   </View>
-                  {allCategory ? allCategory.map((item, index) => (
-                    <View key={index} style={{ marginRight: 16, marginBottom: 20 }}>
+                  <ScrollView
+                    horizontal
+                    contentContainerStyle={{ paddingHorizontal: 1 }}
+                    showsHorizontalScrollIndicator={false}
+                  >
+                    <View style={{ marginRight: 16, marginBottom: 20 }}>
                       <TouchableOpacity
                         activeOpacity={0.7}
                         onPress={() => {
-                          setSelectedCategory(item.name);
-                          setCategoryId(item.id)
+                          setSelectedCategory('Все');
+                          console.log('Selected Category ID:', 'all'); // Use an appropriate ID for "Все"
                         }}
-                        style={{
-                          backgroundColor: selectedCategory === item.name ? 'white' : 'transparent',
-                          borderRadius: 10,
-                        }}
+
                       >
-                        <Text
-                          style={tw`border border-gray-600 p-3 ${selectedCategory === item.name ? 'text-black border-white' : 'text-gray-600'
-                            } rounded-xl font-bold`}
-                        >
-                          {item.name}
-                        </Text>
                       </TouchableOpacity>
                     </View>
-                  )
-                  )
-                    : <View>
-                      <Text>notFound</Text>
-                    </View>
-                  }
-                </ScrollView>
-                <View style={tw`mb-4`}>
-                  {isBottomLoading ? <Skelaton /> : dashboardMasterData ? dashboardMasterData.map((master, idx) => (
-                    <View style={tw`mb-3`}>
-                      <ClientCard
-                        key={idx} // Har bir element uchun noyob kalit kerak
-                        name={master.fullName}
-                        salon={master.salonName}
-                        imageUrl={master.attachmentId}
-                        masterType={master.gender}
-                        feedbackCount={master.favoriteCount}
-                        address={`${master.district}, ${master.street}, ${master.house}`}
-                        orders={master.orderCount}
-                        zaps={master.nextEntryDate}
-                        clients={master.clientCount}
-                        onPress={() => {
-                          setClientData(master)
-                          setSelectedClient(master)
-                          navigation.navigate('(client)/(uslugi)/(masterInformation)/masterInformation')
-                        }}
-                        locationIcon={
-                          <SimpleLineIcons name="location-pin" size={29} color="white"
-                            onPress={() => {
-                              navigate.navigate('(client)/(map)/(master-locations)/master-locations', { id: master.id });
-                            }}
-                          />
-                        }
-                      />
-                    </View>
-                  )
-                  ) :
-                    <View>
-                      <Text>notFound</Text>
-                    </View>
-                  }
-                </View>
+                    {allCategory ? allCategory.map((item, index) => (
+                      <View key={index} style={{ marginRight: 16, marginBottom: 20 }}>
+                        <TouchableOpacity
+                          activeOpacity={0.7}
+                          onPress={() => {
+                            setSelectedCategory(item.name);
+                            setCategoryId(item.id)
+                          }}
+                          style={{
+                            backgroundColor: selectedCategory === item.name ? 'white' : 'transparent',
+                            borderRadius: 10,
+                          }}
+                        >
+                          <Text
+                            style={tw`border border-gray-600 p-3 ${selectedCategory === item.name ? 'text-black border-white' : 'text-gray-600'
+                              } rounded-xl font-bold`}
+                          >
+                            {item.name}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    )
+                    )
+                      : <View>
+                        <Text>notFound</Text>
+                      </View>
+                    }
+                  </ScrollView>
+                  <View style={tw`mb-4`}>
+                    {isBottomLoading ? <Skelaton /> : dashboardMasterData ? dashboardMasterData.map((master, idx) => (
+                      <View style={tw`mb-3`}>
+                        <ClientCard
+                          key={idx} // Har bir element uchun noyob kalit kerak
+                          name={master.fullName}
+                          salon={master.salonName}
+                          imageUrl={master.attachmentId}
+                          masterType={master.gender}
+                          feedbackCount={master.favoriteCount}
+                          address={`${master.district}, ${master.street}, ${master.house}`}
+                          orders={master.orderCount}
+                          zaps={master.nextEntryDate}
+                          clients={master.clientCount}
+                          onPress={() => {
+                            setClientData(master)
+                            setSelectedClient(master)
+                            navigation.navigate('(client)/(uslugi)/(masterInformation)/masterInformation')
+                          }}
+                          locationIcon={
+                            <SimpleLineIcons name="location-pin" size={29} color="white"
+                              onPress={() => {
+                                navigate.navigate('(client)/(map)/(master-locations)/master-locations', { id: master.id });
+                              }}
+                            />
+                          }
+                        />
+                      </View>
+                    )
+                    ) :
+                      <View>
+                        <Text>notFound</Text>
+                      </View>
+                    }
+                  </View>
 
-              </View>
-            ) :
-            (
-              <>
-                <AccordionItem title="Мои мастера" titleThen="У вас пока нет своих мастеров" backgroundColor="#21212E">
-                  <TouchableOpacity style={styles.touchableItem}
-                  onPress={() =>onShare()}
-                  >
-                    <View style={styles.item}>
-                      <View style={styles.textContainer}>
-                        <Text style={styles.titleText1}>Пригласить своего мастера</Text>
+                </View>
+              ) :
+              (
+                <>
+                  <AccordionItem title="Мои мастера" titleThen="У вас пока нет своих мастеров" backgroundColor="#21212E">
+                    <TouchableOpacity style={styles.touchableItem}
+                      onPress={() => onShare()}
+                    >
+                      <View style={styles.item}>
+                        <View style={styles.textContainer}>
+                          <Text style={styles.titleText1}>Пригласить своего мастера</Text>
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.touchableItem}
-                    onPress={() => {
-                      navigate.navigate('(tabs)/(client)/masters-screen' );
-                    }}>
-                    <View style={styles.itemTwo}>
-                      <View style={styles.textContainer}>
-                        <Text style={styles.titleTextTwo}>Записаться к своему мастеру</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.touchableItem}
+                      onPress={() => {
+                        navigate.navigate('(tabs)/(client)/masters-screen');
+                      }}>
+                      <View style={styles.itemTwo}>
+                        <View style={styles.textContainer}>
+                          <Text style={styles.titleTextTwo}>Записаться к своему мастеру</Text>
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                </AccordionItem>
-              </>
-            )
-          }
-        </>
+                    </TouchableOpacity>
+                  </AccordionItem>
+                </>
+              )
+            }
+          </>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -453,7 +458,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#21212E',
     alignItems: 'center',
-    padding: 9,
+    padding: 16,
   },
   navbar: {
     flexDirection: 'row',
@@ -462,6 +467,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 40,
     marginBottom: 20,
+    paddingHorizontal: 16,
   },
   iconGroup: {
     flexDirection: 'row',

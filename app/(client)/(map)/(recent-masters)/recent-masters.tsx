@@ -1,8 +1,8 @@
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Image, Pressable } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Image, Pressable, Platform } from 'react-native';
 import React, { useCallback, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import MapView, { Circle, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Circle, Marker, PROVIDER_DEFAULT, PROVIDER_GOOGLE } from 'react-native-maps';
 import useGetMeeStore from '@/helpers/state_managment/getMee';
 import { useFocusEffect } from 'expo-router';
 import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
@@ -15,6 +15,7 @@ import { RootStackParamList } from '@/type/root';
 import { getFile } from '@/helpers/api';
 import { fetchMasterLocation, fetchTopMastersAdress } from '@/helpers/api-function/map/map';
 import { useMapStore } from '@/helpers/state_managment/map/map';
+import { StatusBar } from 'expo-status-bar';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(client)/(map)/(recent-masters)/recent-masters'>;
@@ -87,6 +88,7 @@ const RecentMasters = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar style='light' />
             <ScrollView>
                 <View>
                     {showByDistance ? (
@@ -118,7 +120,7 @@ const RecentMasters = () => {
                 </View>
                 <View>
                     <MapView
-                        provider={PROVIDER_GOOGLE}
+                        provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : PROVIDER_DEFAULT}
                         customMapStyle={mapCustomStyle}
                         zoomControlEnabled
                         zoomTapEnabled
