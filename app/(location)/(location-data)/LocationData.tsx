@@ -295,9 +295,9 @@ const styles = StyleSheet.create({
   dropdawn: {
     zIndex: 1000,
     width: "100%",
-    position: "absolute",
+    // position: "absolute",
     backgroundColor: "#6b7280",
-    top: 55,
+    // top: 55,
   },
   select: {
     width: "100%",
