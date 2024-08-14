@@ -2,16 +2,25 @@ import { getConfig } from "@/app/(tabs)/(master)/main";
 import { dashboard_daily_time_orders, dashboard_edit_order_status, dashboard_hall_order, dashboard_main_statistic, dashboard_today_work_grafic, dashboard_wait_order } from "@/helpers/api"
 import { DashboardDailyTimeOrders, DashboardHallingOrder, DashboardMainStatistic, DashboardWaitingOrder, TodayWorkGrafic } from "@/type/dashboard/dashboard";
 import axios from "axios"
-import Toast from 'react-native-simple-toast'
+// import Toast from 'react-native-simple-toast'
 
-export const fetchDaylyOrderTimes = async (setDailyTimeData: (val: DashboardDailyTimeOrders[]) => void, masterId: string) => {
+export const fetchDaylyOrderTimes = async (setDailyTimeData: (val: DashboardDailyTimeOrders[]) => void, masterId: string, setWorkPending: (val: boolean) => void) => {
+    setWorkPending(true)
     try {
         const config = await getConfig()
         const { data } = await axios.get(`${dashboard_daily_time_orders}/${masterId}`, config ? config : {});
         if (data.success) {
             setDailyTimeData(data.body.statusTimes);
+            setWorkPending(false)
+        } else {
+            setDailyTimeData([])
+            setWorkPending(false)
         }
-    } catch { }
+    } catch (error) {
+        console.log(error);
+        setDailyTimeData([])
+        setWorkPending(false)
+    }
 }
 
 export const fetchMainStatistic = async (setMainStatisticData: (val: DashboardMainStatistic) => void) => {
@@ -54,14 +63,18 @@ export const fetchHallingOrders = async (setHallData: (val: DashboardWaitingOrde
     }
 }
 
-export const fetchTodayWorkGrafic = async (setTodayGrafic: (val: TodayWorkGrafic) => void, masterId: string) => {
+export const fetchTodayWorkGrafic = async (setTodayGrafic: (val: TodayWorkGrafic) => void, masterId: string, setWorkPending: (val: boolean) => void) => {
+    setWorkPending(true)
     try {
         const config = await getConfig()
         const { data } = await axios.get(`${dashboard_today_work_grafic}/${masterId}`, config ? config : {});
         if (data.success) {
             setTodayGrafic(data.body);
-        }
-    } catch { }
+            setWorkPending(false)
+        } else setWorkPending(false)
+    } catch {
+        setWorkPending(false)
+    }
 }
 
 export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrder[]) => void, setHallData: (val: DashboardHallingOrder[]) => void, orderId: string, status: string, toggleRejectModal: () => void, toggleConfirmModal: () => void, setIsLoading: (val: boolean) => void) => {
@@ -72,12 +85,12 @@ export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrde
             await fetchWaitingOrders(setWaitingData, setIsLoading);
             await fetchHallingOrders(setHallData);
             if (status === 'CONFIRMED') {
-                 alert(`${data.message}`,   )
+                alert(`${data.message}`,)
                 toggleConfirmModal();
             }
             else if (status === 'REJECTED') {
                 toggleRejectModal();
-                 alert(`${data.message}`,   )
+                alert(`${data.message}`,)
             }
         }
     } catch (error) {

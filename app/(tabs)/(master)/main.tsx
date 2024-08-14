@@ -137,6 +137,7 @@ const TabOneScreen: React.FC = () => {
   const [masterTariff, setTariffMaster] = useState<null | string>(null);
   const [backPressCount, setBackPressCount] = useState(0);
   const [pending, setPending] = useState(true);
+  const [workPending, setWorkPending] = useState(true);
   const [orderId, setOrderId] = useState("");
   const [tariff, setTariff] = useState(null);
 
@@ -158,8 +159,6 @@ const TabOneScreen: React.FC = () => {
       fetchWaitingOrders(setWaitingData, setIsLoading);
       fetchHallingOrders(setHallData);
       getUser(setGetMee);
-      fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
-      fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
       getData();
       getNumbers(setNumber);
       getTariffMaster(setTariffMaster);
@@ -174,6 +173,13 @@ const TabOneScreen: React.FC = () => {
       return () => { };
     }, [])
   );
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchDaylyOrderTimes(setDailyTimeData, getMee.id, setWorkPending);
+      fetchTodayWorkGrafic(setTodayGraficData, getMee.id, setWorkPending);
+    }, [getMee.id])
+  )
 
   // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
   useFocusEffect(
@@ -307,7 +313,6 @@ const TabOneScreen: React.FC = () => {
       setIsLoading
     );
 
-  console.log(dailyTimeData);
 
 
   return (
@@ -322,6 +327,7 @@ const TabOneScreen: React.FC = () => {
         <Header />
         <ScheduleSection
           todayGraficData={todayGraficData}
+          workPending={workPending}
           dailyTimeData={dailyTimeData}
           regularVisitCount={regularVisitCount}
           notVisitCount={notVisitCount}
@@ -411,7 +417,7 @@ const TabOneScreen: React.FC = () => {
             <Loading />
           </View>
         ) : (
-          !hasAllNumbers && (
+          !hasAllNumbers && !isLoading && (
             <View style={{ margin: 10 }}>
               <Buttons
                 title="настройку"
@@ -523,6 +529,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
   notVisitCount,
   vipCientsCount,
   newClientsCount,
+  workPending
 }) => (
   <>
     <View style={styles.scheduleSection}>
@@ -536,7 +543,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
           : "Время работы: ваша графическая работа не настроена"}
       </Text>
     </View>
-    {dailyTimeData && (
+    {workPending ? <Loading /> : dailyTimeData && (
       <FlatList
         data={dailyTimeData}
         renderItem={renderTimeSlot}

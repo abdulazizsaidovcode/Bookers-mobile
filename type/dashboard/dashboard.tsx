@@ -65,6 +65,7 @@ export interface ScheduleSectionProps {
     notVisitCount: number;
     vipCientsCount: number;
     newClientsCount: number;
+    workPending: boolean;
 }
 
 export interface StatisticsProps {
