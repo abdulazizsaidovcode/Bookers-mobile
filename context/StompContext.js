@@ -41,9 +41,96 @@
 // export const useStomp = () => {
 //   return useContext(StompContext);
 // };
+// -------------------------------------------------------------------------------
+
+// import React, { createContext, useContext, useState, useEffect } from 'react';
+// import { Client } from '@stomp/stompjs';
+// import SockJS from 'sockjs-client';
+// import { sockjs_url } from '@/helpers/api';
+
+// // Create a context
+// const StompContext = createContext();
+
+// // Create a provider component
+// export const StompProvider = ({ children }) => {
+//   const [stompClient, setStompClient] = useState(null);
+//   const [adminId, setAdminId] = useState("");
+
+//   useEffect(() => {
+//     const socket = new SockJS('https://app.bookers.one/ws');
+
+//     const stompConfig = {
+//       connectHeaders: {},
+//       webSocketFactory: () => socket,
+//       debug: function (str) {
+//         console.log('STOMP: ' + str);
+//       },
+//       reconnectDelay: 5000,
+//       heartbeatIncoming: 100000, // Heartbeat interval (milliseconds)
+//       heartbeatOutgoing: 100000,
+//       onConnect: function (frame) {
+//         console.log('Connected: ' + frame);
+//         setStompClient(stompClient);
+
+//         // Ensure adminId is set before subscribing
+//         if (adminId) {
+//           stompClient.subscribe(`/user/${adminId}/queue/messages`, (response) => {
+//             const receivedMessage = JSON.parse(response.body);
+//             console.log(receivedMessage);
+//           });
+//         }
+//       },
+//       onStompError: (frame) => {
+//         console.log('STOMP Error: ' + frame.headers['message']);
+//         console.log('Additional details: ' + frame.body);
+//       },
+//     };
+
+//     const stompClient = new Client(stompConfig);
+
+//     // Initial connection
+//     stompClient.activate();
+
+//     // Handle WebSocket events
+//     socket.onopen = (res) => {
+//       console.log("WebSocket connection opened.", res);
+//     };
+
+//     socket.onclose = (event) => {
+//       console.log("WebSocket connection closed: ", event);
+//       // Attempt to reconnect if necessary
+//       if (event.code !== 3000) {
+//         stompClient.activate();
+//       }
+//     };
+
+//     socket.onerror = (error) => {
+//       console.error("WebSocket error: ", error);
+//     };
+
+//     // Cleanup on component unmount
+//     return () => {
+//       if (stompClient) {
+//         stompClient.deactivate();
+//       }
+//     };
+//   }, [adminId]); // Re-run effect when adminId changes
+
+//   return (
+//     <StompContext.Provider value={{ stompClient, setAdminId }}>
+//       {children}
+//     </StompContext.Provider>
+//   );
+// };
+
+// // Custom hook to use the Stomp context
+// export const useStomp = () => {
+//   return useContext(StompContext);
+// };
+// -------------------------------------------------------------------------------
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Client } from '@stomp/stompjs';
+import { Client, Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { sockjs_url } from '@/helpers/api';
 
@@ -56,18 +143,21 @@ export const StompProvider = ({ children }) => {
   const [adminId, setAdminId] = useState("");
 
   useEffect(() => {
-    const socket = new SockJS(sockjs_url);
+    const socket = new SockJS('https://app.bookers.one/ws');
+    const stomp = Stomp.over(socket);
 
     const stompConfig = {
       connectHeaders: {},
-      webSocketFactory: () => socket,
+      webSocketFactory: () => stomp,
       debug: function (str) {
         console.log('STOMP: ' + str);
       },
       reconnectDelay: 5000,
       heartbeatIncoming: 100000, // Heartbeat interval (milliseconds)
       heartbeatOutgoing: 100000,
+      
       onConnect: function (frame) {
+        
         console.log('Connected: ' + frame);
         setStompClient(stompClient);
 
@@ -93,12 +183,18 @@ export const StompProvider = ({ children }) => {
     // Handle WebSocket events
     socket.onopen = (res) => {
       console.log("WebSocket connection opened.", res);
+            stomp.connect({}, (frame) => {
+              console.log('Connected: ' + frame);
+              setStompClient(stomp);
+
+        // Ensure adminId is set before subscribing
+      })
     };
 
     socket.onclose = (event) => {
       console.log("WebSocket connection closed: ", event);
       // Attempt to reconnect if necessary
-      if (event.code !== 3000) {
+      if (event.code !== 1011) {
         stompClient.activate();
       }
     };
@@ -126,6 +222,7 @@ export const StompProvider = ({ children }) => {
 export const useStomp = () => {
   return useContext(StompContext);
 };
+
 
 // import React, { createContext, useContext, useState, useEffect } from 'react';
 // import { Client } from '@stomp/stompjs';
