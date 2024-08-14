@@ -44,9 +44,7 @@ const LocationEdit = () => {
   return (
     <SafeAreaView style={[tw`flex-1 px-4`, { backgroundColor: "#21212E" }]}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-      <View style={tw`mt-2`}>
-        <NavigationMenu name="Мой адрес работы" />
-      </View>
+      <NavigationMenu name="Мой адрес работы" />
       <View style={{ paddingHorizontal: 16 }}>
         <Pressable
           onPress={() => router.push("/(location-data)/LocationEditData")}
