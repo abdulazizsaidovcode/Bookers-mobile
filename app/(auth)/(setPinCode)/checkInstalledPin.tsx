@@ -207,7 +207,26 @@ const CheckPin: React.FC = () => {
             <View style={styles.container}>
                 <View style={styles.topSection}>
                     <Text style={styles.label}>{t('Подтвердите ПИН код')}</Text>
-                    <View style={styles.bottomSection}>
+                    
+                    <View style={styles.inputContainer}>
+                        {otp.map((digit, index) => (
+                            <TextInput
+                                key={index}
+                                style={[
+                                    styles.input,
+                                    isCorrect == true ? styles.inputSuccess : styles.inputError,
+                                ]}
+                                value={digit ? "*" : ""}
+                                onChangeText={(text) => handleChangeText(text, index)}
+                                onKeyPress={(e) => handleKeyPress(e, index)}
+                                ref={(ref) => (inputs.current[index] = ref!)}
+                                maxLength={1}
+                                keyboardType="numeric"
+                            />
+                        ))}
+                    </View>
+                </View>
+                <View style={styles.bottomSection}>
                     {!pending ?
                         <TouchableOpacity
                             style={[
@@ -235,25 +254,6 @@ const CheckPin: React.FC = () => {
                     }
 
                 </View>
-                    <View style={styles.inputContainer}>
-                        {otp.map((digit, index) => (
-                            <TextInput
-                                key={index}
-                                style={[
-                                    styles.input,
-                                    isCorrect == true ? styles.inputSuccess : styles.inputError,
-                                ]}
-                                value={digit ? "*" : ""}
-                                onChangeText={(text) => handleChangeText(text, index)}
-                                onKeyPress={(e) => handleKeyPress(e, index)}
-                                ref={(ref) => (inputs.current[index] = ref!)}
-                                maxLength={1}
-                                keyboardType="numeric"
-                            />
-                        ))}
-                    </View>
-                </View>
-                
             </View>
         </SafeAreaView>
     );
