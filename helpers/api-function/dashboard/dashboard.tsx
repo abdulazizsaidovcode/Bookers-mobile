@@ -4,14 +4,18 @@ import { DashboardDailyTimeOrders, DashboardHallingOrder, DashboardMainStatistic
 import axios from "axios"
 import Toast from 'react-native-simple-toast'
 
-export const fetchDaylyOrderTimes = async (setDailyTimeData: (val: DashboardDailyTimeOrders[]) => void, masterId: string) => {
+export const fetchDaylyOrderTimes = async (setDailyTimeData: (val: DashboardDailyTimeOrders[]) => void, masterId: string, setIsLoading: (val: boolean) => void) => {
+    setIsLoading(true)
     try {
         const config = await getConfig()
         const { data } = await axios.get(`${dashboard_daily_time_orders}/${masterId}`, config ? config : {});
         if (data.success) {
             setDailyTimeData(data.body.statusTimes);
-        }
-    } catch { }
+            setIsLoading(false)
+        } else setIsLoading(false   )
+    } catch {
+        setIsLoading(false)
+    }
 }
 
 export const fetchMainStatistic = async (setMainStatisticData: (val: DashboardMainStatistic) => void) => {
@@ -54,14 +58,18 @@ export const fetchHallingOrders = async (setHallData: (val: DashboardWaitingOrde
     }
 }
 
-export const fetchTodayWorkGrafic = async (setTodayGrafic: (val: TodayWorkGrafic) => void, masterId: string) => {
+export const fetchTodayWorkGrafic = async (setTodayGrafic: (val: TodayWorkGrafic) => void, masterId: string, setIsLoading: (val: boolean) => void) => {
+    setIsLoading(true)
     try {
         const config = await getConfig()
         const { data } = await axios.get(`${dashboard_today_work_grafic}/${masterId}`, config ? config : {});
         if (data.success) {
             setTodayGrafic(data.body);
-        }
-    } catch { }
+            setIsLoading(false)
+        } else setIsLoading(false)
+    } catch {
+        setIsLoading(false)
+    }
 }
 
 export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrder[]) => void, setHallData: (val: DashboardHallingOrder[]) => void, orderId: string, status: string, toggleRejectModal: () => void, toggleConfirmModal: () => void, setIsLoading: (val: boolean) => void) => {

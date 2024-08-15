@@ -63,6 +63,7 @@ export interface ScheduleSectionProps {
     regularVisitCount: number;
     todayGraficData: TodayWorkGrafic;
     notVisitCount: number;
+    workPending: boolean;
     vipCientsCount: number;
     newClientsCount: number;
 }
