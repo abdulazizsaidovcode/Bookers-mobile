@@ -17,7 +17,7 @@ import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PieChart from "react-native-pie-chart";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-    
+import Toast from "react-native-simple-toast";
 import {
   editOrderStatus,
   fetchDaylyOrderTimes,
@@ -139,6 +139,7 @@ const TabOneScreen: React.FC = () => {
   const [pending, setPending] = useState(true);
   const [orderId, setOrderId] = useState("");
   const [tariff, setTariff] = useState(null);
+  const [workPending, setWorkPending] = useState(true);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e: any) => {
@@ -158,8 +159,6 @@ const TabOneScreen: React.FC = () => {
       fetchWaitingOrders(setWaitingData, setIsLoading);
       fetchHallingOrders(setHallData);
       getUser(setGetMee);
-      fetchDaylyOrderTimes(setDailyTimeData, getMee.id);
-      fetchTodayWorkGrafic(setTodayGraficData, getMee.id);
       getData();
       getNumbers(setNumber);
       getTariffMaster(setTariffMaster);
@@ -175,13 +174,20 @@ const TabOneScreen: React.FC = () => {
     }, [])
   );
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchDaylyOrderTimes(setDailyTimeData, getMee.id, setWorkPending);
+      fetchTodayWorkGrafic(setTodayGraficData, getMee.id, setWorkPending);
+    }, [getMee.id])
+  )
+
   // 2 marta orqaga qaytishni bosganda ilovadan chiqaradi
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
         if (backPressCount === 0) {
           setBackPressCount(backPressCount + 1);
-           alert("Orqaga qaytish uchun yana bir marta bosing"     );
+          Toast.show("Orqaga qaytish uchun yana bir marta bosing", Toast.SHORT);
           setTimeout(() => {
             setBackPressCount(0);
           }, 2000); // 2 soniya ichida ikkinchi marta bosilmasa, holatni qayta boshlaydi
@@ -307,7 +313,7 @@ const TabOneScreen: React.FC = () => {
       setIsLoading
     );
 
-  console.log(dailyTimeData);
+  console.log(isLoading);
 
 
   return (
@@ -322,6 +328,7 @@ const TabOneScreen: React.FC = () => {
         <Header />
         <ScheduleSection
           todayGraficData={todayGraficData}
+          workPending={workPending}
           dailyTimeData={dailyTimeData}
           regularVisitCount={regularVisitCount}
           notVisitCount={notVisitCount}
@@ -411,7 +418,7 @@ const TabOneScreen: React.FC = () => {
             <Loading />
           </View>
         ) : (
-          !hasAllNumbers && (
+          !hasAllNumbers && !isLoading && (
             <View style={{ margin: 10 }}>
               <Buttons
                 title="настройку"
@@ -521,6 +528,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
   todayGraficData,
   regularVisitCount,
   notVisitCount,
+  workPending,
   vipCientsCount,
   newClientsCount,
 }) => (
@@ -536,7 +544,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
           : "Время работы: ваша графическая работа не настроена"}
       </Text>
     </View>
-    {dailyTimeData && (
+    {workPending ? <Loading /> : dailyTimeData && (
       <FlatList
         data={dailyTimeData}
         renderItem={renderTimeSlot}

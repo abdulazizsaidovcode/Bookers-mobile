@@ -44,7 +44,7 @@ const InternetNotice = () => {
                 } catch (e) {
                     console.error(e);
                 }
-            } else  alert('Пожалуйста, проверьте свой Интернет',   )
+            } else Toast.show('Пожалуйста, проверьте свой Интернет', Toast.LONG)
         });
     };
 

@@ -17,7 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { authStorage, getClientOrMaster } from "@/constants/storage";
 import { useFocusEffect } from 'expo-router';
 import { langstore } from '@/helpers/state_managment/lang/lang';
-    
+import Toast from "react-native-simple-toast";
 import * as SecureStore from 'expo-secure-store';
 import { getConfig } from '@/app/(tabs)/(master)/main';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
@@ -143,12 +143,12 @@ const CheckPin: React.FC = () => {
     // ----------- PIN install ----------------- //
     const installPinCode = () => {
         if (enteredOtp === storedOtp) {
-            alert("пин-код установлен"     );
+            Toast.show("пин-код установлен", Toast.SHORT);
             SecureStore.setItemAsync('password', enteredOtp)
             if (phoneNumber) {
                 SecureStore.setItemAsync('number', phoneNumber)
             } else {
-                alert("телефон не найден"     );
+                Toast.show("телефон не найден", Toast.SHORT);
             }
 
             if (role === 'ROLE_MASTER') {
@@ -159,11 +159,11 @@ const CheckPin: React.FC = () => {
                 navigation.navigate('(tabs)/(client)')
                 setPending(false)
             } else {
-                alert("karioche role yuq"     );
+                Toast.show("karioche role yuq", Toast.SHORT);
             }
         } else {
             setIsCorrect(false);
-            alert("неверный пин-код"     );
+            Toast.show("неверный пин-код", Toast.SHORT);
             setPending(false)
         }
     }
@@ -197,7 +197,7 @@ const CheckPin: React.FC = () => {
         } else {
             setIsCorrect(false);
             setPending(false)
-            alert("неверный пин-код"     );
+            Toast.show("неверный пин-код", Toast.SHORT);
         }
 
     }
@@ -207,7 +207,6 @@ const CheckPin: React.FC = () => {
             <View style={styles.container}>
                 <View style={styles.topSection}>
                     <Text style={styles.label}>{t('Подтвердите ПИН код')}</Text>
-                    
                     <View style={styles.inputContainer}>
                         {otp.map((digit, index) => (
                             <TextInput

@@ -9,7 +9,7 @@ import useGetMeeStore from '@/helpers/state_managment/getMee';
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore';
 import { getUserLocation } from '@/helpers/api-function/getMe/getMee';
 import { getAllCategory } from '@/helpers/api-function/uslugi/uslugi';
-    
+import Toast from "react-native-simple-toast";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { deviceInfo } from "@/helpers/api-function/register/registrFC";
@@ -219,7 +219,7 @@ const Dashboard: React.FC = () => {
       const onBackPress = () => {
         if (backPressCount === 0) {
           setBackPressCount(backPressCount + 1);
-          alert('Orqaga qaytish uchun yana bir marta bosing'     );
+          Toast.show('Orqaga qaytish uchun yana bir marta bosing', Toast.SHORT);
           setTimeout(() => {
             setBackPressCount(0);
           }, 2000);

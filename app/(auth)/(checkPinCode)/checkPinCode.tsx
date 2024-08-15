@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useFocusEffect } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { getClientOrMaster } from "@/constants/storage";
+import Toast from 'react-native-simple-toast';
 
 const CheckPinOnCome: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);

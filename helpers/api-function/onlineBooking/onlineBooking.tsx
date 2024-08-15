@@ -11,7 +11,7 @@ import {
 } from "@/helpers/api";
 import axios from "axios";
 import { Alert } from "react-native";
-    
+import Toast from "react-native-simple-toast";
 import { IsActive } from "@/helpers/state_managment/onlinBooking/onlineBooking";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import { ServiceTime } from "@/app/(standart)/(onlineBooking)/(booking)/breakBetweenSessionIn";
@@ -31,14 +31,14 @@ export const onlineBookingAllowClient = async (
       );
       if (res.data.success) {
         setIsLoading && setIsLoading(false);
-         alert(res.data.message     );
+        Toast.show(res.data.message, Toast.SHORT);
       } else {
         setIsLoading && setIsLoading(false);
       }
     }
   } catch (error: any) {
     setIsLoading && setIsLoading(false);
-     alert(error.response.data.message     );
+    Toast.show(error.response.data.message, Toast.SHORT);
   }
 };
 
@@ -84,11 +84,11 @@ export const onlineBookingSettingsUrgently = async (
 
       if (res.data.success) {
         setIsLoading && setIsLoading(false);
-         alert(res.data.message     );
+        Toast.show(res.data.message, Toast.SHORT);
         setIsEnabled(isEnabled);
       } else {
         setIsLoading && setIsLoading(false);
-         alert(res.data.message     );
+        Toast.show(res.data.message, Toast.SHORT);
       }
     }
   } catch (error) {
@@ -133,16 +133,16 @@ export const postOnlineBookingUserviceTimeAll = async (
       );
       if (res.data.success) {
         setIsLoading && setIsLoading(false);
-         alert(res.data.message     );
+        Toast.show(res.data.message, Toast.SHORT);
         navigation ? navigation.goBack() : () => null;
       } else {
         setIsLoading && setIsLoading(false);
-         alert(res.data.message     );
+        Toast.show(res.data.message, Toast.SHORT);
       }
     }
   } catch (error: any) {
     setIsLoading && setIsLoading(false);
-     alert(error.response.data.message     );
+    Toast.show(error.response.data.message, Toast.SHORT);
   }
 };
 
@@ -166,13 +166,13 @@ export const getOnlineBookingUserviceTimeAll = async (
       console.log(res.data.body);
     } else {
       setIsLoading && setIsLoading(false);
-       alert(res.data.message     );
+      Toast.show(res.data.message, Toast.SHORT);
       setHour(0);
       setMinute(0);
     }
   } catch (error: any) {
     setIsLoading && setIsLoading(false);
-     alert(error.response.data.message     );
+    Toast.show(error.response.data.message, Toast.SHORT);
     setHour(0);
     setMinute(0);
   }
@@ -194,16 +194,16 @@ export const postOnlineBookingserviceTime = async (
       );
       if (res.data.success) {
         setIsLoading && setIsLoading(false);
-         alert(res.message     );
+        Toast.show(res.message, Toast.SHORT);
         navigation ? navigation.goBack() : () => null;
       } else {
         setIsLoading && setIsLoading(false);
-         alert(res.data.message     );
+        Toast.show(res.data.message, Toast.SHORT);
       }
     }
   } catch (error:any) {
     setIsLoading && setIsLoading(false);
-     alert(error.response.data.message     );
+    Toast.show(error.response.data.message, Toast.SHORT);
   }
 };
 
@@ -255,15 +255,15 @@ export const onlineConfirmationServices = async (
     );
     if (res.data.success) {
       setIsLoading && setIsLoading(false);
-       alert(res.data.message     );
+      Toast.show(res.data.message, Toast.SHORT);
       navigation.goBack();
     } else {
       setIsLoading && setIsLoading(false);
-       alert(res.data.message     );
+      Toast.show(res.data.message, Toast.SHORT);
     }
   } catch (error: any) {
     setIsLoading && setIsLoading(false);
-     alert(error.response.data.message     );
+    Toast.show(error.response.data.message, Toast.SHORT);
   }
 };
 
@@ -315,15 +315,15 @@ export const onlineBookingHallWaiting = async (
 
     if (res.data.success) {
       setIsLoading && setIsLoading(false);
-       alert(res.data.message,   );
+      Toast.show(res.data.message, Toast.LONG);
       navigation.goBack();
     } else {
       setIsLoading && setIsLoading(false);
-       alert(res.data.message,   );
+      Toast.show(res.data.message, Toast.LONG);
     }
   } catch (error) {
     setIsLoading && setIsLoading(false);
-     alert("Something is error?",   );
+    Toast.show("Something is error?", Toast.LONG);
   }
 };
 

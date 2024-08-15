@@ -9,7 +9,7 @@ import {
 } from "@/helpers/api";
 import { weekList } from "@/type/graficWork/graficWork";
 import axios from "axios";
-    
+import Toast from "react-native-simple-toast";
 
 // Get api
 
@@ -94,15 +94,15 @@ export const postWorkDay = async (
 
     if (response.data.success) {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert("Work day saved successfully",   );
+      Toast.show("Work day saved successfully", Toast.LONG);
       router();
     } else {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert(response.data.message,   );
+      Toast.show(response.data.message, Toast.LONG);
     }
   } catch (error: any) {
     setIsLoading ? setIsLoading(false) : () => {};
-     alert(error.response.data.message,   );
+    Toast.show(error.response.data.message, Toast.LONG);
   }
 };
 
@@ -131,15 +131,15 @@ export const postWorkTime = async (
     );
     if (response.data.success) {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert("Work time saved successfully",   );
+      Toast.show("Work time saved successfully", Toast.LONG);
       router();
     } else {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert(response.data.message,   );
+      Toast.show(response.data.message, Toast.LONG);
     }
   } catch (error) {
     setIsLoading ? setIsLoading(false) : () => {};
-     alert("Error saving work time",   );
+    Toast.show("Error saving work time", Toast.LONG);
   }
 };
 
@@ -152,7 +152,7 @@ export const putWorkDay = async (
   setIsLoading ? setIsLoading(true) : () => {};
   try {
     if (!workDayWeeks || !date) {
-       alert("hdhdhdhd",   );
+      Toast.show("hdhdhdhd", Toast.LONG);
     }
 
     const data = {
@@ -169,16 +169,16 @@ export const putWorkDay = async (
 
     if (response.data.success) {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert("Work day updated successfully",   );
+      Toast.show("Work day updated successfully", Toast.LONG);
       router();
     } else {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert(response.data.message,   );
+      Toast.show(response.data.message, Toast.LONG);
     }
   } catch (error) {
     console.error("Error updating work day:", error);
     setIsLoading ? setIsLoading(false) : () => {};
-     alert("Error updating work day",   );
+    Toast.show("Error updating work day", Toast.LONG);
   }
 };
 
@@ -208,15 +208,15 @@ export const putWorkTime = async (
 
     if (response.data.success) {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert("Work time updated successfully",   );
+      Toast.show("Work time updated successfully", Toast.LONG);
       router();
     } else {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert(response.data.message,   );
+      Toast.show(response.data.message, Toast.LONG);
     }
   } catch (error) {
     setIsLoading ? setIsLoading(false) : () => {};
     console.error("Error updating work time:", error);
-     alert("Error updating work time",   );
+    Toast.show("Error updating work time", Toast.LONG);
   }
 };

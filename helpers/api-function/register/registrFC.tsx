@@ -1,7 +1,7 @@
 import { base_url, register_page } from "@/helpers/api";
 import axios from "axios";
 import { router } from "expo-router";
-    
+import Toast from "react-native-simple-toast";
 import { authStorage, setClientOrMaster } from "@/constants/storage";
 import * as SecureStore from 'expo-secure-store';
 import { getConfig } from "@/app/(tabs)/(master)/main";
@@ -18,7 +18,7 @@ export const checkNumberFunction = async (phoneNumber: string, setCode: (value: 
             setStatus(res.data.success)
         })
         .catch(err => {
-            if (err.response.data.success === false)  alert(err.response.data.message,   )
+            if (err.response.data.success === false) Toast.show(err.response.data.message, Toast.LONG)
         })
 
 
@@ -31,7 +31,7 @@ export const checkNumberFunction = async (phoneNumber: string, setCode: (value: 
             })
             .catch(err => {
                 pending(false)
-                if (err.response.data.success === false)  alert(err.response.data.message,   )
+                if (err.response.data.success === false) Toast.show(err.response.data.message, Toast.LONG)
             })
     }
 
@@ -44,11 +44,11 @@ export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any
 
     axios.post(`${register_page}checkCode?code=${otpValue}`, setData)
         .then(() => {
-             alert("Вы успешно зарегистрировались",   )
+            Toast.show("Вы успешно зарегистрировались", Toast.LONG)
             setRespone(true)
         })
         .catch(err => {
-             alert("Вы ввели неправильный пароль",   )
+            Toast.show("Вы ввели неправильный пароль", Toast.LONG)
             setRespone(false);
         })
 }
@@ -67,17 +67,17 @@ export const authLogin = async (phoneNumber: string, otpValue: string, setRespon
                     authStorage(res.data.body)
                     setClientOrMaster(res.data.message)
                     setRole(res.data.message)
-                     alert("siz logindan o'tdingiz",   )
+                    Toast.show("siz logindan o'tdingiz", Toast.LONG)
                 } else {
                     setRespone(null)
-                     alert(res.data.message,   )
+                    Toast.show(res.data.message, Toast.LONG)
                 }
             })
             .catch(err => {
                 setRespone(null)
-                 alert(err?.response?.data?.message,   )
+                Toast.show(err?.response?.data?.message, Toast.LONG)
             })
-    } else  alert('Номер телефона обязателен'     )
+    } else Toast.show('Номер телефона обязателен', Toast.SHORT)
 }
 
 interface IRegister {
@@ -125,17 +125,17 @@ export const registerMaster = async (
     }).then(res => {
         if (res.data.success) {
             setData(res.data.body)
-             alert("Вы успешно зарегистрировались ):"     );
+            Toast.show("Вы успешно зарегистрировались ):", Toast.SHORT);
             SecureStore.setItemAsync('number', phoneNumber)
             SecureStore.setItemAsync('password', password)
         } else {
-             alert("Произошла ошибка при регистрации"     );
+            Toast.show("Произошла ошибка при регистрации", Toast.SHORT);
             setData(null)
         }
     }).catch(err => {
         console.log(err);
         setData(null)
-         alert("Произошла ошибка при регистрации"     );
+        Toast.show("Произошла ошибка при регистрации", Toast.SHORT);
     });
 }
 
@@ -161,17 +161,17 @@ export const registerClient = async ({ firstName, lastName, phoneNumber, img, se
     }).then(res => {
         if (res.data.success) {
             setData(res.data.body)
-             alert("Вы успешно зарегистрировались ):"     );
+            Toast.show("Вы успешно зарегистрировались ):", Toast.SHORT);
             SecureStore.setItemAsync('password', password)
             SecureStore.setItemAsync('number', phoneNumber)
         } else {
-             alert("Произошла ошибка при регистрации"     );
+            Toast.show("Произошла ошибка при регистрации", Toast.SHORT);
             setData(null)
         }
     }).catch(err => {
         console.log(err);
         setData(null)
-         alert("Произошла ошибка при регистрации"     );
+        Toast.show("Произошла ошибка при регистрации", Toast.SHORT);
     });
 }
 

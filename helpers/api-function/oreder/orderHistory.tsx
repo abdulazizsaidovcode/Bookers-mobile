@@ -1,5 +1,5 @@
 import { getConfig } from "@/app/(tabs)/(master)/main"
-    
+import Toast from "react-native-simple-toast";
 import { addFebdaback_Url, addMessage_Url, clientOrderaPastComing, clientOrderUpcoming, deleteAllpastcoming_Url, deletePastcoming_Url } from "@/helpers/api";
 import { addfedbackmaster, addMessageInterface, getOrderClientPastcomingInterface, getOrderClientUpcomingInterface } from "@/type/client/editClient";
 import axios from "axios";
@@ -27,7 +27,7 @@ export const getorderClientUpcoming = async (
     }
     catch {
         setIsLoading ? setIsLoading(false) : () => { }
-         alert('Upcoming topilmadi afsuski',   )
+        Toast.show('Upcoming topilmadi afsuski', Toast.LONG)
         setData([])
     }
 }
@@ -51,7 +51,7 @@ export const getOrderClientPustComing = async (setData: (val: getOrderClientPast
     }
     catch {
         setIsLoading ? setIsLoading(false) : () => { }
-         alert('Upcoming topilmadi afsuski',   )
+        Toast.show('Upcoming topilmadi afsuski', Toast.LONG)
         setData([])
     }
 }
@@ -67,18 +67,18 @@ export const addFebbakFunction = async (datas: addfedbackmaster, toggleModal: ()
                 console.log(res.data.message);
                 toggleModal();
             } else {
-                 alert('Add fedback ishlamadi',   );
+                Toast.show('Add fedback ishlamadi', Toast.LONG);
                 console.log(res.data.message);
             }
         } else {
-             alert('Something went wrong',   );
+            Toast.show('Something went wrong', Toast.LONG);
         }
     } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 404) {
             Alert.alert("O'xshamadi", 'Faqat bir marotaba izoh qoldirishingiz mumkin !')
             toggleModal();
         } else {
-             alert('Add fedback funksiya ishlamadi yani catchga tushdi',   );
+            Toast.show('Add fedback funksiya ishlamadi yani catchga tushdi', Toast.LONG);
         }
         console.log(err);
     }
@@ -95,7 +95,7 @@ export const deletePastComingFunction = async (orderId: string | null | undefine
 
         if (res.data.success) {
             getFunction()
-             alert('✅Order deleted successfully',   );
+            Toast.show('✅Order deleted successfully', Toast.LONG);
         } else {
             console.error('Failed to delete order:', res.status);
         }
@@ -118,17 +118,17 @@ export const deleteAllPastComingFunction = async (datas: string[], toggleModal: 
             const config = await getConfig();
             const res = await axios.post(`${deleteAllpastcoming_Url}`, data, config ? config : {});
             if (res.data.success) {
-                 alert('All orders deleted successfully',   );
+                Toast.show('All orders deleted successfully', Toast.LONG);
                 getFunction();
                 toggleModal();
             } else {
-                 alert('All orders deleted error sssssssss',   );
+                Toast.show('All orders deleted error sssssssss', Toast.LONG);
             }
         } else {
-             alert('Data malumotlar topilmadi',   );
+            Toast.show('Data malumotlar topilmadi', Toast.LONG);
         }
     } catch {
-         alert('All orders deleted errorrrrrrrrrrrr',   );
+        Toast.show('All orders deleted errorrrrrrrrrrrr', Toast.LONG);
     }
 }
 
@@ -139,9 +139,9 @@ export const AddMessageOrderUpcoming = async (datas: addMessageInterface, toggle
             const res = await axios.post(addMessage_Url, datas, config ? config : {});
             if (res.data.success) {
                 toggleModal();
-                 alert('✅Message sent successfully',   );
+                Toast.show('✅Message sent successfully', Toast.LONG);
             } else {
-                 alert('Message sent error',   );
+                Toast.show('Message sent error', Toast.LONG);
             }
         }
     } catch (err) {

@@ -31,7 +31,7 @@ export const addFavouriteOrder = async (masterId: string, setFavouriteOrders: (v
     try {
         const { data } = await axios.post(`${favourite_add}/${masterId}`, {}, config ? config : {})
         if (data.success) {
-             alert('Мастер успешно добавлен в список любимый мастеров.',   )
+            Toast.show('Мастер успешно добавлен в список любимый мастеров.', Toast.LONG)
             fetchFavouriteOrders(setFavouriteOrders, setIsloading)
         }
     } catch (error) {
@@ -47,10 +47,10 @@ export const deleteFavouriteOrder = async (masterId: string, setFavouriteOrders:
         if (data.success) {
             await fetchFavouriteOrders(setFavouriteOrders, setIsloading)
             toggleModal && toggleModal()
-             alert('Мастер успешно удален из списка любимый мастеров.',   )
+            Toast.show('Мастер успешно удален из списка любимый мастеров.', Toast.LONG)
         }
     } catch (error: any) {
-        //  alert(error.response.data.message,   )
+        // Toast.show(error.response.data.message, Toast.LONG)
         console.log(error);
 
     }
