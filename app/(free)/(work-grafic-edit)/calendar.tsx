@@ -6,7 +6,7 @@ import { Calendar } from "react-native-calendars";
 import { MarkedDates } from "react-native-calendars/src/types";
 import tw from "tailwind-react-native-classnames";
 import moment from "moment";
-   
+import Toast from 'react-native-simple-toast';
 import { useFocusEffect } from "expo-router";
 
 const CalendarGrafficEdit: React.FC = () => {
@@ -34,7 +34,7 @@ const CalendarGrafficEdit: React.FC = () => {
     const today = moment().format("YYYY-MM-DD");
 
     if (moment(day.dateString).isBefore(today)) {
-      alert('Вы не можете выбрать дату до сегодняшнего дня.',  );
+      Toast.show('Вы не можете выбрать дату до сегодняшнего дня.', Toast.LONG);
       return;
     }
 

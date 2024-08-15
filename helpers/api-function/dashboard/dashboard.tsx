@@ -72,12 +72,12 @@ export const editOrderStatus = async (setWaitingData: (val: DashboardWaitingOrde
             await fetchWaitingOrders(setWaitingData, setIsLoading);
             await fetchHallingOrders(setHallData);
             if (status === 'CONFIRMED') {
-                 alert(`${data.message}`,   )
+                Toast.show(`${data.message}`, Toast.LONG)
                 toggleConfirmModal();
             }
             else if (status === 'REJECTED') {
                 toggleRejectModal();
-                 alert(`${data.message}`,   )
+                Toast.show(`${data.message}`, Toast.LONG)
             }
         }
     } catch (error) {

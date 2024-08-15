@@ -1,4 +1,4 @@
-    
+import Toast from "react-native-simple-toast";
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import axios from "axios";
 import {
@@ -28,21 +28,21 @@ export const updateClientProfile = async (
       );
       if (data.success) {
         setIsLoading ? setIsLoading(false) : () => {};
-         alert("Successfully update",   );
+        Toast.show("Successfully update", Toast.LONG);
         navigate ? navigate() : null;
         getMe ? getMe() : null;
         clearData ? clearData() : null;
       } else {
         setIsLoading ? setIsLoading(false) : () => {};
-         alert("An error occurred on the console",   );
+        Toast.show("An error occurred on the console", Toast.LONG);
       }
     } else {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert("Something went wrong",   );
+      Toast.show("Something went wrong", Toast.LONG);
     }
   } catch (err) {
     setIsLoading ? setIsLoading(false) : () => {};
-     alert("An error occurred on the server",   );
+    Toast.show("An error occurred on the server", Toast.LONG);
   }
 };
 
@@ -64,21 +64,21 @@ export const updateMasterProfile = async (
       );
       if (data.success) {
         setIsLoading ? setIsLoading(false) : () => {};
-         alert(data.message,   );
+        Toast.show(data.message, Toast.LONG);
         navigate ? navigate() : null;
         getMe ? getMe() : null;
         clearData ? clearData() : null;
       } else {
         setIsLoading ? setIsLoading(false) : () => {};
-         alert(data.message,   );
+        Toast.show(data.message, Toast.LONG);
       }
     } else {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert("Something went wrong",   );
+      Toast.show("Something went wrong", Toast.LONG);
     }
   } catch (err) {
     setIsLoading ? setIsLoading(false) : () => {};
-     alert("An error occurred on the server",   );
+    Toast.show("An error occurred on the server", Toast.LONG);
     console.log(err);
   }
 };
@@ -104,7 +104,7 @@ export const clientNotification = async (
     }
   } catch {
     setIsLoading ? setIsLoading(false) : () => {};
-     alert("Notification client ishlamadi",   );
+    Toast.show("Notification client ishlamadi", Toast.LONG);
     setData([]);
   }
 };
@@ -120,15 +120,15 @@ export const deleteClientProfile = async (
     );
     if (data.success) {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert("Successfully deleted",   );
+      Toast.show("Successfully deleted", Toast.LONG);
     } else {
       setIsLoading ? setIsLoading(false) : () => {};
-       alert("An error occurred on the server",   );
+      Toast.show("An error occurred on the server", Toast.LONG);
       console.log(data);
     }
   } catch (err) {
     setIsLoading ? setIsLoading(false) : () => {};
-     alert("An error occurred on the server",   );
+    Toast.show("An error occurred on the server", Toast.LONG);
     console.log(err);
   }
 };
@@ -149,15 +149,15 @@ export const clientNotificationDelete = async (
   try {
     if (clientNotificationDel.data.success) {
     setIsLoading ? setIsLoading(false) : () => {}
-     alert("Successfully deleted",   );
+    Toast.show("Successfully deleted", Toast.LONG);
       getData();
     } else {
     setIsLoading ? setIsLoading(false) : () => {}
-       alert("An error occurred on the server",   );
+      Toast.show("An error occurred on the server", Toast.LONG);
     }
   } catch {
     setIsLoading ? setIsLoading(false) : () => {}
-     alert("An error occurred on the server",   );
+    Toast.show("An error occurred on the server", Toast.LONG);
   }
 };
 //client notification not ready or ready
@@ -180,11 +180,11 @@ export const clientPostReadyORnotReady = async (
       getData();
     } else {
     setIsLoading ? setIsLoading(false) : () => {}
-       alert("An error occurred on the server",   );
+      Toast.show("An error occurred on the server", Toast.LONG);
     }
   } catch {
     setIsLoading ? setIsLoading(false) : () => {}
-     alert("An error occurred on the server",   );
+    Toast.show("An error occurred on the server", Toast.LONG);
   }
 };
 // client notification not ready
@@ -207,6 +207,6 @@ export const getNotificationNor_ReadyClient = async (
     }
   } catch {
     setIsLoading ? setIsLoading(false) : () => {}
-     alert("Not ready yulida catchga utkazildi",   );
+    Toast.show("Not ready yulida catchga utkazildi", Toast.LONG);
   }
 };

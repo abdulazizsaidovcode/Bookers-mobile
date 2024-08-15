@@ -11,7 +11,7 @@ import LocationInput from '@/app/locationInput';
 import Buttons from '@/components/(buttons)/button';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import { getConfig, getConfigImg } from '@/app/(tabs)/(master)/main';
-   
+import Toast from 'react-native-simple-toast';
 import clientStore from '@/helpers/state_managment/client/clientStore';
 import { getMasterTariff } from '@/constants/storage';
 import BottomModal from '@/components/(modals)/modal-bottom';
@@ -37,14 +37,14 @@ const uploadImage = async (val: any, setImageId: (val: string | null) => void) =
         const config = await getConfigImg();
         const response = await axios.post(postFileId, formData, config ? config : {});
         if (response.data.success) {
-             alert("Success",   );
+            Toast.show("Success", Toast.LONG);
             setImageId(response.data.body)
         } else {
-             alert(response.data.message,   );
+            Toast.show(response.data.message, Toast.LONG);
             setImageId(null)
         }
     } catch (err: any) {
-         alert(err.response.data.message,   );
+        Toast.show(err.response.data.message, Toast.LONG);
         setImageId(null)
     }
 };
@@ -141,7 +141,7 @@ const Process: React.FC = () => {
             const response = await axios.post(masterAdd_service, data, config ? config : {});
             console.log(response);
             if (response.data.success) router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
-            else  alert(response.data.message,   );
+            else Toast.show(response.data.message, Toast.LONG);
         } catch (error) {
             console.error('Error adding service:', error);
         }

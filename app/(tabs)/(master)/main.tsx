@@ -17,7 +17,7 @@ import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PieChart from "react-native-pie-chart";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-    
+import Toast from "react-native-simple-toast";
 import {
   editOrderStatus,
   fetchDaylyOrderTimes,
@@ -181,7 +181,7 @@ const TabOneScreen: React.FC = () => {
       const onBackPress = () => {
         if (backPressCount === 0) {
           setBackPressCount(backPressCount + 1);
-           alert("Orqaga qaytish uchun yana bir marta bosing"     );
+          Toast.show("Orqaga qaytish uchun yana bir marta bosing", Toast.SHORT);
           setTimeout(() => {
             setBackPressCount(0);
           }, 2000); // 2 soniya ichida ikkinchi marta bosilmasa, holatni qayta boshlaydi

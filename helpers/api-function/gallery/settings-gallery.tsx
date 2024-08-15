@@ -1,7 +1,7 @@
 import { BooleanState, EditMainPhoto, GalleryData } from "@/type/gallery/gallery";
 import { main_gallery, gallery_add_photo, gallery_edit_main_photo, gallery_full_data, gallery_list, } from "@/helpers/api";
 import axios from "axios";
-    
+import Toast from "react-native-simple-toast";
 import { getConfig, getConfigImg } from "@/app/(tabs)/(master)/main";
 
 export const fetchData = async (setData: (data: GalleryData[]) => void, setIsloading: (val: boolean) => void) => {
@@ -33,7 +33,7 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData)
 
 export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void, setMainImageIndices: (val: number[]) => void, goBack: () => void, setIsloading: (val: boolean) => void) => {
   if (!name.trim()) {
-    return  alert("Please enter a valid name",   );
+    return Toast.show("Please enter a valid name", Toast.LONG);
   }
   setIsloading(true)
   try {
@@ -45,12 +45,12 @@ export const addData = async (formData: FormData, name: string, setData: (data: 
       setAlbumName('')
       setMainImageIndices([])
       goBack()
-       alert("Ваша галерея добавлена",   );
+      Toast.show("Ваша галерея добавлена", Toast.LONG);
     } else setIsloading(false)
   } catch (error: any) {
     setIsloading(false)
     console.log(error);
-     alert(error.response.data.message,   );
+    Toast.show(error.response.data.message, Toast.LONG);
   }
 };
 
@@ -62,11 +62,11 @@ export const addPhoto = async (galleryId: number, formData: FormData, setFullDat
     if (data.success) {
       await fetchFullData(galleryId, setFullData);
       setImages([]);
-       alert('Пожалуйста, подождите, администратор должен одобрить вашу фотографию.',   )
+      Toast.show('Пожалуйста, подождите, администратор должен одобрить вашу фотографию.', Toast.LONG)
       setBooleanState({ ...booleanState, isLoading: false })
     } else setBooleanState({ ...booleanState, isLoading: false })
   } catch (error) {
-     alert(`Пожалуйста, повторите попытку позже`,   );
+    Toast.show(`Пожалуйста, повторите попытку позже`, Toast.LONG);
     console.log(error);
     setBooleanState({ ...booleanState, isLoading: false })
   }
@@ -82,7 +82,7 @@ export const editName = async (id: number, setFullData: (data: GalleryData) => v
       await fetchData(setData, setIsloading)
       setIsLoading({ ...booleanState, isLoading: false })
       toggleModal();
-       alert('Название галереи успешно обновлено.',   )
+      Toast.show('Название галереи успешно обновлено.', Toast.LONG)
     } else setIsLoading({ ...booleanState, isLoading: false })
   } catch (error) {
     console.log(error);
@@ -99,7 +99,7 @@ export const editMainPhoto = async (setFullData: (data: GalleryData) => void, se
       fetchFullData(galleryId, setFullData);
       fetchData(setData, setIsloading);
       toggleShowMain()
-       alert('Ваша основная фотография успешно обновлена.',   )
+      Toast.show('Ваша основная фотография успешно обновлена.', Toast.LONG)
     } else setBooleanState({ ...booleanState, isLoading: false })
   } catch (error) {
     console.log(error);
@@ -125,7 +125,7 @@ export const delPhoto = async (id: number, attachmentIds: string[], setFullData:
       await fetchFullData(id, setFullData);
       await fetchData(setData, setIsloading);
       toggleModal();
-       alert('Фото успешно удалено из галереи.',   );
+      Toast.show('Фото успешно удалено из галереи.', Toast.LONG);
     }
   } catch (error) {
     console.log(error);
@@ -142,7 +142,7 @@ export const delGallery = async (id: number | null, setData: (data: GalleryData[
       await fetchData(setData, setIsloading);
       toggleModal()
       toggleCheckboxes()
-       alert('Ваша галерея успешно удалена',   )
+      Toast.show('Ваша галерея успешно удалена', Toast.LONG)
     }
   } catch (error) {
     console.log(error);

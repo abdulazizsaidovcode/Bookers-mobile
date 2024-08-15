@@ -11,7 +11,7 @@ import Buttons from '@/components/(buttons)/button';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import BottomModal from '@/components/(modals)/modal-bottom';
 import * as ImagePicker from 'expo-image-picker';
-   
+import Toast from 'react-native-simple-toast';
 import { EditMainPhoto } from '@/type/gallery/gallery';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
 import { StatusBar } from 'expo-status-bar';
@@ -76,7 +76,7 @@ const GalleryDetails: React.FC = () => {
 
     const toggleAllModal = () => {
         if (selectedImages.length === 0) {
-            alert('Сначала, выберите фотографии',  );
+            Toast.show('Сначала, выберите фотографии', Toast.LONG);
         } else {
             setBooleanState({ ...booleanState, isAllOpen: !booleanState.isAllOpen });
         }

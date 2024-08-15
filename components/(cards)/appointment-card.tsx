@@ -13,7 +13,7 @@ import {
     getUpcomingClient,
     updateOrderStatus
 } from "@/helpers/api-function/client/client";
-    
+import Toast from "react-native-simple-toast";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 
 const AppointmentCard = ({clicks, serviceName, isBtn, data, userID}: {
@@ -101,7 +101,7 @@ const AppointmentCard = ({clicks, serviceName, isBtn, data, userID}: {
                 onConfirm={() => {
                     updateOrderStatus(data.id, 'REJECTED', () => console.log('loading...'), setSuccessStatus)
                     if (rating > 0) addFeedbackMaster(rating, setIsLoading, toggleModal)
-                    else  alert('Вы еще не оставили отзыв!',   )
+                    else Toast.show('Вы еще не оставили отзыв!', Toast.LONG)
                 }}
                 toggleModal={() => toggleModal()}
             >

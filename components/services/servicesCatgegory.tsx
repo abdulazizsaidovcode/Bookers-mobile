@@ -3,7 +3,7 @@ import { Text, View } from "../Themed";
 import tw from "tailwind-react-native-classnames";
 import { Checkbox, RadioButton } from "react-native-paper";
 import { ServicesProps } from "@/type/services/servicesCategory";
-import { StyleSheet, TouchableOpacity, Platform } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import servicesStore from "@/helpers/state_managment/services/servicesStore";
 
 const ServicesCategory: React.FC<ServicesProps> = ({
@@ -12,12 +12,12 @@ const ServicesCategory: React.FC<ServicesProps> = ({
     isRadioButton = false,
     isChecked = false,
 }) => {
-    const { setIsChecked, checkedIs } = servicesStore();
+    const { setIsChecked, checkedIs } = servicesStore()
     const [checked, setChecked] = useState(isChecked);
 
     useEffect(() => {
         setChecked(isChecked);
-    }, [isChecked]);
+    }, [isChecked])
 
     const handlePress = () => {
         if (isRadioButton) {
@@ -33,34 +33,48 @@ const ServicesCategory: React.FC<ServicesProps> = ({
     return (
         <TouchableOpacity
             activeOpacity={1}
-            onPress={handlePress}
+            onPress={() => {
+                handlePress();   
+            }}
         >
             <View style={[tw`rounded-2xl`, { backgroundColor: "#21212E" }]}>
                 <View
                     style={[
-                        tw`flex p-3 mb-3 flex-row items-center`,
-                        { backgroundColor: "#B9B9C9", borderRadius: 18 },
+                        tw`flex p-3 mb-3 flex-row  items-center`,
+                        {backgroundColor:"#B9B9C9",borderRadius:18}
+                        
                     ]}
                 >
-                    <View style={[styles.checkboxContainer]}>
+                    <View
+                        style={[
+                            tw`rounded-full`,
+                            {
+                                backgroundColor:"#B9B9C9"
+                                // backgroundColor: checked ? "red" : "#B9B9C9",
+                            },
+                        ]}
+                    >
                         {isRadioButton ? (
+                            <View style={styles.checkboxContainer}>
                             <RadioButton
                                 value="radio"
                                 status={checked ? "checked" : "unchecked"}
                                 onPress={handlePress}
-                                color={checked ? "#9C0A35" : "black"}
+                                color={checked ? "#9C0A35" : "black"} // RadioButton color change
                             />
+                            </View>
                         ) : (
-                            <Checkbox
+                            <View style={styles.checkboxContainer}>
+                                <Checkbox
                                 status={checked ? "checked" : "unchecked"}
                                 onPress={handlePress}
-                                color={checked ? "#9C0A35" : "black"}
+                                color={checked ? "#9C0A35" : "black"} // Checkbox color change
                             />
+                            </View>
+                            
                         )}
                     </View>
-                    <Text style={tw`text-black text-lg font-bold ml-2`}>
-                        {title}
-                    </Text>
+                    <Text style={tw`text-black text-lg font-bold ml-2`}>{title}</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -68,11 +82,12 @@ const ServicesCategory: React.FC<ServicesProps> = ({
 };
 
 const styles = StyleSheet.create({
+    checkbox: {
+        alignSelf: "center",
+    },
     checkboxContainer: {
-        transform: [{ scale: Platform.OS === 'ios' ? 1 : 1.1 }], 
-        backgroundColor: '#B9B9C9',
-        justifyContent: 'center',
-        alignItems: 'center',
+        transform: [{ scale: 1.1 }],
+        backgroundColor:'#B9B9C9'
     },
 });
 

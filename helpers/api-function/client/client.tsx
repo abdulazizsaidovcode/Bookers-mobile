@@ -42,7 +42,7 @@ import {
     RegionData,
     UpdateClient
 } from "@/type/client/client";
-    
+import Toast from "react-native-simple-toast";
 import {getConfig} from "@/app/(tabs)/(master)/main";
 import {consoleClear} from "@/constants/consoleClear";
 
@@ -73,7 +73,7 @@ export const getMeClient = async (setData: (val: any | null) => void, clientID: 
             const {data} = await axios.get(`${getMeID}${clientID}`, config ? config : {});
             if (data.success) setData(data.body)
             else setData(null)
-        } else  alert('An error occurred, it will be fixed soon!',   )
+        } else Toast.show('An error occurred, it will be fixed soon!', Toast.LONG)
     } catch (err) {
         consoleClear()
         setData(null)
@@ -171,15 +171,15 @@ export const createClient = async (createData: UpdateClient, setNavigate: (val: 
         if (data.success) {
             setNavigate(true)
             setLoading(false)
-             alert('Successfully saved client✔',   )
+            Toast.show('Successfully saved client✔', Toast.LONG)
         } else {
-             alert('Error saved client✔',   )
+            Toast.show('Error saved client✔', Toast.LONG)
             setLoading(false)
             setNavigate(false)
         }
     } catch (err) {
         consoleClear()
-         alert('Error saved client✔',   )
+        Toast.show('Error saved client✔', Toast.LONG)
         setLoading(false)
         setNavigate(false)
     }
@@ -299,17 +299,17 @@ export const updateClientData = async (updateData: UpdateClient, clientID: strin
         if (data.success) {
             setNavigate(true)
             setLoading(false)
-             alert('Successfully update client ✔',   )
+            Toast.show('Successfully update client ✔', Toast.LONG)
         } else {
             setLoading(false)
             setNavigate(false)
-             alert('Error update client❌',   )
+            Toast.show('Error update client❌', Toast.LONG)
         }
     } catch (err) {
         consoleClear()
         setLoading(false)
         setNavigate(false)
-         alert('Error update client❌',   )
+        Toast.show('Error update client❌', Toast.LONG)
     }
 }
 
@@ -387,20 +387,20 @@ export const addClientMessage = async (clientID: string, message: string, setLoa
             if (data.success) {
                 toggle()
                 setLoading(false)
-                 alert('Successfully message feedback✔',   )
+                Toast.show('Successfully message feedback✔', Toast.LONG)
             } else {
-                 alert('An error occurred on the server❌',   )
+                Toast.show('An error occurred on the server❌', Toast.LONG)
                 toggle()
                 setLoading(false)
             }
         } else {
-             alert('There is a message',   )
+            Toast.show('There is a message', Toast.LONG)
             setLoading(false)
         }
     } catch (err) {
         consoleClear()
         setLoading(false)
-         alert('An error occurred on the server',   )
+        Toast.show('An error occurred on the server', Toast.LONG)
     }
 }
 
@@ -442,12 +442,12 @@ export const addFeedbackMaster = async (star: number | any, setIsLoading: (val: 
             .then(res => {
                 setIsLoading(false)
                 toggle && toggle()
-                if (res.data.success)  alert(`Вы оценили приложение на ${data.count}`,   )
+                if (res.data.success) Toast.show(`Вы оценили приложение на ${data.count}`, Toast.LONG)
             })
             .catch(() => {
                 setIsLoading(false)
                 toggle && toggle()
-                 alert(`An error occurred on the server`,   )
+                Toast.show(`An error occurred on the server`, Toast.LONG)
                 consoleClear()
             })
     }
@@ -507,19 +507,19 @@ export const updateOrderStatus = async (orderID: string, status: string, setLoad
             if (data.success) {
                 toggle && toggle()
                 setSuccessStatus('ACCEPTED')
-                 alert('Successfully update order status',   )
+                Toast.show('Successfully update order status', Toast.LONG)
                 setLoading(false)
             } else {
                 toggle && toggle()
                 setLoading(false)
-                 alert('An error occurred on the server',   )
+                Toast.show('An error occurred on the server', Toast.LONG)
             }
-        } else  alert('Something went wrong',   )
+        } else Toast.show('Something went wrong', Toast.LONG)
     } catch (err) {
         setLoading(false)
         consoleClear()
         toggle && toggle()
-         alert('An error occurred on the server',   )
+        Toast.show('An error occurred on the server', Toast.LONG)
     }
 }
 
@@ -532,12 +532,12 @@ export const clientDelete = async (clientID: string, setRes: (val: boolean) => v
             if (data.success) {
                 setLoading(false)
                 setRes(data.success)
-                 alert(data.message,   )
+                Toast.show(data.message, Toast.LONG)
             }
-        } else  alert('An error occurred on the server',   )
+        } else Toast.show('An error occurred on the server', Toast.LONG)
     } catch (err) {
         setLoading(false)
-         alert('An error occurred on the server',   )
+        Toast.show('An error occurred on the server', Toast.LONG)
         consoleClear()
     }
 }
@@ -549,11 +549,11 @@ export const clientIsVip = async (clientID: string, isStatus: boolean, setSwitch
             const {data} = await axios.put(`${client_isVep}?isVip=${isStatus}&clientId=${clientID}`, '', config ? config : {})
             if (data.success) {
                 setSwitch(isStatus)
-                 alert(`${isStatus ? 'You have made the client a vep client' : 'You have converted a vep client to a normal client'}`,   )
-            } else  alert('Something went wrong',   )
+                Toast.show(`${isStatus ? 'You have made the client a vep client' : 'You have converted a vep client to a normal client'}`, Toast.LONG)
+            } else Toast.show('Something went wrong', Toast.LONG)
         }
     } catch (err) {
         consoleClear()
-         alert('Something went wrong',   )
+        Toast.show('Something went wrong', Toast.LONG)
     }
 }

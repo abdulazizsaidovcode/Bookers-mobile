@@ -1,7 +1,7 @@
 import { getConfig } from "@/app/(tabs)/(master)/main";
 import { base_url } from "@/helpers/api";
 import axios from "axios";
-    
+import Toast from "react-native-simple-toast";
 
 interface data {
   setName?: string;
@@ -57,17 +57,17 @@ export const putPersonalData = async ({
       const response = await axios.put(`${base_url}user`, Data, config ? config : {});
 
       if (response.data.success) {
-         alert("Sizning profilingiz yangilandi"     );
+        Toast.show("Sizning profilingiz yangilandi", Toast.SHORT);
         navigate();
       } else {
-         alert("Sizning profilingiz yangilanmadi"     );
+        Toast.show("Sizning profilingiz yangilanmadi", Toast.SHORT);
       }
     } catch (error) {
       console.error('Error updating profile:', error);
-       alert("Sizning profilingiz yangilanmadi"     );
+      Toast.show("Sizning profilingiz yangilanmadi", Toast.SHORT);
     }
   } else {
-     alert("Siz viloyatingiz va shahringizni kiritishingiz kerak"     );
+    Toast.show("Siz viloyatingiz va shahringizni kiritishingiz kerak", Toast.SHORT);
   }
 };
 
