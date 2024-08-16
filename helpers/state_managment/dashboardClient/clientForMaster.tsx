@@ -3,6 +3,7 @@ import {create} from "zustand";
 export interface ClientMasterByCategory {
     id: string
     firstName: string | null
+    fullName: string | null
     salonName: string | null
     orderCount: number | null
     clientCount: number | null
@@ -17,7 +18,7 @@ export interface ClientMasterByCategory {
     attachmentCount: number | null
     gender: string | null
     servicePrice: number | null
-    nextEntryDate: number | null
+    nextEntryDate: number | string | null
 }
 
 interface DashboardMasterStore {

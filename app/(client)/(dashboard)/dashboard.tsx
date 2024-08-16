@@ -46,21 +46,21 @@ type DashboardItemType = {
 
 
 
-const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
-  return (
-    <TouchableOpacity key={item.id} style={styles.touchableItem} onPress={handlePress}>
-      <View style={styles.item}>
-        <View style={styles.imageContainer}>
-          <Image source={item.image} style={styles.image} />
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.titleText}>{item.title}</Text>
-          <Text style={styles.subtitleText}>{item.titleThen}</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
+// const DashboardItem: React.FC<{ item: DashboardItemType }> = ({ item }) => {
+//   return (
+//     <TouchableOpacity key={item.id} style={styles.touchableItem} >
+//       <View style={styles.item}>
+//         <View style={styles.imageContainer}>
+//           <Image source={item.image} style={styles.image} />
+//         </View>
+//         <View style={styles.textContainer}>
+//           <Text style={styles.titleText}>{item.title}</Text>
+//           <Text style={styles.subtitleText}>{item.titleThen}</Text>
+//         </View>
+//       </View>
+//     </TouchableOpacity>
+//   );
+// };
 
 const Navbar: React.FC = () => {
   const navigation = useNavigation<any>()
@@ -462,6 +462,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 40,
     marginBottom: 20,
+    padding: 3
   },
   iconGroup: {
     flexDirection: 'row',
@@ -469,6 +470,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 50,
     gap: 8,
+    marginEnd: 3
   },
   title: {
     color: '#fff',

@@ -10,7 +10,7 @@ type ClientCardProps = {
   salon?: string | null;
   imageUrl?: string | null;
   name?: string | null;
-  zaps?: string | null;
+  zaps?: number | string | null;
   masterType?: string | null;
   orders?: number | null;
   clients?: number | null;

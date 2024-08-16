@@ -74,7 +74,7 @@ const OrderHistory = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" />
       {activeTab === 'upcoming' && (
-        <View style={styles.header}>
+        <View>
           <NavigationMenu name="Записи" />
         </View>
       )}
@@ -106,7 +106,7 @@ const OrderHistory = () => {
           />
         </View>
         {activeTab === 'upcoming' && (
-          <ScrollView style={{ marginBottom: 160 }}>
+          <ScrollView style={{ marginBottom: 160, }}>
             {isLoading ? <Loading/> : upcoming.length !== 0 ? (
               upcoming.map((upcoming: any, index: number) => (
                 <AccardionHistory id={upcoming.serviceIds} key={index} title={upcoming.serviceName} date={upcoming.orderDate} >
@@ -222,6 +222,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     marginBottom: 20,
+    paddingHorizontal:3,
     gap: 14,
   },
   profileInfo: {

@@ -103,8 +103,8 @@ const OrderClient = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView >
         <NavigationMenu name='График' />
+      <ScrollView style={{paddingHorizontal: 18,}} >
         <Text style={{ marginVertical: 16, color: '#fff', fontSize: 18 }}>Сегодня {curentDay} {curentWeekName} , {curentMonthName}</Text>
         <CalendarGrafficEdit />
         <Booked />
@@ -122,7 +122,7 @@ const OrderClient = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#21212E',
-    padding: 18,
+    
     flex: 1,
     width: '100%',
   }

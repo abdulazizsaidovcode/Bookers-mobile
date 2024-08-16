@@ -81,7 +81,10 @@ const MasterInformation = () => {
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
+      <View style={{paddingHorizontal: 10}}>
+
       <NavigationMenu name={`Подробнее OOOO`} />
+      </View>
       <View style={tw`flex flex-row mb-5 p-3`}>
         <CustomButton1
           borderColor='#9E9E9E'

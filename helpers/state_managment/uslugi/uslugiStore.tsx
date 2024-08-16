@@ -100,7 +100,7 @@ export interface ClientAllCategory {
   clientId: string | null;
   setClientId: (val: string | null) => void;
   selectedClient: Client | null;
-  setSelectedClient: (client: Client | null) => void;
+  setSelectedClient: (client: any) => void;
   commentData: CommentData | null;
   setCommentData: (data: CommentData | null) => void;
   services: any | null;

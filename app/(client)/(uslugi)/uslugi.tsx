@@ -79,7 +79,7 @@ const Uslugi = () => {
             justifyContent: 'space-between',
             backgroundColor: '#21212E'
           }}>
-          <View style={tw`flex flex-row items-center justify-between p-3`}>
+          <View style={tw`flex flex-row items-center justify-between py-3`}>
             <Text style={tw`text-white text-3xl font-bold mb-4 px-4`}>Услуги</Text>
             <TouchableOpacity
               activeOpacity={0.7}
@@ -88,7 +88,6 @@ const Uslugi = () => {
               <Ionicons name="notifications" size={30} color="white" />
             </TouchableOpacity>
           </View>
-
           {loading ? (
             <View style={[tw`flex-1 justify-center items-center`]}>
               <ActivityIndicator size="large" color="#9C0A35" />

@@ -264,6 +264,7 @@ const Masters = () => {
         tw`px-5`,
         {
           flex: 1,
+          paddingTop: 16,
           backgroundColor: "#21212E",
         },
       ]}
@@ -298,7 +299,7 @@ const Masters = () => {
         />
       </View>
       <View style={tw`flex-1`}>
-        <Text style={tw`text-white text-lg font-medium mt-5`}>
+        <Text style={tw`text-white text-lg font-medium mt-3 mb-2`}>
           Топ 100 специалисты {data.length}
         </Text>
 
