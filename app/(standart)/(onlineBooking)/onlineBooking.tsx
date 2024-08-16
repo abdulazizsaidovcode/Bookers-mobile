@@ -17,7 +17,10 @@ import MessageOption from "@/components/messageOption/messageOption";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import {
+  getNumbers,
+  putNumbers,
+} from "@/helpers/api-function/numberSittings/numbersetting";
 import {
   OnlineBookingSettingsUrgentlyStory,
   OnlineBookingStory,
@@ -48,8 +51,8 @@ type SettingsScreenNavigationProp = NavigationProp<
 >;
 
 const OnlineBooking = () => {
-    const { setNumber } = numberSettingStore();
-    const { tariff, setTariff } = clientStore();
+  const { setNumber } = numberSettingStore();
+  const { tariff, setTariff } = clientStore();
   const {
     setUrgentlyt,
     salonId,
@@ -103,7 +106,9 @@ const OnlineBooking = () => {
       id: "2",
       title: t("break_between_sessions"),
       subtitle:
-      selectedHour === 0 || selectedHour && selectedMinute === 0 || selectedMinute
+        selectedHour === 0 ||
+        (selectedHour && selectedMinute === 0) ||
+        selectedMinute
           ? `${selectedHour} час.  ${selectedMinute} мин.`
           : "Разные перерывы для каждой процедуры",
       IconComponent: <Ionicons name="wine" size={30} color="#9C0A35" />,
@@ -130,7 +135,10 @@ const OnlineBooking = () => {
           "(standart)/(onlineBooking)/(booking)/confirmationRecor"
         );
       },
-      isDisabled: selectedHour === 0 || selectedHour && selectedMinute === 0 || selectedMinute,
+      isDisabled:
+        selectedHour === 0 ||
+        (selectedHour && selectedMinute === 0) ||
+        selectedMinute,
     },
   ];
 
@@ -212,7 +220,9 @@ const OnlineBooking = () => {
       ) : (
         <SafeAreaView style={[tw`flex-1 mt-6`, { backgroundColor: "#21212E" }]}>
           <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-          <NavigationMenu name={"Моё расписание"} />
+          <View style={{ padding: 10 }}>
+            <NavigationMenu name={"Моё расписание"} />
+          </View>
           <View style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
             <ScrollView
               showsVerticalScrollIndicator={false}

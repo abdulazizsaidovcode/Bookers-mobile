@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     backgroundColor: "#21212E",
-    padding: 16,
+    paddingHorizontal: 16,
   },
   switchContainer: {
     paddingHorizontal: 16,

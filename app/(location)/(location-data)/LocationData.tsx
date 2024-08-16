@@ -145,7 +145,9 @@ const LocationData = () => {
   return (
     <SafeAreaView style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
       <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
+      <View style={{paddingHorizontal:10}}>
       <NavigationMenu name="Мой адрес работы" />
+</View>
       <View style={[tw`flex-1`, { backgroundColor: "#21212E" }]}>
         <ScrollView
           showsVerticalScrollIndicator={false}

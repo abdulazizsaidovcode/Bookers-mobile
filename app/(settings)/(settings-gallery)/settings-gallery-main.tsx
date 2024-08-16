@@ -74,11 +74,11 @@ const SettingsGalleryMain = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <StatusBar style="light" />
-                <View>
+                <View style={{paddingHorizontal: 10}}>
                     <NavigationMenu name='Моя галерея' />
                 </View>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.content}>
                     <View>
                         <View style={{
@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         justifyContent: 'space-between',
+        paddingHorizontal:5
     },
     content: {
         padding: 10,

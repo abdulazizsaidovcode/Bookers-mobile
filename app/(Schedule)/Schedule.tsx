@@ -123,7 +123,7 @@ const Schedule: React.FC = () => {
           <View>
             <Text
               style={[
-                tw`text-white text-3xl my-7 font-bold`,
+                tw`text-white text-3xl mb-7 mt-12 font-bold`,
                 { letterSpacing: 2 },
               ]}
             >

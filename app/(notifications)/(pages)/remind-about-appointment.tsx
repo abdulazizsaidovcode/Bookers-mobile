@@ -93,7 +93,9 @@ const RemindAboutAppointment: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <StatusBar style="light" />
+        <View style={{paddingHorizontal:10}}>
         <NavigationMenu name="Напоминание о записи" />
+</View>
         <View style={{ padding: 15 }}>
           <View>
             <Text style={styles.title}>

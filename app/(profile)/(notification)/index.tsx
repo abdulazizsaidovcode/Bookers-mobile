@@ -80,7 +80,6 @@ const Notification: React.FC = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.padding}>
                 <View style={styles.header}>
                     <TouchableOpacity
                         onPress={() => {
@@ -105,6 +104,7 @@ const Notification: React.FC = () => {
                             <Text></Text>
                         )}
                 </View>
+            <View style={styles.padding}>
                 {isLoading && <ActivityIndicator size="large" color={"#888"} />}
                 {!isLoading && notifications && notifications.length === 0 && (
                     <Text style={tw` text-center text-white mt-10`}>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
         marginBottom: 16,
-        marginTop: 16,
+        marginTop: 36,
     },
     headerText: {
         color: "#fff",

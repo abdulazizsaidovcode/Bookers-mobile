@@ -37,7 +37,9 @@ const BreakBetweenSession = () => {
     <>
     {isLoading ? <Loading/> : <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#21212E" barStyle="light-content" />
+      <View style={{padding:10}}>
       <NavigationMenu name="Онлайн бронирование" />
+</View>
       
       <View style={styles.content}>
         <View style={styles.buttonContainerWrapper}>

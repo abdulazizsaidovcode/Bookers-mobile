@@ -859,13 +859,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
+    // paddingHorizontal:10
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    padding: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 15,
   },
   title: {
     fontSize: 26,

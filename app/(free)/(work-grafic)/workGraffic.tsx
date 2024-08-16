@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     height: 430,
     display: "flex",
     gap: 20,
+    paddingHorizontal:15
   },
   fullHeightSection: {
     flex: 1,
