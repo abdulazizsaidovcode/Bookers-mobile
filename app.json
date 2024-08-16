@@ -9,10 +9,9 @@
     "scheme": "bookers",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/loading.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff",
-      "tabletImage": "./assets/images/loading.png",
+      "tabletImage": "./assets/images/loading.jpg",
       "tabletBackgroundColor": "#ffffff",
       "imageResizeMode": "native",
       "loadingIndicator": "default",
@@ -21,7 +20,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.alisher09.bookersapp"
+      "bundleIdentifier": "com.alisher09.bookersapp",
+      "infoPlist": {
+        "NSLocationUsageDescription": "Bu dasturni ishlatish uchun joylashuvingiz kerak bo'lishi mumkin."
+      }
     },
     "android": {
       "googleServicesFile": "./google-services.json",

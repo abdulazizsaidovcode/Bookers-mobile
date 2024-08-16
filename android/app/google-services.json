@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "465821023678",
+    "project_id": "bookers-app",
+    "storage_bucket": "bookers-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:465821023678:android:2b054579017b03784e4def",
+        "android_client_info": {
+          "package_name": "com.alisher09.bookersapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqUvNhZSYtcLU70zuQ_38OE4dmhL4nLog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
