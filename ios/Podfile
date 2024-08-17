@@ -1,3 +1,5 @@
+# Podfile
+
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -7,7 +9,7 @@ podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties
 ENV['RCT_NEW_ARCH_ENABLED'] = podfile_properties['newArchEnabled'] == 'true' ? '1' : '0'
 ENV['EX_DEV_CLIENT_NETWORK_INSPECTOR'] = podfile_properties['EX_DEV_CLIENT_NETWORK_INSPECTOR']
 
-platform :ios, podfile_properties['ios.deploymentTarget'] || '13.4'
+platform :ios, podfile_properties['ios.deploymentTarget'] || '17.0'
 
 install! 'cocoapods',
   :deterministic_uuids => false
@@ -20,13 +22,9 @@ target 'Bookers' do
   use_frameworks!
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
   use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
-  # rn_maps_path = '../node_modules/react-native-maps'
-  # pod 'GoogleMaps'
-  # pod 'react-native-google-maps', :path => rn_maps_path
-    # React Native Maps dependencies
-    # rn_maps_path = '../node_modules/react-native-maps'
-    # pod 'react-native-google-maps', :path => rn_maps_path
-    pod 'react-native-maps', path: '../node_modules/react-native-maps'
+  
+  # React Native Maps dependencies
+  pod 'react-native-maps', path: '../node_modules/react-native-maps'
 
   use_react_native!(
     :hermes_enabled => podfile_properties['expo.jsEngine'] == nil || podfile_properties['expo.jsEngine'] == 'hermes',
@@ -39,11 +37,19 @@ target 'Bookers' do
     # Fix for Xcode 14 code signing issues
     installer.target_installation_results.pod_target_installation_results
       .each do |pod_name, target_installation_result|
-      target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
-        resource_bundle_target.build_configurations.each do |config|
-          config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
+          resource_bundle_target.build_configurations.each do |config|
+            config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+          end
         end
       end
+
+    # Add this block to ensure `expo-configure-project.sh` is executed
+    script_path = '../node_modules/expo/scripts/expo-configure-project.sh'
+    if File.exist?(script_path)
+      system("bash #{script_path}")
+    else
+      Pod::UI.warn "Warning: The script `expo-configure-project.sh` was not found at '#{script_path}'."
     end
   end
 
