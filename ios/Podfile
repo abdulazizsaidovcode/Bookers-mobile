@@ -17,15 +17,16 @@ prepare_react_native_project!
 target 'Bookers' do
   # use_expo_modules!
   # config = use_native_modules!
-
+  use_frameworks!
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
   use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
   # rn_maps_path = '../node_modules/react-native-maps'
   # pod 'GoogleMaps'
   # pod 'react-native-google-maps', :path => rn_maps_path
     # React Native Maps dependencies
-    rn_maps_path = '../node_modules/react-native-maps'
-    pod 'react-native-google-maps', :path => rn_maps_path
+    # rn_maps_path = '../node_modules/react-native-maps'
+    # pod 'react-native-google-maps', :path => rn_maps_path
+    pod 'react-native-maps', path: '../node_modules/react-native-maps'
 
   use_react_native!(
     :hermes_enabled => podfile_properties['expo.jsEngine'] == nil || podfile_properties['expo.jsEngine'] == 'hermes',
