@@ -1,4 +1,4 @@
-package com.alisher09.bookersapp
+package uz.sfera.com
 
 import android.os.Build
 import android.os.Bundle

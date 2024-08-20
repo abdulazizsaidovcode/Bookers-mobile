@@ -1,4 +1,4 @@
-package com.alisher09.bookersapp
+package uz.sfera.com
 
 import android.app.Application
 import android.content.res.Configuration
