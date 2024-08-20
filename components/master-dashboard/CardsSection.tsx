@@ -14,19 +14,42 @@ const COLORS = {
     mainRed: "#9C0A35",
 };
 
-const CardsSection: React.FC<{ mainStatisticData: any }> = ({
+const CardsSection: React.FC<{ mainStatisticData: any, hallCount: number, orderCount: number }> = ({
     mainStatisticData,
+    hallCount,
+    orderCount
 }) => (
     <View style={styles.cardsSection}>
         <View style={styles.card}>
-            <Text style={{ color: '#000' }}>Отменённые сеансы</Text>
+            <Text style={{ color: '#000', textAlign: 'center' }}>Запросы на бронирования</Text>
+            <Text style={{ color: COLORS.mainRed, fontSize: 24, fontWeight: "bold" }}>
+                {orderCount | 0}
+            </Text>
+        </View>
+        <View style={styles.card}>
+            <Text style={{ color: '#000', textAlign: 'center' }}>В зале ожидания</Text>
+            <Text style={{ color: COLORS.mainRed, fontSize: 24, fontWeight: "bold" }}>
+                {hallCount | 0}
+            </Text>
+        </View>
+        <View style={styles.card}>
+            <Text style={{ color: '#000', textAlign: 'center' }}>Отменённые записи</Text>
             <Text style={{ color: COLORS.mainRed, fontSize: 24, fontWeight: "bold" }}>
                 {mainStatisticData.rejectedOrder}
             </Text>
         </View>
-        <View style={[styles.card, styles.incomeCard]}>
-            <Text style={{ color: '#fff' }}>Доход в этом месяце</Text>
-            <Text style={styles.cardValue}>{mainStatisticData.incomeThisMonth}</Text>
+        <View style={styles.card}>
+            <Text style={{ color: '#000', textAlign: 'center' }}>Мой доход</Text>
+            <View style={{ width: '100%' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+                    <Text style={{ fontSize: 10 }}>за месяц</Text>
+                    <Text style={{ color: COLORS.mainRed, fontSize: 24, fontWeight: "bold" }}>{mainStatisticData.incomeThisMonth}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginTop: -10 }}>
+                    <Text style={{ fontSize: 10 }}>за период</Text>
+                    <Text style={{ color: COLORS.mainRed, fontSize: 24, fontWeight: "bold" }}>0</Text>
+                </View>
+            </View>
         </View>
     </View>
 );
@@ -37,7 +60,9 @@ const styles = StyleSheet.create({
     cardsSection: {
         flexDirection: "row",
         justifyContent: "space-between",
-        padding: 10,
+        paddingHorizontal: 10,
+        flexWrap: 'wrap',
+        rowGap: 9
     },
     card: {
         width: screenWidth / 2.15,

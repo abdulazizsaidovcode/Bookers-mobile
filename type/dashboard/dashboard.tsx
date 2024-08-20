@@ -59,21 +59,19 @@ export interface DashboardHallingOrder {
 }
 
 export interface ScheduleSectionProps {
-    dailyTimeData: DashboardDailyTimeOrders[];
-    regularVisitCount: number;
+    orderTimeSlots: DashboardDailyTimeOrders[];
     todayGraficData: TodayWorkGrafic;
-    notVisitCount: number;
     workPending: boolean;
-    vipCientsCount: number;
-    newClientsCount: number;
+    isOpen: boolean
+    toggleIsOpen: () => void;
 }
 
 export interface StatisticsProps {
     mainStatisticData: any;
     chartNumerator: number;
     chartDenominator: number;
-    statisticNumerator: string;
-    statisticDenominator: string;
+    statisticNumerator: number;
+    statisticDenominator: number;
 }
 export interface BookingRequestsProps {
     waitingData: DashboardWaitingOrder[];

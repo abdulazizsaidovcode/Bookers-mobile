@@ -10,7 +10,6 @@ const COLORS = {
     gray: "gray",
     booked: "#219653",
     free: "#828282",
-    vip: "#9C0A35",
     new: "#00A1D3",
     cardBackground: "#B9B9C9",
     mainRed: "#9C0A35",
@@ -23,13 +22,11 @@ const renderTimeSlot = ({ item }: any) => (
     <View
         style={[
             styles.timeSlot,
-            item.type === "REGULAR_VISIT"
-                ? styles.bookedSlot
-                : item.type === "STOPPED_VISIT"
-                    ? styles.freeSlot
-                    : item.type === "VIP"
-                        ? styles.vipSlot
-                        : styles.newSlot,
+            item.type === "STOPPED_VISIT"
+                ? styles.freeSlot
+                : item.type === "REGULAR_VISIT"
+                    ? styles.vipSlot
+                    : styles.newSlot,
         ]}
     >
         <Text style={{ color: COLORS.white }}>
@@ -130,7 +127,7 @@ const styles = StyleSheet.create({
     timeSlot: {
         width: screenWidth / 4.4,
         paddingVertical: 10,
-        marginHorizontal: 5,
+        // marginHorizontal: 5,
         borderRadius: 5,
         alignItems: "center",
     },
@@ -141,7 +138,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.free,
     },
     vipSlot: {
-        backgroundColor: COLORS.vip,
+        backgroundColor: COLORS.mainRed,
     },
     newSlot: {
         backgroundColor: COLORS.new,

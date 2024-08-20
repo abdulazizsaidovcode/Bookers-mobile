@@ -8,7 +8,6 @@ const COLORS = {
     gray: "gray",
     booked: "#219653",
     free: "#828282",
-    vip: "#9C0A35",
     new: "#00A1D3",
     cardBackground: "#B9B9C9",
     mainRed: "#9C0A35",
@@ -29,20 +28,27 @@ const Statistics: React.FC<StatisticsProps> = ({
             <Text style={styles.statsTitle}>Выполнено сеансов</Text>
             <PieChart
                 widthAndHeight={100}
-                series={[chartNumerator && chartDenominator ? chartNumerator : 1, chartDenominator && chartNumerator ? chartDenominator : 1]}
+                series={[chartNumerator | 1, chartDenominator | 1]}
                 sliceColor={[COLORS.mainRed, COLORS.background]}
                 coverRadius={0.6}
                 coverFill={COLORS.cardBackground}
             />
             <Text style={styles.statsText}>
-                {mainStatisticData.completedSessions} Сеансы
+                {mainStatisticData.completedSessions}
             </Text>
         </View>
         <View style={styles.statsContainer}>
-            <Text style={styles.statsTitle}>Доход сегодня</Text>
-            <Text style={styles.incomeText}>{statisticNumerator || 0} сум</Text>
-            <Text style={styles.incomeTextSmall}>из</Text>
-            <Text style={styles.incomeText}>{statisticDenominator || 0} сум</Text>
+            <Text style={styles.statsTitle}>Доход на сегодня</Text>
+            <PieChart
+                widthAndHeight={100}
+                series={[statisticNumerator | 1, statisticDenominator | 1]}
+                sliceColor={[COLORS.mainRed, COLORS.background]}
+                coverRadius={0.6}
+                coverFill={COLORS.cardBackground}
+            />
+            <Text style={styles.statsText}>
+                {statisticNumerator}/{statisticDenominator}
+            </Text>
         </View>
     </View>
 );
@@ -51,7 +57,8 @@ export default Statistics
 
 const styles = StyleSheet.create({
     statsSection: {
-        padding: 10,
+        paddingHorizontal: 10,
+        marginBottom: 10,
         flexDirection: "row",
         justifyContent: "space-between",
     },

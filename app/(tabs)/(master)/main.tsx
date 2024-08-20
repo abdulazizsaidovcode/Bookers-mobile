@@ -28,6 +28,8 @@ import ScheduleSection from "@/components/master-dashboard/ScheduleSection";
 import CardsSection from "@/components/master-dashboard/CardsSection";
 import { BookingRequests, BookingRequestsHall } from "@/components/master-dashboard/RequetsCard";
 import Statistics from "@/components/master-dashboard/MainStatistics";
+import { getClientStatistics } from "@/helpers/api-function/client/client";
+import { ClientStatus } from "@/type/client/client";
 
 export const getConfig = async () => {
   try {
@@ -99,6 +101,8 @@ const TabOneScreen: React.FC = () => {
   const [orderId, setOrderId] = useState("");
   const [tariff, setTariff] = useState(null);
   const [workPending, setWorkPending] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [clientCounts, setClientCounts] = useState<ClientStatus | null>(null)
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e: any) => {
@@ -122,6 +126,7 @@ const TabOneScreen: React.FC = () => {
       getNumbers(setNumber);
       getTariffMaster(setTariffMaster);
       getMasterTariff(setTariff);
+      getClientStatistics(setClientCounts)
 
       if (number && number.length > 0) {
         const res = removeDuplicatesAndSort(number);
@@ -234,32 +239,13 @@ const TabOneScreen: React.FC = () => {
     setRejectedIsModal(!isRejectedModal);
   };
 
+  const toggleIsOpen = () => setIsOpen(!isOpen)
+
   const chartFraction = mainStatisticData.completedSessions;
   const [chartNumerator, chartDenominator] = chartFraction.split("/");
   const statisticFraction = mainStatisticData.incomeToday;
-  const [statisticNumerator, statisticDenominator] = statisticFraction.split(
-    "/"
-  );
-  const regularVisitCount =
-    dailyTimeData && dailyTimeData.length !== 0
-      ? dailyTimeData &&
-      dailyTimeData.filter((item) => item.type === "REGULAR_VISIT").length
-      : 0;
-  const notVisitCount =
-    dailyTimeData && dailyTimeData.length !== 0
-      ? dailyTimeData &&
-      dailyTimeData.filter((item) => item.type === "STOPPED_VISIT").length
-      : 0;
-  const vipCientsCount =
-    dailyTimeData && dailyTimeData.length !== 0
-      ? dailyTimeData &&
-      dailyTimeData.filter((item) => item.type === "VIP").length
-      : 0;
-  const newClientsCount =
-    dailyTimeData && dailyTimeData.length! == 0
-      ? dailyTimeData &&
-      dailyTimeData.filter((item) => item.type === "NEW").length
-      : 0;
+  const [statisticNumerator, statisticDenominator] = statisticFraction.split("/");
+  const orderTimeSlots = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "REGULAR_VISIT") : [];
 
   const handleConfirmOrReject = (status: string) =>
     editOrderStatus(
@@ -285,20 +271,28 @@ const TabOneScreen: React.FC = () => {
         <ScheduleSection
           todayGraficData={todayGraficData}
           workPending={workPending}
-          dailyTimeData={dailyTimeData}
-          regularVisitCount={regularVisitCount}
-          notVisitCount={notVisitCount}
-          vipCientsCount={vipCientsCount}
-          newClientsCount={newClientsCount}
+          isOpen={isOpen}
+          toggleIsOpen={toggleIsOpen}
+          orderTimeSlots={orderTimeSlots}
         />
+        <View style={{ padding: 10 }}>
+          <View style={{ backgroundColor: '#9C0A35', borderRadius: 15, justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+            <Text style={{ color: 'white', fontSize: 20 }}>Мои клиенты</Text>
+            <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}>{clientCounts?.allClient || 0}</Text>
+          </View>
+        </View>
         <Statistics
           mainStatisticData={mainStatisticData}
           chartNumerator={+chartNumerator}
           chartDenominator={+chartDenominator}
-          statisticNumerator={statisticNumerator}
-          statisticDenominator={statisticDenominator}
+          statisticNumerator={+statisticNumerator}
+          statisticDenominator={+statisticDenominator}
         />
-        <CardsSection mainStatisticData={mainStatisticData} />
+        <CardsSection
+          mainStatisticData={mainStatisticData}
+          hallCount={hallData.length}
+          orderCount={waitingData.length}
+        />
         {!isLoading ? (
           <BookingRequests
             setWaitingData={setWaitingData}

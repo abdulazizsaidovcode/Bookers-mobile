@@ -1,8 +1,9 @@
+import React from 'react';
 import { ScheduleSectionProps } from "@/type/dashboard/dashboard";
-import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
+import { Dimensions, FlatList, LayoutAnimation, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Loading } from "../loading/loading";
 import { renderTimeSlot } from "./renderedItems";
-
+import { MaterialIcons } from '@expo/vector-icons';
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -13,7 +14,6 @@ const COLORS = {
     gray: "gray",
     booked: "#219653",
     free: "#828282",
-    vip: "#9C0A35",
     new: "#00A1D3",
     cardBackground: "#B9B9C9",
     mainRed: "#9C0A35",
@@ -29,59 +29,59 @@ const StatusIndicator: React.FC<{ color: string; text: string }> = ({
     </View>
 );
 
-
 const ScheduleSection: React.FC<ScheduleSectionProps> = ({
-    dailyTimeData,
+    orderTimeSlots,
     todayGraficData,
-    regularVisitCount,
-    notVisitCount,
     workPending,
-    vipCientsCount,
-    newClientsCount,
-}) => (
-    <>
-        <View style={styles.scheduleSection}>
-            <Text style={styles.sectionTitle}>Расписание на сегодня</Text>
-            <Text style={styles.sectionSubtitle}>
-                {todayGraficData.from && todayGraficData.end
-                    ? `Время работы: с ${todayGraficData.from.slice(
-                        0,
-                        5
-                    )} до ${todayGraficData.end.slice(0, 5)}`
-                    : "Время работы: ваша графическая работа не настроена"}
-            </Text>
-        </View>
-        {workPending ? <Loading /> : dailyTimeData && (
-            <FlatList
-                data={dailyTimeData}
-                renderItem={renderTimeSlot}
-                keyExtractor={(item) => item.time}
-                horizontal
-                style={{ paddingVertical: 10 }}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.scheduleContainer}
-            />
-        )}
-        <View style={styles.statusContainer}>
-            <StatusIndicator
-                color={COLORS.booked}
-                text={`Забронировано (${regularVisitCount || 0})`}
-            />
-            <StatusIndicator
-                color={COLORS.free}
-                text={`Свободно (${notVisitCount || 0})`}
-            />
-            <StatusIndicator
-                color={COLORS.vip}
-                text={`VIP клиенты (${vipCientsCount || 0})`}
-            />
-            <StatusIndicator
-                color={COLORS.new}
-                text={`Новые клиенты (${newClientsCount || 0})`}
-            />
-        </View>
-    </>
-);
+    isOpen,
+    toggleIsOpen
+}) => {
+
+    const handleToggleIsOpen = () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        toggleIsOpen();
+    };
+
+    return (
+        <>
+            <TouchableOpacity onPress={handleToggleIsOpen} activeOpacity={0.8} style={styles.scheduleSection}>
+                <View>
+                    <Text style={styles.sectionTitle}>Расписание на сегодня</Text>
+                    <Text style={styles.sectionSubtitle}>
+                        {todayGraficData.from && todayGraficData.end ? `Время работы: с ${todayGraficData.from.slice(0, 5)} до ${todayGraficData.end.slice(0, 5)}` : "Время работы: необходимо настроить"}
+                    </Text>
+                </View>
+                <View>
+                    <MaterialIcons name={isOpen ? "keyboard-arrow-down" : "keyboard-arrow-right"} size={30} color="white" />
+                </View>
+            </TouchableOpacity>
+
+            <View style={styles.statusContainer}>
+                <StatusIndicator
+                    color={COLORS.mainRed}
+                    text={`Забронировано (${orderTimeSlots.length | 0})`}
+                />
+                <StatusIndicator
+                    color={COLORS.free}
+                    text={`Свободные слоты`}
+                />
+            </View>
+            {isOpen ? workPending ? <Loading /> : orderTimeSlots && (
+                <View style={{ marginTop: 5}}>
+                    <FlatList
+                        data={orderTimeSlots}
+                        renderItem={renderTimeSlot}
+                        keyExtractor={(item) => item.time}
+                        style={{ paddingVertical: 5 }}
+                        numColumns={2}
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={styles.scheduleContainer}
+                    />
+                </View>
+            ) : null}
+        </>
+    );
+};
 
 export default ScheduleSection;
 
@@ -89,11 +89,11 @@ const styles = StyleSheet.create({
     daylyStatus: {
         flexDirection: "row",
         alignItems: "center",
-        paddingHorizontal: 5,
-        paddingVertical: 7,
-        borderWidth: 1,
-        borderColor: COLORS.gray,
+        backgroundColor: COLORS.white,
         borderRadius: 5,
+        paddingVertical: 7,
+        justifyContent: 'center',
+        width: screenWidth / 2.15,
     },
     statusColor: {
         width: screenWidth / 50,
@@ -101,12 +101,15 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     statusText: {
-        fontSize: screenWidth / 50,
-        color: COLORS.white,
+        fontSize: screenWidth / 35,
+        color: '#000',
         marginLeft: 4,
     },
     scheduleSection: {
         padding: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     sectionTitle: {
         color: COLORS.white,
@@ -114,6 +117,7 @@ const styles = StyleSheet.create({
     },
     sectionSubtitle: {
         color: COLORS.gray,
+        width: screenWidth / 1.3
     },
     scheduleContainer: {
         paddingHorizontal: 10,
@@ -123,4 +127,4 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         paddingHorizontal: 10,
     },
-})
+});
