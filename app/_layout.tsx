@@ -150,6 +150,7 @@ import ResponseLocationEdit from "./(location)/(response-location)/ResponseLocat
 import ProfilePage from "./(profile)";
 import FavouriteOrders from "./(client)/(favourite-orders)/favourite-orders";
 import MastersScreen from "./(tabs)/(client)/masters-screen";
+import Offer from "./(auth)/(offer)/offer";
 // import ResponseLocationEdit from "./(location)/(response-location)/responseLocationEdit";
 
 const Stack = createNativeStackNavigator();
@@ -912,6 +913,11 @@ function RootLayoutNav() {
               options={{ headerShown: false }}
               name="(client)/(oreder)/orderDetail"
               component={ClientOrderDetail}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="(auth)/(offer)/offer"
+              component={Offer}
             />
           </Stack.Navigator>
         </MenuProvider>

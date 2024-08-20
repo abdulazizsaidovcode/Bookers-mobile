@@ -39,7 +39,7 @@ export const checkNumberFunction = async (phoneNumber: string, setCode: (value: 
 
 }
 
-export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any, isRegtered: boolean) => {
+export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any, isRegtered: boolean, setischeck: any) => {
     const setData = { phoneNumber: phoneNumber }
 
     axios.post(`${register_page}checkCode?code=${otpValue}`, setData)
@@ -50,10 +50,11 @@ export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any
         .catch(err => {
             Toast.show("Вы ввели неправильный пароль", Toast.LONG)
             setRespone(false);
+            setischeck(true)
         })
 }
 
-export const authLogin = async (phoneNumber: string, otpValue: string, setRespone: any, setRole: any) => {
+export const authLogin = async (phoneNumber: string, otpValue: string, setRespone: any, setRole: any, setischeck: any) => {
     const authData = {
         phone: phoneNumber,
         code: otpValue
@@ -70,11 +71,13 @@ export const authLogin = async (phoneNumber: string, otpValue: string, setRespon
                     Toast.show("siz logindan o'tdingiz", Toast.LONG)
                 } else {
                     setRespone(null)
+                    setischeck(true)
                     Toast.show(res.data.message, Toast.LONG)
                 }
             })
             .catch(err => {
                 setRespone(null)
+                setischeck(true)
                 Toast.show(err?.response?.data?.message, Toast.LONG)
             })
     } else Toast.show('Номер телефона обязателен', Toast.SHORT)
@@ -176,12 +179,13 @@ export const registerClient = async ({ firstName, lastName, phoneNumber, img, se
 }
 
 export const deviceInfo = async (fcmToken: any) => {
-    const payload = { 
+    const payload = {
         deviceId: uuidv4(),
-        deviceType: Platform.OS === 'ios' ? 'IOS' : 'ANDROID', 
-        fcmToken }
+        deviceType: Platform.OS === 'ios' ? 'IOS' : 'ANDROID',
+        fcmToken
+    }
     console.log('adadasdewfjnerijnerwijgfneign erijgneijogneijogneiojgn ', payload);
-    
+
     const config = await getConfig()
     try {
         const { data } = await axios.post(`${register_page}device-info`, payload, config ? config : {})

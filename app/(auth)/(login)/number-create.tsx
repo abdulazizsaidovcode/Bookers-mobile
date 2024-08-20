@@ -9,8 +9,9 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import { checkNumberFunction } from '@/helpers/api-function/register/registrFC';
 import isRegister from '@/helpers/state_managment/isRegister/isRegister'
 import LoadingButtons from '@/components/(buttons)/loadingButton';
-import { useFocusEffect } from 'expo-router';
-import {useRoute} from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from 'expo-router';
+import { useRoute } from "@react-navigation/native";
+import { Feather } from '@expo/vector-icons';
 
 const PhoneNumberInput: React.FC = () => {
     const route = useRoute()
@@ -20,9 +21,12 @@ const PhoneNumberInput: React.FC = () => {
     const [status, setStatus] = useState<boolean>(false);
     const { t } = useTranslation();
     const [pending, setPending] = useState(false);
+    const [isVisibleValid, setIsVisibleValid] = useState<boolean>(false)
+    const navigation = useNavigation<any>()
 
     const handlePhoneNumberChange = (text: string) => {
         setPhoneNumber(text);
+
         setIsValid(phoneInput.current?.isValidNumber(text) ?? false);
     };
 
@@ -37,6 +41,15 @@ const PhoneNumberInput: React.FC = () => {
             if (route.name === '(auth)/(login)/number-create') setPhoneNumber('')
         }, [])
     )
+
+    console.log(phoneNumber);
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handlePress = () => {
+        setIsChecked(!isChecked);
+    };
+
+
 
     return (
         <View style={styles.container}>
@@ -71,11 +84,16 @@ const PhoneNumberInput: React.FC = () => {
                             autoFocus
                         />
                     </View>
-                    {!isValid && (
-                        <Text style={styles.errorText}>{t("invalid_phone_number")}</Text>
+                    {!isValid && isVisibleValid && phoneNumber.length == 13 && (
+                        <Text style={styles.errorText}>Неверный код подтверждения</Text>
+                    )}
+                    {!isVisibleValid && (
+                        <Text style={styles.errorText}>Валидация 9 та символ га бўлиш керак</Text>
                     )}
                 </View>
-                <View style={{ marginVertical: 20, width: '100%' }}>
+
+                {/*  -- ---- -- - - -- for new version --- - - - - - -- - - -  */}
+                {/* <View style={{ marginVertical: 20, width: '100%' }}>
                     <TouchableOpacity style={styles.socialButton} activeOpacity={0.7}>
                         <Image source={require('../../../assets/images/auth/google.png')} />
                         <Text style={styles.socialButtonText}>{t('login_google')}</Text>
@@ -84,18 +102,44 @@ const PhoneNumberInput: React.FC = () => {
                         <Image source={require('../../../assets/images/auth/facebook.png')} />
                         <Text style={styles.socialButtonText}>{t("login_facebook")}</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
             </ScrollView>
             <View style={{ marginVertical: 20 }}>
+                <View style={styles.containerIn}>
+                    <Pressable style={styles.checkboxContainer} onPress={handlePress}>
+                        <View style={{ backgroundColor: !isChecked ? '#21212E' : '#9C0A35', borderRadius: 2, borderWidth: 1, borderColor: isChecked ? '#9C0A35' : '#828282' }}>
+
+                            <Feather
+                                name={isChecked ? 'check' : 'radio'}
+                                size={20}
+                                color={isChecked ? '#fff' : '#21212E'}
+                            />
+                        </View>
+                        <View style={{ marginLeft: 16 }}>
+                            <Text style={[styles.text]}>Я подтверждаю что ознакомился с условиями</Text>
+                            <Pressable
+                                onPress={() => navigation.navigate('(auth)/(offer)/offer')}
+                            >
+                                <Text style={styles.link}>публичной оферты лицензионного соглашения политики конфиденциальности</Text>
+                            </Pressable>
+                        </View>
+                    </Pressable>
+                </View>
                 {!pending ?
-                    <Buttons
+                    (phoneNumber.length == 13 && <Buttons
                         title={"Войти"}
+                        isDisebled={isChecked}
                         onPress={() => {
-                            checkNumberFunction(phoneNumber, setCode, setPending, setStatus)
-                            setPending(true)
+                            if (isValid) {
+                                checkNumberFunction(phoneNumber, setCode, setPending, setStatus)
+                                setPending(true)
+                            } else {
+                                setIsVisibleValid(true)
+                                setPending(false)
+                            }
                         }}
                         backgroundColor={'#9C0A35'}
-                    />
+                    />)
                     :
                     <LoadingButtons
                         title={"Войти"}
@@ -111,7 +155,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#21212E',
-        padding: 16,
+        paddingHorizontal: 16,
         paddingTop: 0,
     },
     textContainer: {
@@ -140,20 +184,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
-        // borderColor: '#9C0A35',
-        borderWidth: 1,
-        // borderRadius: 10,
-        backgroundColor: '#4B4B64',
+        borderRadius: 10,
     },
     phoneInputContainer: {
         width: '100%',
         height: 60,
         borderRadius: 20,
+        backgroundColor: '#21212E'
     },
     phoneInputTextContainer: {
         backgroundColor: '#4B4B64',
-        borderTopRightRadius: 10,
-        borderBottomRightRadius: 10,
+        borderRadius: 10,
         flex: 1,
     },
     phoneInputText: {
@@ -166,13 +207,14 @@ const styles = StyleSheet.create({
     },
     flagButton: {
         borderRightColor: '#9C0A35',
-        borderRightWidth: 1,
         backgroundColor: '#4B4B64',
         paddingHorizontal: 10,
+        borderRadius: 10,
+        marginRight: 10,
     },
     errorText: {
-        color: '#FF0000',
-        marginTop: 5,
+        color: '#FB0A0A',
+        marginTop: 20,
     },
     loginButton: {
         marginTop: 20,
@@ -203,6 +245,29 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontWeight: '700',
         letterSpacing: 1,
+    },
+
+    containerIn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 10,
+        marginBottom: 30
+    },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    text: {
+        color: '#828282',
+        fontSize: 14,
+    },
+    textChecked: {
+        color: '#ffffff',
+    },
+    link: {
+        fontSize: 14,
+        textDecorationLine: 'underline',
+        color: '#828282',
     },
 });
 

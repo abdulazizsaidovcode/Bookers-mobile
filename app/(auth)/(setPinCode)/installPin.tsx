@@ -1,5 +1,5 @@
-import { useNavigation } from 'expo-router';
-import React, { useState, useRef, useEffect } from 'react';
+import { useFocusEffect, useNavigation } from 'expo-router';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, TextInput, StyleSheet, Alert, Text, TouchableOpacity, NativeSyntheticEvent, TextInputKeyPressEventData, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,25 +10,44 @@ type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/(
 
 
 const InstallPin: React.FC = () => {
-    const [otp, setOtp] = useState<string[]>(['1', '', '', '']);
+    const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
     const inputs = useRef<TextInput[]>([]);
     const [pending, setPending] = useState(false);
 
-    useEffect(() => {
-        const getStoredOtp = async () => {
-            try {
-                const storedOtp = await AsyncStorage.getItem('otp');
-                if (storedOtp) {
-                    setOtp(storedOtp.split(''));
+    useFocusEffect(
+        useCallback(() => {
+            async function checkOtp() {
+                // 1. otp qiymatini log bilan chiqarish
+                console.log(otp, '1 - Initial OTP state');
+
+                // 2. OTP qiymatlarini filtrlash, bo'sh bo'lmagan qiymatlarni olish
+                const filteredOtp = otp.filter(item => item !== '');
+
+                // 3. Agar 4 ta qiymat kiritilgan bo'lsa, OTP ni tozalash
+                if (filteredOtp.length === 4) {
+                    console.log('All OTP digits filled, clearing...');
+                    // setTimeoutni await qilishga hojat yo'q, chunki u singdiriladi.
+                    setTimeout(() => {
+                        setOtp(['', '', '', '']);
+                        console.log('OTP cleared');
+                    }, 100);
                 }
-            } catch (error) {
-                console.log('Failed to load OTP from storage', error);
+
+                // 4. Filtrlangan qiymatni log bilan chiqarish
+                console.log(filteredOtp, '3 - Filtered OTP state');
             }
-        };
-        setOtp(['', '', '', '']);
-        getStoredOtp();
-    }, []);
+
+            // 5. Funktsiyani chaqirish
+            checkOtp();
+
+            // 6. useFocusEffectdan tozalash funksiyasini qaytarish
+            return () => {
+                console.log('Cleaning up useFocusEffect...');
+            };
+        }, [otp]) // otp holatini kuzatib borish
+    );
+      
 
     const handlePaste = async () => {
         const text = await Clipboard.getString();
@@ -57,19 +76,30 @@ const InstallPin: React.FC = () => {
     };
 
     const isButtonEnabled = otp.every((digit) => digit.length > 0);
+    useEffect(() => {
+        const handleContinue = async () => {
+            console.log(otp, 9);
 
-    const handleContinue = async () => {
-        setPending(true)
-        try {
-            await AsyncStorage.setItem('otp', otp.join(''));
-            navigation.navigate('(auth)/(setPinCode)/checkInstalledPin');
-            setPending(false)
-            setOtp(['', '', '', ''])
-        } catch (error) {
-            setPending(false)
-            console.log('Failed to save OTP to storage', error);
-        }
-    };
+            let aa = await otp.filter((item) => item !== "")
+            console.log(otp, 10);
+            if (aa.length == 4) {
+                setPending(true)
+                try {
+                    await AsyncStorage.setItem('otp', otp.join(''));
+                    navigation.navigate('(auth)/(setPinCode)/checkInstalledPin');
+                    setPending(false)
+                    setOtp(['', '', '', ''])
+                } catch (error) {
+                    setPending(false)
+                    console.log('Failed to save OTP to storage', error);
+                }
+            }
+
+        };
+        handleContinue()
+
+    }, [otp])
+
 
     const { t } = useTranslation();
 
@@ -94,7 +124,7 @@ const InstallPin: React.FC = () => {
                         ))}
                     </View>
                 </View>
-                <View style={styles.bottomSection}>
+                {/* <View style={styles.bottomSection}>
                     {!pending ?
                         <TouchableOpacity
                             style={[
@@ -117,7 +147,7 @@ const InstallPin: React.FC = () => {
                         />
                     }
 
-                </View>
+                </View> */}
             </View>
         </SafeAreaView>
     );
@@ -153,8 +183,8 @@ const styles = StyleSheet.create({
         borderColor: '#4B4B64',
         backgroundColor: '#4B4B64',
         borderRadius: 10,
-        width: 50,
-        height: 50,
+        width: 62,
+        height: 62,
         margin: 4,
         textAlign: 'center',
         fontSize: 20,

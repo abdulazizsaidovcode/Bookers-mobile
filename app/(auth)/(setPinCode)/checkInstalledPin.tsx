@@ -202,6 +202,15 @@ const CheckPin: React.FC = () => {
 
     }
 
+    useEffect(() => {
+        let aa = otp.filter((item) => item !== '')
+        if (aa.length == 4) {
+            setPending(true)
+            if (!token) register()
+            else installPinCode()
+        }
+    }, [otp])
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
@@ -225,7 +234,7 @@ const CheckPin: React.FC = () => {
                         ))}
                     </View>
                 </View>
-                <View style={styles.bottomSection}>
+                {/* <View style={styles.bottomSection}>
                     {!pending ?
                         <TouchableOpacity
                             style={[
@@ -233,9 +242,7 @@ const CheckPin: React.FC = () => {
                                 { backgroundColor: isButtonEnabled ? '#9C0A35' : '#828282' },
                             ]}
                             onPress={() => {
-                                setPending(true)
-                                if (!token) register()
-                                else installPinCode()
+
                             }}
                             disabled={!isButtonEnabled}
                         >
@@ -252,7 +259,7 @@ const CheckPin: React.FC = () => {
                         />
                     }
 
-                </View>
+                </View> */}
             </View>
         </SafeAreaView>
     );
@@ -288,8 +295,8 @@ const styles = StyleSheet.create({
         borderColor: '#4B4B64',
         backgroundColor: '#4B4B64',
         borderRadius: 10,
-        width: 50,
-        height: 50,
+        width: 62,
+        height: 62,
         margin: 4,
         textAlign: 'center',
         fontSize: 20,

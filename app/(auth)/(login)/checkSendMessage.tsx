@@ -17,10 +17,11 @@ import {
     TextInputKeyPressEventData,
     NativeSyntheticEvent,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
 } from 'react-native';
 import { langstore } from '@/helpers/state_managment/lang/lang';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/checkSendMessage'>;
 
@@ -35,6 +36,7 @@ const OtpInputExample: React.FC = () => {
     const navigation = useNavigation<any>();
     const [roles, setRoles] = useState<string | null>(null);
     const [number, setNumber] = useState('');
+    const [isCheck, setischeck] = useState(false)
     const { setRole } = registerStory()
 
     const { t } = useTranslation();
@@ -43,7 +45,10 @@ const OtpInputExample: React.FC = () => {
         setIsDisabled(otpValue.some(digit => digit === ''));
     }, [otpValue]);
 
-    const handlePaste = (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+    const handlePaste = (event: any) => {
+        if (response == false || response == null) {
+            setischeck(true)
+        }
         const text = event.nativeEvent.text;
         if (text.length === 4 && /^\d{4}$/.test(text)) {
             const otpArray = text.split('');
@@ -55,6 +60,7 @@ const OtpInputExample: React.FC = () => {
     };
 
     const handleChangeText = (text: string, index: number) => {
+        setischeck(false)
         if (/^\d*$/.test(text)) {
             const newOtp = [...otpValue];
             newOtp[index] = text;
@@ -71,39 +77,54 @@ const OtpInputExample: React.FC = () => {
         }
     };
 
-    const handlePress = async () => {
-        setPending(true)
+    useEffect(() => {
+        console.log('a');
+        let a = otpValue.filter((item) => item !== '')
+        
+        const handlePress = async () => {
+            setPending(true)
+            if (a.length == 4) {
+                if (isRegtered) {
+                    await checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered, setischeck);
+                    setTimeout(() => {
+                        setPending(false)
+                    }, 700)
+                } else {
+                    await authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, setRoles, setischeck)
+                    setTimeout(() => {
+                        setPending(false)
+                    }, 700)
+                }
+            }
 
-        if (isRegtered) {
-            await checkCode(phoneNumber, otpValue.map((value) => value).join(''), setRespone, isRegtered);
-            setTimeout(() => {
-                setPending(false)
-            }, 700)
-        } else {
-            await authLogin(number ? number : phoneNumber, otpValue.map((value) => value).join(''), setRespone, setRoles)
-            setTimeout(() => {
-                setPending(false)
-            }, 700)
         }
-    }
+        handlePress()
+    }, [otpValue])
+
+
+
 
     useEffect(() => {
         setNumber(number)
     }, [phoneNumber])
 
     useEffect(() => {
+
+        console.log(isCheck);
+        console.log('asdf');
+
         async function finishwork() {
             if (roles) setRole(roles)
             setPending(false)
 
             if (response) {
                 let parol = await SecureStore.getItemAsync('password')
-                console.log(parol);
 
                 if (isRegtered) {
                     navigation.navigate("(auth)/(register)/(greetings)/greetingFirst");
                     setRespone(null);
                     setPending(false)
+                    setischeck(false)
                     setOtpValue(['', '', '', ''])
                 } else {
                     if (parol !== null) {
@@ -111,17 +132,20 @@ const OtpInputExample: React.FC = () => {
                             navigation.navigate('(tabs)/(master)');
                             setRespone(null);
                             setPending(false)
+                            setischeck(false)
                             setOtpValue(['', '', '', ''])
                         } else if (roles == 'ROLE_CLIENT') {
                             navigation.navigate('(tabs)/(client)');
                             setRespone(null);
                             setPending(false)
+                            setischeck(false)
                             setOtpValue(['', '', '', ''])
                         }
                     } else {
                         navigation.navigate("(auth)/(setPinCode)/installPin");
                         setRespone(null);
                         setPending(false)
+                        setischeck(false)
                         setOtpValue(['', '', '', ''])
                     }
                 }
@@ -140,33 +164,35 @@ const OtpInputExample: React.FC = () => {
 
 
     return (
-        <View style={styles.container}>
-            <View style={styles.textContainer}>
-                <Text style={styles.title}>{t("Confirmation_Number")}</Text>
-                <Text style={styles.phoneNumber}>{number}</Text>
-                <Text style={styles.instruction}>{t("we_sent_you_sms_with_code")}</Text>
-            </View>
-            <View style={styles.otpContainer}>
-                {otpValue.map((digit, index) => (
-                    <TextInput
-                        key={index}
-                        style={!response ? styles.inputFocused : styles.input}
-                        value={digit}
-                        onChangeText={(text) => handleChangeText(text, index)}
-                        onKeyPress={(e) => handleKeyPress(e, index)}
-                        ref={(ref) => (inputs.current[index] = ref!)}
-                        maxLength={1}
-                        keyboardType="numeric"
-                        onPaste={handlePaste}
-                    />
-                ))}
-            </View>
-            <View style={styles.buttonContainer}>
-                {!pending ?
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={styles.container}>
+                <View style={styles.textContainer}>
+                    <Text style={styles.title}>{t("Confirmation_Number")}</Text>
+                    <Text style={styles.phoneNumber}>{phoneNumber}</Text>
+                    <Text style={styles.instruction}>{t("we_sent_you_sms_with_code")}</Text>
+                </View>
+                <View style={styles.otpContainer}>
+                    {otpValue.map((digit, index) => (
+                        <TextInput
+                            key={index}
+                            style={isCheck ? styles.inputFocused : styles.input}
+                            value={digit}
+                            onChangeText={(text) => handleChangeText(text, index)}
+                            onKeyPress={(e) => handleKeyPress(e, index)}
+                            ref={(ref) => (inputs.current[index] = ref!)}
+                            maxLength={1}
+                            keyboardType="numeric"
+                            onPaste={handlePaste}
+                        />
+                    ))}
+                </View>
+                {isCheck && <Text style={{ color: '#FB0A0A', marginTop: 20 }}>Неверный код подтверждения</Text>}
+                <View style={styles.buttonContainer}>
+                    {/* {!pending ?
                     <TouchableOpacity
                         style={[styles.button, isDisabled && styles.disabledButton]}
                         disabled={isDisabled}
-                        onPress={handlePress}
+                        // onPress={handlePress}
                     >
                         <Text style={styles.buttonText}>{t("Confirm")}</Text>
                     </TouchableOpacity>
@@ -175,10 +201,11 @@ const OtpInputExample: React.FC = () => {
                         title={t("Confirm")}
                         backgroundColor={'#9C0A35'}
                     />
-                }
+                } */}
 
+                </View>
             </View>
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -186,52 +213,55 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#21212E',
-        justifyContent: 'space-between',
         alignItems: 'center',
         padding: 20,
     },
     textContainer: {
-        marginTop: 120,
+        marginTop: 60,
         alignItems: 'center',
     },
     title: {
-        fontSize: 20,
-        color: '#fff',
-        marginBottom: 10,
-    },
-    phoneNumber: {
         fontSize: 18,
         color: '#fff',
-        marginBottom: 5,
+        marginBottom: 10,
+        fontWeight: 'bold'
+    },
+    phoneNumber: {
+        fontSize: 28,
+        color: '#fff',
+        marginBottom: 15,
+        marginTop: 50,
     },
     instruction: {
-        fontSize: 14,
-        color: '#a1a1a1',
+        fontSize: 16,
+        color: '#828282',
+        paddingHorizontal: 15,
+        textAlign: 'center'
     },
     otpContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+        marginTop: 70
+
     },
     input: {
         borderWidth: 1,
-        borderColor: '#4e4e50',
+        borderColor: '#4B4B64',
         backgroundColor: '#2e2e3a',
         borderRadius: 8,
-        width: 50,
-        height: 50,
+        width: 62,
+        height: 62,
         margin: 10,
         textAlign: 'center',
         fontSize: 24,
         color: '#fff',
-    },
+    },  
     inputFocused: {
         borderWidth: 1,
-        borderColor: '#9C0A35',
+        borderColor: '#FB0A0A',
         backgroundColor: '#2e2e3a',
         borderRadius: 8,
-        width: 50,
-        height: 50,
+        width: 62,
+        height: 62,
         margin: 10,
         textAlign: 'center',
         fontSize: 24,
