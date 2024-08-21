@@ -125,7 +125,7 @@ const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
 
 const styles = StyleSheet.create({
     timeSlot: {
-        width: screenWidth / 4.4,
+        width: screenWidth / 4.6,
         paddingVertical: 10,
         // marginHorizontal: 5,
         borderRadius: 5,

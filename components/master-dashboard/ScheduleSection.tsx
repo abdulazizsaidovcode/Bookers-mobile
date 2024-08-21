@@ -67,13 +67,14 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
                 />
             </View>
             {isOpen ? workPending ? <Loading /> : orderTimeSlots && (
-                <View style={{ marginTop: 5}}>
+                <View style={{ marginTop: 5 }}>
                     <FlatList
                         data={orderTimeSlots}
                         renderItem={renderTimeSlot}
                         keyExtractor={(item) => item.time}
-                        style={{ paddingVertical: 5 }}
+                        style={{ paddingVertical: 5, }}
                         numColumns={2}
+                        columnWrapperStyle={{ gap: 10 }}
                         showsHorizontalScrollIndicator={false}
                         contentContainerStyle={styles.scheduleContainer}
                     />
