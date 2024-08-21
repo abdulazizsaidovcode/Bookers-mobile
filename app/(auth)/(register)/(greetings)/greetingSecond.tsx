@@ -6,6 +6,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import { useTranslation } from 'react-i18next';
 import { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
+import DatingSkip from '@/components/DatingSkip';
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/address-book'>;
 
 
@@ -24,7 +25,7 @@ const AuthPage2: React.FC = () => {
                     {t("Hassle_free_date_booking_with_hair")}
                 </Text>
             </View>
-            <Buttons title={t("Continue")} onPress={() => navigation.navigate('(auth)/(register)/(greetings)/greetingThird')} />
+            <DatingSkip navigation={navigation} navigate='(auth)/(register)/(greetings)/greetingThird' />
         </SafeAreaView>
     );
 }

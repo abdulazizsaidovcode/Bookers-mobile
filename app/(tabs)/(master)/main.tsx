@@ -318,8 +318,7 @@ const TabOneScreen: React.FC = () => {
             status={false}
           />
         )}
-        <View style={{ padding: 10 }}>
-
+        <View style={{ paddingHorizontal: 10 }}>
           <BusinessCard />
         </View>
         <CenteredModal
