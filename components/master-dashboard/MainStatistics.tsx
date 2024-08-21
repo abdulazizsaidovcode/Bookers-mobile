@@ -41,7 +41,7 @@ const Statistics: React.FC<StatisticsProps> = ({
             <Text style={styles.statsTitle}>Доход на сегодня</Text>
             <PieChart
                 widthAndHeight={100}
-                series={[statisticNumerator | 1, statisticDenominator | 1]}
+                series={[1 | 1, 1 | 1]}
                 sliceColor={[COLORS.mainRed, COLORS.background]}
                 coverRadius={0.6}
                 coverFill={COLORS.cardBackground}
