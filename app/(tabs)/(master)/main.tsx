@@ -30,6 +30,7 @@ import { BookingRequests, BookingRequestsHall } from "@/components/master-dashbo
 import Statistics from "@/components/master-dashboard/MainStatistics";
 import { getClientStatistics } from "@/helpers/api-function/client/client";
 import { ClientStatus } from "@/type/client/client";
+import BusinessCard from "@/components/master-dashboard/BusinessCard";
 
 export const getConfig = async () => {
   try {
@@ -317,6 +318,10 @@ const TabOneScreen: React.FC = () => {
             status={false}
           />
         )}
+        <View style={{ padding: 10 }}>
+
+          <BusinessCard />
+        </View>
         <CenteredModal
           isModal={isRejectedModal}
           toggleModal={toggleRejectModal}

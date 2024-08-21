@@ -2,12 +2,12 @@ import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { IButton } from "@/type/button/button";
 
-const Buttons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', icon, textColor = 'white', textSize = 18, onPress, isDisebled = true }) => {
+const Buttons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35', bordered = false, icon, textColor = 'white', textSize = 18, onPress, isDisebled = true }) => {
     return (
         <TouchableOpacity
             style={[
                 styles.button,
-                { backgroundColor: !isDisebled ? 'gray' : backgroundColor }
+                { backgroundColor: !isDisebled ? 'gray' : backgroundColor, borderWidth: bordered ? 1.5 : 0, borderColor: '#9C0A35' }
             ]}
             onPress={onPress}
             activeOpacity={.8}

@@ -5,6 +5,7 @@ export interface IButton {
     textColor?: string;
     textSize?: number;
     onPress?: () => void;
+    bordered?: boolean;
     isDisebled?: boolean;
     icon?: any
 }
