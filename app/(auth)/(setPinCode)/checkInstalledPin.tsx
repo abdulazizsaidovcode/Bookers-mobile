@@ -47,7 +47,7 @@ const CheckPin: React.FC = () => {
     const [otp, setOtp] = useState<string[]>(['', '', '', '']);
     const [storedOtp, setStoredOtp] = useState<any>(null);
     const [token, setToken] = useState<any | null>(null);
-    const [isCorrect, setIsCorrect] = useState<boolean | null>(true);
+    const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
     const [tokenData, setTokenData] = useState<string | null>('');
     const [isLogin, setIslogin] = useState<any>(false);
     const [pending, setPending] = useState(false);
@@ -110,6 +110,7 @@ const CheckPin: React.FC = () => {
     }, [isLogin])
 
     const handleChangeText = (text: string, index: number) => {
+        setIsCorrect(false)
         if (/^\d*$/.test(text)) {
             const newOtp = [...otp];
             newOtp[index] = text;
@@ -125,7 +126,7 @@ const CheckPin: React.FC = () => {
     // ----------- REGISTER ----------------- //
     const handleContinue = async () => {
         if (enteredOtp === storedOtp) {
-            setIsCorrect(true);
+            setIsCorrect(false);
 
             if (role === 'ROLE_MASTER') {
                 navigation.navigate('(tabs)/(master)')
@@ -137,7 +138,7 @@ const CheckPin: React.FC = () => {
                 setPending(false)
                 enteredOtp = ''
             }
-        } else setIsCorrect(false)
+        } else setIsCorrect(true)
     };
 
     // ----------- PIN install ----------------- //
@@ -162,7 +163,7 @@ const CheckPin: React.FC = () => {
                 Toast.show("karioche role yuq", Toast.SHORT);
             }
         } else {
-            setIsCorrect(false);
+            setIsCorrect(true);
             Toast.show("неверный пин-код", Toast.SHORT);
             setPending(false)
         }
@@ -195,7 +196,7 @@ const CheckPin: React.FC = () => {
                 })
             }
         } else {
-            setIsCorrect(false);
+            setIsCorrect(true);
             setPending(false)
             Toast.show("неверный пин-код", Toast.SHORT);
         }
@@ -211,6 +212,9 @@ const CheckPin: React.FC = () => {
         }
     }, [otp])
 
+    console.log(isCorrect);
+
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
@@ -222,7 +226,7 @@ const CheckPin: React.FC = () => {
                                 key={index}
                                 style={[
                                     styles.input,
-                                    isCorrect == true ? styles.inputSuccess : styles.inputError,
+                                    isCorrect == false ? styles.inputSuccess : styles.inputError,
                                 ]}
                                 value={digit ? "*" : ""}
                                 onChangeText={(text) => handleChangeText(text, index)}
@@ -306,7 +310,7 @@ const styles = StyleSheet.create({
         borderColor: 'red',
     },
     inputSuccess: {
-        borderColor: 'green',
+        borderColor: '#4B4B64',
     },
     bottomSection: {
         padding: 20,
