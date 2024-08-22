@@ -6,7 +6,7 @@ import { useNavigation } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View, Text, Image, SafeAreaView } from 'react-native';
-import {setClientOrMaster} from "@/constants/storage";
+import { setClientOrMaster } from "@/constants/storage";
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(auth)/(register)/(roleSelection)/masterORclient'>;
 
@@ -14,7 +14,8 @@ const MasterorClient: React.FC = () => {
     const { setRole } = registerStory()
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
-    const {t}=useTranslation()
+    const { t } = useTranslation()
+
     return (
         <SafeAreaView style={styles.container} >
             <View style={styles.logo}>
@@ -26,12 +27,12 @@ const MasterorClient: React.FC = () => {
                 <Buttons title={t("master")} backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_MASTER")
                     setClientOrMaster('ROLE_MASTER')
-                    navigation.navigate('(auth)/(register)/(roleSelection)/switchPage');
+                    navigation.navigate('(auth)/(register)/(masterInformation)/getNameSurname');
                 }} />
                 <Buttons title={t("client")} backgroundColor="#9C0A35" onPress={() => {
                     setRole("ROLE_CLIENT")
                     setClientOrMaster('ROLE_CLIENT')
-                    navigation.navigate('(auth)/(register)/(roleSelection)/switchPage');
+                    navigation.navigate('(auth)/(register)/(clientInformations)/getNameSurname')
                 }} />
             </View>
         </SafeAreaView>

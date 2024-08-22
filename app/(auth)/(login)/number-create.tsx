@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image, Pressable } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 import Buttons from '@/components/(buttons)/button';
@@ -12,10 +12,11 @@ import LoadingButtons from '@/components/(buttons)/loadingButton';
 import { useFocusEffect, useNavigation } from 'expo-router';
 import { useRoute } from "@react-navigation/native";
 import { Feather } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PhoneNumberInput: React.FC = () => {
     const route = useRoute()
-    const { phoneNumber, setPhoneNumber, setIsValid, isValid, setCode } = registerStory()
+    const { phoneNumber, setPhoneNumber, setIsValid, isValid, setCode, code } = registerStory()
     const phoneInput = useRef<PhoneInput>(null);
     const { setIsRegtered } = isRegister()
     const [status, setStatus] = useState<boolean>(false);
@@ -23,6 +24,8 @@ const PhoneNumberInput: React.FC = () => {
     const [pending, setPending] = useState(false);
     const [isVisibleValid, setIsVisibleValid] = useState<boolean>(false)
     const navigation = useNavigation<any>()
+    const [isChecked, setIsChecked] = useState(false);
+
 
     const handlePhoneNumberChange = (text: string) => {
         setPhoneNumber(text);
@@ -36,17 +39,32 @@ const PhoneNumberInput: React.FC = () => {
         }, [status])
     )
 
+    useEffect(() => {
+        if (phoneNumber.length == 13) {
+            if (isValid) {
+                setPending(true)
+                checkNumberFunction(phoneNumber, setCode, setPending, setStatus)
+            } else {
+                setIsVisibleValid(true)
+                setPending(false)
+            }
+        }
+    }, [phoneNumber])
+
+    console.log(code);
+
+
     useFocusEffect(
         useCallback(() => {
-            if (route.name === '(auth)/(login)/number-create') setPhoneNumber('')
+            setPhoneNumber('')
         }, [])
     )
 
-    console.log(phoneNumber);
-    const [isChecked, setIsChecked] = useState(false);
 
     const handlePress = () => {
-        setIsChecked(!isChecked);
+        if(status == true){
+            setIsChecked(!isChecked);
+        }
     };
 
 
@@ -87,9 +105,9 @@ const PhoneNumberInput: React.FC = () => {
                     {!isValid && isVisibleValid && phoneNumber.length == 13 && (
                         <Text style={styles.errorText}>Неверный код подтверждения</Text>
                     )}
-                    {!isVisibleValid && (
+                    {/* {!isVisibleValid && (
                         <Text style={styles.errorText}>Валидация 9 та символ га бўлиш керак</Text>
-                    )}
+                    )} */}
                 </View>
 
                 {/*  -- ---- -- - - -- for new version --- - - - - - -- - - -  */}
@@ -105,10 +123,9 @@ const PhoneNumberInput: React.FC = () => {
                 </View> */}
             </ScrollView>
             <View style={{ marginVertical: 20 }}>
-                <View style={styles.containerIn}>
+                {status == true && <View style={styles.containerIn}>
                     <Pressable style={styles.checkboxContainer} onPress={handlePress}>
                         <View style={{ backgroundColor: !isChecked ? '#21212E' : '#9C0A35', borderRadius: 2, borderWidth: 1, borderColor: isChecked ? '#9C0A35' : '#828282' }}>
-
                             <Feather
                                 name={isChecked ? 'check' : 'radio'}
                                 size={20}
@@ -125,24 +142,23 @@ const PhoneNumberInput: React.FC = () => {
                         </View>
                     </Pressable>
                 </View>
+                }
                 {!pending ?
-                    (phoneNumber.length == 13 && <Buttons
-                        title={"Войти"}
-                        isDisebled={isChecked}
-                        onPress={() => {
-                            if (isValid) {
-                                checkNumberFunction(phoneNumber, setCode, setPending, setStatus)
+                    (code && phoneNumber.length == 13 &&
+                        <Buttons
+                            isDisebled={status !== true || isChecked}
+                            title={status !== true ? "Войти" : "Регистрация"}
+                            onPress={() => {
+
                                 setPending(true)
-                            } else {
-                                setIsVisibleValid(true)
-                                setPending(false)
-                            }
-                        }}
-                        backgroundColor={'#9C0A35'}
-                    />)
+                                AsyncStorage.setItem('Agrement', 'true')
+                                navigation.navigate('(auth)/(login)/checkSendMessage')
+                            }}
+                            backgroundColor={'#9C0A35'}
+                        />)
                     :
                     <LoadingButtons
-                        title={"Войти"}
+                        title={""}
                         backgroundColor={'#9C0A35'}
                     />
                 }

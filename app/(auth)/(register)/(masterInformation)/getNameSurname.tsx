@@ -4,10 +4,10 @@ import registerStory from '@/helpers/state_managment/auth/register';
 import { useNavigation } from 'expo-router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
 const UserInfo: React.FC = () => {
-    const { firstName, setFirstName, lastName, setLastName, firstNameError, setFirstNameError, lastNameError, setLastNameError } = registerStory();
+    const { firstName, setFirstName, lastName, setLastName, firstNameError, setFirstNameError, lastNameError, setLastNameError, nickname, setNickname } = registerStory();
     const { t } = useTranslation();
     const navigate = useNavigation<any>();
 
@@ -35,16 +35,24 @@ const UserInfo: React.FC = () => {
             setLastNameError('');
         }
     };
+    const handleSkip = () => {
+        setPending(true);
+        // Nickname ni bo'sh qilib belgilash
+        setNickname('');
+        // Navigate to the next page
+        navigate.navigate('(auth)/(register)/(masterInformation)/getPhoto');
+        setPending(false);
+    };
 
     const isButtonEnabled = firstName.length > 0 && lastName.length > 0 && firstNameError === '' && lastNameError === '';
 
     return (
         <View style={styles.container}>
-            <View style={styles.topSection}>
+            <ScrollView
+                showsHorizontalScrollIndicator={false}
+                style={styles.topSection}>
                 <View style={styles.progressBar}>
                     <View style={styles.progressIndicator} />
-                    <View style={styles.progressSegment} />
-                    <View style={styles.progressSegment} />
                     <View style={styles.progressSegment} />
                 </View>
                 <Text style={styles.label}>{t("your_first_and_last_name")}</Text>
@@ -64,14 +72,26 @@ const UserInfo: React.FC = () => {
                     onChangeText={handleLastNameChange}
                 />
                 {lastNameError ? <Text style={styles.errorText}>{lastNameError}</Text> : null}
-            </View>
+                <TextInput
+                    style={styles.input}
+                    placeholder={t("nickname")}
+                    placeholderTextColor="#8A8A8A"
+                    value={nickname}
+                    onChangeText={setNickname}
+                />
+            </ScrollView>
             <View style={styles.bottomSection}>
+                {nickname.length === 0 && lastName.length === 0 && firstName.length === 0 ? (
+                    <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
+                        <Text style={styles.skipButtonText}>{t("skip")}</Text>
+                    </TouchableOpacity>
+                ) : null}
                 {!pending ?
                     <Buttons title={t("Continue")}
                         isDisebled={!!isButtonEnabled}
                         onPress={() => {
                             setPending(true);
-                            navigate.navigate('(auth)/(register)/(masterInformation)/getNickName');
+                            navigate.navigate('(auth)/(register)/(masterInformation)/getPhoto');
                             setPending(false);
                         }}
                     /> :
@@ -97,8 +117,10 @@ const styles = StyleSheet.create({
     progressBar: {
         flexDirection: 'row',
         height: 5,
-        marginTop: 40,
         borderRadius: 5,
+        paddingHorizontal: 20,
+        marginTop: 100,
+
     },
     progressIndicator: {
         flex: 1,
@@ -118,7 +140,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     input: {
-        height: 50,
+        height: 55,
         borderColor: '#4B4B64',
         backgroundColor: '#4B4B64',
         borderWidth: 1,
@@ -129,6 +151,8 @@ const styles = StyleSheet.create({
     },
     bottomSection: {
         justifyContent: 'flex-end',
+        backgroundColor: '#21212E',
+        paddingTop: 15
     },
     button: {
         borderRadius: 10,
@@ -142,6 +166,17 @@ const styles = StyleSheet.create({
     errorText: {
         color: '#FF0000',
         marginTop: 5,
+    },
+    skipButton: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        paddingVertical: 15,
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    skipButtonText: {
+        color: '#9C0A35',
+        fontSize: 16,
     },
 });
 
