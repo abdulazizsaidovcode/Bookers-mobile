@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     headerText: {
         color: 'white',
         fontSize: 12,
-    },
+    }, 
     title: {
         color: '#000',
         fontSize: 20,
