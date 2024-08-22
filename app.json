@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Bookers",
-    "slug": "bookers-app",
-    "owner": "it-ca",
+    "slug": "bookers",
+    "owner": "abdulaziziz",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/splash.png",
@@ -68,7 +68,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "2b64521f-4869-4570-a629-1d2b655db867",
+        "projectId": "b3ff7d4a-1888-41a4-866d-1f009521707c",
         "apiBaseUrl": "https://app.bookers.one/"
       }
     }
