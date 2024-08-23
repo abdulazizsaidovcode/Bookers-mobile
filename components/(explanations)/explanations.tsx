@@ -11,13 +11,13 @@ const Explanations:React.FC<{text :string}> = ({ text }) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#fff',
-        padding: 16,
+        padding: 10,
         borderRadius: 15,
     },
     text: {
         textAlign: 'center',
         color: '#4F4F4F',
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '300',
     }
 })
