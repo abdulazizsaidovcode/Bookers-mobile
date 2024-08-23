@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { IButton } from "@/type/button/button";
+import { View } from '../Themed';
 
 const ButtonsLighting: React.FC<IButton> = ({ title, backgroundColor = '#fff', bordered = false, icon, textColor = '#9C0A35', textSize = 18, onPress, isDisebled = true }) => {
     return (
@@ -21,15 +22,19 @@ const ButtonsLighting: React.FC<IButton> = ({ title, backgroundColor = '#fff', b
 };
 
 const styles = StyleSheet.create({
+
     button: {
         marginTop: 20,
         width: '100%',
         paddingVertical: 12,
-        borderRadius: 10,
+        borderRadius: 14,
         alignItems: 'center',
         justifyContent: 'center',
-        // shadowOffset: { width: -2, height: 0 },  // No horizontal or vertical offset
-        
+        backgroundColor: '#fff',
+        alignSelf: 'center',
+        elevation: 10,
+        shadowColor: 'white',
+
     },
     buttonText: {
         fontWeight: '500',
