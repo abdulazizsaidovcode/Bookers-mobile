@@ -9,6 +9,8 @@ import Buttons from '@/components/(buttons)/button';
 import { getChatList } from '@/helpers/api-function/chat/chat';
 import { usePinCode } from '@/context/PinContext';
 import CheckPinCode from '../(auth)/(checkPinCode)/checkPinCodeAbsolute';
+import Explanations from '@/components/(explanations)/explanations';
+import ButtonsLighting from '@/components/(buttons)/buttonLIghting';
 
 const ChatSupport = () => {
     const { stompClient, adminId } = useStomp();
@@ -48,6 +50,7 @@ const ChatSupport = () => {
                     onPress={handlePress}
                 />
             </View>
+            <ButtonsLighting title='hello' />
             {/* ) :
                 <ChatList userData={chatData} />
             } */}
