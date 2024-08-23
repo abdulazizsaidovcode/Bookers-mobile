@@ -22,7 +22,7 @@ const Textarea = ({value, onChangeText, placeholder}: {value?: string, onChangeT
 
 const styles = StyleSheet.create({
     textArea: {
-        width: 300,
+        width: '100%',
         padding: 10,
         borderColor: '#444',
         borderWidth: 1,
