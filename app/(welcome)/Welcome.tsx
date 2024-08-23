@@ -83,11 +83,17 @@ const Welcome = () => {
     };
 
     const data = [
+        // {
+        //     title: "Услуги",
+        //     description: "Ваша специализация и услуги",
+        //     icon: <Feather name="check-circle" size={24} color="white"/>,
+        //     onPress: () => navigation.navigate("(standart)/(services)/(myServices)/myServices"),
+        // },
         {
             title: "Услуги",
             description: "Ваша специализация и услуги",
             icon: <Feather name="check-circle" size={24} color="white"/>,
-            onPress: () => navigation.navigate("(standart)/(services)/(myServices)/myServices"),
+            onPress: () => navigation.navigate("(standart)/(services)/(gender)/servesGender"),
         },
         {
             title: "График работы",

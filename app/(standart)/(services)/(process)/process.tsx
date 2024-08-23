@@ -19,6 +19,7 @@ import useNotificationsStore from '@/helpers/state_managment/notifications/notif
 import Textarea from '@/components/select/textarea';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import ServiceForm from '@/components/services/servicesSelect';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
@@ -73,11 +74,31 @@ const Process: React.FC = () => {
     const toggleModal = () => setIsAppoinmentModal(!isAppoinmentModal);
 
     const Gender: GenderOption[] = [
-        { title: 'Мужская для взрослых', id: 1 },
-        { title: 'Женское для взрослых', id: 2 },
-        { title: 'Мужская для детей', id: 3 },
-        { title: 'Женское для детей', id: 4 }
+        { title: 'Для взрослых', id: 1 },
+        { title: 'Для детей', id: 2 },
+    
     ];
+    const services = [
+        'Стрижка и укладка ', 
+        'Стрижка классическая', 
+        'Стрижка под машинку',
+        'Укладка','Моделирование броды','Моделирование усов','Моделирование бороды и усов','Милирование','Окрашивание волос','Оконтовка'
+     ];
+    const prices = [
+        '20 000 сум',
+        '30 000 сум',
+        '40 000 сум',
+        '50 000 сум',
+        '60 000 сум',
+        '70 000 сум',
+        '80 000 сум',
+        '90 000 сум',
+        '100 000 сум',
+        '120 000 сум',
+        '150 000 сум',
+        '200 000 сум',
+
+    ] ;
 
     const pickImageFromCamera = async () => {
         const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -204,20 +225,11 @@ const Process: React.FC = () => {
         setSelectedGender(selectedGender?.id === gender.id ? null : gender);
     };
 
-    const renderChildCategories = ({ item, index }: { item: any; index: number }) => {
-        const isLast = index === childCategoryData.length - 1;
-        return (
-            <Text style={tw`flex flex-row flex-wrap text-black font-bold text-lg`}>
-                {item.name}
-                {!isLast && ', '}
-            </Text>
-        );
-    };
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
             <StatusBar backgroundColor={`#21212E`} barStyle={`light-content`} />
-            <NavigationMenu name={`Процедура услуг`} />
+            <NavigationMenu name={`Мои услуги`} />
             <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -228,13 +240,7 @@ const Process: React.FC = () => {
                         backgroundColor: '#21212E'
                     }}
                 >
-                    <View style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
-                        <View style={[tw`w-full p-4 rounded-3xl mb-4`, { backgroundColor: '#B9B9C9' }]}>
-                            <Text style={tw`text-gray-600`}>Ваша специализация</Text>
-                            <View style={tw`flex flex-row flex-wrap`}>
-                                <FlatList data={childCategoryData} renderItem={renderChildCategories} keyExtractor={(item, index) => index.toString()} />
-                            </View>
-                        </View>
+                    <View style={[tw`flex-1 mt-10`, { backgroundColor: '#21212E' }]}>
                         {Gender.map((gender, index) => (
                             <ServicesCategory
                                 key={index}
@@ -244,18 +250,20 @@ const Process: React.FC = () => {
                                 onPress={() => handleGenderPress(gender)}
                             />
                         ))}
-                        <View style={[tw`mt-5 p-2`, { backgroundColor: '#21212E' }]}>
-                            {uslugi.map((usluga, index) => (
-                                <LocationInput key={index} label={usluga.label} value={usluga.value} onChangeText={usluga.onPress} />
-                            ))}
+                        <View style={[tw`mt-5 p-1`, { backgroundColor: '#21212E' }]}>
+                            <Text style = {[tw`text-lg mb-2`,{color:'#828282'}]}>Название  услуги</Text>
+                            <ServiceForm
+                             inputText='Выберите название  услуги или укажите свою'
+                             btnText='Указать своё название услуги +'
+                             servicePricesOrName={services}
+                            />
                         </View>
-                        <View style={tw`mb-2 p-2`}>
-                            <Text style={tw`text-gray-500 mb-3 text-lg`}>Цена</Text>
-                            <TextInput
-                                keyboardType='numeric'
-                                onChangeText={text => setPrice(`${text}`)}
-                                value={price}
-                                style={[tw` p-3 mb-2 rounded-xl text-lg text-white`, { backgroundColor: '#4B4B64' }]}
+                        <View style={tw`mb-2 p-1`}>
+                        <Text style = {[tw`text-lg mb-2`,{color:'#828282'}]}>Цена услуги от</Text>
+                        <ServiceForm
+                             inputText='Выберите название  услуги или укажите свою'
+                             btnText='Указать свою цену'
+                             servicePricesOrName={prices}
                             />
                         </View>
                         <View style={tw`mb-2 p-2`}>
@@ -279,7 +287,6 @@ const Process: React.FC = () => {
                                 scrollEnabled={true}
                             />
                         </View>
-                        {tariff && tariff === 'STANDARD' &&
                             <View style={tw`p-3`}>
                                 <Text style={tw`text-gray-500 text-xl mb-2`}>Фото услуги</Text>
                                 <TouchableOpacity
@@ -322,7 +329,7 @@ const Process: React.FC = () => {
                                     }
                                 />
                             </View>
-                        }
+                       
                         <View style={tw`flex flex-row justify-center mb-10`}>
                             <Buttons
                                 title='Создать'

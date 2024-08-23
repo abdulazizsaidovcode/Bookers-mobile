@@ -12,6 +12,7 @@ import { gender_status } from '@/helpers/api';
 import { getConfig } from '@/app/(tabs)/(master)/main';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import Toast from "react-native-simple-toast";
+import Explanations from '@/components/(explanations)/explanations';
 
 const ServesGender = () => {
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
@@ -63,6 +64,11 @@ const ServesGender = () => {
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}
                 >
                     <View style={[tw`flex w-full`, { backgroundColor: '#21212E' }]}>
+                    <View style = {[tw`p-4 mb-2`,{backgroundColor: '#21212E'}]}>
+                    <Explanations
+                    text='Для кого Вы оказываете услуги ?'
+                    />
+                    </View>
                         {categories.map((category: any) => (
                             <ServicesCategory
                                 key={category.id}

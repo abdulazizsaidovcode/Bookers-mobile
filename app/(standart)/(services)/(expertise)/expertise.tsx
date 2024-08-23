@@ -15,6 +15,7 @@ import Textarea from '@/components/select/textarea';
 import { getConfig } from '@/app/(tabs)/(master)/main';
 import Skelaton from '@/components/skelaton/skelaton';
 import AccordionSkelaton from '@/components/skelaton/accordionSkelaton';
+import Explanations from '@/components/(explanations)/explanations';
 
 const Expertise: React.FC = () => {
     const route = useRoute();
@@ -135,6 +136,12 @@ const Expertise: React.FC = () => {
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingHorizontal: 16, flexGrow: 1, justifyContent: 'space-between', backgroundColor: '#21212E' }}>
                     <View style={tw`w-full`}>
+                        <View style={[tw`p-4 mb-2`, { backgroundColor: '#21212E' }]}>
+                            <Explanations
+                                text='Выберите свою специализацию?
+                                    Вы можете выбрать несколько вариантов или добавить свою'
+                            />
+                        </View>
                         {loading ? (
                             <View style={tw`mt-5`}>
                                 <ActivityIndicator size="large" color="#9C0A35" />

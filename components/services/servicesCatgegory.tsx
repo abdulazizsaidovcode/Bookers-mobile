@@ -41,7 +41,7 @@ const ServicesCategory: React.FC<ServicesProps> = ({
                 <View
                     style={[
                         tw`flex p-3 mb-3 flex-row  items-center`,
-                        {backgroundColor:"#B9B9C9",borderRadius:18}
+                        {backgroundColor:checked ? '#FFFFFF' :"#B9B9C9",borderRadius:18}
                         
                     ]}
                 >
@@ -49,13 +49,15 @@ const ServicesCategory: React.FC<ServicesProps> = ({
                         style={[
                             tw`rounded-full`,
                             {
-                                backgroundColor:"#B9B9C9"
+                                backgroundColor:"#FFFFFF"
                                 // backgroundColor: checked ? "red" : "#B9B9C9",
                             },
                         ]}
                     >
                         {isRadioButton ? (
-                            <View style={styles.checkboxContainer}>
+                            <View style={[styles.checkboxContainer
+                                ,{backgroundColor:checked ? '#FFFFFF' :"#B9B9C9"}]
+                            }>
                             <RadioButton
                                 value="radio"
                                 status={checked ? "checked" : "unchecked"}
@@ -64,11 +66,14 @@ const ServicesCategory: React.FC<ServicesProps> = ({
                             />
                             </View>
                         ) : (
-                            <View style={styles.checkboxContainer}>
+                            <View style={[styles.checkboxContainer
+                                ,{backgroundColor:checked ? '#FFFFFF' :"#B9B9C9"}]
+                            }>
                                 <Checkbox
                                 status={checked ? "checked" : "unchecked"}
                                 onPress={handlePress}
                                 color={checked ? "#9C0A35" : "black"} // Checkbox color change
+                                
                             />
                             </View>
                             
@@ -87,7 +92,6 @@ const styles = StyleSheet.create({
     },
     checkboxContainer: {
         transform: [{ scale: 1.1 }],
-        backgroundColor:'#B9B9C9'
     },
 });
 

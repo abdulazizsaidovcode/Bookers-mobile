@@ -14,15 +14,15 @@ const ServiceForm: React.FC<ServiceFormProps> = ({ servicePricesOrName = [], inp
   const [showPriceDropdown, setShowPriceDropdown] = useState<boolean>(false);
 
   return (
-    <View style={tw`flex-1 justify-center`}>
+    <View style={tw`flex-1 justify-center `}>
       <TouchableOpacity
         activeOpacity={0.8}
-        style={[tw`flex-row items-center justify-between rounded-xl p-3 mb-3`, { backgroundColor: '#4B4B64' }]}
+        style={[tw`flex-row items-center justify-evenly rounded-xl p-4 mb-3`, { backgroundColor: '#4B4B64' }]}
         onPress={() => setShowPriceDropdown(!showPriceDropdown)}
       >
         <Text
           style={[
-            tw`${servicePrice ? 'text-xl font-bold' : 'text-sm'}`,
+            tw`${servicePrice ? 'text-lg font-bold' : 'text-sm'}`,
             { color: servicePrice ? 'white' : '#828282' },
           ]}
         >
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   priceText: {
     color: '#FFFFFF',
     fontFamily: 'Montserrat',
-    fontSize: 20,
+    fontSize: 17,
   },
   buttonContainer: {
     marginTop: 10,

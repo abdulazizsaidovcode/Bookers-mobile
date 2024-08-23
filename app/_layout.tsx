@@ -17,7 +17,7 @@ import Auth from "./(auth)/auth";
 import ChatDetails from "./(chat)/(communicatie)/chatDetails";
 import Notification from "./(profile)/(notification)";
 import WorkMain from "./(free)/(work-grafic)/workMain";
-import MyServices from "./(standart)/(services)/(myServices)/myServices";
+// import MyServices from "./(standart)/(services)/(myServices)/myServices";
 import Expenses from "./(profile)/(Expenses)";
 import SessionHistory from "./(profile)/(sessionhistory)/sessionHistory";
 import ServesGender from "./(standart)/(services)/(gender)/servesGender";
@@ -434,11 +434,11 @@ function RootLayoutNav() {
               component={Process}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
               name="(standart)/(services)/(myServices)/myServices"
               component={MyServices}
               options={{ headerShown: false }}
-            />
+            /> */}
             <Stack.Screen
               name="(standart)/(services)/(gender)/servesGender"
               component={ServesGender}
