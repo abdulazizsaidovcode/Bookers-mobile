@@ -1,6 +1,6 @@
 // TariffsPage.tsx
 import React, { useCallback, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -20,6 +20,8 @@ interface IDetails {
     id: number;
     name: string;
 }
+
+const { height: screenHeight, width: screenWidth } = Dimensions.get('window')
 
 export const postTariff = async (id: string | number) => {
     let config = await getConfig()
@@ -66,15 +68,16 @@ export const getAllTariff = async (setData: (val: any[] | null) => void, setLoad
     }
 }
 
-const QuickSetupCard: React.FC<{ firstDetails: IDetails[], secondDetails: IDetails[], title: string, minut: number }> = ({ minut, firstDetails,secondDetails, title }) => {
+const QuickSetupCard: React.FC<{ firstDetails: IDetails[], secondDetails: IDetails[], title: string, minut: number }> = ({ minut, firstDetails, secondDetails, title }) => {
     return (
         <View style={styles.qcard}>
-            <LinearGradient
-                colors={['#9C0A35', '#360312']}
+            <ImageBackground
+                source={require('../../../assets/images/vector.png')}
                 style={styles.header}
+            // imageStyle={styles.headerImage} // Apply additional styling to the image
             >
-                <Text style={styles.headerText}>{minut} минут</Text>
-            </LinearGradient>
+                <Text style={styles.headerText}>• {minut} минут</Text>
+            </ImageBackground>
             <Text style={styles.title}>{title}</Text>
             <View style={styles.listContainer}>
                 <View style={styles.listColumn}>
@@ -85,7 +88,7 @@ const QuickSetupCard: React.FC<{ firstDetails: IDetails[], secondDetails: IDetai
                         </View>
                     ))}
                 </View>
-                <View style={styles.listColumn}>
+                <View style={[styles.listColumn]}>
                     {secondDetails.map((item, index) => (
                         <View key={index} style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Entypo name="dot-single" size={24} color="#9C0A35" />
@@ -110,16 +113,39 @@ const TariffsPage: React.FC = () => {
         getMasterTariff(setTariffStatus)
     }, []))
 
-    const firstCard: IDetails[] = [
+    const someFirstCard: IDetails[] = [
         { id: 1, name: 'Услуги' },
         { id: 2, name: 'Адрес работы' },
         { id: 3, name: 'Подтверждение записей' },
     ]
 
-    const secondCard: IDetails[] = [
+    console.log(-screenHeight);
+
+
+    const someSecondCard: IDetails[] = [
+        { id: 1, name: 'График работы' },
+        { id: 2, name: 'Галерея' },
+        { id: 3, name: 'Клиенты' },
+    ]
+
+    const manyFirstCard: IDetails[] = [
         { id: 1, name: 'График работы' },
         { id: 2, name: 'Предоплата' },
         { id: 3, name: 'Клиенты' },
+    ]
+
+    const manySecondCard: IDetails[] = [
+
+        { id: 1, name: 'Услуги' },
+        { id: 2, name: 'Адрес работы' },
+        { id: 3, name: 'Подтверждение записей' },
+        { id: 4, name: 'Активация брони' },
+        { id: 5, name: 'Подтверждение брони' },
+        { id: 6, name: 'Длительность записей' },
+        { id: 7, name: 'Активация зала ожидания' },
+        { id: 8, name: 'Время для ВИП клиентов' },
+        { id: 9, name: 'Предоплата' },
+        { id: 10, name: 'Напоминание о записи' },
     ]
 
     return (
@@ -130,10 +156,16 @@ const TariffsPage: React.FC = () => {
                         <NavigationMenu name='Tariff' />
                         <View>
                             <QuickSetupCard
-                            secondDetails={secondCard} 
-                                firstDetails={firstCard} 
+                                secondDetails={someSecondCard}
+                                firstDetails={someFirstCard}
                                 title='Быстрая настройка:'
                                 minut={5}
+                            />
+                            <QuickSetupCard
+                                secondDetails={manyFirstCard}
+                                firstDetails={manySecondCard}
+                                title='Полная настройка:'
+                                minut={15}
                             />
                             {tariffList && tariffList.map((tariff, index) => (
                                 <TouchableOpacity
@@ -256,18 +288,21 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
     },
     header: {
-        backgroundColor: '#BC002D',
-        paddingVertical: 5,
-        paddingHorizontal: 15,
-        borderRadius: 15,
+        width: screenWidth / 3.3, // Set to your desired width
+        height: 30, // Set to your desired height
         position: 'absolute',
-        right: 0,
+        right: '-3%',
         top: 0,
+        alignItems: 'center'
+    },
+    headerImage: {
+        // borderRadius: 15, // Adjust for rounded corners
     },
     headerText: {
         color: 'white',
-        fontSize: 12,
-    }, 
+        fontSize: 13,
+        fontWeight: '600'
+    },
     title: {
         color: '#000',
         fontSize: 20,
@@ -280,7 +315,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     listColumn: {
-        flex: 1
+        width: '45%'
     },
     listItem: {
         color: '#4F4F4F',
