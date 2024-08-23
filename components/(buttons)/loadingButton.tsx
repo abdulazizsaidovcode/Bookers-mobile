@@ -12,10 +12,10 @@ const LoadingButtons: React.FC<IButton> = ({ title, backgroundColor = '#9C0A35',
             activeOpacity={.8}
             disabled={isDisebled}
         >
-            <Text style={[styles.buttonText, { color: textColor }, { fontSize: textSize }]}>
+            {title !== '' && <Text style={[styles.buttonText, { color: textColor }, { fontSize: textSize }]}>
                 {title}
-            </Text>
-            <ActivityIndicator size="small" color={textColor} style={styles.loader} />
+            </Text>}
+            <ActivityIndicator size="small" color={textColor} style={{ marginLeft: title !== '' ? 10 : 0 }} />
         </TouchableOpacity>
     );
 };
@@ -28,13 +28,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
+
     },
     buttonText: {
         fontWeight: '500',
     },
-    loader: {
-        marginLeft: 20,
-    },
+
 });
 
 export default LoadingButtons;

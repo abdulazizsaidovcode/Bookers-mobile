@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from 'expo-router';
 import ProfileImgUpload from '@/components/profile-img-upload';
@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
+const { width, height } = Dimensions.get('window')
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(free)/(client)/address-book'>;
 
@@ -44,14 +45,14 @@ const UserCameraInfo = () => {
         <View style={styles.container}>
             <View style={styles.topSection}>
                 <View style={styles.progressBar}>
-                    <View style={styles.progressIndicator} />
-                    <View style={styles.progressSegment} />
-                    <View style={styles.progressSegment1} />
                     <View style={styles.progressSegment2} />
+                    <View style={styles.progressSegment1} />
                 </View>
                 <Text style={styles.label}>{t("add_your_photo")}</Text>
                 <Text style={styles.description}>{t("do_not_wish_to_add_photo")}</Text>
-                <ProfileImgUpload registerProfileImg={`registerProfileImg`} />
+                <View>
+                    <ProfileImgUpload registerProfileImg={`registerProfileImg`} />
+                </View>
             </View>
 
             <View style={styles.bottomSection}>
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
     },
     topSection: {
         flex: 1,
+        position: 'relative'
     },
     description: {
         color: '#828282',
@@ -101,8 +103,9 @@ const styles = StyleSheet.create({
     progressBar: {
         flexDirection: 'row',
         height: 5,
-        marginTop: 40,
+        marginTop: 100,
         borderRadius: 5,
+        paddingHorizontal: 20
     },
     progressIndicator: {
         flex: 1,
@@ -167,4 +170,18 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 16,
     },
+    icon: {
+        bottom: height / 100,
+        left: width / 2,
+        position: 'absolute',
+        color: '#fff',
+        backgroundColor: '#9C0A35',
+        padding: 7,
+        borderRadius: 100,
+        borderWidth: 5,
+        borderColor: '#21212E',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });

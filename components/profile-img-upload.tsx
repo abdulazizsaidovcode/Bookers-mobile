@@ -5,19 +5,22 @@ import {
     StyleSheet,
     View,
     TouchableWithoutFeedback,
+    Dimensions,
+    Pressable,
 } from "react-native";
-import React, {useState, useCallback} from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import CenteredModal from "@/components/(modals)/modal-centered";
 import tw from "tailwind-react-native-classnames";
 import BottomModal from "@/components/(modals)/modal-bottom";
-import {MaterialIcons} from "@expo/vector-icons";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
-import {getFile, postFileId} from "@/helpers/api";
+import { getFile, postFileId } from "@/helpers/api";
 import clientStore from "@/helpers/state_managment/client/clientStore";
 import Toast from "react-native-simple-toast";
-import {getConfigImg} from "@/app/(tabs)/(master)/main";
-import {useFocusEffect} from "expo-router";
+import { getConfigImg } from "@/app/(tabs)/(master)/main";
+import { useFocusEffect } from "expo-router";
+const { width, height } = Dimensions.get('window')
 
 const ProfileImgUploadProfile = (
     {
@@ -31,7 +34,7 @@ const ProfileImgUploadProfile = (
         registerProfileImg?: string
         setAttachmentId?: (data: string | null) => void
     }) => {
-    const {setAttachmentID} = clientStore();
+    const { setAttachmentID } = clientStore();
     const [image, setImage] = useState<string | null>(null);
     const [isModal, setIsModal] = useState<boolean>(false);
     const [isDeleteImgModal, setIsDeleteImgModal] = useState<boolean>(false);
@@ -39,7 +42,7 @@ const ProfileImgUploadProfile = (
     useFocusEffect(
         useCallback(() => {
             if (attachmentID) setImage(`${getFile}${attachmentID}`);
-            return () => {};
+            return () => { };
         }, [])
     );
 
@@ -48,7 +51,7 @@ const ProfileImgUploadProfile = (
 
     // ======================= gallery dan img yuklash uchun functions =======================
     const pickImage = async () => {
-        const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== "granted") {
             alert("Kamera ruyxati kerak!");
             return;
@@ -67,7 +70,7 @@ const ProfileImgUploadProfile = (
                 setAttachmentId ? (
                     setAttachmentId(''),
                     setAttachmentID("")
-                 ) : setAttachmentID(result.assets[0])
+                ) : setAttachmentID(result.assets[0])
             }
 
             else await uploadImage(result.assets[0]);
@@ -76,7 +79,7 @@ const ProfileImgUploadProfile = (
 
     // ======================= camera dan img upload un functions =======================
     const takePhoto = async () => {
-        const {status} = await ImagePicker.requestCameraPermissionsAsync();
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
         if (status !== "granted") {
             alert("Kamera ruxsati kerak!");
             return;
@@ -94,7 +97,7 @@ const ProfileImgUploadProfile = (
                 setAttachmentId ? (
                     setAttachmentId(''),
                     setAttachmentID("")
-                 ) : setAttachmentID(result.assets[0])
+                ) : setAttachmentID(result.assets[0])
             }
             else await uploadImage(result.assets[0]);
         }
@@ -106,7 +109,7 @@ const ProfileImgUploadProfile = (
         setAttachmentId ? (
             setAttachmentId(''),
             setAttachmentID("")
-         ) : setAttachmentID("");
+        ) : setAttachmentID("");
         openDeleteModal();
     };
 
@@ -133,7 +136,7 @@ const ProfileImgUploadProfile = (
                 setAttachmentId ? (
                     setAttachmentId(response.data.body),
                     setAttachmentID(response.data.body)
-                 ) : setAttachmentID(response.data.body);
+                ) : setAttachmentID(response.data.body);
             } else Toast.show(response.data.message, Toast.LONG);
         } catch (err: any) {
             Toast.show(err.response.data.message, Toast.LONG);
@@ -151,7 +154,7 @@ const ProfileImgUploadProfile = (
                         activeOpacity={0.8}
                     >
                         {image ? (
-                            <Image source={{uri: image}} style={styles.profileImage}/>
+                            <Image source={{ uri: image }} style={styles.profileImage} />
                         ) : (
                             <Image
                                 source={require("../assets/avatar.png")}
@@ -159,16 +162,26 @@ const ProfileImgUploadProfile = (
                             />
                         )}
                     </TouchableOpacity>
+                    <Pressable
+                        onPress={openModal}
+                        style={styles.icon}
+                    >
+                        {!image ?
+                            <AntDesign style={{ color: '#fff' }} name="plussquareo" size={22} color="black" />
+                            :
+                            <MaterialIcons style={{ color: '#fff' }} name="edit" size={24} color="black" />
+                        }
+                    </Pressable >
                     {!image ||
                         (editPin && (
                             <View
                                 style={[
                                     tw`w-11 h-11 rounded-full items-center justify-center absolute bottom-7 right-1 border-4`,
-                                    {backgroundColor: "#9c0935", borderColor: "#21212E"},
+                                    { backgroundColor: "#9c0935", borderColor: "#21212E" },
                                 ]}
                             >
                                 <TouchableOpacity onPress={openModal} activeOpacity={0.8}>
-                                    <MaterialIcons name="edit" size={24} color="white"/>
+                                    <MaterialIcons name="edit" size={24} color="white" />
                                 </TouchableOpacity>
                             </View>
                         ))}
@@ -185,7 +198,7 @@ const ProfileImgUploadProfile = (
                     <View
                         style={[
                             tw`w-full pb-2`,
-                            {borderBottomWidth: 2, borderBottomColor: "#828282"},
+                            { borderBottomWidth: 2, borderBottomColor: "#828282" },
                         ]}
                         key={`profile image upload bottom modal`}
                     >
@@ -224,7 +237,7 @@ const ProfileImgUploadProfile = (
                             <Text
                                 style={[
                                     tw`text-lg mb-3 font-bold tracking-wide`,
-                                    {color: !image ? "#58454a" : "#9C0A35"},
+                                    { color: !image ? "#58454a" : "#9C0A35" },
                                 ]}
                             >
                                 Удалить фотографию
@@ -235,7 +248,7 @@ const ProfileImgUploadProfile = (
                         <Text
                             style={[
                                 tw`text-lg font-bold tracking-wide mt-3`,
-                                {color: "#9C0A35"},
+                                { color: "#9C0A35" },
                             ]}
                         >
                             Отмена
@@ -257,11 +270,11 @@ const ProfileImgUploadProfile = (
                     style={tw`items-center justify-center`}
                     key={`profile image upload center modal`}
                 >
-                    <MaterialIcons name="delete" size={100} color="#9C0A35"/>
+                    <MaterialIcons name="delete" size={100} color="#9C0A35" />
                     <Text
                         style={[
                             tw`text-white text-base mt-1 text-center`,
-                            {opacity: 0.8},
+                            { opacity: 0.8 },
                         ]}
                     >
                         Вы хотите удалить фотографию?
@@ -290,6 +303,20 @@ const styles = StyleSheet.create({
     imagePlaceholder: {
         color: "#ffffff",
     },
+    icon: {
+        bottom: height / 100,
+        left: width / 5.3,
+        position: 'absolute',
+        color: '#fff',
+        backgroundColor: '#9C0A35',
+        padding: 7,
+        borderRadius: 100,
+        borderWidth: 5,
+        borderColor: '#21212E',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 
 export default ProfileImgUploadProfile;

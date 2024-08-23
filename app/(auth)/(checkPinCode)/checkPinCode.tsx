@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     },
     label: {
         color: '#FFFFFF',
-        fontSize: 18,
+        fontSize: 20,
         marginBottom: 30,
     },
     inputContainer: {
@@ -172,8 +172,8 @@ const styles = StyleSheet.create({
         borderColor: '#4B4B64',
         backgroundColor: '#4B4B64',
         borderRadius: 10,
-        width: 50,
-        height: 50,
+        width: 62,
+        height: 62,
         margin: 4,
         textAlign: 'center',
         fontSize: 20,

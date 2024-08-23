@@ -94,7 +94,8 @@
     "tailwind-react-native-classnames": "^1.5.1",
     "uuid": "^10.0.0",
     "yarn": "^1.22.22",
-    "zustand": "^4.5.2"
+    "zustand": "^4.5.2",
+    "expo-linear-gradient": "~13.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -26,7 +26,6 @@ export const checkNumberFunction = async (phoneNumber: string, setCode: (value: 
         await axios.post(`${register_page}sendCode?purpose=${status}`, sentData)
             .then(res => {
                 setCode(res.data.body);
-                router.push('(auth)/(login)/checkSendMessage')
                 pending(false)
             })
             .catch(err => {
@@ -34,9 +33,6 @@ export const checkNumberFunction = async (phoneNumber: string, setCode: (value: 
                 if (err.response.data.success === false) Toast.show(err.response.data.message, Toast.LONG)
             })
     }
-
-
-
 }
 
 export const checkCode = (phoneNumber: string, otpValue: string, setRespone: any, isRegtered: boolean, setischeck: any) => {

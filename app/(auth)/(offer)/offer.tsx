@@ -1,5 +1,6 @@
 import Buttons from '@/components/(buttons)/button';
 import NavigationMenu from '@/components/navigation/navigation-menu';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from 'expo-router';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#21212E',
         paddingHorizontal: 16,
-        paddingBottom:10
+        paddingBottom: 10
     },
     header: {
         flexDirection: 'row',
