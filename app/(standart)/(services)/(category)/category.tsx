@@ -6,46 +6,50 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
 import axios from 'axios';
-import { category_Father, category_child, getCategory_masterAdd } from '@/helpers/api';
+import { category_Father, getCategory_masterAdd } from '@/helpers/api';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '@/type/root';
-import { router } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import { getConfig } from '@/app/(tabs)/(master)/main';
 import Explanations from '@/components/(explanations)/explanations';
 
 const Category = () => {
     const { setData, data, selectedCategory, setSelectedCategory, setCompleted } = servicesStore();
-
+    const navigation = useNavigation<string>();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingButton, setIsLoadingButton] = useState(false);
 
     const getCategory = async () => {
         try {
             const config = await getConfig();
+            setIsLoading(true);
             const response = await axios.get(`${category_Father}`, config ? config : {});
             const listData = response.data.body.map((item: any) => ({
-                key: item.id,
+                key: item.id.toString(), // Ensure key is a string
                 value: item.name,
             }));
             setData(listData);
         } catch (error) {
             console.error("Error fetching services:", error);
+        } finally {
+            setIsLoading(false); // Ensure loading is turned off after fetching
         }
     };
 
-
-
     const addCategory = async () => {
         try {
+            setIsLoadingButton(true); // Set submitting to true when starting the operation
             const config = await getConfig();
             const response = await axios.post(`${getCategory_masterAdd}categoryIds=${selectedCategory}`, {}, config ? config : {});
             if (response.data.success) {
-                router.push('(standart)/(services)/(expertise)/expertise');
+                navigation.navigate('(standart)/(services)/(expertise)/expertise');
                 setCompleted([true, true, true, false]);
             } else {
                 console.log('Failed to add category');
             }
         } catch (error) {
             console.error("Error adding category:", error);
+        } finally {
+            setIsLoadingButton(false); // Ensure submitting is turned off after operation
         }
     };
 
@@ -53,23 +57,11 @@ const Category = () => {
         getCategory();
     }, []);
 
-    // const openModal = (id: string) => {
-    //     setModalVisible(true);
-    //     getChildCategory(id);
-    // };
-
-    // const closeModal = () => {
-    //     setModalVisible(false);
-    //     setChildCategoryData([]);
-    // };
-
     const handleCategoryPress = (id: string) => {
         if (selectedCategory === id) {
             setSelectedCategory(null);
-            // closeModal();
         } else {
             setSelectedCategory(id);
-            // openModal(id);
         }
     };
 
@@ -108,11 +100,15 @@ const Category = () => {
                     </View>
                     <View style={tw`content-end mb-5`}>
                         <View style={tw`mt-2 content-end`}>
+                        {isLoadingButton ? (
+                            <ActivityIndicator size="large" color="#fff" /> 
+                        ) : (
                             <Buttons
                                 title="Сохранить"
                                 onPress={addCategory}
-                                isDisebled={selectedCategory !== null}
+                                isDisebled={selectedCategory !== null}  
                             />
+                        )}
                         </View>
                     </View>
                 </ScrollView>

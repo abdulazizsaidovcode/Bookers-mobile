@@ -6,7 +6,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
 import CenteredModal from '@/components/(modals)/modal-centered';
-import { router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, useNavigation } from 'expo-router';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import axios from 'axios';
 import { category_child, masterAdd_category } from '@/helpers/api';
@@ -27,7 +27,8 @@ const Expertise: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [noData, setNoData] = useState<boolean>(false);
     const [status, setStatus] = useState<string>('');
-    const { id } = route.params as { id: string };
+    const navigation = useNavigation<any>();
+    // const { id } = route.params as { id: string };
 
     useFocusEffect(
         React.useCallback(() => {
@@ -127,13 +128,8 @@ const Expertise: React.FC = () => {
     };
 
     const handleSave = () => {
-        // Log the selected services
-        console.log('Selected Services:', selectedServices);
-
-        // Navigate to the process page
-        router.push('../(process)/process');
-
-        // Set the completion status
+        loading
+        navigation.navigate('(standart)/(services)/(process)/process');
         setCompleted([true, true, true, true]);
     };
 
@@ -173,7 +169,7 @@ const Expertise: React.FC = () => {
                             <Buttons
                                 title="Сохранить"
                                 onPress={handleSave}
-                                isDisebled={selectedServices.length === 0}
+                                // isDisebled={selectedServices.length == 0}
                             />
                         </View>
                         <CenteredModal
