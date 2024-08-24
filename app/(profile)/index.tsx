@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
   },
   sidebar: {
     backgroundColor: '#21212E',
-    flex: 1,
+    flex: 1, 
     height: height,
     zIndex: 9999,
     padding: 14,
