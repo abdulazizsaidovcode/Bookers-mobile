@@ -14,7 +14,7 @@ import Explanations from '@/components/(explanations)/explanations';
 
 const Category = () => {
     const { setData, data, selectedCategory, setSelectedCategory, setCompleted } = servicesStore();
-    const navigation = useNavigation<string>();
+    const navigation = useNavigation<any>();
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingButton, setIsLoadingButton] = useState(false);
 

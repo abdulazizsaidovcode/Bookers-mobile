@@ -24,7 +24,7 @@ const MyServicesScreen = () => {
     const [category, setCategory] = useState([]);
     const [categoryMaster, setCategoryMaster] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const { id } = route.params as { id: string };
+    // const { id } = route.params as { id: string };
     const [categories, setCategories] = useState([
         'Красота и здоровье волос',
         'Маникюр и педикюр',

@@ -6,7 +6,7 @@ import NavigationMenu from '@/components/navigation/navigation-menu';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import Buttons from '@/components/(buttons)/button';
 import CenteredModal from '@/components/(modals)/modal-centered';
-import { router, useFocusEffect, useNavigation } from 'expo-router';
+import { useFocusEffect, useNavigation } from 'expo-router';
 import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import axios from 'axios';
 import { category_child, masterAdd_category } from '@/helpers/api';
@@ -28,7 +28,6 @@ const Expertise: React.FC = () => {
     const [noData, setNoData] = useState<boolean>(false);
     const [status, setStatus] = useState<string>('');
     const navigation = useNavigation<any>();
-    // const { id } = route.params as { id: string };
 
     useFocusEffect(
         React.useCallback(() => {
@@ -88,19 +87,18 @@ const Expertise: React.FC = () => {
 
     const closeModal = () => {
         setModalVisible(false);
-        setModalStatus(false)
+        setModalStatus(false);
         setValue('');
     };
     const closeModalStatus = () => {
-        setModalStatus(false)  
+        setModalStatus(false);
     };
-   
 
     const handleAdd = () => {
         if (value.trim()) {
             postCategory(selectedCategory, value);
             closeModal();
-            openModalStatus()
+            openModalStatus();
             setValue('');
         }
     };
@@ -128,12 +126,13 @@ const Expertise: React.FC = () => {
     };
 
     const handleSave = () => {
-        loading
+        // Log the selected services
+        console.log("Selected Services:", selectedServices);
+
+        // Proceed with the navigation and completion status
         navigation.navigate('(standart)/(services)/(process)/process');
         setCompleted([true, true, true, true]);
     };
-
-    console.log(selectedServices);
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -169,7 +168,6 @@ const Expertise: React.FC = () => {
                             <Buttons
                                 title="Сохранить"
                                 onPress={handleSave}
-                                // isDisebled={selectedServices.length == 0}
                             />
                         </View>
                         <CenteredModal

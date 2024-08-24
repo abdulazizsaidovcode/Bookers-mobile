@@ -3,18 +3,25 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-nati
 import { Ionicons } from '@expo/vector-icons';
 import tw from 'tailwind-react-native-classnames';
 
-type ServiceFormProps = {
-  servicePricesOrName?: string[];
+interface ServiceFormProps {
   inputText: string;
-  btnText?: string;
-};
+  btnText: string;
+  servicePricesOrName: string[];
+  onValueChange: (value: string) => void; // Qo'shilgan qator
+}
 
-const ServiceForm: React.FC<ServiceFormProps> = ({ servicePricesOrName = [], inputText, btnText }) => {
+const ServiceForm: React.FC<ServiceFormProps> = ({ inputText, btnText, servicePricesOrName, onValueChange }) => {
   const [servicePrice, setServicePrice] = useState<string>('');
   const [showPriceDropdown, setShowPriceDropdown] = useState<boolean>(false);
 
+  const handleSelect = (value: string) => {
+    setServicePrice(value);
+    onValueChange(value); // Tanlangan qiymatni yuqori komponentga etkazish
+    setShowPriceDropdown(false);
+  };
+
   return (
-    <View style={tw`flex-1 justify-center `}>
+    <View style={tw`flex-1 justify-center`}>
       <TouchableOpacity
         activeOpacity={0.8}
         style={[tw`flex-row items-center justify-evenly rounded-xl p-4 mb-3`, { backgroundColor: '#4B4B64' }]}
@@ -50,28 +57,26 @@ const ServiceForm: React.FC<ServiceFormProps> = ({ servicePricesOrName = [], inp
                   styles.priceItem,
                   price === servicePrice && styles.selectedPriceItem,
                 ]}
-                onPress={() => {
-                  setServicePrice(price);
-                  setShowPriceDropdown(false);
-                }}
+                onPress={() => handleSelect(price)} // handleSelect ni chaqirish
               >
                 <Text style={styles.priceText}>{price}</Text>
               </TouchableOpacity>
             ))}
-             {btnText && (
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                activeOpacity={0.9}
-                style={styles.button}
-                onPress={() => {
-                  // Add your button press logic here
-                }}
-              >
-                <Text style={styles.buttonText}>{btnText}</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          </ScrollView> 
+            {btnText && (
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  style={styles.button}
+                  onPress={() => {
+                    console.log('Button pressed');
+                    // Add your button press logic here
+                  }}
+                >
+                  <Text style={styles.buttonText}>{btnText}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </ScrollView>
         </View>
       )}
     </View>
@@ -83,18 +88,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#4B4B64',
     borderRadius: 10,
     padding: 10,
-    maxHeight: 350, 
+    maxHeight: 350,
   },
   scrollView: {
-    maxHeight: 400, 
+    maxHeight: 400,
   },
   scrollContainer: {
-    paddingBottom: 10, 
+    paddingBottom: 10,
   },
   priceItem: {
     padding: 10,
     borderBottomColor: '#333',
-   
   },
   selectedPriceItem: {
     backgroundColor: '#9C0A35',

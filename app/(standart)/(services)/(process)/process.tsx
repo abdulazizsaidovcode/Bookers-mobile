@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'tailwind-react-native-classnames';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import axios from 'axios';
-import { router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, useNavigation } from 'expo-router';
 import { masterAdd_service, postFileId } from '@/helpers/api';
 import ServicesCategory from '@/components/services/servicesCatgegory';
 import LocationInput from '@/app/locationInput';
@@ -61,7 +61,6 @@ const Process: React.FC = () => {
     const [image, setImage] = useState<string | null>(null);
     const [images, setImages] = useState<string | null>(null)
     const [modalVisible, setModalVisible] = useState(false);
-    const { setTariff, tariff } = clientStore();
     const [price, setPrice] = useState<string>('');
     const [time, setTime] = useState<string>('');
     const [description, setDescription] = useState<string>('');
@@ -72,6 +71,7 @@ const Process: React.FC = () => {
     const [appoinmentData, setAppoinmentData] = useState<{ hour: number | null, minute: number | null }>({ hour: null, minute: null });
 
     const toggleModal = () => setIsAppoinmentModal(!isAppoinmentModal);
+    const navigation = useNavigation<any>();  // Corrected type
 
     const Gender: GenderOption[] = [
         { title: 'Для взрослых', id: 1 },
@@ -140,11 +140,6 @@ const Process: React.FC = () => {
 
     const uslugi = [{ label: 'Услуга', value: service, onPress: setService }];
 
-    useFocusEffect(
-        useCallback(() => {
-            getMasterTariff(setTariff);
-        }, [])
-    );
 
     const postService = async () => {
         try {
@@ -155,18 +150,31 @@ const Process: React.FC = () => {
                 name: service,
                 price: parseFloat(price),
                 description: description,
-                attachmentId: tariff && tariff === 'STANDARD' ? images : null,
+                attachmentId: images,
                 active: true,
                 serviceTime: convertTimeToMinutes(time)
-            };
+            };  
+            console.log(data);    
             const response = await axios.post(masterAdd_service, data, config ? config : {});
-            console.log(response);
-            if (response.data.success) router.push('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
+            if (response.data.success) {
+                Toast.show('✅ Услуга успешно добавлена', Toast.LONG);
+                navigation.navigate('(standart)/(services)/(myServicesScreen)/MyServicesScreen');
+            }
             else Toast.show(response.data.message, Toast.LONG);
         } catch (error) {
             console.error('Error adding service:', error);
         }
+
+        console.log(selectedCategory,'category');
+        console.log(selectedGender,'category1');
+        console.log(service,'category2');
+        console.log(price,'category3');
+        console.log(description,'category4');
+        console.log(image, 'image');
+
+        
     };
+    
 
     const hours = Array.from({ length: 13 }, (_, i) => i);
     const minutes = Array.from({ length: 60 }, (_, i) => i);
@@ -256,14 +264,22 @@ const Process: React.FC = () => {
                              inputText='Выберите название  услуги или укажите свою'
                              btnText='Указать своё название услуги +'
                              servicePricesOrName={services}
+                             onValueChange={(selectService) => {
+                                console.log('Select service', selectService);
+                                setService(selectService)  
+                             }}
                             />
                         </View>
                         <View style={tw`mb-2 p-1`}>
                         <Text style = {[tw`text-lg mb-2`,{color:'#828282'}]}>Цена услуги от</Text>
                         <ServiceForm
-                             inputText='Выберите название  услуги или укажите свою'
-                             btnText='Указать свою цену'
-                             servicePricesOrName={prices}
+                                inputText='Выберите название  услуги или укажите свою'
+                                btnText='Указать свою цену'
+                                servicePricesOrName={prices}
+                                onValueChange={(selectedPrice) => {
+                                    console.log('Selected Price:', selectedPrice);
+                                    setPrice(selectedPrice);
+                                }}
                             />
                         </View>
                         <View style={tw`mb-2 p-2`}>
@@ -334,7 +350,7 @@ const Process: React.FC = () => {
                             <Buttons
                                 title='Создать'
                                 onPress={postService}
-                                // isDisebled={!validate}
+                                isDisebled={!validate}
                             />
                         </View>
                     </View>

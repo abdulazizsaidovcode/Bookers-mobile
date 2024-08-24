@@ -18,7 +18,7 @@ const ServesGender: React.FC = () => {
     const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
     const { setCompleted } = servicesStore();
     const [isLoading, setIsLoading] = useState(false);
-    const navigation = useNavigation();  // Corrected type
+    const navigation = useNavigation<any>();  // Corrected type
 
     const categories = [
         { title: 'Мужское направление', id: 1 },
