@@ -157,6 +157,7 @@ import Offer from "./(auth)/(offer)/offer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Header } from "react-native/Libraries/NewAppScreen";
 import { Alert } from "react-native";
+import WorkGrafficNext from "./(free)/(work-grafic)/workGrafficNext";
 // import ResponseLocationEdit from "./(location)/(response-location)/responseLocationEdit";
 
 const Stack = createNativeStackNavigator();
@@ -903,6 +904,11 @@ function MainStack() {
               options={{ headerShown: false }}
               name="(auth)/(offer)/offer"
               component={Offer}
+            />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="(free)/(work-grafic)/workGrafficNext"
+              component={WorkGrafficNext}
             />
           </Stack.Navigator>
         </MenuProvider>
