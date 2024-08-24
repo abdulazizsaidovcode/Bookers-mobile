@@ -8,8 +8,6 @@ import { Loading } from "@/components/loading/loading";
 import * as SecureStore from "expo-secure-store";
 import * as SplashScreen from 'expo-splash-screen';
 
-
-
 const Index: React.FC = () => {
   const [isFirstLaunch, setIsFirstLaunch] = useState<null | boolean>(null);
   const navigation = useNavigation<any>();
