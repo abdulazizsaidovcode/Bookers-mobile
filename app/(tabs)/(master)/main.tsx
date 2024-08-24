@@ -246,7 +246,8 @@ const TabOneScreen: React.FC = () => {
   const [chartNumerator, chartDenominator] = chartFraction.split("/");
   const statisticFraction = mainStatisticData.incomeToday;
   const [statisticNumerator, statisticDenominator] = statisticFraction.split("/");
-  const orderTimeSlots = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "REGULAR_VISIT") : [];
+  const orderTimeSlots = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "BOOKED") : [];
+  const freeTimeSlots = dailyTimeData && dailyTimeData.length !== 0 ? dailyTimeData && dailyTimeData.filter((item) => item.type === "FREE") : [];
 
   const handleConfirmOrReject = (status: string) =>
     editOrderStatus(
@@ -275,6 +276,7 @@ const TabOneScreen: React.FC = () => {
           isOpen={isOpen}
           toggleIsOpen={toggleIsOpen}
           orderTimeSlots={orderTimeSlots}
+          freeTimeSlots={freeTimeSlots}
         />
         <View style={{ padding: 10 }}>
           <View style={{ backgroundColor: '#9C0A35', borderRadius: 15, justifyContent: 'center', alignItems: 'center', padding: 10 }}>

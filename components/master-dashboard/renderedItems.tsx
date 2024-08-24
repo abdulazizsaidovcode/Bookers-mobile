@@ -1,4 +1,5 @@
 import { getFile } from "@/helpers/api";
+import { formatTime } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import { RenderBookingRequestProps } from "@/type/dashboard/dashboard";
 import { FontAwesome } from "@expo/vector-icons";
 import moment from "moment";
@@ -19,20 +20,31 @@ const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
 const renderTimeSlot = ({ item }: any) => (
-    <View
-        style={[
-            styles.timeSlot,
-            item.type === "STOPPED_VISIT"
-                ? styles.freeSlot
-                : item.type === "REGULAR_VISIT"
-                    ? styles.vipSlot
-                    : styles.newSlot,
-        ]}
-    >
-        <Text style={{ color: COLORS.white }}>
-            {item.time === null ? "" : item.time.slice(0, 5) ?? ""}
-        </Text>
-    </View>
+    item.type === 'FREE' ?
+        <View
+            style={[styles.timeSlot, styles.freeSlot]}
+        >
+            <Text style={{ color: COLORS.white }}>
+                {formatTime(item.freeTime)}
+            </Text>
+        </View>
+        :
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View
+                style={[styles.timeSlot, styles.vipSlot]}
+            >
+                <Text style={{ color: COLORS.white }}>
+                    {formatTime(item.startTime)}
+                </Text>
+            </View>
+            <View
+                style={[styles.timeSlot, styles.vipSlot]}
+            >
+                <Text style={{ color: COLORS.white }}>
+                    {formatTime(item.endTime)}
+                </Text>
+            </View>
+        </View>
 );
 
 const renderBookingRequest: React.FC<RenderBookingRequestProps> = ({
@@ -127,7 +139,7 @@ const styles = StyleSheet.create({
     timeSlot: {
         width: screenWidth / 4.6,
         paddingVertical: 10,
-        // marginHorizontal: 5,
+        marginTop: 5,
         borderRadius: 5,
         alignItems: "center",
     },

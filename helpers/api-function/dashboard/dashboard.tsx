@@ -10,17 +10,23 @@ export const fetchDaylyOrderTimes = async (setDailyTimeData: (val: DashboardDail
         const config = await getConfig()
         const { data } = await axios.get(`${dashboard_daily_time_orders}/${masterId}`, config ? config : {});
         if (data.success) {
-            setDailyTimeData(data.body.statusTimes);
+            setDailyTimeData(data.body);
+            console.log('fffffffffffffffffffffffffffffffffffffffffffffffffffffft',data.body);
+            
             setIsLoading(false)
-        } else setIsLoading(false   )
-    } catch {
+        } else setIsLoading(false)
+    } catch (error) {
         setIsLoading(false)
+        console.log(error);
+        
     }
 }
 
 export const fetchMainStatistic = async (setMainStatisticData: (val: DashboardMainStatistic) => void) => {
     try {
         const config = await getConfig()
+         console.log('config', config);
+
         const { data } = await axios.get(dashboard_main_statistic, config ? config : {});
         if (data.success) {
             setMainStatisticData(data.body);

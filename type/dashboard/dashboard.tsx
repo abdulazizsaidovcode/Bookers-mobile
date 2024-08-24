@@ -19,7 +19,9 @@ export interface DashboardState {
 
 export interface DashboardDailyTimeOrders {
     type: string,
-    time: string,
+    freeTime: string | null,
+    startTime: string | null,
+    endTime: string | null,
 }
 
 export interface DashboardMainStatistic {
@@ -60,6 +62,7 @@ export interface DashboardHallingOrder {
 
 export interface ScheduleSectionProps {
     orderTimeSlots: DashboardDailyTimeOrders[];
+    freeTimeSlots: DashboardDailyTimeOrders[];
     todayGraficData: TodayWorkGrafic;
     workPending: boolean;
     isOpen: boolean
