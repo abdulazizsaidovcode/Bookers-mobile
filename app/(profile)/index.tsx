@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -11,15 +11,18 @@ import {
   StatusBar,
   Share,
   Alert,
+  Dimensions,
+  Pressable,
 } from "react-native";
 import {
   FontAwesome5,
   FontAwesome,
-  MaterialIcons,
   AntDesign,
+  FontAwesome6,
 } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useFocusEffect, useNavigation } from "expo-router";
+import { Easing } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
 import { getFile } from "@/helpers/api";
@@ -30,11 +33,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import registerStory from "@/helpers/state_managment/auth/register";
 import { getMasterTariff } from "@/constants/storage";
 import clientStore from "@/helpers/state_managment/client/clientStore";
-import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
 import { Loading } from "@/components/loading/loading";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
-import { usePinCode } from "@/context/PinContext";
-import CheckPinCode from "../(auth)/(checkPinCode)/checkPinCodeAbsolute";
+import { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
+const { width, height } = Dimensions.get("window");
 
 const data: { name: any; color: string; label: string }[] = [
   { name: "facebook", color: "#3b5998", label: "Facebook" },
@@ -46,7 +48,7 @@ const data: { name: any; color: string; label: string }[] = [
 ];
 
 
-const ProfilePage: React.FC = () => {
+const ProfilePage = () => {
   const { setNumber } = numberSettingStore();
   const [isInviteModalVisible, setInviteModalVisible] = useState(false);
   const [isShareModalVisible, setShareModalVisible] = useState(false);
@@ -56,6 +58,36 @@ const ProfilePage: React.FC = () => {
   const { isWaitModal, setIsWaitModal } = numberSettingStore()
   const [toggle, setToggle] = useState(false);
   const { role } = registerStory();
+
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
+
+  // Shared value for animated position
+  const sidebarAnim = useSharedValue(-350);
+
+  const sidebarStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: sidebarAnim.value }],
+    };
+  });
+
+  // Toggle sidebar visibility
+  const toggleSidebar = () => {
+    if (isSidebarVisible) {
+      sidebarAnim.value = withTiming(-400, {
+        duration: 300,
+        easing: Easing.ease,
+      });
+      setSidebarVisible(false);
+    } else {
+      setSidebarVisible(true);
+      sidebarAnim.value = withTiming(0, {
+        duration: 300,
+        easing: Easing.ease,
+      });
+    }
+  };
+
+
 
 
   useFocusEffect(
@@ -269,174 +301,182 @@ const ProfilePage: React.FC = () => {
 
   return (
     <>
-
-
       {isLoading ?
         <Loading />
         :
-        <ScrollView style={[styles.container]}>
-          <SafeAreaView style={{ paddingBottom: 24 }}>
-            <StatusBar backgroundColor={`#21212E`} barStyle={`dark-content`} />
-            <Text style={styles.title}>Профиль</Text>
-            <View style={styles.profileHeader}>
-              <Image
-                source={
-                  getMee && getMee.attachmentId
-                    ? { uri: getFile + getMee.attachmentId }
-                    : require("@/assets/avatar.png")
-                }
-                style={styles.avatar}
-              />
-              <View>
-                {/* <View style={{flexDirection: "row", justifyContent:"center", gap: 4}}> */}
-                <Text style={styles.profileName}>
-                  {getMee && getMee.firstName ? getMee.firstName : "No data"} {getMee && getMee.lastName && getMee.lastName}
+        <View style={[styles.container]}>
+          <StatusBar backgroundColor={`#21212E`} barStyle={`dark-content`} />
+
+          <FontAwesome6
+            name="bars-staggered"
+            size={24} color="#fff"
+            onPress={toggleSidebar}
+          />
+
+          <Animated.View
+            style={[styles.sidebar, sidebarStyle]}
+          >
+            <Pressable
+              onPress={toggleSidebar}
+            >
+              <View
+                style={[
+                  styles.sidebarIn, {
+                    padding: 16,
+                  }
+                ]}>
+                <View style={styles.profileHeader}>
+                  <Image
+                    source={
+                      getMee && getMee.attachmentId
+                        ? { uri: getFile + getMee.attachmentId }
+                        : require("@/assets/avatar.png")
+                    }
+                    style={styles.avatar}
+                  />
+                  <View>
+                    {/* <View style={{flexDirection: "row", justifyContent:"center", gap: 4}}> */}
+                    <Text style={styles.profileName}>
+                      {getMee && getMee.firstName ? getMee.firstName : "No data"} {getMee && getMee.lastName && getMee.lastName}
+                    </Text>
+                    <Text style={styles.profilePhone}>{getMee && getMee.phoneNumber ? getMee.phoneNumber : "No data"}</Text>
+                  </View>
+                </View>
+                {navigationList.map((item, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.menuItem}
+                    onPress={() =>
+                      item.icon === "share-alt"
+                        ? onShare()
+                        : item.modal
+                          ? setToggle(true)
+                          : navigateTo(item.screen)
+                    }
+                    activeOpacity={0.7}
+                  >
+                    <View style={styles.menuItemContent}>
+                      <FontAwesome5 name={item.icon} size={20} color="#9C0A35" />
+                      <Text style={styles.menuItemText}>{item.label}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </Pressable>
+          </Animated.View>
+
+          <Modal
+            transparent={true}
+            visible={isInviteModalVisible}
+            onRequestClose={closeInviteModal}
+          >
+            <View style={styles.modalBackground}>
+              <View style={styles.modalContainer}>
+                <Text style={styles.modalTitle}>
+                  Кому вы хотите отправить ссылку?
                 </Text>
-                {/* <Image
-                source={{
-                  uri: "https://img.icons8.com/?size=100&id=yXOHowNYbgM5&format=png&color=2568EF",
-                }}
-                style={{width:"12%"}}
-              /> */}
-                {/* </View> */}
-                <Text style={styles.profilePhone}>{getMee && getMee.phoneNumber ? getMee.phoneNumber : "No data"}</Text>
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => {
+                    closeInviteModal();
+                    openShareModal();
+                  }}
+                >
+                  <Text style={styles.modalButtonText}>Пригласить мастеров</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => {
+                    closeInviteModal();
+                    openShareModal();
+                  }}
+                >
+                  <Text style={styles.modalButtonText}>Пригласить друзей</Text>
+                </TouchableOpacity>
+                <Button
+                  title="Закрыть"
+                  onPress={closeInviteModal}
+                  color="#E74C3C"
+                />
               </View>
             </View>
+          </Modal>
 
-            {navigationList.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.menuItem}
-                onPress={() =>
-                  item.icon === "share-alt"
-                    ? onShare()
-                    : item.modal
-                      ? setToggle(true)
-                      : navigateTo(item.screen)
-                }
-                activeOpacity={0.7}
+          <Modal
+            transparent={true}
+            visible={isShareModalVisible}
+            onRequestClose={closeShareModal}
+          >
+            <View style={styles.modalBackground}>
+              <View style={styles.modalContainer}>
+                <Text style={styles.modalTitle}>Поделиться</Text>
+                <View style={styles.iconContainer}>
+                  {data.map((item, index): any => (
+                    <TouchableOpacity key={index} style={styles.iconButton}>
+                      <FontAwesome
+                        name={item.name}
+                        size={40}
+                        color={item.color}
+                      />
+                      <Text style={styles.iconLabel}>{item.label}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+                <Button
+                  title="Закрыть"
+                  onPress={closeShareModal}
+                  color="#E74C3C"
+                />
+              </View>
+            </View>
+          </Modal>
+          <CenteredModal
+            isFullBtn={false}
+            btnWhiteText=""
+            oneBtn={true}
+            btnRedText={"Закрыть"}
+            isModal={isWaitModal}
+            onConfirm={() => setIsWaitModal(false)}
+            toggleModal={() => setIsWaitModal(false)}
+          >
+            <>
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 22,
+                  fontWeight: "700",
+                  marginBottom: 20,
+                  paddingTop: 10
+                }}
               >
-                <View style={styles.menuItemContent}>
-                  <FontAwesome5 name={item.icon} size={20} color="#9c0935" />
-                  <Text style={styles.menuItemText}>{item.label}</Text>
-                </View>
-                <MaterialIcons name="navigate-next" size={36} color="#9c0935" />
-              </TouchableOpacity>
-            ))}
-
-            <Modal
-              transparent={true}
-              visible={isInviteModalVisible}
-              onRequestClose={closeInviteModal}
-            >
-              <View style={styles.modalBackground}>
-                <View style={styles.modalContainer}>
-                  <Text style={styles.modalTitle}>
-                    Кому вы хотите отправить ссылку?
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={() => {
-                      closeInviteModal();
-                      openShareModal();
-                    }}
-                  >
-                    <Text style={styles.modalButtonText}>Пригласить мастеров</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.modalButton}
-                    onPress={() => {
-                      closeInviteModal();
-                      openShareModal();
-                    }}
-                  >
-                    <Text style={styles.modalButtonText}>Пригласить друзей</Text>
-                  </TouchableOpacity>
-                  <Button
-                    title="Закрыть"
-                    onPress={closeInviteModal}
-                    color="#E74C3C"
-                  />
-                </View>
-              </View>
-            </Modal>
-
-            <Modal
-              transparent={true}
-              visible={isShareModalVisible}
-              onRequestClose={closeShareModal}
-            >
-              <View style={styles.modalBackground}>
-                <View style={styles.modalContainer}>
-                  <Text style={styles.modalTitle}>Поделиться</Text>
-                  <View style={styles.iconContainer}>
-                    {data.map((item, index): any => (
-                      <TouchableOpacity key={index} style={styles.iconButton}>
-                        <FontAwesome
-                          name={item.name}
-                          size={40}
-                          color={item.color}
-                        />
-                        <Text style={styles.iconLabel}>{item.label}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                  <Button
-                    title="Закрыть"
-                    onPress={closeShareModal}
-                    color="#E74C3C"
-                  />
-                </View>
-              </View>
-            </Modal>
-            <CenteredModal
-              isFullBtn={false}
-              btnWhiteText=""
-              oneBtn={true}
-              btnRedText={"Закрыть"}
-              isModal={isWaitModal}
-              onConfirm={() => setIsWaitModal(false)}
-              toggleModal={() => setIsWaitModal(false)}
-            >
-              <>
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 22,
-                    fontWeight: "700",
-                    marginBottom: 20,
-                    paddingTop: 10
-                  }}
-                >
-                  Ваша заявка принта!
-                </Text>
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 14,
-                    fontWeight: "400",
-                    marginBottom: 20,
-                    letterSpacing: 1,
-                    textAlign: "center"
-                  }}
-                >
-                  Администратор проверяет Ваши данные.
-                </Text>
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 14,
-                    fontWeight: "400",
-                    marginBottom: 30,
-                    letterSpacing: 1,
-                    textAlign: "center"
-                  }}
-                >
-                  Это займет не более 20 минут
-                </Text>
-              </>
-            </CenteredModal>
-          </SafeAreaView>
+                Ваша заявка принта!
+              </Text>
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 14,
+                  fontWeight: "400",
+                  marginBottom: 20,
+                  letterSpacing: 1,
+                  textAlign: "center"
+                }}
+              >
+                Администратор проверяет Ваши данные.
+              </Text>
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 14,
+                  fontWeight: "400",
+                  marginBottom: 30,
+                  letterSpacing: 1,
+                  textAlign: "center"
+                }}
+              >
+                Это займет не более 20 минут
+              </Text>
+            </>
+          </CenteredModal>
           <CenteredModal
             btnWhiteText="Нет"
             isFullBtn
@@ -453,7 +493,8 @@ const ProfilePage: React.FC = () => {
             onConfirm={handleSubmit}
             toggleModal={() => setToggle(false)}
           />
-        </ScrollView>}
+        </View>
+      }
     </>
   );
 };
@@ -462,7 +503,33 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#21212E",
+    zIndex: 9999,
+  },
+  menuButtonText: {
+    color: "#fff",
+    fontSize: 18,
+  },
+  menuButton: {
     padding: 16,
+    backgroundColor: "#9c0935",
+  },
+  sidebar: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    flex: 1,
+    width: width,
+    height: height,
+    zIndex: 9999,
+  },
+  sidebarIn: {
+    width: width - 60,
+    height: height,
+    backgroundColor: "#21212E",
+    paddingTop: height / 15,
+    zIndex: 9999,
+    // padding: 16
+    marginLeft: -width / 30
   },
   title: {
     color: "#ffffff",
@@ -494,17 +561,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#b9b9c9",
-    padding: 16,
-    borderRadius: 8,
+    backgroundColor: "#21212E",
+    paddingHorizontal: height / 50,
+    paddingVertical: height / 60,
+    borderRadius: 12,
     marginBottom: 8,
+    borderColor: "#353535",
+    borderWidth: 2,
+    elevation: 10,
+    shadowColor: "#000",
   },
   menuItemContent: {
     flexDirection: "row",
     alignItems: "center",
   },
   menuItemText: {
-    color: "black",
+    color: "#fff",
     marginLeft: 16,
   },
   modalBackground: {

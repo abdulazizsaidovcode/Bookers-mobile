@@ -1,6 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Share, StyleSheet, Text, View } from "react-native";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import ProfilePage from "@/app/(profile)";
 
 const MasterHeader: React.FC = () => {
     const navigation = useNavigation<any>();
@@ -24,10 +27,10 @@ const MasterHeader: React.FC = () => {
     };
     return (
         <View style={styles.header}>
-            <Text style={styles.title}>Главная</Text>
+            <ProfilePage />
             <View style={styles.headerIcons}>
-                <Ionicons
-                    name="notifications"
+                <FontAwesome5
+                    name="bell"
                     size={24}
                     color={'#ffffff'}
                     style={{ marginRight: 16 }}
