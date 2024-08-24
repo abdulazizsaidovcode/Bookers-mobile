@@ -15,9 +15,7 @@ import {Feather} from "@expo/vector-icons";
 import {FontAwesome5} from "@expo/vector-icons";
 import {Entypo} from "@expo/vector-icons";
 import {FontAwesome6} from "@expo/vector-icons";
-import {Ionicons} from "@expo/vector-icons";
 import {Fontisto} from "@expo/vector-icons";
-import {AntDesign} from "@expo/vector-icons";
 import {router, useFocusEffect} from "expo-router";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import {getNumbers, putNumbers} from "@/helpers/api-function/numberSittings/numbersetting";
@@ -30,8 +28,9 @@ import useGetMeeStore from "@/helpers/state_managment/getMee";
 import {getFile} from "@/helpers/api";
 import {getTariffMaster} from "@/app/(profile)/(tariff)/tariff";
 import {setMasterTariff} from "@/constants/storage";
+import tw from "tailwind-react-native-classnames";
 
-const screenWidht = Dimensions.get("window").width;
+const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, "(welcome)/welcome">;
 
@@ -41,7 +40,6 @@ const Welcome = () => {
     const navigation = useNavigation<SettingsScreenNavigationProp | any>();
     const [getTariffStatus, setGetTariffStatus] = useState<string | null>(null);
 
-
     useFocusEffect(
         useCallback(() => {
             const fetchUserAndTariff = async () => {
@@ -49,21 +47,15 @@ const Welcome = () => {
                 const tariffStatus: any = await getTariffMaster(setGetTariffStatus);
                 setGetTariffStatus(tariffStatus);
             };
-
             fetchUserAndTariff();
 
-            if (number.length < 0 || number.length === 0) {
-                putNumbers(1, () => getNumbers(setNumber));
-            }
+            if (number.length < 0 || number.length === 0) putNumbers(1, () => getNumbers(setNumber));
             return;
         }, [])
     );
 
-
     useEffect(() => {
-        if (getTariffStatus) {
-            setMasterTariff(getTariffStatus);
-        }
+        if (getTariffStatus) setMasterTariff(getTariffStatus);
     }, [getTariffStatus]);
 
     const removeDuplicates = (array: any) => {
@@ -83,82 +75,91 @@ const Welcome = () => {
     };
 
     const data = [
-        // {
-        //     title: "Услуги",
-        //     description: "Ваша специализация и услуги",
-        //     icon: <Feather name="check-circle" size={24} color="white"/>,
-        //     onPress: () => navigation.navigate("(standart)/(services)/(myServices)/myServices"),
-        // },
         {
             title: "Услуги",
-            description: "Ваша специализация и услуги",
+            description: "Настройте свои услуги",
             icon: <Feather name="check-circle" size={24} color="white"/>,
             onPress: () => navigation.navigate("(standart)/(services)/(gender)/servesGender"),
         },
         {
             title: "График работы",
-            description: "Планируйте своё рабочее время",
+            description: "Настройте своё рабочее время",
             icon: <FontAwesome5 name="calendar" size={24} color="white"/>,
-            onPress: () => navigation.navigate("(free)/(work-grafic)/workMain"),
+            onPress: () => navigation.navigate("(free)/(work-grafic)/workGraffic"),
         },
         {
             title: "Локация",
-            description: "Ваше мето работы",
+            description: "Настройте локацию Вашего места работы",
             icon: <Entypo name="location" size={24} color="white"/>,
             onPress: () => router.push("../(location)/Location"),
         },
         {
             title: "Галерея",
-            description: "Создавайте фото и видео галереи своих работ",
+            description: "Создайте галерею своих работ",
             icon: <MaterialIcons name="photo" size={24} color="white"/>,
-            onPress: () =>
-                navigation.navigate(
-                    "(settings)/(settings-gallery)/settings-gallery-main"
-                ),
+            onPress: () => navigation.navigate("(settings)/(settings-gallery)/settings-gallery-main"),
         },
         {
             title: "Онлайн бронирование",
             description: "Настройте записи на Ваши услуги",
             icon: <FontAwesome6 name="calendar-plus" size={24} color="white"/>,
-            onPress: () =>
-                navigation.navigate("(standart)/(onlineBooking)/onlineBooking"),
+            onPress: () => navigation.navigate("(standart)/(onlineBooking)/onlineBooking"),
         },
-        {
-            title: "Уведомления",
-            description: "Настройте уведомления",
-            icon: <Ionicons name="notifications-outline" size={24} color="white"/>,
-            onPress: () => navigation.navigate("(notifications)/notifications"),
-        },
+        // {
+        //     title: "Уведомления",
+        //     description: "Настройте уведомления",
+        //     icon: <Ionicons name="notifications-outline" size={24} color="white"/>,
+        //     onPress: () => navigation.navigate("(notifications)/notifications"),
+        // },
         {
             title: "Клиенты",
-            description: "Добавьте своих клиентов",
+            description: "Добавьте своих клинетов",
             icon: <Fontisto name="persons" size={24} color="white"/>,
-            onPress: () => navigation.navigate(`${getTariffStatus === 'FREE' ? `(free)/(client)/main` : '(standart)/client/standard-main'}`),
+            onPress: () => navigation.navigate(`(standart)/client/standard-main`),
         },
-        {
-            title: "Помощь",
-            description: "Ознакомьтесь с документацией сервиса",
-            icon: <AntDesign name="questioncircleo" size={24} color="white"/>,
-            onPress: () => navigation.navigate("(profile)/(help)/help"),
-        },
+        // {
+        //     title: "Помощь",
+        //     description: "Ознакомьтесь с документацией сервиса",
+        //     icon: <AntDesign name="questioncircleo" size={24} color="white"/>,
+        //     onPress: () => navigation.navigate("(profile)/(help)/help"),
+        // },
     ];
 
     const renderItem = ({item, index}: { item: any, index: number }) => {
         const isEnabled = number.includes(index + 1);
+        const checkNumber = number.length > 0 ? number.length - 1 : 0;
+
+        const checkStatus = () => {
+            if (number.length === 6) return 'FULL'
+            else if (checkNumber <= index) {
+                if (number.length === index + 1) return 'NOW'
+            } else return 'FINISHED'
+        }
+
         return (
             <Pressable
                 onPress={item.onPress}
                 key={index}
                 disabled={!isEnabled}
-                style={({pressed}) => [styles.pressable, {opacity: pressed ? 0.8 : isEnabled ? 1 : 0.5,},]}
+                style={({pressed}) => [styles.pressable, {opacity: pressed ? .9 : isEnabled ? 1 : 0.65},]}
             >
-                <View style={styles.button}>
+                <View style={[
+                    styles.button,
+                    checkStatus() === 'NOW' ? styles.shadow : {},
+                    {backgroundColor: checkStatus() === 'NOW' ? '#fff' : "#B9B9C9", position: 'relative'}
+                ]}>
+                    {checkStatus() === 'FINISHED' && (
+                        <View style={[tw`absolute top-0 left-0 w-7 h-7 rounded-sm justify-center items-center`, {backgroundColor: '#9C0A35'}]}>
+                            <Entypo name="check" size={20} color="white"/>
+                        </View>
+                    )}
                     <View style={styles.iconContainer}>
                         <View style={styles.iconBackground}>{item.icon}</View>
                     </View>
-                    <Text style={styles.buttonTitle}>{item.title}</Text>
+                    <Text
+                        style={styles.buttonTitle}>{item.title}</Text>
                     <Text style={isEnabled ? styles.buttonDescription : styles.buttonDescription2}>
-                        {item.description}
+                        {(number.includes(index + 1) && checkStatus() === 'FINISHED') ? 'Настроено!' : item.description}
                     </Text>
                 </View>
             </Pressable>
@@ -173,7 +174,7 @@ const Welcome = () => {
                 contentContainerStyle={[styles.scrollView, {paddingBottom: 16}]}
             >
                 <View style={styles.progressBar}>
-                    {[...Array(8)].map((_, index) => (
+                    {[...Array(6)].map((_, index) => (
                         <View
                             key={index}
                             style={
@@ -202,12 +203,12 @@ const Welcome = () => {
                     <Text style={styles.profileName}>
                         {getMee.firstName} {getMee.lastName}
                     </Text>
-                    <View style={styles.infoContainer}>
-                        <Text style={styles.infoText}>
-                            А теперь мы поможем Вам настроить приложение что бы клиенты могли
-                            начать бронировать Ваши услуги.
-                        </Text>
-                    </View>
+                    {/*<View style={styles.infoContainer}>*/}
+                    {/*    <Text style={styles.infoText}>*/}
+                    {/*        А теперь мы поможем Вам настроить приложение что бы клиенты могли*/}
+                    {/*        начать бронировать Ваши услуги.*/}
+                    {/*    </Text>*/}
+                    {/*</View>*/}
                 </View>
                 <FlatList
                     data={data}
@@ -321,16 +322,16 @@ const styles = StyleSheet.create({
         backgroundColor: "#21212e",
     },
     pressable: {
-        width: screenWidht / 2.2,
+        width: screenWidth / 2.2,
         padding: 8,
     },
     button: {
         borderRadius: 24,
-        height: screenHeight / 4.3,
+        minHeight: screenHeight / 4.3,
+        // maxHeight: screenHeight / 4.2,
         alignItems: "center",
         paddingVertical: 20,
         paddingHorizontal: 8,
-        backgroundColor: "#b9b9c9",
     },
     iconContainer: {
         width: "100%",
@@ -361,4 +362,13 @@ const styles = StyleSheet.create({
         color: "#0E0E0E",
         textAlign: "center",
     },
+    shadow: {
+        shadowColor: "#FFF",
+        shadowOffset: {
+            width: 5,
+            height: 5,
+        },
+        shadowRadius: 15,
+        elevation: 10,
+    }
 });

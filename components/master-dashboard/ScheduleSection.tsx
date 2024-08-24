@@ -32,6 +32,7 @@ const StatusIndicator: React.FC<{ color: string; text: string }> = ({
 const ScheduleSection: React.FC<ScheduleSectionProps> = ({
     orderTimeSlots,
     todayGraficData,
+    freeTimeSlots,
     workPending,
     isOpen,
     toggleIsOpen
@@ -43,7 +44,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
     };
 
     return (
-        <>
+        <>  
             <TouchableOpacity onPress={handleToggleIsOpen} activeOpacity={0.8} style={styles.scheduleSection}>
                 <View>
                     <Text style={styles.sectionTitle}>Расписание на сегодня</Text>
@@ -72,30 +73,27 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
             </View>
             {isOpen ? workPending ? <Loading /> : orderTimeSlots && (
                 <View style={{ marginTop: 5, flexDirection: 'row' }}>
-                    <View>
+                    <View style={{ width: '50%' }}>
                         <FlatList
                             data={orderTimeSlots}
                             renderItem={renderTimeSlot}
-                            keyExtractor={(item) => item.time}
-                            style={{ width: '50%' }}
+                            keyExtractor={(item) => item.type}
+                            numColumns={1}
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={styles.scheduleContainer}
+                        />
+                    </View>
+                    <View style={{ width: '50%' }}>
+                        <FlatList
+                            data={freeTimeSlots}
+                            renderItem={renderTimeSlot}
+                            keyExtractor={(item) => item.type}
                             numColumns={2}
                             columnWrapperStyle={{ justifyContent: 'space-between' }}
                             showsHorizontalScrollIndicator={false}
                             contentContainerStyle={styles.scheduleContainer}
                         />
                     </View>
-                    {/* <View>
-                        <FlatList
-                            data={orderTimeSlots}
-                            renderItem={renderTimeSlot}
-                            keyExtractor={(item) => item.time}
-                            style={{ width: '50%', }}
-                            numColumns={2}
-                            columnWrapperStyle={{ justifyContent: 'space-between' }}
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={styles.scheduleContainer}
-                        />
-                    </View> */}
                 </View>
             ) : null}
         </>

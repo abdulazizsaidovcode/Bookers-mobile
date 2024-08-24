@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, TextInput, Dimensions, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { addPhoto, delPhoto, editMainPhoto, editName, fetchFullData } from '@/helpers/api-function/gallery/settings-gallery';
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import { getFile } from '@/helpers/api';
@@ -22,8 +22,9 @@ const { width, height } = Dimensions.get('window');
 
 const GalleryDetails: React.FC = () => {
     const route = useRoute();
+    const navigation = useNavigation()
     const { id } = route.params as { id: number };
-    const { fullData, setFullData, setData, booleanState, setBooleanState } = useGalleryStore();
+    const { fullData, setFullData, setData, booleanState, setBooleanState, isWatingModal, setIsWaitingModal } = useGalleryStore();
     const [name, setName] = useState('');
     const [selectedImages, setSelectedImages] = useState<string[]>([]);
     const [images, setImages] = useState<string[]>([]);
@@ -63,6 +64,7 @@ const GalleryDetails: React.FC = () => {
         setBooleanState({ ...booleanState, textModal: !booleanState.textModal })
         setText(text)
     }
+    const toggleWaitingModal = () => setIsWaitingModal(!isWatingModal)
 
     const spliceText = (text: string | null) => {
         if (text === null) return null;
@@ -159,7 +161,7 @@ const GalleryDetails: React.FC = () => {
                     name: `photos[${index}].image`,
                 } as any);
             });
-            addPhoto(id, formData, setFullData, setImages, setBooleanState, booleanState, setLoading);
+            addPhoto(id, formData, setFullData, setImages, setBooleanState, booleanState, setLoading, toggleWaitingModal, navigation.goBack);
         } else {
             editMainPhoto(setFullData, setData, id, selectedMainImages, toggleShowMain, setBooleanState, booleanState, setIsLoading, setLoading)
         }

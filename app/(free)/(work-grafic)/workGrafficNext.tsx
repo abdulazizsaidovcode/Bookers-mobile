@@ -6,19 +6,22 @@ import Buttons from "@/components/(buttons)/button";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { Item } from "@/type/graficWork/graficWork";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import { postWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import { getWorkDay, postWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import CalendarGrafficEdit from "./components/calendar";
 import Toast from "react-native-simple-toast";
 import { RootStackParamList } from "@/type/root";
 import { NavigationProp } from "@react-navigation/native";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { Loading } from "@/components/loading/loading";
+import WorkDays from "./components/workDays";
+import { getUser } from "@/helpers/api-function/getMe/getMee";
+import Explanations from "@/components/(explanations)/explanations";
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
-  "(free)/(work-grafic)/workGraffic"
+  "(free)/(work-grafic)/workGrafficNext"
 >;
 
-const GrafficWorkEdit: React.FC = () => {
+const WorkGrafficNext: React.FC = () => {
   const {
     calendarDate,
     setWeek,
@@ -26,6 +29,8 @@ const GrafficWorkEdit: React.FC = () => {
     weekData,
     setIsLoading,
     isLoading,
+    setGetMee,
+    setWeekData
   } = graficWorkStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
@@ -41,6 +46,14 @@ const GrafficWorkEdit: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
+      getUser(setGetMee);
+      getWorkDay(setWeekData, setIsLoading);
+      return () => { };
+    }, [])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
       const updatedItems = items.map((item) => {
         const isWeekDataActive = weekData.some(
           (weekItem) =>
@@ -50,25 +63,14 @@ const GrafficWorkEdit: React.FC = () => {
         return { ...item, active: isWeekDataActive || item.active };
       });
       setItems(updatedItems);
-      return () => {};
+      return () => { };
     }, [weekData])
   );
 
-  const handleCategoryPress = (id: number) => {
-    const updatedItems = items.map((item) =>
-      item.id === id ? { ...item, active: !item.active } : item
-    );
-    setItems(updatedItems);
-    setWeek(
-      updatedItems.map((item) => ({
-        dayName: item.dayValue,
-        active: item.active,
-      }))
-    );
-  };
+
 
   const handleContinuePress = () => {
-    if (!calendarDate || !week.some((day) => day.active)) {
+    if (!week.some((day) => day.active)) {
       Toast.show(
         "Пожалуйста, выберите дату начала работы и хотя бы один рабочий день.",
         Toast.LONG
@@ -79,9 +81,10 @@ const GrafficWorkEdit: React.FC = () => {
     postWorkDay(
       week,
       calendarDate,
-      () => navigation.navigate("(free)/(work-grafic)/workMain"),
+      () => { },
       setIsLoading
     );
+    navigation.navigate("(free)/(work-grafic)/workTime")
   };
 
   return (
@@ -94,35 +97,23 @@ const GrafficWorkEdit: React.FC = () => {
           <View style={{ paddingLeft: 10 }}>
             <NavigationMenu name="График работы" />
           </View>
-          <ScrollView>
-            <View style={styles.section}>
-              <Text style={styles.title}>График работы с</Text>
-              <CalendarGrafficEdit />
-            </View>
+          <View style={styles.section}>
+            <Explanations text="Выберите дату с которой Вы начнёте работу" />
+
             <View style={styles.fullHeightSection}>
-              <Text style={styles.title}>Выберите рабочие дни в неделю</Text>
-              <View style={styles.categoriesContainer}>
-                {items.map((item, index) => (
-                  <ServicesCategory
-                    key={index}
-                    title={item.dayName}
-                    isChecked={item.active}
-                    onPress={() => handleCategoryPress(item.id)}
-                  />
-                ))}
-              </View>
+              <WorkDays />
               <View style={{ padding: 10 }}>
                 <Buttons title="Продолжить" onPress={handleContinuePress} />
               </View>
             </View>
-          </ScrollView>
+          </View>
         </SafeAreaView>
       )}
     </>
   );
 };
 
-export default GrafficWorkEdit;
+export default WorkGrafficNext;
 
 const styles = StyleSheet.create({
   container: {
@@ -130,10 +121,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#21212e",
   },
   section: {
-    height: 430,
+    paddingHorizontal: 15,
+    flex: 1,
     display: "flex",
-    gap: 20,
-    paddingHorizontal:15
+    justifyContent: "space-between",
+    paddingVertical: 10
   },
   fullHeightSection: {
     flex: 1,

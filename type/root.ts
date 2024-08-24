@@ -95,4 +95,5 @@ export type RootStackParamList = {
   '(standart)/(onlineBooking)/(booking)/confirmationRecor': undefined
   '(standart)/(onlineBooking)/(booking)/breakBetweenSessions': undefined
   '(profile)/(help)/help': undefined
+  '(free)/(work-grafic)/workGrafficNext': undefined
 };

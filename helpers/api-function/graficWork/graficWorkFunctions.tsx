@@ -17,21 +17,21 @@ export const getWorkDay = async (
   setData: (val: weekList[]) => void,
   setIsLoading?: (val: boolean) => void
 ) => {
-  setIsLoading ? setIsLoading(true) : () => {};
+  setIsLoading ? setIsLoading(true) : () => { };
   try {
     const config = await getConfig();
     const response = await axios.get(`${workday_get}`, config ? config : {});
 
     if (response.data.success) {
-      setIsLoading ? setIsLoading(false) : () => {};
+      setIsLoading ? setIsLoading(false) : () => { };
       setData(response.data.body);
     } else {
-      setIsLoading ? setIsLoading(false) : () => {};
+      setIsLoading ? setIsLoading(false) : () => { };
       setData([]);
     }
   } catch (error) {
     console.error("Error fetching work days:", error);
-    setIsLoading ? setIsLoading(false) : () => {};
+    setIsLoading ? setIsLoading(false) : () => { };
     setData([]);
   }
 };
@@ -41,7 +41,7 @@ export const getWorkTime = async (
   masterID: string,
   setIsLoading?: (val: boolean) => void
 ) => {
-  setIsLoading ? setIsLoading(true) : () => {};
+  setIsLoading ? setIsLoading(true) : () => { };
   try {
     if (!masterID) {
       setData([]);
@@ -55,15 +55,15 @@ export const getWorkTime = async (
     );
 
     if (response.data.success) {
-      setIsLoading ? setIsLoading(false) : () => {};
+      setIsLoading ? setIsLoading(false) : () => { };
       setData(response.data.body);
     } else {
-      setIsLoading ? setIsLoading(false) : () => {};
+      setIsLoading ? setIsLoading(false) : () => { };
       setData([]);
     }
   } catch (error) {
     console.error("Error fetching work times:", error);
-    setIsLoading ? setIsLoading(false) : () => {};
+    setIsLoading ? setIsLoading(false) : () => { };
     setData([]);
   }
 };
@@ -74,7 +74,7 @@ export const postWorkDay = async (
   router: () => void,
   setIsLoading?: (val: boolean) => void
 ) => {
-  setIsLoading ? setIsLoading(true) : () => {};
+  setIsLoading ? setIsLoading(true) : () => { };
   try {
     if (!workDayWeeks || !date) {
       return null;
@@ -93,15 +93,15 @@ export const postWorkDay = async (
     );
 
     if (response.data.success) {
-      setIsLoading ? setIsLoading(false) : () => {};
+      setIsLoading ? setIsLoading(false) : () => { };
       Toast.show("Work day saved successfully", Toast.LONG);
       router();
     } else {
-      setIsLoading ? setIsLoading(false) : () => {};
+      setIsLoading ? setIsLoading(false) : () => { };
       Toast.show(response.data.message, Toast.LONG);
     }
   } catch (error: any) {
-    setIsLoading ? setIsLoading(false) : () => {};
+    setIsLoading ? setIsLoading(false) : () => { };
     Toast.show(error.response.data.message, Toast.LONG);
   }
 };
@@ -114,7 +114,7 @@ export const postWorkTime = async (
   router: () => void,
   setIsLoading?: (val: boolean) => void
 ) => {
-  setIsLoading ? setIsLoading(true) : () => {};
+  setIsLoading ? setIsLoading(true) : () => { };
   try {
     const data = {
       fromTimeHour: fromTimeHour,
@@ -130,16 +130,16 @@ export const postWorkTime = async (
       config ? config : {}
     );
     if (response.data.success) {
-      setIsLoading ? setIsLoading(false) : () => {};
-      Toast.show("Work time saved successfully", Toast.LONG);
+      setIsLoading ? setIsLoading(false) : () => { };
+      Toast.show("The runtime has been set successfully", Toast.LONG);
       router();
     } else {
-      setIsLoading ? setIsLoading(false) : () => {};
+      setIsLoading ? setIsLoading(false) : () => { };
       Toast.show(response.data.message, Toast.LONG);
     }
   } catch (error) {
-    setIsLoading ? setIsLoading(false) : () => {};
-    Toast.show("Error saving work time", Toast.LONG);
+    setIsLoading ? setIsLoading(false) : () => { };
+    Toast.show("Error saving runtime", Toast.LONG);
   }
 };
 
@@ -149,7 +149,7 @@ export const putWorkDay = async (
   router: () => void,
   setIsLoading?: (val: boolean) => void
 ) => {
-  setIsLoading ? setIsLoading(true) : () => {};
+  setIsLoading ? setIsLoading(true) : () => { };
   try {
     if (!workDayWeeks || !date) {
       Toast.show("hdhdhdhd", Toast.LONG);
@@ -168,16 +168,16 @@ export const putWorkDay = async (
     );
 
     if (response.data.success) {
-      setIsLoading ? setIsLoading(false) : () => {};
+      setIsLoading ? setIsLoading(false) : () => { };
       Toast.show("Work day updated successfully", Toast.LONG);
       router();
     } else {
-      setIsLoading ? setIsLoading(false) : () => {};
+      setIsLoading ? setIsLoading(false) : () => { };
       Toast.show(response.data.message, Toast.LONG);
     }
   } catch (error) {
     console.error("Error updating work day:", error);
-    setIsLoading ? setIsLoading(false) : () => {};
+    setIsLoading ? setIsLoading(false) : () => { };
     Toast.show("Error updating work day", Toast.LONG);
   }
 };
@@ -190,7 +190,7 @@ export const putWorkTime = async (
   router: () => void,
   setIsLoading?: (val: boolean) => void
 ) => {
-  setIsLoading ? setIsLoading(true) : () => {};
+  setIsLoading ? setIsLoading(true) : () => { };
   try {
     const data = {
       fromTimeHour: fromTimeHour,
@@ -207,16 +207,26 @@ export const putWorkTime = async (
     );
 
     if (response.data.success) {
-      setIsLoading ? setIsLoading(false) : () => {};
-      Toast.show("Work time updated successfully", Toast.LONG);
+      setIsLoading ? setIsLoading(false) : () => { };
+      Toast.show("The runtime has been updated successfully", Toast.LONG);
       router();
     } else {
-      setIsLoading ? setIsLoading(false) : () => {};
+      setIsLoading ? setIsLoading(false) : () => { };
       Toast.show(response.data.message, Toast.LONG);
     }
   } catch (error) {
-    setIsLoading ? setIsLoading(false) : () => {};
-    console.error("Error updating work time:", error);
-    Toast.show("Error updating work time", Toast.LONG);
+    setIsLoading ? setIsLoading(false) : () => { };
+    console.error("Error updating runtime:", error);
+    Toast.show("Error updating runtime", Toast.LONG);
   }
 };
+
+
+export function formatTime(time: string) {
+  const timePattern = /^(\d{1,2}):0$/;
+
+  if (timePattern.test(time)) {
+    const [hours] = time.split(":");
+    return `${hours}:00`;
+  } else return time;
+}

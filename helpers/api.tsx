@@ -151,7 +151,7 @@ export const order_canceled: string = `${base_url}order/client/canceled-sessions
 export const order_status_update: string = `${base_url}order/confirm-order`
 export const order_update: string = `${base_url}order/move-order`
 
-export const dashboard_daily_time_orders: string = `${base_url}user/today/calendar`
+export const dashboard_daily_time_orders: string = `${base_url}user/today/calendar/home`
 export const dashboard_main_statistic: string = `${base_url}order/master/order-statistic`
 export const dashboard_wait_order: string = `${base_url}order/master/clients-today/wait`
 export const dashboard_hall_order: string = `${base_url}order/master/clients-today/hall`

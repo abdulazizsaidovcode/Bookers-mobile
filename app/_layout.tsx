@@ -157,6 +157,7 @@ import Offer from "./(auth)/(offer)/offer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Header } from "react-native/Libraries/NewAppScreen";
 import { Alert } from "react-native";
+import WorkGrafficNext from "./(free)/(work-grafic)/workGrafficNext";
 // import ResponseLocationEdit from "./(location)/(response-location)/responseLocationEdit";
 
 const Stack = createNativeStackNavigator();
@@ -904,6 +905,11 @@ function MainStack() {
               name="(auth)/(offer)/offer"
               component={Offer}
             />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="(free)/(work-grafic)/workGrafficNext"
+              component={WorkGrafficNext}
+            />
           </Stack.Navigator>
         </MenuProvider>
       </StompProvider>
@@ -952,18 +958,6 @@ export default function RootLayout() {
           backgroundColor: '#21212E',
           width: 340,
         },
-        drawerContentOptions: {
-          activeTintColor: '#e91e63',
-          itemStyle: { marginVertical: 5 },
-        },
-      }}
-      drawerContentOptions={{
-        activeTintColor: '#fff',
-        itemStyle: { marginVertical: 5 },
-      }}
-      drawerStyle={{
-        backgroundColor: '#21212E',
-        width: 240,
       }}
       drawerContent={(props) => <ProfilePage />}
     >
