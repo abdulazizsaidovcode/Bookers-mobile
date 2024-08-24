@@ -13,8 +13,6 @@ import { category_child, masterAdd_category } from '@/helpers/api';
 import { useRoute } from '@react-navigation/native';
 import Textarea from '@/components/select/textarea';
 import { getConfig } from '@/app/(tabs)/(master)/main';
-import Skelaton from '@/components/skelaton/skelaton';
-import AccordionSkelaton from '@/components/skelaton/accordionSkelaton';
 import Explanations from '@/components/(explanations)/explanations';
 
 const Expertise: React.FC = () => {
