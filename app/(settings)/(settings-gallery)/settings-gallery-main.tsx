@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, View, Image, Pressable, Dimensions } from
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavigationMenu from '@/components/navigation/navigation-menu';
 import Buttons from '@/components/(buttons)/button';
-import { AntDesign, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/type/root';
 import { getFile } from '@/helpers/api';
@@ -11,12 +11,13 @@ import { delGallery, fetchData } from '@/helpers/api-function/gallery/settings-g
 import useGalleryStore from '@/helpers/state_managment/gallery/settings-gallery';
 import { getNumbers, putNumbers } from '@/helpers/api-function/numberSittings/numbersetting';
 import CenteredModal from '@/components/(modals)/modal-centered';
-import Toast from 'react-native-simple-toast'
+import Toast from 'react-native-simple-toast';
 import { useFocusEffect } from 'expo-router';
 import { getMasterTariff } from '@/constants/storage';
 import numberSettingStore from '@/helpers/state_managment/numberSetting/numberSetting';
 import { StatusBar } from 'expo-status-bar';
 import { Loading } from '@/components/loading/loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, '(settings)/(settings-gallery)/settings-gallery-main'>;
 const { width, height } = Dimensions.get('window');
@@ -27,17 +28,69 @@ const SettingsGalleryMain = () => {
     const { data, setData, isLoading, setIsLoading } = useGalleryStore();
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [tariff, setTariff] = useState(null)
+    const [tariff, setTariff] = useState(null);
     const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
-    const [showAllAttachments, setShowAllAttachments] = useState(false); // New state for attachment condition
+    const [showAllAttachments, setShowAllAttachments] = useState(false);
+    const [isRejectModal, setIsRejectModal] = useState(false);
+    const [confirmedGalleries, setConfirmedGalleries] = useState<string[]>([]);
+    const [currentConfirmedIndex, setCurrentConfirmedIndex] = useState<number>(0);
+    const [hasSeenModals, setHasSeenModals] = useState<boolean>(false);
+
+    const checkForConfirmedAttachments = () => {
+        const confirmedNames = [];
+        for (const item of data) {
+            if (item.resGalleryAttachments.some(attachment => attachment.attachmentStatus === 'APPROVED')) {
+                confirmedNames.push(item.albumName);
+            }
+        }
+        return confirmedNames;
+    };
 
     useFocusEffect(
         useCallback(() => {
-            fetchData(setData, setIsLoading);
-            getMasterTariff(setTariff);
-            return () => { }
-        }, [])
+            const loadSeenModals = async () => {
+                try {
+                    const seen = await AsyncStorage.getItem('hasSeenModals');
+                    if (seen === 'true') {
+                        setHasSeenModals(true);
+                    }
+                } catch (error) {
+                    console.error('Failed to load modal state from AsyncStorage', error);
+                }
+            };
+
+            const checkAndShowModals = async () => {
+                fetchData(setData, setIsLoading);
+                getMasterTariff(setTariff);
+
+                const confirmedNames = checkForConfirmedAttachments();
+                if (confirmedNames.length > 0 && !hasSeenModals) {
+                    setConfirmedGalleries(confirmedNames);
+                    setHasSeenModals(true);
+                    try {
+                        await AsyncStorage.setItem('hasSeenModals', 'true');
+                    } catch (error) {
+                        console.error('Failed to save modal state to AsyncStorage', error);
+                    }
+                }
+            };
+
+            loadSeenModals().then(() => {
+                checkAndShowModals();
+            });
+
+            return () => { };
+        }, [hasSeenModals])
     );
+
+    const handleNextModal = () => {
+        if (currentConfirmedIndex < confirmedGalleries.length - 1) {
+            setCurrentConfirmedIndex(prevIndex => prevIndex + 1);
+        } else {
+            setConfirmedGalleries([]);
+            setCurrentConfirmedIndex(0);
+        }
+    };
 
     const handlePress = (id: number) => {
         if (showCheckboxes) {
@@ -49,9 +102,9 @@ const SettingsGalleryMain = () => {
 
     const toggleModal = () => {
         if (selectedItemId !== null) {
-            setIsOpen(!isOpen)
+            setIsOpen(!isOpen);
         } else {
-            Toast.show('Please select a gallery', Toast.LONG)
+            Toast.show('Please select a gallery', Toast.LONG);
         }
     }
 
@@ -60,24 +113,26 @@ const SettingsGalleryMain = () => {
         setSelectedItemId(null);
     }
 
+    const toggleRejectModal = () => setIsRejectModal(!isRejectModal)
+
     const handleDelGallery = () => {
         if (selectedItemId) {
             delGallery(selectedItemId, setData, toggleModal, toggleCheckboxes, setIsLoading);
         }
     }
 
-    const number = tariff === 'STANDARD' ? 4 : 2
+    const number = tariff === 'STANDARD' ? 4 : 2;
 
     if (isLoading) {
-        return <Loading />
+        return <Loading />;
     }
 
     return (
         <SafeAreaView style={styles.container}>
-                <StatusBar style="light" />
-                <View style={{paddingHorizontal: 10}}>
-                    <NavigationMenu name='Моя галерея' />
-                </View>
+            <StatusBar style="light" />
+            <View style={{ paddingHorizontal: 10 }}>
+                <NavigationMenu name='Моя галерея' />
+            </View>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.content}>
                     <View>
@@ -164,12 +219,31 @@ const SettingsGalleryMain = () => {
                         isFullBtn={true}
                         onConfirm={handleDelGallery}
                     >
-                        <View style={{justifyContent: 'center', alignItems: 'center', marginBottom: 10}}>
-                        <MaterialIcons name="delete" size={100} color="#9C0A35" />
+                        <View style={{ justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+                            <MaterialIcons name="delete" size={100} color="#9C0A35" />
                             <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}>Вы уверены, что хотите
                                 открыть эту галерею?</Text>
                         </View>
                     </CenteredModal>
+                    {confirmedGalleries.length > 0 && (
+                        <CenteredModal
+                            toggleModal={() => { }}
+                            isModal={true}
+                            onConfirm={handleNextModal}
+                            oneBtn
+                            btnWhiteText=""
+                            btnRedText="Закрыть"
+                            isFullBtn={false}
+                        >
+                            <View style={{ justifyContent: 'center', alignItems: 'center', margin: 10, gap: 10 }}>
+                                <Feather name="check-circle" size={100} color="#9C0A35" />
+                                <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}>
+                                    Фото альбома “{confirmedGalleries[currentConfirmedIndex]}”
+                                    одобрено администратором
+                                </Text>
+                            </View>
+                        </CenteredModal>
+                    )}
                 </View>
             </ScrollView>
             <View style={{ position: 'absolute', bottom: 0, padding: 10, width: '100%', justifyContent: 'center' }}>
@@ -184,7 +258,7 @@ const SettingsGalleryMain = () => {
                         }} title='На главную' />}
             </View>
         </SafeAreaView>
-    )
+    );
 }
 
 export default SettingsGalleryMain;
@@ -197,7 +271,7 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         justifyContent: 'space-between',
-        paddingHorizontal:5
+        paddingHorizontal: 5
     },
     content: {
         padding: 10,

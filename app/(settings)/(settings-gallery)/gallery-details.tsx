@@ -15,6 +15,8 @@ import Toast from 'react-native-simple-toast';
 import { EditMainPhoto } from '@/type/gallery/gallery';
 import LoadingButtons from '@/components/(buttons)/loadingButton';
 import { StatusBar } from 'expo-status-bar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Loading } from '@/components/loading/loading';
 
 const { width, height } = Dimensions.get('window');
 
@@ -28,31 +30,32 @@ const GalleryDetails: React.FC = () => {
     const [text, setText] = useState<string | null>(null)
     const [selectedMainImages, setSelectedMainImages] = useState<EditMainPhoto[]>([]);
     const { setIsLoading } = useGalleryStore()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        fetchFullData(id, setFullData);
+        fetchFullData(id, setFullData, setLoading);
     }, [id, setFullData]);
 
     useEffect(() => {
         if (booleanState.selectAll) {
-            setSelectedImages(fullData.resGalleryAttachments.map(item => item.attachmentStatus === 'CANCELED' ? '' : item.attachmentId));
+            setSelectedImages(fullData ? fullData.resGalleryAttachments.map(item => item.attachmentStatus === 'CANCELED' ? '' : item.attachmentId) : []);
         } else {
             setSelectedImages([]);
         }
-    }, [booleanState.selectAll, fullData.resGalleryAttachments]);
+    }, [booleanState.selectAll, fullData && fullData.resGalleryAttachments]);
 
     useEffect(() => {
-        const updatedMainImages = fullData.resGalleryAttachments
+        const updatedMainImages = fullData?.resGalleryAttachments
             .map(item => item.attachmentStatus === 'APPROVED' && ({
                 attachmentId: item.attachmentId,
                 main: selectedImages.includes(item.attachmentId)
             }))
             .filter(Boolean) as EditMainPhoto[];
         setSelectedMainImages(updatedMainImages);
-    }, [selectedImages, fullData.resGalleryAttachments]);
+    }, [selectedImages, fullData && fullData.resGalleryAttachments]);
 
     const toggleModal = () => {
-        setName(fullData.albumName);
+        setName(fullData ? fullData.albumName : '');
         setBooleanState({ ...booleanState, isOpen: !booleanState.isOpen });
     };
 
@@ -68,7 +71,7 @@ const GalleryDetails: React.FC = () => {
         const displayText = isLongText ? text.slice(0, 25) : text;
 
         return (
-            <Pressable onPress={() => toggleTextModal(text)} style={{ flexDirection: 'row' }}>
+            <Pressable onPress={() => isLongText && toggleTextModal(text)} style={{ flexDirection: 'row' }}>
                 <Text style={{ color: 'white', textAlign: 'center' }}>{isLongText ? displayText + '...' : displayText}</Text>
             </Pressable>
         );
@@ -83,7 +86,7 @@ const GalleryDetails: React.FC = () => {
     };
 
     const handleConfirm = () => {
-        editName(id, setFullData, name, toggleModal, setData, setBooleanState, booleanState, setIsLoading);
+        editName(id, setFullData, name, toggleModal, setData, setBooleanState, booleanState, setIsLoading, setLoading);
     };
 
     const handleDeleteMode = () => {
@@ -97,15 +100,14 @@ const GalleryDetails: React.FC = () => {
             : [...prev, imageId]
         );
     };
-    console.log('isDeleteMode', booleanState.isDeleteMode);
-    console.log('selectAll', booleanState.selectAll);
 
     const handleDelete = () => {
         setBooleanState({ ...booleanState, isDeleteMode: false, selectAll: false });
         delPhoto(id, selectedImages, setFullData, setData, () => {
             toggleAllModal();
             setBooleanState({ ...booleanState, isDeleteMode: false, selectAll: false, isAllOpen: false }); // Ensure isDeleteMode is set to false
-        }, setIsLoading);
+        }, setIsLoading,
+            setLoading);
         setSelectedImages([]);
     };
 
@@ -157,11 +159,15 @@ const GalleryDetails: React.FC = () => {
                     name: `photos[${index}].image`,
                 } as any);
             });
-            addPhoto(id, formData, setFullData, setImages, setBooleanState, booleanState);
+            addPhoto(id, formData, setFullData, setImages, setBooleanState, booleanState, setLoading);
         } else {
-            editMainPhoto(setFullData, setData, id, selectedMainImages, toggleShowMain, setBooleanState, booleanState, setIsLoading)
+            editMainPhoto(setFullData, setData, id, selectedMainImages, toggleShowMain, setBooleanState, booleanState, setIsLoading, setLoading)
         }
     };
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -188,11 +194,11 @@ const GalleryDetails: React.FC = () => {
                     addOnPress={toggleBottomModal}
                 />)}
                 <View style={styles.content}>
-                    <Text style={styles.title}>{fullData.albumName}</Text>
+                    <Text style={styles.title}>{fullData && fullData.albumName}</Text>
                     <View style={styles.imagesContainer}>
-                        {images.length === 0 && fullData.resGalleryAttachments.length <= 0 ? (
+                        {images.length === 0 && fullData && fullData.resGalleryAttachments.length <= 0 ? (
                             <Text style={styles.noImagesText}>В этой галерее нет фотографий</Text>
-                        ) : fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
+                        ) : fullData && fullData.resGalleryAttachments.map((albumItem, albumIndex) => (
                             <View key={albumIndex} style={styles.imageWrapper}>
                                 {albumItem.attachmentStatus === 'CANCELED' ? null : booleanState.isDeleteMode && (
                                     <TouchableOpacity style={styles.checkIcon}
@@ -278,7 +284,7 @@ const GalleryDetails: React.FC = () => {
                     <View style={{ marginBottom: 10, justifyContent: 'center', alignItems: 'center' }}>
                         <MaterialIcons name="delete" size={100} color="#9C0A35" />
                         <Text style={styles.modalContentText}>
-                            {selectedImages.length === fullData.resGalleryAttachments.length
+                            {selectedImages.length === fullData?.resGalleryAttachments.length
                                 ? 'Вы уверены, что хотите удалить все фото альбома?'
                                 : 'Вы уверены, что хотите удалить фото?'}
                         </Text>

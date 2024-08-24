@@ -84,7 +84,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
                             contentContainerStyle={styles.scheduleContainer}
                         />
                     </View>
-                    <View>
+                    {/* <View>
                         <FlatList
                             data={orderTimeSlots}
                             renderItem={renderTimeSlot}
@@ -95,7 +95,7 @@ const ScheduleSection: React.FC<ScheduleSectionProps> = ({
                             showsHorizontalScrollIndicator={false}
                             contentContainerStyle={styles.scheduleContainer}
                         />
-                    </View>
+                    </View> */}
                 </View>
             ) : null}
         </>
