@@ -1,5 +1,5 @@
-import {Text, View} from "@/components/Themed";
-import React, {useCallback, useEffect, useState} from "react";
+import { Text, View } from "@/components/Themed";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Image,
     ScrollView,
@@ -9,34 +9,35 @@ import {
     Dimensions,
     TouchableOpacity, FlatList,
 } from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import {Feather} from "@expo/vector-icons";
-import {FontAwesome5} from "@expo/vector-icons";
-import {Entypo} from "@expo/vector-icons";
-import {FontAwesome6} from "@expo/vector-icons";
-import {Fontisto} from "@expo/vector-icons";
-import {router, useFocusEffect} from "expo-router";
+import { Feather } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { FontAwesome6 } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
+import { router, useFocusEffect } from "expo-router";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
-import {getNumbers, putNumbers} from "@/helpers/api-function/numberSittings/numbersetting";
-import {NavigationProp, useNavigation} from "@react-navigation/native";
-import {RootStackParamList} from "@/type/root";
+import { getNumbers, putNumbers } from "@/helpers/api-function/numberSittings/numbersetting";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "@/type/root";
 import Buttons from "@/components/(buttons)/button";
 import * as SecureStore from "expo-secure-store";
-import {getUser} from "@/helpers/api-function/getMe/getMee";
+import { getUser } from "@/helpers/api-function/getMe/getMee";
 import useGetMeeStore from "@/helpers/state_managment/getMee";
-import {getFile} from "@/helpers/api";
-import {getTariffMaster} from "@/app/(profile)/(tariff)/tariff";
-import {setMasterTariff} from "@/constants/storage";
+import { getFile } from "@/helpers/api";
+import { getTariffMaster } from "@/app/(profile)/(tariff)/tariff";
+import { setMasterTariff } from "@/constants/storage";
 import tw from "tailwind-react-native-classnames";
+import CenteredModal from "@/components/(modals)/modal-centered";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 type SettingsScreenNavigationProp = NavigationProp<RootStackParamList, "(welcome)/welcome">;
 
 const Welcome = () => {
-    const {number, setNumber, setIsWaitModal} = numberSettingStore();
-    const {getMee, setGetMee} = useGetMeeStore();
+    const { number, setNumber, setIsWaitModal } = numberSettingStore();
+    const { getMee, setGetMee, iconName, modalText, isOpenModal, setIsOpenModal } = useGetMeeStore();
     const navigation = useNavigation<SettingsScreenNavigationProp | any>();
     const [getTariffStatus, setGetTariffStatus] = useState<string | null>(null);
 
@@ -58,6 +59,9 @@ const Welcome = () => {
         if (getTariffStatus) setMasterTariff(getTariffStatus);
     }, [getTariffStatus]);
 
+    const closeModal = () => {
+        setIsOpenModal(false);
+    }
     const removeDuplicates = (array: any) => {
         return [...new Set(array)];
     };
@@ -78,31 +82,31 @@ const Welcome = () => {
         {
             title: "Услуги",
             description: "Настройте свои услуги",
-            icon: <Feather name="check-circle" size={24} color="white"/>,
+            icon: <Feather name="check-circle" size={24} color="white" />,
             onPress: () => navigation.navigate("(standart)/(services)/(gender)/servesGender"),
         },
         {
             title: "График работы",
             description: "Настройте своё рабочее время",
-            icon: <FontAwesome5 name="calendar" size={24} color="white"/>,
+            icon: <FontAwesome5 name="calendar" size={24} color="white" />,
             onPress: () => navigation.navigate("(free)/(work-grafic)/workGraffic"),
         },
         {
             title: "Локация",
             description: "Настройте локацию Вашего места работы",
-            icon: <Entypo name="location" size={24} color="white"/>,
+            icon: <Entypo name="location" size={24} color="white" />,
             onPress: () => router.push("../(location)/Location"),
         },
         {
             title: "Галерея",
             description: "Создайте галерею своих работ",
-            icon: <MaterialIcons name="photo" size={24} color="white"/>,
+            icon: <MaterialIcons name="photo" size={24} color="white" />,
             onPress: () => navigation.navigate("(settings)/(settings-gallery)/settings-gallery-main"),
         },
         {
             title: "Онлайн бронирование",
             description: "Настройте записи на Ваши услуги",
-            icon: <FontAwesome6 name="calendar-plus" size={24} color="white"/>,
+            icon: <FontAwesome6 name="calendar-plus" size={24} color="white" />,
             onPress: () => navigation.navigate("(standart)/(onlineBooking)/onlineBooking"),
         },
         // {
@@ -114,7 +118,7 @@ const Welcome = () => {
         {
             title: "Клиенты",
             description: "Добавьте своих клинетов",
-            icon: <Fontisto name="persons" size={24} color="white"/>,
+            icon: <Fontisto name="persons" size={24} color="white" />,
             onPress: () => navigation.navigate(`(standart)/client/standard-main`),
         },
         // {
@@ -125,7 +129,7 @@ const Welcome = () => {
         // },
     ];
 
-    const renderItem = ({item, index}: { item: any, index: number }) => {
+    const renderItem = ({ item, index }: { item: any, index: number }) => {
         const isEnabled = number.includes(index + 1);
         const checkNumber = number.length > 0 ? number.length - 1 : 0;
 
@@ -141,16 +145,16 @@ const Welcome = () => {
                 onPress={item.onPress}
                 key={index}
                 disabled={!isEnabled}
-                style={({pressed}) => [styles.pressable, {opacity: pressed ? .9 : isEnabled ? 1 : 0.65},]}
+                style={({ pressed }) => [styles.pressable, { opacity: pressed ? .9 : isEnabled ? 1 : 0.65 },]}
             >
                 <View style={[
                     styles.button,
                     checkStatus() === 'NOW' ? styles.shadow : {},
-                    {backgroundColor: checkStatus() === 'NOW' ? '#fff' : "#B9B9C9", position: 'relative'}
+                    { backgroundColor: checkStatus() === 'NOW' ? '#fff' : "#B9B9C9", position: 'relative' }
                 ]}>
                     {checkStatus() === 'FINISHED' && (
-                        <View style={[tw`absolute top-0 left-0 w-7 h-7 rounded-sm justify-center items-center`, {backgroundColor: '#9C0A35'}]}>
-                            <Entypo name="check" size={20} color="white"/>
+                        <View style={[tw`absolute top-0 left-0 w-7 h-7 rounded-sm justify-center items-center`, { backgroundColor: '#9C0A35' }]}>
+                            <Entypo name="check" size={20} color="white" />
                         </View>
                     )}
                     <View style={styles.iconContainer}>
@@ -168,10 +172,10 @@ const Welcome = () => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <StatusBar backgroundColor="#21212E" barStyle="light-content"/>
+            <StatusBar backgroundColor="#21212E" barStyle="light-content" />
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={[styles.scrollView, {paddingBottom: 16}]}
+                contentContainerStyle={[styles.scrollView, { paddingBottom: 16 }]}
             >
                 <View style={styles.progressBar}>
                     {[...Array(6)].map((_, index) => (
@@ -185,18 +189,18 @@ const Welcome = () => {
                         />
                     ))}
                 </View>
-                <View style={[styles.centeredView, {marginBottom: 20}]}>
+                <View style={[styles.centeredView, { marginBottom: 20 }]}>
                     <Text style={styles.welcomeText}>Добро пожаловать!</Text>
                     <View style={styles.imageContainer}>
                         <Image
                             style={styles.profileImage}
-                            source={getMee.attachmentId ? {uri: `${getFile}${getMee.attachmentId}`} : {uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&s`}}
+                            source={getMee.attachmentId ? { uri: `${getFile}${getMee.attachmentId}` } : { uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&s` }}
                         />
                         <View style={styles.editIconContainer}>
                             <TouchableOpacity activeOpacity={0.5} onPress={() => {
                                 navigation.navigate("(profile)/(settings)/(childSettings)/(profileEdit)/profileEdit")
                             }}>
-                                <MaterialIcons name="edit" size={24} color="white"/>
+                                <MaterialIcons name="edit" size={24} color="white" />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -222,10 +226,29 @@ const Welcome = () => {
                             navigation.navigate('(tabs)/(master)');
                             registered();
                             setIsWaitModal(true)
-                        }}/>
+                        }} />
                     </View>
                 )}
             </ScrollView>
+            <CenteredModal isFullBtn={true} btnRedText="Продолжить" btnWhiteText="" oneBtn={true} isModal={isOpenModal} toggleModal={() => closeModal()}>
+                <View
+                    style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginBottom: 10,
+                        backgroundColor: "#21212E",
+                        padding: 15,
+                        gap: 10
+                    }}
+                >
+                    <Feather name="check-circle" size={80} color="#9C0A35" />
+                    <Text
+                        style={{ fontSize: 17, color: '#fff', textAlign: "center" }}
+                    >
+                       {modalText}
+                    </Text>
+                </View>
+            </CenteredModal>
         </SafeAreaView>
     );
 };

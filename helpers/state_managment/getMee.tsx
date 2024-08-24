@@ -40,7 +40,13 @@ const useGetMeeStore = create<GetMeeStore>((set) => ({
     districtOption: [],
     setDistrictOption: (val: any) => set({ districtOption: val }),
     isLoading: false,
-    setIsLoading: (val: boolean) => set({isLoading: val})
+    setIsLoading: (val: boolean) => set({isLoading: val}),
+    iconName: 'check-circle',
+    setIconName: (val: string) => set({iconName: val}),
+    modalText: 'настроен !',
+    setModalText: (val: string) => set({modalText: val}),
+    isOpenModal: false,
+    setIsOpenModal: (val: boolean) => set({isOpenModal: val}),
 
 }));
 export default useGetMeeStore;

@@ -42,6 +42,12 @@ export interface GetMeeStore {
     districtOption: []
     setDistrictOption: (val: []) => void
     isLoading: boolean
-    setIsLoading: (val: boolean) => void
-
+    setIsLoading: (val: boolean) => void,
+    iconName: string | "check-circle"
+    setIconName: (val: string) => void
+    modalText: string
+    setModalText: (val: string) => void
+    isOpenModal: boolean
+    setIsOpenModal: (val: boolean) => void
+    
 }
