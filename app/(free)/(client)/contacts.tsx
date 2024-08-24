@@ -1,125 +1,86 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
-import Contacts, { Contact } from 'react-native-contacts';
-import { PermissionsAndroid } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, Text, FlatList, Alert} from 'react-native';
+import * as Contacts from 'expo-contacts';
+import {ContactItems} from '@/components/clients/client-items';
+import clientStore from '@/helpers/state_managment/client/clientStore';
+import tw from 'tailwind-react-native-classnames';
+import {useFocusEffect} from "expo-router";
+
+const pageSize = 50;
+
+export const requestContactPermission = async (
+    setContacts: (val: Contacts.Contact[] | any) => void,
+    page: number = 0
+) => {
+    const {status} = await Contacts.requestPermissionsAsync();
+    if (status === 'granted') {
+        const {data} = await Contacts.getContactsAsync({
+            fields: [Contacts.Fields.Emails, Contacts.Fields.PhoneNumbers, Contacts.Fields.Image],
+            pageOffset: page * pageSize,
+            pageSize: pageSize,
+        });
+
+        if (data.length > 0) {
+            const filteredContacts = data.filter(contact =>
+                contact.phoneNumbers?.some((phone: any) => /^\+998\d{9}$/.test(phone.number))
+            );
+
+            setContacts((prevContacts: Contacts.Contact[]) => [...prevContacts, ...filteredContacts]);
+        } else setContacts([]);
+    } else Alert.alert('Permission Denied', 'Contacts permission denied');
+};
+
 
 const ContactList: React.FC = () => {
-    const [contacts, setContacts] = useState<Contact[]>([]);
-    const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
+    const {setSelectedClientList} = clientStore();
+    const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
+    const [selectedContacts, setSelectedContacts] = useState<Contacts.Contact[]>([]);
+    const [currentPage, setCurrentPage] = useState(0);
 
-    const requestContactPermission = async () => {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
-                {
-                    title: 'Contacts Permission',
-                    message: 'This app would like to view your contacts.',
-                    buttonPositive: 'Please accept',
-                }
-            );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                loadContacts();
-            } else {
-                Alert.alert('Permission Denied', 'Contacts permission denied');
-            }
-        } catch (err) {
-            console.warn(err);
-        }
+    useFocusEffect(useCallback(() => {
+        requestContactPermission(setContacts)
+    }, []))
+
+    useEffect(() => {
+        setSelectedClientList(selectedContacts);
+    }, [selectedContacts]);
+
+    const handleContactSelect = (contact: Contacts.Contact) => {
+        if (selectedContacts.some(item => item.id === contact.id)) {
+            setSelectedContacts(selectedContacts.filter(item => item.id !== contact.id));
+        } else setSelectedContacts([...selectedContacts, contact]);
     };
-
-    const loadContacts = () => {
-        console.log(Contacts)
-        if (Contacts && Contacts.getAll) {
-            Contacts.getAll()
-                .then(contacts => {
-                    setContacts(contacts);
-                })
-                .catch(e => {
-                    console.log(e);
-                });
-        } else {
-            console.log('Contacts module is not properly initialized.');
-        }
-    };
-
-    const handleContactSelect = (contact: Contact) => {
-        if (selectedContacts.includes(contact)) {
-            setSelectedContacts(selectedContacts.filter(item => item.recordID !== contact.recordID));
-        } else {
-            setSelectedContacts([...selectedContacts, contact]);
-        }
-    };
-
-    const renderContact = ({ item }: { item: Contact }) => (
-        <TouchableOpacity style={styles.contactItem} onPress={() => handleContactSelect(item)}>
-            <Image source={{ uri: item.thumbnailPath || undefined }} style={styles.contactImage} />
-            <View style={styles.contactText}>
-                <Text style={styles.contactName}>{item.displayName}</Text>
-                {item.phoneNumbers.length > 0 && <Text style={styles.contactPhone}>{item.phoneNumbers[0].number}</Text>}
-            </View>
-            <CheckBox
-                value={selectedContacts.includes(item)}
-                onValueChange={() => handleContactSelect(item)}
-            />
-        </TouchableOpacity>
-    );
 
     return (
-        <View style={styles.container}>
-            <FlatList
-                data={contacts}
-                keyExtractor={item => item.recordID}
-                renderItem={renderContact}
-            />
-            <TouchableOpacity style={styles.addButton} onPress={() => requestContactPermission()}>
-                <Text style={styles.addButtonText}>open</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.addButton} onPress={() => console.log(selectedContacts)}>
-                <Text style={styles.addButtonText}>Добавить</Text>
-            </TouchableOpacity>
+        <View>
+            {contacts.length > 0 ? (
+                <FlatList
+                    data={contacts.slice(0, (currentPage + 1) * pageSize)}
+                    renderItem={({item}) => (
+                        <ContactItems
+                            client={item}
+                            onSelect={() => handleContactSelect(item)}
+                            isSelected={selectedContacts.some(contact => contact.id === item.id)}
+                        />
+                    )}
+                    onEndReached={async () => {
+                        setCurrentPage(prevPage => {
+                            const nextPage = prevPage + 1;
+                            requestContactPermission(setContacts, nextPage);
+                            return nextPage;
+                        });
+                    }}
+                    onEndReachedThreshold={0.5}
+                />
+            ) : (
+                <View style={tw`flex-1 justify-center items-center`}>
+                    <Text style={tw`text-center text-base font-semibold text-white`}>
+                        У вас пока нет ни одного клиента
+                    </Text>
+                </View>
+            )}
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#222',
-    },
-    contactItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#444',
-    },
-    contactImage: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-    },
-    contactText: {
-        flex: 1,
-        marginLeft: 15,
-    },
-    contactName: {
-        color: '#fff',
-        fontSize: 16,
-    },
-    contactPhone: {
-        color: '#aaa',
-        fontSize: 14,
-    },
-    addButton: {
-        backgroundColor: '#f00',
-        padding: 15,
-        alignItems: 'center',
-    },
-    addButtonText: {
-        color: '#fff',
-        fontSize: 18,
-    },
-});
 
 export default ContactList;

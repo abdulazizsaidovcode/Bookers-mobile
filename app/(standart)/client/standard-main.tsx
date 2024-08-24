@@ -218,17 +218,17 @@ const StandardMain = () => {
                             </View>
                         )}
                     </View>
-                    {isFilter === 'all' && (
-                        <View style={tw`pb-5`}>
-                            <Buttons
-                                title={`Настроить позже и перейти на главную`}
-                                onPress={() => {
-                                    putNumbers(2, () => getNumbers(setNumber))
-                                    navigation.goBack()
-                                }}
-                            />
-                        </View>
-                    )}
+                    {/*{isFilter === 'all' && (*/}
+                    {/*    <View style={tw`pb-5`}>*/}
+                    {/*        <Buttons*/}
+                    {/*            title={`Настроить позже и перейти на главную`}*/}
+                    {/*            onPress={() => {*/}
+                    {/*                putNumbers(2, () => getNumbers(setNumber))*/}
+                    {/*                navigation.goBack()*/}
+                    {/*            }}*/}
+                    {/*        />*/}
+                    {/*    </View>*/}
+                    {/*)}*/}
                 </ScrollView>
             </View>
         </SafeAreaView>
