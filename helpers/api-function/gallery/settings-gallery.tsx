@@ -38,7 +38,7 @@ export const fetchFullData = async (id: number, setFullData: (data: GalleryData 
   }
 };
 
-export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void, setMainImageIndices: (val: number[]) => void, goBack: () => void, setIsloading: (val: boolean) => void) => {
+export const addData = async (formData: FormData, name: string, setData: (data: GalleryData[]) => void, setImages: (val: string[]) => void, setAlbumName: (val: string) => void, setMainImageIndices: (val: number[]) => void, goBack: () => void, setIsloading: (val: boolean) => void, setIsWaitingModal: (val: boolean) => void) => {
   if (!name.trim()) {
     return Toast.show("Please enter a valid name", Toast.LONG);
   }
@@ -50,6 +50,7 @@ export const addData = async (formData: FormData, name: string, setData: (data: 
       await fetchData(setData, setIsloading)
       setImages([])
       setAlbumName('')
+      setIsWaitingModal(true)
       setMainImageIndices([])
       goBack()
       Toast.show("Ваша галерея добавлена", Toast.LONG);
@@ -61,7 +62,7 @@ export const addData = async (formData: FormData, name: string, setData: (data: 
   }
 };
 
-export const addPhoto = async (galleryId: number, formData: FormData, setFullData: (data: GalleryData | null) => void, setImages: (val: string[]) => void, setBooleanState: (val: BooleanState) => void, booleanState: BooleanState, setIsLoading: (val: boolean) => void) => {
+export const addPhoto = async (galleryId: number, formData: FormData, setFullData: (data: GalleryData | null) => void, setImages: (val: string[]) => void, setBooleanState: (val: BooleanState) => void, booleanState: BooleanState, setIsLoading: (val: boolean) => void, toggleWaitingModal: () => void, goBack: () => void) => {
   setBooleanState({ ...booleanState, isLoading: true })
   try {
     const config = await getConfigImg()
@@ -69,6 +70,8 @@ export const addPhoto = async (galleryId: number, formData: FormData, setFullDat
     if (data.success) {
       await fetchFullData(galleryId, setFullData, setIsLoading);
       setImages([]);
+      toggleWaitingModal()
+      goBack()
       Toast.show('Пожалуйста, подождите, администратор должен одобрить вашу фотографию.', Toast.LONG)
       setBooleanState({ ...booleanState, isLoading: false })
     } else setBooleanState({ ...booleanState, isLoading: false })

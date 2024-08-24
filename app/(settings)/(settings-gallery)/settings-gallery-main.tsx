@@ -25,7 +25,7 @@ const { width, height } = Dimensions.get('window');
 const SettingsGalleryMain = () => {
     const { setNumber } = numberSettingStore();
     const navigation = useNavigation<SettingsScreenNavigationProp>();
-    const { data, setData, isLoading, setIsLoading } = useGalleryStore();
+    const { data, setData, isLoading, setIsLoading, isWatingModal, setIsWaitingModal } = useGalleryStore();
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [tariff, setTariff] = useState(null);
@@ -34,16 +34,24 @@ const SettingsGalleryMain = () => {
     const [isRejectModal, setIsRejectModal] = useState(false);
     const [confirmedGalleries, setConfirmedGalleries] = useState<string[]>([]);
     const [currentConfirmedIndex, setCurrentConfirmedIndex] = useState<number>(0);
+    const [canceledGalleries, setCanceledGalleries] = useState<string[]>([]);
+    const [currentCanceledIndex, setCurrentCanceledIndex] = useState<number>(0);
     const [hasSeenModals, setHasSeenModals] = useState<boolean>(false);
 
-    const checkForConfirmedAttachments = () => {
+    const checkForGalleryAttachments = () => {
         const confirmedNames = [];
+        const canceledNames = [];
+
         for (const item of data) {
             if (item.resGalleryAttachments.some(attachment => attachment.attachmentStatus === 'APPROVED')) {
                 confirmedNames.push(item.albumName);
             }
+            if (item.resGalleryAttachments.some(attachment => attachment.attachmentStatus === 'CANCELED')) {
+                canceledNames.push(item.albumName);
+            }
         }
-        return confirmedNames;
+
+        return { confirmedNames, canceledNames };
     };
 
     useFocusEffect(
@@ -63,9 +71,20 @@ const SettingsGalleryMain = () => {
                 fetchData(setData, setIsLoading);
                 getMasterTariff(setTariff);
 
-                const confirmedNames = checkForConfirmedAttachments();
+                const { confirmedNames, canceledNames } = checkForGalleryAttachments();
+
                 if (confirmedNames.length > 0 && !hasSeenModals) {
                     setConfirmedGalleries(confirmedNames);
+                    setHasSeenModals(true);
+                    try {
+                        await AsyncStorage.setItem('hasSeenModals', 'true');
+                    } catch (error) {
+                        console.error('Failed to save modal state to AsyncStorage', error);
+                    }
+                }
+
+                if (canceledNames.length > 0 && !hasSeenModals) {
+                    setCanceledGalleries(canceledNames);
                     setHasSeenModals(true);
                     try {
                         await AsyncStorage.setItem('hasSeenModals', 'true');
@@ -114,6 +133,7 @@ const SettingsGalleryMain = () => {
     }
 
     const toggleRejectModal = () => setIsRejectModal(!isRejectModal)
+    const toggleWaitingModal = () => setIsWaitingModal(!isWatingModal)
 
     const handleDelGallery = () => {
         if (selectedItemId) {
@@ -244,7 +264,56 @@ const SettingsGalleryMain = () => {
                             </View>
                         </CenteredModal>
                     )}
+                    {canceledGalleries.length > 0 && (
+                        <CenteredModal
+                            toggleModal={() => { }}
+                            isModal={true}
+                            onConfirm={() => {
+                                if (currentCanceledIndex < canceledGalleries.length - 1) {
+                                    setCurrentCanceledIndex(prevIndex => prevIndex + 1);
+                                } else {
+                                    setCanceledGalleries([]);
+                                    setCurrentCanceledIndex(0);
+                                }
+                            }}
+                            oneBtn
+                            btnWhiteText=""
+                            btnRedText="Закрыть"
+                            isFullBtn={false}
+                        >
+                            <View style={{ justifyContent: 'center', alignItems: 'center', margin: 10, gap: 10 }}>
+                                <Feather name="x-circle" size={100} color="#9C0A35" />
+                                <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}>
+                                    Фото альбома “{canceledGalleries[currentCanceledIndex]}” отклонено администратором:
+                                    “Измените фото  так как оно не соответствует требованиям пользовательского соглашения”
+                                </Text>
+                            </View>
+                        </CenteredModal>
+                    )}
+
                 </View>
+                <CenteredModal
+                    toggleModal={() => { }}
+                    isModal={isWatingModal}
+                    onConfirm={toggleWaitingModal}
+                    oneBtn
+                    btnWhiteText=""
+                    btnRedText="Закрыть"
+                    isFullBtn={false}
+                >
+                    <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 10, gap: 10 }}>
+                        <Feather name="check-circle" size={100} color="#9C0A35" />
+                        <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}>
+                            Фото альбом отправлен на утверждение!
+                        </Text>
+                        <Text style={{ color: 'white', fontSize: 15, textAlign: 'center' }}>
+                            Фото альбом будет доступен клиентам после одобрения администратором.
+                        </Text>
+                        <Text style={{ color: 'white', fontSize: 20, textAlign: 'center', fontWeight: '500' }}>
+                            Ожидайте Уведомления
+                        </Text>
+                    </View>
+                </CenteredModal>
             </ScrollView>
             <View style={{ position: 'absolute', bottom: 0, padding: 10, width: '100%', justifyContent: 'center' }}>
                 {data.length === 0 ?

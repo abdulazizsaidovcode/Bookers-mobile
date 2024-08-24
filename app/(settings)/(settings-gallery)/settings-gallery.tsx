@@ -27,7 +27,7 @@ const SettingsGallery: React.FC = () => {
 
   const navigation = useNavigation()
 
-  const { setData, setIsLoading, isLoading } = useGalleryStore();
+  const { setData, setIsLoading, isLoading, setIsWaitingModal } = useGalleryStore();
 
   const mainPhotos = mainImageIndices.length > 0 ? mainImageIndices.map(index => images[index]).slice(0, 4) : [];
 
@@ -132,7 +132,7 @@ const SettingsGallery: React.FC = () => {
         } as any);
       });
 
-      await addData(formData, albumName, setData, setImages, setAlbumName, setMainImageIndices, navigation.goBack, setIsLoading);
+      await addData(formData, albumName, setData, setImages, setAlbumName, setMainImageIndices, navigation.goBack, setIsLoading, setIsWaitingModal);
     }
   };
 
