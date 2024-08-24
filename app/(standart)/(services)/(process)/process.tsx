@@ -334,7 +334,7 @@ const Process: React.FC = () => {
                             <Buttons
                                 title='Создать'
                                 onPress={postService}
-                                isDisebled={!validate}
+                                // isDisebled={!validate}
                             />
                         </View>
                     </View>

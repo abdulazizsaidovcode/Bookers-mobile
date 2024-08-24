@@ -11,26 +11,23 @@ import servicesStore from '@/helpers/state_managment/services/servicesStore';
 import axios from 'axios';
 import { category_child, masterAdd_category } from '@/helpers/api';
 import { useRoute } from '@react-navigation/native';
-import Textarea from '@/components/select/textarea';
 import { getConfig } from '@/app/(tabs)/(master)/main';
 import Explanations from '@/components/(explanations)/explanations';
+import Textarea from '@/components/select/textarea';
+import Feather from '@expo/vector-icons/Feather';
 
 const Expertise: React.FC = () => {
     const route = useRoute();
     const { childCategoryData, setChildCategoryData, selectedCategory, setCompleted, selectedCategoryId } = servicesStore();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [modalStatus, setModalStatus] = useState<boolean>(false);
     const [value, setValue] = useState('');
     const [validate, setValidate] = useState(false);
     const [selectedServices, setSelectedServices] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [noData, setNoData] = useState<boolean>(false);
+    const [status, setStatus] = useState<string>('');
     const { id } = route.params as { id: string };
-
-    useEffect(() => {
-        if (selectedCategory) {
-            postCategory(selectedCategory, '');
-        }
-    }, [selectedCategory]);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -49,9 +46,7 @@ const Expertise: React.FC = () => {
     const getChildCategory = async (selectedCategory: string | null) => {
         try {
             const config = await getConfig();
-            console.log('Fetching child categories with config:', config);
             const response = await axios.get(`${category_child}${selectedCategory}`, config || {});
-            console.log('Received response:', response.data);
             if (response.data.success) {
                 const child = response.data.body.map((item: any) => ({
                     key: item.id,
@@ -70,12 +65,17 @@ const Expertise: React.FC = () => {
         }
     };
 
-    const postCategory = async (selectedCategoryId: string | null, value: string) => {
+    const postCategory = async (selectedCategory: string | null, value: string) => {
         try {
             const config = await getConfig();
-            const response = await axios.post(`${masterAdd_category}${selectedCategoryId}?name=${value}`, {}, config || {});
+            const response = await axios.post(`${masterAdd_category}${selectedCategory}?name=${value}`, {}, config || {});
+            console.log(response.data);
             if (response.data.success) {
-                getChildCategory(selectedCategoryId);
+                getChildCategory(selectedCategory);
+                setStatus(response.data.status);
+                if (response.data.status === 'CREATED' || response.data.status === 'NEW' || response.data.status === 'APPROVED') {
+                    setModalStatus(true);
+                }
             }
         } catch (error) {
             console.error("Error adding category:", error);
@@ -83,22 +83,28 @@ const Expertise: React.FC = () => {
     };
 
     const openModal = () => setModalVisible(true);
+    const openModalStatus = () => setModalStatus(true);
 
     const closeModal = () => {
         setModalVisible(false);
+        setModalStatus(false)
         setValue('');
     };
+    const closeModalStatus = () => {
+        setModalStatus(false)  
+    };
+   
 
     const handleAdd = () => {
         if (value.trim()) {
-            postCategory(selectedCategoryId, value);
+            postCategory(selectedCategory, value);
             closeModal();
+            openModalStatus()
             setValue('');
         }
     };
 
     const handleCategorySelect = (item: any) => {
-        console.log('Selected Service ID:', item.id);
         setSelectedServices((prevSelected) => {
             const isSelected = prevSelected.find((service) => service.id === item.id);
             const updatedSelectedServices = isSelected
@@ -114,16 +120,24 @@ const Expertise: React.FC = () => {
             <TouchableOpacity onPress={() => handleCategorySelect(item)}>
                 <ServicesCategory
                     title={item.name}
+                    isChecked={isSelected}
                 />
             </TouchableOpacity>
         );
     };
 
     const handleSave = () => {
-        router.push('../(process)/process');
-        setCompleted([true, true, true, true]);
+        // Log the selected services
         console.log('Selected Services:', selectedServices);
+
+        // Navigate to the process page
+        router.push('../(process)/process');
+
+        // Set the completion status
+        setCompleted([true, true, true, true]);
     };
+
+    console.log(selectedServices);
 
     return (
         <SafeAreaView style={[tw`flex-1`, { backgroundColor: '#21212E' }]}>
@@ -136,8 +150,7 @@ const Expertise: React.FC = () => {
                     <View style={tw`w-full`}>
                         <View style={[tw`p-4 mb-2`, { backgroundColor: '#21212E' }]}>
                             <Explanations
-                                text='Выберите свою специализацию?
-                                    Вы можете выбрать несколько вариантов или добавить свою'
+                                text='Выберите свою специализацию? Вы можете выбрать несколько вариантов или добавить свою'
                             />
                         </View>
                         {loading ? (
@@ -173,11 +186,29 @@ const Expertise: React.FC = () => {
                         >
                             <View style={tw`p-4 text-center`}>
                                 <Text style={tw`text-white text-lg mb-2 w-full`}>Добавьте свою специализацию</Text>
-                                <Textarea
-                                    placeholder=''
-                                    onChangeText={(text) => setValue(text)}
-                                    value={value}
-                                />
+                                <View>
+                                    <Textarea
+                                        placeholder=''
+                                        onChangeText={(text) => setValue(text)}
+                                        value={value}
+                                    />
+                                </View>
+                            </View>
+                        </CenteredModal>
+                        <CenteredModal
+                            isModal={modalStatus}
+                            btnWhiteText=''
+                            btnRedText='Продолжить'
+                            isFullBtn={true}
+                            oneBtn
+                            toggleModal={closeModalStatus}
+                            onConfirm={closeModalStatus}
+                        >
+                            <View style={tw`p-4 text-center flex justify-center items-center`}>
+                                <Feather name="check-circle" size={68} color="#9C0A35" />
+                                <Text style={tw`text-white text-md mb-2 mt-4`}>Сообщение отправлено!</Text>
+                                <Text style={tw`text-white mb-4`}>Добавленная Вами специализация будет доступна в приложении после одобрения администратором.</Text>
+                                <Text style={tw`text-white text-lg mb-3`}>Ожидайте Уведомления</Text>
                             </View>
                         </CenteredModal>
                     </View>
