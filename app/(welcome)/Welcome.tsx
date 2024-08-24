@@ -15,9 +15,7 @@ import {Feather} from "@expo/vector-icons";
 import {FontAwesome5} from "@expo/vector-icons";
 import {Entypo} from "@expo/vector-icons";
 import {FontAwesome6} from "@expo/vector-icons";
-import {Ionicons} from "@expo/vector-icons";
 import {Fontisto} from "@expo/vector-icons";
-import {AntDesign} from "@expo/vector-icons";
 import {router, useFocusEffect} from "expo-router";
 import numberSettingStore from "@/helpers/state_managment/numberSetting/numberSetting";
 import {getNumbers, putNumbers} from "@/helpers/api-function/numberSittings/numbersetting";
@@ -30,6 +28,7 @@ import useGetMeeStore from "@/helpers/state_managment/getMee";
 import {getFile} from "@/helpers/api";
 import {getTariffMaster} from "@/app/(profile)/(tariff)/tariff";
 import {setMasterTariff} from "@/constants/storage";
+import tw from "tailwind-react-native-classnames";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -147,8 +146,13 @@ const Welcome = () => {
                 <View style={[
                     styles.button,
                     checkStatus() === 'NOW' ? styles.shadow : {},
-                    {backgroundColor: checkStatus() === 'NOW' ? '#fff' : "#B9B9C9"}
+                    {backgroundColor: checkStatus() === 'NOW' ? '#fff' : "#B9B9C9", position: 'relative'}
                 ]}>
+                    {checkStatus() === 'FINISHED' && (
+                        <View style={[tw`absolute top-0 left-0 w-7 h-7 rounded-sm justify-center items-center`, {backgroundColor: '#9C0A35'}]}>
+                            <Entypo name="check" size={20} color="white"/>
+                        </View>
+                    )}
                     <View style={styles.iconContainer}>
                         <View style={styles.iconBackground}>{item.icon}</View>
                     </View>
