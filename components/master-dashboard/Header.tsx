@@ -1,9 +1,9 @@
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Share, StyleSheet, Text, View } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import ProfilePage from "@/app/(profile)";
+import Buttons from "../(buttons)/button";
 
 const MasterHeader: React.FC = () => {
     const navigation = useNavigation<any>();
@@ -27,8 +27,19 @@ const MasterHeader: React.FC = () => {
     };
     return (
         <View style={styles.header}>
-            <ProfilePage />
+            {/* <ProfilePage /> */}
+            <FontAwesome6
+                name="bars-staggered"
+                size={24} color="#fff"
+                onPress={() => navigation.openDrawer()}
+            />
             <View style={styles.headerIcons}>
+                <Ionicons
+                    name="chatbubble-ellipses-outline"
+                    size={24}
+                    style={{ marginRight: 16 }}
+                    color={'#ffffff'}
+                />
                 <FontAwesome5
                     name="bell"
                     size={24}
@@ -57,6 +68,7 @@ const styles = StyleSheet.create({
         width: "100%",
         paddingHorizontal: 10,
         paddingVertical: 15,
+        marginTop: 10
     },
     title: {
         fontSize: 26,

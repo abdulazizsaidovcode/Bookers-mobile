@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text, ScrollView, } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import Booked from './components/boooked'
-import CalendarGrafficEdit from '@/app/(free)/(work-grafic-edit)/calendar'
+import CalendarGrafficEdit from '@/app/(free)/(work-grafic)/components/calendar'
 import NavigationMenu from '@/components/navigation/navigation-menu'
 import Buttons from '@/components/(buttons)/button'
 import ClientStory from '@/helpers/state_managment/uslugi/uslugiStore'

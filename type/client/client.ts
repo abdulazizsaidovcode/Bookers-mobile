@@ -1,11 +1,9 @@
-import Tariff from "@/app/(profile)/(tariff)/tariff";
-
 export interface Client {
     isLoading: boolean;
     setIsLoading: (val: boolean) => void;
     isClientModal: boolean;
     setIsClientModal: (val: boolean) => void;
-    selectedClientList: number[];
+    selectedClientList: any[];
     setSelectedClientList: (val: any) => void;
     statusData: ClientStatus | null
     setStatusData: (val: ClientStatus | null) => void;
@@ -44,7 +42,7 @@ export interface Client {
     setCanceledData: (val: HistorySessions[] | null) => void;
     refreshing: boolean;
     setRefreshing: (val: boolean) => void;
-    tariff: null|string
+    tariff: null | string
     setTariff: (val: string | null) => void;
 }
 
@@ -202,41 +200,22 @@ export interface HistorySessions {
     "attachmentId": null | string
 }
 
-
-export interface ClientData {
-    id: number;
-    name: string;
-    phone: string;
-    image: string;
-}
-
 export interface ClientItemProps {
-    client: ClientData;
+    client: any;
     isSelected: boolean;
-    onSelect: (id: number) => void;
+    onSelect: (id: any) => void;
 }
 
-
-//vaqtinchalik data
-export const clientsData: ClientData[] = [
-    {id: 1, name: 'Гузаль Шерматова', phone: '+998 93 123-45-67', image: 'https://via.placeholder.com/150'},
-    {id: 2, name: 'Севара Юнусова', phone: '+998 93 171-63-80', image: 'https://via.placeholder.com/150'},
-    {id: 3, name: 'Ноила Азизова', phone: '+998 93 455-45-67', image: 'https://via.placeholder.com/150'},
-    {id: 4, name: 'Шахло Акбарова', phone: '+998 93 874-63-90', image: 'https://via.placeholder.com/150'},
-    {id: 5, name: 'Максуд Акбаров', phone: '+998 93 455-45-67', image: 'https://via.placeholder.com/150'},
-    {id: 6, name: 'Нодир Расулов', phone: '+998 93 874-63-90', image: 'https://via.placeholder.com/150'},
-];
-
-export interface ClientUpdateProfileData {
-        "id": string | null,
-        "nickName": string | null,
-        "firstName": string | null,
-        "lastName": string | null,
-        "phoneNumber": string | null,
-        "birthDate": string | null,
-        "gender": true,
-        "telegram": string | null,
-        "specialist": string | null,
-        "districtId": number | null,
-        "attachmentId": string | null
-}
+// export interface ClientUpdateProfileData {
+//     "id": string | null,
+//     "nickName": string | null,
+//     "firstName": string | null,
+//     "lastName": string | null,
+//     "phoneNumber": string | null,
+//     "birthDate": string | null,
+//     "gender": true,
+//     "telegram": string | null,
+//     "specialist": string | null,
+//     "districtId": number | null,
+//     "attachmentId": string | null
+// }
