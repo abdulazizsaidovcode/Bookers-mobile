@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "465821023678",
-    "project_id": "bookers-app",
-    "storage_bucket": "bookers-app.appspot.com"
+    "project_number": "477751749328",
+    "project_id": "bookers-app-b19fb",
+    "storage_bucket": "bookers-app-b19fb.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:465821023678:android:2b054579017b03784e4def",
+        "mobilesdk_app_id": "1:477751749328:android:ecc1b60dcf5672f1588cd5",
         "android_client_info": {
           "package_name": "uz.sfera.com"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBqUvNhZSYtcLU70zuQ_38OE4dmhL4nLog"
+          "current_key": "AIzaSyBWO1H3WNxG2TQkAZW8jIP3sBORP5-qHkM"
         }
       ],
       "services": {
