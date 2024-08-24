@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
     zIndex: 9999,
     padding: 14,
     paddingTop: height / 10,
-  },
+  }, 
   sidebarIn: {
     width: width / 2,
     height: height,
