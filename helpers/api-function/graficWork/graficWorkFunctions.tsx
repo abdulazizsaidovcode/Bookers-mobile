@@ -131,7 +131,7 @@ export const postWorkTime = async (
     );
     if (response.data.success) {
       setIsLoading ? setIsLoading(false) : () => { };
-      Toast.show("Work time saved successfully", Toast.LONG);
+      Toast.show("The runtime has been set successfully", Toast.LONG);
       router();
     } else {
       setIsLoading ? setIsLoading(false) : () => { };
@@ -139,7 +139,7 @@ export const postWorkTime = async (
     }
   } catch (error) {
     setIsLoading ? setIsLoading(false) : () => { };
-    Toast.show("Error saving work time", Toast.LONG);
+    Toast.show("Error saving runtime", Toast.LONG);
   }
 };
 
@@ -208,7 +208,7 @@ export const putWorkTime = async (
 
     if (response.data.success) {
       setIsLoading ? setIsLoading(false) : () => { };
-      Toast.show("Work time updated successfully", Toast.LONG);
+      Toast.show("The runtime has been updated successfully", Toast.LONG);
       router();
     } else {
       setIsLoading ? setIsLoading(false) : () => { };
@@ -216,8 +216,8 @@ export const putWorkTime = async (
     }
   } catch (error) {
     setIsLoading ? setIsLoading(false) : () => { };
-    console.error("Error updating work time:", error);
-    Toast.show("Error updating work time", Toast.LONG);
+    console.error("Error updating runtime:", error);
+    Toast.show("Error updating runtime", Toast.LONG);
   }
 };
 

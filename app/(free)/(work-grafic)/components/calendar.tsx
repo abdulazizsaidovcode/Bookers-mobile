@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 30,
     paddingVertical: 10,
+    
   },
 });
 

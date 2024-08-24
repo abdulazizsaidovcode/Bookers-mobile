@@ -15,6 +15,7 @@ import { useFocusEffect, useNavigation } from "expo-router";
 import { Loading } from "@/components/loading/loading";
 import WorkDays from "./components/workDays";
 import { getUser } from "@/helpers/api-function/getMe/getMee";
+import Explanations from "@/components/(explanations)/explanations";
 type SettingsScreenNavigationProp = NavigationProp<
   RootStackParamList,
   "(free)/(work-grafic)/workGrafficNext"
@@ -47,7 +48,7 @@ const WorkGrafficNext: React.FC = () => {
     useCallback(() => {
       getUser(setGetMee);
       getWorkDay(setWeekData, setIsLoading);
-      return () => {};
+      return () => { };
     }, [])
   );
 
@@ -62,14 +63,14 @@ const WorkGrafficNext: React.FC = () => {
         return { ...item, active: isWeekDataActive || item.active };
       });
       setItems(updatedItems);
-      return () => {};
+      return () => { };
     }, [weekData])
   );
 
- 
+
 
   const handleContinuePress = () => {
-    if (!calendarDate || !week.some((day) => day.active)) {
+    if (!week.some((day) => day.active)) {
       Toast.show(
         "Пожалуйста, выберите дату начала работы и хотя бы один рабочий день.",
         Toast.LONG
@@ -80,9 +81,10 @@ const WorkGrafficNext: React.FC = () => {
     postWorkDay(
       week,
       calendarDate,
-      () => navigation.navigate("(free)/(work-grafic)/workMain"),
+      () => { },
       setIsLoading
     );
+    navigation.navigate("(free)/(work-grafic)/workTime")
   };
 
   return (
@@ -95,18 +97,16 @@ const WorkGrafficNext: React.FC = () => {
           <View style={{ paddingLeft: 10 }}>
             <NavigationMenu name="График работы" />
           </View>
-          <ScrollView>
-            {/* <View style={styles.section}>
-              <Text style={styles.title}>График работы с</Text>
-              <CalendarGrafficEdit />
-            </View> */}
+          <View style={styles.section}>
+            <Explanations text="Выберите дату с которой Вы начнёте работу" />
+
             <View style={styles.fullHeightSection}>
-            <WorkDays/>
-            <View style={{ padding: 10 }}>
+              <WorkDays />
+              <View style={{ padding: 10 }}>
                 <Buttons title="Продолжить" onPress={handleContinuePress} />
               </View>
             </View>
-          </ScrollView>
+          </View>
         </SafeAreaView>
       )}
     </>
@@ -121,10 +121,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#21212e",
   },
   section: {
-    height: 430,
+    paddingHorizontal: 15,
+    flex: 1,
     display: "flex",
-    gap: 20,
-    paddingHorizontal:15
+    justifyContent: "space-between",
+    paddingVertical: 10
   },
   fullHeightSection: {
     flex: 1,

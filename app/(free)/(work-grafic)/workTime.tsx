@@ -15,6 +15,7 @@ import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStor
 import { NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "@/type/root";
 import { useFocusEffect, useNavigation } from "expo-router";
+import Explanations from "@/components/(explanations)/explanations";
 
 // Type definition for navigation prop
 type SettingsScreenNavigationProp = NavigationProp<
@@ -108,28 +109,30 @@ const TimeWork: React.FC = () => {
           <NavigationMenu name={`Время работы`} />
         </View>
         <ScrollView style={{ marginTop: 15 }}>
-          <View>
+
+          {/* <View>
             <Text style={styles.title}>Рабочие дни</Text>
-          </View>
-          <View style={styles.weekListContainer}>
+            </View>
+            <View style={styles.weekListContainer}>
             {weekData &&
-                weekData.map(
-                    (item, i) =>
-                        item.active && (
-                            <WeeklCard
-                                key={i}
-                                title={item.active && item.dayName.substring(0, 3)}
-                            />
-                        )
-                )}
-          </View>
-          <View>
+            weekData.map(
+              (item, i) =>
+              item.active && (
+              <WeeklCard
+              key={i}
+              title={item.active && item.dayName.substring(0, 3)}
+              />
+              )
+              )}
+              </View> */}
+          <View style={{ marginHorizontal: 16 }}>
+              <Explanations text="Выберите рабочее время"/>
             <Text style={[styles.title, { marginTop: 15 }]}>Время работы</Text>
             <>
-              <Text style={{ color: "white", paddingHorizontal: 15, width: 340 }}>
+              {/* <Text style={{ color: "white", paddingHorizontal: 15, width: 340 }}>
                 Выберите рабочее время в которое запись будет доступна для ваших
                 клиентов
-              </Text>
+              </Text> */}
               <View style={styles.timeListContainer}>
                 {timeList.map((time, index) => (
                     <TimesCard
@@ -144,16 +147,16 @@ const TimeWork: React.FC = () => {
               </View>
             </>
           </View>
-          <View>
+          {/* <View>
             <Text style={[styles.title, { marginTop: 15 }]}>Выходные дни</Text>
             <Text style={{ color: "white", paddingHorizontal: 15 }}>
               {weekendDays.length === 0 ? "Без выходных" : weekendDays.join(", ")}
             </Text>
-          </View>
+          </View> */}
         </ScrollView>
         <View
             style={{
-              paddingHorizontal: 5,
+              paddingHorizontal: 15,
               marginVertical: 20,
               height: "10%",
               alignItems: "center",
@@ -186,7 +189,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "white",
     marginBottom: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
   },
   weekListContainer: {
     width: "100%",

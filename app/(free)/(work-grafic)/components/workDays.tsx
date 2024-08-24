@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     },
     categoriesContainer: {
       flexDirection: "column",
-      paddingHorizontal: 10,
       gap: 5,
       paddingVertical: 10,
     },
