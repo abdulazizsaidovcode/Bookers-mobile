@@ -125,12 +125,12 @@ const MainClient = () => {
                             </Text>
                         </CenteredModal>
                     </View>
-                    <View style={tw`pb-5`}>
-                        <Buttons title={`Настроить позже и перейти на главную`} onPress={() => {
-                            putNumbers(8, () => getNumbers(setNumber))
-                            navigation.goBack()
-                        }}/>
-                    </View>
+                    {/*<View style={tw`pb-5`}>*/}
+                    {/*    <Buttons title={`Настроить позже и перейти на главную`} onPress={() => {*/}
+                    {/*        putNumbers(8, () => getNumbers(setNumber))*/}
+                    {/*        navigation.goBack()*/}
+                    {/*    }}/>*/}
+                    {/*</View>*/}
                 </ScrollView>
             </View>
         </SafeAreaView>

@@ -223,7 +223,7 @@ const StandardMain = () => {
                     {/*        <Buttons*/}
                     {/*            title={`Настроить позже и перейти на главную`}*/}
                     {/*            onPress={() => {*/}
-                    {/*                putNumbers(2, () => getNumbers(setNumber))*/}
+                    {/*                putNumbers(8, () => getNumbers(setNumber))*/}
                     {/*                navigation.goBack()*/}
                     {/*            }}*/}
                     {/*        />*/}

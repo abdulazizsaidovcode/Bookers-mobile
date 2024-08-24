@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7be96cc1-c16c-42be-8526-eeb914434fe3" name="Changes" comment="tab bar edit">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(free)/(client)/client-list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(free)/(client)/client-list.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(free)/(client)/contacts.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(free)/(client)/contacts.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(profile)/(client)/components/AllClients.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(profile)/(client)/components/AllClients.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(standart)/client/standard-main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(standart)/client/standard-main.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(tabs)/(master)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(tabs)/(master)/_layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/clients/client-items.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/clients/client-items.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/type/client/client.ts" beforeDir="false" afterPath="$PROJECT_DIR$/type/client/client.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +17,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -114,8 +105,17 @@
       <workItem from="1724221945005" duration="8000" />
       <workItem from="1724405526751" duration="3543000" />
       <workItem from="1724474273132" duration="568000" />
-      <workItem from="1724476690927" duration="4320000" />
+      <workItem from="1724476690927" duration="9726000" />
     </task>
+    <task id="LOCAL-00001" summary="tab bar edit">
+      <option name="closed" value="true" />
+      <created>1724483133661</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1724483133661</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
