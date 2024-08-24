@@ -6,7 +6,10 @@ import Buttons from "@/components/(buttons)/button";
 import NavigationMenu from "@/components/navigation/navigation-menu";
 import { Item } from "@/type/graficWork/graficWork";
 import graficWorkStore from "@/helpers/state_managment/graficWork/graficWorkStore";
-import { getWorkDay, postWorkDay } from "@/helpers/api-function/graficWork/graficWorkFunctions";
+import {
+  getWorkDay,
+  postWorkDay,
+} from "@/helpers/api-function/graficWork/graficWorkFunctions";
 import CalendarGrafficEdit from "./components/calendar";
 import Toast from "react-native-simple-toast";
 import { RootStackParamList } from "@/type/root";
@@ -29,7 +32,7 @@ const GrafficWorkEdit: React.FC = () => {
     setIsLoading,
     isLoading,
     setGetMee,
-    setWeekData
+    setWeekData,
   } = graficWorkStore();
   const navigation = useNavigation<SettingsScreenNavigationProp>();
 
@@ -66,12 +69,10 @@ const GrafficWorkEdit: React.FC = () => {
     }, [weekData])
   );
 
- 
-
   const handleContinuePress = () => {
-    if (!calendarDate || !week.some((day) => day.active)) {
+    if (!calendarDate) {
       Toast.show(
-        "Пожалуйста, выберите дату начала работы и хотя бы один рабочий день.",
+        "Вы должны ввести дату начала.",
         Toast.LONG
       );
       return;
@@ -80,7 +81,7 @@ const GrafficWorkEdit: React.FC = () => {
     postWorkDay(
       week,
       calendarDate,
-      () => navigation.navigate("(free)/(work-grafic)/workMain"),
+      () => navigation.navigate("(free)/(work-grafic)/workGrafficNext"),
       setIsLoading
     );
   };
@@ -97,12 +98,15 @@ const GrafficWorkEdit: React.FC = () => {
           </View>
           <ScrollView>
             <View style={styles.section}>
-              <Text style={styles.title}>График работы с</Text>
+              <View style={styles.sectionText}>
+                <Text style={styles.title}>Начало графика работы</Text>
+                <Text style={styles.title}>{calendarDate}</Text>
+              </View>
               <CalendarGrafficEdit />
             </View>
             <View style={styles.fullHeightSection}>
-            <WorkDays/>
-            <View style={{ padding: 10 }}>
+              {/* <WorkDays/> */}
+              <View style={{ padding: 10 }}>
                 <Buttons title="Продолжить" onPress={handleContinuePress} />
               </View>
             </View>
@@ -124,14 +128,18 @@ const styles = StyleSheet.create({
     height: 430,
     display: "flex",
     gap: 20,
-    paddingHorizontal:15
+    paddingHorizontal: 15,
+  },
+  sectionText : {
+    display: "flex",
+    
   },
   fullHeightSection: {
     flex: 1,
     marginTop: 10,
   },
   title: {
-    fontSize: 20,
+    fontSize: 17,
     color: "white",
     paddingHorizontal: 15,
   },

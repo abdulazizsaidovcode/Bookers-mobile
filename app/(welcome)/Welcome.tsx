@@ -99,7 +99,7 @@ const Welcome = () => {
             title: "График работы",
             description: "Планируйте своё рабочее время",
             icon: <FontAwesome5 name="calendar" size={24} color="white"/>,
-            onPress: () => navigation.navigate("(free)/(work-grafic)/workMain"),
+            onPress: () => navigation.navigate("(free)/(work-grafic)/workGraffic"),
         },
         {
             title: "Локация",
