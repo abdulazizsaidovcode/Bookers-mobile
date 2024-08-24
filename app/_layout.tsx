@@ -2,7 +2,10 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
   DefaultTheme,
+  NavigationContainer,
   ThemeProvider,
+  useNavigation,
+  useRoute,
 } from "@react-navigation/native";
 import { MenuProvider } from "react-native-popup-menu";
 import { useFonts } from "expo-font";
@@ -151,41 +154,22 @@ import ProfilePage from "./(profile)";
 import FavouriteOrders from "./(client)/(favourite-orders)/favourite-orders";
 import MastersScreen from "./(tabs)/(client)/masters-screen";
 import Offer from "./(auth)/(offer)/offer";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { Header } from "react-native/Libraries/NewAppScreen";
+import { Alert } from "react-native";
 // import ResponseLocationEdit from "./(location)/(response-location)/responseLocationEdit";
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
   initialRouteName: "index",
 };
 
-SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    ...FontAwesome.font,
-  });
+function MainStack() {
 
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
@@ -193,7 +177,7 @@ function RootLayoutNav() {
       <InternetNotice />
       <StompProvider>
         <MenuProvider>
-          <Stack.Navigator initialRouteName="index" screenOptions={{animation: 'none'}}>
+          <Stack.Navigator initialRouteName="index" screenOptions={{ animation: 'none' }}>
             <Stack.Screen
               name="index"
               component={Index}
@@ -828,6 +812,7 @@ function RootLayoutNav() {
               component={CheckPinOnCome}
               options={{ headerShown: false }}
             />
+
             {/* check pin end */}
             <Stack.Screen
               name="(client)/(dashboard)/dashboard"
@@ -924,5 +909,65 @@ function RootLayoutNav() {
       </StompProvider>
     </ThemeProvider>
     // I'm a good developer
+  );
+}
+
+const blockedPages = [
+  "(client)/(oreder)/order",
+  "(client)/(oreder)/orderDetail",
+  "(auth)/(offer)/offer",
+  // boshqa blokirovka qilish kerak bo'lgan sahifalar
+];
+
+
+
+export default function RootLayout() {
+
+  const [loaded, error] = useFonts({
+    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    // Add other fonts if needed
+  });
+
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
+
+
+
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        swipeEnabled: false, // Drawer swiping-ni o'chirish
+        drawerStyle: {
+          backgroundColor: '#21212E',
+          width: 340,
+        },
+        drawerContentOptions: {
+          activeTintColor: '#e91e63',
+          itemStyle: { marginVertical: 5 },
+        },
+      }}
+      drawerContentOptions={{
+        activeTintColor: '#fff',
+        itemStyle: { marginVertical: 5 },
+      }}
+      drawerStyle={{
+        backgroundColor: '#21212E',
+        width: 240,
+      }}
+      drawerContent={(props) => <ProfilePage />}
+    >
+      <Drawer.Screen name="index" options={{ headerShown: false }} component={MainStack} />
+    </Drawer.Navigator>
   );
 }

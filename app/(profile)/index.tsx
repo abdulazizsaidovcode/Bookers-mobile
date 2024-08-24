@@ -59,36 +59,6 @@ const ProfilePage = () => {
   const [toggle, setToggle] = useState(false);
   const { role } = registerStory();
 
-  const [isSidebarVisible, setSidebarVisible] = useState(false);
-
-  // Shared value for animated position
-  const sidebarAnim = useSharedValue(-350);
-
-  const sidebarStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: sidebarAnim.value }],
-    };
-  });
-
-  // Toggle sidebar visibility
-  const toggleSidebar = () => {
-    if (isSidebarVisible) {
-      sidebarAnim.value = withTiming(-400, {
-        duration: 300,
-        easing: Easing.ease,
-      });
-      setSidebarVisible(false);
-    } else {
-      setSidebarVisible(true);
-      sidebarAnim.value = withTiming(0, {
-        duration: 300,
-        easing: Easing.ease,
-      });
-    }
-  };
-
-
-
 
   useFocusEffect(
     useCallback(() => {
@@ -97,9 +67,9 @@ const ProfilePage = () => {
     }, [])
   );
 
-  const openInviteModal = () => {
-    setInviteModalVisible(true);
-  };
+  // const openInviteModal = () => {
+  //   setInviteModalVisible(true);
+  // };
 
   const closeInviteModal = () => {
     setInviteModalVisible(false);
@@ -158,19 +128,19 @@ const ProfilePage = () => {
           screen: "(profile)/(tariff)/tariff",
         },
         {
+          icon: "wallet",
+          label: "Способы оплаты",
+          screen: "(profile)/(sessionhistory)/sessionHistory",
+        },
+        {
           icon: "history",
           label: "История сеансов",
           screen: "(profile)/(sessionhistory)/sessionHistory",
         },
         {
           icon: "info-circle",
-          label: "Справка",
+          label: "Документация",
           screen: "(profile)/(help)/help",
-        },
-        {
-          icon: "bell",
-          label: "Уведомления",
-          screen: "(profile)/(notification)/index",
         },
         {
           icon: "wallet",
@@ -188,12 +158,7 @@ const ProfilePage = () => {
           screen: "(profile)/(settings)/settings",
         },
         {
-          icon: "users",
-          label: "Клиенты",
-          screen: `${tariff === 'FREE' ? '(free)/(client)/main' : '(standart)/client/standard-main'}`,
-        },
-        {
-          icon: "sign-out",
+          icon: "arrow-alt-circle-left",
           label: "Выйти",
           screen: "Logout",
           modal: true,
@@ -306,64 +271,46 @@ const ProfilePage = () => {
         :
         <View style={[styles.container]}>
           <StatusBar backgroundColor={`#21212E`} barStyle={`dark-content`} />
-
-          <FontAwesome6
-            name="bars-staggered"
-            size={24} color="#fff"
-            onPress={toggleSidebar}
-          />
-
-          <Animated.View
-            style={[styles.sidebar, sidebarStyle]}
+          <View
+            style={[styles.sidebar]}
           >
-            <Pressable
-              onPress={toggleSidebar}
-            >
-              <View
-                style={[
-                  styles.sidebarIn, {
-                    padding: 16,
-                  }
-                ]}>
-                <View style={styles.profileHeader}>
-                  <Image
-                    source={
-                      getMee && getMee.attachmentId
-                        ? { uri: getFile + getMee.attachmentId }
-                        : require("@/assets/avatar.png")
-                    }
-                    style={styles.avatar}
-                  />
-                  <View>
-                    {/* <View style={{flexDirection: "row", justifyContent:"center", gap: 4}}> */}
-                    <Text style={styles.profileName}>
-                      {getMee && getMee.firstName ? getMee.firstName : "No data"} {getMee && getMee.lastName && getMee.lastName}
-                    </Text>
-                    <Text style={styles.profilePhone}>{getMee && getMee.phoneNumber ? getMee.phoneNumber : "No data"}</Text>
-                  </View>
-                </View>
-                {navigationList.map((item, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={styles.menuItem}
-                    onPress={() =>
-                      item.icon === "share-alt"
-                        ? onShare()
-                        : item.modal
-                          ? setToggle(true)
-                          : navigateTo(item.screen)
-                    }
-                    activeOpacity={0.7}
-                  >
-                    <View style={styles.menuItemContent}>
-                      <FontAwesome5 name={item.icon} size={20} color="#9C0A35" />
-                      <Text style={styles.menuItemText}>{item.label}</Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
+            <View style={styles.profileHeader}>
+              <Image
+                source={
+                  getMee && getMee.attachmentId
+                    ? { uri: getFile + getMee.attachmentId }
+                    : require("@/assets/avatar.png")
+                }
+                style={styles.avatar}
+              />
+              <View>
+                {/* <View style={{flexDirection: "row", justifyContent:"center", gap: 4}}> */}
+                <Text style={styles.profileName}>
+                  {getMee && getMee.firstName ? getMee.firstName : "No data"} {getMee && getMee.lastName && getMee.lastName}
+                </Text>
+                <Text style={styles.profilePhone}>{getMee && getMee.phoneNumber ? getMee.phoneNumber : "No data"}</Text>
               </View>
-            </Pressable>
-          </Animated.View>
+            </View>
+            {navigationList.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.menuItem}
+                onPress={() =>
+                  item.icon === "share-alt"
+                    ? onShare()
+                    : item.modal
+                      ? setToggle(true)
+                      : navigateTo(item.screen)
+                }
+                activeOpacity={0.7}
+              >
+                <View style={styles.menuItemContent}>
+                  <FontAwesome5 name={item.icon} size={20} color="#9C0A35" />
+                  <Text style={styles.menuItemText}>{item.label}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
 
           <Modal
             transparent={true}
@@ -514,22 +461,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#9c0935",
   },
   sidebar: {
-    position: "absolute",
-    top: 0,
-    left: 0,
+    backgroundColor: '#21212E',
     flex: 1,
-    width: width,
     height: height,
     zIndex: 9999,
+    padding: 14,
+    paddingTop: height / 10,
   },
   sidebarIn: {
-    width: width - 60,
+    width: width / 2,
     height: height,
     backgroundColor: "#21212E",
     paddingTop: height / 15,
-    zIndex: 9999,
-    // padding: 16
-    marginLeft: -width / 30
   },
   title: {
     color: "#ffffff",
